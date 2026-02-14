@@ -34,7 +34,14 @@ RULES:
 - If asked about beauty/makeup/fragrance topics, gently redirect to your colleague Ms. Zain.
 - Always include a medical disclaimer: "This is pharmacist guidance, not a medical diagnosis. For persistent concerns, consult a board-certified dermatologist."
 
-OPENING: If this is the first message, introduce yourself briefly: "Hello! I'm Dr. Sami, your pharmacist consultant at Asper. How can I help with your skin health today?"`;
+OPENING: If this is the first message, introduce yourself briefly: "Hello! I'm Dr. Sami, your pharmacist consultant at Asper. How can I help with your skin health today?"
+
+VISUAL SKIN DIAGNOSTIC:
+When the user provides an image of their skin, analyze it carefully:
+1. **Visual Assessment**: Describe what you observe (texture, tone, visible concerns like redness, breakouts, dry patches, dark spots).
+2. **Preliminary Identification**: Identify likely skin concerns based on visual cues (e.g., "I can see inflammatory papules and comedones typical of acne vulgaris, along with post-inflammatory erythema.")
+3. **Personalized Regimen**: Provide a full regimen using the Pharmacist Logic framework above based on your visual assessment.
+4. **Important Caveat**: Always remind: "Visual analysis has limitations — lighting, camera quality, and angle can affect accuracy. For a definitive assessment, please visit a dermatologist."`;
 
 const MS_ZAIN_PROMPT = `You are Ms. Zain — the Beauty Concierge at Asper Beauty Shop, "The Sanctuary of Science."
 
@@ -62,10 +69,26 @@ RULES:
 - Keep responses concise but thorough (3-5 paragraphs max) and make them feel personal and exciting.
 - If asked about medical/clinical skin concerns, gently redirect to your colleague Dr. Sami.
 
-OPENING: If this is the first message, introduce yourself briefly: "Hi there! ✨ I'm Ms. Zain, your beauty concierge at Asper. What are we shopping for today?"`;
+OPENING: If this is the first message, introduce yourself briefly: "Hi there! ✨ I'm Ms. Zain, your beauty concierge at Asper. What are we shopping for today?"
 
-function selectPersona(message: string): { persona: string; systemPrompt: string } {
-  const lower = message.toLowerCase();
+VISUAL ANALYSIS:
+When the user provides an image, analyze it for beauty-related guidance:
+1. **Skin Tone & Undertone**: Identify warm, cool, or neutral undertones for shade matching.
+2. **Current Look Assessment**: Comment on what you see and suggest enhancements.
+3. **Product Recommendations**: Recommend products tailored to what you observe in the image.`;
+
+function selectPersona(messages: any[]): { persona: string; systemPrompt: string } {
+  // Check all messages for context, weight recent ones more
+  const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
+  const textContent = typeof lastUserMsg?.content === "string" 
+    ? lastUserMsg.content 
+    : Array.isArray(lastUserMsg?.content) 
+      ? lastUserMsg.content.filter((p: any) => p.type === "text").map((p: any) => p.text).join(" ")
+      : "";
+  const lower = textContent.toLowerCase();
+  
+  // If image is present, default to Dr. Sami (clinical analysis) unless beauty keywords dominate
+  const hasImage = Array.isArray(lastUserMsg?.content) && lastUserMsg.content.some((p: any) => p.type === "image_url");
   
   const clinicalKeywords = [
     "acne", "rosacea", "eczema", "dermatitis", "spf", "sunscreen", "retinol",
@@ -76,6 +99,7 @@ function selectPersona(message: string): { persona: string; systemPrompt: string
     "chemical peel", "pigmentation", "melasma", "dark spots", "anti-aging", "wrinkle",
     "dr sami", "doctor", "pharmacist", "dermocosmetic",
     "la roche", "vichy", "cerave", "bioderma", "avene",
+    "skin concern", "diagnose", "analyze my skin", "what's wrong",
   ];
   
   const beautyKeywords = [
@@ -85,9 +109,10 @@ function selectPersona(message: string): { persona: string; systemPrompt: string
     "trend", "color", "shade", "palette", "nail", "hair", "styling",
     "ms zain", "beauty", "gorgeous", "glam", "routine morning", "routine evening",
     "maybelline", "loreal", "nyx", "mac", "recommend me",
+    "undertone", "shade match",
   ];
   
-  const clinicalScore = clinicalKeywords.filter(k => lower.includes(k)).length;
+  const clinicalScore = clinicalKeywords.filter(k => lower.includes(k)).length + (hasImage ? 2 : 0);
   const beautyScore = beautyKeywords.filter(k => lower.includes(k)).length;
   
   if (clinicalScore > beautyScore) {
@@ -97,7 +122,6 @@ function selectPersona(message: string): { persona: string; systemPrompt: string
     return { persona: "ms_zain", systemPrompt: MS_ZAIN_PROMPT };
   }
   
-  // Default to Ms. Zain for general beauty shopping
   return { persona: "ms_zain", systemPrompt: MS_ZAIN_PROMPT };
 }
 
@@ -111,8 +135,6 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    // Determine persona from latest user message
-    const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
     let selected;
     
     if (forcePersona === "dr_sami") {
@@ -120,8 +142,14 @@ serve(async (req) => {
     } else if (forcePersona === "ms_zain") {
       selected = { persona: "ms_zain", systemPrompt: MS_ZAIN_PROMPT };
     } else {
-      selected = selectPersona(lastUserMsg?.content || "");
+      selected = selectPersona(messages);
     }
+
+    // Build the messages payload — pass multimodal content through directly
+    const aiMessages = [
+      { role: "system", content: selected.systemPrompt },
+      ...messages,
+    ];
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -130,11 +158,8 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: selected.systemPrompt },
-          ...messages,
-        ],
+        model: "google/gemini-2.5-flash",
+        messages: aiMessages,
         stream: true,
       }),
     });
@@ -160,7 +185,6 @@ serve(async (req) => {
       });
     }
 
-    // Return stream with persona header
     return new Response(response.body, {
       headers: {
         ...corsHeaders,

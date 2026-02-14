@@ -4,13 +4,31 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { MessageCircle, X, Send, Shield, Heart, Loader2, Volume2, VolumeX } from "lucide-react";
+import { MessageCircle, X, Send, Shield, Heart, Loader2, Volume2, VolumeX, Camera, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 
-type Msg = { role: "user" | "assistant"; content: string; persona?: string };
+type MessageContent =
+  | string
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
+
+type Msg = {
+  role: "user" | "assistant";
+  content: string | MessageContent[];
+  persona?: string;
+  imagePreview?: string; // local preview URL for display
+};
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/beauty-assistant`;
+
+function getTextContent(content: string | MessageContent[]): string {
+  if (typeof content === "string") return content;
+  return content
+    .filter((p): p is { type: "text"; text: string } => (p as any).type === "text")
+    .map((p) => p.text)
+    .join(" ");
+}
 
 async function streamChat({
   messages,
@@ -25,16 +43,19 @@ async function streamChat({
   onDelta: (text: string) => void;
   onDone: () => void;
 }) {
+  // Build payload: pass multimodal content arrays through
+  const payload = messages.map((m) => ({
+    role: m.role,
+    content: m.content, // string or array with image_url parts
+  }));
+
   const resp = await fetch(CHAT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
     },
-    body: JSON.stringify({
-      messages: messages.map((m) => ({ role: m.role, content: m.content })),
-      forcePersona,
-    }),
+    body: JSON.stringify({ messages: payload, forcePersona }),
   });
 
   if (!resp.ok) {
@@ -80,6 +101,15 @@ async function streamChat({
   onDone();
 }
 
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 const personaConfig = {
   dr_sami: {
     name: "Dr. Sami",
@@ -101,7 +131,7 @@ const quickPrompts = [
   { label: "Acne routine", text: "I have acne-prone oily skin. What's a good 3-step routine?" },
   { label: "Gift ideas", text: "I need a luxury gift set for my friend's birthday" },
   { label: "Sunscreen help", text: "What SPF should I use for sensitive skin?" },
-  { label: "Makeup look", text: "Recommend a natural everyday makeup look" },
+  { label: "📸 Skin check", text: "" }, // special: triggers image upload
 ];
 
 export default function AIConcierge() {
@@ -111,13 +141,22 @@ export default function AIConcierge() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPersona, setCurrentPersona] = useState<string>("ms_zain");
   const [speakingIdx, setSpeakingIdx] = useState<number | null>(null);
+  const [pendingImage, setPendingImage] = useState<{ file: File; preview: string } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // Cleanup preview URL on unmount
+  useEffect(() => {
+    return () => {
+      if (pendingImage) URL.revokeObjectURL(pendingImage.preview);
+    };
+  }, [pendingImage]);
 
   const speakText = useCallback((text: string, persona: string | undefined, idx: number) => {
     if (speakingIdx === idx) {
@@ -126,19 +165,16 @@ export default function AIConcierge() {
       return;
     }
     window.speechSynthesis.cancel();
-    // Strip markdown for cleaner speech
     const clean = text.replace(/[#*_`~>\[\]()!]/g, "").replace(/\n+/g, ". ");
     const utterance = new SpeechSynthesisUtterance(clean);
     const voices = window.speechSynthesis.getVoices();
     if (persona === "dr_sami") {
-      // Prefer a deeper male voice for Dr. Sami
-      const male = voices.find(v => v.lang.startsWith("en") && v.name.toLowerCase().includes("male")) 
+      const male = voices.find(v => v.lang.startsWith("en") && v.name.toLowerCase().includes("male"))
         || voices.find(v => v.lang.startsWith("en") && !v.name.toLowerCase().includes("female"));
       if (male) utterance.voice = male;
       utterance.rate = 0.95;
       utterance.pitch = 0.9;
     } else {
-      // Prefer a warmer female voice for Ms. Zain
       const female = voices.find(v => v.lang.startsWith("en") && v.name.toLowerCase().includes("female"))
         || voices.find(v => v.lang.startsWith("en"));
       if (female) utterance.voice = female;
@@ -151,9 +187,49 @@ export default function AIConcierge() {
     window.speechSynthesis.speak(utterance);
   }, [speakingIdx]);
 
+  const handleImageSelect = (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Image must be under 10MB");
+      return;
+    }
+    const preview = URL.createObjectURL(file);
+    setPendingImage({ file, preview });
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
+  const removePendingImage = () => {
+    if (pendingImage) {
+      URL.revokeObjectURL(pendingImage.preview);
+      setPendingImage(null);
+    }
+  };
+
   const send = async (text: string) => {
-    if (!text.trim() || isLoading) return;
-    const userMsg: Msg = { role: "user", content: text.trim() };
+    if (isLoading) return;
+    if (!text.trim() && !pendingImage) return;
+
+    let userContent: string | MessageContent[];
+    let imagePreview: string | undefined;
+
+    if (pendingImage) {
+      // Convert image to base64 and build multimodal content
+      const base64 = await fileToBase64(pendingImage.file);
+      const textPart = text.trim() || "Please analyze my skin in this photo and recommend a routine.";
+      userContent = [
+        { type: "text", text: textPart },
+        { type: "image_url", image_url: { url: base64 } },
+      ];
+      imagePreview = pendingImage.preview;
+      setPendingImage(null);
+    } else {
+      userContent = text.trim();
+    }
+
+    const userMsg: Msg = { role: "user", content: userContent, imagePreview };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setIsLoading(true);
@@ -198,6 +274,20 @@ export default function AIConcierge() {
 
   return (
     <>
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) handleImageSelect(file);
+          e.target.value = "";
+        }}
+      />
+
       {/* Floating button */}
       {!open && (
         <button
@@ -233,13 +323,19 @@ export default function AIConcierge() {
             {messages.length === 0 && (
               <div className="space-y-3">
                 <p className="text-center text-sm text-muted-foreground font-body">
-                  Ask me anything about skincare, beauty, or finding the perfect product ✨
+                  Ask me anything about skincare, beauty, or upload a photo for a skin diagnostic 📸
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                   {quickPrompts.map((qp) => (
                     <button
                       key={qp.label}
-                      onClick={() => send(qp.text)}
+                      onClick={() => {
+                        if (qp.label === "📸 Skin check") {
+                          triggerFileInput();
+                        } else {
+                          send(qp.text);
+                        }
+                      }}
                       className="rounded-lg border border-border/50 bg-secondary/50 px-3 py-2 text-left text-xs font-body text-foreground/80 transition-colors hover:bg-secondary hover:border-primary/20"
                     >
                       {qp.label}
@@ -254,6 +350,7 @@ export default function AIConcierge() {
               const mp = msg.persona
                 ? personaConfig[msg.persona as keyof typeof personaConfig]
                 : null;
+              const displayText = getTextContent(msg.content);
 
               return (
                 <div key={i} className={cn("mb-3 flex gap-2", isUser && "flex-row-reverse")}>
@@ -272,17 +369,27 @@ export default function AIConcierge() {
                         : "bg-secondary text-foreground rounded-bl-sm"
                     )}
                   >
+                    {/* Show uploaded image thumbnail */}
+                    {isUser && msg.imagePreview && (
+                      <div className="mb-2">
+                        <img
+                          src={msg.imagePreview}
+                          alt="Uploaded skin photo"
+                          className="max-h-32 rounded-md border border-primary-foreground/20 object-cover"
+                        />
+                      </div>
+                    )}
                     {isUser ? (
-                      msg.content
+                      displayText
                     ) : (
                       <div className="prose prose-sm max-w-none dark:prose-invert [&>p]:mb-1 [&>p]:last:mb-0">
-                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        <ReactMarkdown>{displayText}</ReactMarkdown>
                       </div>
                     )}
                   </div>
-                  {!isUser && msg.content && !isLoading && (
+                  {!isUser && displayText && !isLoading && (
                     <button
-                      onClick={() => speakText(msg.content, msg.persona, i)}
+                      onClick={() => speakText(displayText, msg.persona, i)}
                       className="mt-1 self-end shrink-0 text-muted-foreground/50 hover:text-primary transition-colors"
                       aria-label={speakingIdx === i ? "Stop speaking" : "Read aloud"}
                       title={speakingIdx === i ? "Stop" : `Listen to ${mp?.name || "response"}`}
@@ -312,6 +419,27 @@ export default function AIConcierge() {
             )}
           </ScrollArea>
 
+          {/* Pending image preview */}
+          {pendingImage && (
+            <div className="border-t border-border/50 bg-muted/50 px-3 py-2 flex items-center gap-2">
+              <img
+                src={pendingImage.preview}
+                alt="Selected photo"
+                className="h-12 w-12 rounded-md object-cover border border-border"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-foreground font-body truncate">{pendingImage.file.name}</p>
+                <p className="text-[10px] text-muted-foreground">Ready for skin analysis</p>
+              </div>
+              <button
+                onClick={removePendingImage}
+                className="shrink-0 text-muted-foreground hover:text-destructive transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+
           {/* Input */}
           <div className="border-t border-border/50 bg-card p-3">
             <form
@@ -321,14 +449,30 @@ export default function AIConcierge() {
               }}
               className="flex gap-2"
             >
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="shrink-0 text-muted-foreground hover:text-primary"
+                onClick={triggerFileInput}
+                disabled={isLoading}
+                title="Upload skin photo for analysis"
+              >
+                <Camera className="h-4 w-4" />
+              </Button>
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about skincare, beauty..."
+                placeholder={pendingImage ? "Describe your concern (optional)..." : "Ask about skincare, beauty..."}
                 className="flex-1 text-sm"
                 disabled={isLoading}
               />
-              <Button type="submit" size="icon" disabled={isLoading || !input.trim()} className="shrink-0">
+              <Button
+                type="submit"
+                size="icon"
+                disabled={isLoading || (!input.trim() && !pendingImage)}
+                className="shrink-0"
+              >
                 <Send className="h-4 w-4" />
               </Button>
             </form>
