@@ -1,65 +1,251 @@
-import { useState } from "react";
-import { useProducts } from "@/hooks/useProducts";
-import { ProductCard } from "@/components/ProductCard";
-import { ConcernFilter } from "@/components/ConcernFilter";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Package } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Search, Sparkles, ShoppingBag, Shield, Leaf, FlaskConical, Heart } from "lucide-react";
 
 const Index = () => {
-  const [concern, setConcern] = useState<string | null>(null);
-  const { data: products, isLoading, error } = useProducts(concern);
-
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border/50 bg-card">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
-            Product Catalog
-          </h1>
-          <p className="mt-2 text-muted-foreground">
-            Browse our curated skincare collection
-          </p>
-          <div className="mt-6">
-            <ConcernFilter selected={concern} onSelect={setConcern} />
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="font-heading text-2xl font-bold text-primary tracking-tight">
+                Asper
+              </span>
+              <span className="text-xs font-body uppercase tracking-[0.25em] text-muted-foreground mt-1">
+                Beauty Shop
+              </span>
+            </div>
+            <div className="hidden md:flex items-center gap-8">
+              <Link to="/products" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">Shop</Link>
+              <a href="#concierge" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">AI Concierge</a>
+              <a href="#about" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">About</a>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button variant="outline" size="sm" className="hidden sm:flex">
+                <Search className="h-4 w-4 mr-2" />
+                Search
+              </Button>
+              <Link to="/products">
+                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  <ShoppingBag className="h-4 w-4 mr-2" />
+                  Shop Now
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-      </header>
+      </nav>
 
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {error && (
-          <div className="rounded-lg bg-destructive/10 p-4 text-sm text-destructive">
-            Failed to load products. Please try again.
+      {/* Hero Section */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-secondary via-background to-secondary/50" />
+        <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-gold/5 blur-3xl" />
+        <div className="absolute bottom-10 left-10 w-96 h-96 rounded-full bg-primary/3 blur-3xl" />
+        
+        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-40">
+          <div className="max-w-3xl">
+            <Badge variant="outline" className="mb-6 border-gold text-gold font-body text-xs tracking-wider px-4 py-1.5">
+              <Shield className="h-3 w-3 mr-2" />
+              PHARMACIST-CURATED AUTHORITY
+            </Badge>
+            
+            <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground leading-[1.1] tracking-tight">
+              The Sanctuary
+              <br />
+              <span className="text-primary">of Science</span>
+            </h1>
+            
+            <p className="mt-6 text-lg sm:text-xl text-muted-foreground font-body leading-relaxed max-w-2xl">
+              Bridging clinical dermocosmetics and everyday beauty essentials.
+              <em className="text-foreground/70 font-medium"> We do not just sell cosmetics; we dispense beauty through intelligence.</em>
+            </p>
+            
+            <div className="mt-10 flex flex-col sm:flex-row gap-4">
+              <Link to="/products">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 h-12 shadow-lg shadow-primary/20">
+                  Explore 5,000+ Products
+                </Button>
+              </Link>
+              <Button size="lg" variant="outline" className="border-gold text-gold hover:bg-gold/10 text-base px-8 h-12">
+                <Sparkles className="h-4 w-4 mr-2" />
+                Meet Your AI Pharmacist
+              </Button>
+            </div>
           </div>
-        )}
+        </div>
 
-        {isLoading && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="space-y-3">
-                <Skeleton className="aspect-square w-full rounded-lg" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-3 w-1/2" />
+        {/* Gold divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      </section>
+
+      {/* 3-Click Solution */}
+      <section id="concierge" className="py-20 sm:py-28 bg-card">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <Badge variant="secondary" className="mb-4 font-body text-xs tracking-wider">
+              THE 3-CLICK SOLUTION
+            </Badge>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground">
+              Beauty Through <span className="text-primary">Intelligence</span>
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto font-body">
+              Our AI Concierge analyzes your skin, recommends a personalized regimen, and adds it to your cart — in three simple steps.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                step: "01",
+                icon: Search,
+                title: "Analyze",
+                description: "AI analyzes your skin concerns, type, and goals using clinical knowledge.",
+                color: "text-primary",
+              },
+              {
+                step: "02",
+                icon: FlaskConical,
+                title: "Recommend",
+                description: "Receive a personalized regimen curated from 5,000+ products by your AI pharmacist.",
+                color: "text-gold",
+              },
+              {
+                step: "03",
+                icon: ShoppingBag,
+                title: "Cart",
+                description: "One click adds your complete routine. Quick, elegant, and beautifully simple.",
+                color: "text-primary",
+              },
+            ].map((item, i) => (
+              <Card key={i} className="group relative border-border/50 hover:border-gold/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-gold to-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                <CardContent className="p-8">
+                  <div className="flex items-start justify-between mb-6">
+                    <span className="text-5xl font-heading font-bold text-border/80">{item.step}</span>
+                    <item.icon className={`h-8 w-8 ${item.color}`} />
+                  </div>
+                  <h3 className="font-heading text-2xl font-semibold text-foreground mb-3">{item.title}</h3>
+                  <p className="text-muted-foreground font-body leading-relaxed">{item.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gold divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+
+      {/* Dual Persona */}
+      <section className="py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">
+              One Brain, <span className="text-primary">Two Voices</span>
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto font-body">
+              Our centralized AI seamlessly switches between clinical authority and aesthetic warmth.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <Card className="border-primary/20 hover:border-primary/40 transition-colors">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Shield className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-xl font-semibold text-foreground">Dr. Sami</h3>
+                    <p className="text-xs text-muted-foreground font-body uppercase tracking-wider">The Clinical Authority</p>
+                  </div>
+                </div>
+                <p className="text-muted-foreground font-body leading-relaxed mb-4">
+                  Authoritative wellness guidance on supplements, dosage, and safety with a clinical, precise tone.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className="text-xs">Medical Queries</Badge>
+                  <Badge variant="outline" className="text-xs">Supplements</Badge>
+                  <Badge variant="outline" className="text-xs">Dosage & Safety</Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-gold/20 hover:border-gold/40 transition-colors">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
+                    <Heart className="h-6 w-6 text-gold" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-xl font-semibold text-foreground">Ms. Zain</h3>
+                    <p className="text-xs text-muted-foreground font-body uppercase tracking-wider">The Beauty Concierge</p>
+                  </div>
+                </div>
+                <p className="text-muted-foreground font-body leading-relaxed mb-4">
+                  Warm, editorial advice on makeup, luxury fragrances, and aesthetic trends with enthusiastic elegance.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className="text-xs">Skincare Routines</Badge>
+                  <Badge variant="outline" className="text-xs">Makeup</Badge>
+                  <Badge variant="outline" className="text-xs">Gift Ideas</Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Gold divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+
+      {/* Trust Signals */}
+      <section id="about" className="py-20 sm:py-28 bg-card">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-12">
+            Why <span className="text-primary">Asper</span>?
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: Shield, title: "Pharmacist-Led", desc: "Every product vetted by licensed pharmacists" },
+              { icon: FlaskConical, title: "5,000+ SKUs", desc: "From clinical dermocosmetics to daily essentials" },
+              { icon: Sparkles, title: "AI-Powered", desc: "Personalized regimens via dual-persona AI" },
+              { icon: Leaf, title: "Authentic Quality", desc: "Direct from brands, no counterfeits ever" },
+            ].map((item, i) => (
+              <div key={i} className="flex flex-col items-center text-center">
+                <div className="w-14 h-14 rounded-full bg-primary/5 border border-primary/10 flex items-center justify-center mb-4">
+                  <item.icon className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="font-heading text-lg font-semibold text-foreground mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground font-body">{item.desc}</p>
               </div>
             ))}
           </div>
-        )}
+        </div>
+      </section>
 
-        {!isLoading && products && products.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-            <Package className="h-12 w-12 mb-4" />
-            <p className="text-lg font-medium">No products found</p>
-            <p className="text-sm">Try selecting a different concern</p>
+      {/* Footer */}
+      <footer className="border-t border-border/50 py-12 bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="font-heading text-xl font-bold text-primary">Asper</span>
+              <span className="text-xs font-body uppercase tracking-[0.2em] text-muted-foreground">Beauty Shop</span>
+            </div>
+            <p className="text-sm text-muted-foreground font-body italic">
+              "We do not just sell cosmetics; we dispense beauty through intelligence."
+            </p>
           </div>
-        )}
-
-        {!isLoading && products && products.length > 0 && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-      </main>
+          <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent mt-8" />
+          <p className="text-xs text-muted-foreground text-center mt-6 font-body">
+            © {new Date().getFullYear()} Asper Beauty Shop. The Sanctuary of Science.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
