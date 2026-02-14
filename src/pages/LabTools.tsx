@@ -90,11 +90,9 @@ function ResultCard({ result }: { result: string }) {
   return (
     <Card className="border-border/50">
       <CardContent className="p-6">
-        <ScrollArea className="max-h-[500px]">
-          <div className="prose prose-sm max-w-none dark:prose-invert font-body">
-            <ReactMarkdown>{result}</ReactMarkdown>
-          </div>
-        </ScrollArea>
+        <div className="prose prose-sm max-w-none dark:prose-invert font-body">
+          <ReactMarkdown>{result}</ReactMarkdown>
+        </div>
       </CardContent>
     </Card>
   );
