@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { MessageCircle, X, Send, Shield, Heart, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Shield, Heart, Loader2, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 
@@ -110,6 +110,7 @@ export default function AIConcierge() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentPersona, setCurrentPersona] = useState<string>("ms_zain");
+  const [speakingIdx, setSpeakingIdx] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -117,6 +118,38 @@ export default function AIConcierge() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const speakText = useCallback((text: string, persona: string | undefined, idx: number) => {
+    if (speakingIdx === idx) {
+      window.speechSynthesis.cancel();
+      setSpeakingIdx(null);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    // Strip markdown for cleaner speech
+    const clean = text.replace(/[#*_`~>\[\]()!]/g, "").replace(/\n+/g, ". ");
+    const utterance = new SpeechSynthesisUtterance(clean);
+    const voices = window.speechSynthesis.getVoices();
+    if (persona === "dr_sami") {
+      // Prefer a deeper male voice for Dr. Sami
+      const male = voices.find(v => v.lang.startsWith("en") && v.name.toLowerCase().includes("male")) 
+        || voices.find(v => v.lang.startsWith("en") && !v.name.toLowerCase().includes("female"));
+      if (male) utterance.voice = male;
+      utterance.rate = 0.95;
+      utterance.pitch = 0.9;
+    } else {
+      // Prefer a warmer female voice for Ms. Zain
+      const female = voices.find(v => v.lang.startsWith("en") && v.name.toLowerCase().includes("female"))
+        || voices.find(v => v.lang.startsWith("en"));
+      if (female) utterance.voice = female;
+      utterance.rate = 1.0;
+      utterance.pitch = 1.1;
+    }
+    utterance.onend = () => setSpeakingIdx(null);
+    utterance.onerror = () => setSpeakingIdx(null);
+    setSpeakingIdx(idx);
+    window.speechSynthesis.speak(utterance);
+  }, [speakingIdx]);
 
   const send = async (text: string) => {
     if (!text.trim() || isLoading) return;
@@ -247,6 +280,16 @@ export default function AIConcierge() {
                       </div>
                     )}
                   </div>
+                  {!isUser && msg.content && !isLoading && (
+                    <button
+                      onClick={() => speakText(msg.content, msg.persona, i)}
+                      className="mt-1 self-end shrink-0 text-muted-foreground/50 hover:text-primary transition-colors"
+                      aria-label={speakingIdx === i ? "Stop speaking" : "Read aloud"}
+                      title={speakingIdx === i ? "Stop" : `Listen to ${mp?.name || "response"}`}
+                    >
+                      {speakingIdx === i ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
+                    </button>
+                  )}
                 </div>
               );
             })}
