@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, Shield, Sparkles, Thermometer } from "lucide-react";
 import heroImage from "@/assets/hero-sanctuary.jpg";
 
 export default function Hero() {
@@ -20,31 +20,34 @@ export default function Hero() {
                 variant="outline"
                 className="mb-4 border-accent text-accent font-body text-xs tracking-[0.2em] px-4 py-1.5"
               >
-                <Shield className="h-3 w-3 mr-2" />
-                100% AUTHENTIC · PHARMACIST CURATED
+                THE FUTURE OF DERMO-RETAIL
               </Badge>
 
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-primary leading-tight tracking-tight">
-                Science meets
+                Curated by Pharmacists.
                 <br />
-                <span className="text-foreground">Soul.</span>
+                <span className="text-foreground">Powered by Intelligence.</span>
               </h1>
             </div>
 
             <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              From clinical care to daily essentials — one trusted roof.
-              Sealed with the Golden Lotus for verifiable radiance.
+              We do not just sell cosmetics. We dispense beauty through intelligence.
+              Bridging the gap between clinical dermocosmetics and everyday essentials.
             </p>
 
             {/* Trust micro-badges */}
             <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
               <span className="inline-flex items-center gap-1.5 text-xs font-body text-muted-foreground border border-border rounded-full px-3 py-1">
-                <Sparkles className="h-3 w-3 text-accent" />
-                Pharmacist-Led
+                <Shield className="h-3 w-3 text-accent" />
+                100% Authentic
               </span>
               <span className="inline-flex items-center gap-1.5 text-xs font-body text-muted-foreground border border-border rounded-full px-3 py-1">
-                <Shield className="h-3 w-3 text-primary" />
-                5,000+ SKUs
+                <Thermometer className="h-3 w-3 text-primary" />
+                Temperature Controlled
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs font-body text-muted-foreground border border-border rounded-full px-3 py-1">
+                <Sparkles className="h-3 w-3 text-accent" />
+                Pharmacist Led
               </span>
             </div>
 
@@ -54,8 +57,17 @@ export default function Hero() {
                   size="lg"
                   className="group bg-primary text-primary-foreground hover:bg-primary/90 text-sm uppercase tracking-widest px-8 h-12 shadow-lg shadow-primary/20"
                 >
-                  Explore The Collection
+                  Find My Ritual
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              <Link to="/products">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-accent text-accent hover:bg-accent/10 text-sm uppercase tracking-widest px-8 h-12"
+                >
+                  Shop All Brands
                 </Button>
               </Link>
             </div>
@@ -76,7 +88,7 @@ export default function Hero() {
             <div className="relative h-full rounded-lg overflow-hidden shadow-xl">
               <img
                 src={heroImage}
-                alt="Luxury skincare serum on white marble surface with morning sunlight"
+                alt="Pristine white marble countertop with Vichy and CeraVe products in morning spa lighting"
                 className="h-full w-full object-cover"
                 loading="eager"
               />

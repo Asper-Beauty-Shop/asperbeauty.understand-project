@@ -2,10 +2,12 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, Sparkles, ShoppingBag, Shield, Leaf, FlaskConical, Heart } from "lucide-react";
+import { Search, Sparkles, ShoppingBag, Shield, FlaskConical, Heart, Award, Truck } from "lucide-react";
 import Hero from "@/components/home/Hero";
+import BrandStory from "@/components/home/BrandStory";
 import ConciergeShowcase from "@/components/home/ConciergeShowcase";
 import PromoBanner from "@/components/home/PromoBanner";
+import Newsletter from "@/components/home/Newsletter";
 import AuthButton from "@/components/AuthButton";
 
 const Index = () => {
@@ -52,6 +54,12 @@ const Index = () => {
       {/* Gold divider */}
       <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
 
+      {/* Brand Story — The Sanctuary of Science */}
+      <BrandStory />
+
+      {/* Gold divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+
       {/* AI Concierge Showcase — Safety Interlock */}
       <ConciergeShowcase />
 
@@ -84,7 +92,7 @@ const Index = () => {
                 icon: FlaskConical,
                 title: "Recommend",
                 description: "Receive a personalized regimen curated from 5,000+ products by your AI pharmacist.",
-                color: "text-gold",
+                color: "text-accent",
               },
               {
                 step: "03",
@@ -94,8 +102,8 @@ const Index = () => {
                 color: "text-primary",
               },
             ].map((item, i) => (
-              <Card key={i} className="group relative border-border/50 hover:border-gold/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-gold to-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Card key={i} className="group relative border-border/50 hover:border-accent/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity" />
                 <CardContent className="p-8">
                   <div className="flex items-start justify-between mb-6">
                     <span className="text-5xl font-heading font-bold text-border/80">{item.step}</span>
@@ -111,7 +119,7 @@ const Index = () => {
       </section>
 
       {/* Gold divider */}
-      <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
 
       {/* Dual Persona */}
       <section className="py-20 sm:py-28">
@@ -148,11 +156,11 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-gold/20 hover:border-gold/40 transition-colors">
+            <Card className="border-accent/20 hover:border-accent/40 transition-colors">
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
-                    <Heart className="h-6 w-6 text-gold" />
+                  <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
+                    <Heart className="h-6 w-6 text-accent" />
                   </div>
                   <div>
                     <h3 className="font-heading text-xl font-semibold text-foreground">Ms. Zain</h3>
@@ -174,20 +182,31 @@ const Index = () => {
       </section>
 
       {/* Gold divider */}
-      <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
 
-      {/* Trust Signals */}
+      {/* Trust Banner — The Three Pillars */}
       <section id="about" className="py-20 sm:py-28 bg-card">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-12">
             Why <span className="text-primary">Asper</span>?
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {[
-              { icon: Shield, title: "Pharmacist-Led", desc: "Every product vetted by licensed pharmacists" },
-              { icon: FlaskConical, title: "5,000+ SKUs", desc: "From clinical dermocosmetics to daily essentials" },
-              { icon: Sparkles, title: "AI-Powered", desc: "Personalized regimens via dual-persona AI" },
-              { icon: Leaf, title: "Authentic Quality", desc: "Direct from brands, no counterfeits ever" },
+              {
+                icon: Award,
+                title: "Guaranteed Authentic",
+                desc: "The Gold Standard. Sourced directly from authorized distributors.",
+              },
+              {
+                icon: FlaskConical,
+                title: "Pharmacist Verified",
+                desc: "Vetted by experts. Safe for pregnancy and sensitive skin.",
+              },
+              {
+                icon: Truck,
+                title: "Amman Concierge Delivery",
+                desc: "Temperature-controlled local delivery. Free over 50 JOD.",
+              },
             ].map((item, i) => (
               <div key={i} className="flex flex-col items-center text-center">
                 <div className="w-14 h-14 rounded-full bg-primary/5 border border-primary/10 flex items-center justify-center mb-4">
@@ -210,6 +229,12 @@ const Index = () => {
         subtitle="Shield. Glow. Repeat."
       />
 
+      {/* Gold divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+
+      {/* Newsletter */}
+      <Newsletter />
+
       {/* Footer */}
       <footer className="border-t border-border/50 py-12 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -222,7 +247,7 @@ const Index = () => {
               "We do not just sell cosmetics; we dispense beauty through intelligence."
             </p>
           </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent mt-8" />
+          <div className="h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent mt-8" />
           <p className="text-xs text-muted-foreground text-center mt-6 font-body">
             © {new Date().getFullYear()} Asper Beauty Shop. The Sanctuary of Science.
           </p>
