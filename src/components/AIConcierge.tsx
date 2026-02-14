@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { MessageCircle, X, Send, Shield, Heart, Loader2, Volume2, VolumeX, Camera, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
+import { supabase } from "@/integrations/supabase/client";
 
 type MessageContent =
   | string
@@ -34,6 +35,7 @@ function getTextContent(content: string | MessageContent[]): string {
 async function streamChat({
   messages,
   forcePersona,
+  userProfile,
   onPersona,
   onDelta,
   onDone,
@@ -41,6 +43,7 @@ async function streamChat({
 }: {
   messages: Msg[];
   forcePersona?: string;
+  userProfile?: { skin_type: string | null; skin_concern: string; tags: string[] } | null;
   onPersona: (p: string) => void;
   onDelta: (text: string) => void;
   onDone: () => void;
@@ -57,7 +60,7 @@ async function streamChat({
       "Content-Type": "application/json",
       Authorization: `Bearer ${ANON_KEY}`,
     },
-    body: JSON.stringify({ messages: payload, forcePersona }),
+    body: JSON.stringify({ messages: payload, forcePersona, userProfile }),
   });
 
   if (!resp.ok) {
@@ -150,8 +153,30 @@ export default function AIConcierge() {
   const [speakingIdx, setSpeakingIdx] = useState<number | null>(null);
   const [pendingImage, setPendingImage] = useState<{ file: File; preview: string } | null>(null);
   const [safetyFlags, setSafetyFlags] = useState<string[]>([]);
+  const [userProfile, setUserProfile] = useState<{ skin_type: string | null; skin_concern: string; tags: string[] } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch concierge_profiles on open
+  useEffect(() => {
+    if (!open) return;
+    (async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const { data } = await supabase
+          .from("concierge_profiles")
+          .select("skin_type, skin_concern")
+          .eq("user_id", user.id)
+          .maybeSingle();
+        if (data) {
+          setUserProfile({ skin_type: data.skin_type, skin_concern: data.skin_concern, tags: [] });
+        }
+      } catch {
+        // Not logged in or no profile — proceed without context
+      }
+    })();
+  }, [open]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -261,6 +286,7 @@ export default function AIConcierge() {
     try {
       await streamChat({
         messages: [...messages, userMsg],
+        userProfile,
         onPersona: (p) => {
           detectedPersona = p;
           setCurrentPersona(p);
