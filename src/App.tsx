@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import BrandShowcase from "./pages/BrandShowcase";
 import LabTools from "./pages/LabTools";
+import Intelligence from "./pages/Intelligence";
 import AIConcierge from "./components/AIConcierge";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ function AppContent() {
         <Route path="/product/:handle" element={<ProductDetail />} />
         <Route path="/brand" element={<BrandShowcase />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/intelligence" element={<Intelligence />} />
         <Route path="/lab" element={<LabTools />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
