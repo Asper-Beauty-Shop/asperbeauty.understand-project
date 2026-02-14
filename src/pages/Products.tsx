@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProductCard } from "@/components/ShopifyProductCard";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { VendorFilter, buildVendorQuery } from "@/components/VendorFilter";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -10,19 +11,23 @@ import { Input } from "@/components/ui/input";
 import { Package, ArrowLeft, Search, SlidersHorizontal, X } from "lucide-react";
 import { buildTypeQuery } from "@/lib/categoryMapping";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Products = () => {
   const [searchInput, setSearchInput] = useState("");
   const [activeQuery, setActiveQuery] = useState<string | undefined>();
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
   const isMobile = useIsMobile();
 
   const buildQuery = () => {
     const parts: string[] = [];
     if (activeQuery) parts.push(activeQuery);
     const typeQuery = buildTypeQuery(selectedTypes);
-    if (typeQuery) parts.push(typeQuery);
+    if (typeQuery) parts.push(`(${typeQuery})`);
+    const vendorQuery = buildVendorQuery(selectedVendors);
+    if (vendorQuery) parts.push(`(${vendorQuery})`);
     return parts.length > 0 ? parts.join(" ") : undefined;
   };
 
@@ -33,9 +38,13 @@ const Products = () => {
     setActiveQuery(searchInput.trim() || undefined);
   };
 
+  const totalFilters = selectedTypes.length + selectedVendors.length;
+
   const filterSidebar = (
     <div className="space-y-4">
       <CategoryFilter selected={selectedTypes} onSelect={setSelectedTypes} />
+      <Separator />
+      <VendorFilter selected={selectedVendors} onSelect={setSelectedVendors} />
     </div>
   );
 
@@ -81,11 +90,11 @@ const Products = () => {
           </form>
 
           {/* Active filter pills */}
-          {selectedTypes.length > 0 && (
+          {totalFilters > 0 && (
             <div className="mt-4 flex flex-wrap gap-1.5">
               {selectedTypes.map((type) => (
                 <Button
-                  key={type}
+                  key={`type-${type}`}
                   variant="secondary"
                   size="sm"
                   className="rounded-full text-xs h-7 gap-1"
@@ -97,11 +106,25 @@ const Products = () => {
                   <X className="h-3 w-3" />
                 </Button>
               ))}
+              {selectedVendors.map((vendor) => (
+                <Button
+                  key={`vendor-${vendor}`}
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full text-xs h-7 gap-1 border-primary/30"
+                  onClick={() =>
+                    setSelectedVendors(selectedVendors.filter((v) => v !== vendor))
+                  }
+                >
+                  🏷️ {vendor}
+                  <X className="h-3 w-3" />
+                </Button>
+              ))}
               <Button
                 variant="ghost"
                 size="sm"
                 className="rounded-full text-xs h-7 text-muted-foreground"
-                onClick={() => setSelectedTypes([])}
+                onClick={() => { setSelectedTypes([]); setSelectedVendors([]); }}
               >
                 Clear all
               </Button>
@@ -128,9 +151,9 @@ const Products = () => {
                   <Button variant="outline" size="sm" className="mb-4 gap-2">
                     <SlidersHorizontal className="h-4 w-4" />
                     Filters
-                    {selectedTypes.length > 0 && (
+                    {totalFilters > 0 && (
                       <span className="ml-1 rounded-full bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5">
-                        {selectedTypes.length}
+                        {totalFilters}
                       </span>
                     )}
                   </Button>
