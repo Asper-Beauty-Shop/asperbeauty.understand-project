@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, Sparkles, ShoppingBag, Shield, Leaf, FlaskConical, Heart } from "lucide-react";
+import Hero from "@/components/home/Hero";
 
 const Index = () => {
   return (
@@ -41,46 +42,7 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-secondary via-background to-secondary/50" />
-        <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-gold/5 blur-3xl" />
-        <div className="absolute bottom-10 left-10 w-96 h-96 rounded-full bg-primary/3 blur-3xl" />
-        
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-40">
-          <div className="max-w-3xl">
-            <Badge variant="outline" className="mb-6 border-gold text-gold font-body text-xs tracking-wider px-4 py-1.5">
-              <Shield className="h-3 w-3 mr-2" />
-              PHARMACIST-CURATED AUTHORITY
-            </Badge>
-            
-            <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground leading-[1.1] tracking-tight">
-              The Sanctuary
-              <br />
-              <span className="text-primary">of Science</span>
-            </h1>
-            
-            <p className="mt-6 text-lg sm:text-xl text-muted-foreground font-body leading-relaxed max-w-2xl">
-              Bridging clinical dermocosmetics and everyday beauty essentials.
-              <em className="text-foreground/70 font-medium"> We do not just sell cosmetics; we dispense beauty through intelligence.</em>
-            </p>
-            
-            <div className="mt-10 flex flex-col sm:flex-row gap-4">
-              <Link to="/products">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 h-12 shadow-lg shadow-primary/20">
-                  Explore 5,000+ Products
-                </Button>
-              </Link>
-              <Button size="lg" variant="outline" className="border-gold text-gold hover:bg-gold/10 text-base px-8 h-12">
-                <Sparkles className="h-4 w-4 mr-2" />
-                Meet Your AI Pharmacist
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Gold divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-      </section>
+      <Hero />
 
       {/* 3-Click Solution */}
       <section id="concierge" className="py-20 sm:py-28 bg-card">
