@@ -11,8 +11,8 @@
 
 @layer base {
   :root {
-    /* Canvas: Soft Ivory #F8F8FF */
-    --background: 240 100% 99.2%;
+    /* Canvas: Warm Ivory — "Morning Spa" */
+    --background: 40 33% 98%;
     --foreground: 0 0% 20%;
 
     /* Card: Pure White #FFFFFF on Ivory */
