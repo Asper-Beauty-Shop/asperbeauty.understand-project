@@ -242,6 +242,140 @@ export type Database = {
         }
         Relationships: []
       }
+      prompt_audit_logs: {
+        Row: {
+          created_at: string
+          experiment_key: string | null
+          id: number
+          locale: Database["public"]["Enums"]["locale_code"]
+          notes: Json | null
+          persona: Database["public"]["Enums"]["persona_type"]
+          prompt_id: string | null
+          session_id: string | null
+          user_id: string | null
+          variant: string | null
+        }
+        Insert: {
+          created_at?: string
+          experiment_key?: string | null
+          id?: number
+          locale: Database["public"]["Enums"]["locale_code"]
+          notes?: Json | null
+          persona: Database["public"]["Enums"]["persona_type"]
+          prompt_id?: string | null
+          session_id?: string | null
+          user_id?: string | null
+          variant?: string | null
+        }
+        Update: {
+          created_at?: string
+          experiment_key?: string | null
+          id?: number
+          locale?: Database["public"]["Enums"]["locale_code"]
+          notes?: Json | null
+          persona?: Database["public"]["Enums"]["persona_type"]
+          prompt_id?: string | null
+          session_id?: string | null
+          user_id?: string | null
+          variant?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prompt_audit_logs_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prompt_experiments: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          key: string
+          locale: Database["public"]["Enums"]["locale_code"]
+          persona: Database["public"]["Enums"]["persona_type"]
+          split_a: number
+          variant_a_prompt_id: string | null
+          variant_b_prompt_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          key: string
+          locale?: Database["public"]["Enums"]["locale_code"]
+          persona: Database["public"]["Enums"]["persona_type"]
+          split_a?: number
+          variant_a_prompt_id?: string | null
+          variant_b_prompt_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          key?: string
+          locale?: Database["public"]["Enums"]["locale_code"]
+          persona?: Database["public"]["Enums"]["persona_type"]
+          split_a?: number
+          variant_a_prompt_id?: string | null
+          variant_b_prompt_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prompt_experiments_variant_a_prompt_id_fkey"
+            columns: ["variant_a_prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prompt_experiments_variant_b_prompt_id_fkey"
+            columns: ["variant_b_prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prompts: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          locale: Database["public"]["Enums"]["locale_code"]
+          persona: Database["public"]["Enums"]["persona_type"]
+          title: string
+          version: number
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          locale?: Database["public"]["Enums"]["locale_code"]
+          persona: Database["public"]["Enums"]["persona_type"]
+          title: string
+          version: number
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          locale?: Database["public"]["Enums"]["locale_code"]
+          persona?: Database["public"]["Enums"]["persona_type"]
+          title?: string
+          version?: number
+        }
+        Relationships: []
+      }
       "Shopify pub": {
         Row: {
           created_at: string | null
@@ -341,6 +475,8 @@ export type Database = {
       }
     }
     Enums: {
+      locale_code: "en" | "ar"
+      persona_type: "dr_sami" | "ms_zain"
       regimen_step: "Step_1_Cleanser" | "Step_2_Treatment" | "Step_3_Protection"
       shopify: "public"
       skin_concern:
@@ -478,6 +614,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      locale_code: ["en", "ar"],
+      persona_type: ["dr_sami", "ms_zain"],
       regimen_step: [
         "Step_1_Cleanser",
         "Step_2_Treatment",
