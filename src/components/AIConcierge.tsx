@@ -180,23 +180,23 @@ export default function AIConcierge() {
       {open && (
         <Card className="fixed bottom-6 right-6 z-50 flex h-[520px] w-[380px] flex-col overflow-hidden border-border/50 shadow-2xl sm:w-[400px]">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border/50 bg-card px-4 py-3">
+          <div className="flex items-center justify-between border-b border-border/50 bg-primary px-4 py-3">
             <div className="flex items-center gap-3">
-              <div className={cn("flex h-9 w-9 items-center justify-center rounded-full", persona.bgColor)}>
-                <PersonaIcon className={cn("h-4 w-4", persona.color)} />
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/20">
+                <PersonaIcon className="h-4 w-4 text-primary-foreground" />
               </div>
               <div>
-                <p className="font-heading text-sm font-semibold">{persona.name}</p>
-                <p className="text-xs text-muted-foreground">{persona.subtitle}</p>
+                <p className="font-heading text-sm font-semibold text-primary-foreground">{persona.name}</p>
+                <p className="text-xs text-primary-foreground/70">{persona.subtitle}</p>
               </div>
             </div>
-            <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
+            <button onClick={() => setOpen(false)} className="text-primary-foreground/70 hover:text-primary-foreground">
               <X className="h-5 w-5" />
             </button>
           </div>
 
           {/* Messages */}
-          <ScrollArea className="flex-1 px-4 py-3" ref={scrollRef}>
+          <ScrollArea className="flex-1 bg-background px-4 py-3" ref={scrollRef}>
             {messages.length === 0 && (
               <div className="space-y-3">
                 <p className="text-center text-sm text-muted-foreground font-body">

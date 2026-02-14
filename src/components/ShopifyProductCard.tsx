@@ -35,7 +35,7 @@ export function ShopifyProductCard({ product }: { product: ShopifyProduct }) {
 
   return (
     <Link to={`/product/${node.handle}`}>
-      <Card className="group overflow-hidden border-border/50 bg-card transition-all hover:shadow-lg hover:-translate-y-1 h-full">
+      <Card className="group overflow-hidden border border-transparent bg-card transition-all hover:shadow-lg hover:-translate-y-1 hover:border-gold h-full">
         <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
           {image ? (
             <img
