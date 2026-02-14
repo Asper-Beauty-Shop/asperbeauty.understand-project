@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, Sparkles, ShoppingBag, Shield, Leaf, FlaskConical, Heart } from "lucide-react";
 import Hero from "@/components/home/Hero";
+import AuthButton from "@/components/AuthButton";
 
 const Index = () => {
   return (
@@ -36,6 +37,7 @@ const Index = () => {
                   Shop Now
                 </Button>
               </Link>
+              <AuthButton />
             </div>
           </div>
         </div>

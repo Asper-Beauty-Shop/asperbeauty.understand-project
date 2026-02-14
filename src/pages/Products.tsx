@@ -13,6 +13,7 @@ import { buildTypeQuery } from "@/lib/categoryMapping";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
+import AuthButton from "@/components/AuthButton";
 
 const Products = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -63,7 +64,10 @@ const Products = () => {
               <div className="h-6 w-px bg-border" />
               <span className="font-heading text-xl font-bold text-primary">Asper</span>
             </div>
-            <CartDrawer />
+            <div className="flex items-center gap-3">
+              <AuthButton />
+              <CartDrawer />
+            </div>
           </div>
         </div>
       </nav>
