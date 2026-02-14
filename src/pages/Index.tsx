@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, Sparkles, ShoppingBag, Shield, Leaf, FlaskConical, Heart } from "lucide-react";
 import Hero from "@/components/home/Hero";
+import ConciergeShowcase from "@/components/home/ConciergeShowcase";
 import AuthButton from "@/components/AuthButton";
 
 const Index = () => {
@@ -46,6 +47,12 @@ const Index = () => {
 
       {/* Hero Section */}
       <Hero />
+
+      {/* Gold divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+
+      {/* AI Concierge Showcase — Safety Interlock */}
+      <ConciergeShowcase />
 
       {/* 3-Click Solution */}
       <section id="concierge" className="py-20 sm:py-28 bg-card">
