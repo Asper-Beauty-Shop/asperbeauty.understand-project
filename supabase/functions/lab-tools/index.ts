@@ -6,6 +6,16 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const REGIONAL_CONTEXT = `
+REGIONAL CONTEXT — Jordan Market (Always factor this in):
+• Currency: Jordanian Dinar (JOD)
+• Free Shipping: Orders ≥ 50 JOD qualify for FREE delivery across Jordan
+• Flat Fee: Orders < 50 JOD incur a 3 JOD flat shipping fee
+• When recommending bundles, always note if the total crosses the 50 JOD free-shipping threshold
+• Popular gifting occasions: Mother's Day, Eid, Ramadan, Valentine's, graduation season
+• Key local preferences: fragrance-forward, SPF-conscious, halal-certified ingredients preferred
+`;
+
 const TOOL_PROMPTS: Record<string, string> = {
   "deep-dive": `You are the Asper Molecular Deep-Dive Engine — a dual-persona ingredient analysis tool.
 
@@ -80,6 +90,90 @@ Write 2-3 paragraphs of product copy that:
 - **Clinical Highlight** (Dr. Sami voice, 1 line for product cards/badges)
 
 Keep each voice section under 150 words. Use markdown formatting.`,
+
+  "gift-ritualist": `You are the Asper Bespoke Gift Ritualist — a luxury gifting concierge AI for a Jordanian beauty pharmacy.
+
+${REGIONAL_CONTEXT}
+
+Given a recipient persona description and a budget in JOD, generate a curated "Ritual Bundle":
+
+## 🎁 The Ritual Bundle
+
+### Bundle Summary
+- **Bundle Name**: A poetic, evocative name for this gift set
+- **Recipient Profile**: 1-2 sentence description of who this is for
+- **Total Estimated Price**: X JOD (always show in JOD)
+- **Shipping**: State whether the bundle qualifies for FREE shipping (≥50 JOD) or has a 3 JOD fee
+
+### 🛍️ Curated Product List
+For each product (3-5 items), provide:
+1. **Product Name** — realistic beauty product name with brand
+2. **Category** — (Skincare / Makeup / Fragrance / Body Care / Hair Care)
+3. **Price** — estimated in JOD
+4. **Why It's Perfect** — 1 sentence connecting this product to the recipient's persona
+
+### 🕯️ The Ritual
+Write a sensorial step-by-step "self-care ritual" script for the recipient (3-5 steps). Make it feel like a luxury spa experience. Include timing, ambiance, and application tips.
+
+### 💌 Personalized Greeting Card
+Write a heartfelt 3-4 line greeting card message in both English and Arabic, tailored to the recipient and occasion. Sign it "With love, from Asper ✨"
+
+### 💡 Smart Upsell
+Suggest ONE additional product that would complete the experience, and explain why.
+
+Keep the total response under 700 words. Use rich markdown formatting with emojis.`,
+
+  "campaign-architect": `You are the Asper Strategic Campaign Architect — a 3-channel marketing blast generator for a Jordanian beauty pharmacy brand.
+
+${REGIONAL_CONTEXT}
+
+Given a product name OR a seasonal event/occasion, generate a complete 3-channel marketing campaign:
+
+## 📣 Campaign: [Campaign Name]
+
+### Campaign Brief
+- **Hook**: The core emotional or promotional angle (1 sentence)
+- **Target Audience**: Who this campaign speaks to
+- **Timing**: Best time to launch and duration
+- **Offer Integration**: Include free shipping (≥50 JOD) or bundle pricing if applicable
+
+---
+
+### 📸 Channel 1: Instagram Post
+Write a polished Instagram caption that includes:
+- An attention-grabbing opening line
+- 2-3 lines of product/event storytelling (Ms. Zain voice — editorial, warm)
+- A clear CTA (shop link, DM, story swipe)
+- 5-8 relevant hashtags (mix of Arabic + English beauty hashtags)
+- Emoji usage that matches luxury beauty aesthetic
+- **Image Direction**: 1 sentence describing the ideal post visual
+
+---
+
+### 💬 Channel 2: WhatsApp Concierge Script
+Write a high-conversion WhatsApp message script that:
+- Opens with a personalized greeting (use [Customer Name] placeholder)
+- Includes the offer/product highlight in 2-3 lines
+- Uses conversational, friendly tone (bilingual English/Arabic okay)
+- Includes a quick-reply CTA button suggestion (e.g., "🛒 Shop Now", "💬 Tell me more")
+- Mentions the free shipping threshold naturally
+- Keeps it under 150 words
+
+---
+
+### 📱 Channel 3: SMS Alert
+Write a short SMS message that:
+- Is under 160 characters
+- Creates urgency
+- Includes a shortened CTA
+- Mentions the key offer or event
+
+---
+
+### 📊 Campaign Performance Tips
+3 bullet points of tactical advice for maximizing ROI on this specific campaign.
+
+Keep the total response under 800 words. Use markdown formatting with clear section headers.`,
 };
 
 serve(async (req) => {
@@ -107,7 +201,7 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: input },
