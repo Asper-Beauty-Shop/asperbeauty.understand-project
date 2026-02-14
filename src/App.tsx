@@ -9,6 +9,7 @@ import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 import BrandShowcase from "./pages/BrandShowcase";
+import LabTools from "./pages/LabTools";
 import AIConcierge from "./components/AIConcierge";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ function AppContent() {
         <Route path="/products" element={<Products />} />
         <Route path="/product/:handle" element={<ProductDetail />} />
         <Route path="/brand" element={<BrandShowcase />} />
+        <Route path="/lab" element={<LabTools />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <AIConcierge />
