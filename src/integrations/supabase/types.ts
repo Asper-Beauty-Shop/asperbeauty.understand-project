@@ -169,50 +169,68 @@ export type Database = {
       }
       products: {
         Row: {
+          ai_persona_lead: Database["public"]["Enums"]["persona_type"] | null
           bestseller_rank: number | null
           brand: string | null
+          clinical_badge: string | null
           created_at: string
+          gold_stitch_tier: boolean
           handle: string
+          hex_swatch: string | null
           id: string
           image_url: string | null
           inventory_total: number
           is_hero: boolean
+          key_ingredients: string[] | null
           price: number | null
           primary_concern: Database["public"]["Enums"]["skin_concern"]
           regimen_step: Database["public"]["Enums"]["regimen_step"]
           tags: string[] | null
+          texture_profile: string | null
           title: string
           updated_at: string
         }
         Insert: {
+          ai_persona_lead?: Database["public"]["Enums"]["persona_type"] | null
           bestseller_rank?: number | null
           brand?: string | null
+          clinical_badge?: string | null
           created_at?: string
+          gold_stitch_tier?: boolean
           handle: string
+          hex_swatch?: string | null
           id?: string
           image_url?: string | null
           inventory_total?: number
           is_hero?: boolean
+          key_ingredients?: string[] | null
           price?: number | null
           primary_concern: Database["public"]["Enums"]["skin_concern"]
           regimen_step: Database["public"]["Enums"]["regimen_step"]
           tags?: string[] | null
+          texture_profile?: string | null
           title: string
           updated_at?: string
         }
         Update: {
+          ai_persona_lead?: Database["public"]["Enums"]["persona_type"] | null
           bestseller_rank?: number | null
           brand?: string | null
+          clinical_badge?: string | null
           created_at?: string
+          gold_stitch_tier?: boolean
           handle?: string
+          hex_swatch?: string | null
           id?: string
           image_url?: string | null
           inventory_total?: number
           is_hero?: boolean
+          key_ingredients?: string[] | null
           price?: number | null
           primary_concern?: Database["public"]["Enums"]["skin_concern"]
           regimen_step?: Database["public"]["Enums"]["regimen_step"]
           tags?: string[] | null
+          texture_profile?: string | null
           title?: string
           updated_at?: string
         }
