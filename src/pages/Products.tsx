@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProductCard } from "@/components/ShopifyProductCard";
+import { useProductEnrichmentBulk } from "@/hooks/useProductEnrichment";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { VendorFilter, buildVendorQuery } from "@/components/VendorFilter";
 import { CartDrawer } from "@/components/CartDrawer";
@@ -34,6 +35,11 @@ const Products = () => {
 
   const { data, isLoading, error } = useShopifyProducts(buildQuery(), 24);
 
+  const handles = useMemo(
+    () => (data?.products || []).map((p) => p.node.handle),
+    [data?.products]
+  );
+  const { data: enrichmentMap } = useProductEnrichmentBulk(handles);
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setActiveQuery(searchInput.trim() || undefined);
@@ -198,7 +204,7 @@ const Products = () => {
               <>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {data.products.map((product) => (
-                    <ShopifyProductCard key={product.node.id} product={product} />
+                    <ShopifyProductCard key={product.node.id} product={product} enrichment={enrichmentMap?.get(product.node.handle)} />
                   ))}
                 </div>
 

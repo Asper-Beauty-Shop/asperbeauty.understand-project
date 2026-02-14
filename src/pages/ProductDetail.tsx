@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useShopifyProduct } from "@/hooks/useShopifyProducts";
+import { useProductEnrichment } from "@/hooks/useProductEnrichment";
 import { useCartStore } from "@/stores/cartStore";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, ShoppingCart, Loader2, Package } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Loader2, Package, Shield } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
   const { data: product, isLoading, error } = useShopifyProduct(handle || "");
+  const { data: enrichment } = useProductEnrichment(handle);
   const addItem = useCartStore(state => state.addItem);
   const cartLoading = useCartStore(state => state.isLoading);
   const [selectedVariantIdx, setSelectedVariantIdx] = useState(0);
@@ -117,19 +120,49 @@ const ProductDetail = () => {
             )}
             <h1 className="font-heading text-3xl font-bold text-foreground">{node.title}</h1>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <span className="text-2xl font-bold text-foreground">
                 {selectedVariant?.price.currencyCode} {parseFloat(selectedVariant?.price.amount || "0").toFixed(2)}
               </span>
               {node.productType && (
                 <Badge variant="secondary">{node.productType}</Badge>
               )}
+              {enrichment?.clinical_badge && (
+                <Badge variant="outline" className="gap-1">
+                  <Shield className="h-3 w-3 text-primary" />
+                  {enrichment.clinical_badge}
+                </Badge>
+              )}
+              {enrichment?.ai_persona_lead && (
+                <Badge variant="outline" className="border-accent/50">
+                  {enrichment.ai_persona_lead === "dr_sami" ? "🔬 Dr. Sami Pick" : "✨ Ms. Zain Pick"}
+                </Badge>
+              )}
             </div>
+
+            {enrichment?.texture_profile && (
+              <p className="text-sm italic text-muted-foreground">
+                Texture: {enrichment.texture_profile}
+              </p>
+            )}
 
             {node.description && (
               <p className="text-muted-foreground font-body leading-relaxed">
                 {node.description}
               </p>
+            )}
+
+            {enrichment?.key_ingredients && enrichment.key_ingredients.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">Key Ingredients</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {enrichment.key_ingredients.map((ing) => (
+                    <Badge key={ing} variant="secondary" className="text-xs">
+                      {ing}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             )}
 
             {/* Variant Selection */}
