@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Sparkles, ShoppingBag, Shield, Leaf, FlaskConical, Heart } from "lucide-react";
 import Hero from "@/components/home/Hero";
 import ConciergeShowcase from "@/components/home/ConciergeShowcase";
+import PromoBanner from "@/components/home/PromoBanner";
 import AuthButton from "@/components/AuthButton";
 
 const Index = () => {
@@ -199,6 +200,15 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Gold divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+
+      {/* Seasonal Promo Banner */}
+      <PromoBanner
+        campaign="Summer Hydration"
+        subtitle="Shield. Glow. Repeat."
+      />
 
       {/* Footer */}
       <footer className="border-t border-border/50 py-12 bg-background">
