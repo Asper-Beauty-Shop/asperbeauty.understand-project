@@ -20,7 +20,8 @@ type Msg = {
   imagePreview?: string; // local preview URL for display
 };
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/beauty-assistant`;
+const CHAT_URL = "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
+const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxY2VpYnZhbGtveXRhZnlud29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzc1OTUsImV4cCI6MjA4NTkxMzU5NX0.cnstN7JUhkt-hevIWhaeYRu1Y51tPSTi7eOBM6RLz4Y";
 
 function getTextContent(content: string | MessageContent[]): string {
   if (typeof content === "string") return content;
@@ -36,24 +37,25 @@ async function streamChat({
   onPersona,
   onDelta,
   onDone,
+  onSafetyFlags,
 }: {
   messages: Msg[];
   forcePersona?: string;
   onPersona: (p: string) => void;
   onDelta: (text: string) => void;
   onDone: () => void;
+  onSafetyFlags?: (flags: string[]) => void;
 }) {
-  // Build payload: pass multimodal content arrays through
   const payload = messages.map((m) => ({
     role: m.role,
-    content: m.content, // string or array with image_url parts
+    content: m.content,
   }));
 
   const resp = await fetch(CHAT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      Authorization: `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({ messages: payload, forcePersona }),
   });
@@ -65,6 +67,11 @@ async function streamChat({
 
   const persona = resp.headers.get("X-Persona");
   if (persona) onPersona(persona);
+
+  const safetyFlags = resp.headers.get("X-Safety-Flags");
+  if (safetyFlags && safetyFlags !== "none" && onSafetyFlags) {
+    onSafetyFlags(safetyFlags.split(","));
+  }
 
   if (!resp.body) throw new Error("No response body");
 
@@ -142,6 +149,7 @@ export default function AIConcierge() {
   const [currentPersona, setCurrentPersona] = useState<string>("ms_zain");
   const [speakingIdx, setSpeakingIdx] = useState<number | null>(null);
   const [pendingImage, setPendingImage] = useState<{ file: File; preview: string } | null>(null);
+  const [safetyFlags, setSafetyFlags] = useState<string[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -259,6 +267,7 @@ export default function AIConcierge() {
         },
         onDelta: upsert,
         onDone: () => setIsLoading(false),
+        onSafetyFlags: (flags) => setSafetyFlags(flags),
       });
     } catch (e: any) {
       setMessages((prev) => [
@@ -320,6 +329,16 @@ export default function AIConcierge() {
 
           {/* Messages */}
           <ScrollArea className="flex-1 bg-background px-4 py-3" ref={scrollRef}>
+            {/* Safety Interlock Banner */}
+            {safetyFlags.length > 0 && (
+              <div className="mb-3 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs font-body text-destructive flex items-start gap-2">
+                <Shield className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-semibold">Safety Interlock Active:</span>{" "}
+                  {safetyFlags.join(", ")} flagged for your profile. Dr. Sami is ensuring all recommendations are safe.
+                </div>
+              </div>
+            )}
             {messages.length === 0 && (
               <div className="space-y-3">
                 <p className="text-center text-sm text-muted-foreground font-body">
