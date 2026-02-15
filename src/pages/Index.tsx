@@ -195,24 +195,30 @@ const Index = () => {
 
       <div className="gold-divider" />
 
-      {/* Trust Banner */}
-      <section id="about" className="py-24 sm:py-32 bg-card">
+      {/* Science Behind the Beauty */}
+      <section id="about" className="py-24 sm:py-32 lab-zone">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-12">
+          <Badge variant="outline" className="mb-4 border-accent text-accent font-body text-xs tracking-[0.2em] px-4 py-1.5">
+            THE SCIENCE BEHIND THE BEAUTY
+          </Badge>
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-4">
             Why <span className="text-primary">Asper</span>?
           </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto font-body mb-16">
+            More than a marketplace — a pharmacist-led sanctuary where every product is vetted, verified, and stored with clinical care.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {[
-              { icon: Award, title: "Guaranteed Authentic", desc: "The Gold Standard. Sourced directly from authorized distributors." },
-              { icon: FlaskConical, title: "Pharmacist Verified", desc: "Vetted by experts. Safe for pregnancy and sensitive skin." },
-              { icon: Truck, title: "Amman Concierge Delivery", desc: "Temperature-controlled local delivery. Free over 50 JOD." },
+              { icon: FlaskConical, title: "Clinical Formulas", desc: "Every product is evaluated for active ingredient efficacy by our in-house pharmacists." },
+              { icon: Award, title: "Authenticity Guaranteed", desc: "The Gold Standard. Direct sourcing from authorized distributors — zero grey market." },
+              { icon: Truck, title: "Cold-Chain Storage", desc: "Temperature-controlled warehousing and last-mile delivery. Free over 50 JOD in Amman." },
             ].map((item, i) => (
-              <div key={i} className="flex flex-col items-center text-center">
-                <div className="w-14 h-14 rounded-full bg-primary/5 border border-primary/10 flex items-center justify-center mb-4">
-                  <item.icon className="h-6 w-6 text-primary" />
+              <div key={i} className="flex flex-col items-center text-center group">
+                <div className="w-16 h-16 rounded-full bg-card border border-accent/20 flex items-center justify-center mb-5 group-hover:border-accent/50 transition-colors shadow-sm">
+                  <item.icon className="h-7 w-7 text-primary" />
                 </div>
                 <h3 className="font-heading text-lg font-semibold text-foreground mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground font-body">{item.desc}</p>
+                <p className="text-sm text-muted-foreground font-body leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -231,20 +237,37 @@ const Index = () => {
 
       <Newsletter />
 
-      {/* Footer */}
-      <footer className="border-t border-accent/10 py-12 bg-background">
+      {/* Footer — Deep Maroon */}
+      <footer className="py-16 bg-primary text-primary-foreground">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <img src={asperLogo} alt="Asper" className="h-6 w-auto" />
-              <span className="text-xs font-body uppercase tracking-[0.2em] text-muted-foreground">Beauty Shop</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <img src={asperLogo} alt="Asper" className="h-8 w-auto brightness-0 invert opacity-90" />
+                <span className="text-xs font-body uppercase tracking-[0.25em] text-primary-foreground/70">Beauty Shop</span>
+              </div>
+              <p className={`text-sm text-primary-foreground/70 leading-relaxed ${locale === "ar" ? "font-arabic" : "font-body"}`}>
+                {t("footer.tagline")}
+              </p>
             </div>
-            <p className={`text-sm text-muted-foreground italic ${locale === "ar" ? "font-arabic" : "font-body"}`}>
-              {t("footer.tagline")}
-            </p>
+            <div>
+              <h4 className="font-heading text-sm font-semibold mb-4 text-primary-foreground/90">Quick Links</h4>
+              <div className="flex flex-col gap-2">
+                <Link to="/products" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">Shop All</Link>
+                <Link to="/intelligence" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">AI Intelligence</Link>
+                <Link to="/brand" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">Our Story</Link>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-heading text-sm font-semibold mb-4 text-primary-foreground/90">Connect</h4>
+              <div className="flex flex-col gap-2">
+                <a href="#" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">Instagram</a>
+                <a href="#" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">WhatsApp</a>
+              </div>
+            </div>
           </div>
-          <div className="gold-divider mt-8" />
-          <p className={`text-xs text-muted-foreground text-center mt-6 ${locale === "ar" ? "font-arabic" : "font-body"}`}>
+          <div className="h-px bg-primary-foreground/10" />
+          <p className={`text-xs text-primary-foreground/50 text-center mt-6 ${locale === "ar" ? "font-arabic" : "font-body"}`}>
             © {new Date().getFullYear()} {t("footer.copyright")}
           </p>
         </div>
