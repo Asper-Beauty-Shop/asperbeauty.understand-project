@@ -4,6 +4,7 @@ import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProductCard } from "@/components/ShopifyProductCard";
 import { useProductEnrichmentBulk } from "@/hooks/useProductEnrichment";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { ConcernFilter } from "@/components/ConcernFilter";
 import { VendorFilter, buildVendorQuery } from "@/components/VendorFilter";
 import { CartDrawer } from "@/components/CartDrawer";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductSkeletons";
@@ -21,6 +22,7 @@ const Products = () => {
   const [activeQuery, setActiveQuery] = useState<string | undefined>();
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
+  const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
   const buildQuery = () => {
@@ -154,6 +156,11 @@ const Products = () => {
 
           {/* Main content */}
           <main className="flex-1 min-w-0">
+            {/* Concern filter chips */}
+            <div className="mb-5">
+              <p className="text-xs font-body font-medium text-muted-foreground uppercase tracking-wider mb-2">Shop by Concern</p>
+              <ConcernFilter selected={selectedConcern} onSelect={setSelectedConcern} />
+            </div>
             {/* Mobile filter button */}
             {isMobile && (
               <Sheet>
