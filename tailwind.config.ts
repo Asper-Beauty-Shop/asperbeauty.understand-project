@@ -69,6 +69,13 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
+      boxShadow: {
+        'maroon-glow': '0 4px 20px -2px rgba(128, 0, 32, 0.12)',
+        'maroon-deep': '0 10px 25px -5px rgba(128, 0, 32, 0.25)',
+      },
+      ringColor: {
+        DEFAULT: 'hsl(var(--gold))',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

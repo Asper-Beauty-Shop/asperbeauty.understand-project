@@ -46,7 +46,7 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
     <Link to={`/product/${node.handle}`}>
       <Card
         className={cn(
-          "group overflow-hidden bg-card product-card-hover h-full",
+          "group overflow-hidden bg-card product-card-hover h-full shadow-maroon-glow hover:shadow-maroon-deep",
           isGold
             ? "border border-accent/60 hover:border-accent hover:shadow-[0_8px_30px_-8px_hsl(var(--accent)/0.35)]"
             : "border border-transparent hover:border-gold"
