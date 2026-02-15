@@ -152,6 +152,30 @@ export type Database = {
         }
         Relationships: []
       }
+      items: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          name: string
+          price_cents: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          name: string
+          price_cents: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          name?: string
+          price_cents?: number
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           email: string
