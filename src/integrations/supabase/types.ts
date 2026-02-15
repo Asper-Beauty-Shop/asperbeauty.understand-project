@@ -460,6 +460,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_tenants: {
         Row: {
           tenant_id: string
@@ -493,6 +514,13 @@ export type Database = {
           title: string
         }[]
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       sync_tray_product: {
         Args: {
           p_bestseller_rank: number
@@ -508,6 +536,7 @@ export type Database = {
       }
     }
     Enums: {
+      app_role: "admin" | "editor"
       locale_code: "en" | "ar"
       persona_type: "dr_sami" | "ms_zain"
       regimen_step: "Step_1_Cleanser" | "Step_2_Treatment" | "Step_3_Protection"
@@ -647,6 +676,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "editor"],
       locale_code: ["en", "ar"],
       persona_type: ["dr_sami", "ms_zain"],
       regimen_step: [
