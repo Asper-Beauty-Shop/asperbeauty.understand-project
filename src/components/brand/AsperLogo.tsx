@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import asperLogo from "@/assets/asper-logo.png";
+import asperLogo from "@/assets/asper-lotus-logo.png";
 
 interface AsperLogoProps {
   variant?: "seal" | "bloom";

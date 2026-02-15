@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import asperLogo from "@/assets/asper-logo.png";
+import asperLogo from "@/assets/asper-lotus-logo.png";
 
 export default function SplashScreen({ onComplete }: { onComplete: () => void }) {
   const [phase, setPhase] = useState<"logo" | "text" | "exit">("logo");
