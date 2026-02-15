@@ -8,8 +8,9 @@ import { useCartSync } from "@/hooks/useCartSync";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import SplashScreen from "@/components/SplashScreen";
 import { useIncognitoStore } from "./stores/incognitoStore";
+import AIConcierge from "./components/AIConcierge";
 
-// Lazy-load all route pages to reduce initial bundle & main-thread work
+// Lazy-load route pages to reduce initial bundle & main-thread work
 const Index = lazy(() => import("./pages/Index"));
 const Products = lazy(() => import("./pages/Products"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
@@ -20,7 +21,6 @@ const LabTools = lazy(() => import("./pages/LabTools"));
 const Intelligence = lazy(() => import("./pages/Intelligence"));
 const AdminEnrichment = lazy(() => import("./pages/AdminEnrichment"));
 const Checkout = lazy(() => import("./pages/Checkout"));
-const AIConcierge = lazy(() => import("./components/AIConcierge"));
 
 const queryClient = new QueryClient();
 
@@ -67,8 +67,8 @@ function AppContent() {
           <Route path="/admin/enrichment" element={<AdminEnrichment />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <AIConcierge />
       </Suspense>
+      <AIConcierge />
     </>
   );
 }
