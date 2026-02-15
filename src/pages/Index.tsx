@@ -6,16 +6,19 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Sparkles, ShoppingBag, Shield, FlaskConical, Heart, Award, Truck, Globe, ArrowRight } from "lucide-react";
 import { IconNewArrivals, IconBestSellers, IconGiftSets } from "@/components/brand/ClinicalIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { lazy, Suspense } from "react";
 import Hero from "@/components/home/Hero";
-import BrandStory from "@/components/home/BrandStory";
 import ConciergeShowcase from "@/components/home/ConciergeShowcase";
-import PromoBanner from "@/components/home/PromoBanner";
-import Newsletter from "@/components/home/Newsletter";
 import ShopByConcern from "@/components/home/ShopByConcern";
 import PharmacistPicks from "@/components/home/PharmacistPicks";
-import SocialGallery from "@/components/home/SocialGallery";
 import SearchBar from "@/components/home/SearchBar";
-import ExpertTips from "@/components/home/ExpertTips";
+import LazySection from "@/components/LazySection";
+
+const BrandStory = lazy(() => import("@/components/home/BrandStory"));
+const ExpertTips = lazy(() => import("@/components/home/ExpertTips"));
+const PromoBanner = lazy(() => import("@/components/home/PromoBanner"));
+const SocialGallery = lazy(() => import("@/components/home/SocialGallery"));
+const Newsletter = lazy(() => import("@/components/home/Newsletter"));
 import ScrollProgress from "@/components/ScrollProgress";
 import AuthButton from "@/components/AuthButton";
 import MobileBottomNav from "@/components/MobileBottomNav";
@@ -242,12 +245,19 @@ const Index = () => {
 
       <div className="gold-divider" />
 
-      <BrandStory />
+      <LazySection minHeight="400px">
+        <Suspense fallback={<div className="py-20" />}>
+          <BrandStory />
+        </Suspense>
+      </LazySection>
 
       <div className="gold-divider" />
 
-      {/* Expert Weekly Tips */}
-      <ExpertTips />
+      <LazySection minHeight="350px">
+        <Suspense fallback={<div className="py-20" />}>
+          <ExpertTips />
+        </Suspense>
+      </LazySection>
 
       <div className="gold-divider" />
 
@@ -283,15 +293,27 @@ const Index = () => {
 
       <div className="gold-divider" />
 
-      <PromoBanner campaign="Summer Hydration" subtitle="Shield. Glow. Repeat." />
+      <LazySection minHeight="250px">
+        <Suspense fallback={<div className="py-16" />}>
+          <PromoBanner campaign="Summer Hydration" subtitle="Shield. Glow. Repeat." />
+        </Suspense>
+      </LazySection>
 
       <div className="gold-divider" />
 
-      <SocialGallery />
+      <LazySection minHeight="300px">
+        <Suspense fallback={<div className="py-20" />}>
+          <SocialGallery />
+        </Suspense>
+      </LazySection>
 
       <div className="gold-divider" />
 
-      <Newsletter />
+      <LazySection minHeight="200px">
+        <Suspense fallback={<div className="py-16" />}>
+          <Newsletter />
+        </Suspense>
+      </LazySection>
 
       {/* Footer — Deep Maroon */}
       <footer className="py-16 bg-primary text-primary-foreground">
