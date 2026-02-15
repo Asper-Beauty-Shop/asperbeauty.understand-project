@@ -16,11 +16,14 @@ export default function Hero() {
   return (
     <section className="relative h-[85vh] min-h-[600px] max-h-[900px] overflow-hidden">
       {/* Video Background */}
+      {/* eslint-disable-next-line react/no-unknown-property */}
       <video
         autoPlay
         muted
         loop
         playsInline
+        // @ts-ignore fetchpriority is valid HTML but not yet in React types
+        fetchpriority="high"
         className="absolute inset-0 h-full w-full object-cover"
       >
         <source src={heroVideo} type="video/mp4" />
