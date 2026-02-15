@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,18 +7,20 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useCartSync } from "@/hooks/useCartSync";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import SplashScreen from "@/components/SplashScreen";
-import Index from "./pages/Index";
-import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import NotFound from "./pages/NotFound";
-import Auth from "./pages/Auth";
-import BrandShowcase from "./pages/BrandShowcase";
-import LabTools from "./pages/LabTools";
-import Intelligence from "./pages/Intelligence";
-import AdminEnrichment from "./pages/AdminEnrichment";
-import Checkout from "./pages/Checkout";
-import AIConcierge from "./components/AIConcierge";
 import { useIncognitoStore } from "./stores/incognitoStore";
+
+// Lazy-load all route pages to reduce initial bundle & main-thread work
+const Index = lazy(() => import("./pages/Index"));
+const Products = lazy(() => import("./pages/Products"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Auth = lazy(() => import("./pages/Auth"));
+const BrandShowcase = lazy(() => import("./pages/BrandShowcase"));
+const LabTools = lazy(() => import("./pages/LabTools"));
+const Intelligence = lazy(() => import("./pages/Intelligence"));
+const AdminEnrichment = lazy(() => import("./pages/AdminEnrichment"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const AIConcierge = lazy(() => import("./components/AIConcierge"));
 
 const queryClient = new QueryClient();
 
@@ -52,19 +54,21 @@ function AppContent() {
   return (
     <>
       <ScrollRestoration />
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/product/:handle" element={<ProductDetail />} />
-        <Route path="/brand" element={<BrandShowcase />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/intelligence" element={<Intelligence />} />
-        <Route path="/lab" element={<LabTools />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/admin/enrichment" element={<AdminEnrichment />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <AIConcierge />
+      <Suspense fallback={<div className="min-h-screen bg-background" />}>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/product/:handle" element={<ProductDetail />} />
+          <Route path="/brand" element={<BrandShowcase />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/intelligence" element={<Intelligence />} />
+          <Route path="/lab" element={<LabTools />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/admin/enrichment" element={<AdminEnrichment />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <AIConcierge />
+      </Suspense>
     </>
   );
 }
