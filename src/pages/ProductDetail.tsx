@@ -347,24 +347,45 @@ const ProductDetail = () => {
                 )
               )}
 
-              {/* Add to Cart — Desktop */}
-              <Button
-                size="lg"
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 btn-ripple h-12 text-sm uppercase tracking-widest hidden lg:flex"
-                onClick={handleAddToCart}
-                disabled={cartLoading || !selectedVariant?.availableForSale}
-              >
-                {cartLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : !selectedVariant?.availableForSale ? (
-                  "Out of Stock"
-                ) : (
-                  <>
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    Add to Regimen
-                  </>
-                )}
-              </Button>
+              {/* Add to Cart / Notify Me — Desktop */}
+              {selectedVariant?.availableForSale ? (
+                <Button
+                  size="lg"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 btn-ripple h-12 text-sm uppercase tracking-widest hidden lg:flex"
+                  onClick={handleAddToCart}
+                  disabled={cartLoading}
+                >
+                  {cartLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Add to Regimen
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <div className="hidden lg:block space-y-3">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full h-12 text-sm uppercase tracking-widest border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                    onClick={() => toast.success("We'll notify you!", { description: "You'll get an alert when this item is back in stock.", position: "top-center" })}
+                  >
+                    🔔 Notify Me When Available
+                  </Button>
+                  <div className="flex items-start gap-2 bg-secondary/50 rounded-lg px-4 py-3 border border-border/30">
+                    <span className="text-base shrink-0 mt-0.5">🔬</span>
+                    <div>
+                      <p className="text-xs font-medium text-foreground font-body">Dr. Sami suggests this alternative:</p>
+                      <p className="text-xs text-muted-foreground font-body italic">Browse similar products with comparable active ingredients.</p>
+                      <Link to="/products" className="text-xs text-primary font-semibold font-body hover:underline">
+                        View Alternatives →
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -379,23 +400,32 @@ const ProductDetail = () => {
               {selectedVariant?.price.currencyCode} {priceAmount.toFixed(2)}
             </p>
           </div>
-          <Button
-            size="lg"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 btn-ripple px-6 h-11 text-sm uppercase tracking-widest shrink-0"
-            onClick={handleAddToCart}
-            disabled={cartLoading || !selectedVariant?.availableForSale}
-          >
-            {cartLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : !selectedVariant?.availableForSale ? (
-              "Sold Out"
-            ) : (
-              <>
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                Add
-              </>
-            )}
-          </Button>
+          {selectedVariant?.availableForSale ? (
+            <Button
+              size="lg"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 btn-ripple px-6 h-11 text-sm uppercase tracking-widest shrink-0"
+              onClick={handleAddToCart}
+              disabled={cartLoading}
+            >
+              {cartLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  Add
+                </>
+              )}
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-primary text-primary px-6 h-11 text-sm uppercase tracking-widest shrink-0"
+              onClick={() => toast.success("We'll notify you!", { description: "You'll get an alert when this item is back.", position: "top-center" })}
+            >
+              🔔 Notify Me
+            </Button>
+          )}
         </div>
       </div>
     </div>

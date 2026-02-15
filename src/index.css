@@ -38,7 +38,8 @@
     --accent: 43 69% 46%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
+    /* Polite Error: Soft Terracotta instead of harsh red */
+    --destructive: 15 60% 58%;
     --destructive-foreground: 0 0% 100%;
 
     /* Structure borders: subtle gold-tinted */
@@ -93,7 +94,7 @@
     --accent: 43 69% 46%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 15 50% 45%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 18%;

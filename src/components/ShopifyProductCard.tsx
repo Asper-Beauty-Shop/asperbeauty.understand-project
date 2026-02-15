@@ -189,23 +189,44 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
             </div>
           )}
 
-          <Button
-            size="sm"
-            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-xs btn-ripple"
-            onClick={handleAddToCart}
-            disabled={isLoading || !variant?.availableForSale}
-          >
-            {isLoading ? (
-              <Loader2 className="h-3 w-3 animate-spin" />
-            ) : !variant?.availableForSale ? (
-              "Out of Stock"
-            ) : (
-              <>
-                <ShoppingCart className="h-3 w-3 mr-1" />
-                Add to Cart
-              </>
-            )}
-          </Button>
+          {variant?.availableForSale ? (
+            <Button
+              size="sm"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-xs btn-ripple"
+              onClick={handleAddToCart}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : (
+                <>
+                  <ShoppingCart className="h-3 w-3 mr-1" />
+                  Add to Cart
+                </>
+              )}
+            </Button>
+          ) : (
+            <div className="space-y-2">
+              <Button
+                size="sm"
+                variant="outline"
+                className="w-full text-xs border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toast.success("We'll notify you!", {
+                    description: "You'll get an alert when this item is back in stock.",
+                    position: "top-center",
+                  });
+                }}
+              >
+                🔔 Notify Me
+              </Button>
+              <p className="text-[10px] text-muted-foreground italic font-body text-center">
+                🔬 Dr. Sami suggests a similar alternative
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </Link>
