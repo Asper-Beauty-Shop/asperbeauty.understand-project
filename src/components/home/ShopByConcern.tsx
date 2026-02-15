@@ -2,23 +2,23 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import {
-  Droplets,
-  Sun,
-  Sparkles,
-  Leaf,
-  Palette,
-  Flame,
-  CircleDot,
-} from "lucide-react";
+  IconAcne,
+  IconHydration,
+  IconAntiAging,
+  IconSensitivity,
+  IconPigmentation,
+  IconRedness,
+  IconSunProtection,
+} from "@/components/brand/ClinicalIcons";
 
 const concerns = [
-  { label: "Acne", icon: Flame, query: "acne", color: "text-primary" },
-  { label: "Hydration", icon: Droplets, query: "hydration", color: "text-blue-500" },
-  { label: "Anti-Aging", icon: Sparkles, query: "aging", color: "text-accent" },
-  { label: "Sensitivity", icon: Leaf, query: "sensitivity", color: "text-green-600" },
-  { label: "Pigmentation", icon: Palette, query: "pigmentation", color: "text-purple-500" },
-  { label: "Redness", icon: CircleDot, query: "redness", color: "text-rose-500" },
-  { label: "Sun Protection", icon: Sun, query: "SPF sunscreen", color: "text-amber-500" },
+  { label: "Acne", Icon: IconAcne, query: "acne" },
+  { label: "Hydration", Icon: IconHydration, query: "hydration" },
+  { label: "Anti-Aging", Icon: IconAntiAging, query: "aging" },
+  { label: "Sensitivity", Icon: IconSensitivity, query: "sensitivity" },
+  { label: "Pigmentation", Icon: IconPigmentation, query: "pigmentation" },
+  { label: "Redness", Icon: IconRedness, query: "redness" },
+  { label: "Sun Protection", Icon: IconSunProtection, query: "SPF sunscreen" },
 ];
 
 export default function ShopByConcern() {
@@ -54,7 +54,10 @@ export default function ShopByConcern() {
                 className="group flex flex-col items-center gap-3 p-6 rounded-lg border border-border bg-card hover:border-accent/50 hover:shadow-lg transition-all duration-300"
               >
                 <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center group-hover:bg-accent/10 transition-colors">
-                  <c.icon className={`h-6 w-6 ${c.color} group-hover:scale-110 transition-transform`} />
+                  <c.Icon
+                    size={26}
+                    className="text-primary group-hover:text-accent transition-colors duration-300"
+                  />
                 </div>
                 <span className="font-body text-sm font-medium text-foreground text-center">
                   {c.label}
