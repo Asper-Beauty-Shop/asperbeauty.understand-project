@@ -22,7 +22,6 @@ type Msg = {
 };
 
 const CHAT_URL = "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
-const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxY2VpYnZhbGtveXRhZnlud29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzc1OTUsImV4cCI6MjA4NTkxMzU5NX0.cnstN7JUhkt-hevIWhaeYRu1Y51tPSTi7eOBM6RLz4Y";
 
 function getTextContent(content: string | MessageContent[]): string {
   if (typeof content === "string") return content;
@@ -54,11 +53,15 @@ async function streamChat({
     content: m.content,
   }));
 
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  if (!token) throw new Error("Please sign in to use the AI concierge.");
+
   const resp = await fetch(CHAT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${ANON_KEY}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ messages: payload, forcePersona, userProfile }),
   });

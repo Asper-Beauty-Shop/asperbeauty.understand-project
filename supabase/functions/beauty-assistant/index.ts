@@ -274,40 +274,52 @@ serve(async (req) => {
   }
 
   try {
+    // ─── Authentication ───
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Authentication required" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(JSON.stringify({ error: "Invalid authentication" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const userId = claimsData.claims.sub as string;
+
     const { messages, forcePersona, userProfile } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    // Optionally fetch user profile from Supabase if auth token present
+    // Fetch user profile from Supabase for safety interlock
     let medicalContext: UserMedicalContext | null = userProfile || null;
 
     if (!medicalContext) {
-      const authHeader = req.headers.get("authorization");
-      if (authHeader) {
-        try {
-          const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-          const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-          const supabase = createClient(supabaseUrl, supabaseKey, {
-            global: { headers: { Authorization: authHeader } },
-          });
-          const { data: { user } } = await supabase.auth.getUser();
-          if (user) {
-            const { data: profile } = await supabase
-              .from("concierge_profiles")
-              .select("skin_type, skin_concern")
-              .eq("user_id", user.id)
-              .maybeSingle();
-            if (profile) {
-              medicalContext = {
-                skin_type: profile.skin_type,
-                skin_concern: profile.skin_concern,
-                tags: [],
-              };
-            }
-          }
-        } catch (e) {
-          console.warn("Could not fetch user profile for safety interlock:", e);
+      try {
+        const { data: profile } = await supabase
+          .from("concierge_profiles")
+          .select("skin_type, skin_concern")
+          .eq("user_id", userId)
+          .maybeSingle();
+        if (profile) {
+          medicalContext = {
+            skin_type: profile.skin_type,
+            skin_concern: profile.skin_concern,
+            tags: [],
+          };
         }
+      } catch (e) {
+        console.warn("Could not fetch user profile for safety interlock:", e);
       }
     }
 

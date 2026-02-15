@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { ArrowLeft, FlaskConical, Atom, Zap, PenTool, Send, Loader2, RotateCcw, Gift, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,9 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from "react-markdown";
 
-const SUPABASE_URL = "https://qqceibvalkoytafynwoc.supabase.co";
-const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxY2VpYnZhbGtveXRhZnlud29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzc1OTUsImV4cCI6MjA4NTkxMzU5NX0.cnstN7JUhkt-hevIWhaeYRu1Y51tPSTi7eOBM6RLz4Y";
-const LAB_URL = `${SUPABASE_URL}/functions/v1/lab-tools`;
+const LAB_URL = "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/lab-tools";
 
 function useLabStream() {
   const [result, setResult] = useState("");
@@ -25,11 +24,15 @@ function useLabStream() {
     setLoading(true);
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) throw new Error("Please sign in to use Lab Tools.");
+
       const resp = await fetch(LAB_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${ANON_KEY}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ tool, input }),
       });

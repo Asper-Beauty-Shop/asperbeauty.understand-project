@@ -179,12 +179,36 @@ Write a short SMS message that:
 Keep the total response under 800 words. Use markdown formatting with clear section headers.`,
 };
 
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // ─── Authentication ───
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Authentication required" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(JSON.stringify({ error: "Invalid authentication" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const { tool, input } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");

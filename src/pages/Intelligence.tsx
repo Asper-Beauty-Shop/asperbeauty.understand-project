@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import {
   ShieldCheck, Sparkles, Camera, Volume2, Upload, Trash2,
@@ -22,8 +23,6 @@ const ASPER_CATALOG = [
 ];
 
 const CHAT_URL = "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
-const ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxY2VpYnZhbGtveXRhZnlud29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzc1OTUsImV4cCI6MjA4NTkxMzU5NX0.cnstN7JUhkt-hevIWhaeYRu1Y51tPSTi7eOBM6RLz4Y";
 
 type Msg = {
   role: "user" | "assistant";
@@ -55,11 +54,15 @@ async function streamChat({
   onDelta: (text: string) => void;
   onDone: () => void;
 }) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  if (!token) throw new Error("Please sign in to use the AI assistant.");
+
   const resp = await fetch(CHAT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${ANON_KEY}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ messages, forcePersona }),
   });
