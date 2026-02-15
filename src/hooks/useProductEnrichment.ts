@@ -9,6 +9,10 @@ export interface ProductEnrichment {
   hex_swatch: string | null;
   gold_stitch_tier: boolean;
   product_highlights: string[] | null;
+  condition: string | null;
+  availability_status: string | null;
+  gtin: string | null;
+  mpn: string | null;
 }
 
 /**
@@ -22,7 +26,7 @@ export function useProductEnrichment(handle: string | undefined) {
       if (!handle) return null;
       const { data, error } = await supabase
         .from("products")
-        .select("clinical_badge, ai_persona_lead, key_ingredients, texture_profile, hex_swatch, gold_stitch_tier, product_highlights")
+        .select("clinical_badge, ai_persona_lead, key_ingredients, texture_profile, hex_swatch, gold_stitch_tier, product_highlights, condition, availability_status, gtin, mpn")
         .eq("handle", handle)
         .maybeSingle();
       if (error) {
@@ -47,7 +51,7 @@ export function useProductEnrichmentBulk(handles: string[]) {
       if (handles.length === 0) return new Map<string, ProductEnrichment>();
       const { data, error } = await supabase
         .from("products")
-        .select("handle, clinical_badge, ai_persona_lead, key_ingredients, texture_profile, hex_swatch, gold_stitch_tier, product_highlights")
+        .select("handle, clinical_badge, ai_persona_lead, key_ingredients, texture_profile, hex_swatch, gold_stitch_tier, product_highlights, condition, availability_status, gtin, mpn")
         .in("handle", handles);
       if (error) {
         console.warn("Bulk enrichment lookup failed:", error.message);
@@ -63,6 +67,10 @@ export function useProductEnrichmentBulk(handles: string[]) {
           hex_swatch: row.hex_swatch,
           gold_stitch_tier: row.gold_stitch_tier,
           product_highlights: row.product_highlights,
+          condition: row.condition,
+          availability_status: row.availability_status,
+          gtin: row.gtin,
+          mpn: row.mpn,
         });
       }
       return map;

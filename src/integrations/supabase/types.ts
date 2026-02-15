@@ -170,11 +170,14 @@ export type Database = {
       products: {
         Row: {
           ai_persona_lead: Database["public"]["Enums"]["persona_type"] | null
+          availability_status: string | null
           bestseller_rank: number | null
           brand: string | null
           clinical_badge: string | null
+          condition: string | null
           created_at: string
           gold_stitch_tier: boolean
+          gtin: string | null
           handle: string
           hex_swatch: string | null
           id: string
@@ -182,6 +185,7 @@ export type Database = {
           inventory_total: number
           is_hero: boolean
           key_ingredients: string[] | null
+          mpn: string | null
           price: number | null
           primary_concern: Database["public"]["Enums"]["skin_concern"]
           product_highlights: string[] | null
@@ -193,11 +197,14 @@ export type Database = {
         }
         Insert: {
           ai_persona_lead?: Database["public"]["Enums"]["persona_type"] | null
+          availability_status?: string | null
           bestseller_rank?: number | null
           brand?: string | null
           clinical_badge?: string | null
+          condition?: string | null
           created_at?: string
           gold_stitch_tier?: boolean
+          gtin?: string | null
           handle: string
           hex_swatch?: string | null
           id?: string
@@ -205,6 +212,7 @@ export type Database = {
           inventory_total?: number
           is_hero?: boolean
           key_ingredients?: string[] | null
+          mpn?: string | null
           price?: number | null
           primary_concern: Database["public"]["Enums"]["skin_concern"]
           product_highlights?: string[] | null
@@ -216,11 +224,14 @@ export type Database = {
         }
         Update: {
           ai_persona_lead?: Database["public"]["Enums"]["persona_type"] | null
+          availability_status?: string | null
           bestseller_rank?: number | null
           brand?: string | null
           clinical_badge?: string | null
+          condition?: string | null
           created_at?: string
           gold_stitch_tier?: boolean
+          gtin?: string | null
           handle?: string
           hex_swatch?: string | null
           id?: string
@@ -228,6 +239,7 @@ export type Database = {
           inventory_total?: number
           is_hero?: boolean
           key_ingredients?: string[] | null
+          mpn?: string | null
           price?: number | null
           primary_concern?: Database["public"]["Enums"]["skin_concern"]
           product_highlights?: string[] | null

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Package, ShoppingCart, Loader2, Shield } from "lucide-react";
+import { Package, ShoppingCart, Loader2, Shield, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import type { ShopifyProduct } from "@/lib/shopify";
@@ -72,14 +72,31 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
             </span>
           )}
 
-          {/* Gold Seal — Guaranteed Authenticity */}
-          <div className="absolute top-3 right-3 z-10">
+          {/* Condition + Availability badges */}
+          <div className="absolute top-3 right-3 z-10 flex flex-col gap-1 items-end">
             <div className="h-7 w-7 flex items-center justify-center border border-accent bg-card/80 backdrop-blur-sm rounded-sm p-1" title="Guaranteed Authenticity">
               <svg viewBox="0 0 24 24" fill="none" className="text-accent h-full w-full">
                 <path d="M12 2L14.5 7.5L20 9L15.5 13L17 18.5L12 15.5L7 18.5L8.5 13L4 9L9.5 7.5L12 2Z" fill="currentColor"/>
               </svg>
             </div>
+            {enrichment?.condition && enrichment.condition !== 'new' && (
+              <span className="rounded-full bg-muted/90 backdrop-blur-sm px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground capitalize">
+                {enrichment.condition}
+              </span>
+            )}
           </div>
+
+          {/* Availability overlay for non-standard statuses */}
+          {enrichment?.availability_status && enrichment.availability_status !== 'in_stock' && (
+            <div className="absolute bottom-2 left-2 z-10">
+              <Badge variant="secondary" className="text-[9px] font-medium bg-primary/90 text-primary-foreground">
+                {enrichment.availability_status === 'preorder' ? 'Pre-order' : 
+                 enrichment.availability_status === 'backorder' ? 'Backorder' : 
+                 enrichment.availability_status === 'out_of_stock' ? 'Out of Stock' : 
+                 enrichment.availability_status}
+              </Badge>
+            </div>
+          )}
         </div>
         <CardContent className="p-4 space-y-3">
           <div className="space-y-1">
@@ -115,11 +132,19 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
             <span className="text-sm font-bold text-foreground">
               {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
             </span>
-            {node.productType && (
-              <Badge variant="secondary" className="text-[10px]">
-                {node.productType}
-              </Badge>
-            )}
+            <div className="flex items-center gap-1.5">
+              {enrichment?.gtin && (
+                <span className="flex items-center gap-0.5 text-[9px] text-accent" title={`GTIN: ${enrichment.gtin}`}>
+                  <CheckCircle2 className="h-2.5 w-2.5" />
+                  Verified
+                </span>
+              )}
+              {node.productType && (
+                <Badge variant="secondary" className="text-[10px]">
+                  {node.productType}
+                </Badge>
+              )}
+            </div>
           </div>
 
           {/* Enrichment badges */}

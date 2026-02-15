@@ -7,7 +7,7 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, ShoppingCart, Loader2, Package, Shield } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Loader2, Package, Shield, CheckCircle2, Barcode } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -124,6 +124,19 @@ const ProductDetail = () => {
               <span className="text-2xl font-bold text-foreground">
                 {selectedVariant?.price.currencyCode} {parseFloat(selectedVariant?.price.amount || "0").toFixed(2)}
               </span>
+              {enrichment?.condition && (
+                <Badge variant="secondary" className="capitalize">
+                  {enrichment.condition}
+                </Badge>
+              )}
+              {enrichment?.availability_status && enrichment.availability_status !== 'in_stock' && (
+                <Badge variant="outline" className="border-primary/50 text-primary capitalize">
+                  {enrichment.availability_status === 'preorder' ? 'Pre-order' : 
+                   enrichment.availability_status === 'backorder' ? 'Backorder' : 
+                   enrichment.availability_status === 'out_of_stock' ? 'Out of Stock' : 
+                   enrichment.availability_status}
+                </Badge>
+              )}
               {node.productType && (
                 <Badge variant="secondary">{node.productType}</Badge>
               )}
@@ -176,6 +189,31 @@ const ProductDetail = () => {
                       {ing}
                     </Badge>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* GTIN / MPN — Authenticity Proof */}
+            {(enrichment?.gtin || enrichment?.mpn) && (
+              <div className="border border-border rounded-lg p-4 space-y-2 bg-muted/30">
+                <div className="flex items-center gap-2">
+                  <Barcode className="h-4 w-4 text-accent" />
+                  <p className="text-sm font-medium text-foreground">Authenticity Identifiers</p>
+                  <CheckCircle2 className="h-3.5 w-3.5 text-accent ml-auto" />
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-xs text-muted-foreground">
+                  {enrichment.gtin && (
+                    <div>
+                      <span className="font-medium text-foreground">GTIN</span>
+                      <p className="font-mono mt-0.5">{enrichment.gtin}</p>
+                    </div>
+                  )}
+                  {enrichment.mpn && (
+                    <div>
+                      <span className="font-medium text-foreground">MPN</span>
+                      <p className="font-mono mt-0.5">{enrichment.mpn}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
