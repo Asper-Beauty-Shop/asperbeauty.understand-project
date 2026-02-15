@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import type { ShopifyProduct } from "@/lib/shopify";
 import type { ProductEnrichment } from "@/hooks/useProductEnrichment";
 import { useCartStore } from "@/stores/cartStore";
+import { playAddToCartSound } from "@/lib/sounds";
+import { BlurUpImage } from "@/components/BlurUpImage";
 
 interface Props {
   product: ShopifyProduct;
@@ -36,6 +38,7 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
       quantity: 1,
       selectedOptions: variant.selectedOptions || [],
     });
+    playAddToCartSound();
     toast.success("Excellent choice", {
       description: `${node.title} added to your regimen.`,
       position: "top-center",
@@ -54,12 +57,11 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
       >
         <div className="relative aspect-[3/4] bg-background flex items-center justify-center overflow-hidden">
           {image ? (
-            <img
+            <BlurUpImage
               src={image.url}
               alt={image.altText || node.title}
-              className="h-full w-full object-contain p-4 transition-transform duration-700 group-hover:scale-105"
-              loading="lazy"
-              style={{ filter: "drop-shadow(4px 6px 12px rgba(128, 0, 32, 0.1))" }}
+              className="p-4 transition-transform duration-700 group-hover:scale-105"
+              containerClassName="h-full w-full"
             />
           ) : (
             <Package className="h-16 w-16 text-muted-foreground/40" />

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Leaf, ShieldCheck } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
+import { ShareRegimenButton } from "@/components/ShareRegimenButton";
 
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -134,6 +135,9 @@ export const CartDrawer = () => {
 
               {/* Footer — Totals + Checkout */}
               <div className="flex-shrink-0 space-y-4 pt-4 border-t border-border">
+                <div className="flex justify-end">
+                  <ShareRegimenButton />
+                </div>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold font-heading">Total</span>
                   <span className="text-xl font-bold text-foreground font-body">

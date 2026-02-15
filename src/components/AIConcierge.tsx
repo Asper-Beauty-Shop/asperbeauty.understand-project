@@ -8,6 +8,7 @@ import { MessageCircle, X, Send, Shield, Heart, Loader2, Volume2, VolumeX, Camer
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
+import { playNotificationSound } from "@/lib/sounds";
 
 type MessageContent =
   | string
@@ -311,7 +312,7 @@ export default function AIConcierge() {
           setCurrentPersona(p);
         },
         onDelta: upsert,
-        onDone: () => setIsLoading(false),
+        onDone: () => { setIsLoading(false); playNotificationSound(); },
         onSafetyFlags: (flags) => setSafetyFlags(flags),
       });
     } catch (e: any) {

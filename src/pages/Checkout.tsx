@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCartStore } from "@/stores/cartStore";
 import AsperLogo from "@/components/brand/AsperLogo";
 import { cn } from "@/lib/utils";
+import { playSuccessSound } from "@/lib/sounds";
 
 /* ─── Jordanian Location Data ─── */
 const CITIES = [
@@ -75,6 +76,7 @@ export default function Checkout() {
     } else {
       // COD flow — show confirmation
       setSubmitting(true);
+      playSuccessSound();
       if ("vibrate" in navigator) navigator.vibrate([100, 50, 100]);
       setTimeout(() => {
         setSubmitting(false);

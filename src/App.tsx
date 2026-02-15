@@ -1,9 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useCartSync } from "@/hooks/useCartSync";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import SplashScreen from "@/components/SplashScreen";
@@ -21,10 +21,30 @@ import AIConcierge from "./components/AIConcierge";
 
 const queryClient = new QueryClient();
 
+/** Scroll restoration: save/restore scroll position per route */
+function ScrollRestoration() {
+  const location = useLocation();
+  useEffect(() => {
+    // Restore saved position for this path
+    const saved = sessionStorage.getItem(`scroll-${location.pathname}`);
+    if (saved) {
+      requestAnimationFrame(() => window.scrollTo(0, parseInt(saved, 10)));
+    } else {
+      window.scrollTo(0, 0);
+    }
+    // Save position on leave
+    return () => {
+      sessionStorage.setItem(`scroll-${location.pathname}`, String(window.scrollY));
+    };
+  }, [location.pathname]);
+  return null;
+}
+
 function AppContent() {
   useCartSync();
   return (
     <>
+      <ScrollRestoration />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/products" element={<Products />} />
