@@ -114,7 +114,7 @@ const ProductDetail = () => {
           {/* Details */}
           <div className="space-y-6">
             {node.vendor && (
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
                 {node.vendor}
               </p>
             )}
@@ -144,6 +144,21 @@ const ProductDetail = () => {
               <p className="text-sm italic text-muted-foreground">
                 Texture: {enrichment.texture_profile}
               </p>
+            )}
+
+            {/* Product Highlights */}
+            {enrichment?.product_highlights && enrichment.product_highlights.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">Highlights</p>
+                <ul className="space-y-1.5">
+                  {enrichment.product_highlights.map((h, i) => (
+                    <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                      <span className="text-accent mt-0.5">✦</span>
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
 
             {node.description && (

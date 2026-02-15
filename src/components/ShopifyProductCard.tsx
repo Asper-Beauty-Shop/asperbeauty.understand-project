@@ -84,11 +84,11 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
         <CardContent className="p-4 space-y-3">
           <div className="space-y-1">
             {node.vendor && (
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent">
                 {node.vendor}
               </p>
             )}
-            <h3 className="font-semibold text-sm leading-tight text-foreground line-clamp-2">
+            <h3 className="font-heading text-sm font-semibold leading-tight text-foreground line-clamp-2">
               {node.title}
             </h3>
           </div>
@@ -97,6 +97,18 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
             <p className="text-[11px] italic text-muted-foreground">
               {enrichment.texture_profile}
             </p>
+          )}
+
+          {/* Product Highlights */}
+          {enrichment?.product_highlights && enrichment.product_highlights.length > 0 && (
+            <ul className="space-y-0.5">
+              {enrichment.product_highlights.slice(0, 2).map((h, i) => (
+                <li key={i} className="text-[10px] text-muted-foreground flex items-start gap-1">
+                  <span className="text-accent mt-px">✦</span>
+                  <span className="line-clamp-1">{h}</span>
+                </li>
+              ))}
+            </ul>
           )}
 
           <div className="flex items-center justify-between">

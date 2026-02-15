@@ -184,6 +184,7 @@ export type Database = {
           key_ingredients: string[] | null
           price: number | null
           primary_concern: Database["public"]["Enums"]["skin_concern"]
+          product_highlights: string[] | null
           regimen_step: Database["public"]["Enums"]["regimen_step"]
           tags: string[] | null
           texture_profile: string | null
@@ -206,6 +207,7 @@ export type Database = {
           key_ingredients?: string[] | null
           price?: number | null
           primary_concern: Database["public"]["Enums"]["skin_concern"]
+          product_highlights?: string[] | null
           regimen_step: Database["public"]["Enums"]["regimen_step"]
           tags?: string[] | null
           texture_profile?: string | null
@@ -228,6 +230,7 @@ export type Database = {
           key_ingredients?: string[] | null
           price?: number | null
           primary_concern?: Database["public"]["Enums"]["skin_concern"]
+          product_highlights?: string[] | null
           regimen_step?: Database["public"]["Enums"]["regimen_step"]
           tags?: string[] | null
           texture_profile?: string | null
