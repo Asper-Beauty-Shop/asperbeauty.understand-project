@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,12 +21,24 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import MegaMenu from "@/components/MegaMenu";
 import { CartDrawer } from "@/components/CartDrawer";
 import { IncognitoToggle } from "@/components/IncognitoToggle";
+import TrustBadges from "@/components/brand/TrustBadges";
+import BrandIcon from "@/components/brand/BrandIcon";
+import { useCartStore } from "@/stores/cartStore";
+import { cn } from "@/lib/utils";
 import asperLogo from "@/assets/asper-logo.png";
 
 const Index = () => {
   const { t, toggle, dir, locale } = useLanguage();
   const [conciergeOpen, setConciergeOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const cartCount = useCartStore((s) => s.items.reduce((t, i) => t + i.quantity, 0));
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background mobile-bottom-pad" dir={dir}>
@@ -37,35 +49,42 @@ const Index = () => {
       <nav className="sticky top-0 z-50 border-b border-accent/10 glass-nav">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-              <img src={asperLogo} alt="Asper" className="h-8 w-auto" />
-              <span className="text-xs font-body uppercase tracking-[0.25em] text-muted-foreground mt-1">
+            {/* Logo with scroll shrink */}
+            <Link to="/" className="flex items-center gap-2">
+              <img
+                src={asperLogo}
+                alt="Asper"
+                className={cn(
+                  "w-auto transition-all duration-500 ease-luxury",
+                  scrolled ? "h-6" : "h-8"
+                )}
+              />
+              <span
+                className={cn(
+                  "text-xs font-body uppercase tracking-[0.25em] text-muted-foreground mt-1 transition-all duration-500",
+                  scrolled ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
+                )}
+              >
                 Beauty Shop
               </span>
-            </div>
+            </Link>
             <div className="hidden md:flex items-center gap-8">
               <MegaMenu label={t("nav.shop")} />
               <Link to="/intelligence" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">{t("nav.intelligence")}</Link>
               <a href="#experts" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">{t("nav.concierge")}</a>
               <a href="#about" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">{t("nav.about")}</a>
             </div>
-            <div className="flex items-center gap-3">
-              {/* Language Toggle */}
-              <button
-                onClick={toggle}
-                className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors border border-border rounded-full px-3 py-1.5"
-                title="Switch language"
-              >
-                <Globe className="h-3.5 w-3.5" />
-                <span className={locale === "ar" ? "font-body" : "font-arabic"}>{t("lang.switch")}</span>
-              </button>
+            <div className="flex items-center gap-1">
+              {/* Language Toggle — BrandIcon */}
+              <BrandIcon icon="globe" onClick={toggle} ariaLabel="Switch language" />
               <SearchBar />
-              <Link to="/products">
-                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  <ShoppingBag className="h-4 w-4 mr-2" />
-                  {t("nav.shop_now")}
-                </Button>
-              </Link>
+              {/* Tote Bag Cart Icon */}
+              <BrandIcon
+                icon="cart"
+                notificationCount={cartCount}
+                onClick={() => setCartOpen(true)}
+                ariaLabel="Open cart"
+              />
               <AuthButton />
             </div>
           </div>
@@ -274,6 +293,12 @@ const Index = () => {
               </div>
             </div>
           </div>
+
+          {/* Trust Badges — Hexagonal Gold Stamps */}
+          <div className="mb-8">
+            <TrustBadges />
+          </div>
+
           <div className="h-px bg-primary-foreground/10" />
           <div className="flex items-center justify-between mt-6">
             <p className={`text-xs text-primary-foreground/50 ${locale === "ar" ? "font-arabic" : "font-body"}`}>
@@ -289,6 +314,9 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Cart Drawer (controlled) */}
+      <CartDrawer />
 
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav
