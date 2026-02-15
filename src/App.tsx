@@ -18,6 +18,7 @@ import Intelligence from "./pages/Intelligence";
 import AdminEnrichment from "./pages/AdminEnrichment";
 import Checkout from "./pages/Checkout";
 import AIConcierge from "./components/AIConcierge";
+import { useIncognitoStore } from "./stores/incognitoStore";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,12 @@ function ScrollRestoration() {
 
 function AppContent() {
   useCartSync();
+  const incognito = useIncognitoStore((s) => s.enabled);
+  
+  useEffect(() => {
+    document.body.classList.toggle("incognito-mode", incognito);
+  }, [incognito]);
+
   return (
     <>
       <ScrollRestoration />
