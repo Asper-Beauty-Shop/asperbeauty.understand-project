@@ -2,17 +2,39 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    toast.success("Welcome to the Inner Circle!", {
-      description: "Your first curated regimen is on its way.",
-    });
-    setEmail("");
+    if (!email || submitting) return;
+    setSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from("newsletter_subscribers" as any)
+        .insert({ email: email.trim().toLowerCase() } as any);
+      if (error) {
+        if (error.code === "23505") {
+          toast.info("You're already in the Inner Circle!", {
+            description: "This email is already subscribed.",
+          });
+        } else {
+          throw error;
+        }
+      } else {
+        toast.success("Welcome to the Inner Circle!", {
+          description: "Your first curated regimen is on its way.",
+        });
+      }
+      setEmail("");
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -33,8 +55,8 @@ export default function Newsletter() {
             className="flex-1"
             required
           />
-          <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-widest text-sm px-6">
-            Subscribe
+          <Button type="submit" disabled={submitting} className="bg-primary text-primary-foreground hover:bg-primary/90 uppercase tracking-widest text-sm px-6">
+            {submitting ? "Subscribing…" : "Subscribe"}
           </Button>
         </form>
       </div>
