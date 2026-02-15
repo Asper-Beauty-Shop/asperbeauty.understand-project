@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Shield, Sparkles, Thermometer, Sun, Moon, CloudSun } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTimeContext } from "@/hooks/useTimeContext";
-import heroImage from "@/assets/hero-sanctuary.jpg";
+import heroVideo from "@/assets/hero-video.mp4";
 import { cn } from "@/lib/utils";
 
 const timeIcons = { morning: Sun, afternoon: CloudSun, evening: Moon };
@@ -15,69 +14,77 @@ export default function Hero() {
   const TimeIcon = timeIcons[timeOfDay];
 
   return (
-    <section className={cn(
-      "relative overflow-hidden bg-background py-16 sm:py-24 lg:py-32 transition-colors duration-700",
-      moodClass
-    )}>
-      {/* Subtle decorative orbs */}
-      <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-accent/5 blur-3xl" />
-      <div className="absolute bottom-10 left-10 w-96 h-96 rounded-full bg-primary/3 blur-3xl" />
+    <section className="relative h-[85vh] min-h-[600px] max-h-[900px] overflow-hidden">
+      {/* Video Background */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover"
+      >
+        <source src={heroVideo} type="video/mp4" />
+      </video>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
-          <div className={`space-y-8 text-center ${dir === "rtl" ? "lg:text-right" : "lg:text-left"}`}>
-            {/* Time-aware greeting */}
+      {/* Gradient overlays for readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/50 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-primary/30" />
+
+      {/* Gold border frame */}
+      <div className="absolute inset-4 sm:inset-8 border border-accent/30 pointer-events-none z-10" />
+
+      {/* Content */}
+      <div className="relative z-20 h-full flex items-center">
+        <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 w-full">
+          <div className={`max-w-2xl space-y-6 ${dir === "rtl" ? "mr-0 ml-auto text-right" : ""}`}>
+            {/* Time-aware greeting pill */}
             <div className={cn(
-              "inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-body tracking-wide",
-              timeOfDay === "evening"
-                ? "bg-primary/10 text-primary border border-primary/20"
-                : "bg-accent/10 text-accent border border-accent/20"
+              "inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-body tracking-wide backdrop-blur-sm",
+              "bg-primary-foreground/10 text-primary-foreground/90 border border-primary-foreground/20"
             )}>
               <TimeIcon className="h-3.5 w-3.5" />
               <span>{greeting}</span>
             </div>
 
-            <div>
-              <Badge
-                variant="outline"
-                className="mb-4 border-accent text-accent font-body text-xs tracking-[0.2em] px-4 py-1.5"
-              >
-                {t("hero.badge")}
-              </Badge>
+            <h1 className={cn(
+              "font-heading text-4xl sm:text-5xl lg:text-7xl font-bold text-primary-foreground leading-[1.1] tracking-tight",
+              dir === "rtl" && "font-arabic"
+            )}>
+              {t("hero.title_1")}
+              <br />
+              <span className="text-accent">{t("hero.title_2")}</span>
+            </h1>
 
-              <h1 className={`font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-primary leading-tight tracking-tight ${dir === "rtl" ? "font-arabic" : ""}`}>
-                {t("hero.title_1")}
-                <br />
-                <span className="text-foreground">{t("hero.title_2")}</span>
-              </h1>
-            </div>
-
-            <p className={`text-lg text-muted-foreground max-w-xl leading-relaxed ${dir === "rtl" ? "font-arabic mx-auto lg:mr-0 lg:ml-auto" : "font-body mx-auto lg:mx-0"}`}>
+            <p className={cn(
+              "text-base sm:text-lg text-primary-foreground/80 max-w-lg leading-relaxed",
+              dir === "rtl" ? "font-arabic" : "font-body"
+            )}>
               {tagline}
             </p>
 
             {/* Trust micro-badges */}
-            <div className={`flex flex-wrap gap-3 ${dir === "rtl" ? "justify-center lg:justify-end" : "justify-center lg:justify-start"}`}>
-              <span className="inline-flex items-center gap-1.5 text-xs font-body text-muted-foreground border border-border rounded-full px-3 py-1">
-                <Shield className="h-3 w-3 text-accent" />
-                {t("hero.authentic")}
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-xs font-body text-muted-foreground border border-border rounded-full px-3 py-1">
-                <Thermometer className="h-3 w-3 text-primary" />
-                {t("hero.temperature")}
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-xs font-body text-muted-foreground border border-border rounded-full px-3 py-1">
-                <Sparkles className="h-3 w-3 text-accent" />
-                {t("hero.pharmacist_led")}
-              </span>
+            <div className={`flex flex-wrap gap-3 ${dir === "rtl" ? "justify-end" : ""}`}>
+              {[
+                { icon: Shield, label: t("hero.authentic"), color: "text-accent" },
+                { icon: Thermometer, label: t("hero.temperature"), color: "text-accent" },
+                { icon: Sparkles, label: t("hero.pharmacist_led"), color: "text-accent" },
+              ].map((item) => (
+                <span
+                  key={item.label}
+                  className="inline-flex items-center gap-1.5 text-xs font-body text-primary-foreground/70 border border-primary-foreground/15 backdrop-blur-sm rounded-full px-3 py-1"
+                >
+                  <item.icon className={`h-3 w-3 ${item.color}`} />
+                  {item.label}
+                </span>
+              ))}
             </div>
 
-            <div className={`flex flex-col sm:flex-row gap-4 ${dir === "rtl" ? "justify-center lg:justify-end" : "justify-center lg:justify-start"}`}>
+            {/* CTAs */}
+            <div className={`flex flex-col sm:flex-row gap-4 pt-2 ${dir === "rtl" ? "justify-end" : ""}`}>
               <Link to="/products">
                 <Button
                   size="lg"
-                  className="group bg-primary text-primary-foreground hover:bg-primary/90 text-sm uppercase tracking-widest px-8 h-12 shadow-lg shadow-primary/20"
+                  className="group bg-accent text-primary hover:bg-accent/90 text-sm uppercase tracking-widest px-8 h-12 font-semibold shadow-lg shadow-accent/20"
                 >
                   {t("hero.cta_primary")}
                   <ArrowRight className={`h-4 w-4 group-hover:translate-x-1 transition-transform ${dir === "rtl" ? "mr-2 rotate-180" : "ml-2"}`} />
@@ -87,51 +94,22 @@ export default function Hero() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-accent text-accent hover:bg-accent/10 text-sm uppercase tracking-widest px-8 h-12"
+                  className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-sm uppercase tracking-widest px-8 h-12"
                 >
                   {t("hero.cta_secondary")}
                 </Button>
               </Link>
             </div>
           </div>
-
-          {/* Hero Image with Gold Stitch Frame */}
-          <div className={`relative h-[400px] sm:h-[500px] lg:h-[600px] group ${dir === "rtl" ? "lg:-translate-x-8" : "lg:translate-x-8"}`}>
-            {/* Gold Stitch animated border */}
-            <div className="absolute -inset-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-              <div className="absolute inset-0 rounded-lg border-2 border-accent/60 animate-[fade-in_0.6s_ease-out_forwards]" />
-              <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-accent rounded-full shadow-lg shadow-accent/40" />
-              <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-accent rounded-full shadow-lg shadow-accent/40" />
-              <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-accent rounded-full shadow-lg shadow-accent/40" />
-              <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-accent rounded-full shadow-lg shadow-accent/40" />
-            </div>
-
-            <div className="relative h-full rounded-lg overflow-hidden shadow-xl">
-              <img
-                src={heroImage}
-                alt="Pristine white marble countertop with Vichy and CeraVe products in morning spa lighting"
-                className={cn(
-                  "h-full w-full object-cover transition-all duration-700",
-                  timeOfDay === "evening" && "brightness-75 contrast-105 saturate-[0.85]"
-                )}
-                loading="eager"
-              />
-              {/* Evening warm overlay */}
-              {timeOfDay === "evening" && (
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-primary/10 pointer-events-none" />
-              )}
-              <div className="absolute inset-4 border border-accent/30 pointer-events-none rounded-sm" />
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-foreground/60 to-transparent px-6 py-5">
-                <p className="text-primary-foreground/90 font-body text-xs uppercase tracking-[0.2em]">
-                  {t("hero.sanctuary")}
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 gold-divider" />
+      {/* Bottom sanctuary label */}
+      <div className="absolute bottom-6 sm:bottom-10 right-6 sm:right-10 z-20">
+        <p className="text-primary-foreground/50 font-body text-[10px] sm:text-xs uppercase tracking-[0.3em]">
+          {t("hero.sanctuary")}
+        </p>
+      </div>
     </section>
   );
 }
