@@ -83,6 +83,30 @@ export type Database = {
         }
         Relationships: []
       }
+      cleanup_allowlist: {
+        Row: {
+          archive_table_name: string | null
+          archive_table_schema: string | null
+          table_name: string
+          table_schema: string
+          timestamp_column: string
+        }
+        Insert: {
+          archive_table_name?: string | null
+          archive_table_schema?: string | null
+          table_name: string
+          table_schema: string
+          timestamp_column: string
+        }
+        Update: {
+          archive_table_name?: string | null
+          archive_table_schema?: string | null
+          table_name?: string
+          table_schema?: string
+          timestamp_column?: string
+        }
+        Relationships: []
+      }
       concierge_profiles: {
         Row: {
           created_at: string
@@ -546,6 +570,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cron_cleanup: {
+        Args: {
+          action?: string
+          archive_table?: string
+          older_than_days: number
+          src_table: string
+          timestamp_column: string
+        }
+        Returns: Json
+      }
+      fq: { Args: { rel_name: string; rel_schema: string }; Returns: string }
       generate_prescription: { Args: { payload: Json }; Returns: Json }
       get_tray_by_concern: {
         Args: { p_concern: Database["public"]["Enums"]["skin_concern"] }
