@@ -20,6 +20,7 @@ import AuthButton from "@/components/AuthButton";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import MegaMenu from "@/components/MegaMenu";
 import { CartDrawer } from "@/components/CartDrawer";
+import { IncognitoToggle } from "@/components/IncognitoToggle";
 import asperLogo from "@/assets/asper-logo.png";
 
 const Index = () => {
@@ -269,6 +270,7 @@ const Index = () => {
               <div className="flex flex-col gap-2">
                 <a href="#" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">Instagram</a>
                 <a href="#" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">WhatsApp</a>
+                <IncognitoToggle className="mt-2 border-primary-foreground/20 text-primary-foreground/60 hover:text-primary-foreground hover:border-primary-foreground/40" />
               </div>
             </div>
           </div>

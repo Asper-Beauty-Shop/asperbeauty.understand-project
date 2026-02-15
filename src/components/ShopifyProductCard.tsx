@@ -10,6 +10,7 @@ import type { ProductEnrichment } from "@/hooks/useProductEnrichment";
 import { useCartStore } from "@/stores/cartStore";
 import { playAddToCartSound } from "@/lib/sounds";
 import { BlurUpImage } from "@/components/BlurUpImage";
+import { useIncognitoStore } from "@/stores/incognitoStore";
 
 interface Props {
   product: ShopifyProduct;
@@ -19,6 +20,7 @@ interface Props {
 export function ShopifyProductCard({ product, enrichment }: Props) {
   const addItem = useCartStore(state => state.addItem);
   const isLoading = useCartStore(state => state.isLoading);
+  const incognito = useIncognitoStore(state => state.enabled);
   const { node } = product;
   const image = node.images.edges[0]?.node;
   const price = node.priceRange.minVariantPrice;
@@ -60,7 +62,7 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
             <BlurUpImage
               src={image.url}
               alt={image.altText || node.title}
-              className="p-4 transition-transform duration-700 group-hover:scale-105"
+              className={cn("p-4 transition-transform duration-700 group-hover:scale-105", incognito && "product-image-incognito")}
               containerClassName="h-full w-full"
             />
           ) : (
@@ -108,8 +110,8 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
                 {node.vendor}
               </p>
             )}
-            <h3 className="font-heading text-sm font-semibold leading-tight text-foreground line-clamp-2">
-              {node.title}
+            <h3 className={cn("font-heading text-sm font-semibold leading-tight text-foreground line-clamp-2", incognito && "product-title-incognito")}>
+              {incognito ? "Wellness Product" : node.title}
             </h3>
           </div>
 

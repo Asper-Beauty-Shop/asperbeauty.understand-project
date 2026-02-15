@@ -1,15 +1,24 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Shield, Sparkles, Thermometer } from "lucide-react";
+import { ArrowRight, Shield, Sparkles, Thermometer, Sun, Moon, CloudSun } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTimeContext } from "@/hooks/useTimeContext";
 import heroImage from "@/assets/hero-sanctuary.jpg";
+import { cn } from "@/lib/utils";
+
+const timeIcons = { morning: Sun, afternoon: CloudSun, evening: Moon };
 
 export default function Hero() {
   const { t, dir } = useLanguage();
+  const { timeOfDay, greeting, tagline, moodClass } = useTimeContext();
+  const TimeIcon = timeIcons[timeOfDay];
 
   return (
-    <section className="relative overflow-hidden bg-background py-16 sm:py-24 lg:py-32">
+    <section className={cn(
+      "relative overflow-hidden bg-background py-16 sm:py-24 lg:py-32 transition-colors duration-700",
+      moodClass
+    )}>
       {/* Subtle decorative orbs */}
       <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-accent/5 blur-3xl" />
       <div className="absolute bottom-10 left-10 w-96 h-96 rounded-full bg-primary/3 blur-3xl" />
@@ -18,6 +27,17 @@ export default function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div className={`space-y-8 text-center ${dir === "rtl" ? "lg:text-right" : "lg:text-left"}`}>
+            {/* Time-aware greeting */}
+            <div className={cn(
+              "inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-body tracking-wide",
+              timeOfDay === "evening"
+                ? "bg-primary/10 text-primary border border-primary/20"
+                : "bg-accent/10 text-accent border border-accent/20"
+            )}>
+              <TimeIcon className="h-3.5 w-3.5" />
+              <span>{greeting}</span>
+            </div>
+
             <div>
               <Badge
                 variant="outline"
@@ -34,7 +54,7 @@ export default function Hero() {
             </div>
 
             <p className={`text-lg text-muted-foreground max-w-xl leading-relaxed ${dir === "rtl" ? "font-arabic mx-auto lg:mr-0 lg:ml-auto" : "font-body mx-auto lg:mx-0"}`}>
-              {t("hero.subtitle")}
+              {tagline}
             </p>
 
             {/* Trust micro-badges */}
@@ -90,9 +110,16 @@ export default function Hero() {
               <img
                 src={heroImage}
                 alt="Pristine white marble countertop with Vichy and CeraVe products in morning spa lighting"
-                className="h-full w-full object-cover"
+                className={cn(
+                  "h-full w-full object-cover transition-all duration-700",
+                  timeOfDay === "evening" && "brightness-75 contrast-105 saturate-[0.85]"
+                )}
                 loading="eager"
               />
+              {/* Evening warm overlay */}
+              {timeOfDay === "evening" && (
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-primary/10 pointer-events-none" />
+              )}
               <div className="absolute inset-4 border border-accent/30 pointer-events-none rounded-sm" />
               <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-foreground/60 to-transparent px-6 py-5">
                 <p className="text-primary-foreground/90 font-body text-xs uppercase tracking-[0.2em]">
