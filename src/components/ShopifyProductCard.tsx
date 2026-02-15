@@ -148,8 +148,10 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
           )}
 
           <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-foreground">
-              {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
+            <span className="text-foreground font-body">
+              <span className="text-[10px] align-top font-medium text-muted-foreground">{price.currencyCode}</span>
+              <span className="text-base font-semibold text-primary mx-0.5">{parseFloat(price.amount).toFixed(2).split('.')[0]}</span>
+              <span className="text-[10px] align-top font-medium text-muted-foreground">.{parseFloat(price.amount).toFixed(2).split('.')[1]}</span>
             </span>
             <div className="flex items-center gap-1.5">
               {enrichment?.gtin && (

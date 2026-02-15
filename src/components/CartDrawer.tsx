@@ -44,8 +44,15 @@ export const CartDrawer = () => {
           {items.length === 0 ? (
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
-                <ShoppingCart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground font-body">Your cart is empty</p>
+                {/* Empty regimen illustration */}
+                <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary/5 border border-primary/10">
+                  <ShoppingCart className="h-10 w-10 text-primary/40" />
+                </div>
+                <p className="font-heading text-lg font-semibold text-foreground mb-1">Your regimen is empty</p>
+                <p className="text-sm text-muted-foreground font-body mb-4">Need a recommendation?</p>
+                <a href="#" className="text-sm font-body font-semibold text-primary hover:text-primary/80 transition-colors">
+                  Ask Dr. Sami →
+                </a>
               </div>
             </div>
           ) : (

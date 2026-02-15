@@ -450,8 +450,8 @@ export default function AIConcierge() {
                     className={cn(
                       "max-w-[80%] rounded-xl px-3 py-2 text-sm font-body",
                       isUser
-                        ? "bg-primary text-primary-foreground rounded-br-sm"
-                        : "bg-secondary text-foreground rounded-bl-sm"
+                        ? "bg-muted text-foreground rounded-br-sm"
+                        : "bg-background border border-accent/30 text-foreground rounded-bl-sm"
                     )}
                   >
                     {/* Show uploaded image thumbnail */}
@@ -493,11 +493,11 @@ export default function AIConcierge() {
                     <Loader2 className="h-3 w-3 animate-spin" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="rounded-xl rounded-bl-sm bg-secondary px-3 py-2">
-                  <div className="flex gap-1">
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:0ms]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:150ms]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:300ms]" />
+                <div className="rounded-xl rounded-bl-sm bg-background border border-accent/30 px-3 py-2">
+                  <div className="flex gap-1.5">
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-accent [animation-delay:0ms]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-accent/70 [animation-delay:150ms]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-accent/40 [animation-delay:300ms]" />
                   </div>
                 </div>
               </div>

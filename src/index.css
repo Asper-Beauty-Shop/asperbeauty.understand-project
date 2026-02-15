@@ -118,6 +118,16 @@
     @apply border-border;
   }
 
+  /* ─── Golden Focus Ring (Accessibility as Luxury) ─── */
+  *:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--gold) / 0.7), 0 0 12px hsl(var(--gold) / 0.2);
+  }
+  input:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 3px hsl(var(--gold) / 0.6);
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
@@ -155,6 +165,13 @@
   }
   .font-body {
     font-family: var(--font-body);
+  }
+  /* Warm colored shadow — "sitting in a warm room" */
+  .shadow-warm {
+    box-shadow: 0 4px 20px -4px hsl(var(--primary) / 0.08);
+  }
+  .shadow-warm-lg {
+    box-shadow: 0 8px 30px -6px hsl(var(--primary) / 0.12);
   }
 }
 
