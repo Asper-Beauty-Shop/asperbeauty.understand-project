@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, Sparkles, ShoppingBag, Shield, FlaskConical, Heart, Award, Truck, Globe } from "lucide-react";
+import { Search, Sparkles, ShoppingBag, Shield, FlaskConical, Heart, Award, Truck, Globe, ArrowRight } from "lucide-react";
+import { IconNewArrivals, IconBestSellers, IconGiftSets } from "@/components/brand/ClinicalIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Hero from "@/components/home/Hero";
 import BrandStory from "@/components/home/BrandStory";
@@ -93,6 +94,34 @@ const Index = () => {
 
       {/* 1. Hero Section */}
       <Hero />
+
+      {/* Featured Navigation Badges */}
+      <section className="py-8 bg-secondary/50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center gap-6 sm:gap-10 flex-wrap">
+            {[
+              { Icon: IconNewArrivals, label: "New Arrivals", to: "/products?sort=newest" },
+              { Icon: IconBestSellers, label: "Best Sellers", to: "/products?sort=bestseller" },
+              { Icon: IconGiftSets, label: "Gift Sets", to: "/products?q=gift+set" },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                to={item.to}
+                className="group flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-border bg-card hover:border-accent/50 hover:shadow-lg transition-all duration-300"
+              >
+                <item.Icon
+                  size={20}
+                  className="text-primary group-hover:text-accent transition-colors duration-300"
+                />
+                <span className="font-body text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                  {item.label}
+                </span>
+                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all duration-300" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <div className="gold-divider" />
 
