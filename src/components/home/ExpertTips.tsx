@@ -29,7 +29,7 @@ const tips = [
 
 export default function ExpertTips() {
   return (
-    <section className="py-20 sm:py-28 bg-background">
+    <section className="py-24 sm:py-32 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <Badge

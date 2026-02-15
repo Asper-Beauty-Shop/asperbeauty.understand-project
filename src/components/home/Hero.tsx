@@ -104,7 +104,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 gold-divider" />
     </section>
   );
 }

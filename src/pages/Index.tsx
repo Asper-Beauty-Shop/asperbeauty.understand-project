@@ -14,6 +14,7 @@ import PharmacistPicks from "@/components/home/PharmacistPicks";
 import SocialGallery from "@/components/home/SocialGallery";
 import SearchBar from "@/components/home/SearchBar";
 import ExpertTips from "@/components/home/ExpertTips";
+import ScrollProgress from "@/components/ScrollProgress";
 import AuthButton from "@/components/AuthButton";
 import asperLogo from "@/assets/asper-logo.png";
 
@@ -22,8 +23,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background" dir={dir}>
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-sm">
+      {/* Gold scroll progress bar */}
+      <ScrollProgress />
+
+      {/* Glassmorphism Navigation */}
+      <nav className="sticky top-0 z-50 border-b border-accent/10 glass-nav">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
@@ -64,18 +68,18 @@ const Index = () => {
       {/* 1. Hero Section */}
       <Hero />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       {/* 2a. Shop by Concern */}
       <ShopByConcern />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       {/* 2b. AI Concierge Showcase */}
       <ConciergeShowcase />
 
       {/* 3-Click Solution */}
-      <section id="experts" className="py-20 sm:py-28 bg-card">
+      <section id="experts" className="py-24 sm:py-32 lab-zone">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="secondary" className="mb-4 font-body text-xs tracking-wider">
@@ -111,10 +115,10 @@ const Index = () => {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       {/* Dual Persona */}
-      <section className="py-20 sm:py-28">
+      <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-4 border-accent text-accent font-body text-xs tracking-[0.2em] px-4 py-1.5">
@@ -176,23 +180,23 @@ const Index = () => {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       <PharmacistPicks />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       <BrandStory />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       {/* Expert Weekly Tips */}
       <ExpertTips />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       {/* Trust Banner */}
-      <section id="about" className="py-20 sm:py-28 bg-card">
+      <section id="about" className="py-24 sm:py-32 bg-card">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-12">
             Why <span className="text-primary">Asper</span>?
@@ -215,20 +219,20 @@ const Index = () => {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       <PromoBanner campaign="Summer Hydration" subtitle="Shield. Glow. Repeat." />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       <SocialGallery />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="gold-divider" />
 
       <Newsletter />
 
       {/* Footer */}
-      <footer className="border-t border-border/50 py-12 bg-background">
+      <footer className="border-t border-accent/10 py-12 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
@@ -239,7 +243,7 @@ const Index = () => {
               {t("footer.tagline")}
             </p>
           </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent mt-8" />
+          <div className="gold-divider mt-8" />
           <p className={`text-xs text-muted-foreground text-center mt-6 ${locale === "ar" ? "font-arabic" : "font-body"}`}>
             © {new Date().getFullYear()} {t("footer.copyright")}
           </p>

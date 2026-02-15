@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -11,8 +11,8 @@
 
 @layer base {
   :root {
-    /* Canvas: Warm Cream Ivory — "Morning Spa" */
-    --background: 39 40% 95%;
+    /* Canvas: Soft Ivory #F8F8FF — "Morning Spa" */
+    --background: 240 100% 99%;
     --foreground: 0 0% 20%;
 
     /* Card: Pure White #FFFFFF on Ivory */
@@ -58,6 +58,9 @@
     --gold-light: 43 60% 70%;
     --gold-dark: 43 75% 35%;
 
+    /* Science Lab zone: faint maroon tint */
+    --lab-zone: 345 30% 97%;
+
     --sidebar-background: 40 33% 97%;
     --sidebar-foreground: 0 0% 20%;
     --sidebar-primary: 345 100% 25%;
@@ -97,6 +100,8 @@
     --input: 0 0% 18%;
     --ring: 345 80% 55%;
 
+    --lab-zone: 345 20% 10%;
+
     --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 40 33% 96%;
     --sidebar-primary: 345 80% 55%;
@@ -122,9 +127,13 @@
     font-family: var(--font-heading);
   }
 
-  /* RTL support */
+  /* RTL support — slightly taller line-height for Arabic elegance */
   [dir="rtl"] body {
     font-family: var(--font-arabic);
+  }
+  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+    font-family: var(--font-arabic);
+    line-height: 1.6;
   }
 }
 
@@ -141,4 +150,63 @@
   .font-body {
     font-family: var(--font-body);
   }
+}
+
+/* ─── Golden Thread Divider ─── */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--gold) / 0.15) 15%,
+    hsl(var(--gold) / 0.5) 50%,
+    hsl(var(--gold) / 0.15) 85%,
+    transparent 100%
+  );
+}
+
+/* ─── Glassmorphism Navigation ─── */
+.glass-nav {
+  background: hsl(var(--background) / 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ─── Scroll Progress Bar ─── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--gold)),
+    hsl(var(--gold-light)),
+    hsl(var(--gold))
+  );
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* ─── Science Lab Zone ─── */
+.lab-zone {
+  background-color: hsl(var(--lab-zone));
+}
+
+/* ─── Concierge Badge (floating button) ─── */
+.concierge-badge {
+  box-shadow:
+    0 0 0 1px hsl(var(--gold) / 0.5),
+    0 8px 24px -4px hsl(var(--primary) / 0.25);
+}
+
+/* ─── Product Card Gold Stitch Hover ─── */
+.product-card-hover {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.35s ease;
+}
+.product-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -8px hsl(var(--gold) / 0.2);
 }

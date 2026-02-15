@@ -338,11 +338,11 @@ export default function AIConcierge() {
         }}
       />
 
-      {/* Floating button */}
+      {/* Floating "Medical Concierge" badge */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-110"
+          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground concierge-badge transition-transform hover:scale-110"
           aria-label="Open AI Concierge"
         >
           <MessageCircle className="h-6 w-6" />
@@ -351,7 +351,7 @@ export default function AIConcierge() {
 
       {/* Chat panel */}
       {open && (
-        <Card className="fixed bottom-6 right-6 z-50 flex h-[520px] w-[380px] flex-col overflow-hidden border-border/50 shadow-2xl sm:w-[400px]">
+        <Card className="fixed bottom-6 right-6 z-50 flex h-[520px] w-[380px] flex-col overflow-hidden border-accent/30 shadow-2xl sm:w-[400px]">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border/50 bg-primary px-4 py-3">
             <div className="flex items-center gap-3">

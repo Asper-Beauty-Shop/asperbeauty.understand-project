@@ -46,13 +46,13 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
     <Link to={`/product/${node.handle}`}>
       <Card
         className={cn(
-          "group overflow-hidden bg-card transition-all hover:-translate-y-1 h-full",
+          "group overflow-hidden bg-card product-card-hover h-full",
           isGold
             ? "border border-accent/60 hover:border-accent hover:shadow-[0_8px_30px_-8px_hsl(var(--accent)/0.35)]"
-            : "border border-transparent hover:shadow-md hover:border-gold"
+            : "border border-transparent hover:border-gold"
         )}
       >
-        <div className="relative aspect-square bg-muted flex items-center justify-center overflow-hidden">
+        <div className="relative aspect-[3/4] bg-muted flex items-center justify-center overflow-hidden">
           {image ? (
             <img
               src={image.url}
