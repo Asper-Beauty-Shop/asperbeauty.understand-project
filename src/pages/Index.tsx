@@ -26,7 +26,7 @@ import TrustBadges from "@/components/brand/TrustBadges";
 import BrandIcon from "@/components/brand/BrandIcon";
 import { useCartStore } from "@/stores/cartStore";
 import { cn } from "@/lib/utils";
-import asperLogo from "@/assets/asper-logo.png";
+import asperLogo from "@/assets/asper-lotus-logo.png";
 
 const Index = () => {
   const { t, toggle, dir, locale } = useLanguage();
