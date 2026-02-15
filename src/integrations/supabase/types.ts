@@ -152,24 +152,6 @@ export type Database = {
         }
         Relationships: []
       }
-      Lovabke: {
-        Row: {
-          created_at: string
-          id: number
-          shopify: Database["public"]["Enums"]["shopify"]
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          shopify: Database["public"]["Enums"]["shopify"]
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          shopify?: Database["public"]["Enums"]["shopify"]
-        }
-        Relationships: []
-      }
       newsletter_subscribers: {
         Row: {
           email: string
