@@ -84,7 +84,7 @@ export async function storefrontApiRequest(query: string, variables: Record<stri
 
 const PRODUCTS_QUERY = `
   query GetProducts($first: Int!, $query: String, $after: String) {
-    products(first: $first, query: $query, after: $after) {
+    products(first: $first, query: $query, after: $after, sortKey: UPDATED_AT, reverse: true) {
       edges {
         node {
           id
