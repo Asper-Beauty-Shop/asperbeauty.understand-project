@@ -10,10 +10,22 @@ export default function PharmacistPicks() {
   const { data: picks } = useQuery({
     queryKey: ["pharmacist-picks-shopify"],
     queryFn: async () => {
-      const { products } = await fetchProducts(12);
-      // Only show products that have at least one image
+      const { products } = await fetchProducts(50);
+      // Beauty/skincare product types to show on homepage
+      const beautyTypes = [
+        "fragrance", "body care", "skin care", "skincare", "hair care",
+        "makeup", "cosmetics", "serum", "cream", "moisturizer",
+        "cleanser", "toner", "sunscreen", "lip", "perfume", "cologne",
+        "face", "beauty", "nail", "mask", "oil", "lotion", "eye care",
+      ];
       return products
-        .filter((p) => p.node.images.edges.length > 0)
+        .filter((p) => {
+          const type = (p.node.productType || "").toLowerCase();
+          const title = (p.node.title || "").toLowerCase();
+          const hasImage = p.node.images.edges.length > 0;
+          const isBeauty = beautyTypes.some((bt) => type.includes(bt) || title.includes(bt));
+          return hasImage && isBeauty;
+        })
         .slice(0, 6);
     },
     staleTime: 5 * 60 * 1000,
