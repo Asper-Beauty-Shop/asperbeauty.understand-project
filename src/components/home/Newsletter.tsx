@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+const emailSchema = z.string().email("Please enter a valid email address").max(254, "Email is too long");
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
@@ -13,8 +16,9 @@ export default function Newsletter() {
     if (!email || submitting) return;
     setSubmitting(true);
     try {
+      const validatedEmail = emailSchema.parse(email.trim().toLowerCase());
       const { data, error } = await supabase.functions.invoke("newsletter-subscribe", {
-        body: { email: email.trim().toLowerCase() },
+        body: { email: validatedEmail },
       });
 
       if (error) {
@@ -34,8 +38,12 @@ export default function Newsletter() {
         });
       }
       setEmail("");
-    } catch {
-      toast.error("Something went wrong. Please try again.");
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        toast.error(err.errors[0].message);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
     } finally {
       setSubmitting(false);
     }

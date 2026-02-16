@@ -22,7 +22,8 @@ type Msg = {
   imagePreview?: string; // local preview URL for display
 };
 
-const CHAT_URL = "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
+const SUPABASE_URL = "https://qqceibvalkoytafynwoc.supabase.co";
+const CHAT_URL = `${SUPABASE_URL}/functions/v1/beauty-assistant`;
 
 function getTextContent(content: string | MessageContent[]): string {
   if (typeof content === "string") return content;
