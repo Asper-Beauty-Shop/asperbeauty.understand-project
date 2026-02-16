@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function AuthButton() {
   const { user, loading, signInWithGoogle, signOut } = useAuth();
+  const navigate = useNavigate();
   const [signingIn, setSigningIn] = useState(false);
 
   if (loading) return null;
@@ -79,6 +81,10 @@ export default function AuthButton() {
           <p className="text-sm font-medium truncate">{user.user_metadata?.full_name || "User"}</p>
           <p className="text-xs text-muted-foreground truncate">{user.email}</p>
         </div>
+        <DropdownMenuItem onClick={() => navigate("/profile")} className="cursor-pointer">
+          <User className="h-4 w-4 mr-2" />
+          My Profile
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={signOut} className="text-destructive cursor-pointer">
           <LogOut className="h-4 w-4 mr-2" />
           Sign out
