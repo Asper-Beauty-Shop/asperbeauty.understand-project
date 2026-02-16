@@ -13,18 +13,22 @@ export default function Newsletter() {
     if (!email || submitting) return;
     setSubmitting(true);
     try {
-      const { error } = await supabase
-        .from("newsletter_subscribers" as any)
-        .insert({ email: email.trim().toLowerCase() } as any);
+      const { data, error } = await supabase.functions.invoke("newsletter-subscribe", {
+        body: { email: email.trim().toLowerCase() },
+      });
+
       if (error) {
-        if (error.code === "23505") {
-          toast.info("You're already in the Inner Circle!", {
-            description: "This email is already subscribed.",
-          });
+        // Check for rate limiting
+        if (error.message?.includes("429") || error.message?.includes("Too many")) {
+          toast.error("Too many attempts. Please try again in a minute.");
         } else {
           throw error;
         }
-      } else {
+      } else if (data?.status === "duplicate") {
+        toast.info("You're already in the Inner Circle!", {
+          description: "This email is already subscribed.",
+        });
+      } else if (data?.status === "subscribed") {
         toast.success("Welcome to the Inner Circle!", {
           description: "Your first curated regimen is on its way.",
         });
