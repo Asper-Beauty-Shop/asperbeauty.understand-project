@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, Loader2, Stethoscope, Package, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
+import { fetchProducts, normalizePrice, ShopifyProduct } from "@/lib/shopify";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* ─── Dynamic Placeholder Typing Effect ─── */
@@ -247,7 +247,7 @@ export default function SearchBar() {
                         <p className="text-[11px] text-muted-foreground font-body">{p.node.vendor}</p>
                       </div>
                       <span className="text-sm font-body font-semibold text-primary shrink-0">
-                        {parseFloat(p.node.priceRange.minVariantPrice.amount).toFixed(2)} {p.node.priceRange.minVariantPrice.currencyCode}
+                        {normalizePrice(p.node.priceRange.minVariantPrice.amount).toFixed(2)} {p.node.priceRange.minVariantPrice.currencyCode}
                       </span>
                     </button>
                   );

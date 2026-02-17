@@ -200,12 +200,12 @@ function GiftRitualistTab() {
     setCatalogLoading(true);
     let catalogText = "";
     try {
-      const { fetchProducts } = await import("@/lib/shopify");
+      const { fetchProducts, normalizePrice } = await import("@/lib/shopify");
       const { products } = await fetchProducts(100);
       catalogText = products
         .map((p) => {
           const n = p.node;
-          const price = parseFloat(n.priceRange.minVariantPrice.amount).toFixed(2);
+          const price = normalizePrice(n.priceRange.minVariantPrice.amount).toFixed(2);
           const currency = n.priceRange.minVariantPrice.currencyCode;
           return `- ${n.title} | Brand: ${n.vendor || "N/A"} | Type: ${n.productType || "N/A"} | Price: ${price} ${currency} | Handle: ${n.handle}`;
         })

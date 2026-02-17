@@ -13,6 +13,7 @@ import {
   Barcode, Sun, Moon, Droplets, Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
+import { normalizePrice } from "@/lib/shopify";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import asperLogo from "@/assets/asper-lotus-logo.png";
@@ -142,7 +143,7 @@ const ProductDetail = () => {
   };
 
   const keyIngredients = enrichment?.key_ingredients || [];
-  const priceAmount = parseFloat(selectedVariant?.price.amount || "0");
+  const priceAmount = normalizePrice(selectedVariant?.price.amount || "0");
 
   return (
     <div className="min-h-screen bg-background">

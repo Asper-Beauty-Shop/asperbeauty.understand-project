@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
+import { fetchProducts, normalizePrice, type ShopifyProduct } from "@/lib/shopify";
 import { motion } from "framer-motion";
 import { ArrowRight, Award, Shield } from "lucide-react";
 
@@ -56,7 +56,7 @@ export default function PharmacistPicks() {
           {picks.map((product, i) => {
             const p = product.node;
             const imageUrl = p.images.edges[0]?.node.url;
-            const price = parseFloat(p.priceRange.minVariantPrice.amount);
+            const price = normalizePrice(p.priceRange.minVariantPrice.amount);
 
             return (
               <motion.div

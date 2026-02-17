@@ -6,13 +6,14 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Leaf, ShieldCheck } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { ShareRegimenButton } from "@/components/ShareRegimenButton";
+import { normalizePrice } from "@/lib/shopify";
 
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { items, isLoading, isSyncing, updateQuantity, removeItem, getCheckoutUrl, syncCart } = useCartStore();
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
+  const totalPrice = items.reduce((sum, item) => sum + (normalizePrice(item.price.amount) * item.quantity), 0);
 
   useEffect(() => { if (isOpen) syncCart(); }, [isOpen, syncCart]);
 
@@ -88,7 +89,7 @@ export const CartDrawer = () => {
                         <p className="text-xs text-muted-foreground font-body">{item.selectedOptions.map(o => o.value).join(' · ')}</p>
                         <p className="font-body font-semibold text-sm text-foreground mt-1">
                           <span className="text-[10px] align-top mr-0.5 font-normal text-muted-foreground">{item.price.currencyCode}</span>
-                          {parseFloat(item.price.amount).toFixed(2)}
+                          {normalizePrice(item.price.amount).toFixed(2)}
                         </p>
                       </div>
                       <div className="flex flex-col items-end gap-2 flex-shrink-0">

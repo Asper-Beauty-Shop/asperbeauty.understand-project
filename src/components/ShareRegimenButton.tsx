@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Share2, Loader2, Download, Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { normalizePrice } from "@/lib/shopify";
 
 /**
  * Generates a shareable "My Clinical Routine" image from cart items.
@@ -112,7 +113,7 @@ export function ShareRegimenButton() {
         // Price
         ctx.fillStyle = "#800020";
         ctx.font = "bold 32px 'Montserrat', sans-serif";
-        ctx.fillText(`${parseFloat(item.price.amount).toFixed(2)} ${item.price.currencyCode}`, x + cardW / 2, y + cardH - 35);
+        ctx.fillText(`${normalizePrice(item.price.amount).toFixed(2)} ${item.price.currencyCode}`, x + cardW / 2, y + cardH - 35);
       }
 
       // "Dr. Sami Approved" stamp

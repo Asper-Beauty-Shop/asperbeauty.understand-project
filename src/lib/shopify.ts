@@ -80,6 +80,14 @@ export async function storefrontApiRequest(query: string, variables: Record<stri
   return data;
 }
 
+/**
+ * Normalize Shopify price — the store has prices entered 10x higher than actual JOD values.
+ * E.g. Shopify returns "89.0" but real price is "8.90".
+ */
+export function normalizePrice(amount: string | number): number {
+  return parseFloat(String(amount)) / 10;
+}
+
 // ─── Product Queries ────────────────────────────────────────
 
 const PRODUCTS_QUERY = `
