@@ -227,6 +227,45 @@ export type Database = {
         }
         Relationships: []
       }
+      events: {
+        Row: {
+          event_type: string
+          external_id: string | null
+          id: string
+          payload: Json
+          provider: string
+          raw_body: string
+          received_at: string
+          signature: string
+          timestamp: number | null
+          valid: boolean
+        }
+        Insert: {
+          event_type: string
+          external_id?: string | null
+          id?: string
+          payload: Json
+          provider: string
+          raw_body: string
+          received_at?: string
+          signature: string
+          timestamp?: number | null
+          valid?: boolean
+        }
+        Update: {
+          event_type?: string
+          external_id?: string | null
+          id?: string
+          payload?: Json
+          provider?: string
+          raw_body?: string
+          received_at?: string
+          signature?: string
+          timestamp?: number | null
+          valid?: boolean
+        }
+        Relationships: []
+      }
       items: {
         Row: {
           created_at: string
@@ -585,6 +624,24 @@ export type Database = {
           id?: string
           tenant_id?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      site_config: {
+        Row: {
+          key: string
+          updated_at: string | null
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string | null
+          value: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string | null
+          value?: string
         }
         Relationships: []
       }
