@@ -137,6 +137,71 @@ export type Database = {
         }
         Relationships: []
       }
+      concierge_brain_rules: {
+        Row: {
+          action: Json
+          brain_id: string
+          created_at: string
+          id: string
+          is_active: boolean
+          pattern: string | null
+          rule_type: string
+          weight: number
+        }
+        Insert: {
+          action: Json
+          brain_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          pattern?: string | null
+          rule_type: string
+          weight?: number
+        }
+        Update: {
+          action?: Json
+          brain_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          pattern?: string | null
+          rule_type?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "concierge_brain_rules_brain_id_fkey"
+            columns: ["brain_id"]
+            isOneToOne: false
+            referencedRelation: "concierge_brains"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      concierge_brains: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          priority: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          priority?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          priority?: number
+        }
+        Relationships: []
+      }
       concierge_profiles: {
         Row: {
           created_at: string
@@ -185,6 +250,57 @@ export type Database = {
           id?: string
           title?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      customer_leads: {
+        Row: {
+          chat_summary: string | null
+          created_at: string | null
+          email: string | null
+          follow_up_at: string | null
+          id: string
+          notes: string | null
+          order_id: string | null
+          order_value: number | null
+          phone: string | null
+          skin_concern: string | null
+          source: string
+          status: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          chat_summary?: string | null
+          created_at?: string | null
+          email?: string | null
+          follow_up_at?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          order_value?: number | null
+          phone?: string | null
+          skin_concern?: string | null
+          source?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          chat_summary?: string | null
+          created_at?: string | null
+          email?: string | null
+          follow_up_at?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          order_value?: number | null
+          phone?: string | null
+          skin_concern?: string | null
+          source?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -713,9 +829,56 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      digital_tray_products_v: {
+        Row: {
+          bestseller_rank: number | null
+          created_at: string | null
+          id: string | null
+          inventory_total: number | null
+          is_bestseller: boolean | null
+          is_hero: boolean | null
+          primary_concern: Database["public"]["Enums"]["skin_concern"] | null
+          regimen_step: Database["public"]["Enums"]["regimen_step"] | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bestseller_rank?: number | null
+          created_at?: string | null
+          id?: string | null
+          inventory_total?: number | null
+          is_bestseller?: boolean | null
+          is_hero?: boolean | null
+          primary_concern?: Database["public"]["Enums"]["skin_concern"] | null
+          regimen_step?: Database["public"]["Enums"]["regimen_step"] | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bestseller_rank?: number | null
+          created_at?: string | null
+          id?: string | null
+          inventory_total?: number | null
+          is_bestseller?: boolean | null
+          is_hero?: boolean | null
+          primary_concern?: Database["public"]["Enums"]["skin_concern"] | null
+          regimen_step?: Database["public"]["Enums"]["regimen_step"] | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      apply_concierge_brain_rules: {
+        Args: { in_brain_id: string; in_concern: string; in_context?: Json }
+        Returns: Json
+      }
+      build_digital_tray: { Args: { in_concern: string }; Returns: Json }
+      convert_lead: {
+        Args: { lead_id: string; p_order_id: string; p_order_value: number }
+        Returns: undefined
+      }
       cron_cleanup: {
         Args: {
           action?: string
@@ -728,17 +891,39 @@ export type Database = {
       }
       fq: { Args: { rel_name: string; rel_schema: string }; Returns: string }
       generate_prescription: { Args: { payload: Json }; Returns: Json }
-      get_tray_by_concern: {
-        Args: { p_concern: Database["public"]["Enums"]["skin_concern"] }
+      get_leads_for_followup: {
+        Args: { limit_n?: number }
         Returns: {
-          bestseller_rank: number
+          chat_summary: string | null
+          created_at: string | null
+          email: string | null
+          follow_up_at: string | null
           id: string
-          inventory_total: number
-          is_bestseller: boolean
-          is_hero: boolean
-          regimen_step: Database["public"]["Enums"]["regimen_step"]
-          title: string
+          notes: string | null
+          order_id: string | null
+          order_value: number | null
+          phone: string | null
+          skin_concern: string | null
+          source: string
+          status: string
+          updated_at: string | null
+          user_id: string | null
         }[]
+        SetofOptions: {
+          from: "*"
+          to: "customer_leads"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      get_tray_by_concern: {
+        Args: { concern_tag: Database["public"]["Enums"]["skin_concern"] }
+        Returns: Json
+      }
+      get_tray_for_user: { Args: { p_user_id: string }; Returns: Json }
+      get_tray_with_concierge: {
+        Args: { concierge_name: string; free_text: string; user_id?: string }
+        Returns: Json
       }
       has_role: {
         Args: {
@@ -746,6 +931,27 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      mark_lead_contacted: {
+        Args: { lead_id: string; note?: string }
+        Returns: undefined
+      }
+      normalize_concern: { Args: { input_text: string }; Returns: string }
+      resolve_concierge_brain: {
+        Args: { brain_name: string }
+        Returns: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          priority: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "concierge_brains"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       sync_tray_product: {
         Args: {
@@ -765,7 +971,13 @@ export type Database = {
       app_role: "admin" | "editor"
       locale_code: "en" | "ar"
       persona_type: "dr_sami" | "ms_zain"
-      regimen_step: "Step_1_Cleanser" | "Step_2_Treatment" | "Step_3_Protection"
+      regimen_step:
+        | "Step_1_Cleanser"
+        | "Step_2_Treatment"
+        | "Step_3_Protection"
+        | "Step_1"
+        | "Step_2"
+        | "Step_3"
       shopify: "public"
       skin_concern:
         | "Concern_Acne"
@@ -775,6 +987,11 @@ export type Database = {
         | "Concern_Pigmentation"
         | "Concern_Redness"
         | "Concern_Oiliness"
+        | "Concern_Brightening"
+        | "Concern_SunProtection"
+        | "Concern_DarkCircles"
+        | "Concern_AntiAging"
+        | "Concern_Dryness"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -909,6 +1126,9 @@ export const Constants = {
         "Step_1_Cleanser",
         "Step_2_Treatment",
         "Step_3_Protection",
+        "Step_1",
+        "Step_2",
+        "Step_3",
       ],
       shopify: ["public"],
       skin_concern: [
@@ -919,6 +1139,11 @@ export const Constants = {
         "Concern_Pigmentation",
         "Concern_Redness",
         "Concern_Oiliness",
+        "Concern_Brightening",
+        "Concern_SunProtection",
+        "Concern_DarkCircles",
+        "Concern_AntiAging",
+        "Concern_Dryness",
       ],
     },
   },
