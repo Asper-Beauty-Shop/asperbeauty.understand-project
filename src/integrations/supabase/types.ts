@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      access_links: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          label: string
+          meta: Json | null
+          url: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          label: string
+          meta?: Json | null
+          url: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string
+          meta?: Json | null
+          url?: string
+        }
+        Relationships: []
+      }
       ai_message_audit: {
         Row: {
           completion_tokens: number | null
@@ -937,6 +970,10 @@ export type Database = {
         Returns: undefined
       }
       normalize_concern: { Args: { input_text: string }; Returns: string }
+      product_usage_hint: {
+        Args: { regimen_step: string; title: string }
+        Returns: Json
+      }
       resolve_concierge_brain: {
         Args: { brain_name: string }
         Returns: {
@@ -952,6 +989,10 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      suggest_addon_for_freeshipping: {
+        Args: { cart_total: number; concern: string; target?: number }
+        Returns: Json
       }
       sync_tray_product: {
         Args: {
