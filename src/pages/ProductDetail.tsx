@@ -18,12 +18,6 @@ import {
 } from "lucide-react";
 import { ShareButtons } from "@/components/ShareButtons";
 import { toast } from "sonner";
-import {
-  getLocalizedCategory,
-  getLocalizedDescription,
-  translateTitle,
-} from "@/lib/productUtils";
-import { formatJOD } from "@/lib/productImageUtils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Accordion,
@@ -32,37 +26,22 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import type { Tables } from "@/integrations/supabase/types";
 
-interface SupabaseProduct {
-  id: string;
-  title: string;
-  description: string | null;
-  price: number;
-  original_price: number | null;
-  discount_percent: number | null;
-  is_on_sale: boolean | null;
-  image_url: string | null;
-  category: string;
-  subcategory: string | null;
-  brand: string | null;
-  tags: string[] | null;
-  volume_ml: string | null;
-  skin_concerns: string[] | null;
-  texture: string | null;
-  scent: string | null;
-}
+type DbProduct = Tables<"products">;
+
+const formatJOD = (n: number) => `${n.toFixed(2)} JOD`;
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
-  const { language } = useLanguage();
-  const isArabic = language === "ar";
-  const [product, setProduct] = useState<SupabaseProduct | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<SupabaseProduct[]>([]);
+  const { locale } = useLanguage();
+  const isArabic = locale === "ar";
+  const [product, setProduct] = useState<DbProduct | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
 
   const addItem = useCartStore((state) => state.addItem);
-  const setCartOpen = useCartStore((state) => state.setOpen);
   const { toggleItem, isInWishlist } = useWishlistStore();
 
   useEffect(() => {
@@ -72,123 +51,66 @@ const ProductDetail = () => {
         const { data, error } = await supabase
           .from("products")
           .select("*")
-          .eq("id", handle)
+          .eq("handle", handle)
           .maybeSingle();
 
         if (error) throw error;
-        setProduct(data);
-
-        if (data?.category) {
+        if (data) {
+          setProduct(data);
           const { data: related } = await supabase
             .from("products")
             .select("*")
-            .eq("category", data.category)
-            .neq("id", handle)
+            .eq("primary_concern", data.primary_concern)
+            .neq("id", data.id)
             .limit(4);
-
           setRelatedProducts(related || []);
         }
       } catch (error) {
-        if (import.meta.env.DEV) {
-          console.error("Failed to fetch product:", error);
-        }
+        if (import.meta.env.DEV) console.error("Failed to fetch product:", error);
       } finally {
         setLoading(false);
       }
     };
-
     loadProduct();
   }, [handle]);
 
+  const buildShopifyNode = (p: DbProduct) => ({
+    id: p.id,
+    title: p.title,
+    description: p.pharmacist_note || "",
+    handle: p.handle,
+    vendor: p.brand || "",
+    productType: p.primary_concern || "",
+    priceRange: { minVariantPrice: { amount: String(p.price ?? 0), currencyCode: "JOD" } },
+    images: { edges: [{ node: { url: p.image_url || "", altText: p.title } }] },
+    variants: { edges: [] as any[] },
+    options: [] as { name: string; values: string[] }[],
+  });
+
   const handleAddToCart = () => {
     if (!product) return;
-
-    const cartItem = {
-      product: {
-        node: {
-          id: product.id,
-          title: product.title,
-          handle: product.id,
-          description: product.description || "",
-          priceRange: {
-            minVariantPrice: {
-              amount: product.price.toString(),
-              currencyCode: "JOD",
-            },
-          },
-          images: {
-            edges: [{
-              node: { url: product.image_url || "", altText: product.title },
-            }],
-          },
-          variants: { edges: [] },
-          options: [],
-        },
-      },
+    addItem({
+      product: { node: buildShopifyNode(product) },
       variantId: product.id,
       variantTitle: "Default",
-      price: { amount: product.price.toString(), currencyCode: "JOD" },
+      price: { amount: String(product.price ?? 0), currencyCode: "JOD" },
       quantity,
       selectedOptions: [],
-    };
-
-    addItem(cartItem);
-    toast.success(
-      isArabic ? "تمت الإضافة إلى الحقيبة" : "Added to your ritual",
-      {
-        description: product.title,
-        position: "top-center",
-      },
-    );
-    setCartOpen(true);
+    });
+    toast.success(isArabic ? "تمت الإضافة إلى الحقيبة" : "Added to your ritual", { description: product.title, position: "top-center" });
   };
 
   const handleWishlistToggle = () => {
     if (!product) return;
-    const shopifyFormat = {
-      node: {
-        id: product.id,
-        title: product.title,
-        handle: product.id,
-        description: product.description || "",
-        priceRange: {
-          minVariantPrice: {
-            amount: product.price.toString(),
-            currencyCode: "JOD",
-          },
-        },
-        images: {
-          edges: [{
-            node: { url: product.image_url || "", altText: product.title },
-          }],
-        },
-        variants: { edges: [] },
-        options: [],
-      },
-    };
-    toggleItem(shopifyFormat);
+    toggleItem({ node: buildShopifyNode(product) });
     if (!isInWishlist(product.id)) {
-      toast.success(isArabic ? "تمت الإضافة إلى المفضلة" : "Added to wishlist", {
-        description: product.title,
-        position: "top-center",
-      });
+      toast.success(isArabic ? "تمت الإضافة إلى المفضلة" : "Added to wishlist", { description: product.title, position: "top-center" });
     }
   };
 
   const isWishlisted = product ? isInWishlist(product.id) : false;
-  const rawPrice = product?.price;
-  const currentPrice = typeof rawPrice === "number" && !Number.isNaN(rawPrice) && rawPrice >= 0
-    ? rawPrice
-    : 0;
-  const rawOriginal = product?.original_price;
-  const originalPrice = typeof rawOriginal === "number" && !Number.isNaN(rawOriginal) && rawOriginal >= 0
-    ? rawOriginal
-    : null;
-  const isOnSale = product?.is_on_sale && originalPrice &&
-    originalPrice > currentPrice;
-  const discountPercent = product?.discount_percent || 0;
+  const currentPrice = product?.price ?? 0;
 
-  // 💎 LUXURY LOADING STATE
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -225,217 +147,90 @@ const ProductDetail = () => {
     );
   }
 
-  // Smart Defaults for Scraped Data
-  const brandName = product.brand ||
-    (isArabic ? "مجموعة حصرية" : "Exclusive Collection");
-  const textureInfo = product.texture ||
-    (product.volume_ml
-      ? `${product.volume_ml}ml - ${
-        isArabic ? "قوام حريري سريع الامتصاص" : "Silky, fast-absorbing formula"
-      }`
-      : (isArabic
-        ? "قوام حريري سريع الامتصاص"
-        : "Silky, fast-absorbing formula"));
-  const scentInfo = product.scent ||
-    (isArabic ? "خالٍ من العطور / طبيعي" : "Fragrance-free / Natural");
-
-  // If we only have 1 image, duplicate it for gallery effect
-  const galleryImages = product.image_url
-    ? [product.image_url, product.image_url]
-    : [
-      "https://images.unsplash.com/photo-1571781535014-53bd44f29186?q=80&w=1200",
-    ];
+  const brandName = product.brand || (isArabic ? "مجموعة حصرية" : "Exclusive Collection");
+  const galleryImages = product.image_url ? [product.image_url] : ["/placeholder.svg"];
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-
-      {/* Split Screen Layout */}
       <div className="grid lg:grid-cols-2 min-h-screen pt-20">
-        {/* LEFT: The Gallery (Cinematic Scroll) */}
+        {/* LEFT: Gallery */}
         <div className="bg-muted/30 lg:overflow-y-auto">
           <div className="space-y-1">
             {galleryImages.map((img, idx) => (
               <div key={idx} className="relative aspect-[4/5] overflow-hidden">
-                <img
-                  src={img}
-                  alt={`${product.title} - View ${idx + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                />
-                {idx === 0 && isOnSale && (
-                  <div className="absolute top-6 left-6 bg-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded">
-                    -{discountPercent}% OFF
-                  </div>
-                )}
-                <div className="absolute bottom-6 left-6 text-xs font-light tracking-widest text-white/70 uppercase">
-                  Figure 0{idx + 1} — {idx === 0 ? "The Vessel" : "The Texture"}
-                </div>
+                <img src={img} alt={`${product.title} - View ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
               </div>
             ))}
           </div>
         </div>
 
-        {/* RIGHT: The Editorial Details */}
+        {/* RIGHT: Details */}
         <div className="lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto bg-background">
           <div className="p-8 lg:p-16 flex flex-col justify-center min-h-full">
-            {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 text-sm mb-6">
-              <Link
-                to="/"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                {isArabic ? "الرئيسية" : "Home"}
-              </Link>
+              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "الرئيسية" : "Home"}</Link>
               <span className="text-muted-foreground">/</span>
-              <Link
-                to="/collections"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                {getLocalizedCategory(product.category, language)}
-              </Link>
+              <Link to="/shop" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "المتجر" : "Shop"}</Link>
             </nav>
 
-            {/* Brand & Title */}
             <div className="mb-8">
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground mb-3 block">
-                {product.brand || product.category}
-              </span>
-              <h1 className="font-serif text-3xl lg:text-4xl text-foreground leading-tight mb-6">
-                {translateTitle(product.title, language)}
-              </h1>
-
-              {/* Price & Rating */}
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl font-light text-foreground">
-                    {formatJOD(currentPrice)}
-                  </span>
-                  {isOnSale && originalPrice && (
-                    <span className="text-lg text-muted-foreground line-through">
-                      {formatJOD(originalPrice)}
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 fill-primary text-primary"
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    (128 {isArabic ? "تقييم" : "Reviews"})
-                  </span>
-                </div>
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground mb-3 block">{brandName}</span>
+              <h1 className="font-serif text-3xl lg:text-4xl text-foreground leading-tight mb-6">{product.title}</h1>
+              <div className="flex items-center gap-3">
+                <span className="text-2xl font-light text-foreground">{formatJOD(currentPrice)}</span>
               </div>
             </div>
 
-            {/* Description */}
-            <p className="text-muted-foreground leading-relaxed mb-8 font-light">
-              {getLocalizedDescription(product.description, language, 300) ||
-                (isArabic
-                  ? "منتج تجميل فاخر من مجموعتنا المختارة، مصنوع بأجود المكونات للحصول على بشرة مشرقة ونضرة."
-                  : "A premium beauty product from our curated collection, crafted with the finest ingredients for radiant and youthful skin.")}
-            </p>
+            {product.pharmacist_note && (
+              <p className="text-muted-foreground leading-relaxed mb-8 font-light">{product.pharmacist_note}</p>
+            )}
 
-            {/* Skin Concern Tags */}
-            {product.skin_concerns && product.skin_concerns.length > 0 && (
+            {product.key_ingredients && product.key_ingredients.length > 0 && (
               <div className="mb-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">
-                  {isArabic ? "مناسب لـ" : "Good For"}
-                </p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">{isArabic ? "المكونات الرئيسية" : "Key Ingredients"}</p>
                 <div className="flex flex-wrap gap-2">
-                  {product.skin_concerns.map((concern) => (
-                    <span
-                      key={concern}
-                      className="px-3 py-1 rounded-full bg-[#FFF8E1] border border-[#D4AF37]/40 text-xs text-[#7A6000] font-medium capitalize"
-                    >
-                      {concern.replace(/-/g, " ")}
-                    </span>
+                  {product.key_ingredients.map((ing) => (
+                    <span key={ing} className="px-3 py-1 rounded-full bg-accent/10 border border-accent/40 text-xs text-foreground font-medium">{ing}</span>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Sensory Details */}
-            <div className="grid grid-cols-2 gap-6 mb-10 pb-10 border-b border-border">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Droplets className="w-4 h-4 text-primary" />
-                  {isArabic ? "القوام" : "Texture"}
-                </div>
-                <p className="text-sm text-muted-foreground">{textureInfo}</p>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Sparkles className="w-4 h-4 text-primary" />
-                  {isArabic ? "العطر" : "Scent"}
-                </div>
-                <p className="text-sm text-muted-foreground">{scentInfo}</p>
-              </div>
-            </div>
-
-            {/* Quantity & Add to Bag */}
             <div className="space-y-6 mb-10">
               <div className="flex items-center justify-center gap-8 py-4 border border-border">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="p-3 hover:text-primary transition-colors"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span className="text-lg font-medium w-8 text-center">
-                  {quantity}
-                </span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="p-3 hover:text-primary transition-colors"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-primary transition-colors"><Minus className="w-4 h-4" /></button>
+                <span className="text-lg font-medium w-8 text-center">{quantity}</span>
+                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-primary transition-colors"><Plus className="w-4 h-4" /></button>
               </div>
 
               <div className="flex gap-4">
-                <Button
-                  onClick={handleAddToCart}
-                  className="flex-1 py-6 text-base font-medium tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground rounded-none"
-                >
+                <Button onClick={handleAddToCart} className="flex-1 py-6 text-base font-medium tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground rounded-none">
                   <ShoppingBag className="w-5 h-5 mr-3" />
-                  {isArabic ? "أضف إلى الحقيبة" : "Add to Ritual"} —{" "}
-                  {formatJOD(currentPrice * quantity)}
+                  {isArabic ? "أضف إلى الحقيبة" : "Add to Ritual"} — {formatJOD(currentPrice * quantity)}
                 </Button>
-                <button
-                  onClick={handleWishlistToggle}
-                  className={`w-14 h-14 flex items-center justify-center border transition-all ${
-                    isWishlisted
-                      ? "bg-primary border-primary text-primary-foreground"
-                      : "border-border text-foreground hover:border-primary"
-                  }`}
-                >
-                  <Heart
-                    className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`}
-                  />
+                <button onClick={handleWishlistToggle} className={`w-14 h-14 flex items-center justify-center border transition-all ${isWishlisted ? "bg-primary border-primary text-primary-foreground" : "border-border text-foreground hover:border-primary"}`}>
+                  <Heart className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`} />
                 </button>
               </div>
 
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <ShieldCheck className="w-4 h-4 text-primary" />
-                {isArabic
-                  ? "موزع معتمد • منتج أصلي 100%"
-                  : "Authorized Retailer • 100% Authentic"}
+                {isArabic ? "موزع معتمد • منتج أصلي 100%" : "Authorized Retailer • 100% Authentic"}
               </div>
 
-              <ShareButtons
-                url={window.location.href}
-                title={`${isArabic ? "اكتشف" : "Check out"} ${product.title} ${
-                  isArabic ? "من آسبر بيوتي" : "from Asper Beauty"
-                }`}
-              />
+              <ShareButtons url={window.location.href} title={`${isArabic ? "اكتشف" : "Check out"} ${product.title}`} />
             </div>
 
-            {/* Accordions */}
+            {product.clinical_badge && (
+              <div className="mb-6 px-4 py-3 bg-accent/10 border border-accent/30 rounded-lg">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Sparkles className="w-4 h-4 text-accent" />
+                  {product.clinical_badge}
+                </div>
+              </div>
+            )}
+
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="ritual" className="border-border">
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline">
@@ -445,37 +240,9 @@ const ProductDetail = () => {
                   <div className="flex items-start gap-3 py-2">
                     <Sparkles className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      {isArabic
-                        ? "ضعيه صباحاً ومساءً على بشرة نظيفة قبل المرطب. استخدمي كمية مناسبة ووزعيها بلطف على الوجه والرقبة."
-                        : "Apply AM and PM on clean skin before your moisturizer. Gently smooth over face and throat."}
+                      {isArabic ? "ضعيه صباحاً ومساءً على بشرة نظيفة." : "Apply AM and PM on clean skin before your moisturizer."}
                     </p>
                   </div>
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="ingredients" className="border-border">
-                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline">
-                  {isArabic ? "المكونات الرئيسية" : "Key Ingredients"}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {isArabic
-                      ? "مكونات طبيعية فاخرة تعمل على ترطيب البشرة وتجديدها. تحتوي على فيتامين سي وحمض الهيالورونيك والنياسيناميد."
-                      : "Premium natural ingredients that hydrate and rejuvenate. Contains Vitamin C, Hyaluronic Acid, and Niacinamide."}
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="shipping" className="border-border">
-                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline">
-                  {isArabic ? "الشحن والإرجاع" : "Shipping & Returns"}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {isArabic
-                      ? "شحن مجاني للطلبات فوق 50 دينار. التوصيل خلال 24-48 ساعة في عمان. 3 دينار للتوصيل داخل عمان، 5 دينار للمحافظات."
-                      : "Free shipping on all orders over 50 JOD. Delivered within 24-48 hours in Amman. 3 JOD for Amman, 5 JOD for Governorates."}
-                  </p>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
@@ -483,73 +250,25 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="py-20 px-8 lg:px-16 bg-muted/30">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="font-serif text-2xl lg:text-3xl text-center mb-12">
-              {isArabic ? "أكملي طقوسك" : "Complete The Ritual"}
-            </h2>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedProducts.map((related) => (
-                <Link
-                  key={related.id}
-                  to={`/product/${related.id}`}
-                  className="group bg-background rounded-lg overflow-hidden border border-border hover:border-primary transition-all"
-                >
-                  <div className="aspect-square overflow-hidden">
-                    <img
-                      src={related.image_url || "/placeholder.svg"}
-                      alt={related.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+        <section className="py-16 bg-muted/20">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <h2 className="font-serif text-2xl text-foreground mb-8">{isArabic ? "قد يعجبك أيضاً" : "You May Also Like"}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {relatedProducts.map((rp) => (
+                <Link key={rp.id} to={`/product/${rp.handle}`} className="group">
+                  <div className="aspect-square bg-muted/30 rounded-lg overflow-hidden mb-3">
+                    <img src={rp.image_url || "/placeholder.svg"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
-                  <div className="p-4">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                      {related.brand || related.category}
-                    </p>
-                    <h3 className="font-medium text-foreground text-sm line-clamp-2 mb-2">
-                      {related.title}
-                    </h3>
-                    <p className="text-primary font-medium">
-                      {formatJOD(related.price)}
-                    </p>
-                  </div>
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest">{rp.brand}</p>
+                  <p className="text-sm font-medium text-foreground line-clamp-2">{rp.title}</p>
+                  <p className="text-sm text-foreground mt-1">{formatJOD(rp.price ?? 0)}</p>
                 </Link>
               ))}
             </div>
           </div>
         </section>
       )}
-
-      {/* Mobile Sticky CTA */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4 z-40 shadow-2xl">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={handleWishlistToggle}
-            className={`w-12 h-12 flex-shrink-0 flex items-center justify-center border transition-all ${
-              isWishlisted
-                ? "bg-primary border-primary text-primary-foreground"
-                : "border-border text-foreground"
-            }`}
-          >
-            <Heart
-              className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`}
-            />
-          </button>
-          <div className="flex-shrink-0">
-            <p className="text-xl text-primary font-medium">
-              {formatJOD(currentPrice)}
-            </p>
-          </div>
-          <Button
-            onClick={handleAddToCart}
-            className="flex-1 py-3 bg-primary text-primary-foreground font-medium rounded-none"
-          >
-            {isArabic ? "أضف إلى الحقيبة" : "Add to Bag"}
-          </Button>
-        </div>
-      </div>
 
       <Footer />
     </div>

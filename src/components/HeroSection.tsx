@@ -64,8 +64,8 @@ const GoldParticles = () => {
 };
 const HeroSection = () => {
   const [videoLoaded, setVideoLoaded] = useState(false);
-  const { language } = useLanguage();
-  const isAr = language === "ar";
+  const { locale } = useLanguage();
+  const isAr = locale === "ar";
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-[#FFF8E1] via-[#FFFDF5] to-[#FFF8E1]">

@@ -1,187 +1,74 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import {
-  Eye,
   Grid3X3,
-  LayoutGrid,
   LayoutList,
   Loader2,
-  Percent,
   ShoppingBag,
   Sparkles,
-  Star,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { formatJOD, getProductImage, CATEGORY_FILTER_TO_DB } from "@/lib/productImageUtils";
-import { ProductQuickView } from "@/components/ProductQuickView";
-import {
-  FilterState,
-  ProductSearchFilters,
-} from "@/components/ProductSearchFilters";
 import { useCartStore } from "@/stores/cartStore";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ProductQuickView } from "@/components/ProductQuickView";
+import { ProductSearchFilters, type FilterState } from "@/components/ProductSearchFilters";
+import type { Tables } from "@/integrations/supabase/types";
 
-// Extended Product type with new columns
-interface Product {
-  id: string;
-  title: string;
-  price: number;
-  description: string | null;
-  category: string;
-  subcategory: string | null;
-  image_url: string | null;
-  brand: string | null;
-  volume_ml: string | null;
-  is_on_sale: boolean | null;
-  original_price: number | null;
-  discount_percent: number | null;
-  skin_concerns: string[] | null;
-  tags: string[] | null;
-  created_at: string;
-  updated_at: string;
-}
+type Product = Tables<"products">;
 
-// Product Card Component
-const ShopProductCard = ({
-  product,
-  onQuickView,
-  viewMode,
-}: {
-  product: Product;
-  onQuickView: (product: Product) => void;
-  viewMode: "grid" | "list";
-}) => {
-  const { language } = useLanguage();
-  const addItem = useCartStore((state) => state.addItem);
-  const setCartOpen = useCartStore((state) => state.setOpen);
-  const imageUrl = getProductImage(
-    product.image_url,
-    product.category,
-    product.title,
-  );
+const formatJOD = (n: number | null) => `${(n ?? 0).toFixed(2)} JOD`;
 
-  const isOnSale = product.is_on_sale && product.original_price &&
-    product.original_price > product.price;
-  const discountPercent = product.discount_percent ||
-    (isOnSale
-      ? Math.round(
-        ((product.original_price! - product.price) / product.original_price!) *
-          100,
-      )
-      : 0);
+// Product Card
+const ShopProductCard = ({ product, onQuickView, viewMode }: { product: Product; onQuickView: (p: Product) => void; viewMode: "grid" | "list" }) => {
+  const { locale } = useLanguage();
+  const addItem = useCartStore((s) => s.addItem);
+  const imageUrl = product.image_url || "/placeholder.svg";
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-
-    const cartProduct = {
-      node: {
-        id: product.id,
-        title: product.title,
-        handle: product.id,
-        description: product.description || "",
-        priceRange: {
-          minVariantPrice: {
-            amount: product.price.toString(),
-            currencyCode: "JOD",
-          },
-        },
-        images: {
-          edges: [{ node: { url: imageUrl, altText: product.title } }],
-        },
-        variants: {
-          edges: [{
-            node: {
-              id: product.id,
-              title: "Default",
-              price: { amount: product.price.toString(), currencyCode: "JOD" },
-              selectedOptions: [],
-            },
-          }],
+    addItem({
+      product: {
+        node: {
+          id: product.id,
+          title: product.title,
+          description: product.pharmacist_note || "",
+          handle: product.handle,
+          vendor: product.brand || "",
+          productType: product.primary_concern || "",
+          priceRange: { minVariantPrice: { amount: String(product.price ?? 0), currencyCode: "JOD" } },
+          images: { edges: [{ node: { url: imageUrl, altText: product.title } }] },
+          variants: { edges: [{ node: { id: product.id, title: "Default", price: { amount: String(product.price ?? 0), currencyCode: "JOD" }, availableForSale: true, selectedOptions: [] } }] },
+          options: [],
         },
       },
-    };
-
-    addItem({
-      product: cartProduct as import("@/lib/shopify").ShopifyProduct,
       variantId: product.id,
       variantTitle: "Default",
-      price: { amount: product.price.toString(), currencyCode: "JOD" },
+      price: { amount: String(product.price ?? 0), currencyCode: "JOD" },
       quantity: 1,
       selectedOptions: [],
     });
-
-    toast.success(
-      language === "ar" ? "تمت الإضافة إلى السلة" : "Added to cart",
-      {
-        description: product.title,
-        position: "top-center",
-      },
-    );
-    setCartOpen(true);
+    toast.success(locale === "ar" ? "تمت الإضافة إلى السلة" : "Added to cart", { description: product.title, position: "top-center" });
   };
 
   if (viewMode === "list") {
     return (
-      <article
-        className="group bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex"
-        onClick={() => onQuickView(product)}
-      >
-        <div className="relative w-40 md:w-48 flex-shrink-0 bg-gray-50">
-          <img
-            src={imageUrl}
-            alt={product.title}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          {isOnSale && discountPercent > 0 && (
-            <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-[#E53E3E] text-white px-2 py-1 rounded-sm text-xs font-semibold">
-              <Percent className="w-3 h-3" />-{discountPercent}%
-            </div>
-          )}
+      <article className="group bg-card rounded-lg overflow-hidden border border-border shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex" onClick={() => onQuickView(product)}>
+        <div className="relative w-40 md:w-48 flex-shrink-0 bg-muted/30">
+          <img src={imageUrl} alt={product.title} className="w-full h-full object-cover" loading="lazy" />
         </div>
         <div className="flex-1 p-4 flex flex-col">
-          {product.brand && (
-            <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">
-              {product.brand}
-            </p>
-          )}
-          <h3 className="text-sm font-medium text-gray-900 mb-1 group-hover:text-burgundy transition-colors">
-            {product.title}
-          </h3>
-          {product.volume_ml && (
-            <p className="text-xs text-gray-500 mb-2">{product.volume_ml}</p>
-          )}
-          <p className="text-xs text-gray-600 line-clamp-2 mb-3 flex-grow">
-            {product.description}
-          </p>
+          {product.brand && <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">{product.brand}</p>}
+          <h3 className="text-sm font-medium text-foreground mb-1 group-hover:text-primary transition-colors">{product.title}</h3>
+          <p className="text-xs text-muted-foreground line-clamp-2 mb-3 flex-grow">{product.pharmacist_note}</p>
           <div className="flex items-center justify-between mt-auto">
-            <div className="flex items-baseline gap-2">
-              {isOnSale && product.original_price && (
-                <span className="text-sm text-gray-400 line-through">
-                  {formatJOD(product.original_price)}
-                </span>
-              )}
-              <span
-                className={`text-base font-bold ${
-                  isOnSale ? "text-[#E53E3E]" : "text-gray-900"
-                }`}
-              >
-                {formatJOD(product.price)}
-              </span>
-            </div>
-            <Button
-              onClick={handleAddToCart}
-              size="sm"
-              className="bg-burgundy hover:bg-burgundy-light text-white text-xs"
-            >
+            <span className="text-base font-bold text-foreground">{formatJOD(product.price)}</span>
+            <Button onClick={handleAddToCart} size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs">
               <ShoppingBag className="w-4 h-4 me-1" />
-              {language === "ar" ? "إضافة" : "Add"}
+              {locale === "ar" ? "إضافة" : "Add"}
             </Button>
           </div>
         </div>
@@ -190,100 +77,32 @@ const ShopProductCard = ({
   }
 
   return (
-    <article
-      className="group relative bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col animate-fade-in"
-      onClick={() => onQuickView(product)}
-    >
-      <div className="relative aspect-square overflow-hidden bg-gray-50">
-        <img
-          src={imageUrl}
-          alt={product.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
-        />
-        {isOnSale && discountPercent > 0 && (
-          <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-[#E53E3E] text-white px-2 py-1 rounded-sm text-xs font-semibold shadow-md">
-            <Percent className="w-3 h-3" />-{discountPercent}%
+    <article className="group relative bg-card rounded-lg overflow-hidden border border-border shadow-sm hover:shadow-lg hover:border-accent/50 transition-all duration-300 cursor-pointer flex flex-col animate-fade-in" onClick={() => onQuickView(product)}>
+      <div className="relative aspect-square overflow-hidden bg-muted/30">
+        <img src={imageUrl} alt={product.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        {product.clinical_badge && (
+          <div className="absolute top-2 left-2 z-10 bg-accent/90 text-accent-foreground px-2 py-1 rounded text-[10px] font-semibold">
+            {product.clinical_badge}
           </div>
         )}
-        {(product.category === "Best Seller" ||
-          product.category === "New Arrival") && (
-          <Badge
-            className={`absolute ${
-              isOnSale ? "top-10" : "top-2"
-            } left-2 z-10 font-medium text-[10px] uppercase tracking-wide px-2 py-1 flex items-center gap-1 shadow-sm border-0 ${
-              product.category === "Best Seller"
-                ? "bg-amber-500 text-white"
-                : "bg-emerald-500 text-white"
-            }`}
-          >
-            {product.category === "Best Seller" && (
-              <Star className="w-3 h-3 fill-current" />
-            )}
-            {product.category === "New Arrival" && (
-              <Sparkles className="w-3 h-3" />
-            )}
-            {product.category}
-          </Badge>
-        )}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onQuickView(product);
-            }}
-            className="w-11 h-11 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-burgundy hover:text-white transition-all duration-200"
-          >
-            <Eye className="w-5 h-5" />
-          </button>
-        </div>
       </div>
       <div className="p-4 flex flex-col flex-grow">
-        {product.brand && (
-          <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-medium">
-            {product.brand}
-          </p>
-        )}
-        <h3 className="text-sm font-medium text-gray-900 leading-tight line-clamp-2 mb-1 group-hover:text-burgundy transition-colors flex-grow">
-          {product.title}
-        </h3>
-        {product.volume_ml && (
-          <p className="text-xs text-gray-500 mb-1">{product.volume_ml}</p>
-        )}
-        {product.skin_concerns && product.skin_concerns.length > 0 && (
+        {product.brand && <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1 font-medium">{product.brand}</p>}
+        <h3 className="text-sm font-medium text-foreground leading-tight line-clamp-2 mb-1 group-hover:text-primary transition-colors flex-grow">{product.title}</h3>
+        {product.key_ingredients && product.key_ingredients.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-2">
-            {product.skin_concerns.slice(0, 2).map((concern) => (
-              <span
-                key={concern}
-                className="px-2 py-0.5 rounded-full bg-[#FFF8E1] border border-[#D4AF37]/30 text-[10px] text-[#7A6000] font-medium"
-              >
-                {concern.replace(/-/g, " ")}
-              </span>
+            {product.key_ingredients.slice(0, 2).map((ing) => (
+              <span key={ing} className="px-2 py-0.5 rounded-full bg-accent/10 border border-accent/30 text-[10px] text-foreground/70 font-medium">{ing}</span>
             ))}
           </div>
         )}
         <div className="mt-auto">
           <div className="flex items-baseline gap-2 mb-3">
-            {isOnSale && product.original_price && (
-              <span className="text-sm text-gray-400 line-through">
-                {formatJOD(product.original_price)}
-              </span>
-            )}
-            <span
-              className={`text-base font-bold ${
-                isOnSale ? "text-[#E53E3E]" : "text-gray-900"
-              }`}
-            >
-              {formatJOD(product.price)}
-            </span>
+            <span className="text-base font-bold text-foreground">{formatJOD(product.price)}</span>
           </div>
-          <Button
-            onClick={handleAddToCart}
-            size="sm"
-            className="w-full bg-burgundy hover:bg-burgundy-light text-white text-xs uppercase tracking-wide py-2.5"
-          >
+          <Button onClick={handleAddToCart} size="sm" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xs uppercase tracking-wide py-2.5">
             <ShoppingBag className="w-4 h-4 me-2" />
-            {language === "ar" ? "أضف للسلة" : "Add to Cart"}
+            {locale === "ar" ? "أضف للسلة" : "Add to Cart"}
           </Button>
         </div>
       </div>
@@ -291,60 +110,36 @@ const ShopProductCard = ({
   );
 };
 
-// Ambition pills for intent-based navigation (blueprint CRO requirement)
 const AMBITION_PILLS = [
-  { id: "pregnancy-safe", icon: "🤰", labelEn: "Pregnancy Safe", labelAr: "آمن للحمل" },
-  { id: "rosacea-safe", icon: "🌸", labelEn: "Rosacea Safe", labelAr: "آمن للوردية" },
-  { id: "glass-skin", icon: "✨", labelEn: "Glass Skin", labelAr: "بشرة زجاجية" },
-  { id: "barrier-repair", icon: "🛡️", labelEn: "Barrier Repair", labelAr: "إصلاح الحاجز" },
-  { id: "acne", icon: "💊", labelEn: "Acne Care", labelAr: "علاج حب الشباب" },
-  { id: "anti-aging", icon: "⏰", labelEn: "Anti-Aging", labelAr: "مكافحة الشيخوخة" },
-  { id: "hydration", icon: "💧", labelEn: "Deep Hydration", labelAr: "ترطيب عميق" },
-  { id: "dark-spots", icon: "🌟", labelEn: "Dark Spots", labelAr: "البقع الداكنة" },
-  { id: "sensitivity", icon: "🌿", labelEn: "Sensitive Skin", labelAr: "بشرة حساسة" },
-  { id: "sun-protection", icon: "☀️", labelEn: "Sun Protection", labelAr: "الحماية من الشمس" },
+  { id: "Concern_Acne", icon: "💊", labelEn: "Acne Care", labelAr: "علاج حب الشباب" },
+  { id: "Concern_AntiAging", icon: "⏰", labelEn: "Anti-Aging", labelAr: "مكافحة الشيخوخة" },
+  { id: "Concern_Hydration", icon: "💧", labelEn: "Hydration", labelAr: "ترطيب" },
+  { id: "Concern_Sensitivity", icon: "🌿", labelEn: "Sensitive Skin", labelAr: "بشرة حساسة" },
+  { id: "Concern_Pigmentation", icon: "🌟", labelEn: "Dark Spots", labelAr: "البقع الداكنة" },
+  { id: "Concern_SunProtection", icon: "☀️", labelEn: "Sun Protection", labelAr: "حماية من الشمس" },
+  { id: "Concern_Brightening", icon: "✨", labelEn: "Brightening", labelAr: "إشراقة" },
+  { id: "Concern_Dryness", icon: "🛡️", labelEn: "Dryness", labelAr: "جفاف" },
 ];
 
-// Main Shop Page
 export default function Shop() {
-  const { language } = useLanguage();
+  const { locale } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchParams] = useSearchParams();
-  const categoryParam = searchParams.get("category") ?? "";
-  const initialCategories = useMemo(() => {
-    if (!categoryParam) return [];
-    const normalized = categoryParam.toLowerCase().replace(/\s+/g, "-");
-    if (normalized === "skincare" || normalized === "skin-care") return ["skin-care"];
-    if (normalized === "haircare" || normalized === "hair-care") return ["hair-care"];
-    if (normalized === "makeup" || normalized === "make-up") return ["makeup"];
-    if (normalized === "fragrance" || normalized === "fragrances") return ["fragrance"];
-    if (normalized === "bodycare" || normalized === "body-care") return ["body-care"];
-    if (normalized === "tools" || normalized === "tools-devices") return ["tools-devices"];
-    if (["skin-care", "makeup", "hair-care", "fragrance", "body-care", "tools-devices"].includes(normalized)) return [normalized];
-    return [];
-  }, [categoryParam]);
+  const concernParam = searchParams.get("concern") ?? "";
 
   const [filters, setFilters] = useState<FilterState>({
     searchQuery: "",
-    categories: initialCategories,
+    categories: [],
     subcategories: [],
     brands: [],
-    skinConcerns: [],
+    skinConcerns: concernParam ? [concernParam] : [],
     priceRange: [0, 200],
     onSaleOnly: false,
   });
-
-  useEffect(() => {
-    if (initialCategories.length > 0) {
-      setFilters((prev) => ({ ...prev, categories: initialCategories }));
-    }
-  // initialCategories derived from URL; join string is intentional
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialCategories.join(",")]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -354,7 +149,6 @@ export default function Shop() {
           .from("products")
           .select("*")
           .order("created_at", { ascending: false });
-
         if (error) throw error;
         setProducts(data || []);
       } catch (err) {
@@ -366,99 +160,44 @@ export default function Shop() {
     fetchProducts();
   }, []);
 
-  // Filter products
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      // Category filter (maps filter ids like "skin-care" to product.category values)
-      if (filters.categories.length > 0) {
-        const productCat = (product.category || "").trim();
-        const matchesCategory = filters.categories.some((filterCat) => {
-          const allowedValues = CATEGORY_FILTER_TO_DB[filterCat];
-          if (allowedValues) {
-            return allowedValues.some(
-              (v) => v.toLowerCase() === productCat.toLowerCase()
-            );
-          }
-          return productCat.toLowerCase() === filterCat.toLowerCase();
-        });
-        if (!matchesCategory) return false;
-      }
-
-      // Search query
       if (filters.searchQuery) {
-        const query = filters.searchQuery.toLowerCase();
-        const matchesSearch = product.title.toLowerCase().includes(query) ||
-          product.brand?.toLowerCase().includes(query) ||
-          product.description?.toLowerCase().includes(query);
-        if (!matchesSearch) return false;
+        const q = filters.searchQuery.toLowerCase();
+        const matches = product.title.toLowerCase().includes(q) || product.brand?.toLowerCase().includes(q) || product.pharmacist_note?.toLowerCase().includes(q);
+        if (!matches) return false;
       }
-
-      // Brand filter
-      if (filters.brands.length > 0) {
-        if (!product.brand || !filters.brands.includes(product.brand)) {
-          return false;
-        }
-      }
-
-      // Skin concerns filter
-      if (filters.skinConcerns.length > 0) {
-        const productConcerns = product.skin_concerns || [];
-        const hasMatchingConcern = filters.skinConcerns.some((concern) =>
-          productConcerns.includes(concern)
-        );
-        if (!hasMatchingConcern) return false;
-      }
-
-      // Price range filter (handle invalid/undefined prices)
-      const price = Number(product?.price);
-      if (Number.isNaN(price) || price < 0) return false;
-      if (
-        price < filters.priceRange[0] ||
-        price > filters.priceRange[1]
-      ) {
-        return false;
-      }
-
-      // On sale filter
-      if (filters.onSaleOnly && !product.is_on_sale) return false;
-
+      if (filters.brands.length > 0 && (!product.brand || !filters.brands.includes(product.brand))) return false;
+      if (filters.skinConcerns.length > 0 && !filters.skinConcerns.includes(product.primary_concern)) return false;
+      const price = product.price ?? 0;
+      if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
       return true;
     });
   }, [products, filters]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header />
-
       <main className="pt-20 pb-16">
-        {/* Hero Banner */}
-        <div className="bg-burgundy text-white py-8 md:py-12">
+        {/* Hero */}
+        <div className="bg-primary text-primary-foreground py-8 md:py-12">
           <div className="container mx-auto px-4 max-w-7xl text-center">
-            <h1 className="text-2xl md:text-4xl font-semibold mb-2">
-              {language === "ar" ? "تسوق جميع المنتجات" : "Shop All Products"}
+            <h1 className="text-2xl md:text-4xl font-serif font-semibold mb-2">
+              {locale === "ar" ? "تسوق جميع المنتجات" : "Shop All Products"}
             </h1>
-            <p className="text-cream/80 text-sm md:text-base">
-              {language === "ar"
-                ? "اكتشف أفضل منتجات العناية بالبشرة والجمال"
-                : "Discover premium skincare and beauty products"}
+            <p className="text-primary-foreground/70 text-sm md:text-base">
+              {locale === "ar" ? "اكتشف أفضل منتجات العناية بالبشرة والجمال" : "Discover premium skincare and beauty products"}
             </p>
-            <Link
-              to="/shop/organized"
-              className="inline-flex items-center gap-2 mt-4 text-cream/90 hover:text-white text-sm font-medium tracking-wide underline underline-offset-2"
-            >
-              <LayoutGrid className="w-4 h-4" />
-              {language === "ar" ? "عرض حسب المجموعة" : "View by Collection"}
-            </Link>
           </div>
         </div>
 
-        {/* Ambition Strip — intent-based navigation (blueprint requirement) */}
-        <div className="bg-gradient-to-b from-white to-gray-50 border-b border-gray-100 shadow-sm">
+        {/* Ambition Pills */}
+        <div className="bg-background border-b border-border">
           <div className="container mx-auto px-4 max-w-7xl py-4">
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-gray-500 font-sans">
-                {language === "ar" ? "تسوّقي حسب هدفك" : "Shop by Ambition"}
+              <Sparkles className="w-4 h-4 text-accent" />
+              <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                {locale === "ar" ? "تسوّقي حسب هدفك" : "Shop by Concern"}
               </span>
             </div>
             <div className="flex gap-2.5 overflow-x-auto pb-1 scrollbar-hide">
@@ -468,19 +207,15 @@ export default function Shop() {
                   <button
                     key={pill.id}
                     onClick={() => {
-                      const updated = isActive
-                        ? filters.skinConcerns.filter((c) => c !== pill.id)
-                        : [...filters.skinConcerns, pill.id];
+                      const updated = isActive ? filters.skinConcerns.filter((c) => c !== pill.id) : [...filters.skinConcerns, pill.id];
                       setFilters({ ...filters, skinConcerns: updated });
                     }}
                     className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full border text-xs font-semibold transition-all duration-200 ${
-                      isActive
-                        ? "bg-[#800020] text-white border-[#800020] shadow-md scale-105"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-[#D4AF37] hover:text-gray-900 hover:shadow-sm"
+                      isActive ? "bg-primary text-primary-foreground border-primary shadow-md" : "bg-card text-foreground/70 border-border hover:border-accent hover:text-foreground"
                     }`}
                   >
                     <span role="img" aria-hidden="true">{pill.icon}</span>
-                    <span>{language === "ar" ? pill.labelAr : pill.labelEn}</span>
+                    <span>{locale === "ar" ? pill.labelAr : pill.labelEn}</span>
                   </button>
                 );
               })}
@@ -490,111 +225,45 @@ export default function Shop() {
 
         <div className="container mx-auto px-4 max-w-7xl py-8">
           <div className="lg:flex lg:gap-8">
-            {/* Sidebar Filters - Desktop */}
             <aside className="hidden lg:block w-72 flex-shrink-0">
-              <ProductSearchFilters
-                filters={filters}
-                onFiltersChange={setFilters}
-                productCount={filteredProducts.length}
-              />
+              <ProductSearchFilters filters={filters} onFilterChange={setFilters} products={filteredProducts} />
             </aside>
-
-            {/* Main Content */}
             <div className="flex-1">
-              {/* Top Bar */}
               <div className="flex items-center justify-between mb-6">
-                <p className="text-sm text-gray-600">
-                  {language === "ar"
-                    ? `${filteredProducts.length} منتج`
-                    : `${filteredProducts.length} products`}
+                <p className="text-sm text-muted-foreground">
+                  {locale === "ar" ? `${filteredProducts.length} منتج` : `${filteredProducts.length} products`}
                 </p>
-
-                <div className="flex items-center gap-3">
-                  {/* Mobile Filters */}
-                  <div className="lg:hidden">
-                    <ProductSearchFilters
-                      filters={filters}
-                      onFiltersChange={setFilters}
-                      productCount={filteredProducts.length}
-                    />
-                  </div>
-
-                  {/* View Mode Toggle */}
-                  <div className="hidden sm:flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1">
-                    <button
-                      onClick={() => setViewMode("grid")}
-                      className={`p-2 rounded ${
-                        viewMode === "grid"
-                          ? "bg-burgundy text-white"
-                          : "text-gray-500 hover:bg-gray-100"
-                      }`}
-                    >
-                      <Grid3X3 className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setViewMode("list")}
-                      className={`p-2 rounded ${
-                        viewMode === "list"
-                          ? "bg-burgundy text-white"
-                          : "text-gray-500 hover:bg-gray-100"
-                      }`}
-                    >
-                      <LayoutList className="w-4 h-4" />
-                    </button>
-                  </div>
+                <div className="flex items-center gap-1 bg-card rounded-lg border border-border p-1">
+                  <button onClick={() => setViewMode("grid")} className={`p-2 rounded ${viewMode === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}>
+                    <Grid3X3 className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => setViewMode("list")} className={`p-2 rounded ${viewMode === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}>
+                    <LayoutList className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
 
-              {/* Loading */}
               {isLoading && (
                 <div className="flex items-center justify-center py-20">
-                  <Loader2 className="w-8 h-8 text-burgundy animate-spin" />
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
                 </div>
               )}
 
-              {/* Empty State */}
               {!isLoading && filteredProducts.length === 0 && (
-                <div className="text-center py-20 bg-white rounded-xl border border-gray-100">
-                  <p className="text-gray-500 mb-4">
-                    {language === "ar"
-                      ? "لا توجد منتجات مطابقة للفلاتر"
-                      : "No products match your filters"}
+                <div className="text-center py-20 bg-card rounded-xl border border-border">
+                  <p className="text-muted-foreground mb-4">
+                    {locale === "ar" ? "لا توجد منتجات مطابقة للفلاتر" : "No products match your filters"}
                   </p>
-                  <Button
-                    variant="outline"
-                    onClick={() =>
-                      setFilters({
-                        searchQuery: "",
-                        categories: [],
-                        subcategories: [],
-                        brands: [],
-                        skinConcerns: [],
-                        priceRange: [0, 200],
-                        onSaleOnly: false,
-                      })}
-                  >
-                    {language === "ar" ? "مسح الفلاتر" : "Clear Filters"}
+                  <Button variant="outline" onClick={() => setFilters({ searchQuery: "", categories: [], subcategories: [], brands: [], skinConcerns: [], priceRange: [0, 200], onSaleOnly: false })}>
+                    {locale === "ar" ? "مسح الفلاتر" : "Clear Filters"}
                   </Button>
                 </div>
               )}
 
-              {/* Product Grid/List */}
               {!isLoading && filteredProducts.length > 0 && (
-                <div
-                  className={viewMode === "grid"
-                    ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
-                    : "space-y-4"}
-                >
+                <div className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" : "space-y-4"}>
                   {filteredProducts.map((product) => (
-                    <ShopProductCard
-                      key={product.id}
-                      product={product}
-                      onQuickView={(p) => {
-                        setSelectedProduct(p);
-                        setIsQuickViewOpen(true);
-                      }}
-                      viewMode={viewMode}
-                    />
+                    <ShopProductCard key={product.id} product={product} onQuickView={(p) => { setSelectedProduct(p); setIsQuickViewOpen(true); }} viewMode={viewMode} />
                   ))}
                 </div>
               )}
@@ -602,16 +271,11 @@ export default function Shop() {
           </div>
         </div>
       </main>
-
       <Footer />
-
       <ProductQuickView
-        product={selectedProduct}
-        isOpen={isQuickViewOpen}
-        onClose={() => {
-          setIsQuickViewOpen(false);
-          setTimeout(() => setSelectedProduct(null), 300);
-        }}
+        product={selectedProduct ? { id: selectedProduct.id, title: selectedProduct.title, price: selectedProduct.price ?? 0, description: selectedProduct.pharmacist_note, image_url: selectedProduct.image_url, brand: selectedProduct.brand } : null}
+        open={isQuickViewOpen}
+        onOpenChange={(open) => { setIsQuickViewOpen(open); if (!open) setTimeout(() => setSelectedProduct(null), 300); }}
       />
     </div>
   );
