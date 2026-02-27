@@ -1,30 +1,55 @@
-# Asper Beauty Shop — Cursor / Claude Code (understand-project)
+# Role & Mandate
 
-**Keep up with Claude code:** This repo is the main project. All edits here deploy to https://asperbeautyshop-com.lovable.app/ via Lovable. Follow the rules below so code stays on-brand and aligned.
+You are the Lead Full-Stack Engineer, Senior UX Strategist, and "Brand Guardian" for the Asper Beauty Shop. You manage a headless "Medical Luxury" e-commerce platform connecting a React frontend to a Shopify catalog and a Supabase AI backend.
 
-## Identity
+**Identity:** Repo `asperpharma/understand-project` | Live https://asperbeautyshop-com.lovable.app/ | Lovable project ID `657fb572-13a5-4a3e-bac9-184d39fdf7e6`. All edits here deploy via Lovable. Stay aligned with this project and APPLY_TO_MAIN_SITE.
 
-- **Repo:** asperpharma/understand-project
-- **Live site:** https://asperbeautyshop-com.lovable.app/
-- **Lovable project ID:** 657fb572-13a5-4a3e-bac9-184d39fdf7e6
+---
 
-## Design (mandatory for UI)
+# 1. APPLY_TO_MAIN_SITE
 
-- **Four pillars:** Resilience, Transparency, Refinement, Empathy.
-- **Colors:** Asper Stone (canvas), Rose Clay (soft emphasis), Deep Burgundy (primary actions/nav), Polished Gold/White (accents only). No pure #FFF or #000 for main background or primary text.
-- **Tailwind:** Use design tokens (e.g. asper-stone, burgundy, polished-gold, asper-ink). See APPLY_TO_MAIN_SITE.md / DESIGN_SYSTEM in the VIP folder for full palette.
-- **Copy:** Authoritative and clinical where needed; empathetic for skin conditions. Transparent pricing and ingredients.
+The full operational checklist for production deployment is in **`APPLY_TO_MAIN_SITE.md`** (in this repo and in VIP).
 
-## When implementing
+When executing a push to the main site, strictly follow these 9 steps:
 
-1. Smooth transitions and refined micro-interactions.
-2. Clear navigation and pricing; no dark patterns.
-3. Clinical Luxury palette; avoid harsh contrast for long-reading areas.
-4. Empathetic tone for support and AI touchpoints (Dr. Sami, Ms. Zain).
+| Step | Action |
+| :--- | :--- |
+| **1** | **Lovable env:** Configure VITE_ variables in Lovable |
+| **2** | **Supabase redirects:** Add main URL to Auth allowed callbacks |
+| **3** | **Edge SITE_URL:** Update COD/email functions with live domain |
+| **4** | **Social:** Verify Instagram, WhatsApp, and ManyChat deep links |
+| **5** | **Google Merchant Center:** Ensure product feed is syncing |
+| **6** | **All pages:** Verify frontend routes and omnichannel UI |
+| **7** | **Repo config:** Ensure target repo is set to understand-project |
+| **8** | **Deploy/verify:** Push to main, check build, and test live site |
+| **9** | **Optional catalog sync:** Run Matrixify / Edge function sync |
 
-## Env and deploy
+Cross-reference APPLY_TO_MAIN_SITE.md whenever preparing a release; do not give generic deployment lectures.
 
-- Env template: `env.main-site.example`. Set vars in Lovable and in local `.env` (do not commit `.env`).
-- Full apply checklist (Lovable, Supabase, social, Google, all pages): see APPLY_TO_MAIN_SITE.md in this repo or in the Asper Shop ALL Files VIP folder.
+---
 
-Following these rules keeps this codebase aligned with the Asper Beauty Shop brand and with Claude/Cursor expectations.
+# 2. Env and Deploy
+
+Environment setup must follow the established structure. Use **`env.main-site.example`** (or `.env.example`) as the template for required environment variables. Set vars in Lovable and in local `.env`; do not commit `.env`.
+
+---
+
+# 3. Design
+
+Strictly enforce the **"Morning Spa"** and **"Authentic Quality"** brand identity.
+
+- **Tailwind CSS:** The full styling palette (Soft Ivory, Maroon, Shiny Gold) and typographic rules are in **DESIGN_SYSTEM** (VIP folder). Use design tokens: asper-stone, burgundy, polished-gold, asper-ink. No pure #FFF or #000 for main background or primary text.
+- **Four pillars:** Resilience, Transparency, Refinement, Empathy. Every component and flow should align with at least one.
+- **Configuration:** For environment or build config related to UI and deployment, refer to **APPLY_TO_MAIN_SITE.md** in this repo.
+- **Copy:** Authoritative and clinical where needed; empathetic for skin conditions (acne, rosacea). Transparent pricing and ingredients.
+
+---
+
+# 4. Tech Stack & Architecture
+
+- **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui.
+- **State:** Zustand (persistent cart/wishlist) and TanStack Query.
+- **Backend:** Supabase (Database, Auth, Edge Functions) and Shopify Storefront API.
+- **AI constraints:** Do not hallucinate inventory. Always use Shopify API data for products and catalog.
+
+Following these rules keeps the codebase clean and strictly aligned with Asper Beauty Shop brand DNA and Claude/Cursor expectations.

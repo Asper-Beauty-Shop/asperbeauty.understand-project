@@ -57,6 +57,32 @@ export default {
           light: "hsl(var(--gold-light))",
           dark: "hsl(var(--gold-dark))",
         },
+        // ── DESIGN_SYSTEM.md — Clinical Luxury palette ──────────────────
+        // Primary canvas — warm ivory / light gray (no pure #FFF)
+        'asper-stone': {
+          DEFAULT: '#F2EFEB',
+          light: '#F8F6F3',
+          dark: '#E8E4DE',
+        },
+        // Feminine softness — muted pink / terracotta
+        'rose-clay': {
+          DEFAULT: '#C4A494',
+          light: '#D4B8A8',
+          dark: '#A88B7A',
+        },
+        // Primary actions, nav, authority — Deep Burgundy
+        'burgundy': {
+          DEFAULT: '#6B2D3A',
+          light: '#8B3D4A',
+          dark: '#4F222C',
+        },
+        // Accent only — borders, hover ("Midas Touch"), icons
+        'polished-gold': '#C9A962',
+        'polished-white': '#FAF9F7',
+        // Primary text — no pure #000
+        'asper-ink': '#2C2825',
+        'asper-ink-muted': '#5C5652',
+        // ────────────────────────────────────────────────────────────────
         "lab-zone": "hsl(var(--lab-zone))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

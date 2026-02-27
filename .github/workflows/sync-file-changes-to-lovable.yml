@@ -1,0 +1,40 @@
+# Sync File Changes to Lovable (main project)
+# Repo: asperpharma/understand-project
+# Lovable: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
+#
+# On every push, sends lists of added/modified/removed files to Lovable via webhook.
+# SETUP: In GitHub repo → Settings → Secrets and variables → Actions, add:
+#   LOVABLE_WEBHOOK_URL = (webhook URL from Lovable for file sync)
+#
+name: Sync File Changes to Lovable
+
+on:
+  push:
+    branches:
+      - '**' # triggers on all branches
+
+jobs:
+  sync_files_to_lovable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Filter commit file changes and send to Lovable
+        env:
+          LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
+        run: |
+          echo "Gathering lists of changed files..."
+          ADDED=$(jq -r '.commits[].added[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
+          MODIFIED=$(jq -r '.commits[].modified[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
+          REMOVED=$(jq -r '.commits[].removed[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
+          PAYLOAD=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg commit "${{ github.sha }}" \
+            --arg sender "${{ github.actor }}" \
+            --arg url "${{ github.event.compare }}" \
+            --argjson added "$ADDED" \
+            --argjson modified "$MODIFIED" \
+            --argjson removed "$REMOVED" \
+            '{repo: $repo, commit: $commit, sender: $sender, compare_url: $url, added: $added, modified: $modified, removed: $removed}')
+          echo "Sending file changes to Lovable..."
+          curl -X POST "$LOVABLE_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD"
