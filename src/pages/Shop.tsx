@@ -6,8 +6,11 @@ import {
   Loader2,
   ShoppingBag,
   Sparkles,
+  Shield,
+  Package,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,14 +19,34 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductQuickView } from "@/components/ProductQuickView";
 import { ProductSearchFilters, type FilterState } from "@/components/ProductSearchFilters";
+import { cn } from "@/lib/utils";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Product = Tables<"products">;
 
-const formatJOD = (n: number | null) => `${(n ?? 0).toFixed(2)} JOD`;
+/** Luxury pricing display — currency small & top-aligned, integer large in maroon, decimals small */
+const LuxuryPrice = ({ amount, currency = "JOD" }: { amount: number | null; currency?: string }) => {
+  const val = (amount ?? 0).toFixed(2);
+  const [integer, decimal] = val.split(".");
+  return (
+    <span className="font-body text-foreground">
+      <span className="text-[10px] align-top font-medium text-muted-foreground">{currency}</span>
+      <span className="text-lg font-semibold text-primary mx-0.5">{integer}</span>
+      <span className="text-[10px] align-top font-medium text-muted-foreground">.{decimal}</span>
+    </span>
+  );
+};
 
-// Product Card
-const ShopProductCard = ({ product, onQuickView, viewMode }: { product: Product; onQuickView: (p: Product) => void; viewMode: "grid" | "list" }) => {
+// ─── Product Card with Gold Stitch ─────────────────────────────
+const ShopProductCard = ({
+  product,
+  onQuickView,
+  viewMode,
+}: {
+  product: Product;
+  onQuickView: (p: Product) => void;
+  viewMode: "grid" | "list";
+}) => {
   const { locale } = useLanguage();
   const addItem = useCartStore((s) => s.addItem);
   const imageUrl = product.image_url || "/placeholder.svg";
@@ -51,23 +74,37 @@ const ShopProductCard = ({ product, onQuickView, viewMode }: { product: Product;
       quantity: 1,
       selectedOptions: [],
     });
-    toast.success(locale === "ar" ? "تمت الإضافة إلى السلة" : "Added to cart", { description: product.title, position: "top-center" });
+    toast.success(locale === "ar" ? "تمت الإضافة" : "Excellent choice", {
+      description: product.title,
+      position: "top-center",
+    });
   };
 
   if (viewMode === "list") {
     return (
-      <article className="group bg-card rounded-lg overflow-hidden border border-border shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex" onClick={() => onQuickView(product)}>
-        <div className="relative w-40 md:w-48 flex-shrink-0 bg-muted/30">
+      <article
+        className="group bg-card rounded-lg overflow-hidden border border-border/50 hover:border-accent/40 shadow-maroon-glow hover:shadow-maroon-deep transition-all duration-300 cursor-pointer flex product-card-hover"
+        onClick={() => onQuickView(product)}
+      >
+        <div className="relative w-40 md:w-48 flex-shrink-0 bg-background">
           <img src={imageUrl} alt={product.title} className="w-full h-full object-cover" loading="lazy" />
         </div>
         <div className="flex-1 p-4 flex flex-col">
-          {product.brand && <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">{product.brand}</p>}
-          <h3 className="text-sm font-medium text-foreground mb-1 group-hover:text-primary transition-colors">{product.title}</h3>
-          <p className="text-xs text-muted-foreground line-clamp-2 mb-3 flex-grow">{product.pharmacist_note}</p>
+          {product.brand && (
+            <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent mb-1">{product.brand}</p>
+          )}
+          <h3 className="font-heading text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+            {product.title}
+          </h3>
+          {product.pharmacist_note && (
+            <p className="text-xs text-muted-foreground line-clamp-2 mb-3 flex-grow font-body italic">
+              {product.pharmacist_note}
+            </p>
+          )}
           <div className="flex items-center justify-between mt-auto">
-            <span className="text-base font-bold text-foreground">{formatJOD(product.price)}</span>
-            <Button onClick={handleAddToCart} size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs">
-              <ShoppingBag className="w-4 h-4 me-1" />
+            <LuxuryPrice amount={product.price} />
+            <Button onClick={handleAddToCart} size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs btn-ripple">
+              <ShoppingBag className="w-3.5 h-3.5 me-1" />
               {locale === "ar" ? "إضافة" : "Add"}
             </Button>
           </div>
@@ -77,39 +114,89 @@ const ShopProductCard = ({ product, onQuickView, viewMode }: { product: Product;
   }
 
   return (
-    <article className="group relative bg-card rounded-lg overflow-hidden border border-border shadow-sm hover:shadow-lg hover:border-accent/50 transition-all duration-300 cursor-pointer flex flex-col animate-fade-in" onClick={() => onQuickView(product)}>
-      <div className="relative aspect-square overflow-hidden bg-muted/30">
-        <img src={imageUrl} alt={product.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-        {product.clinical_badge && (
-          <div className="absolute top-2 left-2 z-10 bg-accent/90 text-accent-foreground px-2 py-1 rounded text-[10px] font-semibold">
-            {product.clinical_badge}
-          </div>
-        )}
+    <article
+      className="group relative bg-card rounded-lg overflow-hidden border border-border/50 hover:border-accent/40 shadow-maroon-glow hover:shadow-maroon-deep transition-all duration-500 cursor-pointer flex flex-col product-card-hover animate-fade-in"
+      onClick={() => onQuickView(product)}
+    >
+      {/* Gold Stitch animated border corners */}
+      <div className="absolute inset-0 rounded-lg border-2 border-accent/0 group-hover:border-accent/50 transition-all duration-700 pointer-events-none z-10">
+        <div className="absolute -top-0.5 -left-0.5 w-1.5 h-1.5 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 shadow-lg shadow-accent/40" />
+        <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 shadow-lg shadow-accent/40" />
+        <div className="absolute -bottom-0.5 -left-0.5 w-1.5 h-1.5 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 shadow-lg shadow-accent/40" />
+        <div className="absolute -bottom-0.5 -right-0.5 w-1.5 h-1.5 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 shadow-lg shadow-accent/40" />
       </div>
-      <div className="p-4 flex flex-col flex-grow">
-        {product.brand && <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1 font-medium">{product.brand}</p>}
-        <h3 className="text-sm font-medium text-foreground leading-tight line-clamp-2 mb-1 group-hover:text-primary transition-colors flex-grow">{product.title}</h3>
+
+      {/* Image */}
+      <div className="relative aspect-square overflow-hidden bg-background flex items-center justify-center p-4">
+        {imageUrl && imageUrl !== "/placeholder.svg" ? (
+          <img
+            src={imageUrl}
+            alt={product.title}
+            className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+        ) : (
+          <Package className="h-16 w-16 text-muted-foreground/30" />
+        )}
+        {product.clinical_badge && (
+          <span className="absolute top-3 left-3 z-10 flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2 py-0.5 text-[10px] font-medium text-foreground shadow-sm">
+            <Shield className="h-3 w-3 text-primary" />
+            {product.clinical_badge}
+          </span>
+        )}
+        {/* Authenticity star */}
+        <div className="absolute top-3 right-3 z-10 h-6 w-6 flex items-center justify-center border border-accent bg-card/80 backdrop-blur-sm rounded-sm p-0.5" title="Guaranteed Authenticity">
+          <svg viewBox="0 0 24 24" fill="none" className="text-accent h-full w-full">
+            <path d="M12 2L14.5 7.5L20 9L15.5 13L17 18.5L12 15.5L7 18.5L8.5 13L4 9L9.5 7.5L12 2Z" fill="currentColor" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 flex flex-col flex-grow space-y-2">
+        {product.brand && (
+          <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent">{product.brand}</p>
+        )}
+        <h3 className="font-heading text-sm font-semibold text-foreground leading-tight line-clamp-2 group-hover:text-primary transition-colors flex-grow">
+          {product.title}
+        </h3>
+
+        {/* Key Ingredients */}
         {product.key_ingredients && product.key_ingredients.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-2">
+          <div className="flex flex-wrap gap-1">
             {product.key_ingredients.slice(0, 2).map((ing) => (
-              <span key={ing} className="px-2 py-0.5 rounded-full bg-accent/10 border border-accent/30 text-[10px] text-foreground/70 font-medium">{ing}</span>
+              <span key={ing} className="px-2 py-0.5 rounded-full bg-secondary border border-border/50 text-[10px] text-muted-foreground font-medium">
+                {ing}
+              </span>
             ))}
           </div>
         )}
-        <div className="mt-auto">
-          <div className="flex items-baseline gap-2 mb-3">
-            <span className="text-base font-bold text-foreground">{formatJOD(product.price)}</span>
-          </div>
-          <Button onClick={handleAddToCart} size="sm" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xs uppercase tracking-wide py-2.5">
-            <ShoppingBag className="w-4 h-4 me-2" />
-            {locale === "ar" ? "أضف للسلة" : "Add to Cart"}
-          </Button>
+
+        {/* Price + Type */}
+        <div className="flex items-center justify-between pt-1">
+          <LuxuryPrice amount={product.price} />
+          {product.primary_concern && (
+            <Badge variant="secondary" className="text-[10px]">
+              {product.primary_concern.replace("Concern_", "")}
+            </Badge>
+          )}
         </div>
+
+        {/* Add to Cart */}
+        <Button
+          onClick={handleAddToCart}
+          size="sm"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xs uppercase tracking-wide btn-ripple"
+        >
+          <ShoppingBag className="w-3.5 h-3.5 me-1.5" />
+          {locale === "ar" ? "أضف للسلة" : "Add to Cart"}
+        </Button>
       </div>
     </article>
   );
 };
 
+// ─── Concern Ambition Pills ───────────────────────────────────
 const AMBITION_PILLS = [
   { id: "Concern_Acne", icon: "💊", labelEn: "Acne Care", labelAr: "علاج حب الشباب" },
   { id: "Concern_AntiAging", icon: "⏰", labelEn: "Anti-Aging", labelAr: "مكافحة الشيخوخة" },
@@ -121,6 +208,7 @@ const AMBITION_PILLS = [
   { id: "Concern_Dryness", icon: "🛡️", labelEn: "Dryness", labelAr: "جفاف" },
 ];
 
+// ─── Shop Page ────────────────────────────────────────────────
 export default function Shop() {
   const { locale } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
@@ -178,25 +266,28 @@ export default function Shop() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="pt-20 pb-16">
-        {/* Hero */}
-        <div className="bg-primary text-primary-foreground py-8 md:py-12">
+      <main className="pt-16">
+        {/* Hero Banner */}
+        <div className="bg-primary text-primary-foreground py-10 md:py-14">
           <div className="container mx-auto px-4 max-w-7xl text-center">
-            <h1 className="text-2xl md:text-4xl font-serif font-semibold mb-2">
+            <Badge variant="outline" className="mb-3 border-accent/40 text-accent font-body text-xs tracking-[0.2em] px-4 py-1">
+              CURATED CATALOG
+            </Badge>
+            <h1 className="font-heading text-3xl md:text-5xl font-bold mb-3">
               {locale === "ar" ? "تسوق جميع المنتجات" : "Shop All Products"}
             </h1>
-            <p className="text-primary-foreground/70 text-sm md:text-base">
-              {locale === "ar" ? "اكتشف أفضل منتجات العناية بالبشرة والجمال" : "Discover premium skincare and beauty products"}
+            <p className="text-primary-foreground/70 text-sm md:text-base font-body max-w-lg mx-auto">
+              {locale === "ar" ? "اكتشف أفضل منتجات العناية بالبشرة والجمال" : "Pharmacist-curated skincare and beauty, guaranteed authentic."}
             </p>
           </div>
         </div>
 
         {/* Ambition Pills */}
-        <div className="bg-background border-b border-border">
+        <div className="bg-secondary/30 border-b border-border">
           <div className="container mx-auto px-4 max-w-7xl py-4">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-4 h-4 text-accent" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground font-body">
                 {locale === "ar" ? "تسوّقي حسب هدفك" : "Shop by Concern"}
               </span>
             </div>
@@ -210,9 +301,12 @@ export default function Shop() {
                       const updated = isActive ? filters.skinConcerns.filter((c) => c !== pill.id) : [...filters.skinConcerns, pill.id];
                       setFilters({ ...filters, skinConcerns: updated });
                     }}
-                    className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full border text-xs font-semibold transition-all duration-200 ${
-                      isActive ? "bg-primary text-primary-foreground border-primary shadow-md" : "bg-card text-foreground/70 border-border hover:border-accent hover:text-foreground"
-                    }`}
+                    className={cn(
+                      "flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full border text-xs font-semibold transition-all duration-200 font-body",
+                      isActive
+                        ? "bg-primary text-primary-foreground border-primary shadow-maroon-glow"
+                        : "bg-card text-foreground/70 border-border hover:border-accent hover:text-foreground"
+                    )}
                   >
                     <span role="img" aria-hidden="true">{pill.icon}</span>
                     <span>{locale === "ar" ? pill.labelAr : pill.labelEn}</span>
@@ -230,14 +324,26 @@ export default function Shop() {
             </aside>
             <div className="flex-1">
               <div className="flex items-center justify-between mb-6">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground font-body">
                   {locale === "ar" ? `${filteredProducts.length} منتج` : `${filteredProducts.length} products`}
                 </p>
                 <div className="flex items-center gap-1 bg-card rounded-lg border border-border p-1">
-                  <button onClick={() => setViewMode("grid")} className={`p-2 rounded ${viewMode === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}>
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={cn(
+                      "p-2 rounded transition-colors",
+                      viewMode === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
+                    )}
+                  >
                     <Grid3X3 className="w-4 h-4" />
                   </button>
-                  <button onClick={() => setViewMode("list")} className={`p-2 rounded ${viewMode === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={cn(
+                      "p-2 rounded transition-colors",
+                      viewMode === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
+                    )}
+                  >
                     <LayoutList className="w-4 h-4" />
                   </button>
                 </div>
@@ -251,10 +357,11 @@ export default function Shop() {
 
               {!isLoading && filteredProducts.length === 0 && (
                 <div className="text-center py-20 bg-card rounded-xl border border-border">
-                  <p className="text-muted-foreground mb-4">
+                  <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                  <p className="text-muted-foreground mb-4 font-body">
                     {locale === "ar" ? "لا توجد منتجات مطابقة للفلاتر" : "No products match your filters"}
                   </p>
-                  <Button variant="outline" onClick={() => setFilters({ searchQuery: "", categories: [], subcategories: [], brands: [], skinConcerns: [], priceRange: [0, 200], onSaleOnly: false })}>
+                  <Button variant="outline" className="border-accent text-accent hover:bg-accent/10" onClick={() => setFilters({ searchQuery: "", categories: [], subcategories: [], brands: [], skinConcerns: [], priceRange: [0, 200], onSaleOnly: false })}>
                     {locale === "ar" ? "مسح الفلاتر" : "Clear Filters"}
                   </Button>
                 </div>
@@ -263,7 +370,12 @@ export default function Shop() {
               {!isLoading && filteredProducts.length > 0 && (
                 <div className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" : "space-y-4"}>
                   {filteredProducts.map((product) => (
-                    <ShopProductCard key={product.id} product={product} onQuickView={(p) => { setSelectedProduct(p); setIsQuickViewOpen(true); }} viewMode={viewMode} />
+                    <ShopProductCard
+                      key={product.id}
+                      product={product}
+                      onQuickView={(p) => { setSelectedProduct(p); setIsQuickViewOpen(true); }}
+                      viewMode={viewMode}
+                    />
                   ))}
                 </div>
               )}

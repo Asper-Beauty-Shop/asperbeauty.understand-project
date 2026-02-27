@@ -23,6 +23,7 @@ const AdminEnrichment = lazy(() => import("./pages/AdminEnrichment"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Shop = lazy(() => import("./pages/Shop"));
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/shop" element={<Shop />} />
           <Route path="/product/:handle" element={<ProductDetail />} />
           <Route path="/brand" element={<BrandShowcase />} />
           <Route path="/auth" element={<Auth />} />

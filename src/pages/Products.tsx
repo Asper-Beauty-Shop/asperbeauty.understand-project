@@ -17,6 +17,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AuthButton from "@/components/AuthButton";
+import { Footer } from "@/components/Footer";
 import asperLogo from "@/assets/asper-lotus-logo.png";
 
 const Products = () => {
@@ -220,6 +221,7 @@ const Products = () => {
           </main>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
