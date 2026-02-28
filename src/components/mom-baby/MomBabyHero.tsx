@@ -52,6 +52,14 @@ export default function MomBabyHero() {
                 ? "منتجات موثوقة ومعتمدة طبياً، تم اختيارها بعناية من قبل صيادلتنا لكل مرحلة من مراحل الأمومة."
                 : "Pharmacist-curated, clinically validated products for every stage of motherhood. Trusted by dermatologists. Loved by mothers."}
             </p>
+
+            <button
+              onClick={() => document.getElementById("lifecycle-nav")?.scrollIntoView({ behavior: "smooth" })}
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 font-body text-sm font-semibold text-primary-foreground shadow-maroon-glow hover:bg-primary/90 transition-colors duration-300"
+            >
+              {isAr ? "استكشفي المراحل" : "Explore Stages"}
+              <Baby className="w-4 h-4" />
+            </button>
           </motion.div>
 
           {/* Hero image */}
