@@ -1,24 +1,39 @@
-# Branch Status: copilot/commit-pull-request
+# Pull Request Status for understand-project
 
-## Current State
+## Active Pull Requests
 
-- **Branch Name**: `copilot/commit-pull-request`
-- **Pull Request**: #15 (Open, Draft)
-- **Base Branch**: `main`
-- **Status**: Up to date with remote
-- **Working Tree**: Clean (no uncommitted changes)
+### PR #35: Update all pull requests related to understand project
 
-## Commits on This Branch
-
-- `bc6a01c` - Initial plan (ahead of main)
-
-## Pull Request Details
-
-- **Title**: [WIP] Commit and pull all request related to this branch
+- **Branch Name**: `copilot/update-understand-project-prs`
 - **State**: Open (Draft)
+- **Base Branch**: `main`
+- **Created**: 2026-02-28T14:24:36Z
 - **Assignees**: Copilot, asperpharma
-- **Created**: 2026-02-28T09:45:48Z
+- **Status**: Up to date with remote
+- **Working Tree**: Clean
 
-## Summary
+#### Commits on This Branch
 
-All changes have been committed to this branch and the pull request has been created and is being tracked. The branch is synchronized with the remote repository.
+- `1c5b3cc` - Initial plan
+- Based on: `29c264a` - Preload hero video asset
+
+#### Objective
+
+Document and update all pull requests in the understand-project repository. This includes:
+- Updating PR status documentation
+- Ensuring all PRs are properly tracked
+- Maintaining consistent PR metadata
+
+## Historical Pull Requests
+
+### Previous: copilot/commit-pull-request (PR #15)
+
+- **Status**: Closed/Merged
+- **Branch**: No longer exists
+- **Note**: This was a previous automated PR that has been completed
+
+## Repository PR Summary
+
+- **Total Open PRs**: 1 (PR #35)
+- **Total Closed PRs**: Multiple historical PRs
+- **Last Updated**: 2026-02-28
