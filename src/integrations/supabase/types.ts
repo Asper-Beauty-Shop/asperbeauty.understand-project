@@ -170,6 +170,78 @@ export type Database = {
         }
         Relationships: []
       }
+      cod_orders: {
+        Row: {
+          assigned_at: string | null
+          city: string
+          created_at: string
+          customer_email: string | null
+          customer_lat: number | null
+          customer_lng: number | null
+          customer_name: string
+          customer_phone: string
+          delivered_at: string | null
+          delivery_address: string
+          delivery_notes: string | null
+          driver_id: string | null
+          id: string
+          items: Json
+          notes: string | null
+          order_number: string
+          shipping_cost: number
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          city?: string
+          created_at?: string
+          customer_email?: string | null
+          customer_lat?: number | null
+          customer_lng?: number | null
+          customer_name: string
+          customer_phone: string
+          delivered_at?: string | null
+          delivery_address: string
+          delivery_notes?: string | null
+          driver_id?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          order_number: string
+          shipping_cost?: number
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          assigned_at?: string | null
+          city?: string
+          created_at?: string
+          customer_email?: string | null
+          customer_lat?: number | null
+          customer_lng?: number | null
+          customer_name?: string
+          customer_phone?: string
+          delivered_at?: string | null
+          delivery_address?: string
+          delivery_notes?: string | null
+          driver_id?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          order_number?: string
+          shipping_cost?: number
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       concierge_brain_rules: {
         Row: {
           action: Json
@@ -264,6 +336,47 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      consultations: {
+        Row: {
+          channel: string | null
+          created_at: string
+          id: string
+          locale: string | null
+          profile_id: string | null
+          regimen: Json | null
+          transcript: Json | null
+          user_id: string
+        }
+        Insert: {
+          channel?: string | null
+          created_at?: string
+          id?: string
+          locale?: string | null
+          profile_id?: string | null
+          regimen?: Json | null
+          transcript?: Json | null
+          user_id: string
+        }
+        Update: {
+          channel?: string | null
+          created_at?: string
+          id?: string
+          locale?: string | null
+          profile_id?: string | null
+          regimen?: Json | null
+          transcript?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultations_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "concierge_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       conversations: {
         Row: {
@@ -520,6 +633,7 @@ export type Database = {
           id: string
           image_url: string | null
           inventory_total: number
+          is_bestseller: boolean
           is_hero: boolean
           key_ingredients: string[] | null
           mpn: string | null
@@ -548,6 +662,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           inventory_total?: number
+          is_bestseller?: boolean
           is_hero?: boolean
           key_ingredients?: string[] | null
           mpn?: string | null
@@ -576,6 +691,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           inventory_total?: number
+          is_bestseller?: boolean
           is_hero?: boolean
           key_ingredients?: string[] | null
           mpn?: string | null

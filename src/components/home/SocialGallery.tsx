@@ -52,7 +52,7 @@ const socialPosts = [
 
 export default function SocialGallery() {
   const { data } = useShopifyProducts(undefined, 6);
-  const products = data?.products || [];
+  const products = data || [];
 
   return (
     <section className="py-20 sm:py-28 bg-background">

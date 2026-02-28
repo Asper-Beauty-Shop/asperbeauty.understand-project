@@ -196,7 +196,7 @@ const AsperLogo = ({
 export default function AsperIntelligence() {
   const [activeTab, setActiveTab] = useState("intelligence");
   const [persona, setPersona] = useState<"clinical" | "aesthetic">("clinical");
-  const [logoStyle] = useState("v1");
+  const [logoStyle] = useState<"v1" | "v2">("v1");
   const [messages, setMessages] = useState<
     Array<{
       role: "user" | "assistant";

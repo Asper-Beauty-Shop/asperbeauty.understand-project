@@ -52,7 +52,7 @@ export default function ConcernCollection() {
         setLoading(true);
         const all = await fetchProducts(100);
         if (normalized) {
-          const filtered = filterProductsByConcern(all, normalized);
+          const filtered = filterProductsByConcern(all as any, normalized) as unknown as ShopifyProduct[];
           setProducts(filtered);
         } else {
           setProducts(all);

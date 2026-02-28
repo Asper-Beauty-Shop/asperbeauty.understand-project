@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
-import asperLogo from "@/assets/asper-logo.jpg";
+import asperLogo from "@/assets/asper-logo.png";
 
 // Brand-accurate social media icon components
 const InstagramIcon = ({ className }: { className?: string }) => (

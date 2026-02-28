@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// Category images - WebP for better compression
-import skinCareImg from "@/assets/categories/skin-care.webp";
-import hairCareImg from "@/assets/categories/hair-care.webp";
-import bodyCareImg from "@/assets/categories/body-care.webp";
-import makeUpImg from "@/assets/categories/make-up.webp";
-import fragrancesImg from "@/assets/categories/fragrances.webp";
-import toolsDevicesImg from "@/assets/categories/tools-devices.webp";
+const skinCareImg = "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&q=80";
+const hairCareImg = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80";
+const bodyCareImg = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80";
+const makeUpImg = "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400&q=80";
+const fragrancesImg = "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&q=80";
+const toolsDevicesImg = "https://images.unsplash.com/photo-1559181567-c3190ca9be8a?w=400&q=80";
 
 const categories = [
   {

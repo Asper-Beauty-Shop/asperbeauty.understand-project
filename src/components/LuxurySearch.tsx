@@ -168,7 +168,7 @@ export const LuxurySearch = (
                     {product.title}
                   </p>
                   <p className="text-[10px] uppercase tracking-widest text-gray-400">
-                    {product.category}
+                    {product.primary_concern ?? ""}
                   </p>
                 </div>
 

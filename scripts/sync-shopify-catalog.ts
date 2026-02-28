@@ -4,13 +4,13 @@
  * Architecture:
  *   CSV → this script → Shopify Admin API (GraphQL)
  *   Shopify → Storefront API → Lovable frontend
- *   Shopify → Product feed → Google Merchant Center
+ *   Shopify → Product feed → Google Merchant Center (ID 5717495012)
  *
  * Single source of truth: Shopify.
- * Idempotent: lookup by Handle → update or create. No duplicates.
+ * Idempotent: lookup by Handle (fallback SKU) → update or create. No duplicates.
  *
  * Usage:
- *   npx ts-node scripts/sync-shopify-catalog.ts [--dry-run] [--limit N] [path/to/file.csv]
+ *   npx tsx scripts/sync-shopify-catalog.ts [--dry-run] [--limit N] [--publish] [path/to/file.csv]
  *
  * Env vars (in .env or exported):
  *   SHOPIFY_ADMIN_ACCESS_TOKEN  — Admin API token (shpat_xxxx)
@@ -20,6 +20,33 @@
 
 import * as fs from "fs";
 import * as path from "path";
+
+// ---------------------------------------------------------------------------
+// Load .env (inline, no external dependency)
+// ---------------------------------------------------------------------------
+
+function loadEnv() {
+  const envPath = path.resolve(process.cwd(), ".env");
+  if (!fs.existsSync(envPath)) return;
+  const content = fs.readFileSync(envPath, "utf-8");
+  for (const line of content.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eqIdx = trimmed.indexOf("=");
+    if (eqIdx === -1) continue;
+    const key = trimmed.slice(0, eqIdx).trim();
+    let val = trimmed.slice(eqIdx + 1).trim();
+    // Strip surrounding quotes
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      val = val.slice(1, -1);
+    }
+    if (!process.env[key]) {
+      process.env[key] = val;
+    }
+  }
+}
+
+loadEnv();
 
 // ---------------------------------------------------------------------------
 // Config
@@ -34,9 +61,12 @@ const ADMIN_URL = `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${API_VERSION}/grap
 // CLI flags
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes("--dry-run");
+const PUBLISH = args.includes("--publish");
 const limitIdx = args.indexOf("--limit");
 const LIMIT = limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : Infinity;
-const csvArg = args.find((a) => !a.startsWith("--") && a !== args[limitIdx + 1]);
+const csvArg = args.find(
+  (a) => !a.startsWith("--") && (limitIdx === -1 || a !== args[limitIdx + 1])
+);
 const CSV_PATH =
   csvArg || process.env.CSV_PATH || path.resolve("data/shopify-import-3.csv");
 
@@ -44,25 +74,49 @@ const CSV_PATH =
 // Helpers
 // ---------------------------------------------------------------------------
 
-async function adminGraphQL(query: string, variables: Record<string, any> = {}) {
-  const res = await fetch(ADMIN_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": SHOPIFY_ADMIN_ACCESS_TOKEN,
-    },
-    body: JSON.stringify({ query, variables }),
-  });
+const MAX_RETRIES = 3;
 
+async function adminGraphQL(
+  query: string,
+  variables: Record<string, any> = {},
+  attempt = 1
+): Promise<any> {
+  let res: Response;
+  try {
+    res = await fetch(ADMIN_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": SHOPIFY_ADMIN_ACCESS_TOKEN,
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+  } catch (err: any) {
+    if (attempt < MAX_RETRIES) {
+      const wait = Math.pow(2, attempt) * 1000;
+      console.warn(`  ⏳ Network error, retrying in ${wait / 1000}s (attempt ${attempt}/${MAX_RETRIES})...`);
+      await sleep(wait);
+      return adminGraphQL(query, variables, attempt + 1);
+    }
+    throw err;
+  }
+
+  // Rate limit handling
   if (res.status === 429) {
     const retryAfter = parseInt(res.headers.get("Retry-After") || "2", 10);
-    console.warn(`  ⏳ Rate limited. Waiting ${retryAfter}s...`);
+    console.warn(`  ⏳ Rate limited (429). Waiting ${retryAfter}s...`);
     await sleep(retryAfter * 1000);
-    return adminGraphQL(query, variables); // retry
+    return adminGraphQL(query, variables, 1);
   }
 
   if (!res.ok) {
     const text = await res.text();
+    if (attempt < MAX_RETRIES && res.status >= 500) {
+      const wait = Math.pow(2, attempt) * 1000;
+      console.warn(`  ⏳ Server error ${res.status}, retrying in ${wait / 1000}s (attempt ${attempt}/${MAX_RETRIES})...`);
+      await sleep(wait);
+      return adminGraphQL(query, variables, attempt + 1);
+    }
     throw new Error(`HTTP ${res.status}: ${text}`);
   }
 
@@ -115,7 +169,7 @@ function normalizeProductType(raw: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// CSV parser (minimal, handles quoted fields with commas/newlines)
+// CSV parser (handles quoted fields with commas/newlines)
 // ---------------------------------------------------------------------------
 
 function parseCSV(raw: string): Record<string, string>[] {
@@ -205,9 +259,13 @@ function groupProducts(rows: Record<string, string>[]): ProductGroup[] {
         .map((t) => t.trim())
         .filter(Boolean);
       const type = row["Type"] || "";
-      // Add normalized tag for frontend filtering
-      if (type && !tags.some((t) => t.toLowerCase() === type.toLowerCase())) {
-        tags.push(type);
+
+      // Add normalized tag for frontend filtering (e.g. "Skin Care" → tag "skincare")
+      if (type) {
+        const normalized = normalizeTag(type);
+        if (!tags.some((t) => normalizeTag(t) === normalized)) {
+          tags.push(normalized);
+        }
       }
 
       const optionNames: string[] = [];
@@ -261,11 +319,26 @@ function groupProducts(rows: Record<string, string>[]): ProductGroup[] {
 }
 
 // ---------------------------------------------------------------------------
-// Shopify Admin mutations
+// Shopify Admin GraphQL mutations
 // ---------------------------------------------------------------------------
 
 const LOOKUP_BY_HANDLE = `
   query LookupByHandle($query: String!) {
+    products(first: 1, query: $query) {
+      edges {
+        node {
+          id
+          variants(first: 100) {
+            edges { node { id sku } }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const LOOKUP_BY_SKU = `
+  query LookupBySKU($query: String!) {
     products(first: 1, query: $query) {
       edges {
         node {
@@ -321,6 +394,25 @@ const VARIANT_BULK_UPDATE = `
     productVariantsBulkUpdate(productId: $productId, variants: $variants) {
       productVariants { id }
       userErrors { field message }
+    }
+  }
+`;
+
+const PUBLISHABLE_PUBLISH = `
+  mutation PublishablePublish($id: ID!, $input: [PublicationInput!]!) {
+    publishablePublish(id: $id, input: $input) {
+      publishable { ... on Product { id } }
+      userErrors { field message }
+    }
+  }
+`;
+
+const GET_PUBLICATIONS = `
+  query GetPublications {
+    publications(first: 10) {
+      edges {
+        node { id name }
+      }
     }
   }
 `;
@@ -423,29 +515,172 @@ async function setInventoryQuantities(
 }
 
 // ---------------------------------------------------------------------------
+// Inventory queries & mutations
+// ---------------------------------------------------------------------------
+
+const LOCATIONS_QUERY = `
+  query GetLocations {
+    locations(first: 1) {
+      edges { node { id name } }
+    }
+  }
+`;
+
+const VARIANT_INVENTORY_ITEMS = `
+  query VariantInventoryItems($productId: ID!) {
+    product(id: $productId) {
+      variants(first: 100) {
+        edges {
+          node {
+            id
+            sku
+            inventoryItem { id }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const INVENTORY_SET_QUANTITIES = `
+  mutation InventorySetQuantities($input: InventorySetQuantitiesInput!) {
+    inventorySetQuantities(input: $input) {
+      inventoryAdjustmentGroup { reason }
+      userErrors { field message }
+    }
+  }
+`;
+
+let cachedLocationId: string | null = null;
+
+async function getPrimaryLocationId(): Promise<string> {
+  if (cachedLocationId) return cachedLocationId;
+  const data = await adminGraphQL(LOCATIONS_QUERY);
+  const loc = data?.locations?.edges?.[0]?.node;
+  if (!loc) throw new Error("No Shopify locations found. Create a location first.");
+  cachedLocationId = loc.id;
+  console.log(`  📍 Primary location: ${loc.name} (${loc.id})`);
+  return loc.id;
+}
+
+async function setInventoryQuantities(
+  productId: string,
+  variants: { sku: string; inventoryQty: number }[],
+  tag: string
+) {
+  const locationId = await getPrimaryLocationId();
+
+  // Fetch inventoryItemIds for the product's variants
+  const data = await adminGraphQL(VARIANT_INVENTORY_ITEMS, { productId });
+  const variantEdges = data?.product?.variants?.edges || [];
+
+  const quantities: { inventoryItemId: string; locationId: string; quantity: number }[] = [];
+
+  for (const edge of variantEdges) {
+    const node = edge.node;
+    const inventoryItemId = node.inventoryItem?.id;
+    if (!inventoryItemId) continue;
+
+    // Match by SKU or by position
+    const csvMatch = variants.find((v) => v.sku && v.sku === node.sku);
+    const qty = csvMatch?.inventoryQty ?? variants[variantEdges.indexOf(edge)]?.inventoryQty;
+
+    if (qty !== undefined && qty >= 0) {
+      quantities.push({ inventoryItemId, locationId, quantity: qty });
+    }
+  }
+
+  if (quantities.length === 0) return;
+
+  try {
+    const result = await adminGraphQL(INVENTORY_SET_QUANTITIES, {
+      input: {
+        name: "available",
+        reason: "correction",
+        quantities,
+      },
+    });
+    const errors = result?.inventorySetQuantities?.userErrors;
+    if (errors?.length) {
+      console.warn(`  ⚠️ ${tag} inventory warnings:`, errors);
+    } else {
+      console.log(`  📦 ${tag}: set inventory for ${quantities.length} variant(s)`);
+    }
+  } catch (invErr: any) {
+    console.warn(`  ⚠️ ${tag} inventory update failed: ${invErr.message}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Sync logic
 // ---------------------------------------------------------------------------
 
-async function syncProduct(product: ProductGroup, index: number) {
-  const tag = `[${index}] ${product.handle}`;
+let publicationId: string | null = null;
+
+async function getPublicationId(): Promise<string | null> {
+  if (publicationId) return publicationId;
+  try {
+    const data = await adminGraphQL(GET_PUBLICATIONS);
+    const edges = data?.publications?.edges || [];
+    // Prefer "Online Store" publication
+    const onlineStore = edges.find(
+      (e: any) => e.node.name === "Online Store"
+    );
+    publicationId = onlineStore?.node?.id || edges[0]?.node?.id || null;
+    return publicationId;
+  } catch {
+    return null;
+  }
+}
+
+async function publishProduct(productId: string) {
+  const pubId = await getPublicationId();
+  if (!pubId) {
+    console.warn("  ⚠️ No publication found, skipping publish");
+    return;
+  }
+  try {
+    const data = await adminGraphQL(PUBLISHABLE_PUBLISH, {
+      id: productId,
+      input: [{ publicationId: pubId }],
+    });
+    const errors = data?.publishablePublish?.userErrors;
+    if (errors?.length) {
+      console.warn(`  ⚠️ Publish warnings:`, errors.map((e: any) => e.message).join("; "));
+    }
+  } catch (err: any) {
+    console.warn(`  ⚠️ Publish failed: ${err.message}`);
+  }
+}
+
+async function syncProduct(product: ProductGroup, index: number, total: number) {
+  const tag = `[${index}/${total}] ${product.handle}`;
 
   if (!product.title) {
     console.warn(`  ⚠️ ${tag}: missing title, skipping`);
-    return { status: "skipped", handle: product.handle, reason: "no title" };
+    return { status: "skipped" as const, handle: product.handle, reason: "no title" };
   }
 
   if (DRY_RUN) {
     console.log(
       `  🔍 ${tag}: "${product.title}" | ${product.variants.length} variant(s) | ${product.images.length} image(s) [DRY RUN]`
     );
-    return { status: "dry-run", handle: product.handle };
+    return { status: "dry-run" as const, handle: product.handle };
   }
 
   // 1. Lookup existing product by handle
   const lookupData = await adminGraphQL(LOOKUP_BY_HANDLE, {
     query: `handle:${product.handle}`,
   });
-  const existing = lookupData?.products?.edges?.[0]?.node;
+  let existing = lookupData?.products?.edges?.[0]?.node;
+
+  // Fallback: lookup by SKU if no match by handle
+  if (!existing && product.variants[0]?.sku) {
+    const skuLookup = await adminGraphQL(LOOKUP_BY_SKU, {
+      query: `sku:${product.variants[0].sku}`,
+    });
+    existing = skuLookup?.products?.edges?.[0]?.node;
+  }
 
   const input: Record<string, any> = {
     title: product.title,
@@ -483,20 +718,20 @@ async function syncProduct(product: ProductGroup, index: number) {
     .map((img) => ({
       originalSource: img.src,
       alt: img.alt,
-      mediaContentType: "IMAGE",
+      mediaContentType: "IMAGE" as const,
     }));
 
   let productId: string;
   let variantEdges: any[];
 
   if (existing) {
-    // UPDATE
+    // ---- UPDATE ----
     input.id = existing.id;
     const updateData = await adminGraphQL(PRODUCT_UPDATE, { input });
     const errors = updateData?.productUpdate?.userErrors;
     if (errors?.length) {
       console.error(`  ❌ ${tag} update errors:`, errors);
-      return { status: "error", handle: product.handle, errors };
+      return { status: "error" as const, handle: product.handle, errors };
     }
     productId = existing.id;
     variantEdges =
@@ -513,20 +748,20 @@ async function syncProduct(product: ProductGroup, index: number) {
 
     console.log(`  ✅ ${tag}: updated`);
   } else {
-    // CREATE
+    // ---- CREATE ----
     const createData = await adminGraphQL(PRODUCT_CREATE, { input, media });
     const errors = createData?.productCreate?.userErrors;
     if (errors?.length) {
       console.error(`  ❌ ${tag} create errors:`, errors);
-      return { status: "error", handle: product.handle, errors };
+      return { status: "error" as const, handle: product.handle, errors };
     }
     productId = createData.productCreate.product.id;
     variantEdges = createData.productCreate.product.variants.edges;
-    console.log(`  ✅ ${tag}: created`);
+    console.log(`  ✅ ${tag}: created "${product.title}"`);
   }
 
-  // 2. Update variant prices/SKUs if needed (for updates, or if create didn't set them)
-  if (existing && product.variants.length > 0 && variantEdges?.length > 0) {
+  // 2. Update variant prices/SKUs
+  if (product.variants.length > 0 && variantEdges?.length > 0) {
     const variantUpdates = variantEdges
       .map((edge: any, i: number) => {
         const csvVariant = product.variants[i];
@@ -541,13 +776,20 @@ async function syncProduct(product: ProductGroup, index: number) {
       .filter(Boolean);
 
     if (variantUpdates.length > 0) {
-      const bulkData = await adminGraphQL(VARIANT_BULK_UPDATE, {
-        productId,
-        variants: variantUpdates,
-      });
-      const bulkErrors = bulkData?.productVariantsBulkUpdate?.userErrors;
-      if (bulkErrors?.length) {
-        console.warn(`  ⚠️ ${tag} variant update warnings:`, bulkErrors);
+      try {
+        const bulkData = await adminGraphQL(VARIANT_BULK_UPDATE, {
+          productId,
+          variants: variantUpdates,
+        });
+        const bulkErrors = bulkData?.productVariantsBulkUpdate?.userErrors;
+        if (bulkErrors?.length) {
+          console.warn(
+            `  ⚠️ ${tag} variant update warnings:`,
+            bulkErrors.map((e: any) => e.message).join("; ")
+          );
+        }
+      } catch (err: any) {
+        console.warn(`  ⚠️ ${tag} variant update failed: ${err.message}`);
       }
     }
   }
@@ -560,7 +802,15 @@ async function syncProduct(product: ProductGroup, index: number) {
     );
   }
 
-  return { status: existing ? "updated" : "created", handle: product.handle };
+  // 3. Publish to storefront (auto-publish new active products, or if --publish flag)
+  if (PUBLISH || (!existing && product.status === "active")) {
+    await publishProduct(productId);
+  }
+
+  return {
+    status: (existing ? "updated" : "created") as "updated" | "created",
+    handle: product.handle,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -568,17 +818,28 @@ async function syncProduct(product: ProductGroup, index: number) {
 // ---------------------------------------------------------------------------
 
 async function main() {
-  console.log("╔══════════════════════════════════════════════════════════╗");
-  console.log("║  Asper Beauty Shop — Shopify Catalog Sync              ║");
-  console.log("╚══════════════════════════════════════════════════════════╝");
+  console.log("╔══════════════════════════════════════════════════════════════╗");
+  console.log("║  Asper Beauty Shop — Shopify Catalog Sync                   ║");
+  console.log("║  Single source of truth: Shopify → Lovable + GMC            ║");
+  console.log("╚══════════════════════════════════════════════════════════════╝");
   console.log(`  Store:    ${SHOPIFY_STORE_DOMAIN}`);
+  console.log(`  API:      ${API_VERSION}`);
   console.log(`  CSV:      ${CSV_PATH}`);
   console.log(`  Dry run:  ${DRY_RUN}`);
+  console.log(`  Publish:  ${PUBLISH}`);
   console.log(`  Limit:    ${LIMIT === Infinity ? "all" : LIMIT}`);
   console.log("");
 
   if (!SHOPIFY_ADMIN_ACCESS_TOKEN && !DRY_RUN) {
-    console.error("❌ SHOPIFY_ADMIN_ACCESS_TOKEN is required. Set it in .env or export it.");
+    console.error(
+      "❌ SHOPIFY_ADMIN_ACCESS_TOKEN is required. Set it in .env or export it."
+    );
+    console.error(
+      "   Get it from: Shopify Admin → Settings → Apps → Develop apps → Create app"
+    );
+    console.error(
+      "   Scopes needed: write_products, read_products, write_inventory, read_inventory"
+    );
     process.exit(1);
   }
 
@@ -593,14 +854,16 @@ async function main() {
 
   const products = groupProducts(rows);
   const toSync = products.slice(0, LIMIT);
-  console.log(`  Grouped into ${products.length} products; syncing ${toSync.length}\n`);
+  console.log(
+    `  Grouped into ${products.length} unique products; syncing ${toSync.length}\n`
+  );
 
   const results = { created: 0, updated: 0, skipped: 0, errors: 0, dryRun: 0 };
   const errorLog: any[] = [];
 
   for (let i = 0; i < toSync.length; i++) {
     try {
-      const result = await syncProduct(toSync[i], i + 1);
+      const result = await syncProduct(toSync[i], i + 1, toSync.length);
       if (result.status === "created") results.created++;
       else if (result.status === "updated") results.updated++;
       else if (result.status === "skipped") results.skipped++;
@@ -610,24 +873,28 @@ async function main() {
       } else if (result.status === "dry-run") results.dryRun++;
     } catch (err: any) {
       results.errors++;
-      errorLog.push({ handle: toSync[i].handle, error: err.message });
-      console.error(`  ❌ [${i + 1}] ${toSync[i].handle}: ${err.message}`);
+      errorLog.push({
+        handle: toSync[i].handle,
+        error: err.message,
+        timestamp: new Date().toISOString(),
+      });
+      console.error(`  ❌ [${i + 1}/${toSync.length}] ${toSync[i].handle}: ${err.message}`);
     }
 
-    // Throttle: 500ms between products
+    // Throttle between products to avoid rate limits
     if (!DRY_RUN && i < toSync.length - 1) {
-      await sleep(500);
+      await sleep(THROTTLE_MS);
     }
   }
 
-  console.log("\n══════════════════════════════════════════════════════════");
+  console.log("\n══════════════════════════════════════════════════════════════");
   console.log("  Summary:");
   console.log(`    Created:  ${results.created}`);
   console.log(`    Updated:  ${results.updated}`);
   console.log(`    Skipped:  ${results.skipped}`);
   console.log(`    Errors:   ${results.errors}`);
   if (DRY_RUN) console.log(`    Dry run:  ${results.dryRun}`);
-  console.log("══════════════════════════════════════════════════════════\n");
+  console.log("══════════════════════════════════════════════════════════════\n");
 
   if (errorLog.length > 0) {
     const errPath = path.resolve("data/sync-errors.json");

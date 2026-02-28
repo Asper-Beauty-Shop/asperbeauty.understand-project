@@ -13,7 +13,7 @@ import MobileFilterButton from "@/components/MobileFilterButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Package, ArrowLeft, Search, X } from "lucide-react";
-import { buildTypeQuery, buildTabTypeQuery, getGroupsForTab } from "@/lib/categoryMapping";
+import { categorizeProduct } from "@/lib/categoryMapping";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -30,20 +30,16 @@ const Products = () => {
   const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
-  // Get sub-groups visible for the active tab
-  const visibleGroups = useMemo(() => getGroupsForTab(activeTab), [activeTab]);
+  const visibleGroups: any[] = [];
 
   const buildQuery = () => {
     const parts: string[] = [];
     if (activeQuery) parts.push(activeQuery);
-    // Tab-level type filter
-    const tabQuery = buildTabTypeQuery(activeTab);
-    if (tabQuery) parts.push(`(${tabQuery})`);
-    // Sub-category type filter (within the active tab)
-    const typeQuery = buildTypeQuery(selectedTypes);
-    if (typeQuery) parts.push(`(${typeQuery})`);
-    const vendorQuery = buildVendorQuery(selectedVendors);
-    if (vendorQuery) parts.push(`(${vendorQuery})`);
+    if (activeTab !== "All") parts.push(`product_type:${activeTab}`);
+    if (selectedVendors.length > 0) {
+      const vendorQuery = buildVendorQuery(selectedVendors);
+      if (vendorQuery) parts.push(`(${vendorQuery})`);
+    }
     return parts.length > 0 ? parts.join(" ") : undefined;
   };
 
@@ -56,8 +52,8 @@ const Products = () => {
   };
 
   const handles = useMemo(
-    () => (data?.products || []).map((p) => p.node.handle),
-    [data?.products]
+    () => (data || []).map((p) => p.node.handle),
+    [data]
   );
   const { data: enrichmentMap } = useProductEnrichmentBulk(handles);
   const handleSearch = (e: React.FormEvent) => {
@@ -213,7 +209,7 @@ const Products = () => {
 
             {isLoading && <ProductGridSkeleton count={6} />}
 
-            {!isLoading && data?.products && data.products.length === 0 && (
+            {!isLoading && data && data.length === 0 && (
               <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
                 <Package className="h-12 w-12 mb-4" />
                 <p className="text-lg font-medium font-heading">No products found</p>
@@ -221,21 +217,19 @@ const Products = () => {
               </div>
             )}
 
-            {!isLoading && data?.products && data.products.length > 0 && (
+            {!isLoading && data && data.length > 0 && (
               <>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {data.products.map((product) => (
+                  {data.map((product) => (
                     <ShopifyProductCard key={product.node.id} product={product} enrichment={enrichmentMap?.get(product.node.handle)} />
                   ))}
                 </div>
 
-                {data.pageInfo?.hasNextPage && (
-                  <div className="mt-8 flex justify-center">
-                    <p className="text-sm text-muted-foreground font-body">
-                      Showing {data.products.length} products — refine with filters to find more
-                    </p>
-                  </div>
-                )}
+                <div className="mt-8 flex justify-center">
+                  <p className="text-sm text-muted-foreground font-body">
+                    Showing {data.length} products — refine with filters to find more
+                  </p>
+                </div>
               </>
             )}
           </main>

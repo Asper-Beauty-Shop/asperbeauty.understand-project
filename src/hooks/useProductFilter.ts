@@ -131,7 +131,7 @@ export function useProductFilter(
   const filterProductsByConcern = useCallback(
     (products: ShopifyProduct[]): ShopifyProduct[] => {
       if (!concernSlug) return products;
-      return filterByConcern(products, concernSlug);
+      return filterByConcern(products as Array<{ node: { title: string; description?: string | null; tags?: string[] } }>, concernSlug) as unknown as ShopifyProduct[];
     },
     [concernSlug],
   );

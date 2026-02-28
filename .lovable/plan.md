@@ -1,39 +1,58 @@
 
 
-## Plan: Enhance Intent-Based Deep Linking
+## Analysis
 
-### Current State
-The `AIConcierge.tsx` already has basic deep linking (lines 169-186): it reads `?intent=` and `?source=` from the URL, opens the panel, and pre-fills the input text. However, it has several gaps:
+After thorough review, the four named components (**BestSellersSection**, **DealOfTheDay**, **DriverAssignment**, **FeaturedCollection**) do not have TypeScript compilation errors. They correctly map Supabase `products` Row fields to their local interfaces. However, there are two real issues:
 
-1. **No auto-send** — it only fills the input; the user must manually press Send
-2. **No intent-to-prompt mapping** — raw intent like "acne" becomes generic "I need help with acne" instead of a tailored clinical prompt
-3. **No URL cleanup** — query params remain in the URL bar after handling
-4. **No source tracking** — the `source` param (ig, tiktok, fb) isn't logged or used for analytics
+### Issue 1: `is_bestseller` column missing from `products` table
 
-### Implementation Steps
+The `build_digital_tray` DB function (used by the AI Concierge regimen builder) references `is_bestseller` on the `products` table:
 
-**1. Add an intent-to-prompt mapping object** in `AIConcierge.tsx` that maps common marketing intents to rich, persona-appropriate opening messages:
-- `acne` → "I'm struggling with acne and oiliness. What's the best clinical routine?"
-- `glow` → "I want radiant, glowing skin. What do you recommend?"
-- `anti-aging` → "I'm looking for an anti-aging routine with proven actives."
-- `hydration` → "My skin is very dry. I need a deep hydration regimen."
-- `bridal` → "I'm getting married soon! Help me with a bridal skincare bootcamp."
-- `pregnancy` → "I'm pregnant and need a safe skincare routine."
-- Fallback: `"I need help with {intent}."`
+```sql
+order by is_bestseller desc nulls last, is_hero desc nulls last ...
+```
 
-**2. Modify the deep link `useEffect`** to:
-- Map the intent to a tailored prompt using the mapping
-- Auto-send the message after auth check completes (watch `isAuthenticated` state) instead of just filling the input
-- Clean up the URL using `window.history.replaceState` to remove `?intent=` and `?source=` params
-- Store `source` in a ref so it can optionally be included in the API payload for analytics
+But the `products` table does NOT have an `is_bestseller` column (only `digital_tray_products` does). This causes a **runtime SQL error** whenever the concierge tries to build a 3-step regimen.
 
-**3. Add a `deepLinkIntent` ref** that stores the pending intent text, and trigger `send()` automatically once `isAuthenticated === true` — this solves the timing issue where auth hasn't resolved yet when the deep link fires.
+### Issue 2: `cod_orders` table not in generated types
 
-### Files Changed
-- `src/components/AIConcierge.tsx` — All changes in this single file
+`AdminOrders.tsx` and `DriverDashboard.tsx` use `(supabase as any).from("cod_orders")` to bypass TypeScript because the table isn't in the generated types. This is a type-safety gap, not a compilation error.
 
-### Technical Notes
-- Uses `window.history.replaceState` for clean URL (no page reload)
-- The auto-send fires only once via the existing `deepLinkHandled` ref
-- Intent mapping is extensible — new campaigns just add a key to the map
+---
+
+## Plan
+
+### A. Add `is_bestseller` column to `products` table
+
+Apply migration:
+
+```sql
+ALTER TABLE public.products
+  ADD COLUMN IF NOT EXISTS is_bestseller boolean NOT NULL DEFAULT false;
+```
+
+### B. Regenerate TypeScript types
+
+After the migration, regenerate `src/integrations/supabase/types.ts` so the new column is available to TypeScript.
+
+### C. Refresh PostgREST schema cache
+
+```sql
+NOTIFY pgrst, 'reload schema';
+```
+
+This fixes the `build_digital_tray` runtime failure and makes the `is_bestseller` field available in TypeScript for any future component use.
+
+---
+
+### Technical Detail
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| BestSellersSection | No TS errors | Maps `pharmacist_note` to `description` correctly |
+| FeaturedCollection | No TS errors | Same mapping pattern |
+| DealOfTheDay | No TS errors | Accesses only existing columns |
+| DriverAssignment | No TS errors | Uses `user_roles` + `profiles` tables correctly |
+| `build_digital_tray` | **Runtime SQL error** | References missing `is_bestseller` on `products` |
+| AdminOrders / DriverDashboard | Type-safety gap | Uses `as any` cast for `cod_orders` |
 

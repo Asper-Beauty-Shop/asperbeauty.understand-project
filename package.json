@@ -16,7 +16,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:bulk-upload": "node scripts/test-bulk-upload-validation.mjs"
+    "sync": "tsx scripts/sync-shopify-catalog.ts",
+    "sync:dry": "tsx scripts/sync-shopify-catalog.ts --dry-run",
+    "sync:publish": "tsx scripts/sync-shopify-catalog.ts --publish"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^2.0.2",
@@ -94,7 +96,7 @@
     "lovable-tagger": "^1.1.13",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
-    "tsx": "^4.19.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^7.3.1",

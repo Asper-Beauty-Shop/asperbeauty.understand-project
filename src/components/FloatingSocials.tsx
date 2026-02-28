@@ -126,7 +126,7 @@ export const FloatingSocials = () => {
             aria-label={social.name}
           >
             <div className="w-10 h-10 flex items-center justify-center">
-              <Icon className="w-5 h-5" />
+              <Icon />
             </div>
             <span className="max-w-0 overflow-hidden group-hover:max-w-[100px] group-hover:pr-3 transition-all duration-300 text-sm font-medium whitespace-nowrap">
               {social.name}
