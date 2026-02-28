@@ -382,7 +382,7 @@ const Index = () => {
                 <a href="https://wa.me/962790656666" target="_blank" rel="noopener noreferrer" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">
                   WhatsApp: +962 79 065 6666
                 </a>
-                <a href="https://instagram.com/asper.beauty.shop" target="_blank" rel="noopener noreferrer" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">
+                <a href="https://www.instagram.com/asper.beauty.shop/" target="_blank" rel="noopener noreferrer" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors font-body">
                   @asper.beauty.shop
                 </a>
                 <IncognitoToggle className="mt-1 border-primary-foreground/20 text-primary-foreground/60 hover:text-primary-foreground hover:border-primary-foreground/40" />
