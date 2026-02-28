@@ -26,6 +26,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { SafetyBadges } from "@/components/product/SafetyBadges";
 import type { Tables } from "@/integrations/supabase/types";
 
 type DbProduct = Tables<"products">;
@@ -218,6 +219,8 @@ const ProductDetail = () => {
                 <ShieldCheck className="w-4 h-4 text-primary" />
                 {isArabic ? "موزع معتمد • منتج أصلي 100%" : "Authorized Retailer • 100% Authentic"}
               </div>
+
+              <SafetyBadges product={product} className="justify-center" />
 
               <ShareButtons url={window.location.href} title={`${isArabic ? "اكتشف" : "Check out"} ${product.title}`} />
             </div>
