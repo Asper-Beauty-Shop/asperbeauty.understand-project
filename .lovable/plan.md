@@ -1,39 +1,40 @@
 
 
-## Plan: Enhance Intent-Based Deep Linking
+## Fix Plan: Resolve All TypeScript Build Errors
 
-### Current State
-The `AIConcierge.tsx` already has basic deep linking (lines 169-186): it reads `?intent=` and `?source=` from the URL, opens the panel, and pre-fills the input text. However, it has several gaps:
+The site is currently broken due to multiple TypeScript errors. Here's the fix plan organized by file:
 
-1. **No auto-send** — it only fills the input; the user must manually press Send
-2. **No intent-to-prompt mapping** — raw intent like "acne" becomes generic "I need help with acne" instead of a tailored clinical prompt
-3. **No URL cleanup** — query params remain in the URL bar after handling
-4. **No source tracking** — the `source` param (ig, tiktok, fb) isn't logged or used for analytics
+### Critical Blocker (Build Crash)
 
-### Implementation Steps
+1. **`src/pages/BrandVichy.tsx`** — Replace the entire file with a simple redirect component. The file imports a missing asset `@/assets/brands/vichy-hero.jpg` that doesn't exist. Replace with `Navigate to="/brands"`.
 
-**1. Add an intent-to-prompt mapping object** in `AIConcierge.tsx` that maps common marketing intents to rich, persona-appropriate opening messages:
-- `acne` → "I'm struggling with acne and oiliness. What's the best clinical routine?"
-- `glow` → "I want radiant, glowing skin. What do you recommend?"
-- `anti-aging` → "I'm looking for an anti-aging routine with proven actives."
-- `hydration` → "My skin is very dry. I need a deep hydration regimen."
-- `bridal` → "I'm getting married soon! Help me with a bridal skincare bootcamp."
-- `pregnancy` → "I'm pregnant and need a safe skincare routine."
-- Fallback: `"I need help with {intent}."`
+### Type Mismatches
 
-**2. Modify the deep link `useEffect`** to:
-- Map the intent to a tailored prompt using the mapping
-- Auto-send the message after auth check completes (watch `isAuthenticated` state) instead of just filling the input
-- Clean up the URL using `window.history.replaceState` to remove `?intent=` and `?source=` params
-- Store `source` in a ref so it can optionally be included in the API payload for analytics
+2. **`src/components/ProductQuickView.tsx`** — Change `price: number` to `price: number | null` in the `Product` interface (line 30) to match what `ProductCatalog` passes.
 
-**3. Add a `deepLinkIntent` ref** that stores the pending intent text, and trigger `send()` automatically once `isAuthenticated === true` — this solves the timing issue where auth hasn't resolved yet when the deep link fires.
+3. **`src/components/LuxurySearch.tsx`** — The `SearchResult` interface at line 24 doesn't have `category`. The error at line 171 says `Property 'category' does not exist`. Current code at line 171 uses `product.primary_concern` which is correct. This error may already be resolved — will verify, but if `category` is referenced elsewhere in the file, replace with `primary_concern`.
 
-### Files Changed
-- `src/components/AIConcierge.tsx` — All changes in this single file
+4. **`src/pages/ManageProducts.tsx`** — The `Product` interface is missing properties the DB returns, and `insert` call is missing required fields:
+   - Add `brand?: string | null`, `clinical_badge?: string | null`, `pharmacist_note?: string | null` to form data insert object
+   - Add `handle`, `primary_concern`, `regimen_step` as required fields in the insert payload (they're already in `formData`)
+   - Cast `setProducts` data with `as Product[]` or add index signature
 
-### Technical Notes
-- Uses `window.history.replaceState` for clean URL (no page reload)
-- The auto-send fires only once via the existing `deepLinkHandled` ref
-- Intent mapping is extensible — new campaigns just add a key to the map
+5. **`src/pages/BulkUpload.tsx`** — Status mapping mismatch: queue uses `"done"`/`"error"` but type expects `"completed"`/`"failed"`. The current fix at lines 128-132 maps these correctly. Verify this is still present.
+
+6. **`src/hooks/useProductFilter.ts`** — Type casting at line 134 needs `as unknown as ShopifyProduct[]` pattern. Currently uses a partial cast. Fix the generic type assertion.
+
+7. **`src/pages/ConcernCollection.tsx`** — Same `filterProductsByConcern` casting issue. Currently uses `as any` + `as unknown as ShopifyProduct[]` which should work. Verify.
+
+8. **`src/pages/AdminAuditLogs.tsx`** — Lines 214/217: "excessively deep" type instantiation with `cod_orders`. Replace with `(supabase as any).from("cod_orders")` pattern consistently.
+
+### Component Props
+
+9. **`src/components/FloatingSocials.tsx`** — Line 129: SVG `Icon` component rendered as `<Icon />` but something passes `className`. Check if `<Icon className="..." />` exists — if so, use a wrapper `<span className="..."><Icon /></span>`.
+
+### Technical Details
+
+- The `BrandVichy.tsx` fix is the critical path — everything else fails to build because Vite stops on this missing import
+- The `ManageProducts.tsx` insert needs to include `handle`, `primary_concern`, and `regimen_step` which are NOT NULL columns in the DB
+- The `AdminAuditLogs.tsx` deep instantiation error is because `cod_orders` table isn't in the generated types — use `any` assertion
+- Most `useProductFilter`/`ConcernCollection` errors are about `ShopifyProduct.node.tags` being `string | string[]` vs `string[]` — fix with type assertion
 
