@@ -16,11 +16,16 @@ on:
 jobs:
   sync_files_to_lovable:
     runs-on: ubuntu-latest
+    if: ${{ secrets.LOVABLE_WEBHOOK_URL != '' }}
     steps:
       - name: Filter commit file changes and send to Lovable
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
+          if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
+            echo "Error: LOVABLE_WEBHOOK_URL is not set or is empty"
+            exit 1
+          fi
           echo "Gathering lists of changed files..."
           ADDED=$(jq -r '.commits[].added[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
           MODIFIED=$(jq -r '.commits[].modified[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
