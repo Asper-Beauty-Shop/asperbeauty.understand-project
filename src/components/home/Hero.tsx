@@ -1,18 +1,33 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Leaf, Sparkles, Sun, Moon, CloudSun, FlaskConical, Droplets } from "lucide-react";
+import { ArrowRight, Shield, Leaf, Sparkles, Sun, Moon, CloudSun, FlaskConical, Droplets, Package } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTimeContext } from "@/hooks/useTimeContext";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const timeIcons = { morning: Sun, afternoon: CloudSun, evening: Moon };
 
-/* Floating product cards for the "Digital Tray" */
-const trayProducts = [
-  { title: "Retinol Night Treatment", brand: "Asper Beauty", price: "68.00", step: "Treatment", icon: FlaskConical },
-  { title: "Vitamin C Brightening Cream", brand: "Asper Beauty", price: "52.00", step: "Protection", icon: Sparkles },
-  { title: "Nourishing Hair Oil", brand: "Kérastase", price: "32.00", step: "Nourish", icon: Droplets },
+const stepIcon = (step: string) => {
+  if (step.includes("1")) return FlaskConical;
+  if (step.includes("2")) return Sparkles;
+  if (step.includes("3")) return Droplets;
+  return Package;
+};
+
+const stepLabel = (step: string) => {
+  if (step.includes("1")) return "Cleanser";
+  if (step.includes("2")) return "Treatment";
+  if (step.includes("3")) return "Protection";
+  return "Essentials";
+};
+
+const fallbackProducts = [
+  { title: "Retinol Night Treatment", brand: "Asper Beauty", price: 68, step: "Treatment", icon: FlaskConical },
+  { title: "Vitamin C Brightening Cream", brand: "Asper Beauty", price: 52, step: "Protection", icon: Sparkles },
+  { title: "Nourishing Hair Oil", brand: "Kérastase", price: 32, step: "Nourish", icon: Droplets },
 ];
 
 export default function Hero() {
@@ -20,6 +35,30 @@ export default function Hero() {
   const { timeOfDay, greeting } = useTimeContext();
   const TimeIcon = timeIcons[timeOfDay];
   const isAr = locale === "ar";
+
+  const { data: dbProducts } = useQuery({
+    queryKey: ["hero-tray-products"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("products")
+        .select("title, brand, price, regimen_step, image_url")
+        .eq("is_hero", true)
+        .order("bestseller_rank", { ascending: true, nullsFirst: false })
+        .limit(3);
+      return data;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const trayProducts = dbProducts && dbProducts.length > 0
+    ? dbProducts.map((p) => ({
+        title: p.title,
+        brand: p.brand || "Asper Beauty",
+        price: p.price ?? 0,
+        step: stepLabel(p.regimen_step),
+        icon: stepIcon(p.regimen_step),
+      }))
+    : fallbackProducts;
 
   return (
     <section className="relative min-h-[85vh] lg:min-h-[90vh] overflow-hidden bg-background">
@@ -144,7 +183,7 @@ export default function Hero() {
                         <p className="text-sm font-heading font-semibold text-foreground truncate">{product.title}</p>
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <p className="text-sm font-semibold text-foreground">{product.price} <span className="text-xs text-muted-foreground">JOD</span></p>
+                        <p className="text-sm font-semibold text-foreground">{Number(product.price).toFixed(2)} <span className="text-xs text-muted-foreground">JOD</span></p>
                         <span className="text-[10px] font-body uppercase tracking-wider text-accent">{product.step}</span>
                       </div>
                     </div>
