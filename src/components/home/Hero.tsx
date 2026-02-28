@@ -25,9 +25,9 @@ const stepLabel = (step: string) => {
 };
 
 const fallbackProducts = [
-  { title: "Retinol Night Treatment", brand: "Asper Beauty", price: 68, step: "Treatment", icon: FlaskConical },
-  { title: "Vitamin C Brightening Cream", brand: "Asper Beauty", price: 52, step: "Protection", icon: Sparkles },
-  { title: "Nourishing Hair Oil", brand: "Kérastase", price: 32, step: "Nourish", icon: Droplets },
+  { title: "Retinol Night Treatment", brand: "Asper Beauty", price: 68, step: "Treatment", icon: FlaskConical, handle: "" },
+  { title: "Vitamin C Brightening Cream", brand: "Asper Beauty", price: 52, step: "Protection", icon: Sparkles, handle: "" },
+  { title: "Nourishing Hair Oil", brand: "Kérastase", price: 32, step: "Nourish", icon: Droplets, handle: "" },
 ];
 
 export default function Hero() {
@@ -41,7 +41,7 @@ export default function Hero() {
     queryFn: async () => {
       const { data } = await supabase
         .from("products")
-        .select("title, brand, price, regimen_step, image_url")
+        .select("title, brand, price, regimen_step, image_url, handle")
         .eq("is_hero", true)
         .order("bestseller_rank", { ascending: true, nullsFirst: false })
         .limit(3);
@@ -57,6 +57,7 @@ export default function Hero() {
         price: p.price ?? 0,
         step: stepLabel(p.regimen_step),
         icon: stepIcon(p.regimen_step),
+        handle: p.handle,
       }))
     : fallbackProducts;
 
@@ -161,36 +162,41 @@ export default function Hero() {
 
               {/* Product tray cards */}
               <div className="relative space-y-4 py-8">
-                {trayProducts.map((product, i) => (
-                  <motion.div
-                    key={product.title}
-                    className={cn(
-                      "relative bg-card rounded-xl border border-border p-5 shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 group",
-                      i === 0 && "lg:ml-4",
-                      i === 1 && "lg:ml-12",
-                      i === 2 && "lg:ml-6",
-                    )}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 + i * 0.15, ease: [0.19, 1, 0.22, 1] }}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0 group-hover:bg-accent/10 transition-colors">
-                        <product.icon className="h-5 w-5 text-primary" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-body uppercase tracking-[0.2em] text-muted-foreground">{product.brand}</p>
-                        <p className="text-sm font-heading font-semibold text-foreground truncate">{product.title}</p>
-                      </div>
-                      <div className="text-right flex-shrink-0">
-                        <p className="text-sm font-semibold text-foreground">{Number(product.price).toFixed(2)} <span className="text-xs text-muted-foreground">JOD</span></p>
-                        <span className="text-[10px] font-body uppercase tracking-wider text-accent">{product.step}</span>
-                      </div>
-                    </div>
-                    {/* Gold stitch on hover */}
-                    <div className="absolute inset-0 rounded-xl border border-accent/0 group-hover:border-accent/60 transition-colors duration-300 pointer-events-none" />
-                  </motion.div>
-                ))}
+                {trayProducts.map((product, i) => {
+                  const Wrapper = product.handle ? Link : "div";
+                  const wrapperProps = product.handle ? { to: `/product/${product.handle}` } : {};
+                  return (
+                    <Wrapper key={product.title} {...(wrapperProps as any)} className="block">
+                      <motion.div
+                        className={cn(
+                          "relative bg-card rounded-xl border border-border p-5 shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 group cursor-pointer",
+                          i === 0 && "lg:ml-4",
+                          i === 1 && "lg:ml-12",
+                          i === 2 && "lg:ml-6",
+                        )}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4 + i * 0.15, ease: [0.19, 1, 0.22, 1] }}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0 group-hover:bg-accent/10 transition-colors">
+                            <product.icon className="h-5 w-5 text-primary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[10px] font-body uppercase tracking-[0.2em] text-muted-foreground">{product.brand}</p>
+                            <p className="text-sm font-heading font-semibold text-foreground truncate">{product.title}</p>
+                          </div>
+                          <div className="text-right flex-shrink-0">
+                            <p className="text-sm font-semibold text-foreground">{Number(product.price).toFixed(2)} <span className="text-xs text-muted-foreground">JOD</span></p>
+                            <span className="text-[10px] font-body uppercase tracking-wider text-accent">{product.step}</span>
+                          </div>
+                        </div>
+                        {/* Gold stitch on hover */}
+                        <div className="absolute inset-0 rounded-xl border border-accent/0 group-hover:border-accent/60 transition-colors duration-300 pointer-events-none" />
+                      </motion.div>
+                    </Wrapper>
+                  );
+                })}
               </div>
 
               {/* AI Concierge chat bubble */}
