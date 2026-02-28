@@ -116,7 +116,7 @@ async function adminGraphQL(
     const text = await res.text();
     if (attempt < MAX_RETRIES && res.status >= 500) {
       const wait = Math.pow(2, attempt) * 1000;
-      console.warn(`  ⏳ Server error ${res.status}, retrying in ${wait / 1000}s...`);
+      console.warn(`  ⏳ Server error ${res.status}, retrying in ${wait / 1000}s (attempt ${attempt}/${MAX_RETRIES})...`);
       await sleep(wait);
       return adminGraphQL(query, variables, attempt + 1);
     }
