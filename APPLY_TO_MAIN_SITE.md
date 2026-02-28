@@ -2,9 +2,72 @@
 
 **Main site:** https://asperbeautyshop-com.lovable.app/  
 **Repo:** asperpharma/understand-project  
-**Lovable:** https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings
+**Lovable:** https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings  
+**Supabase project:** `qqceibvalkoytafynwoc`
 
 Use this checklist to run all updates and apply the brain, social media, Google Merchant Center, and every page to the main Asper Beauty Shop website.
+
+---
+
+## ⚠️ Manual overrides to clear blockers (100% Production Ready)
+
+Do these **in your dashboards** so the live site can use the Brain and Commerce Engine. Tick each when done.
+
+### Step 1 — Lovable environment variables
+
+Open **[Lovable → Settings → Environment variables](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings)**. Paste these exact values:
+
+| Variable | Value |
+|----------|-------|
+| `VITE_SUPABASE_PROJECT_ID` | `qqceibvalkoytafynwoc` |
+| `VITE_SUPABASE_URL` | `https://qqceibvalkoytafynwoc.supabase.co` |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | *(your anon/public key — see .env)* |
+| `VITE_SHOPIFY_STORE_DOMAIN` | `lovable-project-milns.myshopify.com` |
+| `VITE_SHOPIFY_STOREFRONT_TOKEN` | *(your Storefront API token)* |
+| `VITE_SHOPIFY_API_VERSION` | `2025-07` |
+| `VITE_SITE_URL` | `https://asperbeautyshop-com.lovable.app/` |
+
+- [ ] All vars saved → trigger redeploy
+
+### Step 2 — Supabase Auth redirects
+
+Open **[Supabase → Auth → URL Configuration](https://supabase.com/dashboard/project/qqceibvalkoytafynwoc/auth/url-configuration)**:
+
+- Add **Redirect URL:** `https://asperbeautyshop-com.lovable.app/**`
+- Set **Site URL:** `https://asperbeautyshop-com.lovable.app/`
+
+- [ ] Redirect URL added and Site URL set
+
+### Step 3 — Edge Function `SITE_URL` secret
+
+Open **[Supabase → Settings → Edge Functions → Secrets](https://supabase.com/dashboard/project/qqceibvalkoytafynwoc/settings/functions)**:
+
+- Add or update: **`SITE_URL`** = `https://asperbeautyshop-com.lovable.app/`
+
+- [ ] SITE_URL secret saved
+
+### Step 5 — Google Merchant Center
+
+- Log into Google Merchant Center (ID `5717495012`).
+- Verify Shopify feed is syncing and product links use the main domain.
+
+- [ ] Feed syncing without critical errors
+
+### Step 8 — Deploy & verify
+
+From your **understand-project** clone:
+
+```bash
+git add . && git commit -m "feat: complete apply_to_main_site checklist" && git push origin main
+```
+
+After Lovable finishes deploying, verify:
+
+```bash
+curl -s https://asperbeautyshop-com.lovable.app/health | python -m json.tool
+```
+
+- [ ] `/health` returns `"status": "ok"`
 
 ---
 
@@ -14,8 +77,8 @@ In **Lovable** → your project → **Settings** → **Environment variables**, 
 
 | Variable | Value | Purpose |
 |----------|--------|----------|
-| `VITE_SUPABASE_PROJECT_ID` | `rgehleqcubtmcwyipyvi` | Brain / Beauty Assistant project |
-| `VITE_SUPABASE_URL` | `https://rgehleqcubtmcwyipyvi.supabase.co` | Supabase API |
+| `VITE_SUPABASE_PROJECT_ID` | `qqceibvalkoytafynwoc` | Brain / Beauty Assistant project |
+| `VITE_SUPABASE_URL` | `https://qqceibvalkoytafynwoc.supabase.co` | Supabase API |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | *(your anon/public key)* | Frontend auth & Edge Function calls |
 | `VITE_SHOPIFY_STORE_DOMAIN` | `lovable-project-milns.myshopify.com` | 5000+ SKU catalog |
 | `VITE_SHOPIFY_STOREFRONT_TOKEN` | *(your Storefront API token)* | Storefront API |
@@ -34,7 +97,7 @@ Reference: `env.main-site.example` in this folder (copy names from there; never 
 
 So users can log in on https://asperbeautyshop-com.lovable.app/:
 
-1. Open **Supabase Dashboard** → project **rgehleqcubtmcwyipyvi**  
+1. Open **Supabase Dashboard** → project **qqceibvalkoytafynwoc**  
 2. **Authentication** → **URL Configuration**  
 3. Add to **Redirect URLs**:  
    - `https://asperbeautyshop-com.lovable.app/**`  
