@@ -31,7 +31,19 @@ import type { Tables } from "@/integrations/supabase/types";
 
 type DbProduct = Tables<"products">;
 
-const formatJOD = (n: number) => `${n.toFixed(2)} JOD`;
+/** Split-render JOD price: large integer, small currency + decimals */
+const SplitPrice = ({ amount, className = "" }: { amount: number; className?: string }) => {
+  const formatted = amount.toFixed(3);
+  const [integer, decimals] = formatted.split(".");
+  return (
+    <span className={className}>
+      <span className="text-2xl font-medium text-burgundy">{integer}</span>
+      <span className="text-xs text-burgundy/70 align-top ms-0.5">.{decimals} JD</span>
+    </span>
+  );
+};
+
+const formatJODSimple = (n: number) => `${n.toFixed(3)} JD`;
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
@@ -180,9 +192,7 @@ const ProductDetail = () => {
             <div className="mb-8">
               <span className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground mb-3 block">{brandName}</span>
               <h1 className="font-serif text-3xl lg:text-4xl text-foreground leading-tight mb-6">{product.title}</h1>
-              <div className="flex items-center gap-3">
-                <span className="text-2xl font-light text-foreground">{formatJOD(currentPrice)}</span>
-              </div>
+              <SplitPrice amount={currentPrice} />
             </div>
 
             {/* Pharmacist Note (brief) */}
@@ -200,18 +210,21 @@ const ProductDetail = () => {
               </div>
             )}
 
+            {/* Gold Divider */}
+            <div className="w-16 h-px bg-polished-gold mb-10" />
+
             {/* Add to Cart — Primary CTA */}
             <div className="space-y-6 mb-10">
-              <div className="flex items-center justify-center gap-8 py-4 border border-border">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-primary transition-colors"><Minus className="w-4 h-4" /></button>
-                <span className="text-lg font-medium w-8 text-center">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-primary transition-colors"><Plus className="w-4 h-4" /></button>
+              <div className="flex items-center justify-center gap-8 py-4 border border-polished-gold/30">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-burgundy transition-colors"><Minus className="w-4 h-4" /></button>
+                <span className="text-lg font-body font-medium w-8 text-center text-asper-ink">{quantity}</span>
+                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-burgundy transition-colors"><Plus className="w-4 h-4" /></button>
               </div>
 
               <div className="flex gap-4">
-                <Button onClick={handleAddToCart} className="flex-1 py-6 text-base font-medium tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground rounded-none">
-                  <ShoppingBag className="w-5 h-5 mr-3" />
-                  {isArabic ? "أضف إلى الحقيبة" : "Add to Ritual"} — {formatJOD(currentPrice * quantity)}
+                <Button onClick={handleAddToCart} variant="luxury" size="luxury-lg" className="flex-1">
+                  <ShoppingBag className="w-5 h-5 me-3" />
+                  {isArabic ? "أضف إلى الحقيبة" : "Add to Ritual"} — {formatJODSimple(currentPrice * quantity)}
                 </Button>
                 <button onClick={handleWishlistToggle} className={`w-14 h-14 flex items-center justify-center border transition-all ${isWishlisted ? "bg-primary border-primary text-primary-foreground" : "border-border text-foreground hover:border-primary"}`}>
                   <Heart className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`} />
@@ -228,7 +241,7 @@ const ProductDetail = () => {
             </div>
 
             {/* ─── Clean PDP Accordions: Clinical data below the fold ─── */}
-            <Accordion type="multiple" className="w-full border-t border-border">
+            <Accordion type="multiple" className="w-full border-t border-polished-gold/30">
               {/* How to Use */}
               <AccordionItem value="how-to-use" className="border-border">
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
@@ -343,12 +356,12 @@ const ProductDetail = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {relatedProducts.map((rp) => (
                 <Link key={rp.id} to={`/product/${rp.handle}`} className="group">
-                  <div className="aspect-square bg-muted/30 rounded-lg overflow-hidden mb-3">
+                  <div className="aspect-square bg-asper-stone rounded-lg overflow-hidden mb-3 border border-transparent group-hover:border-polished-gold transition-colors duration-300">
                     <img src={rp.image_url || "/placeholder.svg"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-widest">{rp.brand}</p>
-                  <p className="text-sm font-medium text-foreground line-clamp-2">{rp.title}</p>
-                  <p className="text-sm text-foreground mt-1">{formatJOD(rp.price ?? 0)}</p>
+                  <p className="text-xs text-asper-ink-muted uppercase tracking-widest font-body">{rp.brand}</p>
+                  <p className="text-sm font-medium text-asper-ink line-clamp-2 font-body">{rp.title}</p>
+                  <SplitPrice amount={rp.price ?? 0} className="mt-1" />
                 </Link>
               ))}
             </div>
