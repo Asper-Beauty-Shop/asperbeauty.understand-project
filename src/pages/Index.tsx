@@ -20,6 +20,7 @@ const PromoBanner = lazy(() => import("@/components/home/PromoBanner"));
 const SocialGallery = lazy(() => import("@/components/home/SocialGallery"));
 const Newsletter = lazy(() => import("@/components/home/Newsletter"));
 import ScrollProgress from "@/components/ScrollProgress";
+import CommercialTape from "@/components/CommercialTape";
 import AuthButton from "@/components/AuthButton";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import MegaMenu from "@/components/MegaMenu";
@@ -49,6 +50,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background mobile-bottom-pad" dir={dir}>
+      {/* Commercial Tape — USP ticker */}
+      <CommercialTape />
+
       {/* Gold scroll progress bar */}
       <ScrollProgress />
 
