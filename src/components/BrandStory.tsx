@@ -83,6 +83,8 @@ const BrandStory = () => {
           <img
             src={asperLogo}
             alt={isRTL ? "طقوس أسبر" : "Asper Ritual"}
+            width={384}
+            height={384}
             className="rounded-t-full border-b-4 border-asper-gold shadow-2xl mx-auto max-w-sm w-full object-cover"
           />
         </div>

@@ -46,6 +46,8 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
           <img
             src={asperLogo}
             alt="Asper"
+            width={96}
+            height={96}
             className="h-24 w-auto drop-shadow-[0_0_30px_hsl(43_69%_46%/0.4)]"
           />
         </motion.div>

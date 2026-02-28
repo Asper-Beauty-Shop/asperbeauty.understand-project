@@ -84,7 +84,7 @@ const Products = () => {
                 </Button>
               </Link>
               <div className="h-6 w-px bg-border" />
-              <img src={asperLogo} alt="Asper" className="h-7 w-auto" />
+              <img src={asperLogo} alt="Asper" width={28} height={28} className="h-7 w-auto" />
             </div>
             <div className="flex items-center gap-3">
               <AuthButton />
