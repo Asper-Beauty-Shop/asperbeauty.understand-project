@@ -265,6 +265,28 @@ serve(async (req) => {
         replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
       }
 
+      // ManyChat expects { version, content } format for rich responses
+      if (route === "manychat") {
+        return new Response(
+          JSON.stringify({
+            version: "v2",
+            content: {
+              messages: [
+                { type: "text", text: replyText || "Sorry, I couldn't process that. Please try again." }
+              ],
+              actions: [],
+              quick_replies: [
+                { type: "node", caption: "🧴 Acne Help", target: "acne" },
+                { type: "node", caption: "✨ Glow Routine", target: "glow" },
+                { type: "node", caption: "👤 Talk to Human", target: "human" },
+              ],
+            },
+            reply: replyText || "Sorry, I couldn't process that. Please try again.",
+          }),
+          { status: 200, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
+        );
+      }
+
       return new Response(
         JSON.stringify({ reply: replyText || "Sorry, I couldn't process that. Please try again." }),
         { status: 200, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
