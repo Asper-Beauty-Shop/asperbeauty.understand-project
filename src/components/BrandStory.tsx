@@ -1,5 +1,5 @@
 import { useLanguage } from "@/contexts/LanguageContext";
-import asperLogo from "@/assets/asper-lotus-logo.png";
+import asperLogo from "@/assets/asper-lotus-logo-optimized.webp";
 
 const features = {
   en: [
