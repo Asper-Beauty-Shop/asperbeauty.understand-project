@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CATEGORY_GROUPS } from "@/lib/categoryMapping";
+import { CATEGORY_GROUPS, type CategoryGroup } from "@/lib/categoryMapping";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
@@ -8,11 +8,14 @@ import { cn } from "@/lib/utils";
 interface CategoryFilterProps {
   selected: string[];
   onSelect: (selected: string[]) => void;
+  /** When provided, only show these groups instead of all CATEGORY_GROUPS */
+  groups?: CategoryGroup[];
 }
 
-export function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
+export function CategoryFilter({ selected, onSelect, groups }: CategoryFilterProps) {
+  const displayGroups = groups || CATEGORY_GROUPS;
   const [expandedGroups, setExpandedGroups] = useState<string[]>(
-    CATEGORY_GROUPS.map((g) => g.label)
+    displayGroups.map((g) => g.label)
   );
 
   const toggleGroup = (label: string) => {
@@ -30,7 +33,7 @@ export function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
   };
 
   const isGroupPartiallySelected = (groupLabel: string) => {
-    const group = CATEGORY_GROUPS.find((g) => g.label === groupLabel);
+    const group = displayGroups.find((g) => g.label === groupLabel);
     if (!group) return false;
     const selectedCount = group.subcategories.filter((s) =>
       selected.includes(s.label)
@@ -39,13 +42,13 @@ export function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
   };
 
   const isGroupFullySelected = (groupLabel: string) => {
-    const group = CATEGORY_GROUPS.find((g) => g.label === groupLabel);
+    const group = displayGroups.find((g) => g.label === groupLabel);
     if (!group) return false;
     return group.subcategories.every((s) => selected.includes(s.label));
   };
 
   const toggleGroupAll = (groupLabel: string) => {
-    const group = CATEGORY_GROUPS.find((g) => g.label === groupLabel);
+    const group = displayGroups.find((g) => g.label === groupLabel);
     if (!group) return;
     const allLabels = group.subcategories.map((s) => s.label);
     if (isGroupFullySelected(groupLabel)) {
@@ -75,7 +78,7 @@ export function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
         )}
       </div>
 
-      {CATEGORY_GROUPS.map((group) => {
+      {displayGroups.map((group) => {
         const isExpanded = expandedGroups.includes(group.label);
         return (
           <div key={group.label} className="space-y-0.5">
