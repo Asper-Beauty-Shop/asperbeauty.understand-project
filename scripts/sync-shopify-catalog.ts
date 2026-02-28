@@ -326,6 +326,103 @@ const VARIANT_BULK_UPDATE = `
 `;
 
 // ---------------------------------------------------------------------------
+// Inventory queries & mutations
+// ---------------------------------------------------------------------------
+
+const LOCATIONS_QUERY = `
+  query GetLocations {
+    locations(first: 1) {
+      edges { node { id name } }
+    }
+  }
+`;
+
+const VARIANT_INVENTORY_ITEMS = `
+  query VariantInventoryItems($productId: ID!) {
+    product(id: $productId) {
+      variants(first: 100) {
+        edges {
+          node {
+            id
+            sku
+            inventoryItem { id }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const INVENTORY_SET_QUANTITIES = `
+  mutation InventorySetQuantities($input: InventorySetQuantitiesInput!) {
+    inventorySetQuantities(input: $input) {
+      inventoryAdjustmentGroup { reason }
+      userErrors { field message }
+    }
+  }
+`;
+
+let cachedLocationId: string | null = null;
+
+async function getPrimaryLocationId(): Promise<string> {
+  if (cachedLocationId) return cachedLocationId;
+  const data = await adminGraphQL(LOCATIONS_QUERY);
+  const loc = data?.locations?.edges?.[0]?.node;
+  if (!loc) throw new Error("No Shopify locations found. Create a location first.");
+  cachedLocationId = loc.id;
+  console.log(`  📍 Primary location: ${loc.name} (${loc.id})`);
+  return loc.id;
+}
+
+async function setInventoryQuantities(
+  productId: string,
+  variants: { sku: string; inventoryQty: number }[],
+  tag: string
+) {
+  const locationId = await getPrimaryLocationId();
+
+  // Fetch inventoryItemIds for the product's variants
+  const data = await adminGraphQL(VARIANT_INVENTORY_ITEMS, { productId });
+  const variantEdges = data?.product?.variants?.edges || [];
+
+  const quantities: { inventoryItemId: string; locationId: string; quantity: number }[] = [];
+
+  for (const edge of variantEdges) {
+    const node = edge.node;
+    const inventoryItemId = node.inventoryItem?.id;
+    if (!inventoryItemId) continue;
+
+    // Match by SKU or by position
+    const csvMatch = variants.find((v) => v.sku && v.sku === node.sku);
+    const qty = csvMatch?.inventoryQty ?? variants[variantEdges.indexOf(edge)]?.inventoryQty;
+
+    if (qty !== undefined && qty >= 0) {
+      quantities.push({ inventoryItemId, locationId, quantity: qty });
+    }
+  }
+
+  if (quantities.length === 0) return;
+
+  try {
+    const result = await adminGraphQL(INVENTORY_SET_QUANTITIES, {
+      input: {
+        name: "available",
+        reason: "correction",
+        quantities,
+      },
+    });
+    const errors = result?.inventorySetQuantities?.userErrors;
+    if (errors?.length) {
+      console.warn(`  ⚠️ ${tag} inventory warnings:`, errors);
+    } else {
+      console.log(`  📦 ${tag}: set inventory for ${quantities.length} variant(s)`);
+    }
+  } catch (invErr: any) {
+    console.warn(`  ⚠️ ${tag} inventory update failed: ${invErr.message}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Sync logic
 // ---------------------------------------------------------------------------
 
@@ -453,6 +550,14 @@ async function syncProduct(product: ProductGroup, index: number) {
         console.warn(`  ⚠️ ${tag} variant update warnings:`, bulkErrors);
       }
     }
+  }
+  // 3. Set inventory quantities at the primary location
+  if (variantEdges?.length > 0 && product.variants.some((v) => v.inventoryQty > 0)) {
+    await setInventoryQuantities(
+      productId,
+      product.variants.map((v) => ({ sku: v.sku, inventoryQty: v.inventoryQty })),
+      tag
+    );
   }
 
   return { status: existing ? "updated" : "created", handle: product.handle };
