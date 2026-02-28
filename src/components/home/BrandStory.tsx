@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Shield, Lightbulb, Award } from "lucide-react";
-import productBottle from "@/assets/asper-product-bottle.png";
-import skincareCloseup from "@/assets/skincare-closeup.png";
+import botanicalElegance from "@/assets/asper-botanical-elegance.png";
+import minimalistBottle from "@/assets/asper-minimalist-bottle.png";
 
 const features = [
   { icon: Shield, en: "Curated Authority", ar: "سلطة طبية مختارة" },
@@ -33,8 +33,8 @@ export default function BrandStory() {
           {/* Product bottle — dramatic maroon scene */}
           <div className="relative group overflow-hidden rounded-lg aspect-[4/3]">
             <img
-              src={productBottle}
-              alt="Asper signature product with gold wax seal"
+              src={botanicalElegance}
+              alt="Asper Beauty botanical elegance collection with lotus flowers"
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               loading="lazy"
             />
@@ -49,8 +49,8 @@ export default function BrandStory() {
           {/* Skincare closeup — soft spa feel */}
           <div className="relative group overflow-hidden rounded-lg aspect-[4/3]">
             <img
-              src={skincareCloseup}
-              alt="Woman applying clinical skincare regimen"
+              src={minimalistBottle}
+              alt="Asper Beauty minimalist serum bottle with gold cap"
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               loading="lazy"
             />

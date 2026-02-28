@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Droplets, Mountain, Sparkles, Gem } from "lucide-react";
+import shelfDisplay from "@/assets/asper-shelf-display.png";
 
 const minerals = [
   { icon: Droplets, name: "Magnesium", benefit: "Deep hydration & barrier repair" },
@@ -17,8 +18,8 @@ const HeritageSourcing = () => {
           <div className="relative">
             <div className="rounded-lg overflow-hidden border-2 border-accent shadow-emerald-glow">
               <img
-                src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80"
-                alt="Luxury spa minerals and Dead Sea wellness"
+                src={shelfDisplay}
+                alt="Asper Beauty pharmacy shelf with maroon products and gold fixtures"
                 className="w-full h-[420px] object-cover"
                 loading="lazy"
               />
