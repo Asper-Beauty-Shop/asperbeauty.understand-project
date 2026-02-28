@@ -58,26 +58,26 @@ export default {
           dark: "hsl(var(--gold-dark))",
         },
         // ── DESIGN_SYSTEM.md — Clinical Luxury palette ──────────────────
-        // Primary canvas — warm ivory / light gray (no pure #FFF)
+        // Primary canvas — white marble / soft ivory (no pure #FFF)
         'asper-stone': {
-          DEFAULT: '#F2EFEB',
-          light: '#F8F6F3',
-          dark: '#E8E4DE',
+          DEFAULT: '#F9F9F7',
+          light: '#FDFCFA',
+          dark: '#F0EDE8',
         },
-        // Feminine softness — muted pink / terracotta
-        'rose-clay': {
-          DEFAULT: '#C4A494',
-          light: '#D4B8A8',
-          dark: '#A88B7A',
+        // Nature accent — soft sage / botanical
+        'sage': {
+          DEFAULT: '#7BA68A',
+          light: '#A3C4AE',
+          dark: '#5A8A6A',
         },
-        // Primary actions, nav, authority — Deep Burgundy
-        'burgundy': {
-          DEFAULT: '#6B2D3A',
-          light: '#8B3D4A',
-          dark: '#4F222C',
+        // Primary actions, nav, authority — Deep Emerald
+        'emerald': {
+          DEFAULT: '#005C45',
+          light: '#007A5E',
+          dark: '#003D2E',
         },
         // Accent only — borders, hover ("Midas Touch"), icons
-        'polished-gold': '#C9A962',
+        'polished-gold': '#C5A028',
         'polished-white': '#FAF9F7',
         // Primary text — no pure #000
         'asper-ink': '#2C2825',
@@ -96,8 +96,10 @@ export default {
         },
       },
       boxShadow: {
-        'maroon-glow': '0 4px 20px -2px rgba(128, 0, 32, 0.12)',
-        'maroon-deep': '0 10px 25px -5px rgba(128, 0, 32, 0.25)',
+        'emerald-glow': '0 4px 20px -2px rgba(0, 92, 69, 0.12)',
+        'emerald-deep': '0 10px 25px -5px rgba(0, 92, 69, 0.25)',
+        'maroon-glow': '0 4px 20px -2px rgba(0, 92, 69, 0.12)',
+        'maroon-deep': '0 10px 25px -5px rgba(0, 92, 69, 0.25)',
       },
       ringColor: {
         DEFAULT: 'hsl(var(--gold))',

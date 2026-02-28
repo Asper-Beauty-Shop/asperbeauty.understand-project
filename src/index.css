@@ -11,31 +11,31 @@
 
 @layer base {
   :root {
-    /* Canvas: Asper Stone #F2EFEB — warm ivory, no pure #FFF */
-    --background: 30 18% 94%;
+    /* Canvas: White Marble / Soft Ivory — no pure #FFF */
+    --background: 40 20% 97%;
     --foreground: 20 10% 15%;
 
-    /* Card: Polished White on Asper Stone */
+    /* Card: Clean white on marble */
     --card: 40 33% 98%;
     --card-foreground: 20 10% 15%;
 
     --popover: 40 33% 98%;
     --popover-foreground: 20 10% 15%;
 
-    /* Primary Action: Burgundy #6B2D3A */
-    --primary: 348 41% 30%;
-    --primary-foreground: 30 18% 94%;
+    /* Primary Action: Emerald Green #005C45 */
+    --primary: 163 100% 18%;
+    --primary-foreground: 40 20% 97%;
 
-    /* Secondary: Warm stone tint */
-    --secondary: 30 18% 94%;
-    --secondary-foreground: 348 41% 30%;
+    /* Secondary: Soft ivory tint */
+    --secondary: 40 20% 95%;
+    --secondary-foreground: 163 100% 18%;
 
     /* Muted: Soft warm grey */
-    --muted: 30 12% 90%;
+    --muted: 40 12% 90%;
     --muted-foreground: 20 6% 35%;
 
-    /* Accent: Polished Gold #C9A962 */
-    --accent: 40 47% 59%;
+    /* Accent: Metallic Gold #C5A028 */
+    --accent: 43 66% 46%;
     --accent-foreground: 20 10% 15%;
 
     /* Polite Error: Soft Terracotta */
@@ -43,9 +43,9 @@
     --destructive-foreground: 40 33% 98%;
 
     /* Structure borders: subtle gold-tinted */
-    --border: 30 15% 85%;
-    --input: 30 15% 85%;
-    --ring: 348 41% 30%;
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 163 100% 18%;
 
     --radius: 0.5rem;
 
@@ -54,63 +54,63 @@
     --font-body: 'Montserrat', 'Helvetica Neue', sans-serif;
     --font-arabic: 'Tajawal', sans-serif;
 
-    /* Gold accent — Polished Gold #C9A962 */
-    --gold: 40 47% 59%;
-    --gold-light: 40 40% 72%;
-    --gold-dark: 40 52% 45%;
+    /* Gold accent — Metallic Gold #C5A028 */
+    --gold: 43 66% 46%;
+    --gold-light: 43 55% 62%;
+    --gold-dark: 43 70% 36%;
 
-    /* Science Lab zone: faint maroon tint */
-    --lab-zone: 348 20% 96%;
+    /* Science Lab zone: faint emerald tint */
+    --lab-zone: 163 15% 96%;
 
-    --sidebar-background: 30 18% 95%;
+    --sidebar-background: 40 20% 96%;
     --sidebar-foreground: 20 10% 15%;
-    --sidebar-primary: 348 41% 30%;
-    --sidebar-primary-foreground: 30 18% 94%;
-    --sidebar-accent: 40 47% 59%;
+    --sidebar-primary: 163 100% 18%;
+    --sidebar-primary-foreground: 40 20% 97%;
+    --sidebar-accent: 43 66% 46%;
     --sidebar-accent-foreground: 20 10% 15%;
-    --sidebar-border: 30 15% 85%;
-    --sidebar-ring: 348 41% 30%;
+    --sidebar-border: 40 15% 88%;
+    --sidebar-ring: 163 100% 18%;
   }
 
   .dark {
-    --background: 20 10% 7%;
-    --foreground: 30 18% 94%;
+    --background: 160 10% 7%;
+    --foreground: 40 20% 94%;
 
-    --card: 20 8% 10%;
-    --card-foreground: 30 18% 94%;
+    --card: 160 8% 10%;
+    --card-foreground: 40 20% 94%;
 
-    --popover: 20 8% 10%;
-    --popover-foreground: 30 18% 94%;
+    --popover: 160 8% 10%;
+    --popover-foreground: 40 20% 94%;
 
-    --primary: 348 45% 55%;
-    --primary-foreground: 30 18% 94%;
+    --primary: 163 60% 40%;
+    --primary-foreground: 40 20% 97%;
 
-    --secondary: 20 8% 14%;
-    --secondary-foreground: 30 18% 94%;
+    --secondary: 160 8% 14%;
+    --secondary-foreground: 40 20% 94%;
 
-    --muted: 20 6% 14%;
-    --muted-foreground: 20 6% 65%;
+    --muted: 160 6% 14%;
+    --muted-foreground: 160 6% 65%;
 
-    --accent: 40 47% 59%;
-    --accent-foreground: 20 10% 15%;
+    --accent: 43 66% 46%;
+    --accent-foreground: 160 10% 7%;
 
     --destructive: 15 50% 45%;
-    --destructive-foreground: 30 18% 94%;
+    --destructive-foreground: 40 20% 94%;
 
-    --border: 20 6% 18%;
-    --input: 20 6% 18%;
-    --ring: 348 45% 55%;
+    --border: 160 6% 18%;
+    --input: 160 6% 18%;
+    --ring: 163 60% 40%;
 
-    --lab-zone: 348 15% 10%;
+    --lab-zone: 163 15% 10%;
 
-    --sidebar-background: 20 10% 8%;
-    --sidebar-foreground: 30 18% 94%;
-    --sidebar-primary: 348 45% 55%;
-    --sidebar-primary-foreground: 30 18% 94%;
-    --sidebar-accent: 20 8% 14%;
-    --sidebar-accent-foreground: 30 18% 94%;
-    --sidebar-border: 20 6% 18%;
-    --sidebar-ring: 348 45% 55%;
+    --sidebar-background: 160 10% 8%;
+    --sidebar-foreground: 40 20% 94%;
+    --sidebar-primary: 163 60% 40%;
+    --sidebar-primary-foreground: 40 20% 97%;
+    --sidebar-accent: 160 8% 14%;
+    --sidebar-accent-foreground: 40 20% 94%;
+    --sidebar-border: 160 6% 18%;
+    --sidebar-ring: 163 60% 40%;
   }
 }
 
