@@ -35,26 +35,26 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
         >
-          {/* Glassmorphism Card */}
-          <div className="bg-background/80 backdrop-blur-xl border border-accent/40 rounded-2xl p-8 sm:p-12 lg:p-16 shadow-2xl">
+          {/* Glassmorphism Card — Morning Spa palette */}
+          <div className="bg-asper-stone/85 backdrop-blur-xl border border-polished-gold/30 rounded-2xl p-8 sm:p-12 lg:p-16 shadow-gold-lg">
             {/* Gold decorative line */}
-            <div className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-accent to-transparent mb-8" />
+            <div className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-polished-gold to-transparent mb-8" />
 
             <h1
               className={cn(
-                "font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary leading-[1.05] tracking-tight",
+                "font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-asper-ink leading-[1.05] tracking-tight",
                 isAr && "font-arabic"
               )}
             >
               {isAr ? (
                 <>
-                  بإشراف <span className="text-accent">صيدلاني</span>.
+                  بإشراف <span className="text-polished-gold">صيدلاني</span>.
                   <br />
                   مدعوم بالذكاء.
                 </>
               ) : (
                 <>
-                  Curated by <span className="text-accent">Pharmacists</span>.
+                  Curated by <span className="text-polished-gold">Pharmacists</span>.
                   <br />
                   Powered by Intelligence.
                 </>
@@ -63,7 +63,7 @@ export default function Hero() {
 
             <p
               className={cn(
-                "mt-6 text-base sm:text-lg text-foreground/80 max-w-2xl mx-auto leading-relaxed",
+                "mt-6 text-base sm:text-lg text-asper-ink-muted max-w-2xl mx-auto leading-relaxed",
                 isAr ? "font-arabic" : "font-body"
               )}
             >
@@ -81,22 +81,22 @@ export default function Hero() {
               ].map((item) => (
                 <span
                   key={item.label}
-                  className="inline-flex items-center gap-1.5 text-xs font-body text-muted-foreground border border-border rounded-full px-3 py-1 bg-card/60"
+                  className="inline-flex items-center gap-1.5 text-xs font-body text-asper-ink-muted border border-rose-clay-light rounded-full px-3 py-1 bg-asper-stone/60"
                 >
-                  <item.icon className="h-3 w-3 text-accent" />
+                  <item.icon className="h-3 w-3 text-polished-gold" />
                   {item.label}
                 </span>
               ))}
             </div>
 
             {/* Gold decorative line */}
-            <div className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-accent to-transparent my-8" />
+            <div className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-polished-gold to-transparent my-8" />
 
             {/* CTA */}
             <Link to="/intelligence">
               <Button
                 size="lg"
-                className="group bg-primary text-primary-foreground hover:bg-primary/90 border border-transparent hover:border-accent hover:shadow-lg hover:shadow-accent/20 text-sm uppercase tracking-widest px-10 h-14 font-semibold transition-all duration-400"
+                className="group bg-burgundy text-primary-foreground hover:bg-burgundy-light border border-transparent hover:border-polished-gold hover:shadow-lg hover:shadow-polished-gold/20 text-sm uppercase tracking-widest px-10 h-14 font-semibold transition-all duration-400"
               >
                 {isAr ? "ابدئي تحليل بشرتك المجاني" : "Start Free AI Skin Analysis"}
                 <ArrowRight

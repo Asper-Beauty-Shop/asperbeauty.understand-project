@@ -25,36 +25,37 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
 
-        // --- DESIGN_SYSTEM.md Morning Spa Tokens ---
+        // --- DESIGN_SYSTEM.md Morning Spa Tokens (HSL via CSS vars) ---
         "asper-stone": {
-          DEFAULT: "#F2EFEB",
-          light: "#F8F6F3",
-          dark: "#E8E4DE",
+          DEFAULT: "hsl(var(--asper-stone))",
+          light: "hsl(var(--asper-stone-light))",
+          dark: "hsl(var(--asper-stone-dark))",
         },
         "rose-clay": {
-          DEFAULT: "#C4A494",
-          light: "#D4B8A8",
-          dark: "#A88B7A",
+          DEFAULT: "hsl(var(--rose-clay))",
+          light: "hsl(var(--rose-clay-light))",
+          dark: "hsl(var(--rose-clay-dark))",
         },
-        "polished-gold": "#C9A962",
-        "polished-white": "#FAF9F7",
+        "polished-gold": "hsl(var(--polished-gold))",
+        "polished-white": "hsl(var(--polished-white))",
         "asper-ink": {
-          DEFAULT: "#2C2825",
-          muted: "#5C5652",
+          DEFAULT: "hsl(var(--asper-ink))",
+          muted: "hsl(var(--asper-ink-muted))",
         },
+        // Legacy compat tokens
+        maroon: "hsl(var(--burgundy))",
+        "soft-ivory": "hsl(var(--asper-stone))",
+        "shiny-gold": "hsl(var(--polished-gold))",
+        "dark-charcoal": "hsl(var(--asper-ink))",
         // Legacy pharmacy tokens (backward compat)
         asper: {
           merlot: "#4A0404",
-          merlotLight: "#800020",
-          gold: "#D4AF37",
-          goldLight: "#F3E5AB",
-          charcoal: "#1A1A1A",
-          ivory: "#F9F7F2",
+          merlotLight: "hsl(var(--burgundy))",
+          gold: "hsl(var(--polished-gold))",
+          goldLight: "hsl(var(--gold-light))",
+          charcoal: "hsl(var(--asper-ink))",
+          ivory: "hsl(var(--asper-stone))",
         },
-        maroon: "#800020",
-        "soft-ivory": "#F8F8FF",
-        "shiny-gold": "#C5A028",
-        "dark-charcoal": "#333333",
         // --------------------------------------
         primary: {
           DEFAULT: "hsl(var(--primary))",
