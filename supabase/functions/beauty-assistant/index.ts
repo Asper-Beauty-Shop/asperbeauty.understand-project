@@ -322,6 +322,16 @@ serve(async (req) => {
   // ——— Webhook Path (Gorgias / ManyChat) — signature-verified ———
   if (route === "gorgias" || route === "manychat") {
     try {
+      // Rate limit BEFORE crypto work to block floods cheaply
+      const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+        ?? req.headers.get("x-real-ip") ?? "unknown";
+      if (!webhookRateLimit(clientIp, route)) {
+        console.warn(`Webhook rate limit exceeded: ${route} from ${clientIp}`);
+        return new Response(JSON.stringify({ error: "Too many requests" }), {
+          status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json", "Retry-After": "60" },
+        });
+      }
+
       const rawBody = await req.text();
 
       // Verify webhook signature
@@ -344,16 +354,6 @@ serve(async (req) => {
         console.warn(`Invalid ${route} webhook signature`);
         return new Response(JSON.stringify({ error: "Invalid signature" }), {
           status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
-
-      // Rate limit per IP + route
-      const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
-        ?? req.headers.get("x-real-ip") ?? "unknown";
-      if (!webhookRateLimit(clientIp, route)) {
-        console.warn(`Webhook rate limit exceeded: ${route} from ${clientIp}`);
-        return new Response(JSON.stringify({ error: "Too many requests" }), {
-          status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json", "Retry-After": "60" },
         });
       }
 
