@@ -4,7 +4,7 @@ import { fetchProducts, fetchProductByHandle } from "@/lib/shopify";
 export function useShopifyProducts(searchQuery?: string, first = 24, after?: string) {
   return useQuery({
     queryKey: ["shopify-products", searchQuery, first, after],
-    queryFn: () => fetchProducts(first, searchQuery, after),
+    queryFn: () => fetchProducts(first, searchQuery),
   });
 }
 

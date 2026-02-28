@@ -592,3 +592,10 @@ export async function createStorefrontCheckout(
 
   return formatCheckoutUrl(cart.checkoutUrl);
 }
+
+/** Normalize a Shopify price string to a number */
+export function normalizePrice(amount: string | number): number {
+  if (typeof amount === "number") return amount;
+  const parsed = parseFloat(amount);
+  return isNaN(parsed) ? 0 : parsed;
+}

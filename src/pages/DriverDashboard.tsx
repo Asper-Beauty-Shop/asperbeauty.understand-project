@@ -151,7 +151,7 @@ export default function DriverDashboard() {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("cod_orders")
         .select("*")
         .eq("driver_id", user.id)
@@ -196,7 +196,7 @@ export default function DriverDashboard() {
         updateData.delivered_at = new Date().toISOString();
       }
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("cod_orders")
         .update(updateData)
         .eq("id", orderId);

@@ -256,9 +256,13 @@ const translations: Record<Language, Translations> = {
 
 interface LanguageContextType {
   language: Language;
+  /** Alias for language — kept for backward compatibility */
+  locale: Language;
   setLanguage: (lang: Language) => void;
   t: Translations;
   isRTL: boolean;
+  /** Alias for isRTL direction string */
+  dir: "rtl" | "ltr";
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
@@ -285,7 +289,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <LanguageContext.Provider
-      value={{ language, setLanguage, t: translations[language], isRTL }}
+      value={{ language, locale: language, setLanguage, t: translations[language], isRTL, dir: isRTL ? "rtl" : "ltr" }}
     >
       {children}
     </LanguageContext.Provider>

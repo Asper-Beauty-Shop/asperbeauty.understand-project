@@ -23,17 +23,25 @@ import { useCartStore } from "@/stores/cartStore";
 interface Product {
   id: string;
   title: string;
-  price: number;
-  description: string | null;
-  category: string;
+  price: number | null;
+  handle: string;
+  primary_concern: string;
   image_url: string | null;
   brand: string | null;
-  volume_ml: string | null;
-  is_on_sale: boolean | null;
-  original_price: number | null;
-  discount_percent: number | null;
+  clinical_badge: string | null;
+  pharmacist_note: string | null;
+  gold_stitch_tier: boolean;
+  is_hero: boolean;
+  tags: string[] | null;
   created_at: string;
   updated_at: string;
+  // Compat aliases
+  category?: string;
+  description?: string | null;
+  volume_ml?: string | null;
+  is_on_sale?: boolean | null;
+  original_price?: number | null;
+  discount_percent?: number | null;
 }
 
 // Professional ProductCard Component - BeautyBox/iHerb Style

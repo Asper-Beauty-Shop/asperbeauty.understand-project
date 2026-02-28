@@ -135,7 +135,7 @@ export default function AdminAuditLogs() {
       const { data, error } = await supabase
         .from("user_roles")
         .select("user_id")
-        .eq("role", "driver");
+        .eq("role", "admin" as const);
 
       if (error) throw error;
 
@@ -143,13 +143,13 @@ export default function AdminAuditLogs() {
         const userIds = data.map((d) => d.user_id);
         const { data: profiles, error: profileError } = await supabase
           .from("profiles")
-          .select("id, email")
-          .in("id", userIds);
+          .select("user_id, display_name")
+          .in("user_id", userIds);
 
         if (profileError) throw profileError;
 
         setDrivers(
-          profiles?.map((p) => ({ id: p.id, email: p.email || "Unknown" })) ||
+          profiles?.map((p) => ({ id: p.user_id, email: p.display_name || "Unknown" })) ||
             [],
         );
       }

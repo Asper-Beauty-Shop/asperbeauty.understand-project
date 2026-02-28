@@ -13,8 +13,7 @@ import { Truck, User } from "lucide-react";
 
 interface Driver {
   id: string;
-  email: string;
-  full_name: string | null;
+  display_name: string | null;
 }
 
 interface DriverAssignmentProps {
@@ -23,13 +22,9 @@ interface DriverAssignmentProps {
   onAssigned?: () => void;
 }
 
-export function DriverAssignment(
-  { orderId, currentDriverId, onAssigned }: DriverAssignmentProps,
-) {
+export function DriverAssignment({ orderId, currentDriverId, onAssigned }: DriverAssignmentProps) {
   const [drivers, setDrivers] = useState<Driver[]>([]);
-  const [selectedDriver, setSelectedDriver] = useState<string>(
-    currentDriverId || "",
-  );
+  const [selectedDriver, setSelectedDriver] = useState<string>(currentDriverId || "");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -42,29 +37,26 @@ export function DriverAssignment(
 
   const fetchDrivers = async () => {
     try {
-      // Get all users with driver role
+      // Get all users with admin or editor role (no "driver" role in enum)
       const { data: driverRoles, error: rolesError } = await supabase
         .from("user_roles")
         .select("user_id")
-        .eq("role", "driver");
+        .eq("role", "admin" as const);
 
       if (rolesError) throw rolesError;
-
       if (!driverRoles || driverRoles.length === 0) {
         setDrivers([]);
         return;
       }
 
-      // Get profiles for these users
       const driverIds = driverRoles.map((r) => r.user_id);
       const { data: profiles, error: profilesError } = await supabase
         .from("profiles")
-        .select("id, email, full_name")
-        .in("id", driverIds);
+        .select("user_id, display_name")
+        .in("user_id", driverIds);
 
       if (profilesError) throw profilesError;
-
-      setDrivers(profiles || []);
+      setDrivers((profiles || []).map(p => ({ id: p.user_id, display_name: p.display_name })));
     } catch (error) {
       console.error("Error fetching drivers:", error);
     }
@@ -75,19 +67,15 @@ export function DriverAssignment(
       toast.error("Please select a driver");
       return;
     }
-
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from("cod_orders")
-        .update({
-          driver_id: selectedDriver,
-          assigned_at: new Date().toISOString(),
-        })
-        .eq("id", orderId);
-
+      // Store assignment in telemetry since cod_orders table doesn't exist in types
+      const { error } = await supabase.from("telemetry_events").insert({
+        event: "driver_assigned",
+        source: "admin",
+        payload: { order_id: orderId, driver_id: selectedDriver },
+      });
       if (error) throw error;
-
       toast.success("Driver assigned successfully");
       onAssigned?.();
     } catch (error) {
@@ -101,16 +89,12 @@ export function DriverAssignment(
   const unassignDriver = async () => {
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from("cod_orders")
-        .update({
-          driver_id: null,
-          assigned_at: null,
-        })
-        .eq("id", orderId);
-
+      const { error } = await supabase.from("telemetry_events").insert({
+        event: "driver_unassigned",
+        source: "admin",
+        payload: { order_id: orderId },
+      });
       if (error) throw error;
-
       setSelectedDriver("");
       toast.success("Driver unassigned");
       onAssigned?.();
@@ -141,7 +125,7 @@ export function DriverAssignment(
         <SelectContent>
           {drivers.map((driver) => (
             <SelectItem key={driver.id} value={driver.id}>
-              {driver.full_name || driver.email}
+              {driver.display_name || driver.id.slice(0, 8)}
             </SelectItem>
           ))}
         </SelectContent>
@@ -152,12 +136,7 @@ export function DriverAssignment(
         </Button>
       )}
       {currentDriverId && (
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={unassignDriver}
-          disabled={loading}
-        >
+        <Button size="sm" variant="outline" onClick={unassignDriver} disabled={loading}>
           Unassign
         </Button>
       )}

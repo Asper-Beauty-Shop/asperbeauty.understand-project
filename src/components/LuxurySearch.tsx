@@ -24,9 +24,9 @@ import { formatJOD } from "@/lib/productImageUtils";
 interface SearchResult {
   id: string;
   title: string;
-  category: string;
+  primary_concern: string | null;
   image_url: string | null;
-  price: number;
+  price: number | null;
 }
 
 export const LuxurySearch = (
@@ -47,11 +47,11 @@ export const LuxurySearch = (
     const timer = setTimeout(async () => {
       const { data } = await supabase
         .from("products")
-        .select("id, title, category, image_url, price")
+        .select("id, title, primary_concern, image_url, price")
         .ilike("title", `%${query}%`)
         .limit(5);
 
-      if (data) setResults(data);
+      if (data) setResults(data as SearchResult[]);
     }, 300);
 
     return () => clearTimeout(timer);
