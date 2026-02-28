@@ -1,50 +1,30 @@
 
 
-## Restore the "Morning Spa" Design Foundation
+## Diagnosis: Blank Screen Root Cause
 
-The current homepage (`Index.tsx`) uses three components that conflict with the DESIGN_SYSTEM.md palette:
+The console error is definitive:
+```
+Error: VITE_SUPABASE_PUBLISHABLE_KEY environment variable is required
+```
 
-1. **`HeroSection.tsx`** — Gold particles on `#FFF8E1`, hardcoded hex colors, "Discover Your Ritual" layout
-2. **`CelestialFeaturedCollection.tsx`** — Dark `celestial-gradient` (merlot `#4A0404`) background
-3. **`BrandStory.tsx`** — Dark `asper-merlot` (#4A0404) background with gold text
+In `src/integrations/supabase/client.ts` (line 8-10), there's a hard `throw` that kills React before it can mount. The `ErrorBoundary` wraps `<App />` but can't catch errors thrown during **module evaluation** — the `supabase/client.ts` module is imported eagerly by multiple components, so the throw happens before React's render cycle begins.
 
-The target design uses `asper-stone` (#F2EFEB) ivory backgrounds, `burgundy` (#6B2D3A) for authority, `rose-clay` for warmth, and `polished-gold` for accents — the "Morning Spa" language already defined in `DESIGN_SYSTEM.md` and partially implemented in `src/components/home/Hero.tsx`.
+The `.env` file shown earlier was created during a previous AI edit session but no longer exists on disk. The Lovable secrets store has no `VITE_SUPABASE_PUBLISHABLE_KEY` entry either.
 
----
+## Fix Plan
 
-### Implementation Steps
+**1. Make the Supabase client resilient to missing env vars**
+- In `src/integrations/supabase/client.ts`, replace the hard `throw` with a fallback to the hardcoded anon key (which is already present as a fallback for `SUPABASE_URL`)
+- The anon key `eyJhbG...` from the original `.env` is a **publishable** key (safe to embed in client code), so hardcoding it as a fallback is the correct pattern — same as `SUPABASE_URL` already does on line 5
 
-**1. Swap the Hero component**
-- Replace `HeroSection` import in `Index.tsx` with `src/components/home/Hero.tsx` (full-screen video + glassmorphism card, "Curated by Pharmacists" headline, trust micro-badges)
-- Remove the old `HeroSection.tsx` gold-particle component from the homepage render
+Concrete change:
+```typescript
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://qqceibvalkoytafynwoc.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxY2VpYnZhbGtveXRhZnlud29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzc1OTUsImV4cCI6MjA4NTkxMzU5NX0.cnstN7JUhkt-hevIWhaeYRu1Y51tPSTi7eOBM6RLz4Y";
 
-**2. Retheme `CelestialFeaturedCollection` to Morning Spa palette**
-- Change section background from `bg-celestial-gradient` (dark merlot) to `bg-asper-stone` or `bg-rose-clay-light`
-- Update text colors from `text-asper-ivory` / `text-asper-gold` to `text-asper-ink` / `text-burgundy`
-- Replace `GlassGoldProductCard` with `luxury-card` pattern (white cards, `shadow-maroon-glow`, polished-gold hover border)
-- Update gold accent lines to use design system tokens
+// Remove the if/throw block entirely
+```
 
-**3. Retheme `BrandStory` to Morning Spa palette**
-- Change from `bg-asper-merlot` dark background to a warm split: `bg-asper-stone` with a `rose-clay-light` accent panel
-- Update headline from `text-asper-gold` to `text-burgundy` with `font-heading`
-- Change body text from `text-asper-ivory/80` to `text-asper-ink-muted`
-- Update feature list accent lines from `bg-asper-gold` to `bg-polished-gold`
-
-**4. Ensure Tailwind config has all DESIGN_SYSTEM.md tokens**
-- Add missing tokens to `tailwind.config.ts`: `asper-stone`, `asper-stone-light`, `asper-stone-dark`, `rose-clay`, `rose-clay-light`, `rose-clay-dark`, `polished-gold`, `asper-ink`, `asper-ink-muted`, `polished-white`
-- Add `shadow-maroon-glow` and `shadow-maroon-deep` custom shadows
-- Add `font-heading` alias mapping to Playfair Display
-
-**5. Clean up CSS variables in `index.css`**
-- Verify `--background` maps to warm ivory (not pure white)
-- Ensure body base styles use `bg-asper-stone text-asper-ink`
-
----
-
-### Technical Notes
-
-- The `src/components/home/Hero.tsx` already exists and is fully functional but unused on the homepage — it just needs to be swapped in
-- The Header and Footer already follow the Morning Spa palette (maroon nav bar, burgundy footer with gold accents) — no changes needed there
-- All hardcoded hex values (`#FFF8E1`, `#D4AF37`, `#4A0404`) in affected components will be replaced with Tailwind design tokens
-- The `celestial-gradient` background image in Tailwind config can remain for backward compatibility but will no longer be used on the homepage
+**2. Add `resolve.dedupe` to Vite config**
+- Add `dedupe: ["react", "react-dom"]` to `vite.config.ts` to prevent duplicate React instances after the force push (defensive measure per the stack overflow pattern)
 
