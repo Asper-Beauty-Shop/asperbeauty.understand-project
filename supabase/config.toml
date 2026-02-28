@@ -3,5 +3,62 @@ project_id = "qqceibvalkoytafynwoc"
 [functions.beauty-assistant]
 verify_jwt = false
 
-[functions.lab-tools]
+[functions.bulk-product-upload]
+verify_jwt = false
+
+[functions.create-cod-order]
+verify_jwt = false
+
+[functions.get-order-status]
+verify_jwt = false
+
+[functions.delete-account]
+verify_jwt = false
+
+[functions.enrich-products]
+verify_jwt = false
+
+[functions.scrape-product]
+verify_jwt = false
+
+[functions.generate-product-images]
+verify_jwt = false
+
+[functions.remove-background]
+verify_jwt = false
+
+[functions.verify-captcha]
+verify_jwt = false
+
+[functions.generate-embeddings]
+verify_jwt = false
+
+[functions.capture-bot-lead]
+verify_jwt = false
+
+[functions.get-products-by-concern]
+verify_jwt = false
+
+[functions.get-digital-tray]
+verify_jwt = false
+
+[functions.health-checks-ingest]
+verify_jwt = false
+
+[functions.log-concierge-events]
+verify_jwt = false
+
+[functions.log-telemetry]
+verify_jwt = false
+
+[functions.prescription-bridge]
+verify_jwt = false
+
+[functions.shopify-best-sellers]
+verify_jwt = false
+
+[functions.tray]
+verify_jwt = false
+
+[functions.gemini-tts]
 verify_jwt = false

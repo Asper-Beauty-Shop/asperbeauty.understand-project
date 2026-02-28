@@ -1,23 +1,65 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import type { ShopifyProduct } from '@/lib/shopify';
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import { ShopifyProduct } from "@/lib/shopify";
 
 interface WishlistStore {
   items: ShopifyProduct[];
+  isOpen: boolean;
+
+  // Actions
+  addItem: (product: ShopifyProduct) => void;
+  removeItem: (productId: string) => void;
   toggleItem: (product: ShopifyProduct) => void;
-  isInWishlist: (id: string) => boolean;
+  isInWishlist: (productId: string) => boolean;
+  clearWishlist: () => void;
+  setOpen: (open: boolean) => void;
 }
 
 export const useWishlistStore = create<WishlistStore>()(
   persist(
     (set, get) => ({
       items: [],
-      toggleItem: (product) => {
-        const exists = get().items.some(i => i.node.id === product.node.id);
-        set({ items: exists ? get().items.filter(i => i.node.id !== product.node.id) : [...get().items, product] });
+      isOpen: false,
+
+      addItem: (product) => {
+        const { items } = get();
+        const exists = items.some((item) => item.node.id === product.node.id);
+
+        if (!exists) {
+          set({ items: [...items, product] });
+        }
       },
-      isInWishlist: (id) => get().items.some(i => i.node.id === id),
+
+      removeItem: (productId) => {
+        set({
+          items: get().items.filter((item) => item.node.id !== productId),
+        });
+      },
+
+      toggleItem: (product) => {
+        const { items, addItem, removeItem } = get();
+        const exists = items.some((item) => item.node.id === product.node.id);
+
+        if (exists) {
+          removeItem(product.node.id);
+        } else {
+          addItem(product);
+        }
+      },
+
+      isInWishlist: (productId) => {
+        return get().items.some((item) => item.node.id === productId);
+      },
+
+      clearWishlist: () => {
+        set({ items: [] });
+      },
+
+      setOpen: (isOpen) => set({ isOpen }),
     }),
-    { name: 'asper-wishlist', storage: createJSONStorage(() => localStorage) }
-  )
+    {
+      name: "asper-wishlist",
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
 );

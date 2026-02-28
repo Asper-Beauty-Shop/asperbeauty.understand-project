@@ -1,116 +1,137 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Tajawal:wght@400;500;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Asper Beauty Shop — "Medical Luxury" Design System
-   Theme: Ivory & Gold | "The Sanctuary of Science"
-   All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    /* Canvas: Soft Ivory (#F8F8FF) — no pure #FFF */
-    --background: 240 100% 99%;
-    --foreground: 20 6% 20%;
+    /* Asper Beauty Quiet Luxury Palette */
 
-    /* Card: Clean white on ivory */
-    --card: 240 100% 99.5%;
-    --card-foreground: 20 6% 20%;
+    /* Cream #F3E5DC = HSL 25 47% 91% - Global Background */
+    --cream: 25 47% 91%;
+    --cream-dark: 25 35% 85%;
 
-    --popover: 240 100% 99.5%;
-    --popover-foreground: 20 6% 20%;
+    /* Gold Foil #D4AF37 = HSL 46 66% 52% - Accents & Borders */
+    --gold: 46 66% 52%;
+    --gold-light: 46 66% 62%;
+    --gold-glow: 46 66% 70%;
 
-    /* Primary Action: Deep Maroon (#800020) */
-    --primary: 345 100% 25%;
-    --primary-foreground: 240 100% 99%;
+    /* Deep Burgundy #4A0E19 = HSL 348 68% 17% - Header/Footer */
+    --burgundy: 348 68% 17%;
+    --burgundy-light: 348 58% 25%;
+    --burgundy-dark: 348 68% 12%;
 
-    /* Secondary: Soft ivory tint */
-    --secondary: 240 30% 96%;
-    --secondary-foreground: 345 100% 25%;
+    /* Dark Warm Brown #2C1A1D = HSL 350 25% 14% - Text */
+    --warm-brown: 350 25% 14%;
+    --warm-brown-light: 350 20% 35%;
 
-    /* Muted: Soft warm grey */
-    --muted: 240 12% 90%;
-    --muted-foreground: 20 6% 35%;
+    /* Primary backgrounds - Cream base */
+    --background: 25 47% 91%;
+    --foreground: 350 25% 14%;
 
-    /* Accent: Metallic Gold (#C5A028) */
-    --accent: 43 66% 46%;
-    --accent-foreground: 20 6% 20%;
+    --card: 25 40% 95%;
+    --card-foreground: 350 25% 14%;
 
-    /* Polite Error: Soft Terracotta */
-    --destructive: 15 60% 58%;
-    --destructive-foreground: 240 100% 99%;
+    --popover: 25 47% 91%;
+    --popover-foreground: 350 25% 14%;
 
-    /* Structure borders: subtle gold-tinted */
-    --border: 40 15% 88%;
-    --input: 40 15% 88%;
-    --ring: 345 100% 25%;
+    /* Deep Burgundy for primary accent surfaces */
+    --primary: 348 68% 17%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Soft cream for secondary surfaces */
+    --secondary: 25 35% 88%;
+    --secondary-foreground: 350 25% 14%;
+
+    --muted: 25 30% 85%;
+    --muted-foreground: 350 20% 40%;
+
+    /* Gold accent */
+    --accent: 46 66% 52%;
+    --accent-foreground: 350 25% 14%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 46 40% 75%;
+    --input: 46 40% 80%;
+    --ring: 46 66% 52%;
 
     --radius: 0.5rem;
 
-    /* Typography */
-    --font-heading: 'Playfair Display', Georgia, serif;
-    --font-body: 'Montserrat', 'Helvetica Neue', sans-serif;
-    --font-arabic: 'Tajawal', sans-serif;
+    /* Legacy token mappings for compatibility */
+    --maroon: 348 68% 17%;
+    --maroon-light: 348 58% 25%;
+    --maroon-dark: 348 68% 12%;
+    --rose: 350 45% 55%;
+    --rose-light: 350 50% 65%;
+    --shiny-gold: 46 66% 52%;
+    --soft-ivory: 25 47% 91%;
+    --dark-charcoal: 350 25% 14%;
 
-    /* Gold accent — Metallic Gold #C5A028 */
-    --gold: 43 66% 46%;
-    --gold-light: 43 55% 62%;
-    --gold-dark: 43 70% 36%;
+    /* Luxury Black/Charcoal #1A1A1A, #2D2D2D */
+    --luxury-black: 0 0% 10%;
+    --luxury-charcoal: 0 0% 18%;
 
-    /* Science Lab zone: faint maroon tint */
-    --lab-zone: 345 10% 97%;
+    --font-display: "Playfair Display", serif;
+    --font-body: "Inter", "Lato", sans-serif;
+    --font-script: "Great Vibes", cursive;
 
-    --sidebar-background: 240 30% 96%;
-    --sidebar-foreground: 20 6% 20%;
-    --sidebar-primary: 345 100% 25%;
-    --sidebar-primary-foreground: 240 100% 99%;
-    --sidebar-accent: 43 66% 46%;
-    --sidebar-accent-foreground: 20 6% 20%;
-    --sidebar-border: 40 15% 88%;
-    --sidebar-ring: 345 100% 25%;
+    --sidebar-background: 348 68% 17%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 348 68% 17%;
+    --sidebar-accent: 348 58% 25%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 348 58% 22%;
+    --sidebar-ring: 46 66% 52%;
   }
 
   .dark {
-    --background: 345 10% 7%;
-    --foreground: 40 20% 94%;
+    /* Dark mode with Burgundy base */
+    --background: 348 68% 10%;
+    --foreground: 25 47% 91%;
 
-    --card: 345 8% 10%;
-    --card-foreground: 40 20% 94%;
+    --card: 348 68% 14%;
+    --card-foreground: 25 47% 91%;
 
-    --popover: 345 8% 10%;
-    --popover-foreground: 40 20% 94%;
+    --popover: 348 68% 14%;
+    --popover-foreground: 25 47% 91%;
 
-    --primary: 345 60% 40%;
-    --primary-foreground: 240 100% 99%;
+    --primary: 25 47% 91%;
+    --primary-foreground: 348 68% 10%;
 
-    --secondary: 345 8% 14%;
-    --secondary-foreground: 40 20% 94%;
+    --secondary: 348 58% 18%;
+    --secondary-foreground: 25 47% 91%;
 
-    --muted: 345 6% 14%;
-    --muted-foreground: 345 6% 65%;
+    --muted: 348 50% 20%;
+    --muted-foreground: 25 30% 70%;
 
-    --accent: 43 66% 46%;
-    --accent-foreground: 345 10% 7%;
+    --accent: 46 66% 52%;
+    --accent-foreground: 348 68% 10%;
 
-    --destructive: 15 50% 45%;
-    --destructive-foreground: 40 20% 94%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 25 47% 91%;
 
-    --border: 345 6% 18%;
-    --input: 345 6% 18%;
-    --ring: 345 60% 40%;
+    --border: 348 50% 22%;
+    --input: 348 50% 22%;
+    --ring: 46 66% 52%;
 
-    --lab-zone: 345 15% 10%;
+    --burgundy: 348 68% 10%;
+    --burgundy-light: 348 58% 18%;
+    --cream: 25 47% 91%;
+    --gold: 46 66% 52%;
+    --gold-light: 46 66% 62%;
 
-    --sidebar-background: 345 10% 8%;
-    --sidebar-foreground: 40 20% 94%;
-    --sidebar-primary: 345 60% 40%;
-    --sidebar-primary-foreground: 240 100% 99%;
-    --sidebar-accent: 345 8% 14%;
-    --sidebar-accent-foreground: 40 20% 94%;
-    --sidebar-border: 345 6% 18%;
-    --sidebar-ring: 345 60% 40%;
+    --sidebar-background: 348 68% 10%;
+    --sidebar-foreground: 25 47% 91%;
+    --sidebar-primary: 25 47% 91%;
+    --sidebar-primary-foreground: 348 68% 10%;
+    --sidebar-accent: 348 58% 18%;
+    --sidebar-accent-foreground: 25 47% 91%;
+    --sidebar-border: 348 50% 22%;
+    --sidebar-ring: 46 66% 52%;
   }
 }
 
@@ -119,241 +140,567 @@
     @apply border-border;
   }
 
-  /* ─── Golden Focus Ring (Accessibility as Luxury) ─── */
-  *:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--gold) / 0.7), 0 0 12px hsl(var(--gold) / 0.2);
-  }
-  input:focus-visible, textarea:focus-visible, select:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 3px hsl(var(--gold) / 0.6);
-  }
-
   body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-body);
-  }
-
-  /* ─── Micro-Texture: Premium Paper Grain ─── */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.025;
-    pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: multiply;
-  }
-
-  /* ─── Branded Scrollbar ─── */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: hsl(var(--background));
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--primary));
-    border-radius: 10px;
-    border: 2px solid hsl(var(--background));
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(var(--primary) / 0.8);
-  }
-  /* Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--primary)) hsl(var(--background));
+    @apply bg-soft-ivory text-dark-charcoal font-body antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
+    @apply font-display font-bold text-maroon;
   }
 
-  /* RTL support — larger size + tighter spacing for Arabic elegance */
+  /* RTL / Arabic */
   [dir="rtl"] body {
-    font-family: var(--font-arabic);
-    font-size: 1.1em;
-    letter-spacing: 0;
+    @apply font-arabic;
   }
-  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
-    font-family: var(--font-arabic);
-    line-height: 1.6;
-    letter-spacing: 0;
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    @apply font-arabic;
   }
-  [dir="rtl"] p, [dir="rtl"] span, [dir="rtl"] a {
-    letter-spacing: 0;
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    font-family: "Playfair Display", "Tajawal", serif;
+  }
+}
+
+@layer components {
+  .luxury-container {
+    @apply max-w-7xl mx-auto px-6 lg:px-8;
+  }
+
+  .luxury-heading {
+    @apply font-display text-foreground tracking-wide;
+  }
+
+  .luxury-subheading {
+    @apply font-body text-muted-foreground tracking-widest uppercase text-xs;
+  }
+
+  .luxury-script {
+    @apply font-script text-accent;
+  }
+
+  /* Gold Accent Dividers */
+  .luxury-divider {
+    @apply w-16 h-px bg-gradient-to-r from-transparent via-accent to-transparent
+      mx-auto;
+  }
+
+  .gold-accent-line {
+    @apply h-px bg-gradient-to-r from-transparent via-gold to-transparent;
+  }
+
+  .gold-accent-line-left {
+    @apply h-px bg-gradient-to-r from-gold/80 via-gold/40 to-transparent;
+  }
+
+  .gold-accent-line-right {
+    @apply h-px bg-gradient-to-r from-transparent via-gold/40 to-gold/80;
+  }
+
+  /* Section Top Gold Accent */
+  .section-gold-top {
+    @apply relative;
+  }
+
+  .section-gold-top::before {
+    content: "";
+    @apply absolute top-0 left-1/2 -translate-x-1/2 w-48 h-px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--gold)),
+      transparent
+    );
+  }
+
+  /* Product Cards - Premium Luxury */
+  .luxury-card {
+    @apply bg-card border border-gold/20 rounded-lg overflow-hidden;
+    transition: all 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+      0 4px 20px -4px hsl(var(--warm-brown) / 0.08),
+      0 0 0 1px hsl(var(--gold) / 0.05);
+  }
+
+  .luxury-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 20px 40px -12px hsl(var(--warm-brown) / 0.15),
+      0 0 0 1px hsl(var(--gold) / 0.15),
+      0 0 40px -20px hsl(var(--gold) / 0.2);
+  }
+
+  .luxury-card-image {
+    @apply overflow-hidden;
+  }
+
+  .luxury-card-image img {
+    transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .luxury-card:hover .luxury-card-image img {
+    transform: scale(1.08);
+  }
+
+  /* Gradient Backgrounds */
+  .gradient-cream {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--cream)) 0%,
+      hsl(var(--cream-dark)) 100%
+    );
+  }
+
+  .gradient-burgundy {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--burgundy)) 0%,
+      hsl(var(--burgundy-dark)) 100%
+    );
+  }
+
+  .gradient-gold {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--gold)) 0%,
+      hsl(var(--gold-light)) 100%
+    );
+  }
+
+  .gradient-gold-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--gold-light)) 0%,
+      hsl(var(--gold)) 50%,
+      hsl(var(--gold-light)) 100%
+    );
+    background-size: 200% 100%;
+    animation: goldShimmer 3s ease-in-out infinite;
+  }
+
+  /* Premium Button Gradients */
+  .luxury-button {
+    @apply font-body tracking-widest uppercase text-xs py-4 px-8 relative
+      overflow-hidden;
+    transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .luxury-button-primary {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--burgundy)) 0%,
+      hsl(var(--burgundy-dark)) 100%
+    );
+    @apply text-primary-foreground;
+    box-shadow: 0 4px 20px -4px hsl(var(--burgundy) / 0.4);
+  }
+
+  .luxury-button-primary:hover {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--burgundy-light)) 0%,
+      hsl(var(--burgundy)) 100%
+    );
+    box-shadow:
+      0 8px 30px -4px hsl(var(--burgundy) / 0.5),
+      0 0 20px -4px hsl(var(--gold) / 0.3);
+    transform: translateY(-2px);
+  }
+
+  .luxury-button-secondary {
+    @apply bg-transparent text-primary border-2 border-gold;
+    box-shadow: 0 0 0 0 hsl(var(--gold) / 0);
+  }
+
+  .luxury-button-secondary:hover {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--gold) / 0.1) 0%,
+      hsl(var(--gold) / 0.05) 100%
+    );
+    box-shadow: 0 4px 20px -4px hsl(var(--gold) / 0.3);
+    transform: translateY(-2px);
+  }
+
+  .luxury-button-gold {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--gold)) 0%,
+      hsl(var(--gold-light)) 100%
+    );
+    @apply text-warm-brown;
+    box-shadow: 0 4px 20px -4px hsl(var(--gold) / 0.5);
+  }
+
+  .luxury-button-gold:hover {
+    box-shadow:
+      0 8px 30px -4px hsl(var(--gold) / 0.6),
+      0 0 30px -8px hsl(var(--gold) / 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Gold Icon Badges */
+  .icon-badge-gold {
+    @apply relative inline-flex items-center justify-center;
+  }
+
+  .icon-badge-gold::after {
+    content: "";
+    @apply absolute -inset-1 rounded-full opacity-0;
+    background: radial-gradient(circle, hsl(var(--gold) / 0.3), transparent);
+    transition: opacity 500ms ease;
+  }
+
+  .icon-badge-gold:hover::after {
+    @apply opacity-100;
+  }
+
+  /* Gold Shadow Layering */
+  .shadow-gold-sm {
+    box-shadow:
+      0 2px 8px -2px hsl(var(--warm-brown) / 0.1),
+      0 0 0 1px hsl(var(--gold) / 0.08);
+  }
+
+  .shadow-gold-md {
+    box-shadow:
+      0 4px 20px -4px hsl(var(--warm-brown) / 0.12),
+      0 0 0 1px hsl(var(--gold) / 0.1),
+      0 0 30px -15px hsl(var(--gold) / 0.15);
+  }
+
+  .shadow-gold-lg {
+    box-shadow:
+      0 8px 40px -8px hsl(var(--warm-brown) / 0.15),
+      0 0 0 1px hsl(var(--gold) / 0.12),
+      0 0 50px -20px hsl(var(--gold) / 0.25);
+  }
+
+  .shadow-gold-glow {
+    box-shadow:
+      0 0 40px -10px hsl(var(--gold) / 0.4),
+      0 0 80px -20px hsl(var(--gold) / 0.2);
+  }
+
+  /* Gold Border Accents */
+  .border-gold-gradient {
+    border: 1px solid transparent;
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-image:
+      linear-gradient(hsl(var(--card)), hsl(var(--card))),
+      linear-gradient(
+      135deg,
+      hsl(var(--gold) / 0.3),
+      hsl(var(--gold) / 0.1),
+      hsl(var(--gold) / 0.3)
+    );
+  }
+
+  /* Section Headers with Gold */
+  .section-header {
+    @apply relative text-center;
+  }
+
+  .section-header::after {
+    content: "";
+    @apply block w-24 h-px mx-auto mt-4;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--gold)),
+      transparent
+    );
+  }
+
+  .luxury-link {
+    @apply relative;
+    transition: color 500ms ease;
+  }
+
+  .luxury-link::after {
+    content: "";
+    @apply absolute w-full scale-x-0 h-px bottom-0 left-0 origin-bottom-right;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--gold) / 0.5),
+      hsl(var(--gold)),
+      hsl(var(--gold) / 0.5)
+    );
+    transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .luxury-link:hover::after {
+    @apply scale-x-100 origin-bottom-left;
+  }
+
+  /* Mega Menu */
+  .mega-menu {
+    @apply absolute left-0 right-0 bg-cream border-t shadow-gold-lg;
+    border-top-color: hsl(var(--gold) / 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mega-menu.open {
+    @apply opacity-100 visible;
+  }
+
+  /* Premium Card Overlay */
+  .card-overlay-gradient {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 40%,
+      hsl(var(--warm-brown) / 0.05) 70%,
+      hsl(var(--warm-brown) / 0.15) 100%
+    );
   }
 }
 
 @layer utilities {
-  .gold-border {
-    border-color: hsl(var(--gold));
+  /* Extended Transition Durations */
+  .duration-400 {
+    transition-duration: 400ms;
   }
-  .gold-text {
-    color: hsl(var(--gold));
+
+  .duration-500 {
+    transition-duration: 500ms;
   }
-  .font-heading {
-    font-family: var(--font-heading);
+
+  .duration-600 {
+    transition-duration: 600ms;
   }
-  .font-body {
-    font-family: var(--font-body);
+
+  .duration-700 {
+    transition-duration: 700ms;
   }
-  /* Warm colored shadow — "sitting in a warm room" */
-  .shadow-warm {
-    box-shadow: 0 4px 20px -4px hsl(var(--primary) / 0.08);
+
+  .duration-800 {
+    transition-duration: 800ms;
   }
-  .shadow-warm-lg {
-    box-shadow: 0 8px 30px -6px hsl(var(--primary) / 0.12);
+
+  .duration-1000 {
+    transition-duration: 1000ms;
+  }
+
+  .ease-luxury {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ease-luxury-out {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  /* Premium Animations */
+  .animate-fade-up {
+    animation: fadeUp 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-gold-pulse {
+    animation: goldPulse 3s ease-in-out infinite;
+  }
+
+  /* Staggered Animation Delays */
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+  .delay-600 {
+    animation-delay: 600ms;
+  }
+  .delay-700 {
+    animation-delay: 700ms;
+  }
+  .delay-800 {
+    animation-delay: 800ms;
+  }
+
+  /* Hover Transforms */
+  .hover-lift {
+    transition:
+      transform 500ms cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+
+  .hover-scale-subtle {
+    transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-scale-subtle:hover {
+    transform: scale(1.02);
   }
 }
 
-/* ─── Golden Thread Divider ─── */
-.gold-divider {
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    hsl(var(--gold) / 0.15) 15%,
-    hsl(var(--gold) / 0.5) 50%,
-    hsl(var(--gold) / 0.15) 85%,
-    transparent 100%
-  );
+/* Premium Keyframe Animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* ─── Glassmorphism Navigation ─── */
-.glass-nav {
-  background: hsl(var(--background) / 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-/* ─── Scroll Progress Bar ─── */
-.scroll-progress {
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes goldShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px -5px hsl(var(--gold) / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px -5px hsl(var(--gold) / 0.5);
+  }
+}
+
+@keyframes gold-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 4px 20px rgba(212, 175, 55, 0.5));
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.skeleton-shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Luxury Beauty Background - Full Page Subtle Overlay with Parallax */
+body::before {
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    hsl(var(--gold)),
-    hsl(var(--gold-light)),
-    hsl(var(--gold))
-  );
-  z-index: 100;
-  transition: width 0.1s linear;
+  right: 0;
+  bottom: 0;
+  background-image: url("/luxury-beauty-background.jpg");
+  background-size: 120% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: -1;
+  filter: sepia(0.3) saturate(0.7) brightness(1.1);
+  mix-blend-mode: multiply;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
-/* ─── Science Lab Zone ─── */
-.lab-zone {
-  background-color: hsl(var(--lab-zone));
-}
-
-/* ─── Concierge Badge (floating button) ─── */
-.concierge-badge {
-  box-shadow:
-    0 0 0 1px hsl(var(--gold) / 0.5),
-    0 8px 24px -4px hsl(var(--primary) / 0.25);
-}
-
-/* ─── Product Card Gold Stitch Hover ─── */
-.product-card-hover {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.35s ease;
-}
-.product-card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px -8px hsl(var(--gold) / 0.2);
-}
-
-/* ─── Button Ripple Effect ─── */
-.btn-ripple {
-  position: relative;
-  overflow: hidden;
-}
-.btn-ripple::after {
-  content: '';
+/* Hero Portrait Background - More Visible in Hero with Parallax */
+.hero-portrait-background {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, hsl(var(--primary-foreground) / 0.2) 10%, transparent 60%);
-  transform: scale(0);
-  opacity: 0;
-  transition: none;
-}
-.btn-ripple:active::after {
-  transform: scale(4);
-  opacity: 1;
-  transition: transform 0.5s ease, opacity 0.3s ease;
-}
-
-/* ─── Image Fade-In ─── */
-.img-fade-in {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-.img-fade-in.loaded {
-  opacity: 1;
-}
-
-/* ─── Gold Seal Rotation ─── */
-.gold-seal-rotate {
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.gold-seal-rotate:hover {
-  transform: rotate(360deg);
-}
-
-/* ─── Commercial Tape Marquee ─── */
-.commercial-tape:hover .commercial-tape-track {
-  animation-play-state: paused;
-}
-.commercial-tape-track {
-  animation: marquee-scroll 35s linear infinite;
-}
-[dir="rtl"] .commercial-tape-track {
-  animation: marquee-scroll-rtl 35s linear infinite;
-}
-@keyframes marquee-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-@keyframes marquee-scroll-rtl {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(50%); }
-}
-
-/* ─── Mobile Bottom Nav Spacing ─── */
-@media (max-width: 768px) {
-  .mobile-bottom-pad {
-    padding-bottom: 5rem;
-  }
-}
-
-/* ─── Day/Night Hero Modes ─── */
-.hero-morning {
-  /* Bright, sun-drenched feel */
-}
-.hero-afternoon {
-  /* Balanced, neutral */
-}
-.hero-evening {
-  background: linear-gradient(
-    135deg,
-    hsl(var(--background)) 0%,
-    hsl(345 30% 97%) 50%,
-    hsl(var(--background)) 100%
-  );
-}
-
-/* ─── Incognito Mode ─── */
-body.incognito-mode .product-image-incognito {
-  filter: blur(12px) saturate(0.3);
-  transition: filter 0.3s ease;
-}
-body.incognito-mode .product-title-incognito {
-  filter: blur(4px);
-  user-select: none;
-  transition: filter 0.3s ease;
+  inset: -20%;
+  background-image: url("/luxury-beauty-background.jpg");
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+  opacity: 0.08;
+  pointer-events: none;
+  filter: sepia(0.25) saturate(0.65) brightness(1.15);
+  mix-blend-mode: multiply;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform 0.1s ease-out;
 }

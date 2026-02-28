@@ -1,6 +1,11 @@
 import { cn } from "@/lib/utils";
-import { PARENT_TABS } from "@/lib/categoryMapping";
+import { CATEGORIES } from "@/lib/categoryMapping";
 import { useRef, useEffect } from "react";
+
+const PARENT_TABS = Object.values(CATEGORIES).map((cat) => ({
+  label: cat.title,
+  icon: cat.slug === "skin-care" ? "🧴" : cat.slug === "hair-care" ? "💇" : cat.slug === "make-up" ? "💄" : cat.slug === "body-care" ? "🧼" : cat.slug === "fragrances" ? "🌸" : "🔧",
+}));
 
 interface CategoryTabsProps {
   activeTab: string;
@@ -11,22 +16,14 @@ export function CategoryTabs({ activeTab, onTabChange }: CategoryTabsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLButtonElement>(null);
 
-  // Auto-scroll active tab into view
   useEffect(() => {
     if (activeRef.current && scrollRef.current) {
-      activeRef.current.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest",
-      });
+      activeRef.current.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     }
   }, [activeTab]);
 
   return (
-    <div
-      ref={scrollRef}
-      className="flex gap-1.5 overflow-x-auto scrollbar-hide py-1 -mx-1 px-1"
-    >
+    <div ref={scrollRef} className="flex gap-1.5 overflow-x-auto scrollbar-hide py-1 -mx-1 px-1">
       {PARENT_TABS.map((tab) => {
         const isActive = activeTab === tab.label;
         return (
