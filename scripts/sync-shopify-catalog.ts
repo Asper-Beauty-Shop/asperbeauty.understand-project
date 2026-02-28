@@ -38,7 +38,7 @@ const limitIdx = args.indexOf("--limit");
 const LIMIT = limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : Infinity;
 const csvArg = args.find((a) => !a.startsWith("--") && a !== args[limitIdx + 1]);
 const CSV_PATH =
-  csvArg || process.env.CSV_PATH || path.resolve("data/shopify-import-2.csv");
+  csvArg || process.env.CSV_PATH || path.resolve("data/shopify-import-3.csv");
 
 // ---------------------------------------------------------------------------
 // Helpers
