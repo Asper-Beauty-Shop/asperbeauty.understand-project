@@ -25,20 +25,36 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
 
-        // --- YOUR CUSTOM ASPER BRAND COLORS ---
-        asper: {
-          merlot: "#4A0404", // Deepest Burgundy (Main Backgrounds)
-          merlotLight: "#800020", // Lighter Maroon (Secondary/Gradients)
-          gold: "#D4AF37", // Metallic Gold (Primary Accents/Text)
-          goldLight: "#F3E5AB", // Champagne (Highlights/Hover states)
-          charcoal: "#1A1A1A", // Dark Text for light areas
-          ivory: "#F9F7F2", // Off-white for text on dark backgrounds
+        // --- DESIGN_SYSTEM.md Morning Spa Tokens ---
+        "asper-stone": {
+          DEFAULT: "#F2EFEB",
+          light: "#F8F6F3",
+          dark: "#E8E4DE",
         },
-        // Premium Pharmacy palette (verified science / trusted pharmacy)
-        maroon: "#800020", // Primary brand
-        "soft-ivory": "#F8F8FF", // Global background
-        "shiny-gold": "#C5A028", // Trust/accent (not bling)
-        "dark-charcoal": "#333333", // High readability text
+        "rose-clay": {
+          DEFAULT: "#C4A494",
+          light: "#D4B8A8",
+          dark: "#A88B7A",
+        },
+        "polished-gold": "#C9A962",
+        "polished-white": "#FAF9F7",
+        "asper-ink": {
+          DEFAULT: "#2C2825",
+          muted: "#5C5652",
+        },
+        // Legacy pharmacy tokens (backward compat)
+        asper: {
+          merlot: "#4A0404",
+          merlotLight: "#800020",
+          gold: "#D4AF37",
+          goldLight: "#F3E5AB",
+          charcoal: "#1A1A1A",
+          ivory: "#F9F7F2",
+        },
+        maroon: "#800020",
+        "soft-ivory": "#F8F8FF",
+        "shiny-gold": "#C5A028",
+        "dark-charcoal": "#333333",
         // --------------------------------------
         primary: {
           DEFAULT: "hsl(var(--primary))",

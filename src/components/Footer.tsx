@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ShieldCheck, Award, CheckCircle, Stethoscope } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
 import asperLogo from "@/assets/asper-logo.png";
@@ -293,9 +294,43 @@ export const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright Bar */}
+      {/* Trust & Credentials Bar */}
       <div className="border-t border-gold/30">
-        <div className="luxury-container py-6">
+        <div className="luxury-container py-8">
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-6">
+            <div className="flex items-center gap-2 text-cream/70">
+              <ShieldCheck className="w-4 h-4 text-gold" />
+              <span className="text-xs font-body uppercase tracking-wider">
+                {isArabic ? "صيدلية مرخصة" : "Licensed Pharmacy"}
+              </span>
+            </div>
+            <div className="w-px h-4 bg-gold/30 hidden sm:block" />
+            <div className="flex items-center gap-2 text-cream/70">
+              <Award className="w-4 h-4 text-gold" />
+              <span className="text-xs font-body uppercase tracking-wider">
+                {isArabic ? "معتمد من JFDA" : "JFDA Certified"}
+              </span>
+            </div>
+            <div className="w-px h-4 bg-gold/30 hidden sm:block" />
+            <div className="flex items-center gap-2 text-cream/70">
+              <CheckCircle className="w-4 h-4 text-gold" />
+              <span className="text-xs font-body uppercase tracking-wider">
+                {isArabic ? "أصلي 100%" : "100% Authentic"}
+              </span>
+            </div>
+            <div className="w-px h-4 bg-gold/30 hidden sm:block" />
+            <div className="flex items-center gap-2 text-cream/70">
+              <Stethoscope className="w-4 h-4 text-gold" />
+              <span className="text-xs font-body uppercase tracking-wider">
+                {isArabic ? "تمت مراجعته من صيدلي" : "Pharmacist Reviewed"}
+              </span>
+            </div>
+          </div>
+          <p className="text-center text-[10px] text-cream/40 font-body max-w-2xl mx-auto mb-4">
+            {isArabic
+              ? "قد يختلف تصميم العبوة عن الصورة المعروضة بسبب تحديثات الشركة المصنعة. المنتج والمكونات تبقى كما هي."
+              : "Packaging design may vary from images shown due to manufacturer updates. Product formulation and ingredients remain unchanged."}
+          </p>
           <p className="font-body text-xs text-cream/50 text-center">
             © 2026 Asper Beauty Shop.{" "}
             {isArabic ? "جميع الحقوق محفوظة." : "All Rights Reserved."}
