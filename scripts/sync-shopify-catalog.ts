@@ -84,6 +84,36 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
+/** Normalize CSV Type to one of the canonical product types */
+function normalizeProductType(raw: string): string {
+  const lower = raw.toLowerCase().trim();
+  const map: Record<string, string> = {
+    skincare: "Skin Care", "skin care": "Skin Care", "skin": "Skin Care",
+    cleanser: "Skin Care", serum: "Skin Care", moisturizer: "Skin Care",
+    toner: "Skin Care", mask: "Skin Care", "eye cream": "Skin Care",
+    sunscreen: "Skin Care", micellar: "Skin Care", exfoliant: "Skin Care",
+    makeup: "Makeup", lipstick: "Makeup", foundation: "Makeup",
+    concealer: "Makeup", mascara: "Makeup", blush: "Makeup",
+    eyeshadow: "Makeup", primer: "Makeup", "lip gloss": "Makeup",
+    "hair care": "Hair Care", haircare: "Hair Care", shampoo: "Hair Care",
+    conditioner: "Hair Care", "hair oil": "Hair Care", "hair mask": "Hair Care",
+    fragrance: "Fragrance", perfume: "Fragrance", cologne: "Fragrance",
+    "eau de": "Fragrance", oud: "Fragrance",
+    supplement: "Supplements", supplements: "Supplements", vitamin: "Supplements",
+    "baby care": "Baby Care", baby: "Baby Care", "mom & baby": "Baby Care",
+    "mom and baby": "Baby Care", maternity: "Baby Care",
+    "bath & body": "Bath & Body", "body lotion": "Bath & Body",
+    "body wash": "Bath & Body", soap: "Bath & Body",
+  };
+  for (const [key, val] of Object.entries(map)) {
+    if (lower.includes(key)) return val;
+  }
+  // If already one of the canonical types, return as-is with proper casing
+  const canonical = ["Skin Care", "Makeup", "Hair Care", "Fragrance", "Supplements", "Baby Care"];
+  const match = canonical.find((c) => c.toLowerCase() === lower);
+  return match || raw || "Skin Care";
+}
+
 // ---------------------------------------------------------------------------
 // CSV parser (minimal, handles quoted fields with commas/newlines)
 // ---------------------------------------------------------------------------
@@ -190,7 +220,7 @@ function groupProducts(rows: Record<string, string>[]): ProductGroup[] {
         title: row["Title"] || "",
         bodyHtml: row["Body (HTML)"] || "",
         vendor: row["Vendor"] || "Asper Beauty",
-        productType: type,
+        productType: normalizeProductType(type),
         tags,
         status: (row["Status"] || "active").toLowerCase(),
         seoTitle: row["SEO Title"] || "",
@@ -264,7 +294,7 @@ const PRODUCT_CREATE = `
 `;
 
 const PRODUCT_UPDATE = `
-  mutation ProductUpdate($input: ProductInput!) {
+  mutation ProductUpdate($input: ProductInput!, $media: [CreateMediaInput!]) {
     productUpdate(input: $input) {
       product {
         id
@@ -273,6 +303,15 @@ const PRODUCT_UPDATE = `
         }
       }
       userErrors { field message }
+    }
+  }
+`;
+
+const PRODUCT_MEDIA_CREATE = `
+  mutation ProductCreateMedia($productId: ID!, $media: [CreateMediaInput!]!) {
+    productCreateMedia(productId: $productId, media: $media) {
+      media { alt mediaContentType status }
+      mediaUserErrors { field message }
     }
   }
 `;
@@ -365,6 +404,16 @@ async function syncProduct(product: ProductGroup, index: number) {
     productId = existing.id;
     variantEdges =
       updateData?.productUpdate?.product?.variants?.edges || existing.variants.edges;
+
+    // Attach media on update via separate mutation
+    if (media.length > 0) {
+      try {
+        await adminGraphQL(PRODUCT_MEDIA_CREATE, { productId, media });
+      } catch (mediaErr: any) {
+        console.warn(`  ⚠️ ${tag} media upload skipped: ${mediaErr.message}`);
+      }
+    }
+
     console.log(`  ✅ ${tag}: updated`);
   } else {
     // CREATE
