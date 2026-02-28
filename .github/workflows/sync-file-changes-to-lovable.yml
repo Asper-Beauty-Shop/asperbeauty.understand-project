@@ -59,6 +59,7 @@ jobs:
             --argjson removed "$REMOVED" \
             '{repo: $repo, commit: $commit, sender: $sender, compare_url: $url, added: $added, modified: $modified, removed: $removed}')
           echo "Sending file changes to Lovable..."
-          curl -X POST "$LOVABLE_WEBHOOK_URL" \
+          curl -s -X POST "$LOVABLE_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
             -d "$PAYLOAD"
+          echo "Done."

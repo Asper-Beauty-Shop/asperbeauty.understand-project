@@ -1,8 +1,10 @@
-# Welcome to your Lovable project
+# Asper Beauty Shop
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**URL**: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6  
+**Live Site**: https://asperbeautyshop-com.lovable.app/  
+**Repository**: asperpharma/understand-project
 
 ## How can I edit this code?
 
@@ -10,7 +12,7 @@ There are several ways of editing your application.
 
 **Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Simply visit the [Lovable Project](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
@@ -24,13 +26,13 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/asperpharma/understand-project.git
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd understand-project
 
 # Step 3: Install the necessary dependencies.
-npm i
+npm install
 
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
@@ -59,15 +61,37 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase (Backend & AI)
+- Shopify (Commerce)
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Quick Deploy
 
-## Can I connect a custom domain to my Lovable project?
+Simply open [Lovable](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6) and click on Share → Publish.
+
+### Full Deployment Guide
+
+For a comprehensive deployment guide including environment setup, health checks, and verification steps, see [APPLY_TO_MAIN_SITE.md](./APPLY_TO_MAIN_SITE.md).
+
+This guide covers:
+- Environment variable configuration
+- Supabase authentication setup
+- GitHub Actions workflows
+- Health check and verification procedures
+- Social media and Google Merchant Center configuration
+
+## Custom Domain
 
 Yes, you can!
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Additional Documentation
+
+- **[DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md)** - Brand guidelines and design tokens
+- **[MAIN_PROJECT.md](./MAIN_PROJECT.md)** - Project overview and architecture
+- **[TEST_BRAIN_AND_CHATBOT.md](./TEST_BRAIN_AND_CHATBOT.md)** - Testing guide for AI features
+- **[docs/ROLE_AND_MANDATE.md](./docs/ROLE_AND_MANDATE.md)** - Development standards and practices
