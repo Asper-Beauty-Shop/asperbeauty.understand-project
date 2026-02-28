@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# Environment variables (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# Sync error logs
+data/sync-errors.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
