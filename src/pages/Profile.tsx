@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, ArrowLeft, Save, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import asperLogo from "@/assets/asper-lotus-logo.png";
+import asperLogo from "@/assets/asper-lotus-logo-optimized.webp";
 
 export default function Profile() {
   const { user, loading, signOut } = useAuth();
