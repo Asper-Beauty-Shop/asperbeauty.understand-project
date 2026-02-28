@@ -27,18 +27,18 @@ jobs:
             echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings"
             exit 1
           fi
-          
+
           # Debug: Show masked URL (only show protocol and first few characters)
           MASKED_URL=$(echo "$LOVABLE_WEBHOOK_URL" | sed -E 's|(https?://[^/]{0,10}).*|\1...|')
           echo "LOVABLE_WEBHOOK_URL=$MASKED_URL"
-          
+
           # Validate URL format
           if ! echo "$LOVABLE_WEBHOOK_URL" | grep -qE '^https?://'; then
             echo "Error: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
             echo "Expected format: https://api.lovable.ai/... or similar"
             exit 1
           fi
-          
+
           echo "Gathering lists of changed files..."
           ADDED=$(jq -r '.commits[].added[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
           MODIFIED=$(jq -r '.commits[].modified[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
