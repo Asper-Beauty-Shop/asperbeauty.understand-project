@@ -327,10 +327,27 @@ serve(async (req) => {
     const userId = user.id;
     console.log("Authenticated user:", userId);
 
-    const { messages } = await req.json();
+    const body = await req.json();
+    const { messages, source: campaignSource } = body;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
+    }
+
+    // Log campaign source attribution to telemetry_events if present
+    if (campaignSource) {
+      const adminClient = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      );
+      adminClient.from("telemetry_events").insert({
+        user_id: userId,
+        event: "deep_link_campaign",
+        source: "ai_concierge",
+        payload: { campaign_source: campaignSource },
+      }).then(({ error }) => {
+        if (error) console.error("Telemetry insert error:", error.message);
+      });
     }
 
     // Extract last user message for product matching
