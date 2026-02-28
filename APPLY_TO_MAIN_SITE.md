@@ -26,6 +26,7 @@ Open **[Lovable → Settings → Environment variables](https://lovable.dev/proj
 | `VITE_SHOPIFY_STOREFRONT_TOKEN` | *(your Storefront API token)* |
 | `VITE_SHOPIFY_API_VERSION` | `2025-07` |
 | `VITE_SITE_URL` | `https://asperbeautyshop-com.lovable.app/` |
+| `VITE_LOVABLE_URL` | `asperbeautyshop-com.lovable.app` |
 
 - [ ] All vars saved → trigger redeploy
 
@@ -256,7 +257,7 @@ If you have a new or updated CSV catalog to push to the store that feeds the mai
 | Main site | https://asperbeautyshop-com.lovable.app/ |
 | Lovable settings | https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings |
 | GitHub repo | https://github.com/asperpharma/understand-project |
-| Supabase project | rgehleqcubtmcwyipyvi |
+| Supabase project | qqceibvalkoytafynwoc |
 | Env template | `env.main-site.example` (this folder) |
 | Design system | `DESIGN_SYSTEM.md` |
 | Single source of truth | `MAIN_PROJECT.md` |
