@@ -25,6 +25,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Shop = lazy(() => import("./pages/Shop"));
 const Health = lazy(() => import("./pages/Health"));
+const MomBaby = lazy(() => import("./pages/MomBaby"));
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ function AppContent() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin/enrichment" element={<AdminEnrichment />} />
           <Route path="/health" element={<Health />} />
+          <Route path="/mom-baby" element={<MomBaby />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

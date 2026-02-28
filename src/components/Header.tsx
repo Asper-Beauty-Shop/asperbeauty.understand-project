@@ -49,6 +49,9 @@ export const Header = () => {
             <Link to="/shop" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors font-body">
               {t("nav.shop")}
             </Link>
+            <Link to="/mom-baby" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors font-body">
+              {locale === "ar" ? "الأم والطفل" : "Mom & Baby"}
+            </Link>
             <Link to="/products" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors font-body">
               Products
             </Link>
