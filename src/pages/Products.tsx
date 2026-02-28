@@ -4,6 +4,7 @@ import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProductCard } from "@/components/ShopifyProductCard";
 import { useProductEnrichmentBulk } from "@/hooks/useProductEnrichment";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { CategoryTabs } from "@/components/CategoryTabs";
 import { ConcernFilter } from "@/components/ConcernFilter";
 import { VendorFilter, buildVendorQuery } from "@/components/VendorFilter";
 import { CartDrawer } from "@/components/CartDrawer";
@@ -11,8 +12,8 @@ import { ProductGridSkeleton } from "@/components/skeletons/ProductSkeletons";
 import MobileFilterButton from "@/components/MobileFilterButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Package, ArrowLeft, Search, SlidersHorizontal, X } from "lucide-react";
-import { buildTypeQuery } from "@/lib/categoryMapping";
+import { Package, ArrowLeft, Search, X } from "lucide-react";
+import { buildTypeQuery, buildTabTypeQuery, getGroupsForTab } from "@/lib/categoryMapping";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -23,14 +24,22 @@ import asperLogo from "@/assets/asper-lotus-logo.png";
 const Products = () => {
   const [searchInput, setSearchInput] = useState("");
   const [activeQuery, setActiveQuery] = useState<string | undefined>();
+  const [activeTab, setActiveTab] = useState("All");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
   const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
+  // Get sub-groups visible for the active tab
+  const visibleGroups = useMemo(() => getGroupsForTab(activeTab), [activeTab]);
+
   const buildQuery = () => {
     const parts: string[] = [];
     if (activeQuery) parts.push(activeQuery);
+    // Tab-level type filter
+    const tabQuery = buildTabTypeQuery(activeTab);
+    if (tabQuery) parts.push(`(${tabQuery})`);
+    // Sub-category type filter (within the active tab)
     const typeQuery = buildTypeQuery(selectedTypes);
     if (typeQuery) parts.push(`(${typeQuery})`);
     const vendorQuery = buildVendorQuery(selectedVendors);
@@ -39,6 +48,12 @@ const Products = () => {
   };
 
   const { data, isLoading, error } = useShopifyProducts(buildQuery(), 24);
+
+  // Reset sub-category selections when switching tabs
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setSelectedTypes([]);
+  };
 
   const handles = useMemo(
     () => (data?.products || []).map((p) => p.node.handle),
@@ -54,7 +69,7 @@ const Products = () => {
 
   const filterSidebar = (
     <div className="space-y-4">
-      <CategoryFilter selected={selectedTypes} onSelect={setSelectedTypes} />
+      <CategoryFilter selected={selectedTypes} onSelect={setSelectedTypes} groups={visibleGroups} />
       <Separator />
       <VendorFilter selected={selectedVendors} onSelect={setSelectedVendors} />
     </div>
@@ -103,6 +118,11 @@ const Products = () => {
               <Search className="h-4 w-4" />
             </Button>
           </form>
+
+          {/* Top-level category tabs */}
+          <div className="mt-5">
+            <CategoryTabs activeTab={activeTab} onTabChange={handleTabChange} />
+          </div>
 
           {/* Active filter pills */}
           {totalFilters > 0 && (
