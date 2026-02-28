@@ -2,7 +2,7 @@
 
 ## Active Pull Requests
 
-### PR #35: Update all pull requests related to understand project
+### PR #35: Update all pull requests related to understand-project
 
 - **Branch Name**: `copilot/update-understand-project-prs`
 - **State**: Open (Draft)

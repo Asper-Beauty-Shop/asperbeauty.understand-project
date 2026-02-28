@@ -8,7 +8,7 @@ The understand-project repository is a React/TypeScript e-commerce application i
 
 ## Active Pull Requests
 
-### PR #35: Update all pull requests related to understand project
+### PR #35: Update all pull requests related to understand-project
 - **Branch**: `copilot/update-understand-project-prs`
 - **Status**: Open (Draft)
 - **Created**: 2026-02-28
