@@ -17,7 +17,6 @@ on:
 jobs:
   sync_to_lovable:
     runs-on: ubuntu-latest
-    if: secrets.LOVABLE_WEBHOOK_URL != ''
     steps:
       - name: Send event data to Lovable
         env:
@@ -25,9 +24,9 @@ jobs:
         run: |
           # Validate that LOVABLE_WEBHOOK_URL is set
           if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "Error: LOVABLE_WEBHOOK_URL is not set"
-            echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings"
-            exit 1
+            echo "Warning: LOVABLE_WEBHOOK_URL is not set"
+            echo "Skipping event sync. Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
+            exit 0
           fi
 
           # Debug: Show masked URL (only show protocol and domain)
