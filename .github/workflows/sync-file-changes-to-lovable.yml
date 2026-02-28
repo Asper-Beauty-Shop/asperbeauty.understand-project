@@ -16,8 +16,10 @@ on:
 jobs:
   sync_files_to_lovable:
     runs-on: ubuntu-latest
+    if: secrets.LOVABLE_WEBHOOK_URL != ''
     steps:
       - name: Filter commit file changes and send to Lovable
+        continue-on-error: true
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
@@ -35,6 +37,6 @@ jobs:
             --argjson removed "$REMOVED" \
             '{repo: $repo, commit: $commit, sender: $sender, compare_url: $url, added: $added, modified: $modified, removed: $removed}')
           echo "Sending file changes to Lovable..."
-          curl -X POST "$LOVABLE_WEBHOOK_URL" \
+          curl -s -f -X POST "$LOVABLE_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d "$PAYLOAD"
+            -d "$PAYLOAD" || echo "Webhook call failed (non-fatal)."

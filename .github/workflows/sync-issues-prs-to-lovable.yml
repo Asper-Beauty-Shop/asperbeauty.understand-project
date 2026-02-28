@@ -20,6 +20,7 @@ jobs:
     if: secrets.LOVABLE_WEBHOOK_URL != ''
     steps:
       - name: Send event data to Lovable
+        continue-on-error: true
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
@@ -34,7 +35,7 @@ jobs:
             --arg body "${{ github.event.issue.body || github.event.pull_request.body }}" \
             '{event_name: $event_name, action: $action, repo: $repo, sender: $sender, url: $url, title: $title, body: $body}'
           )
-          curl -s -X POST "$LOVABLE_WEBHOOK_URL" \
+          curl -s -f -X POST "$LOVABLE_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d "$PAYLOAD"
+            -d "$PAYLOAD" || echo "Webhook call failed (non-fatal)."
           echo "Done."
