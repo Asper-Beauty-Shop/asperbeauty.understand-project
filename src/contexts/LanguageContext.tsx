@@ -1,74 +1,301 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-type Locale = "en" | "ar";
+type Language = "en" | "ar";
 
-interface LanguageContextValue {
-  locale: Locale;
-  dir: "ltr" | "rtl";
-  toggle: () => void;
-  t: (key: string) => string;
+interface Translations {
+  // Navigation
+  home: string;
+  collections: string;
+  shopByCategory: string;
+  brands: string;
+  bestSellers: string;
+  offers: string;
+  contactUs: string;
+  search: string;
+  cart: string;
+
+  // Collections
+  hairCare: string;
+  bodyCare: string;
+  makeUp: string;
+  skincare: string;
+  fragrances: string;
+  toolsDevices: string;
+
+  // Hero
+  heroTitle: string;
+  heroSubtitle: string;
+  discoverCollections: string;
+  scroll: string;
+
+  // Products
+  addToBag: string;
+  addToCart: string;
+  addedToBag: string;
+  premiumProduct: string;
+  noImage: string;
+  quantity: string;
+  selectSize: string;
+  selectColor: string;
+  inStock: string;
+  outOfStock: string;
+
+  // Cart
+  shoppingCart: string;
+  cartEmpty: string;
+  itemsInCart: string;
+  total: string;
+  checkout: string;
+  checkoutWithShopify: string;
+  creatingCheckout: string;
+  remove: string;
+
+  // Footer
+  navigation: string;
+  customerCare: string;
+  legal: string;
+  stayConnected: string;
+  subscribeText: string;
+  yourEmail: string;
+  subscribe: string;
+  privacyPolicy: string;
+  termsOfService: string;
+  cookiePolicy: string;
+  accessibility: string;
+  shippingInfo: string;
+  returnsExchanges: string;
+  orderTracking: string;
+  faq: string;
+  newArrivals: string;
+  giftSets: string;
+  allRightsReserved: string;
+  beautyShop: string;
+
+  // Pages
+  exploreCollections: string;
+  discoverBrands: string;
+  topSellers: string;
+  specialOffers: string;
+  getInTouch: string;
+  loadingProducts: string;
+  noProductsFound: string;
+  backToHome: string;
+  productNotFound: string;
 }
 
-const translations: Record<string, Record<Locale, string>> = {
-  "nav.shop": { en: "Shop", ar: "تسوق" },
-  "nav.intelligence": { en: "Intelligence", ar: "الذكاء" },
-  "nav.concierge": { en: "AI Concierge", ar: "المساعد الذكي" },
-  "nav.about": { en: "About", ar: "عن أسبر" },
-  "nav.shop_now": { en: "Shop Now", ar: "تسوق الآن" },
-  "hero.badge": { en: "THE FUTURE OF DERMO-RETAIL", ar: "مستقبل التجميل الطبي" },
-  "hero.title_1": { en: "Curated by Pharmacists.", ar: "بإشراف صيدلاني." },
-  "hero.title_2": { en: "Powered by Intelligence.", ar: "مدعوم بالذكاء." },
-  "hero.subtitle": {
-    en: "We do not just sell cosmetics. We dispense beauty through intelligence. Bridging the gap between clinical dermocosmetics and everyday essentials.",
-    ar: "لا نبيع مستحضرات تجميل فحسب. نقدم الجمال من خلال الذكاء. نسد الفجوة بين مستحضرات التجميل الطبية والاحتياجات اليومية.",
+const translations: Record<Language, Translations> = {
+  en: {
+    // Navigation
+    home: "Home",
+    collections: "Collections",
+    shopByCategory: "Shop By Category",
+    brands: "Brands",
+    bestSellers: "Best Sellers",
+    offers: "Offers",
+    contactUs: "Contact Us",
+    search: "Search",
+    cart: "Cart",
+
+    // Collections
+    hairCare: "Hair Care",
+    bodyCare: "Body Care",
+    makeUp: "Make Up",
+    skincare: "Skincare",
+    fragrances: "Fragrances",
+    toolsDevices: "Tools & Devices",
+
+    // Hero
+    heroTitle: "Unbox Pure Indulgence",
+    heroSubtitle:
+      "Discover our curated collection of premium beauty boxes, crafted with the finest ingredients for discerning individuals.",
+    discoverCollections: "Discover Collections",
+    scroll: "Scroll",
+
+    // Products
+    addToBag: "Add to Bag",
+    addToCart: "Add to Cart",
+    addedToBag: "Added to bag",
+    premiumProduct: "Premium beauty product",
+    noImage: "No image",
+    quantity: "Quantity",
+    selectSize: "Select Size",
+    selectColor: "Select Color",
+    inStock: "In Stock",
+    outOfStock: "Out of Stock",
+
+    // Cart
+    shoppingCart: "Shopping Cart",
+    cartEmpty: "Your cart is empty",
+    itemsInCart: "items in your cart",
+    total: "Total",
+    checkout: "Checkout",
+    checkoutWithShopify: "Checkout with Shopify",
+    creatingCheckout: "Creating Checkout...",
+    remove: "Remove",
+
+    // Footer
+    navigation: "Navigation",
+    customerCare: "Customer Care",
+    legal: "Legal",
+    stayConnected: "Stay Connected",
+    subscribeText: "Subscribe to receive exclusive offers and updates.",
+    yourEmail: "Your email",
+    subscribe: "Subscribe",
+    privacyPolicy: "Privacy Policy",
+    termsOfService: "Terms of Service",
+    cookiePolicy: "Cookie Policy",
+    accessibility: "Accessibility",
+    shippingInfo: "Shipping Info",
+    returnsExchanges: "Returns & Exchanges",
+    orderTracking: "Order Tracking",
+    faq: "FAQ",
+    newArrivals: "New Arrivals",
+    giftSets: "Gift Sets",
+    allRightsReserved: "All rights reserved.",
+    beautyShop: "Beauty Shop",
+
+    // Pages
+    exploreCollections: "Explore Collections",
+    discoverBrands: "Discover Brands",
+    topSellers: "Top Sellers",
+    specialOffers: "Special Offers",
+    getInTouch: "Get In Touch",
+    loadingProducts: "Loading products...",
+    noProductsFound: "No products found",
+    backToHome: "Back to Home",
+    productNotFound: "Product not found",
   },
-  "hero.cta_primary": { en: "Find My Ritual", ar: "اكتشف روتيني" },
-  "hero.cta_secondary": { en: "Shop All Brands", ar: "تصفح العلامات" },
-  "hero.authentic": { en: "100% Authentic", ar: "أصلي 100%" },
-  "hero.temperature": { en: "Temperature Controlled", ar: "تخزين مُبرّد" },
-  "hero.pharmacist_led": { en: "Pharmacist Led", ar: "بإشراف صيدلاني" },
-  "hero.sanctuary": { en: "The Sanctuary of Science", ar: "حرم العلم" },
-  "footer.tagline": {
-    en: '"We do not just sell cosmetics; we dispense beauty through intelligence."',
-    ar: '"لا نبيع مستحضرات تجميل فحسب؛ بل نقدم الجمال من خلال الذكاء."',
+  ar: {
+    // Navigation
+    home: "الرئيسية",
+    collections: "المجموعات",
+    shopByCategory: "تسوق حسب الفئة",
+    brands: "العلامات التجارية",
+    bestSellers: "الأكثر مبيعاً",
+    offers: "العروض",
+    contactUs: "اتصل بنا",
+    search: "بحث",
+    cart: "السلة",
+
+    // Collections
+    hairCare: "العناية بالشعر",
+    bodyCare: "العناية بالجسم",
+    makeUp: "المكياج",
+    skincare: "العناية بالبشرة",
+    fragrances: "العطور",
+    toolsDevices: "الأدوات والأجهزة",
+
+    // Hero
+    heroTitle: "افتح صندوق الفخامة",
+    heroSubtitle:
+      "اكتشف مجموعتنا المختارة من صناديق التجميل الفاخرة، المصنوعة بأجود المكونات للأفراد المميزين.",
+    discoverCollections: "اكتشف المجموعات",
+    scroll: "مرر",
+
+    // Products
+    addToBag: "أضف إلى الحقيبة",
+    addToCart: "أضف إلى السلة",
+    addedToBag: "تمت الإضافة",
+    premiumProduct: "منتج تجميل فاخر",
+    noImage: "لا توجد صورة",
+    quantity: "الكمية",
+    selectSize: "اختر الحجم",
+    selectColor: "اختر اللون",
+    inStock: "متوفر",
+    outOfStock: "غير متوفر",
+
+    // Cart
+    shoppingCart: "سلة التسوق",
+    cartEmpty: "سلتك فارغة",
+    itemsInCart: "منتجات في سلتك",
+    total: "المجموع",
+    checkout: "الدفع",
+    checkoutWithShopify: "الدفع عبر شوبيفاي",
+    creatingCheckout: "جاري إنشاء الطلب...",
+    remove: "إزالة",
+
+    // Footer
+    navigation: "التنقل",
+    customerCare: "خدمة العملاء",
+    legal: "قانوني",
+    stayConnected: "ابقَ على تواصل",
+    subscribeText: "اشترك لتلقي العروض الحصرية والتحديثات.",
+    yourEmail: "بريدك الإلكتروني",
+    subscribe: "اشترك",
+    privacyPolicy: "سياسة الخصوصية",
+    termsOfService: "شروط الخدمة",
+    cookiePolicy: "سياسة ملفات تعريف الارتباط",
+    accessibility: "إمكانية الوصول",
+    shippingInfo: "معلومات الشحن",
+    returnsExchanges: "الإرجاع والاستبدال",
+    orderTracking: "تتبع الطلب",
+    faq: "الأسئلة الشائعة",
+    newArrivals: "وصل حديثاً",
+    giftSets: "مجموعات الهدايا",
+    allRightsReserved: "جميع الحقوق محفوظة.",
+    beautyShop: "متجر التجميل",
+
+    // Pages
+    exploreCollections: "استكشف المجموعات",
+    discoverBrands: "اكتشف العلامات التجارية",
+    topSellers: "الأكثر مبيعاً",
+    specialOffers: "عروض خاصة",
+    getInTouch: "تواصل معنا",
+    loadingProducts: "جاري تحميل المنتجات...",
+    noProductsFound: "لم يتم العثور على منتجات",
+    backToHome: "العودة للرئيسية",
+    productNotFound: "المنتج غير موجود",
   },
-  "footer.copyright": { en: "Asper Beauty Shop. The Sanctuary of Science.", ar: "أسبر بيوتي شوب. حرم العلم." },
-  "lang.switch": { en: "العربية", ar: "English" },
 };
 
-const LanguageContext = createContext<LanguageContextValue | null>(null);
+interface LanguageContextType {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: Translations;
+  isRTL: boolean;
+}
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>(() => {
-    return (localStorage.getItem("asper-locale") as Locale) || "en";
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined,
+);
+
+export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+  const [language, setLanguageState] = useState<Language>(() => {
+    const saved = localStorage.getItem("asper-language");
+    return (saved as Language) || "en";
   });
 
-  const dir = locale === "ar" ? "rtl" : "ltr";
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem("asper-language", lang);
+  };
+
+  const isRTL = language === "ar";
 
   useEffect(() => {
-    document.documentElement.dir = dir;
-    document.documentElement.lang = locale;
-    localStorage.setItem("asper-locale", locale);
-  }, [locale, dir]);
-
-  const toggle = useCallback(() => {
-    setLocale((prev) => (prev === "en" ? "ar" : "en"));
-  }, []);
-
-  const t = useCallback(
-    (key: string) => translations[key]?.[locale] ?? key,
-    [locale]
-  );
+    document.documentElement.dir = isRTL ? "rtl" : "ltr";
+    document.documentElement.lang = language;
+  }, [language, isRTL]);
 
   return (
-    <LanguageContext.Provider value={{ locale, dir, toggle, t }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage, t: translations[language], isRTL }}
+    >
       {children}
     </LanguageContext.Provider>
   );
-}
+};
 
-export function useLanguage() {
-  const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("useLanguage must be used within LanguageProvider");
-  return ctx;
-}
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error("useLanguage must be used within a LanguageProvider");
+  }
+  return context;
+};

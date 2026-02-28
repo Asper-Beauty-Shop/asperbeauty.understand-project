@@ -1,109 +1,218 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import type { Product } from "@/hooks/useProducts";
-import { Package, Shield } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ShopifyProduct } from "@/lib/shopify";
+import { useCartStore } from "@/stores/cartStore";
+import { useWishlistStore } from "@/stores/wishlistStore";
+import { toast } from "sonner";
+import { Heart, Sparkles, Star } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { QuickViewModal } from "./QuickViewModal";
+import { translateTitle } from "@/lib/productUtils";
+import { formatJOD } from "@/lib/productImageUtils";
+import { OptimizedImage } from "./OptimizedImage";
 
-function formatStep(step: string) {
-  return step.replace(/^Step_\d+_/, "").replace(/([A-Z])/g, " $1").trim();
+interface ProductCardProps {
+  product: ShopifyProduct;
 }
 
-function formatConcern(concern: string) {
-  return concern.replace("Concern_", "");
-}
+export const ProductCard = ({ product }: ProductCardProps) => {
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
+  const { node } = product;
+  const addItem = useCartStore((state) => state.addItem);
+  const setCartOpen = useCartStore((state) => state.setOpen);
+  const { toggleItem, isInWishlist } = useWishlistStore();
+  const { t, language } = useLanguage();
 
-export function ProductCard({ product }: { product: Product }) {
-  const isGold = product.gold_stitch_tier;
+  const isWishlisted = isInWishlist(node.id);
+
+  const firstVariant = node.variants.edges[0]?.node;
+  const firstImage = node.images.edges[0]?.node;
+  const price = node.priceRange.minVariantPrice;
+
+  // Check for badges based on tags
+  const tags = node.tags ?? [];
+  const isBestseller = Array.isArray(tags)
+    ? tags.some((tag: string) => tag.toLowerCase().includes("bestseller"))
+    : typeof tags === "string" && tags.toLowerCase().includes("bestseller");
+
+  // Check if product is new (created within last 30 days)
+  const createdAt = node.createdAt ?? null;
+  const isNewArrival = createdAt
+    ? (Date.now() - new Date(createdAt).getTime()) < 30 * 24 * 60 * 60 * 1000
+    : false;
+
+  // Check for sale/discount
+  const compareAtPrice = firstVariant?.compareAtPrice;
+  const currentPrice = parseFloat(firstVariant?.price?.amount || price.amount);
+  const originalPrice = compareAtPrice
+    ? parseFloat(compareAtPrice.amount)
+    : null;
+  const isOnSale = originalPrice && originalPrice > currentPrice;
+  const discountPercent = isOnSale
+    ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
+    : 0;
+
+  // Premium Pharmacy: Verified / Pharmacist Verified badge
+  const isVerified = Array.isArray(tags)
+    ? tags.some((tag: string) => /verified|pharmacist|authentic/i.test(tag))
+    : typeof tags === "string" && /verified|pharmacist|authentic/i.test(tags);
+
+  // Extract brand from vendor or title
+  const brand = node.vendor ?? node.title.split(" ")[0];
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!firstVariant) return;
+
+    addItem({
+      product,
+      variantId: firstVariant.id,
+      variantTitle: firstVariant.title,
+      price: firstVariant.price,
+      quantity: 1,
+      selectedOptions: firstVariant.selectedOptions,
+    });
+
+    toast.success(t.addedToBag, {
+      description: node.title,
+      position: "top-center",
+    });
+
+    setCartOpen(true);
+  };
+
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleItem(product);
+
+    if (!isWishlisted) {
+      toast.success("Added to wishlist", {
+        description: node.title,
+        position: "top-center",
+      });
+    }
+  };
 
   return (
-    <Card
-      className={cn(
-        "group overflow-hidden bg-card transition-all hover:-translate-y-1",
-        isGold
-          ? "border-accent/60 hover:border-accent hover:shadow-[0_8px_30px_-8px_hsl(var(--accent)/0.35)]"
-          : "border-border/50 hover:shadow-lg"
-      )}
-    >
-      <div className="relative aspect-square bg-background flex items-center justify-center overflow-hidden">
-        {product.image_url && !product.image_url.includes("example.com") ? (
-          <img
-            src={product.image_url}
-            alt={product.title}
-            className="h-full w-full object-contain p-4 transition-transform group-hover:scale-105"
-            loading="lazy"
-            style={{ filter: "drop-shadow(4px 6px 12px rgba(128, 0, 32, 0.1))" }}
-          />
-        ) : (
-          <Package className="h-16 w-16 text-muted-foreground/40" />
+    <Link to={`/product/${node.handle}`} className="group block">
+      {/* Premium Pharmacy card: white, soft-ivory context, gold border on hover */}
+      <div className="relative bg-white rounded-lg p-4 transition-all duration-300 border border-transparent hover:border-shiny-gold hover:shadow-lg">
+        {/* Trust seal */}
+        {isVerified && (
+          <div className="absolute top-2 right-2 z-10">
+            <Badge className="bg-soft-ivory text-shiny-gold border border-shiny-gold text-xs font-bold uppercase tracking-wider">
+              Verified
+            </Badge>
+          </div>
         )}
-        {product.clinical_badge && (
-          <span className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2 py-0.5 text-[10px] font-medium text-foreground shadow-sm">
-            <Shield className="h-3 w-3 text-primary" />
-            {product.clinical_badge}
-          </span>
-        )}
-        {isGold && (
-          <span className="absolute top-2 right-2 text-accent text-lg">★</span>
-        )}
-      </div>
-      <CardContent className="p-4 space-y-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="space-y-1 min-w-0">
-            {product.brand && (
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                {product.brand}
-              </p>
+
+        {/* Image Container */}
+        <div className="aspect-square overflow-hidden rounded-md bg-gray-50 mb-4">
+          {firstImage
+            ? (
+              <OptimizedImage
+                src={firstImage.url}
+                alt={firstImage.altText || node.title}
+                className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                width={400}
+                height={400}
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              />
+            )
+            : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                <span className="text-dark-charcoal/60 font-body text-sm">
+                  {t.noImage}
+                </span>
+              </div>
             )}
-            <h3 className="font-semibold text-sm leading-tight text-foreground line-clamp-2">
-              {product.title}
-            </h3>
-          </div>
-          {product.price && (
-            <span className="text-sm font-bold text-foreground whitespace-nowrap">
-              ${Number(product.price).toFixed(2)}
-            </span>
-          )}
         </div>
 
-        {product.texture_profile && (
-          <p className="text-[11px] italic text-muted-foreground">
-            {product.texture_profile}
+        {/* Content - clean & clinical */}
+        <div className="space-y-1">
+          <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+            {brand}
           </p>
-        )}
-
-        <div className="flex flex-wrap gap-1.5">
-          <Badge variant="secondary" className="text-[10px] font-medium">
-            {formatStep(product.regimen_step)}
-          </Badge>
-          <Badge variant="outline" className="text-[10px] font-medium">
-            {formatConcern(product.primary_concern)}
-          </Badge>
-          {product.is_hero && (
-            <Badge className="text-[10px] bg-primary text-primary-foreground">
-              Hero
-            </Badge>
-          )}
-          {product.ai_persona_lead && (
-            <Badge variant="outline" className="text-[10px] font-medium border-accent/50 text-accent-foreground">
-              {product.ai_persona_lead === "dr_sami" ? "🔬 Dr. Sami" : "✨ Ms. Zain"}
-            </Badge>
-          )}
+          <h3 className="font-display text-lg text-dark-charcoal leading-tight line-clamp-2">
+            {translateTitle(node.title, language)}
+          </h3>
+          <div className="flex items-center gap-2 mt-2">
+            {isOnSale && originalPrice && (
+              <span className="text-xs text-gray-500 line-through">
+                {formatJOD(originalPrice)}
+              </span>
+            )}
+            <p className="text-maroon font-bold">
+              {formatJOD(currentPrice)}
+            </p>
+          </div>
         </div>
 
-        {product.key_ingredients && product.key_ingredients.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {product.key_ingredients.slice(0, 3).map((ing) => (
-              <span key={ing} className="text-[10px] rounded-full bg-muted px-1.5 py-0.5 text-muted-foreground">
-                {ing}
-              </span>
-            ))}
+        {/* Bestseller / New / Sale badges - top left */}
+        {(isBestseller || isNewArrival || isOnSale) && (
+          <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5">
+            {isBestseller && (
+              <div
+                className="w-7 h-7 rounded-full bg-shiny-gold flex items-center justify-center shadow-md"
+                title="Bestseller"
+              >
+                <Star className="w-3.5 h-3.5 text-white fill-white" />
+              </div>
+            )}
+            {isNewArrival && !isBestseller && (
+              <div
+                className="w-7 h-7 rounded-full bg-shiny-gold flex items-center justify-center shadow-md"
+                title="New Arrival"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-white" />
+              </div>
+            )}
+            {isOnSale && (
+              <div className="px-2 py-1 bg-maroon text-white text-xs font-medium rounded-full">
+                -{discountPercent}%
+              </div>
+            )}
           </div>
         )}
 
-        <p className="text-xs text-muted-foreground">
-          {product.inventory_total} in stock
-        </p>
-      </CardContent>
-    </Card>
+        {/* Wishlist - top right (below Verified if present) */}
+        <button
+          type="button"
+          onClick={handleWishlistToggle}
+          aria-label={isWishlisted
+            ? (language === "ar" ? "إزالة من المفضلة" : "Remove from wishlist")
+            : (language === "ar" ? "إضافة إلى المفضلة" : "Add to wishlist")}
+          className={`absolute top-2 right-2 z-20 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+            isVerified ? "top-10" : ""
+          } ${
+            isWishlisted
+              ? "bg-shiny-gold text-white"
+              : "bg-white/90 text-dark-charcoal/70 md:opacity-0 md:group-hover:opacity-100 hover:bg-shiny-gold hover:text-white"
+          }`}
+        >
+          <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
+        </button>
+
+        {/* Quick Add - appears on hover (Premium Pharmacy: Add to Regimen) */}
+        <button
+          type="button"
+          onClick={handleAddToCart}
+          className="w-full mt-4 bg-maroon text-white py-2 rounded text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        >
+          {language === "ar" ? "إضافة إلى النظام" : "Add to Regimen"}
+        </button>
+      </div>
+
+      <QuickViewModal
+        product={product}
+        isOpen={isQuickViewOpen}
+        onClose={() => setIsQuickViewOpen(false)}
+      />
+    </Link>
   );
-}
+};

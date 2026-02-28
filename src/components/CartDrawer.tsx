@@ -1,167 +1,325 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Leaf, ShieldCheck } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  ArrowLeft,
+  Loader2,
+  Lock,
+  Minus,
+  Plus,
+  Trash2,
+  Truck,
+  X,
+} from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
-import { ShareRegimenButton } from "@/components/ShareRegimenButton";
-import { normalizePrice } from "@/lib/shopify";
+import { toast } from "sonner";
+import { ASPER_PROTOCOL } from "@/lib/asperProtocol";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translateTitle } from "@/lib/productUtils";
+import { CODCheckoutForm, OrderSuccess } from "./CODCheckoutForm";
+
+const FREE_SHIPPING_THRESHOLD = 50; // JOD
 
 export const CartDrawer = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-  const { items, isLoading, isSyncing, updateQuantity, removeItem, getCheckoutUrl, syncCart } = useCartStore();
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + (normalizePrice(item.price.amount) * item.quantity), 0);
+  const [checkoutMode, setCheckoutMode] = useState<"cart" | "cod" | "success">(
+    "cart",
+  );
+  const [orderNumber, setOrderNumber] = useState<string>("");
 
-  useEffect(() => { if (isOpen) syncCart(); }, [isOpen, syncCart]);
+  const {
+    items,
+    isLoading,
+    isOpen,
+    updateQuantity,
+    removeItem,
+    setOpen,
+    getTotalPrice,
+    getCheckoutUrl,
+    syncCart,
+  } = useCartStore();
 
-  /* ─── Swipe-to-dismiss: track right-swipe on SheetContent ─── */
-  const touchStartX = useRef(0);
-  const touchStartY = useRef(0);
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  }, []);
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
-    if (dx > 80 && dy < 60) setIsOpen(false); // swipe right → dismiss
-  }, []);
+  const totalPrice = getTotalPrice();
+  const { t, isRTL, language } = useLanguage();
+  const isArabic = language === "ar";
+
+  // Calculate shipping progress
+  const amountToFreeShipping = Math.max(
+    0,
+    FREE_SHIPPING_THRESHOLD - totalPrice,
+  );
+  const shippingProgress = Math.min(
+    100,
+    (totalPrice / FREE_SHIPPING_THRESHOLD) * 100,
+  );
+  const hasFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
 
   const handleCheckout = () => {
-    setIsOpen(false);
-    navigate("/checkout");
+    const checkoutUrl = getCheckoutUrl();
+    if (checkoutUrl) {
+      window.open(checkoutUrl, "_blank");
+      setOpen(false);
+    } else {
+      toast.error(isArabic ? ASPER_PROTOCOL.checkoutUnavailable.ar : ASPER_PROTOCOL.checkoutUnavailable.en);
+    }
+  };
+
+  // Sync cart when drawer opens
+  const handleDrawerOpen = (open: boolean) => {
+    if (open) syncCart();
+    handleOpenChange(open);
+  };
+
+  const handleCODSuccess = (orderNum: string) => {
+    setOrderNumber(orderNum);
+    setCheckoutMode("success");
+  };
+
+  const handleCloseAfterSuccess = () => {
+    setCheckoutMode("cart");
+    setOrderNumber("");
+    setOpen(false);
+  };
+
+  const handleBackToCart = () => {
+    setCheckoutMode("cart");
+  };
+
+  // Reset checkout mode when drawer closes
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setCheckoutMode("cart");
+    }
+    setOpen(open);
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="relative">
-          <ShoppingCart className="h-5 w-5" />
-          {totalItems > 0 && (
-            <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-primary text-primary-foreground">
-              {totalItems}
-            </Badge>
-          )}
-        </Button>
-      </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg flex flex-col h-full bg-background transition-transform duration-700 ease-luxury" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-        <SheetHeader className="flex-shrink-0">
-          <SheetTitle className="font-heading text-2xl">Your Regimen</SheetTitle>
-          <SheetDescription className="font-body">
-            {totalItems === 0 ? "Your regimen is empty" : `${totalItems} item${totalItems !== 1 ? 's' : ''} curated for you`}
-          </SheetDescription>
-        </SheetHeader>
-        <div className="flex flex-col flex-1 pt-6 min-h-0">
-          {items.length === 0 ? (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary/5 border border-primary/10">
-                  <ShoppingCart className="h-10 w-10 text-primary/40" />
-                </div>
-                <p className="font-heading text-lg font-semibold text-foreground mb-1">Your regimen is empty</p>
-                <p className="text-sm text-muted-foreground font-body mb-4">Need a recommendation?</p>
-                <a href="/intelligence" className="text-sm font-body font-semibold text-primary hover:text-primary/80 transition-colors">
-                  Ask Dr. Sami →
-                </a>
+    <Sheet open={isOpen} onOpenChange={handleDrawerOpen}>
+      <SheetContent
+        className={`w-full sm:max-w-md flex flex-col h-full bg-background p-0 ${
+          isRTL ? "border-r border-l-0" : "border-l"
+        } border-gold/20`}
+        side={isRTL ? "left" : "right"}
+      >
+        {/* Header */}
+        <SheetHeader className="flex-shrink-0 px-6 pt-6 pb-4 border-b border-gold/20">
+          <div className="flex items-center justify-between">
+            {checkoutMode === "cod" && (
+              <button
+                onClick={handleBackToCart}
+                className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors mr-2"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+            )}
+            <SheetTitle className="font-serif text-xl text-foreground tracking-wide flex-1">
+              {checkoutMode === "success"
+                ? (isArabic ? "تم الطلب" : "Order Placed")
+                : checkoutMode === "cod"
+                ? (isArabic ? "الدفع عند الاستلام" : "Cash on Delivery")
+                : (isArabic ? "اختياراتك" : "Your Selection")}
+            </SheetTitle>
+            <button
+              onClick={() => handleOpenChange(false)}
+              className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Shipping Progress Bar - Only show in cart mode */}
+          {checkoutMode === "cart" && items.length > 0 && (
+            <div className="mt-4">
+              <div className="h-1 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gold transition-all duration-500 ease-out rounded-full"
+                  style={{ width: `${shippingProgress}%` }}
+                />
               </div>
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                {hasFreeShipping
+                  ? (isArabic
+                    ? "🎁 شحن مجاني مفعّل!"
+                    : "🎁 Complimentary Shipping Unlocked!")
+                  : (isArabic
+                    ? `أنت على بعد ${
+                      amountToFreeShipping.toFixed(0)
+                    } دينار من الشحن المجاني`
+                    : `You are ${
+                      amountToFreeShipping.toFixed(0)
+                    } JOD away from Complimentary Shipping`)}
+              </p>
             </div>
-          ) : (
+          )}
+        </SheetHeader>
+
+        <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+          {/* Success Mode */}
+          {checkoutMode === "success" && (
+            <div className="flex-1 p-6">
+              <OrderSuccess
+                orderNumber={orderNumber}
+                onClose={handleCloseAfterSuccess}
+              />
+            </div>
+          )}
+
+          {/* COD Checkout Mode */}
+          {checkoutMode === "cod" && (
+            <div className="flex-1 p-6 overflow-y-auto">
+              <CODCheckoutForm
+                onSuccess={handleCODSuccess}
+                onCancel={handleBackToCart}
+              />
+            </div>
+          )}
+
+          {/* Cart Mode */}
+          {checkoutMode === "cart" && (
             <>
-              <div className="flex-1 overflow-y-auto pr-2 min-h-0">
-                <div className="space-y-4">
-                  {items.map((item) => (
-                    <div key={item.variantId} className="flex gap-4 p-3 rounded-lg border border-border/50 bg-card shadow-maroon-glow">
-                      {/* Square, object-contain image */}
-                      <div className="w-16 h-16 bg-background rounded-md overflow-hidden flex-shrink-0 border border-border/30 flex items-center justify-center">
-                        {item.product.node.images?.edges?.[0]?.node && (
-                          <img
-                            src={item.product.node.images.edges[0].node.url}
-                            alt={item.product.node.title}
-                            className="w-full h-full object-contain p-1"
-                          />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-body font-semibold text-sm truncate text-primary">{item.product.node.title}</h4>
-                        <p className="text-xs text-muted-foreground font-body">{item.selectedOptions.map(o => o.value).join(' · ')}</p>
-                        <p className="font-body font-semibold text-sm text-foreground mt-1">
-                          <span className="text-[10px] align-top mr-0.5 font-normal text-muted-foreground">{item.price.currencyCode}</span>
-                          {normalizePrice(item.price.amount).toFixed(2)}
-                        </p>
-                      </div>
-                      <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeItem(item.variantId)}>
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                        <div className="flex items-center gap-1">
-                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.variantId, item.quantity - 1)}>
-                            <Minus className="h-3 w-3" />
-                          </Button>
-                          <span className="w-8 text-center text-sm font-body">{item.quantity}</span>
-                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.variantId, item.quantity + 1)}>
-                            <Plus className="h-3 w-3" />
-                          </Button>
-                        </div>
+              {items.length === 0
+                ? (
+                  <div className="flex-1 flex items-center justify-center p-6">
+                    <div className="text-center">
+                      <p className="text-muted-foreground text-sm">
+                        {isArabic ? "سلتك فارغة" : "Your selection is empty"}
+                      </p>
+                    </div>
+                  </div>
+                )
+                : (
+                  <>
+                    {/* Cart Items - Scrollable */}
+                    <div className="flex-1 overflow-y-auto px-6 py-4 min-h-0">
+                      <div className="space-y-4">
+                        {items.map((item) => (
+                          <div
+                            key={item.variantId}
+                            className="flex gap-4 group"
+                          >
+                            {/* Thumbnail */}
+                            <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden flex-shrink-0">
+                              {item.product.node.images?.edges?.[0]?.node && (
+                                <img
+                                  src={item.product.node.images.edges[0].node
+                                    .url}
+                                  alt={item.product.node.title}
+                                  className="w-full h-full object-cover"
+                                />
+                              )}
+                            </div>
+
+                            {/* Info */}
+                            <div className="flex-1 min-w-0 flex flex-col justify-center">
+                              <p className="text-xs text-muted-foreground uppercase tracking-wide">
+                                {item.product.node.vendor || "Brand"}
+                              </p>
+                              <h4 className="font-serif text-sm text-foreground leading-tight line-clamp-2 mt-0.5">
+                                {translateTitle(
+                                  item.product.node.title,
+                                  language,
+                                )}
+                              </h4>
+                              <p className="text-sm text-foreground mt-1">
+                                {parseFloat(item.price.amount).toFixed(3)}{" "}
+                                {item.price.currencyCode}
+                              </p>
+                            </div>
+
+                            {/* Quantity Stepper & Remove */}
+                            <div className="flex flex-col items-end justify-between flex-shrink-0">
+                              <button
+                                onClick={() => removeItem(item.variantId)}
+                                className="text-muted-foreground hover:text-foreground transition-colors opacity-0 group-hover:opacity-100"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+
+                              {/* Stepper */}
+                              <div className="flex items-center border border-border rounded overflow-hidden">
+                                <button
+                                  onClick={() =>
+                                    updateQuantity(
+                                      item.variantId,
+                                      item.quantity - 1,
+                                    )}
+                                  className="w-7 h-7 flex items-center justify-center text-foreground hover:bg-muted transition-colors"
+                                >
+                                  <Minus className="h-3 w-3" />
+                                </button>
+                                <span className="w-8 text-center text-sm text-foreground">
+                                  {item.quantity}
+                                </span>
+                                <button
+                                  onClick={() =>
+                                    updateQuantity(
+                                      item.variantId,
+                                      item.quantity + 1,
+                                    )}
+                                  className="w-7 h-7 flex items-center justify-center text-foreground hover:bg-muted transition-colors"
+                                >
+                                  <Plus className="h-3 w-3" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  ))}
-                </div>
 
-                {/* Pharmacist Verification Badge */}
-                <div className="mt-6 flex items-center gap-2.5 rounded-lg border border-accent/20 bg-accent/5 px-4 py-3">
-                  <ShieldCheck className="h-5 w-5 text-accent shrink-0" />
-                  <div>
-                    <p className="text-xs font-body font-semibold text-foreground">Verified by Dr. Sami</p>
-                    <p className="text-[10px] text-muted-foreground font-body">All items checked for safety & interactions.</p>
-                  </div>
-                </div>
+                    {/* Footer - Pinned to Bottom */}
+                    <div className="flex-shrink-0 p-6 border-t border-gold/20 bg-background">
+                      {/* Subtotal */}
+                      <div className="flex justify-between items-center mb-4">
+                        <span className="text-muted-foreground">
+                          {isArabic ? "المجموع الفرعي" : "Subtotal"}
+                        </span>
+                        <span className="font-serif text-lg text-foreground">
+                          {totalPrice.toFixed(3)}{" "}
+                          {items[0]?.price.currencyCode || "JOD"}
+                        </span>
+                      </div>
 
-                {/* Smart Cross-Sell */}
-                <div className="mt-4 rounded-lg border border-accent/30 bg-card p-4 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Leaf className="h-4 w-4 text-accent" />
-                    <p className="text-xs font-body font-semibold text-accent uppercase tracking-wider">Complete the Routine</p>
-                  </div>
-                  <p className="text-sm font-body text-muted-foreground">
-                    Add a moisturizer to lock in your treatment's benefits overnight.
-                  </p>
-                  <a href="/products?q=moisturizer" className="text-xs font-body font-semibold text-primary hover:text-primary/80 transition-colors">
-                    Browse Moisturizers →
-                  </a>
-                </div>
-              </div>
-
-              {/* Footer — Totals + Checkout */}
-              <div className="flex-shrink-0 space-y-4 pt-4 border-t border-border">
-                <div className="flex justify-end">
-                  <ShareRegimenButton />
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold font-heading">Total</span>
-                  <span className="text-xl font-bold text-foreground font-body">
-                    <span className="text-xs align-top mr-0.5 font-normal text-muted-foreground">{items[0]?.price.currencyCode || 'JOD'}</span>
-                    {totalPrice.toFixed(2)}
-                  </span>
-                </div>
-                <Button
-                  onClick={handleCheckout}
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 btn-ripple h-12 text-sm uppercase tracking-widest"
-                  size="lg"
-                  disabled={items.length === 0 || isLoading || isSyncing}
-                >
-                  {isLoading || isSyncing ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <>
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Checkout with Shopify
-                    </>
-                  )}
-                </Button>
-              </div>
+                      {/* Checkout: Shopify (card) or COD */}
+                      <div className="flex flex-col gap-2">
+                        <button
+                          onClick={handleCheckout}
+                          disabled={
+                            items.length === 0 ||
+                            isLoading ||
+                            !getCheckoutUrl()
+                          }
+                          className="w-full py-3 border-2 border-foreground text-foreground font-medium text-sm tracking-wide uppercase transition-all hover:bg-foreground hover:text-background disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                          {isLoading
+                            ? <Loader2 className="w-4 h-4 animate-spin" />
+                            : (
+                              <>
+                                <Lock className="w-4 h-4" />
+                                {isArabic
+                                  ? "الدفع بالبطاقة (Shopify)"
+                                  : "Pay with Card (Shopify)"}
+                              </>
+                            )}
+                        </button>
+                        <button
+                          onClick={() => setCheckoutMode("cod")}
+                          disabled={items.length === 0 || isLoading}
+                          className="w-full py-3.5 bg-foreground text-background font-medium text-sm tracking-wide uppercase transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                          <Truck className="w-4 h-4" />
+                          {isArabic
+                            ? "الدفع عند الاستلام"
+                            : "Cash on Delivery"}
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
             </>
           )}
         </div>
