@@ -95,7 +95,7 @@ export default function Profile() {
 
         {/* Header */}
         <div className="text-center space-y-3">
-          <img src={asperLogo} alt="Asper" className="h-10 w-auto mx-auto" />
+          <img src={asperLogo} alt="Asper" width={40} height={40} className="h-10 w-auto mx-auto" />
           <h1 className="font-heading text-2xl font-bold text-foreground">My Profile</h1>
           <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
         </div>
