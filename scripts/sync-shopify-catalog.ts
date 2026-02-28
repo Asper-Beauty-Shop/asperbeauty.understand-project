@@ -592,8 +592,8 @@ async function syncProduct(product: ProductGroup, index: number, total: number) 
     }
   }
 
-  // 3. Publish to storefront if --publish flag is set
-  if (PUBLISH) {
+  // 3. Publish to storefront (auto-publish new active products, or if --publish flag)
+  if (PUBLISH || (!existing && product.status === "active")) {
     await publishProduct(productId);
   }
 
