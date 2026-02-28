@@ -1,41 +1,23 @@
-import { Badge } from "@/components/ui/badge";
-import { ShieldCheck, Leaf, Heart, Award, FlaskConical } from "lucide-react";
+import { ShieldCheck, Award, FlaskConical, Leaf } from "lucide-react";
 
-const certifications = [
-  { icon: ShieldCheck, label: "JFDA Certified", detail: "Jordan Food & Drug Administration" },
-  { icon: Leaf, label: "Cruelty-Free", detail: "No animal testing — ever" },
-  { icon: Heart, label: "Dermatologist Tested", detail: "Clinically validated formulas" },
-  { icon: Award, label: "Authenticity Guaranteed", detail: "Direct from authorized distributors" },
-  { icon: FlaskConical, label: "Cold-Chain Verified", detail: "Temperature-controlled logistics" },
+const badges = [
+  { icon: ShieldCheck, label: "JFDA CERTIFIED" },
+  { icon: Award, label: "100% AUTHENTIC GUARANTEED" },
+  { icon: FlaskConical, label: "PHARMACIST VETTED" },
+  { icon: Leaf, label: "CRUELTY-FREE" },
 ];
 
 const ClinicalProof = () => {
   return (
-    <section className="py-16 sm:py-20 border-y border-accent/15 bg-gradient-to-b from-background via-secondary/30 to-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <Badge variant="outline" className="mb-4 border-accent text-accent font-body text-xs tracking-[0.2em] px-4 py-1.5">
-            CLINICAL PROOF & CERTIFICATION
-          </Badge>
-          <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground">
-            Trusted by <span className="text-primary">Science</span>, Verified by <span className="text-accent">Standards</span>
-          </h2>
-          <p className="mt-3 text-muted-foreground text-base max-w-xl mx-auto font-body">
-            Every product in our pharmacy meets the highest clinical and ethical standards.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-          {certifications.map((cert) => (
-            <div
-              key={cert.label}
-              className="group flex flex-col items-center text-center max-w-[140px]"
-            >
-              <div className="w-16 h-16 rounded-full border-2 border-accent/20 bg-card flex items-center justify-center mb-3 group-hover:border-accent/50 group-hover:shadow-emerald-glow transition-all duration-400">
-                <cert.icon className="h-7 w-7 text-primary group-hover:text-accent transition-colors duration-400" />
-              </div>
-              <span className="font-heading text-sm font-semibold text-foreground mb-0.5">{cert.label}</span>
-              <span className="text-[11px] text-muted-foreground font-body leading-snug">{cert.detail}</span>
+    <section className="py-10 sm:py-12 bg-white border-t border-border/30">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 md:flex md:items-center md:justify-between gap-8 md:gap-12">
+          {badges.map((badge) => (
+            <div key={badge.label} className="flex items-center gap-3 justify-center md:justify-start">
+              <badge.icon className="h-5 w-5 text-accent shrink-0" strokeWidth={1.6} />
+              <span className="font-body text-[11px] sm:text-xs tracking-[0.15em] uppercase text-foreground font-medium">
+                {badge.label}
+              </span>
             </div>
           ))}
         </div>
