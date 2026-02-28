@@ -1,40 +1,76 @@
 
 
-## Fix Plan: Resolve All TypeScript Build Errors
+## Summary
 
-The site is currently broken due to multiple TypeScript errors. Here's the fix plan organized by file:
+Three issues to fix:
 
-### Critical Blocker (Build Crash)
+1. **ManyChat extraction** — Currently reads `data.text`. The user wants `messaging[0].message.text`. This aligns with ManyChat's actual webhook payload structure.
 
-1. **`src/pages/BrandVichy.tsx`** — Replace the entire file with a simple redirect component. The file imports a missing asset `@/assets/brands/vichy-hero.jpg` that doesn't exist. Replace with `Navigate to="/brands"`.
+2. **Gorgias extraction** — Currently reads `body.messages[last].body_text`. The user wants `body.message.body_text` (singular `message` object, not array). Will add this as a fallback path.
 
-### Type Mismatches
+3. **Old Supabase project ID** — Three source files and `config.toml` still reference the obsolete `rgehleqcubtmcwyipyvi`. Must update to `qqceibvalkoytafynwoc`.
 
-2. **`src/components/ProductQuickView.tsx`** — Change `price: number` to `price: number | null` in the `Product` interface (line 30) to match what `ProductCatalog` passes.
+---
 
-3. **`src/components/LuxurySearch.tsx`** — The `SearchResult` interface at line 24 doesn't have `category`. The error at line 171 says `Property 'category' does not exist`. Current code at line 171 uses `product.primary_concern` which is correct. This error may already be resolved — will verify, but if `category` is referenced elsewhere in the file, replace with `primary_concern`.
+## Changes
 
-4. **`src/pages/ManageProducts.tsx`** — The `Product` interface is missing properties the DB returns, and `insert` call is missing required fields:
-   - Add `brand?: string | null`, `clinical_badge?: string | null`, `pharmacist_note?: string | null` to form data insert object
-   - Add `handle`, `primary_concern`, `regimen_step` as required fields in the insert payload (they're already in `formData`)
-   - Cast `setProducts` data with `as Product[]` or add index signature
+### A. Update `extractFromManyChat` in `supabase/functions/beauty-assistant/index.ts`
 
-5. **`src/pages/BulkUpload.tsx`** — Status mapping mismatch: queue uses `"done"`/`"error"` but type expects `"completed"`/`"failed"`. The current fix at lines 128-132 maps these correctly. Verify this is still present.
+Add `messaging[0].message.text` as the primary extraction path:
 
-6. **`src/hooks/useProductFilter.ts`** — Type casting at line 134 needs `as unknown as ShopifyProduct[]` pattern. Currently uses a partial cast. Fix the generic type assertion.
+```typescript
+function extractFromManyChat(body: Record<string, unknown>): { message: string } {
+  // ManyChat webhook: messaging[0].message.text
+  const messaging = Array.isArray(body.messaging) ? body.messaging : [];
+  const firstMsg = messaging[0] as Record<string, unknown> | undefined;
+  const msgObj = firstMsg?.message as Record<string, unknown> | undefined;
 
-7. **`src/pages/ConcernCollection.tsx`** — Same `filterProductsByConcern` casting issue. Currently uses `as any` + `as unknown as ShopifyProduct[]` which should work. Verify.
+  const text =
+    typeof msgObj?.text === "string" ? msgObj.text
+    : typeof (body.data as any)?.text === "string" ? (body.data as any).text
+    : typeof (body as any).text === "string" ? (body as any).text
+    : typeof (body as any).message === "string" ? (body as any).message
+    : "";
+  return { message: text || "(No message)" };
+}
+```
 
-8. **`src/pages/AdminAuditLogs.tsx`** — Lines 214/217: "excessively deep" type instantiation with `cod_orders`. Replace with `(supabase as any).from("cod_orders")` pattern consistently.
+### B. Update `extractFromGorgias` in `supabase/functions/beauty-assistant/index.ts`
 
-### Component Props
+Add `body.message.body_text` as a fallback path (singular `message` object):
 
-9. **`src/components/FloatingSocials.tsx`** — Line 129: SVG `Icon` component rendered as `<Icon />` but something passes `className`. Check if `<Icon className="..." />` exists — if so, use a wrapper `<span className="..."><Icon /></span>`.
+```typescript
+function extractFromGorgias(body: Record<string, unknown>): { message: string } {
+  // Try body.messages[] array first
+  const messages = Array.isArray(body.messages) ? body.messages : [];
+  const last = messages.filter((m: unknown) => m && typeof m === "object").pop() as Record<string, unknown> | undefined;
+  // Try singular body.message object
+  const singleMsg = (body.message && typeof body.message === "object") ? body.message as Record<string, unknown> : undefined;
 
-### Technical Details
+  const text =
+    typeof last?.body_text === "string" ? last.body_text
+    : typeof last?.body_html === "string" ? last.body_html.replace(/<[^>]+>/g, "").trim()
+    : typeof singleMsg?.body_text === "string" ? singleMsg.body_text
+    : typeof singleMsg?.body_html === "string" ? (singleMsg.body_html as string).replace(/<[^>]+>/g, "").trim()
+    : typeof (body as any).body_text === "string" ? (body as any).body_text
+    : typeof (body as any).message === "string" ? (body as any).message
+    : "";
+  return { message: text || "(No message)" };
+}
+```
 
-- The `BrandVichy.tsx` fix is the critical path — everything else fails to build because Vite stops on this missing import
-- The `ManageProducts.tsx` insert needs to include `handle`, `primary_concern`, and `regimen_step` which are NOT NULL columns in the DB
-- The `AdminAuditLogs.tsx` deep instantiation error is because `cod_orders` table isn't in the generated types — use `any` assertion
-- Most `useProductFilter`/`ConcernCollection` errors are about `ShopifyProduct.node.tags` being `string | string[]` vs `string[]` — fix with type assertion
+### C. Fix old project ID references
+
+| File | Line | Change |
+|------|------|--------|
+| `supabase/config.toml` | 1 | `project_id = "rgehleqcubtmcwyipyvi"` → `"qqceibvalkoytafynwoc"` |
+| `src/components/AIConcierge.tsx` | 25 | Fallback URL `rgehleq...` → `qqceib...` |
+| `src/pages/LabTools.tsx` | 14 | Fallback URL `rgehleq...` → `qqceib...` |
+| `src/pages/Intelligence.tsx` | 25 | Fallback URL `rgehleq...` → `qqceib...` |
+
+All four files get the same string replacement: `rgehleqcubtmcwyipyvi` → `qqceibvalkoytafynwoc`.
+
+### D. Redeploy edge function
+
+After updating `beauty-assistant/index.ts`, deploy it so the ManyChat and Gorgias fixes go live.
 
