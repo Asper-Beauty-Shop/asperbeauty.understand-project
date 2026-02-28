@@ -24,9 +24,9 @@ jobs:
         run: |
           # Validate that LOVABLE_WEBHOOK_URL is set
           if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "Error: LOVABLE_WEBHOOK_URL is not set"
-            echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
-            exit 1
+            echo "Warning: LOVABLE_WEBHOOK_URL is not set"
+            echo "Skipping Lovable sync. Set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
+            exit 0
           fi
 
           # Debug: Show masked URL (only show protocol and domain)
