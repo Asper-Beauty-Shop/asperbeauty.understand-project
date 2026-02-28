@@ -95,13 +95,13 @@ export default {
         },
       },
       fontFamily: {
-        // Defines your luxury font stack
         serif: ["Playfair Display", "serif"],
         sans: ["Montserrat", "sans-serif"],
         display: ["Playfair Display", "serif"],
+        heading: ["Playfair Display", "serif"],
         body: ["Montserrat", "Inter", "sans-serif"],
         script: ["Great Vibes", "cursive"],
-        arabic: ["Tajawal", "sans-serif"], // RTL / Arabic
+        arabic: ["Tajawal", "sans-serif"],
       },
       backgroundImage: {
         "celestial-gradient": "linear-gradient(to bottom, #4A0404, #2b0202)",
