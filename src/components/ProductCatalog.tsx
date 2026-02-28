@@ -63,12 +63,13 @@ const ProductCard = ({
     product.title,
   );
 
+  const price = product.price ?? 0;
   const isOnSale = product.is_on_sale && product.original_price &&
-    product.original_price > product.price;
+    product.original_price > price;
   const discountPercent = product.discount_percent ||
     (isOnSale
       ? Math.round(
-        ((product.original_price! - product.price) / product.original_price!) *
+        ((product.original_price! - price) / product.original_price!) *
           100,
       )
       : 0);
@@ -85,7 +86,7 @@ const ProductCard = ({
         description: product.description || "",
         priceRange: {
           minVariantPrice: {
-            amount: product.price.toString(),
+            amount: price.toString(),
             currencyCode: "JOD",
           },
         },
@@ -102,7 +103,7 @@ const ProductCard = ({
             node: {
               id: product.id,
               title: "Default",
-              price: { amount: product.price.toString(), currencyCode: "JOD" },
+              price: { amount: price.toString(), currencyCode: "JOD" },
               selectedOptions: [],
             },
           }],
@@ -114,7 +115,7 @@ const ProductCard = ({
       product: cartProduct as import("@/lib/shopify").ShopifyProduct,
       variantId: product.id,
       variantTitle: "Default",
-      price: { amount: product.price.toString(), currencyCode: "JOD" },
+      price: { amount: price.toString(), currencyCode: "JOD" },
       quantity: 1,
       selectedOptions: [],
     });
@@ -227,7 +228,7 @@ const ProductCard = ({
                 isOnSale ? "text-[#E53E3E]" : "text-gray-900"
               }`}
             >
-              {formatJOD(product.price)}
+              {formatJOD(price)}
             </span>
           </div>
 
