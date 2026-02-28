@@ -70,9 +70,6 @@ const csvArg = args.find(
 const CSV_PATH =
   csvArg || process.env.CSV_PATH || path.resolve("data/shopify-import-3.csv");
 
-// Throttle between products (ms)
-const THROTTLE_MS = 500;
-
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -141,12 +138,34 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-/**
- * Normalize a product type into a consistent tag for frontend filtering.
- * E.g. "Skin Care" → "skincare", "Hair Care" → "haircare"
- */
-function normalizeTag(type: string): string {
-  return type.toLowerCase().replace(/\s+/g, "").replace(/[^a-z0-9]/g, "");
+/** Normalize CSV Type to one of the canonical product types */
+function normalizeProductType(raw: string): string {
+  const lower = raw.toLowerCase().trim();
+  const map: Record<string, string> = {
+    skincare: "Skin Care", "skin care": "Skin Care", "skin": "Skin Care",
+    cleanser: "Skin Care", serum: "Skin Care", moisturizer: "Skin Care",
+    toner: "Skin Care", mask: "Skin Care", "eye cream": "Skin Care",
+    sunscreen: "Skin Care", micellar: "Skin Care", exfoliant: "Skin Care",
+    makeup: "Makeup", lipstick: "Makeup", foundation: "Makeup",
+    concealer: "Makeup", mascara: "Makeup", blush: "Makeup",
+    eyeshadow: "Makeup", primer: "Makeup", "lip gloss": "Makeup",
+    "hair care": "Hair Care", haircare: "Hair Care", shampoo: "Hair Care",
+    conditioner: "Hair Care", "hair oil": "Hair Care", "hair mask": "Hair Care",
+    fragrance: "Fragrance", perfume: "Fragrance", cologne: "Fragrance",
+    "eau de": "Fragrance", oud: "Fragrance",
+    supplement: "Supplements", supplements: "Supplements", vitamin: "Supplements",
+    "baby care": "Baby Care", baby: "Baby Care", "mom & baby": "Baby Care",
+    "mom and baby": "Baby Care", maternity: "Baby Care",
+    "bath & body": "Bath & Body", "body lotion": "Bath & Body",
+    "body wash": "Bath & Body", soap: "Bath & Body",
+  };
+  for (const [key, val] of Object.entries(map)) {
+    if (lower.includes(key)) return val;
+  }
+  // If already one of the canonical types, return as-is with proper casing
+  const canonical = ["Skin Care", "Makeup", "Hair Care", "Fragrance", "Supplements", "Baby Care"];
+  const match = canonical.find((c) => c.toLowerCase() === lower);
+  return match || raw || "Skin Care";
 }
 
 // ---------------------------------------------------------------------------
@@ -361,10 +380,10 @@ const PRODUCT_UPDATE = `
   }
 `;
 
-const PRODUCT_CREATE_MEDIA = `
+const PRODUCT_MEDIA_CREATE = `
   mutation ProductCreateMedia($productId: ID!, $media: [CreateMediaInput!]!) {
     productCreateMedia(productId: $productId, media: $media) {
-      media { id }
+      media { alt mediaContentType status }
       mediaUserErrors { field message }
     }
   }
@@ -397,6 +416,103 @@ const GET_PUBLICATIONS = `
     }
   }
 `;
+
+// ---------------------------------------------------------------------------
+// Inventory queries & mutations
+// ---------------------------------------------------------------------------
+
+const LOCATIONS_QUERY = `
+  query GetLocations {
+    locations(first: 1) {
+      edges { node { id name } }
+    }
+  }
+`;
+
+const VARIANT_INVENTORY_ITEMS = `
+  query VariantInventoryItems($productId: ID!) {
+    product(id: $productId) {
+      variants(first: 100) {
+        edges {
+          node {
+            id
+            sku
+            inventoryItem { id }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const INVENTORY_SET_QUANTITIES = `
+  mutation InventorySetQuantities($input: InventorySetQuantitiesInput!) {
+    inventorySetQuantities(input: $input) {
+      inventoryAdjustmentGroup { reason }
+      userErrors { field message }
+    }
+  }
+`;
+
+let cachedLocationId: string | null = null;
+
+async function getPrimaryLocationId(): Promise<string> {
+  if (cachedLocationId) return cachedLocationId;
+  const data = await adminGraphQL(LOCATIONS_QUERY);
+  const loc = data?.locations?.edges?.[0]?.node;
+  if (!loc) throw new Error("No Shopify locations found. Create a location first.");
+  cachedLocationId = loc.id;
+  console.log(`  📍 Primary location: ${loc.name} (${loc.id})`);
+  return loc.id;
+}
+
+async function setInventoryQuantities(
+  productId: string,
+  variants: { sku: string; inventoryQty: number }[],
+  tag: string
+) {
+  const locationId = await getPrimaryLocationId();
+
+  // Fetch inventoryItemIds for the product's variants
+  const data = await adminGraphQL(VARIANT_INVENTORY_ITEMS, { productId });
+  const variantEdges = data?.product?.variants?.edges || [];
+
+  const quantities: { inventoryItemId: string; locationId: string; quantity: number }[] = [];
+
+  for (const edge of variantEdges) {
+    const node = edge.node;
+    const inventoryItemId = node.inventoryItem?.id;
+    if (!inventoryItemId) continue;
+
+    // Match by SKU or by position
+    const csvMatch = variants.find((v) => v.sku && v.sku === node.sku);
+    const qty = csvMatch?.inventoryQty ?? variants[variantEdges.indexOf(edge)]?.inventoryQty;
+
+    if (qty !== undefined && qty >= 0) {
+      quantities.push({ inventoryItemId, locationId, quantity: qty });
+    }
+  }
+
+  if (quantities.length === 0) return;
+
+  try {
+    const result = await adminGraphQL(INVENTORY_SET_QUANTITIES, {
+      input: {
+        name: "available",
+        reason: "correction",
+        quantities,
+      },
+    });
+    const errors = result?.inventorySetQuantities?.userErrors;
+    if (errors?.length) {
+      console.warn(`  ⚠️ ${tag} inventory warnings:`, errors);
+    } else {
+      console.log(`  📦 ${tag}: set inventory for ${quantities.length} variant(s)`);
+    }
+  } catch (invErr: any) {
+    console.warn(`  ⚠️ ${tag} inventory update failed: ${invErr.message}`);
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Inventory queries & mutations
@@ -621,27 +737,16 @@ async function syncProduct(product: ProductGroup, index: number, total: number) 
     variantEdges =
       updateData?.productUpdate?.product?.variants?.edges || existing.variants.edges;
 
-    // Add media on update (if images present)
+    // Attach media on update via separate mutation
     if (media.length > 0) {
       try {
-        const mediaData = await adminGraphQL(PRODUCT_CREATE_MEDIA, {
-          productId,
-          media,
-        });
-        const mediaErrors = mediaData?.productCreateMedia?.mediaUserErrors;
-        if (mediaErrors?.length) {
-          // Log but don't fail - image URLs may already exist or be invalid
-          console.warn(
-            `  ⚠️ ${tag} media warnings:`,
-            mediaErrors.map((e: any) => e.message).join("; ")
-          );
-        }
-      } catch (err: any) {
-        console.warn(`  ⚠️ ${tag} media upload skipped: ${err.message}`);
+        await adminGraphQL(PRODUCT_MEDIA_CREATE, { productId, media });
+      } catch (mediaErr: any) {
+        console.warn(`  ⚠️ ${tag} media upload skipped: ${mediaErr.message}`);
       }
     }
 
-    console.log(`  ✅ ${tag}: updated "${product.title}"`);
+    console.log(`  ✅ ${tag}: updated`);
   } else {
     // ---- CREATE ----
     const createData = await adminGraphQL(PRODUCT_CREATE, { input, media });
