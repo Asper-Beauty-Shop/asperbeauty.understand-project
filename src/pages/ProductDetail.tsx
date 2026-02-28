@@ -31,6 +31,11 @@ import type { Tables } from "@/integrations/supabase/types";
 
 type DbProduct = Tables<"products">;
 
+// Split JOD formatting for Morning Spa design
+const formatJODSplit = (n: number) => ({
+  amount: n.toFixed(2),
+  currency: "JOD",
+});
 const formatJOD = (n: number) => `${n.toFixed(2)} JOD`;
 
 const ProductDetail = () => {
@@ -139,7 +144,7 @@ const ProductDetail = () => {
           <h1 className="font-serif text-2xl text-foreground mb-4">
             {isArabic ? "المنتج غير موجود" : "Product Not Found"}
           </h1>
-          <Link to="/" className="text-primary hover:underline text-sm">
+          <Link to="/" className="text-polished-gold hover:underline text-sm">
             {isArabic ? "العودة للمتجر" : "Return to Shop"}
           </Link>
         </div>
@@ -171,17 +176,18 @@ const ProductDetail = () => {
           <div className="p-8 lg:p-16 flex flex-col justify-center min-h-full">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-sm mb-6">
-              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "الرئيسية" : "Home"}</Link>
+              <Link to="/" className="text-muted-foreground hover:text-polished-gold transition-colors">{isArabic ? "الرئيسية" : "Home"}</Link>
               <span className="text-muted-foreground">/</span>
-              <Link to="/shop" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "المتجر" : "Shop"}</Link>
+              <Link to="/shop" className="text-muted-foreground hover:text-polished-gold transition-colors">{isArabic ? "المتجر" : "Shop"}</Link>
             </nav>
 
             {/* Above the Fold: Brand, Title, Price */}
             <div className="mb-8">
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground mb-3 block">{brandName}</span>
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-polished-gold mb-3 block">{brandName}</span>
               <h1 className="font-serif text-3xl lg:text-4xl text-foreground leading-tight mb-6">{product.title}</h1>
-              <div className="flex items-center gap-3">
-                <span className="text-2xl font-light text-foreground">{formatJOD(currentPrice)}</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-semibold text-foreground">{formatJODSplit(currentPrice).amount}</span>
+                <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{formatJODSplit(currentPrice).currency}</span>
               </div>
             </div>
 
@@ -192,9 +198,9 @@ const ProductDetail = () => {
 
             {/* Clinical Badge */}
             {product.clinical_badge && (
-              <div className="mb-6 px-4 py-3 bg-accent/10 border border-accent/30 rounded-lg">
+              <div className="mb-6 px-4 py-3 bg-accent/10 border border-polished-gold/30 rounded-lg">
                 <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Sparkles className="w-4 h-4 text-accent" />
+                  <Sparkles className="w-4 h-4 text-polished-gold" />
                   {product.clinical_badge}
                 </div>
               </div>
@@ -202,24 +208,24 @@ const ProductDetail = () => {
 
             {/* Add to Cart — Primary CTA */}
             <div className="space-y-6 mb-10">
-              <div className="flex items-center justify-center gap-8 py-4 border border-border">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-primary transition-colors"><Minus className="w-4 h-4" /></button>
+              <div className="flex items-center justify-center gap-8 py-4 border border-polished-gold/20 bg-polished-white">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-burgundy transition-colors"><Minus className="w-4 h-4" /></button>
                 <span className="text-lg font-medium w-8 text-center">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-primary transition-colors"><Plus className="w-4 h-4" /></button>
+                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-burgundy transition-colors"><Plus className="w-4 h-4" /></button>
               </div>
 
               <div className="flex gap-4">
-                <Button onClick={handleAddToCart} className="flex-1 py-6 text-base font-medium tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground rounded-none">
+                <Button onClick={handleAddToCart} className="flex-1 py-6 text-base font-medium tracking-wide bg-burgundy hover:bg-burgundy-light text-white rounded-none shadow-md hover:shadow-lg transition-all">
                   <ShoppingBag className="w-5 h-5 mr-3" />
-                  {isArabic ? "أضف إلى الحقيبة" : "Add to Ritual"} — {formatJOD(currentPrice * quantity)}
+                  {isArabic ? "أضف إلى الحقيبة" : "Add to Ritual"} — <span className="font-semibold">{formatJODSplit(currentPrice * quantity).amount}</span> <span className="text-xs ml-1">{formatJODSplit(currentPrice * quantity).currency}</span>
                 </Button>
-                <button onClick={handleWishlistToggle} className={`w-14 h-14 flex items-center justify-center border transition-all ${isWishlisted ? "bg-primary border-primary text-primary-foreground" : "border-border text-foreground hover:border-primary"}`}>
+                <button onClick={handleWishlistToggle} className={`w-14 h-14 flex items-center justify-center border transition-all ${isWishlisted ? "bg-burgundy border-burgundy text-white" : "border-polished-gold/40 text-foreground hover:border-polished-gold hover:bg-polished-gold/10"}`}>
                   <Heart className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`} />
                 </button>
               </div>
 
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                <ShieldCheck className="w-4 h-4 text-primary" />
+                <ShieldCheck className="w-4 h-4 text-polished-gold" />
                 {isArabic ? "موزع معتمد • منتج أصلي 100%" : "Authorized Retailer • 100% Authentic"}
               </div>
 
@@ -228,31 +234,31 @@ const ProductDetail = () => {
             </div>
 
             {/* ─── Clean PDP Accordions: Clinical data below the fold ─── */}
-            <Accordion type="multiple" className="w-full border-t border-border">
+            <Accordion type="multiple" className="w-full border-t border-polished-gold/20">
               {/* How to Use */}
-              <AccordionItem value="how-to-use" className="border-border">
-                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
+              <AccordionItem value="how-to-use" className="border-polished-gold/20">
+                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5 hover:text-burgundy">
                   <span className="flex items-center gap-2">
-                    <Droplets className="w-4 h-4 text-primary" />
+                    <Droplets className="w-4 h-4 text-polished-gold" />
                     {isArabic ? "طريقة الاستخدام" : "How to Use"}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-3 py-2 text-sm text-muted-foreground leading-relaxed">
                     <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">1</span>
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center text-xs font-bold">1</span>
                       <p>{isArabic ? "نظفي البشرة جيداً وجففيها بلطف." : "Cleanse skin thoroughly and pat dry."}</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">2</span>
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center text-xs font-bold">2</span>
                       <p>{isArabic ? "ضعي كمية مناسبة على الوجه والرقبة." : "Apply an appropriate amount to face and neck."}</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">3</span>
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center text-xs font-bold">3</span>
                       <p>{isArabic ? "دلكي بلطف بحركات دائرية حتى يمتص بالكامل." : "Massage gently in circular motions until fully absorbed."}</p>
                     </div>
                     {product.regimen_step && (
-                      <div className="mt-3 px-3 py-2 bg-accent/10 rounded text-xs">
+                      <div className="mt-3 px-3 py-2 bg-polished-gold/10 rounded text-xs border border-polished-gold/20">
                         <span className="font-semibold text-foreground">{isArabic ? "خطوة الروتين:" : "Regimen Step:"}</span>{" "}
                         {product.regimen_step.replace(/_/g, " ")}
                       </div>
@@ -262,10 +268,10 @@ const ProductDetail = () => {
               </AccordionItem>
 
               {/* Ingredients (INCI) */}
-              <AccordionItem value="ingredients" className="border-border">
-                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
+              <AccordionItem value="ingredients" className="border-polished-gold/20">
+                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5 hover:text-burgundy">
                   <span className="flex items-center gap-2">
-                    <Beaker className="w-4 h-4 text-primary" />
+                    <Beaker className="w-4 h-4 text-polished-gold" />
                     {isArabic ? "المكونات (INCI)" : "Ingredients (INCI)"}
                   </span>
                 </AccordionTrigger>
@@ -278,7 +284,7 @@ const ProductDetail = () => {
                         </p>
                         <div className="flex flex-wrap gap-2 mb-4">
                           {product.key_ingredients.map((ing) => (
-                            <span key={ing} className="px-3 py-1.5 rounded-full bg-accent/10 border border-accent/30 text-xs text-foreground font-medium">{ing}</span>
+                            <span key={ing} className="px-3 py-1.5 rounded-full bg-polished-gold/10 border border-polished-gold/30 text-xs text-foreground font-medium">{ing}</span>
                           ))}
                         </div>
                         <p className="text-xs text-muted-foreground italic">
@@ -299,10 +305,10 @@ const ProductDetail = () => {
               </AccordionItem>
 
               {/* Regulatory Warnings */}
-              <AccordionItem value="regulatory" className="border-border">
-                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
+              <AccordionItem value="regulatory" className="border-polished-gold/20">
+                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5 hover:text-burgundy">
                   <span className="flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-primary" />
+                    <AlertTriangle className="w-4 h-4 text-polished-gold" />
                     {isArabic ? "التحذيرات التنظيمية" : "Regulatory Warnings"}
                   </span>
                 </AccordionTrigger>
