@@ -4,13 +4,13 @@
  * Architecture:
  *   CSV → this script → Shopify Admin API (GraphQL)
  *   Shopify → Storefront API → Lovable frontend
- *   Shopify → Product feed → Google Merchant Center
+ *   Shopify → Product feed → Google Merchant Center (ID: 5717495012)
  *
  * Single source of truth: Shopify.
- * Idempotent: lookup by Handle → update or create. No duplicates.
+ * Idempotent: lookup by Handle (fallback SKU) → update or create. No duplicates.
  *
  * Usage:
- *   npx ts-node scripts/sync-shopify-catalog.ts [--dry-run] [--limit N] [path/to/file.csv]
+ *   npx tsx scripts/sync-shopify-catalog.ts [--dry-run] [--limit N] [--publish] [path/to/file.csv]
  *
  * Env vars (in .env or exported):
  *   SHOPIFY_ADMIN_ACCESS_TOKEN  — Admin API token (shpat_xxxx)
@@ -20,6 +20,10 @@
 
 import * as fs from "fs";
 import * as path from "path";
+import { config } from "dotenv";
+
+// Load .env from project root
+config({ path: path.resolve(import.meta.dirname ?? ".", "../.env") });
 
 // ---------------------------------------------------------------------------
 // Config
@@ -27,16 +31,25 @@ import * as path from "path";
 
 const SHOPIFY_STORE_DOMAIN =
   process.env.SHOPIFY_STORE_DOMAIN || "lovable-project-milns.myshopify.com";
-const SHOPIFY_ADMIN_ACCESS_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN || "";
-const API_VERSION = "2024-01";
+const SHOPIFY_ADMIN_ACCESS_TOKEN =
+  process.env.SHOPIFY_ADMIN_ACCESS_TOKEN || "";
+const API_VERSION = "2025-01";
 const ADMIN_URL = `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${API_VERSION}/graphql.json`;
+
+const MAX_RETRIES = 5;
+const THROTTLE_MS = 500;
 
 // CLI flags
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes("--dry-run");
+const PUBLISH = args.includes("--publish");
 const limitIdx = args.indexOf("--limit");
 const LIMIT = limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : Infinity;
-const csvArg = args.find((a) => !a.startsWith("--") && a !== args[limitIdx + 1]);
+const csvArg = args.find(
+  (a) =>
+    !a.startsWith("--") &&
+    (limitIdx === -1 || a !== args[limitIdx + 1])
+);
 const CSV_PATH =
   csvArg || process.env.CSV_PATH || path.resolve("data/shopify-import-2.csv");
 
@@ -44,7 +57,11 @@ const CSV_PATH =
 // Helpers
 // ---------------------------------------------------------------------------
 
-async function adminGraphQL(query: string, variables: Record<string, any> = {}) {
+async function adminGraphQL(
+  query: string,
+  variables: Record<string, unknown> = {},
+  retries = 0
+): Promise<any> {
   const res = await fetch(ADMIN_URL, {
     method: "POST",
     headers: {
@@ -55,10 +72,14 @@ async function adminGraphQL(query: string, variables: Record<string, any> = {}) 
   });
 
   if (res.status === 429) {
+    if (retries >= MAX_RETRIES) {
+      throw new Error("Rate limit: max retries exceeded");
+    }
     const retryAfter = parseInt(res.headers.get("Retry-After") || "2", 10);
-    console.warn(`  ⏳ Rate limited. Waiting ${retryAfter}s...`);
-    await sleep(retryAfter * 1000);
-    return adminGraphQL(query, variables); // retry
+    const backoff = Math.max(retryAfter, Math.pow(2, retries)) * 1000;
+    console.warn(`  Rate limited. Waiting ${backoff / 1000}s (retry ${retries + 1}/${MAX_RETRIES})...`);
+    await sleep(backoff);
+    return adminGraphQL(query, variables, retries + 1);
   }
 
   if (!res.ok) {
@@ -85,7 +106,7 @@ function slugify(text: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// CSV parser (minimal, handles quoted fields with commas/newlines)
+// CSV parser (handles quoted fields with commas/newlines)
 // ---------------------------------------------------------------------------
 
 function parseCSV(raw: string): Record<string, string>[] {
@@ -175,9 +196,14 @@ function groupProducts(rows: Record<string, string>[]): ProductGroup[] {
         .map((t) => t.trim())
         .filter(Boolean);
       const type = row["Type"] || "";
-      // Add normalized tag for frontend filtering
-      if (type && !tags.some((t) => t.toLowerCase() === type.toLowerCase())) {
-        tags.push(type);
+
+      // Add normalized tag for frontend category filtering
+      // e.g. "Skin Care" → tag "skincare" so /products?category=skincare works
+      if (type) {
+        const normalizedTag = type.toLowerCase().replace(/\s+/g, "");
+        if (!tags.some((t) => t.toLowerCase().replace(/\s+/g, "") === normalizedTag)) {
+          tags.push(type);
+        }
       }
 
       const optionNames: string[] = [];
@@ -231,11 +257,26 @@ function groupProducts(rows: Record<string, string>[]): ProductGroup[] {
 }
 
 // ---------------------------------------------------------------------------
-// Shopify Admin mutations
+// Shopify Admin GraphQL mutations
 // ---------------------------------------------------------------------------
 
 const LOOKUP_BY_HANDLE = `
   query LookupByHandle($query: String!) {
+    products(first: 1, query: $query) {
+      edges {
+        node {
+          id
+          variants(first: 100) {
+            edges { node { id sku } }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const LOOKUP_BY_SKU = `
+  query LookupBySKU($query: String!) {
     products(first: 1, query: $query) {
       edges {
         node {
@@ -286,30 +327,93 @@ const VARIANT_BULK_UPDATE = `
   }
 `;
 
+const PUBLISHABLE_PUBLISH = `
+  mutation PublishablePublish($id: ID!, $input: [PublicationInput!]!) {
+    publishablePublish(id: $id, input: $input) {
+      publishable { availablePublicationCount }
+      userErrors { field message }
+    }
+  }
+`;
+
+const GET_PUBLICATIONS = `
+  query GetPublications {
+    publications(first: 10) {
+      edges { node { id name } }
+    }
+  }
+`;
+
 // ---------------------------------------------------------------------------
-// Sync logic
+// Resolve existing product (by handle, fallback to SKU)
 // ---------------------------------------------------------------------------
 
-async function syncProduct(product: ProductGroup, index: number) {
-  const tag = `[${index}] ${product.handle}`;
+async function resolveExisting(
+  handle: string,
+  sku: string | undefined
+): Promise<{ id: string; variants: any[] } | null> {
+  // Primary: lookup by handle
+  const byHandle = await adminGraphQL(LOOKUP_BY_HANDLE, {
+    query: `handle:${handle}`,
+  });
+  const handleNode = byHandle?.products?.edges?.[0]?.node;
+  if (handleNode) return { id: handleNode.id, variants: handleNode.variants.edges };
+
+  // Fallback: lookup by SKU
+  if (sku) {
+    const bySku = await adminGraphQL(LOOKUP_BY_SKU, {
+      query: `sku:${sku}`,
+    });
+    const skuNode = bySku?.products?.edges?.[0]?.node;
+    if (skuNode) return { id: skuNode.id, variants: skuNode.variants.edges };
+  }
+
+  return null;
+}
+
+// ---------------------------------------------------------------------------
+// Sync a single product
+// ---------------------------------------------------------------------------
+
+let publicationId: string | null = null;
+
+async function getPublicationId(): Promise<string | null> {
+  if (publicationId) return publicationId;
+  try {
+    const data = await adminGraphQL(GET_PUBLICATIONS);
+    const onlineStore = data?.publications?.edges?.find(
+      (e: any) =>
+        e.node.name === "Online Store" || e.node.name === "online_store"
+    );
+    publicationId = onlineStore?.node?.id || data?.publications?.edges?.[0]?.node?.id || null;
+    return publicationId;
+  } catch {
+    return null;
+  }
+}
+
+async function syncProduct(
+  product: ProductGroup,
+  index: number,
+  total: number
+): Promise<{ status: string; handle: string; reason?: string; errors?: any }> {
+  const tag = `[${index}/${total}] ${product.handle}`;
 
   if (!product.title) {
-    console.warn(`  ⚠️ ${tag}: missing title, skipping`);
+    console.warn(`  SKIP ${tag}: missing title`);
     return { status: "skipped", handle: product.handle, reason: "no title" };
   }
 
   if (DRY_RUN) {
     console.log(
-      `  🔍 ${tag}: "${product.title}" | ${product.variants.length} variant(s) | ${product.images.length} image(s) [DRY RUN]`
+      `  DRY  ${tag}: "${product.title}" | ${product.variants.length} variant(s) | ${product.images.length} image(s)`
     );
     return { status: "dry-run", handle: product.handle };
   }
 
-  // 1. Lookup existing product by handle
-  const lookupData = await adminGraphQL(LOOKUP_BY_HANDLE, {
-    query: `handle:${product.handle}`,
-  });
-  const existing = lookupData?.products?.edges?.[0]?.node;
+  // 1. Resolve existing product by handle (or SKU fallback)
+  const firstSku = product.variants[0]?.sku;
+  const existing = await resolveExisting(product.handle, firstSku);
 
   const input: Record<string, any> = {
     title: product.title,
@@ -330,7 +434,7 @@ async function syncProduct(product: ProductGroup, index: number) {
     input.options = product.optionNames;
   }
 
-  // Variants for create
+  // Include variants in create input
   if (!existing && product.variants.length > 0) {
     input.variants = product.variants.map((v) => ({
       sku: v.sku,
@@ -342,6 +446,7 @@ async function syncProduct(product: ProductGroup, index: number) {
     }));
   }
 
+  // Media for create
   const media = product.images
     .sort((a, b) => a.position - b.position)
     .map((img) => ({
@@ -354,33 +459,35 @@ async function syncProduct(product: ProductGroup, index: number) {
   let variantEdges: any[];
 
   if (existing) {
-    // UPDATE
+    // ── UPDATE ──
     input.id = existing.id;
     const updateData = await adminGraphQL(PRODUCT_UPDATE, { input });
     const errors = updateData?.productUpdate?.userErrors;
     if (errors?.length) {
-      console.error(`  ❌ ${tag} update errors:`, errors);
+      console.error(`  FAIL ${tag} update:`, errors);
       return { status: "error", handle: product.handle, errors };
     }
     productId = existing.id;
     variantEdges =
-      updateData?.productUpdate?.product?.variants?.edges || existing.variants.edges;
-    console.log(`  ✅ ${tag}: updated`);
+      updateData?.productUpdate?.product?.variants?.edges || existing.variants;
+    console.log(`  UPD  ${tag}: updated`);
   } else {
-    // CREATE
+    // ── CREATE ──
     const createData = await adminGraphQL(PRODUCT_CREATE, { input, media });
     const errors = createData?.productCreate?.userErrors;
     if (errors?.length) {
-      console.error(`  ❌ ${tag} create errors:`, errors);
+      console.error(`  FAIL ${tag} create:`, errors);
       return { status: "error", handle: product.handle, errors };
     }
     productId = createData.productCreate.product.id;
     variantEdges = createData.productCreate.product.variants.edges;
-    console.log(`  ✅ ${tag}: created`);
+    console.log(`  NEW  ${tag}: created`);
   }
 
-  // 2. Update variant prices/SKUs if needed (for updates, or if create didn't set them)
-  if (existing && product.variants.length > 0 && variantEdges?.length > 0) {
+  // 2. Bulk-update variant prices/SKUs (for BOTH create and update)
+  //    productCreate does not always set variant price correctly;
+  //    always reconcile via productVariantsBulkUpdate.
+  if (product.variants.length > 0 && variantEdges?.length > 0) {
     const variantUpdates = variantEdges
       .map((edge: any, i: number) => {
         const csvVariant = product.variants[i];
@@ -395,13 +502,32 @@ async function syncProduct(product: ProductGroup, index: number) {
       .filter(Boolean);
 
     if (variantUpdates.length > 0) {
-      const bulkData = await adminGraphQL(VARIANT_BULK_UPDATE, {
-        productId,
-        variants: variantUpdates,
-      });
-      const bulkErrors = bulkData?.productVariantsBulkUpdate?.userErrors;
-      if (bulkErrors?.length) {
-        console.warn(`  ⚠️ ${tag} variant update warnings:`, bulkErrors);
+      try {
+        const bulkData = await adminGraphQL(VARIANT_BULK_UPDATE, {
+          productId,
+          variants: variantUpdates,
+        });
+        const bulkErrors = bulkData?.productVariantsBulkUpdate?.userErrors;
+        if (bulkErrors?.length) {
+          console.warn(`  WARN ${tag} variant update:`, bulkErrors);
+        }
+      } catch (err: any) {
+        console.warn(`  WARN ${tag} variant update failed: ${err.message}`);
+      }
+    }
+  }
+
+  // 3. Publish to Online Store (optional, via --publish flag)
+  if (PUBLISH) {
+    const pubId = await getPublicationId();
+    if (pubId) {
+      try {
+        await adminGraphQL(PUBLISHABLE_PUBLISH, {
+          id: productId,
+          input: [{ publicationId: pubId }],
+        });
+      } catch (err: any) {
+        console.warn(`  WARN ${tag} publish failed: ${err.message}`);
       }
     }
   }
@@ -414,22 +540,31 @@ async function syncProduct(product: ProductGroup, index: number) {
 // ---------------------------------------------------------------------------
 
 async function main() {
-  console.log("╔══════════════════════════════════════════════════════════╗");
-  console.log("║  Asper Beauty Shop — Shopify Catalog Sync              ║");
-  console.log("╚══════════════════════════════════════════════════════════╝");
+  const startTime = Date.now();
+
+  console.log("");
+  console.log("  Asper Beauty Shop — Shopify Catalog Sync");
+  console.log("  =========================================");
   console.log(`  Store:    ${SHOPIFY_STORE_DOMAIN}`);
+  console.log(`  API:      ${API_VERSION}`);
   console.log(`  CSV:      ${CSV_PATH}`);
   console.log(`  Dry run:  ${DRY_RUN}`);
+  console.log(`  Publish:  ${PUBLISH}`);
   console.log(`  Limit:    ${LIMIT === Infinity ? "all" : LIMIT}`);
   console.log("");
 
   if (!SHOPIFY_ADMIN_ACCESS_TOKEN && !DRY_RUN) {
-    console.error("❌ SHOPIFY_ADMIN_ACCESS_TOKEN is required. Set it in .env or export it.");
+    console.error(
+      "  ERROR: SHOPIFY_ADMIN_ACCESS_TOKEN is required.\n" +
+      "  Set it in .env or export it in your shell.\n" +
+      "  Get it from: Shopify Admin > Settings > Apps > Develop apps > Create app\n" +
+      "  Scopes needed: write_products, read_products, write_inventory, read_inventory"
+    );
     process.exit(1);
   }
 
   if (!fs.existsSync(CSV_PATH)) {
-    console.error(`❌ CSV file not found: ${CSV_PATH}`);
+    console.error(`  ERROR: CSV file not found: ${CSV_PATH}`);
     process.exit(1);
   }
 
@@ -439,43 +574,59 @@ async function main() {
 
   const products = groupProducts(rows);
   const toSync = products.slice(0, LIMIT);
-  console.log(`  Grouped into ${products.length} products; syncing ${toSync.length}\n`);
+  console.log(`  Grouped into ${products.length} unique products; syncing ${toSync.length}`);
+  console.log("");
 
   const results = { created: 0, updated: 0, skipped: 0, errors: 0, dryRun: 0 };
-  const errorLog: any[] = [];
+  const errorLog: { timestamp: string; handle: string; error: string }[] = [];
 
   for (let i = 0; i < toSync.length; i++) {
     try {
-      const result = await syncProduct(toSync[i], i + 1);
+      const result = await syncProduct(toSync[i], i + 1, toSync.length);
       if (result.status === "created") results.created++;
       else if (result.status === "updated") results.updated++;
       else if (result.status === "skipped") results.skipped++;
       else if (result.status === "error") {
         results.errors++;
-        errorLog.push(result);
+        errorLog.push({
+          timestamp: new Date().toISOString(),
+          handle: result.handle,
+          error: JSON.stringify(result.errors),
+        });
       } else if (result.status === "dry-run") results.dryRun++;
     } catch (err: any) {
       results.errors++;
-      errorLog.push({ handle: toSync[i].handle, error: err.message });
-      console.error(`  ❌ [${i + 1}] ${toSync[i].handle}: ${err.message}`);
+      errorLog.push({
+        timestamp: new Date().toISOString(),
+        handle: toSync[i].handle,
+        error: err.message,
+      });
+      console.error(`  FAIL [${i + 1}/${toSync.length}] ${toSync[i].handle}: ${err.message}`);
     }
 
-    // Throttle: 500ms between products
+    // Throttle between products to avoid rate limits
     if (!DRY_RUN && i < toSync.length - 1) {
-      await sleep(500);
+      await sleep(THROTTLE_MS);
     }
   }
 
-  console.log("\n══════════════════════════════════════════════════════════");
-  console.log("  Summary:");
+  const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+  console.log("");
+  console.log("  =========================================");
+  console.log("  Summary");
+  console.log("  =========================================");
   console.log(`    Created:  ${results.created}`);
   console.log(`    Updated:  ${results.updated}`);
   console.log(`    Skipped:  ${results.skipped}`);
   console.log(`    Errors:   ${results.errors}`);
   if (DRY_RUN) console.log(`    Dry run:  ${results.dryRun}`);
-  console.log("══════════════════════════════════════════════════════════\n");
+  console.log(`    Time:     ${elapsed}s`);
+  console.log("");
 
   if (errorLog.length > 0) {
+    const errDir = path.resolve("data");
+    if (!fs.existsSync(errDir)) fs.mkdirSync(errDir, { recursive: true });
     const errPath = path.resolve("data/sync-errors.json");
     fs.writeFileSync(errPath, JSON.stringify(errorLog, null, 2));
     console.log(`  Error details saved to ${errPath}`);
