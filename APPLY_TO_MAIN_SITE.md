@@ -3,7 +3,7 @@
 **Main site:** https://asperbeautyshop-com.lovable.app/  
 **Repo:** asperpharma/understand-project  
 **Lovable:** https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings  
-**Supabase project:** `qqceibvalkoytafynwoc`
+**Supabase project:** `qqceibvalkoytafynwoc` *(correct — do NOT use old ID rgehleqcubtmcwyipyvi)*
 
 ---
 
