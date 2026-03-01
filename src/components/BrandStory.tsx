@@ -17,15 +17,15 @@ const content = {
     msZain: {
       name: "Ms. Zain",
       role: "The Aesthetic Voice",
-      quote: "Beauty is a ritual, not a routine. Let me guide your glow.",
+      quote: "Welcome to your personal beauty ritual. True luxury is in the details.",
       description:
-        "From the perfect morning radiance routine to curated evening indulgence, Ms. Zain transforms your daily regimen into an experience of texture, scent, and visible results.",
-      badges: ["Daily Radiance", "Personal Rituals", "Custom Routines"],
+        "Beauty is an experience. From the scent of a premium serum to the glow of a bridal routine, we curate high-end aesthetics that transform your daily skincare into a moment of pure, unapologetic indulgence.",
+      badges: ["Bridal Radiance", "Sensorial Textures", "Editorial Glow"],
     },
   },
   ar: {
-    title: "حيث يلتقي العلم بالفخامة",
-    subtitle: "فلسفة الصوتين في أسبر بيوتي",
+    title: "حيث يلتقي العلم بالرفاهية",
+    subtitle: "فلسفة الصوت المزدوج لجمال أسبر",
     drSami: {
       name: "د. سامي",
       role: "الصوت السريري",
