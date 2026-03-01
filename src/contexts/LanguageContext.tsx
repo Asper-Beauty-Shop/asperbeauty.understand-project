@@ -297,6 +297,32 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     const hrefAr = document.querySelector('link[hreflang="ar"]') as HTMLLinkElement | null;
     if (hrefEn) hrefEn.href = base;
     if (hrefAr) hrefAr.href = arUrl;
+
+    // Update meta descriptions dynamically
+    const enDesc = "Discover premium skincare and beauty products at Asper Beauty Shop. Curated luxury essentials for your daily beauty ritual.";
+    const arDesc = "اكتشفي منتجات العناية بالبشرة والجمال الفاخرة في أسبر بيوتي شوب. مستحضرات فاخرة منتقاة بعناية لروتين جمالك اليومي.";
+    const desc = isRTL ? arDesc : enDesc;
+
+    const metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    if (metaDesc) metaDesc.content = desc;
+
+    const ogDesc = document.querySelector('meta[property="og:description"]') as HTMLMetaElement | null;
+    if (ogDesc) ogDesc.content = desc;
+
+    const twDesc = document.querySelector('meta[name="twitter:description"]') as HTMLMetaElement | null;
+    if (twDesc) twDesc.content = desc;
+
+    // Update titles
+    const enTitle = "Asper Beauty Shop | Luxury Skincare & Beauty Essentials";
+    const arTitle = "أسبر بيوتي شوب | مستحضرات العناية بالبشرة والجمال الفاخرة";
+    const title = isRTL ? arTitle : enTitle;
+    document.title = title;
+
+    const ogTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement | null;
+    if (ogTitle) ogTitle.content = title;
+
+    const twTitle = document.querySelector('meta[name="twitter:title"]') as HTMLMetaElement | null;
+    if (twTitle) twTitle.content = title;
   }, [language, isRTL]);
 
   return (
