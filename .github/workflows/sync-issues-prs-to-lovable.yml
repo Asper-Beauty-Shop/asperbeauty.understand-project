@@ -19,7 +19,7 @@ jobs:
   sync_to_lovable:
     runs-on: ubuntu-latest
     # Skip this job if LOVABLE_WEBHOOK_URL is not configured
-    if: ${{ secrets.LOVABLE_WEBHOOK_URL != '' }}
+    if: secrets.LOVABLE_WEBHOOK_URL != ''
     steps:
       - name: Send event data to Lovable
         env:
