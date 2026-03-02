@@ -42,7 +42,9 @@ def install_via_clone(repo: str, path_suffix: str, skill_name: str) -> bool:
         # path_suffix is e.g. skills/.curated/medical-luxury-engine
         src = Path(clone_dir) / path_suffix.replace("/", os.sep)
         if not src.exists():
-            src = Path(clone_dir) / "skills" / path_suffix.split("/")[-2] / skill_name
+            parts = path_suffix.strip("/").split("/")
+            if len(parts) >= 2:
+                src = Path(clone_dir) / "skills" / parts[-2] / skill_name
         if not src.exists() and (Path(clone_dir) / "skills").exists():
             for p in (Path(clone_dir) / "skills").rglob(skill_name):
                 if p.is_dir():
@@ -99,7 +101,7 @@ def main():
         return 1
 
     for sys_path in SYSTEM_PATHS:
-        if sys_path in args.path or args.path.startswith(sys_path + "/"):
+        if args.path == sys_path or args.path.startswith(sys_path + "/"):
             print("Cannot install skills/.system skills.")
             return 1
 
