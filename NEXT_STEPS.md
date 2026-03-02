@@ -72,6 +72,7 @@ Example implementation (in React Router):
 - Verify changes were merged to `main` branch
 - Check GitHub Actions is enabled for repository
 - Review workflow file permissions
+- `.github/workflows/deploy-health-check.yml` - Post-deployment
 
 ## Additional Resources
 
@@ -81,8 +82,7 @@ Example implementation (in React Router):
 - [APPLY_TO_MAIN_SITE.md](./APPLY_TO_MAIN_SITE.md) - Pre-deployment checklist
 
 ## Workflow Files
-
-- `.github/workflows/deploy-health-check.yml` - Post-deployment health verification
+ health verification
 - `.github/workflows/sync-file-changes-to-lovable.yml` - File change synchronization
 - `.github/workflows/sync-issues-prs-to-lovable.yml` - Issue and PR synchronization
 
