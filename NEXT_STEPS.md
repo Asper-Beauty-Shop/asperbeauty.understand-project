@@ -60,7 +60,7 @@ curl -X GET https://YOUR_SUPABASE_PROJECT.supabase.co/functions/v1/bulk-product-
 # }
 ```
 
-**If you get HTTP 503:** Follow the instructions in [PRE_LAUNCH_CHECKLIST.md §5](#pre-launch-checklist) to configure Shopify secrets.
+**If you get HTTP 503:** Follow the instructions in [PRE_LAUNCH_CHECKLIST.md §5](docs/PRE_LAUNCH_CHECKLIST.md#5-verify-secrets-configuration) to configure Shopify secrets.
 
 ### 4. API Integration Tests
 
