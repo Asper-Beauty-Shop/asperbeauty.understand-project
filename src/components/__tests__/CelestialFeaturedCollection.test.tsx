@@ -226,9 +226,9 @@ describe("CelestialFeaturedCollection — Digital Tray", () => {
 
       const productLinks = screen.getAllByRole("link");
       expect(productLinks).toHaveLength(3);
-      for (const link of productLinks) {
-        expect(link).toHaveAttribute("href", expect.stringContaining("/product/"));
-      }
+      expect(productLinks[0]).toHaveAttribute("href", "/product/test-product-1");
+      expect(productLinks[1]).toHaveAttribute("href", "/product/test-product-2");
+      expect(productLinks[2]).toHaveAttribute("href", "/product/test-product-3");
     });
   });
 
