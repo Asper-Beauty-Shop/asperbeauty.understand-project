@@ -421,7 +421,7 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload \
 - `missing` array lists missing secrets
 - `error` field in response body
 
-See [PRE_LAUNCH_CHECKLIST.md §5](PRE_LAUNCH_CHECKLIST.md) for detailed secrets configuration steps.
+See [PRE_LAUNCH_CHECKLIST.md §5](PRE_LAUNCH_CHECKLIST.md#5-verify-secrets-configuration) for detailed secrets configuration steps.
 
 ---
 
