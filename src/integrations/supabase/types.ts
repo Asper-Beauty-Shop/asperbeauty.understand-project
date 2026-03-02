@@ -976,6 +976,39 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_audit_logs: {
+        Row: {
+          concern_detected: string | null
+          error_message: string | null
+          event_type: string
+          id: string
+          provider: string
+          received_at: string
+          response_ms: number | null
+          status: string
+        }
+        Insert: {
+          concern_detected?: string | null
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          provider: string
+          received_at?: string
+          response_ms?: number | null
+          status: string
+        }
+        Update: {
+          concern_detected?: string | null
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          provider?: string
+          received_at?: string
+          response_ms?: number | null
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       digital_tray_products_v: {
