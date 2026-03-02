@@ -62,13 +62,34 @@ This project is built with:
 
 ## Production-Ready Checklist
 
-> **Note:** Before following this guide, replace all placeholders in this documentation:
-> - `REPLACE_WITH_PROJECT_ID` → Your actual Lovable project ID
-> - `YOUR_SUPABASE_PROJECT` → Your Supabase project reference ID
-> - `YOUR_JWT_TOKEN` / `YOUR_SUPABASE_JWT_TOKEN` → Your actual JWT token
-> - `your-store.myshopify.com` → Your actual Shopify store domain
+### Quick Deploy
 
-Before deploying to production, ensure you've completed all items in the [PRE_LAUNCH_CHECKLIST.md](docs/PRE_LAUNCH_CHECKLIST.md):
+Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+
+### Automated Deployment Flow
+
+This project uses an automated deployment pipeline:
+
+1. **Push to Main**: When code is merged to the `main` branch, Lovable automatically deploys the changes
+2. **Health Check**: GitHub Actions runs a post-deployment health check after 120 seconds
+3. **Verification**: The workflow pings the `/health` endpoint to verify the deployment succeeded
+4. **Notifications**: Optional Discord notifications for deployment status
+
+### Deployment Documentation
+
+For comprehensive deployment guides and best practices, see:
+- [NEXT_STEPS.md](./NEXT_STEPS.md) - Quick reference for deployment flow and next steps
+- [docs/DEPLOYMENT_TEMPLATE.md](./docs/DEPLOYMENT_TEMPLATE.md) - Complete deployment guide with checklists
+- [APPLY_TO_MAIN_SITE.md](./APPLY_TO_MAIN_SITE.md) - Pre-deployment verification checklist
+
+### Monitoring
+
+After deployment, monitor:
+- **Live Site**: https://asperbeautyshop-com.lovable.app/
+- **GitHub Actions**: Check workflow runs for health check results
+- **Lovable Dashboard**: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
+
+## Can I connect a custom domain to my Lovable project?
 
 - [ ] ✅ Development environment configured
 - [ ] ✅ Database and tables created

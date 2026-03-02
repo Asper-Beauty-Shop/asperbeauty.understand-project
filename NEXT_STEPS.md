@@ -1,221 +1,95 @@
 # Next Steps: Deployment Flow
 
-> **Note:** Replace placeholders with your actual values:
-> - `YOUR_SUPABASE_PROJECT` → Your Supabase project reference ID
-> - `YOUR_SUPABASE_JWT_TOKEN` → Your JWT token from `supabase auth token`
-> - `YOUR_HEALTH_CHECKS_SECRET` → Your configured health checks secret
-> - `REPLACE_WITH_PROJECT_ID` → Your Lovable project ID
-> - `your-production-domain.com` → Your actual production domain
+This document outlines the deployment flow and next steps for the Asper Beauty Shop project.
 
-## Flow at a Glance
+## Overview
 
-This document outlines the deployment workflow for the Asper Beauty Shop from local development to production. Follow these steps to ensure a smooth deployment process.
+The project uses Lovable for automated deployments with GitHub Actions for health checks and file synchronization.
 
-```
-Health Checks (1-5) → Fix 503 Errors → Create PR → DNS Setup → Verify Production
-```
+## Deployment Flow
 
-## Health Check Steps
+1. **Code Changes**
+   - Make changes to the codebase
+   - Commit changes to a feature branch
+   - Push to GitHub
 
-### 1. Frontend Health Check
+2. **Pull Request & Review**
+   - Create a pull request to `main` branch
+   - Code review and approval
+   - Merge to `main`
 
-Verify the main application is responsive:
+3. **Automated Deployment**
+   - Lovable automatically deploys from `main` branch
+   - Deployment typically completes within 2-5 minutes
+   - Live site: https://asperbeautyshop-com.lovable.app/
 
-```bash
-# Check the homepage
-curl -I https://asperbeautyshop-com.lovable.app/
+4. **Health Check**
+   - GitHub Actions workflow runs automatically after push to `main`
+   - Waits 120 seconds for Lovable deployment
+   - Checks `/health` endpoint for 200 response
+   - Optional: Discord notification with status
 
-# Expected: HTTP 200
-```
+## Health Check Endpoint
 
-### 2. Health Endpoint Check
+The application should implement a `/health` endpoint that returns:
+- HTTP 200 status for successful health check
+- JSON response with status information (optional)
 
-Verify the dedicated health endpoint returns system status:
-
-```bash
-# Check health endpoint
-curl https://asperbeautyshop-com.lovable.app/health
-
-# Expected response:
-# {
-#   "status": "ok",
-#   "version": "1.0.0",
-#   "checks": {
-#     "supabase": true,
-#     "shopify": true
-#   }
-# }
+Example implementation (in React Router):
+```typescript
+{
+  path: '/health',
+  element: <HealthCheck />
+}
 ```
 
-### 3. Bulk Product Upload Health Check
+## Next Steps for Developers
 
-Verify Shopify integration secrets are configured:
+### 1. Verify Health Endpoint
+- Ensure `/health` route is implemented
+- Test locally: `http://localhost:5173/health`
+- Verify returns 200 status
 
-```bash
-# GET request to check Shopify configuration
-curl -X GET https://YOUR_SUPABASE_PROJECT.supabase.co/functions/v1/bulk-product-upload
+### 2. Configure Discord Notifications (Optional)
+- Go to GitHub repository → Settings → Secrets and variables → Actions
+- Add `DISCORD_WEBHOOK_URL` secret
+- Get webhook URL from Discord server settings
 
-# Expected when configured (HTTP 200):
-# {"status":"ok","message":"Shopify secrets configured"}
+### 3. Monitor Deployments
+- Check GitHub Actions tab for workflow runs
+- Review deployment logs
+- Verify health check results
 
-# Expected when NOT configured (HTTP 503):
-# {
-#   "status": "unavailable",
-#   "message": "Shopify secrets missing or invalid",
-#   "missing": ["SHOPIFY_STORE_DOMAIN", "SHOPIFY_ACCESS_TOKEN"],
-#   "hint": "SHOPIFY_STORE_DOMAIN must be myshopify domain only (no https://)"
-# }
-```
+### 4. Troubleshooting
 
-**If you get HTTP 503:** Follow the instructions in [PRE_LAUNCH_CHECKLIST.md §5](docs/PRE_LAUNCH_CHECKLIST.md#5-verify-secrets-configuration) to configure Shopify secrets.
+**Health check fails:**
+- Verify `/health` endpoint exists and returns 200
+- Check Lovable deployment logs
+- Ensure deployment completed before health check runs
+- Adjust wait time in workflow if needed (currently 120s)
 
-### 4. API Integration Tests
+**Deployment doesn't trigger:**
+- Verify changes were merged to `main` branch
+- Check GitHub Actions is enabled for repository
+- Review workflow file permissions
+- `.github/workflows/deploy-health-check.yml` - Post-deployment
 
-Test key API endpoints with authentication:
+## Additional Resources
 
-```bash
-# Test bulk product upload (requires admin auth)
-curl -X POST https://YOUR_SUPABASE_PROJECT.supabase.co/functions/v1/bulk-product-upload \
-  -H "Authorization: Bearer YOUR_SUPABASE_JWT_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "action": "categorize",
-    "products": [
-      {
-        "sku": "TEST-001",
-        "name": "Moisturizing Face Cream",
-        "costPrice": 15.00,
-        "sellingPrice": 29.99
-      }
-    ]
-  }'
+- [Lovable Documentation](https://docs.lovable.dev/)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [DEPLOYMENT_TEMPLATE.md](./docs/DEPLOYMENT_TEMPLATE.md) - Detailed deployment guide
+- [APPLY_TO_MAIN_SITE.md](./APPLY_TO_MAIN_SITE.md) - Pre-deployment checklist
 
-# Expected: categorized product with assigned category and image prompt
-```
+## Workflow Files
+ health verification
+- `.github/workflows/sync-file-changes-to-lovable.yml` - File change synchronization
+- `.github/workflows/sync-issues-prs-to-lovable.yml` - Issue and PR synchronization
 
-See [docs/DEPLOYMENT_TEMPLATE.md](docs/DEPLOYMENT_TEMPLATE.md) for complete payload examples.
+## Contact & Support
 
-### 5. Database Connectivity
-
-Verify Supabase database is accessible and tables are created:
-
-```bash
-# Use Supabase CLI or dashboard to verify tables exist:
-# - products
-# - orders
-# - users
-# - deployment_health_checks
-# - checklist_progress
-
-# Check via health-checks-ingest function (requires HEALTH_CHECKS_SECRET header)
-curl -X POST https://YOUR_SUPABASE_PROJECT.supabase.co/functions/v1/health-checks-ingest \
-  -H "Content-Type: application/json" \
-  -H "x-health-checks-secret: YOUR_HEALTH_CHECKS_SECRET" \
-  -d '{
-    "health_check": {
-      "branch": "main",
-      "job_name": "manual-test",
-      "status": "success"
-    }
-  }'
-
-# Expected (HTTP 201): {"ok":true,"health_check":{"id":123}}
-```
-
-## Fixing 503 Errors
-
-If any health check returns HTTP 503, follow these steps:
-
-1. **Bulk Product Upload 503**: Missing Shopify secrets
-   - Go to Supabase Dashboard → Edge Functions → bulk-product-upload → Secrets
-   - Add `SHOPIFY_STORE_DOMAIN` (e.g., `your-store.myshopify.com`)
-   - Add `SHOPIFY_ACCESS_TOKEN` (Admin API access token)
-   - See [PRE_LAUNCH_CHECKLIST.md §5](docs/PRE_LAUNCH_CHECKLIST.md#5-verify-secrets-configuration)
-
-2. **General 503**: Service unavailable
-   - Check deployment status in Lovable dashboard
-   - Verify environment variables are set correctly
-   - Check logs for specific error messages
-
-## Create Pull Request
-
-Once all health checks pass:
-
-1. Create a feature branch for your changes:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. Commit your changes:
-   ```bash
-   git add .
-   git commit -m "feat: description of your changes"
-   ```
-
-3. Push to origin:
-   ```bash
-   git push -u origin feature/your-feature-name
-   ```
-
-4. Open a PR in GitHub:
-   ```bash
-   gh pr create --base main --head feature/your-feature-name \
-     --title "feat: Your Feature Title" \
-     --body "Description of changes"
-   ```
-
-5. Wait for automated checks to pass (see `.github/workflows/deploy-health-check.yml`)
-
-## DNS Setup
-
-After merging to main and deploying via Lovable:
-
-1. **Lovable Deployment**:
-   - Open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID)
-   - Click Share → Publish
-   - Wait for deployment to complete
-
-2. **Custom Domain** (Optional):
-   - Navigate to Project → Settings → Domains
-   - Click "Connect Domain"
-   - Follow instructions to add DNS records
-   - See [Lovable Docs: Custom Domain](https://docs.lovable.dev/features/custom-domain)
-
-## Verify Production
-
-Final verification checklist:
-
-- [ ] Frontend loads at production URL
-- [ ] Health endpoint returns 200 OK
-- [ ] Bulk product upload returns 200 (not 503)
-- [ ] Database queries work correctly
-- [ ] Shopify integration is functional
-- [ ] SSL certificate is valid
-- [ ] Custom domain resolves correctly (if configured)
-
-Run the automated health check script:
-
-```bash
-# Set your production URL
-export SITE_URL=https://your-production-domain.com
-
-# Run health check
-node scripts/health-check.js
-```
-
-## Related Documentation
-
-- [README.md](README.md) - Production-ready checklist and overview
-- [docs/DEPLOYMENT_TEMPLATE.md](docs/DEPLOYMENT_TEMPLATE.md) - Deployment templates and examples
-- [docs/PRE_LAUNCH_CHECKLIST.md](docs/PRE_LAUNCH_CHECKLIST.md) - §5 secrets configuration
-- [.github/workflows/deploy-health-check.yml](.github/workflows/deploy-health-check.yml) - Automated health checks
-
-## PRE_LAUNCH Checklist Reference
-
-Before going live, ensure all items in the [PRE_LAUNCH_CHECKLIST.md §5](docs/PRE_LAUNCH_CHECKLIST.md#5-verify-secrets-configuration) are completed, including:
-
-- Environment variables configured
-- Secrets properly set
-- Database migrations applied
-- Third-party integrations tested
-- Monitoring and logging enabled
+For deployment issues or questions:
+1. Check workflow logs in GitHub Actions
+2. Review Lovable dashboard
+3. Consult team documentation in `/docs`
+4. Reference [MAIN_PROJECT.md](./MAIN_PROJECT.md) for integration details
