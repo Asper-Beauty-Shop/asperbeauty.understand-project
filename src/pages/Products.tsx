@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProductCard } from "@/components/ShopifyProductCard";
 import { useProductEnrichmentBulk } from "@/hooks/useProductEnrichment";
@@ -7,19 +6,16 @@ import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { ConcernFilter } from "@/components/ConcernFilter";
 import { VendorFilter, buildVendorQuery } from "@/components/VendorFilter";
-import { CartDrawer } from "@/components/CartDrawer";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductSkeletons";
 import MobileFilterButton from "@/components/MobileFilterButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Package, ArrowLeft, Search, X } from "lucide-react";
-import { categorizeProduct } from "@/lib/categoryMapping";
+import { Package, Search, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
-import AuthButton from "@/components/AuthButton";
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import asperLogo from "@/assets/asper-lotus-logo.png";
 
 const Products = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -73,96 +69,77 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <nav className="sticky top-0 z-50 border-b border-accent/10 glass-nav">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
-                </Button>
-              </Link>
-              <div className="h-6 w-px bg-border" />
-              <img src={asperLogo} alt="Asper" className="h-7 w-auto" />
-            </div>
-            <div className="flex items-center gap-3">
-              <AuthButton />
-              <CartDrawer />
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
+      <main className="pt-16">
+        <header className="border-b border-border/50 bg-card">
+          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">
+              Product Catalog
+            </h1>
+            <p className="mt-2 text-muted-foreground font-body">
+              Browse our curated collection of 4,000+ beauty & wellness products
+            </p>
 
-      <header className="border-b border-border/50 bg-card">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">
-            Product Catalog
-          </h1>
-          <p className="mt-2 text-muted-foreground font-body">
-            Browse our curated collection of 4,000+ beauty & wellness products
-          </p>
-
-          <form onSubmit={handleSearch} className="mt-6 flex gap-2 max-w-lg">
-            <Input
-              placeholder="Search products..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="font-body"
-            />
-            <Button type="submit" size="sm" className="bg-primary text-primary-foreground">
-              <Search className="h-4 w-4" />
-            </Button>
-          </form>
-
-          {/* Top-level category tabs */}
-          <div className="mt-5">
-            <CategoryTabs activeTab={activeTab} onTabChange={handleTabChange} />
-          </div>
-
-          {/* Active filter pills */}
-          {totalFilters > 0 && (
-            <div className="mt-4 flex flex-wrap gap-1.5">
-              {selectedTypes.map((type) => (
-                <Button
-                  key={`type-${type}`}
-                  variant="secondary"
-                  size="sm"
-                  className="rounded-full text-xs h-7 gap-1"
-                  onClick={() =>
-                    setSelectedTypes(selectedTypes.filter((t) => t !== type))
-                  }
-                >
-                  {type}
-                  <X className="h-3 w-3" />
-                </Button>
-              ))}
-              {selectedVendors.map((vendor) => (
-                <Button
-                  key={`vendor-${vendor}`}
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full text-xs h-7 gap-1 border-primary/30"
-                  onClick={() =>
-                    setSelectedVendors(selectedVendors.filter((v) => v !== vendor))
-                  }
-                >
-                  🏷️ {vendor}
-                  <X className="h-3 w-3" />
-                </Button>
-              ))}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="rounded-full text-xs h-7 text-muted-foreground"
-                onClick={() => { setSelectedTypes([]); setSelectedVendors([]); }}
-              >
-                Clear all
+            <form onSubmit={handleSearch} className="mt-6 flex gap-2 max-w-lg">
+              <Input
+                placeholder="Search products..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="font-body"
+              />
+              <Button type="submit" size="sm" className="bg-primary text-primary-foreground">
+                <Search className="h-4 w-4" />
               </Button>
+            </form>
+
+            {/* Top-level category tabs */}
+            <div className="mt-5">
+              <CategoryTabs activeTab={activeTab} onTabChange={handleTabChange} />
             </div>
-          )}
-        </div>
-      </header>
+
+            {/* Active filter pills */}
+            {totalFilters > 0 && (
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {selectedTypes.map((type) => (
+                  <Button
+                    key={`type-${type}`}
+                    variant="secondary"
+                    size="sm"
+                    className="rounded-full text-xs h-7 gap-1"
+                    onClick={() =>
+                      setSelectedTypes(selectedTypes.filter((t) => t !== type))
+                    }
+                  >
+                    {type}
+                    <X className="h-3 w-3" />
+                  </Button>
+                ))}
+                {selectedVendors.map((vendor) => (
+                  <Button
+                    key={`vendor-${vendor}`}
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full text-xs h-7 gap-1 border-primary/30"
+                    onClick={() =>
+                      setSelectedVendors(selectedVendors.filter((v) => v !== vendor))
+                    }
+                  >
+                    🏷️ {vendor}
+                    <X className="h-3 w-3" />
+                  </Button>
+                ))}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-full text-xs h-7 text-muted-foreground"
+                  onClick={() => { setSelectedTypes([]); setSelectedVendors([]); }}
+                >
+                  Clear all
+                </Button>
+              </div>
+            )}
+          </div>
+        </header>
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex gap-8">
@@ -234,7 +211,7 @@ const Products = () => {
             )}
           </main>
         </div>
-      </div>
+      </main>
       <Footer />
     </div>
   );
