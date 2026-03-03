@@ -3,8 +3,9 @@
 # Lovable: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
 #
 # On every push, sends lists of added/modified/removed files to Lovable via webhook.
-# SETUP: In GitHub repo → Settings → Secrets and variables → Actions, add:
+# SETUP (OPTIONAL): In GitHub repo → Settings → Secrets and variables → Actions, add:
 #   LOVABLE_WEBHOOK_URL = (webhook URL from Lovable for file sync)
+# If the secret is not configured, this workflow will skip gracefully.
 #
 name: Sync File Changes to Lovable
 
@@ -21,11 +22,11 @@ jobs:
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
-          # Validate that LOVABLE_WEBHOOK_URL is set
+          # Check if LOVABLE_WEBHOOK_URL is set
           if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "Error: LOVABLE_WEBHOOK_URL is not set"
-            echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
-            exit 1
+            echo "ℹ️  LOVABLE_WEBHOOK_URL is not configured - skipping Lovable sync"
+            echo "This is optional. To enable, set the LOVABLE_WEBHOOK_URL secret in repository settings."
+            exit 0
           fi
 
           # Debug: Show masked URL (only show protocol and domain)
@@ -34,9 +35,10 @@ jobs:
 
           # Validate URL format
           if ! echo "$LOVABLE_WEBHOOK_URL" | grep -qE '^https?://'; then
-            echo "Error: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
+            echo "⚠️  Warning: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
             echo "Expected format: https://api.lovable.ai/... or similar"
-            exit 1
+            echo "Skipping sync due to invalid URL format."
+            exit 0
           fi
 
           echo "Gathering lists of changed files..."

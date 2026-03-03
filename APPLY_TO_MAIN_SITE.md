@@ -298,7 +298,7 @@ After deploy, confirm these pages on **https://asperbeautyshop-com.lovable.app/*
   - `sync-issues-prs-to-lovable.yml`
 
 - [ ] `.env` in understand-project (from example), not committed
-- [ ] Workflows copied; `LOVABLE_WEBHOOK_URL` set if needed
+- [ ] Workflows copied; `LOVABLE_WEBHOOK_URL` is optional (workflows will skip gracefully if not set)
 
 ---
 

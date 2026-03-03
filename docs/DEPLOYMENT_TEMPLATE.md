@@ -178,13 +178,14 @@ git push origin main
 
 ## Environment Configuration
 
-### Required Secrets
+### Optional Secrets
 
-Ensure these are configured in GitHub repository settings:
+These secrets are optional. Workflows will skip gracefully if not configured:
 
-#### Lovable Integration
-- `LOVABLE_WEBHOOK_URL` - For file change synchronization
+#### Lovable Integration (Optional)
+- `LOVABLE_WEBHOOK_URL` - For file change synchronization with Lovable platform
 - Lovable project URL: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
+- If not set, the sync workflows will skip without causing build failures
 
 #### Optional Notifications
 - `DISCORD_WEBHOOK_URL` - For deployment notifications
