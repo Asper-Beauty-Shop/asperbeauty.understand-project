@@ -7,7 +7,7 @@ import { useWishlistStore } from "@/stores/wishlistStore";
 import { toast } from "sonner";
 import { Heart, Sparkles, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { QuickViewModal } from "./QuickViewModal";
+import { QuickViewModal, QuickViewButton } from "./QuickViewModal";
 import { translateTitle } from "@/lib/productUtils";
 import { formatJOD } from "@/lib/productImageUtils";
 import { OptimizedImage } from "./OptimizedImage";
@@ -111,7 +111,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         {/* Image Container */}
-        <div className="aspect-square overflow-hidden rounded-md bg-gray-50 mb-4">
+        <div className="relative aspect-square overflow-hidden rounded-md bg-gray-50 mb-4">
           {firstImage
             ? (
               <OptimizedImage
@@ -131,6 +131,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 </span>
               </div>
             )}
+          {/* Quick View - appears on hover over image */}
+          <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <QuickViewButton onClick={() => setIsQuickViewOpen(true)} />
+          </div>
         </div>
 
         {/* Content - clean & clinical */}
@@ -187,8 +191,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           aria-label={isWishlisted
             ? (language === "ar" ? "إزالة من المفضلة" : "Remove from wishlist")
             : (language === "ar" ? "إضافة إلى المفضلة" : "Add to wishlist")}
-          className={`absolute top-2 right-2 z-20 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
-            isVerified ? "top-10" : ""
+          className={`absolute right-2 z-20 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+            isVerified ? "top-10" : "top-2"
           } ${
             isWishlisted
               ? "bg-shiny-gold text-white"
@@ -198,11 +202,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
         </button>
 
-        {/* Quick Add - appears on hover (Premium Pharmacy: Add to Regimen) */}
+        {/* Quick Add - visible on mobile, appears on hover on desktop */}
         <button
           type="button"
           onClick={handleAddToCart}
-          className="w-full mt-4 bg-maroon text-white py-2 rounded text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className="w-full mt-4 bg-maroon text-white py-2 rounded text-sm font-medium md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
         >
           {language === "ar" ? "إضافة إلى النظام" : "Add to Regimen"}
         </button>
