@@ -172,8 +172,8 @@ export default function AdminOrders() {
 
     setIsLoading(true);
     try {
-      const { data, error } = await (supabase as any)
-        .from("cod_orders")
+      const { data, error } = await supabase
+        .from("cod_orders" as never)
         .select("*")
         .order("created_at", { ascending: false });
 
@@ -356,8 +356,8 @@ export default function AdminOrders() {
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     setIsUpdating(orderId);
     try {
-      const { error } = await (supabase as any)
-        .from("cod_orders")
+      const { error } = await supabase
+        .from("cod_orders" as never)
         .update({ status: newStatus })
         .eq("id", orderId);
 

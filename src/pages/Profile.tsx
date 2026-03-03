@@ -74,8 +74,9 @@ export default function Profile() {
       if (error) throw error;
 
       toast({ title: "Profile updated", description: "Your changes have been saved." });
-    } catch (err: any) {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      toast({ title: "Error", description: message, variant: "destructive" });
     } finally {
       setSaving(false);
     }
