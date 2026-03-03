@@ -219,7 +219,7 @@ export default function AdminAuditLogs() {
     ]);
 
     const profileMap = new Map(
-      (profilesResult.data || []).map((p: any) => [p.user_id, p.display_name]),
+      (profilesResult.data || []).map((p: { user_id: string; display_name: string | null }) => [p.user_id, p.display_name]),
     );
     const orderMap = new Map(
       (ordersResult.data || []).map((o) => [o.id, o.order_number]),

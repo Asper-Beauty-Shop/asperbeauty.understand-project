@@ -77,6 +77,8 @@ export default function Profile() {
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       toast({ title: "Error", description: msg, variant: "destructive" });
+      const message = err instanceof Error ? err.message : String(err);
+      toast({ title: "Error", description: message, variant: "destructive" });
     } finally {
       setSaving(false);
     }

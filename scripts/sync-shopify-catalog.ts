@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Asper Beauty Shop — CSV → Shopify Admin API Catalog Sync
  *

@@ -29,6 +29,7 @@ function getTextContent(content: string | MessageContent[]): string {
   if (typeof content === "string") return content;
   return content
     .filter((p): p is { type: "text"; text: string } => (p as { type: string }).type === "text")
+    .filter((p): p is { type: "text"; text: string } => typeof p === "object" && p !== null && "type" in p && p.type === "text")
     .map((p) => p.text)
     .join(" ");
 }
@@ -266,7 +267,7 @@ export default function AIConcierge() {
       return;
     }
     window.speechSynthesis.cancel();
-    const clean = text.replace(/[#*_`~>\[\]()!]/g, "").replace(/\n+/g, ". ");
+    const clean = text.replace(/[#*_`~>[\]()!]/g, "").replace(/\n+/g, ". ");
     const utterance = new SpeechSynthesisUtterance(clean);
     const voices = window.speechSynthesis.getVoices();
     if (persona === "dr_sami") {
@@ -369,6 +370,10 @@ export default function AIConcierge() {
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: `⚠️ ${msg}`, persona: currentPersona },
+      const errMsg = e instanceof Error ? e.message : String(e);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: `⚠️ ${errMsg}`, persona: currentPersona },
       ]);
       setIsLoading(false);
     }

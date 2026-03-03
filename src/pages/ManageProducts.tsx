@@ -31,6 +31,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 import { formatJOD } from "@/lib/productImageUtils";
 import {
@@ -243,8 +244,8 @@ const ManageProducts = () => {
         title: formData.title.trim(),
         price: parseFloat(formData.price),
         handle: formData.handle.trim() || formData.title.trim().toLowerCase().replace(/\s+/g, "-"),
-        primary_concern: formData.primary_concern as any,
-        regimen_step: formData.regimen_step as any,
+        primary_concern: formData.primary_concern as Tables<"products">["primary_concern"],
+        regimen_step: formData.regimen_step as Tables<"products">["regimen_step"],
         image_url: formData.image_url.trim() || null,
       };
 

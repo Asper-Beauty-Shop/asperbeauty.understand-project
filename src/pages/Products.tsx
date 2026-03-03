@@ -30,7 +30,7 @@ const Products = () => {
   const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
-  const visibleGroups: any[] = [];
+  const visibleGroups: { name: string; types: string[] }[] = [];
 
   const buildQuery = () => {
     const parts: string[] = [];

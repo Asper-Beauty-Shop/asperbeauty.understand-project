@@ -12,6 +12,10 @@ import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import AuthButton from "@/components/AuthButton";
 
+type MessageContent =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
+
 // --- Catalog snapshot ---
 const ASPER_CATALOG = [
   { handle: "maybelline-eraser", title: "Maybelline Instant Age Rewind Eraser", price: "12.30", vendor: "Maybelline", type: "Concealer" },
@@ -50,6 +54,7 @@ async function streamChat({
   onDone,
 }: {
   messages: { role: string; content: string | Array<{ type: string; text?: string; image_url?: { url: string } }> }[];
+  messages: { role: string; content: string | MessageContent[] }[];
   forcePersona?: string;
   onPersona: (p: string) => void;
   onDelta: (text: string) => void;
@@ -151,6 +156,7 @@ export default function Intelligence() {
     const userText = inputValue.trim() || "Please analyze this image and recommend a routine.";
 
     let userContent: string | Array<{ type: string; text?: string; image_url?: { url: string } }>;
+    let userContent: string | MessageContent[];
     if (capturedImage) {
       userContent = [
         { type: "text", text: userText },
@@ -189,6 +195,7 @@ export default function Intelligence() {
 
       // Add current message
       apiMessages.push({ role: "user", content: userContent });
+      apiMessages.push({ role: "user", content: userContent as string | MessageContent[] });
 
       await streamChat({
         messages: apiMessages,
@@ -204,6 +211,10 @@ export default function Intelligence() {
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: `⚠️ ${msg}`, persona: detectedPersona },
+      const errMsg = err instanceof Error ? err.message : String(err);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: `⚠️ ${errMsg}`, persona: detectedPersona },
       ]);
       setIsLoading(false);
     }
@@ -216,7 +227,7 @@ export default function Intelligence() {
       return;
     }
     window.speechSynthesis.cancel();
-    const clean = text.replace(/[#*_`~>\[\]()!]/g, "").replace(/\n+/g, ". ");
+    const clean = text.replace(/[#*_`~>[\]()!]/g, "").replace(/\n+/g, ". ");
     const utterance = new SpeechSynthesisUtterance(clean);
     const voices = window.speechSynthesis.getVoices();
     if (isClinical) {
