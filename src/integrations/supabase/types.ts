@@ -1156,6 +1156,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      upsert_concierge_profile: {
+        Args: {
+          p_recommended_routine: Json
+          p_skin_concern: string
+          p_skin_type: string
+          p_user_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "editor"
