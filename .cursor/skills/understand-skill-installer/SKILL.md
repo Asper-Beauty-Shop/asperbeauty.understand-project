@@ -1,7 +1,9 @@
 ---
-name: understand-skill-installer
-description: Installs Understand Project skills from a GitHub URL or owner/repo into $UNDERSTAND_HOME/skills. Use when the user asks to install a skill, add a skill from GitHub, install from a curated list, or install by repo/path.
----
+name:   
+understa    nd-skill-installer  
+description: Installs 
+Understand Project skills from a GitHub URL or owner/repo into $UNDERSTAND_HOME/skills. Use when the user asks to install a skill, add a skill from GitHub, install from a curated list, or install by repo/path.
+--- 
 
 # Understand Skill Installer
 

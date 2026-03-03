@@ -40,6 +40,7 @@ import { RequireAdmin } from "./components/RequireAdmin";
 const BeautyAssistant = lazy(() =>
   import("@/components/BeautyAssistant").then((m) => ({ default: m.BeautyAssistant })),
 );
+const ChatBot = lazy(() => import("@/components/ChatBot"));
 
 const queryClient = new QueryClient();
 
@@ -68,7 +69,7 @@ const App = () => {
             <Sonner position="top-center" />
             <BrowserRouter>
               <Suspense fallback={null}>
-                <BeautyAssistant />
+                <ChatBot />
               </Suspense>
               <Routes>
                 <Route path="/" element={<Index />} />

@@ -252,6 +252,23 @@
     transform: scale(1.08);
   }
 
+  /* Dr. Bot — Medical Luxury Chat (Soft Ivory #F5F1E8, Gold Stitch #C5A028) */
+  .dr-bot-glass {
+    background: rgba(245, 241, 232, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .gold-stitch-card {
+    border: 1px solid #C5A028;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 1px 3px rgba(197, 160, 40, 0.08);
+  }
+
+  .dr-bot-burgundy-muted {
+    background: rgba(106, 30, 42, 0.1);
+  }
+
   /* Gradient Backgrounds */
   .gradient-cream {
     background: linear-gradient(

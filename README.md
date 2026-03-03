@@ -20,6 +20,9 @@ If you want to work locally using your own IDE, you can clone this repo and push
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
+**Claude Code and Codex Assist (VS Code extension)**  
+When using VS Code or Cursor, the *Claude Code and Codex Assist* extension lets you browse chat history from both Claude Code (`~/.claude/projects/`) and Codex (`~/.codex/sessions/`), with visual badges and a unified interface. Useful for reviewing past sessions and applying changes across both assistants (cross-platform: macOS, Windows, Linux).
+
 Follow these steps:
 
 ```sh
