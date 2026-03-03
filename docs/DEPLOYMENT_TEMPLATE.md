@@ -183,7 +183,7 @@ git push origin main
 Ensure these are configured in GitHub repository settings:
 
 #### Lovable Integration
-- `LOVABLE_WEBHOOK_URL` - For file change synchronization
+- `LOVABLE_WEBHOOK_URL` - (Optional) For file change synchronization with Lovable
 - Lovable project URL: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
 
 #### Optional Notifications
