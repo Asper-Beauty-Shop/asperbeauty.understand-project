@@ -3,9 +3,8 @@
 # Lovable: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
 #
 # Sends issue/PR open, edit, reopen, close events to Lovable via webhook.
-# SETUP (OPTIONAL): In GitHub repo → Settings → Secrets and variables → Actions, add:
+# SETUP: In GitHub repo → Settings → Secrets and variables → Actions, add:
 #   LOVABLE_WEBHOOK_URL = (webhook URL from Lovable, if provided)
-#   If not set, the workflow will succeed with a warning message.
 #
 name: Sync Issues and PRs to Lovable
 
@@ -23,12 +22,11 @@ jobs:
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
-          # Check if LOVABLE_WEBHOOK_URL is set
+          # Validate that LOVABLE_WEBHOOK_URL is set
           if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "⚠️  Warning: LOVABLE_WEBHOOK_URL is not set"
-            echo "ℹ️  To enable sync with Lovable, set the LOVABLE_WEBHOOK_URL secret in repository settings."
-            echo "✓ Workflow will continue without syncing."
-            exit 0
+            echo "Error: LOVABLE_WEBHOOK_URL is not set"
+            echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
+            exit 1
           fi
 
           # Debug: Show masked URL (only show protocol and domain)
@@ -37,10 +35,9 @@ jobs:
 
           # Validate URL format
           if ! echo "$LOVABLE_WEBHOOK_URL" | grep -qE '^https?://'; then
-            echo "⚠️  Warning: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
+            echo "Error: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
             echo "Expected format: https://api.lovable.ai/... or similar"
-            echo "✓ Workflow will continue without syncing."
-            exit 0
+            exit 1
           fi
 
           echo "Sending event to Lovable..."
