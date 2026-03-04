@@ -1,183 +1,141 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { LuxuryProductCard } from "@/components/LuxuryProductCard";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { AnimatedSection } from "@/components/AnimatedSection";
 import { cn } from "@/lib/utils";
 
-interface Product {
+interface SliderProduct {
   id: string;
+  handle: string;
   title: string;
-  brand?: string;
-  category?: string;
-  price: number;
-  original_price?: number | null;
-  discount_percent?: number | null;
-  image_url: string;
-  description?: string;
-  volume_ml?: number;
-  is_new?: boolean;
-  is_on_sale?: boolean;
-  tags?: string[];
+  brand: string;
+  image: string;
+  tag?: string;
 }
 
 interface ProductSliderProps {
-  title: string;
-  titleAr?: string;
-  subtitle?: string;
-  subtitleAr?: string;
-  products: Product[];
-  ctaText?: string;
-  ctaLink?: string;
-  className?: string;
+  title: { en: string; ar: string };
+  subtitle?: { en: string; ar: string };
+  products: SliderProduct[];
 }
 
 export const ProductSlider = ({
   title,
-  titleAr,
   subtitle,
-  subtitleAr,
   products,
-  ctaText,
-  ctaLink,
-  className,
 }: ProductSliderProps) => {
-  const { language, dir } = useLanguage();
+  const { language } = useLanguage();
   const isArabic = language === "ar";
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const checkScrollButtons = () => {
-    if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-    }
-  };
-
-  useEffect(() => {
-    checkScrollButtons();
-    window.addEventListener("resize", checkScrollButtons);
-    return () => window.removeEventListener("resize", checkScrollButtons);
-  }, [products]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
-      const targetScroll =
-        direction === "left"
-          ? scrollContainerRef.current.scrollLeft - scrollAmount
-          : scrollContainerRef.current.scrollLeft + scrollAmount;
-
-      scrollContainerRef.current.scrollTo({
-        left: targetScroll,
+    if (scrollRef.current) {
+      const scrollAmount = 320;
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
       });
-
-      setTimeout(checkScrollButtons, 300);
     }
   };
 
   return (
-    <section className={cn("py-16 md:py-20 bg-asper-stone overflow-hidden", className)}>
+    <section className="py-16 lg:py-20 bg-asper-stone-light relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
+
       <div className="luxury-container">
-        {/* Header */}
-        <div className="mb-8 md:mb-12 text-center">
-          {subtitle && (
-            <p className="font-body text-xs md:text-sm uppercase tracking-[0.3em] text-polished-gold mb-3">
-              {isArabic ? subtitleAr || subtitle : subtitle}
-            </p>
-          )}
-          <h2 className="font-heading text-3xl md:text-5xl text-asper-ink font-bold">
-            {isArabic ? titleAr || title : title}
-          </h2>
-          {/* Decorative line */}
-          <div className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-polished-gold to-transparent mt-6" />
-        </div>
-
-        {/* Slider Container */}
-        <div className="relative group">
-          {/* Previous Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => scroll("left")}
-            disabled={!canScrollLeft}
-            className={cn(
-              "absolute top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full",
-              "bg-asper-stone/90 border-2 border-polished-gold/30 backdrop-blur-sm",
-              "hover:bg-burgundy hover:border-polished-gold hover:shadow-gold-lg",
-              "disabled:opacity-0 disabled:pointer-events-none",
-              "transition-all duration-300 opacity-0 group-hover:opacity-100",
-              dir === "rtl" ? "right-4 md:-right-6" : "left-4 md:-left-6"
+        {/* Section Header */}
+        <AnimatedSection
+          className="flex items-end justify-between mb-10"
+          animation="fade-up"
+        >
+          <div>
+            {subtitle && (
+              <span className="font-body text-xs uppercase tracking-[0.2em] text-polished-gold mb-2 block">
+                {isArabic ? subtitle.ar : subtitle.en}
+              </span>
             )}
-            aria-label="Previous"
-          >
-            {dir === "rtl" ? (
-              <ChevronRight className="h-6 w-6 text-polished-gold" />
-            ) : (
-              <ChevronLeft className="h-6 w-6 text-polished-gold" />
-            )}
-          </Button>
+            <h2 className="font-display text-2xl lg:text-3xl text-asper-ink">
+              {isArabic ? title.ar : title.en}
+            </h2>
+          </div>
 
-          {/* Scrollable Products Container */}
+          {/* Desktop navigation arrows */}
+          <div className="hidden md:flex items-center gap-2">
+            <button
+              onClick={() => scroll("left")}
+              className="w-10 h-10 rounded-full border border-polished-gold/30 hover:border-polished-gold/60 flex items-center justify-center text-asper-ink hover:text-polished-gold transition-all duration-300"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className="w-10 h-10 rounded-full border border-polished-gold/30 hover:border-polished-gold/60 flex items-center justify-center text-asper-ink hover:text-polished-gold transition-all duration-300"
+              aria-label="Next"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        </AnimatedSection>
+
+        {/* Product Carousel */}
+        <AnimatedSection animation="fade-up" delay={150}>
           <div
-            ref={scrollContainerRef}
-            onScroll={checkScrollButtons}
-            className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
-            style={{
-              scrollSnapType: "x mandatory",
-              WebkitOverflowScrolling: "touch",
-            }}
+            ref={scrollRef}
+            className="flex gap-5 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {products.map((product) => (
-              <div
+              <Link
                 key={product.id}
-                className="flex-shrink-0 w-[280px] md:w-[320px] scroll-snap-align-start"
+                to={`/product/${product.handle}`}
+                className="group flex-shrink-0 w-64 lg:w-72"
               >
-                <LuxuryProductCard product={product} />
-              </div>
+                {/* Product Card */}
+                <div className="rounded-xl overflow-hidden border border-border bg-card hover:border-polished-gold/40 hover:shadow-lg transition-all duration-400">
+                  {/* Image */}
+                  <div className="relative aspect-[3/4] bg-secondary overflow-hidden">
+                    <img
+                      src={product.image}
+                      alt={product.title}
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    {/* Product tag */}
+                    {product.tag && (
+                      <span className="absolute top-3 left-3 bg-polished-gold text-asper-ink text-[10px] uppercase tracking-wider font-body font-semibold px-3 py-1 rounded-full">
+                        {product.tag}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-4 space-y-1.5">
+                    <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-body">
+                      {product.brand}
+                    </p>
+                    <h3 className="font-display text-sm text-foreground line-clamp-2 leading-snug">
+                      {product.title}
+                    </h3>
+                    <span
+                      className={cn(
+                        "inline-flex items-center gap-1.5 text-xs font-body text-burgundy font-semibold uppercase tracking-wider mt-2",
+                        "group-hover:text-polished-gold transition-colors duration-300"
+                      )}
+                    >
+                      {isArabic ? "تسوق الآن" : "Shop Now"}
+                      <ChevronRight className="w-3 h-3" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
-
-          {/* Next Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => scroll("right")}
-            disabled={!canScrollRight}
-            className={cn(
-              "absolute top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full",
-              "bg-asper-stone/90 border-2 border-polished-gold/30 backdrop-blur-sm",
-              "hover:bg-burgundy hover:border-polished-gold hover:shadow-gold-lg",
-              "disabled:opacity-0 disabled:pointer-events-none",
-              "transition-all duration-300 opacity-0 group-hover:opacity-100",
-              dir === "rtl" ? "left-4 md:-left-6" : "right-4 md:-right-6"
-            )}
-            aria-label="Next"
-          >
-            {dir === "rtl" ? (
-              <ChevronLeft className="h-6 w-6 text-polished-gold" />
-            ) : (
-              <ChevronRight className="h-6 w-6 text-polished-gold" />
-            )}
-          </Button>
-        </div>
-
-        {/* Optional CTA */}
-        {ctaText && ctaLink && (
-          <div className="mt-8 text-center">
-            <a
-              href={ctaLink}
-              className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-widest text-burgundy hover:text-polished-gold transition-colors duration-300"
-            >
-              {ctaText}
-              <ChevronRight className={cn("h-4 w-4", dir === "rtl" && "rotate-180")} />
-            </a>
-          </div>
-        )}
+        </AnimatedSection>
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
     </section>
   );
 };

@@ -16,8 +16,8 @@ interface ProductCardProps {
   product: ShopifyProduct;
 }
 
-const getDNATag = (node: any) => {
-  const tags = node.tags || [];
+const getDNATag = (node: ShopifyProduct["node"]) => {
+  const tags = Array.isArray(node.tags) ? node.tags : [];
   const vendor = (node.vendor || "").toLowerCase();
   if (tags.includes("best-seller") || tags.includes("bestseller"))
     return { label: "Best Seller", bg: "#800020", color: "#fff" };
@@ -30,7 +30,7 @@ const getDNATag = (node: any) => {
   return null;
 };
 
-const getKeyBenefit = (node: any) => {
+const getKeyBenefit = (node: ShopifyProduct["node"]) => {
   const type = (node.productType || "").toLowerCase();
   if (type.includes("serum")) return "Advanced Treatment Serum";
   if (type.includes("moisturizer")) return "Hydration & Repair";
@@ -48,19 +48,19 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const { node } = product;
   const addItem = useCartStore((state) => state.addItem);
   const setCartOpen = useCartStore((state) => state.setOpen);
-  const { toggleItem, isWishlisted } = useWishlistStore();
+  const { toggleItem, isInWishlist } = useWishlistStore();
   const { language } = useLanguage();
 
-  const isWishlistedItem = isWishlisted(node.id);
+  const isWishlistedItem = isInWishlist(node.id);
   const dnaTag = getDNATag(node);
   const keyBenefit = getKeyBenefit(node);
   const firstImage = node.images?.edges?.[0]?.node;
   const secondImage = node.images?.edges?.[1]?.node;
   const displayImage = isHovered && secondImage ? secondImage : firstImage;
   const price = node.priceRange?.minVariantPrice?.amount;
-  const comparePrice = node.compareAtPriceRange?.maxVariantPrice?.amount;
-  const hasDiscount = comparePrice && parseFloat(comparePrice) > parseFloat(price || "0");
   const firstVariant = node.variants?.edges?.[0]?.node;
+  const comparePrice = firstVariant?.compareAtPrice?.amount;
+  const hasDiscount = comparePrice && parseFloat(comparePrice) > parseFloat(price || "0");
   const isVerified = node.tags?.includes("authentic") || node.tags?.includes("verified");
   const displayTitle = translateTitle(node.title || "", language);
 
@@ -69,14 +69,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     e.stopPropagation();
     if (!firstVariant) return;
     addItem({
+      product,
       variantId: firstVariant.id,
-      productId: node.id,
-      title: node.title || "",
-      price: parseFloat(price || "0"),
-      image: firstImage?.url || "",
-      handle: node.handle || "",
-      vendor: node.vendor || "",
+      variantTitle: firstVariant.title,
+      price: firstVariant.price,
       quantity: 1,
+      selectedOptions: firstVariant.selectedOptions,
     });
     setCartOpen(true);
   };
@@ -84,7 +82,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleItem(node as any);
+    toggleItem(product);
     if (!isWishlistedItem) {
       toast.success("Added to wishlist", { description: node.title, position: "top-center" });
     }
@@ -114,6 +112,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           )}
           <button
             onClick={handleWishlistToggle}
+            aria-label={isWishlistedItem
+              ? (language === "ar" ? "إزالة من المفضلة" : "Remove from wishlist")
+              : (language === "ar" ? "إضافة إلى المفضلة" : "Add to wishlist")}
             className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm transition-all hover:bg-white shadow-sm"
           >
             <Heart className={`w-4 h-4 transition-colors ${isWishlistedItem ? "fill-[#800020] text-[#800020]" : "text-gray-400 hover:text-[#800020]"}`} />
@@ -168,7 +169,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 className="w-full py-2 text-xs font-semibold text-white rounded-md transition-all hover:opacity-90 active:scale-95"
                 style={{ backgroundColor: "#800020", fontFamily: "Montserrat, sans-serif", borderRadius: "6px" }}
               >
-                Add to Regimen
+                {language === "ar" ? "إضافة إلى النظام" : "Add to Regimen"}
               </button>
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsQuickViewOpen(true); }}

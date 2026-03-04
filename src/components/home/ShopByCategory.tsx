@@ -1,132 +1,102 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { cn } from "@/lib/utils";
 import { AnimatedSection } from "@/components/AnimatedSection";
-import { Sparkles, Droplets, Palette, Flower2, Heart, Shield } from "lucide-react";
 
-interface CategoryItem {
-  id: string;
-  name: string;
-  nameAr?: string;
-  icon: React.ElementType;
-  link: string;
-  color: string;
-}
-
-const categories: CategoryItem[] = [
+const CATEGORIES = [
+  {
+    id: "perfume",
+en: "Perfume",
+    ar: "عطور",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=🌸",
+    href: "/collections/perfume",
+  },
   {
     id: "skincare",
-    name: "Skincare",
-    nameAr: "العناية بالبشرة",
-    icon: Droplets,
-    link: "/collections/skincare",
-    color: "from-blue-400/20 to-blue-500/20",
+    en: "Skincare",
+    ar: "العناية بالبشرة",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=✨",
+    href: "/collections/skincare",
   },
   {
     id: "makeup",
-    name: "Makeup",
-    nameAr: "المكياج",
-    icon: Palette,
-    link: "/collections/makeup",
-    color: "from-pink-400/20 to-pink-500/20",
-  },
-  {
-    id: "fragrance",
-    name: "Perfume",
-    nameAr: "العطور",
-    icon: Flower2,
-    link: "/collections/fragrance",
-    color: "from-purple-400/20 to-purple-500/20",
+    en: "Makeup",
+    ar: "مكياج",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=💄",
+    href: "/collections/makeup",
   },
   {
     id: "hair",
-    name: "Hair Care",
-    nameAr: "العناية بالشعر",
-    icon: Sparkles,
-    link: "/collections/hair",
-    color: "from-amber-400/20 to-amber-500/20",
+    en: "Hair",
+    ar: "العناية بالشعر",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=💇",
+    href: "/collections/hair",
   },
   {
-    id: "wellness",
-    name: "Wellness",
-    nameAr: "الصحة",
-    icon: Heart,
-    link: "/collections/wellness",
-    color: "from-rose-400/20 to-rose-500/20",
+    id: "body",
+    en: "Body",
+    ar: "العناية بالجسم",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=🧴",
+    href: "/collections/body",
   },
   {
-    id: "derma",
-    name: "Derma Care",
-    nameAr: "العناية الطبية",
-    icon: Shield,
-    link: "/skin-concerns",
-    color: "from-green-400/20 to-green-500/20",
+    id: "suncare",
+    en: "Sun Care",
+    ar: "حماية من الشمس",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=☀️",
+    href: "/collections/suncare",
   },
 ];
 
-interface ShopByCategoryProps {
-  className?: string;
-}
-
-export const ShopByCategory = ({ className }: ShopByCategoryProps) => {
+export const ShopByCategory = () => {
   const { language } = useLanguage();
   const isArabic = language === "ar";
 
   return (
-    <section className={cn("py-16 md:py-20 bg-asper-stone-light", className)}>
+    <section className="py-16 lg:py-20 bg-card relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
+
       <div className="luxury-container">
-        {/* Header */}
-        <AnimatedSection animation="fade-up" className="text-center mb-12">
-          <p className="font-body text-xs md:text-sm uppercase tracking-[0.3em] text-polished-gold mb-3">
-            {isArabic ? "اكتشف حسب الفئة" : "Discover by Category"}
-          </p>
-          <h2 className="font-heading text-3xl md:text-5xl text-asper-ink font-bold">
-            {isArabic ? "تسوق حسب الفئة" : "Shop by Category"}
+        <AnimatedSection className="text-center mb-12" animation="fade-up">
+          <span className="font-body text-xs uppercase tracking-[0.3em] text-polished-gold mb-3 block">
+            {isArabic ? "تسوقي حسب الفئة" : "Browse by Category"}
+          </span>
+          <h2 className="font-display text-2xl lg:text-3xl text-asper-ink">
+            {isArabic ? "اكتشفي مجموعاتنا" : "Shop by Category"}
           </h2>
-          {/* Decorative line */}
-          <div className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-polished-gold to-transparent mt-6" />
+          <div className="flex items-center justify-center gap-3 mt-4">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent to-polished-gold/60" />
+            <div className="w-1.5 h-1.5 rounded-full bg-polished-gold/60" />
+            <div className="w-12 h-px bg-gradient-to-l from-transparent to-polished-gold/60" />
+          </div>
         </AnimatedSection>
 
-        {/* Category Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-          {categories.map((category, index) => (
-            <AnimatedSection
-              key={category.id}
-              animation="fade-up"
-              delay={index * 100}
-            >
+        <AnimatedSection animation="fade-up" delay={150}>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-6 lg:gap-8">
+            {CATEGORIES.map((category) => (
               <Link
-                to={category.link}
-                className="group block text-center"
+                key={category.id}
+                to={category.href}
+                className="group flex flex-col items-center gap-3"
               >
-                {/* Icon Circle */}
-                <div className="relative mb-4 mx-auto w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32">
-                  {/* Background gradient */}
-                  <div
-                    className={cn(
-                      "absolute inset-0 rounded-full bg-gradient-to-br opacity-80 group-hover:opacity-100 transition-opacity duration-300",
-                      category.color
-                    )}
+                {/* Circle icon */}
+                <div className="relative w-20 h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden border-2 border-polished-gold/20 group-hover:border-polished-gold/60 transition-all duration-400 group-hover:shadow-[0_4px_20px_hsl(var(--polished-gold)/0.2)] group-hover:scale-105">
+                  <img
+                    src={category.icon}
+                    alt={isArabic ? category.ar : category.en}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
                   />
-                  {/* Border */}
-                  <div className="absolute inset-0 rounded-full border-2 border-polished-gold/30 group-hover:border-polished-gold group-hover:shadow-gold-lg transition-all duration-300" />
-                  {/* Icon */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <category.icon className="w-10 h-10 md:w-12 md:h-12 text-burgundy group-hover:text-polished-gold transition-colors duration-300" />
-                  </div>
-                  {/* Hover glow effect */}
-                  <div className="absolute inset-0 rounded-full bg-polished-gold/0 group-hover:bg-polished-gold/10 blur-xl transition-all duration-500" />
                 </div>
-
-                {/* Category Name */}
-                <h3 className="font-body text-sm md:text-base font-medium text-asper-ink group-hover:text-burgundy transition-colors duration-300">
-                  {isArabic ? category.nameAr || category.name : category.name}
-                </h3>
+                <span className="font-body text-xs lg:text-sm text-asper-ink group-hover:text-polished-gold transition-colors duration-300 text-center">
+                  {isArabic ? category.ar : category.en}
+                </span>
               </Link>
-            </AnimatedSection>
-          ))}
-        </div>
+            ))}
+          </div>
+        </AnimatedSection>
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
     </section>
   );
 };

@@ -3,30 +3,44 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
-import { CampaignHero } from "@/components/home/CampaignHero";
-import { ProductSlider } from "@/components/home/ProductSlider";
-import { EditorialSpotlight } from "@/components/home/EditorialSpotlight";
-import { BrandOfTheWeek } from "@/components/home/BrandOfTheWeek";
-import { ShopByCategory } from "@/components/home/ShopByCategory";
+import Hero from "@/components/home/Hero";
 import { USPBar } from "@/components/home/USPBar";
-import { NPSSurvey } from "@/components/home/NPSSurvey";
-import BrandStory from "@/components/home/BrandStory";
-import CelestialFeaturedCollection from "@/components/CelestialFeaturedCollection";
+import { ProductSlider } from "@/components/home/ProductSlider";
 import { Footer } from "@/components/Footer";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load below-the-fold components for better initial load performance
+const EditorialSpotlight = lazy(() =>
+  import("@/components/home/EditorialSpotlight").then((m) => ({
+    default: m.EditorialSpotlight,
+  }))
+);
+const BrandOfTheWeek = lazy(() =>
+  import("@/components/home/BrandOfTheWeek").then((m) => ({
+    default: m.BrandOfTheWeek,
+  }))
+);
+const ShopByCategory = lazy(() =>
+  import("@/components/home/ShopByCategory").then((m) => ({
+    default: m.ShopByCategory,
+  }))
+);
+const CelestialFeaturedCollection = lazy(() =>
+  import("@/components/CelestialFeaturedCollection")
+);
 const FeaturedBrands = lazy(() =>
   import("@/components/FeaturedBrands").then((m) => ({
     default: m.FeaturedBrands,
   }))
 );
-const Testimonials = lazy(() =>
-  import("@/components/Testimonials").then((m) => ({ default: m.Testimonials }))
-);
 const Newsletter = lazy(() =>
   import("@/components/Newsletter").then((m) => ({ default: m.Newsletter }))
+);
+const NPSSurvey = lazy(() =>
+  import("@/components/home/NPSSurvey").then((m) => ({
+    default: m.NPSSurvey,
+  }))
 );
 const TrustBanner = lazy(() =>
   import("@/components/TrustBanner").then((m) => ({ default: m.TrustBanner }))
@@ -53,6 +67,25 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
     </div>
   </div>
 );
+
+// Sample product data for sliders
+const NEW_ARRIVALS = [
+  { id: "1", handle: "cosmic-dealer-lip-oil", title: "Crystal Lip Oil — Rose Quartz", brand: "Cosmic Dealer", image: "https://placehold.co/400x533/FAF7F2/800020?text=Crystal+Lip+Oil", tag: "Just In" },
+  { id: "2", handle: "moussse-cloud-cream", title: "Cloud Cream Moisturizer", brand: "Moussse", image: "https://placehold.co/400x533/FAF7F2/800020?text=Cloud+Cream", tag: "Clean Product" },
+  { id: "3", handle: "mirror-water-botanical-mist", title: "Botanical Facial Mist", brand: "Mirror Water", image: "https://placehold.co/400x533/FAF7F2/800020?text=Botanical+Mist", tag: "Just In" },
+  { id: "4", handle: "phlur-missing-person", title: "Missing Person Eau de Parfum", brand: "Phlur", image: "https://placehold.co/400x533/FAF7F2/800020?text=Missing+Person" },
+  { id: "5", handle: "summer-fridays-jet-lag", title: "Jet Lag Mask — Hydrating", brand: "Summer Fridays", image: "https://placehold.co/400x533/FAF7F2/800020?text=Jet+Lag+Mask", tag: "Clean Product" },
+  { id: "6", handle: "kosas-revealer-concealer", title: "Revealer Skin-Improving Concealer", brand: "Kosas", image: "https://placehold.co/400x533/FAF7F2/800020?text=Revealer" },
+];
+
+const BESTSELLERS = [
+  { id: "7", handle: "augustinus-bader-rich-cream", title: "The Rich Cream", brand: "Augustinus Bader", image: "https://placehold.co/400x533/FAF7F2/800020?text=The+Rich+Cream", tag: "Bestseller" },
+  { id: "8", handle: "westman-atelier-contour", title: "Face Trace Contour Stick", brand: "Westman Atelier", image: "https://placehold.co/400x533/FAF7F2/800020?text=Contour+Stick", tag: "Bestseller" },
+  { id: "9", handle: "drunk-elephant-protini", title: "Protini Polypeptide Cream", brand: "Drunk Elephant", image: "https://placehold.co/400x533/FAF7F2/800020?text=Protini" },
+  { id: "10", handle: "tatcha-dewy-skin-cream", title: "The Dewy Skin Cream", brand: "Tatcha", image: "https://placehold.co/400x533/FAF7F2/800020?text=Dewy+Skin", tag: "Bestseller" },
+  { id: "11", handle: "merit-flush-balm", title: "Flush Balm Cheek Color", brand: "Merit", image: "https://placehold.co/400x533/FAF7F2/800020?text=Flush+Balm" },
+  { id: "12", handle: "ilia-super-serum", title: "Super Serum Skin Tint SPF 40", brand: "ILIA", image: "https://placehold.co/400x533/FAF7F2/800020?text=Super+Serum", tag: "Bestseller" },
+];
 
 const Index = () => {
   const navigate = useNavigate();
@@ -128,108 +161,62 @@ const Index = () => {
     <div className="min-h-screen bg-background animate-fade-in">
       <Header />
       <main>
-        {/* 1. Campaign Hero - "Wonder Women Edit" Style */}
-        <CampaignHero
-          badge="Special Edition"
-          badgeAr="إصدار خاص"
-          campaignTitle="WONDER WOMEN EDIT"
-          campaignTitleAr="إصدار النساء المبدعات"
-          subtitle="Female Founders"
-          subtitleAr="المؤسسات الإناث"
-          description="Celebrating the women behind iconic beauty brands like Phlur and Mirror Water. Discover their stories and shop their revolutionary products."
-          descriptionAr="احتفالاً بالنساء وراء علامات الجمال الأيقونية مثل Phlur و Mirror Water. اكتشف قصصهن وتسوق منتجاتهن الثورية."
-          imageUrl="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=1600"
-          ctaText="Shop Now"
-          ctaTextAr="تسوقي الآن"
-          ctaLink="/shop"
-        />
+        {/* 1. Hero Banner — Wonder Women Edit / Female Founders */}
+        <Hero />
 
-        {/* 2. Product Discovery - Just Landed! What's New */}
-        {newArrivals.length > 0 && (
-          <ProductSlider
-            title="Just Landed! What's New"
-            titleAr="وصل حديثاً! ما الجديد"
-            subtitle="New Arrivals"
-            subtitleAr="المنتجات الجديدة"
-            products={newArrivals}
-            ctaText="View All New Arrivals"
-            ctaLink="/shop"
-          />
-        )}
-
-        {/* 3. USP Bar - Trust Signals */}
+        {/* 2. USP Bar — Trust Signals */}
         <USPBar />
 
-        {/* 4. Editorial Spotlight - "WANTED!" Section */}
-        <EditorialSpotlight
-          badge="WANTED!"
-          badgeAr="مطلوب!"
-          title="Hydration Heroes"
-          titleAr="أبطال الترطيب"
-          description="Discover the power trio from Augustinus Bader. These revolutionary products work together to deliver intense hydration and restore your skin's natural glow. Pharmacist-approved for all skin types."
-          descriptionAr="اكتشف الثلاثي القوي من Augustinus Bader. تعمل هذه المنتجات الثورية معًا لتوفير ترطيب مكثف واستعادة التوهج الطبيعي لبشرتك. معتمد من الصيادلة لجميع أنواع البشرة."
-          imageUrl="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800"
-          ctaText="Discover Now"
-          ctaTextAr="اكتشف الآن"
-          ctaLink="/brands"
-          imagePosition="left"
+        {/* 3. Product Slider — Just Landed / What's New */}
+        <ProductSlider
+          title={{ en: "Just Landed! What's New", ar: "وصل حديثاً! الجديد لدينا" }}
+          subtitle={{ en: "New Arrivals", ar: "وصل حديثاً" }}
+          products={NEW_ARRIVALS}
         />
 
-        {/* 5. Product Discovery - Bestsellers / Niche Approved */}
-        {bestsellers.length > 0 && (
-          <ProductSlider
-            title="Bestsellers / Niche Approved"
-            titleAr="الأكثر مبيعاً / معتمد من المتخصصين"
-            subtitle="Top Performers"
-            subtitleAr="الأفضل أداءً"
-            products={bestsellers}
-            ctaText="Shop Bestsellers"
-            ctaLink="/best-sellers"
-          />
-        )}
-
-        {/* 6. Shop by Category Grid */}
-        <ShopByCategory />
-
-        {/* 7. Brand of the Week */}
-        <BrandOfTheWeek
-          brandName="Sitre"
-          brandNameAr="سيتر"
-          tagline="Modern-day sexiness"
-          taglineAr="الإغراء العصري"
-          description="Sitre redefines modern beauty with a philosophy rooted in confidence and self-expression. Each product is crafted to enhance your natural allure while celebrating your unique style."
-          descriptionAr="سيتر تعيد تعريف الجمال الحديث بفلسفة متجذرة في الثقة والتعبير عن الذات. كل منتج مصمم لتعزيز جاذبيتك الطبيعية مع الاحتفال بأسلوبك الفريد."
-          images={[
-            "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800",
-            "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=800",
-            "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800",
-          ]}
-          ctaLink="/brands"
+        {/* 4. Product Slider — Bestsellers */}
+        <ProductSlider
+          title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
+          subtitle={{ en: "Most Loved", ar: "الأكثر حباً" }}
+          products={BESTSELLERS}
         />
 
-        {/* Featured Collection with Glass & Gold Cards */}
-        <CelestialFeaturedCollection />
+        {/* 5. Editorial Spotlight — WANTED! Hero Products */}
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <EditorialSpotlight />
+        </Suspense>
 
-        {/* Brand Story Section */}
-        <BrandStory />
+        {/* 6. Brand of the Week */}
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <BrandOfTheWeek />
+        </Suspense>
 
-        {/* Lazy-loaded below-the-fold sections */}
+        {/* 7. Shop by Category Grid */}
+        <Suspense fallback={<SectionSkeleton height="h-48" />}>
+          <ShopByCategory />
+        </Suspense>
+
+        {/* 8. Digital Tray — Clinical Routine */}
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <CelestialFeaturedCollection />
+        </Suspense>
+
+        {/* 9. Featured Brands Carousel */}
         <Suspense fallback={<SectionSkeleton height="h-32" />}>
           <FeaturedBrands />
         </Suspense>
 
-        <Suspense fallback={<SectionSkeleton height="h-96" />}>
-          <Testimonials />
-        </Suspense>
-
-        {/* 8. NPS Survey */}
-        <NPSSurvey />
-
-        {/* 9. Newsletter with "15% OFF FOR BEAUTY INSIDERS" */}
+        {/* 10. Newsletter — 15% Off for Beauty Insiders */}
         <Suspense fallback={<SectionSkeleton height="h-48" />}>
           <Newsletter />
         </Suspense>
 
+        {/* 11. NPS Survey */}
+        <Suspense fallback={<SectionSkeleton height="h-20" />}>
+          <NPSSurvey />
+        </Suspense>
+
+        {/* 12. Trust Banner */}
         <Suspense fallback={<SectionSkeleton height="h-24" />}>
           <TrustBanner />
         </Suspense>

@@ -207,6 +207,64 @@ export const Footer = () => {
         </div>
       </div>
 
+      {/* SEO Block — Top Brands & Categories */}
+      <div className="border-t border-polished-gold/20">
+        <div className="luxury-container py-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Top Brands */}
+            <div>
+              <h4 className="font-display text-sm text-polished-white mb-4 uppercase tracking-wider">
+                {isArabic ? "أبرز العلامات" : "Top Brands"}
+              </h4>
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                {[
+                  "Vichy", "Eucerin", "Bioderma", "Cetaphil", "SVR",
+                  "La Roche-Posay", "Bourjois", "Essence", "IsaDora",
+                  "Maybelline", "L'Oréal Paris", "Garnier",
+                ].map((brand) => (
+                  <Link
+                    key={brand}
+                    to={`/brands/${brand.toLowerCase().replace(/['\s]/g, "-")}`}
+                    className="font-body text-xs text-asper-stone-light/50 hover:text-polished-gold transition-colors duration-300"
+                  >
+                    {brand}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Top Categories */}
+            <div>
+              <h4 className="font-display text-sm text-polished-white mb-4 uppercase tracking-wider">
+                {isArabic ? "أبرز الفئات" : "Top Categories"}
+              </h4>
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                {[
+                  { en: "Skincare", href: "/collections/skincare" },
+                  { en: "Makeup", href: "/collections/makeup" },
+                  { en: "Perfume", href: "/collections/perfume" },
+                  { en: "Hair Care", href: "/collections/hair" },
+                  { en: "Body Care", href: "/collections/body" },
+                  { en: "Sun Protection", href: "/collections/suncare" },
+                  { en: "Anti-Aging", href: "/concerns/anti-aging" },
+                  { en: "Acne Treatment", href: "/concerns/acne" },
+                  { en: "Moisturizers", href: "/collections/moisturizers" },
+                  { en: "Serums", href: "/collections/serums" },
+                ].map((cat) => (
+                  <Link
+                    key={cat.en}
+                    to={cat.href}
+                    className="font-body text-xs text-asper-stone-light/50 hover:text-polished-gold transition-colors duration-300"
+                  >
+                    {cat.en}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Trust & Credentials Bar */}
       <div className="border-t border-polished-gold/30">
         <div className="luxury-container py-8">
