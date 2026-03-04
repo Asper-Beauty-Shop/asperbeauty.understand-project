@@ -36,9 +36,10 @@ jobs:
 
           # Validate URL format
           if ! echo "$LOVABLE_WEBHOOK_URL" | grep -qE '^https?://'; then
-            echo "Error: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
+            echo "Warning: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
             echo "Expected format: https://api.lovable.ai/... or similar"
-            exit 1
+            echo "Skipping Lovable sync."
+            exit 0
           fi
 
           # Debug: Show masked URL (only show protocol and domain)

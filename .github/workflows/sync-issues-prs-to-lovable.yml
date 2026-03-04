@@ -37,9 +37,10 @@ jobs:
 
           # Validate URL format
           if ! echo "$LOVABLE_WEBHOOK_URL" | grep -qE '^https?://'; then
-            echo "Error: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
+            echo "Warning: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
             echo "Expected format: https://api.lovable.ai/... or similar"
-            exit 1
+            echo "Skipping Lovable sync."
+            exit 0
           fi
 
           # Debug: Show masked URL (only show protocol and domain)
@@ -47,15 +48,23 @@ jobs:
           echo "LOVABLE_WEBHOOK_URL=$MASKED_URL"
 
           echo "Sending event to Lovable..."
+          # Use GitHub event path JSON directly to avoid shell injection issues
           PAYLOAD=$(jq -n \
             --arg event_name "${{ github.event_name }}" \
             --arg action "${{ github.event.action }}" \
             --arg repo "${{ github.repository }}" \
             --arg sender "${{ github.actor }}" \
             --arg url "${{ github.event.issue.html_url || github.event.pull_request.html_url }}" \
-            --arg title "${{ github.event.issue.title || github.event.pull_request.title }}" \
-            --arg body "${{ github.event.issue.body || github.event.pull_request.body }}" \
-            '{event_name: $event_name, action: $action, repo: $repo, sender: $sender, url: $url, title: $title, body: $body}'
+            --argjson event_data "$(cat "$GITHUB_EVENT_PATH")" \
+            '{
+              event_name: $event_name,
+              action: $action,
+              repo: $repo,
+              sender: $sender,
+              url: $url,
+              title: ($event_data.issue.title // $event_data.pull_request.title // ""),
+              body: ($event_data.issue.body // $event_data.pull_request.body // "")
+            }'
           )
           curl -s -X POST "$LOVABLE_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
