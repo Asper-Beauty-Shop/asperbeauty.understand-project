@@ -442,4 +442,5 @@ The app is bilingual: **English** and **Arabic**. Arabic uses RTL layout.
 | `docs/DEPLOYMENT_TEMPLATE.md` | Full deployment guide with examples |
 | `docs/PRE_LAUNCH_CHECKLIST.md` | Security and configuration checks |
 | `docs/ROLE_AND_MANDATE.md` | Developer role guidelines |
+| `docs/COMMAND_PROTOCOL.md` | Slash command protocol (`/breakdown`, `/status`, `/pre-launch`, `/scaffold`, `/debug`) |
 | `env.main-site.example` | Environment variable template |
