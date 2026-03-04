@@ -50,17 +50,23 @@ Example implementation (in React Router):
 - Test locally: `http://localhost:5173/health`
 - Verify returns 200 status
 
-### 2. Configure Discord Notifications (Optional)
+### 2. Configure Lovable Webhook Sync
+- Go to GitHub repository → Settings → Secrets and variables → Actions
+- Add `LOVABLE_WEBHOOK_URL` secret
+- To get the URL: open your Lovable project settings at https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6, navigate to **Settings → Integrations** (or **Settings → GitHub**), and copy the webhook URL
+- If you can't find it in the UI, contact Lovable support with project ID: `657fb572-13a5-4a3e-bac9-184d39fdf7e6`
+
+### 3. Configure Discord Notifications (Optional)
 - Go to GitHub repository → Settings → Secrets and variables → Actions
 - Add `DISCORD_WEBHOOK_URL` secret
 - Get webhook URL from Discord server settings
 
-### 3. Monitor Deployments
+### 4. Monitor Deployments
 - Check GitHub Actions tab for workflow runs
 - Review deployment logs
 - Verify health check results
 
-### 4. Troubleshooting
+### 5. Troubleshooting
 
 **Health check fails:**
 - Verify `/health` endpoint exists and returns 200
