@@ -61,7 +61,7 @@ const Products = () => {
 
   const filterSidebar = (
     <div className="space-y-4">
-      <CategoryFilter selected={selectedTypes} onSelect={setSelectedTypes} groups={visibleGroups} />
+      <CategoryFilter selected={selectedTypes} onSelect={setSelectedTypes} />
       <Separator />
       <VendorFilter selected={selectedVendors} onSelect={setSelectedVendors} />
     </div>
@@ -211,6 +211,7 @@ const Products = () => {
             )}
           </main>
         </div>
+      </div>
       </main>
       <Footer />
     </div>

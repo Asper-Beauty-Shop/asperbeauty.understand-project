@@ -109,7 +109,7 @@ const Index = () => {
         price: p.price ?? 0,
         image_url: p.image_url || "/placeholder.svg",
         category: p.primary_concern,
-        tags: p.is_available_in_jordan === false ? ["Not available in your country"] : [],
+        tags: [] as string[],
         is_new: true,
       }));
     },
