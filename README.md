@@ -75,6 +75,24 @@ This project uses an automated deployment pipeline:
 3. **Verification**: The workflow pings the `/health` endpoint to verify the deployment succeeded
 4. **Notifications**: Optional Discord notifications for deployment status
 
+### GitHub Actions Secrets Setup
+
+The sync workflows require the following secret to be configured in GitHub repository settings
+(**Settings → Secrets and variables → Actions → New repository secret**):
+
+| Secret | Required | Description |
+|--------|----------|-------------|
+| `LOVABLE_WEBHOOK_URL` | Optional | Webhook URL for syncing file changes and issue/PR events to Lovable. If not set, the sync steps are skipped gracefully. |
+| `DISCORD_WEBHOOK_URL` | Optional | Discord webhook for deployment status notifications. |
+
+**How to get `LOVABLE_WEBHOOK_URL`:**
+1. Open your Lovable project at https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
+2. Go to **Settings → Integrations** (or **Settings → GitHub**)
+3. Copy the webhook URL shown there
+4. Add it as a repository secret named `LOVABLE_WEBHOOK_URL`
+
+> If the webhook URL is not visible in the Lovable UI, contact Lovable support with project ID `657fb572-13a5-4a3e-bac9-184d39fdf7e6`.
+
 ### Deployment Documentation
 
 For comprehensive deployment guides and best practices, see:
