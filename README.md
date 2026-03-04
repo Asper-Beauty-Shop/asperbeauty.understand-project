@@ -66,6 +66,14 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 
+### Required Setup
+
+⚠️ **Before workflows can run successfully, you must configure GitHub Secrets:**
+- **LOVABLE_WEBHOOK_URL** (Required) - Enables file and issue sync with Lovable
+- **DISCORD_WEBHOOK_URL** (Optional) - Enables deployment notifications
+
+📖 **See [docs/GITHUB_SECRETS_SETUP.md](./docs/GITHUB_SECRETS_SETUP.md) for step-by-step instructions**
+
 ### Automated Deployment Flow
 
 This project uses an automated deployment pipeline:
@@ -96,6 +104,7 @@ The sync workflows require the following secret to be configured in GitHub repos
 ### Deployment Documentation
 
 For comprehensive deployment guides and best practices, see:
+- [docs/GITHUB_SECRETS_SETUP.md](./docs/GITHUB_SECRETS_SETUP.md) - **START HERE**: Configure required GitHub secrets
 - [NEXT_STEPS.md](./NEXT_STEPS.md) - Quick reference for deployment flow and next steps
 - [docs/DEPLOYMENT_TEMPLATE.md](./docs/DEPLOYMENT_TEMPLATE.md) - Complete deployment guide with checklists
 - [APPLY_TO_MAIN_SITE.md](./APPLY_TO_MAIN_SITE.md) - Pre-deployment verification checklist

@@ -3,8 +3,13 @@
 # Lovable: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
 #
 # On every push, sends lists of added/modified/removed files to Lovable via webhook.
-# SETUP: In GitHub repo → Settings → Secrets and variables → Actions, add:
-#   LOVABLE_WEBHOOK_URL = (webhook URL from Lovable for file sync)
+# 
+# REQUIRED SETUP:
+#   1. In GitHub repo → Settings → Secrets and variables → Actions
+#   2. Add secret: LOVABLE_WEBHOOK_URL = (webhook URL from Lovable for file sync)
+#   3. See docs/GITHUB_SECRETS_SETUP.md for detailed instructions
+#
+# This workflow will FAIL if LOVABLE_WEBHOOK_URL is not configured.
 #
 name: Sync File Changes to Lovable
 
