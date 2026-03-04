@@ -99,7 +99,7 @@ const ProductDetail = () => {
     productType: p.primary_concern || "",
     priceRange: { minVariantPrice: { amount: String(p.price ?? 0), currencyCode: "JOD" } },
     images: { edges: [{ node: { url: p.image_url || "", altText: p.title } }] },
-    variants: { edges: [] as any[] },
+    variants: { edges: [] as { node: Record<string, unknown> }[] },
     options: [] as { name: string; values: string[] }[],
   });
 

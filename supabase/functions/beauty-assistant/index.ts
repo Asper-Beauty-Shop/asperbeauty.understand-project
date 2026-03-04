@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -110,10 +111,8 @@ function extractFromGorgias(body: Record<string, unknown>): { message: string } 
   const text =
     typeof last?.body_text === "string" ? last.body_text
     : typeof last?.body_html === "string" ? last.body_html.replace(/<[^>]+>/g, "").trim()
-    : typeof singleMsg?.body_text === "string" ? singleMsg.body_text
-    : typeof singleMsg?.body_html === "string" ? (singleMsg.body_html as string).replace(/<[^>]+>/g, "").trim()
-    : typeof (body as any).body_text === "string" ? (body as any).body_text
-    : typeof (body as any).message === "string" ? (body as any).message
+    : typeof (body as Record<string, unknown>).body_text === "string" ? (body as Record<string, unknown>).body_text
+    : typeof (body as Record<string, unknown>).message === "string" ? (body as Record<string, unknown>).message
     : "";
   return { message: text || "(No message)" };
 }
@@ -125,10 +124,9 @@ function extractFromManyChat(body: Record<string, unknown>): { message: string }
   const msgObj = firstMsg?.message as Record<string, unknown> | undefined;
 
   const text =
-    typeof msgObj?.text === "string" ? msgObj.text
-    : typeof (body.data as any)?.text === "string" ? (body.data as any).text
-    : typeof (body as any).text === "string" ? (body as any).text
-    : typeof (body as any).message === "string" ? (body as any).message
+    typeof data?.text === "string" ? data.text
+    : typeof (body as Record<string, unknown>).text === "string" ? (body as Record<string, unknown>).text
+    : typeof (body as Record<string, unknown>).message === "string" ? (body as Record<string, unknown>).message
     : "";
   return { message: text || "(No message)" };
 }
@@ -168,7 +166,7 @@ function concernSlugToEnum(slug: string): string[] {
 }
 
 /** Format a product row into a readable string for the AI context */
-function formatProduct(p: any): string {
+function formatProduct(p: Record<string, unknown>): string {
   const parts = [`**${p.title}**`];
   if (p.brand) parts[0] += ` (${p.brand})`;
   if (p.price) parts.push(`${p.price} JOD`);
@@ -182,11 +180,11 @@ function formatProduct(p: any): string {
 
 /** Fetch products matching a concern or keywords from the products table */
 async function fetchProductContext(
-  supabaseClient: any,
+  supabaseClient: ReturnType<typeof createClient>,
   userMessage: string,
   detectedSlug: string | null
-): Promise<{ productContext: string; matchedProducts: any[] }> {
-  let matchedProducts: any[] = [];
+): Promise<{ productContext: string; matchedProducts: unknown[] }> {
+  let matchedProducts: unknown[] = [];
   let productContext = "";
 
   // Try concern-based lookup first
@@ -550,11 +548,12 @@ serve(async (req) => {
     }
 
     // Extract last user message for product matching
-    const lastUserMessage = messages.filter((m: any) => m.role === "user").pop()?.content || "";
-    const lastText = typeof lastUserMessage === "string"
-      ? lastUserMessage
-      : Array.isArray(lastUserMessage)
-        ? lastUserMessage.filter((p: any) => p.type === "text").map((p: any) => p.text).join(" ")
+    const lastUserMessage = messages.filter((m: unknown) => (m as { role?: string }).role === "user").pop() as { content?: string | Array<{ type?: string; text?: string }> } | undefined;
+    const rawContent = lastUserMessage?.content ?? "";
+    const lastText = typeof rawContent === "string"
+      ? rawContent
+      : Array.isArray(rawContent)
+        ? rawContent.filter((p: { type?: string }) => p.type === "text").map((p: { text?: string }) => p.text ?? "").join(" ")
         : "";
 
     const detectedConcernSlug = detectConcernSlug(lastText);

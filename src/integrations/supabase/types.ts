@@ -871,6 +871,24 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          count: number
+          key: string
+          window_start: string
+        }
+        Insert: {
+          count?: number
+          key: string
+          window_start: string
+        }
+        Update: {
+          count?: number
+          key?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       "Shopify pub": {
         Row: {
           created_at: string | null
@@ -1071,6 +1089,10 @@ export type Database = {
         }
         Returns: Json
       }
+      enforce_rate_limit: {
+        Args: { p_key: string; p_limit: number }
+        Returns: boolean
+      }
       fq: { Args: { rel_name: string; rel_schema: string }; Returns: string }
       generate_prescription: { Args: { payload: Json }; Returns: Json }
       get_leads_for_followup: {
@@ -1153,6 +1175,15 @@ export type Database = {
           p_is_hero: boolean
           p_step: Database["public"]["Enums"]["regimen_step"]
           p_title: string
+        }
+        Returns: undefined
+      }
+      upsert_concierge_profile: {
+        Args: {
+          p_recommended_routine: Json
+          p_skin_concern: string
+          p_skin_type: string
+          p_user_id: string
         }
         Returns: undefined
       }
