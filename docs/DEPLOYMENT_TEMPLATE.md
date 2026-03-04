@@ -186,6 +186,12 @@ Ensure these are configured in GitHub repository settings:
 - `LOVABLE_WEBHOOK_URL` - For file change synchronization
 - Lovable project URL: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
 
+**How to get the webhook URL:**
+1. Open your Lovable project at the URL above
+2. Go to **Settings → Integrations** (or **Settings → GitHub**) and look for the webhook URL
+3. Copy the URL and add it as a GitHub Actions secret named `LOVABLE_WEBHOOK_URL`
+4. If you cannot find the webhook URL in the Lovable UI, contact Lovable support with your project ID: `657fb572-13a5-4a3e-bac9-184d39fdf7e6`
+
 #### Optional Notifications
 - `DISCORD_WEBHOOK_URL` - For deployment notifications
 
