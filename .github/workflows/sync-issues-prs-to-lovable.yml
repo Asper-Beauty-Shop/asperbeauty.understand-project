@@ -24,8 +24,9 @@ jobs:
         run: |
           # Skip gracefully when LOVABLE_WEBHOOK_URL is not configured
           if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "Warning: LOVABLE_WEBHOOK_URL secret is not set. Skipping Lovable sync."
-            echo "To enable sync, add the LOVABLE_WEBHOOK_URL secret in GitHub repo Settings → Secrets and variables → Actions."
+            echo "Warning: LOVABLE_WEBHOOK_URL is not set"
+            echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
+            echo "Skipping Lovable sync (secret not configured)."
             exit 0
           fi
 
