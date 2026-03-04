@@ -443,4 +443,6 @@ The app is bilingual: **English** and **Arabic**. Arabic uses RTL layout.
 | `docs/PRE_LAUNCH_CHECKLIST.md` | Security and configuration checks |
 | `docs/ROLE_AND_MANDATE.md` | Developer role guidelines |
 | `docs/COMMAND_PROTOCOL.md` | Slash command protocol (`/breakdown`, `/status`, `/pre-launch`, `/scaffold`, `/debug`) |
+| `docs/PROJECT_DNA.md` | Digital flagship strategy, product organization, visual language, SaaS vision |
+| `docs/DR_BOT_BLUEPRINT.md` | Dr. Bot architecture, operation rules, behavioral flows, deployment phases |
 | `env.main-site.example` | Environment variable template |
