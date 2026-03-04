@@ -1,4 +1,5 @@
-project_id = "rgehleqcubtmcwyipyvi"
+# Production — do NOT change. Branch: understand-project
+project_id = "qqceibvalkoytafynwoc"
 
 [functions.beauty-assistant]
 verify_jwt = false

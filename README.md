@@ -1,5 +1,7 @@
 # Welcome to your Lovable project
 
+**Backend (official 2026):** Supabase project `qqceibvalkoytafynwoc` — see [SUPABASE_MASTER_PROFILE.md](./SUPABASE_MASTER_PROFILE.md). Branch: `understand-project`.
+
 ## Project info
 
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
@@ -63,9 +65,24 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Dr. Bot (AI Assistant) — Apply across the platform
+
+**Dr. Bot** (dual-persona: Dr. Sami / Ms. Zain) is the single AI assistant for the site:
+
+- **Where it appears**: One floating chat button on **every page** (home, shop, product, account, etc.). It is mounted once in `App.tsx`, so it is available platform-wide.
+- **How users open it**:
+  - Click the floating button (bottom-right, or bottom-left in Arabic/RTL).
+  - Click **"Consult"** or **"Ask Pharmacist"** in the Header or Footer — these open the same Dr. Bot panel.
+- **Backend**: Chat streams from the `beauty-assistant` Supabase Edge Function (same backend for all platforms).
+
+To **apply updates** (including Dr. Bot changes) to the live website, use the steps in *How can I deploy this project?* below.
+
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+1. **Push your code** to the `main` branch (e.g. from your IDE or GitHub). If the repo is connected to Lovable, changes sync automatically.
+2. **Publish from Lovable**: Open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click **Share → Publish** to update the live app.
+3. **Custom domain** (e.g. www.asperbeautyshop.com): In Lovable go to **Project → Settings → Domains** and connect your domain. After publishing, the updated site (including Dr. Bot) will be live on that domain.
+4. **Backend (optional)**: If you changed `supabase/functions/beauty-assistant`, deploy Edge Functions with the Supabase CLI: `supabase functions deploy beauty-assistant --project-ref qqceibvalkoytafynwoc`.
 
 ## Can I connect a custom domain to my Lovable project?
 

@@ -328,7 +328,7 @@ serve(async (req) => {
     console.log("Authenticated user:", userId);
 
     const body = await req.json();
-    const { messages, source: campaignSource } = body;
+    const { messages, source: campaignSource, forcePersona: clientPersona, userProfile } = body;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
@@ -365,9 +365,10 @@ serve(async (req) => {
     // Fetch product context
     const { productContext, matchedProducts } = await fetchProductContext(supabaseClient, lastText, detectedConcernSlug);
 
-    // Detect persona from user message
+    // Persona routing: use client hint (forcePersona) if valid, else detect from last user message
     const drSamiTriggers = /acne|rosacea|eczema|hyperpigment|pregnan|حامل|حمل|ingredient|مكونات|barrier|retinol|spf|sunscreen|allergy|حساسية|salicylic|medical|طبي|clinical|pharmacist|صيدلاني|supplement|dosage|safety/i;
-    const persona = drSamiTriggers.test(lastText) ? "dr_sami" : "ms_zain";
+    const detectedPersona = drSamiTriggers.test(lastText) ? "dr_sami" : "ms_zain";
+    const persona = (clientPersona === "dr_sami" || clientPersona === "ms_zain") ? clientPersona : detectedPersona;
 
     const systemPrompt = buildSystemPrompt(productContext, shopRoutinePath);
 

@@ -210,6 +210,13 @@ export default function ChatBot() {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages]);
 
+  // Platform-wide: Header/Footer "Consult" and "Ask Pharmacist" open Dr. Bot
+  useEffect(() => {
+    const open = () => setOpen(true);
+    window.addEventListener("open-beauty-assistant", open);
+    return () => window.removeEventListener("open-beauty-assistant", open);
+  }, []);
+
   useEffect(() => {
     return () => {
       if (pendingImage) URL.revokeObjectURL(pendingImage.preview);
@@ -326,6 +333,7 @@ export default function ChatBot() {
       await streamChat({
         messages: [...messages, userMsg],
         userProfile,
+        forcePersona: detected,
         onPersona: (p) => {
           detectedPersona = p as PersonaId;
           setCurrentPersona(detectedPersona);

@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
+import HeroSlider, { type Slide } from "@/components/HeroSlider";
 import BrandStory from "@/components/BrandStory";
 import CelestialFeaturedCollection from "@/components/CelestialFeaturedCollection";
 import { Footer } from "@/components/Footer";

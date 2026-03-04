@@ -16,7 +16,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:bulk-upload": "node scripts/test-bulk-upload-validation.mjs"
+    "test:bulk-upload": "node scripts/test-bulk-upload-validation.mjs",
+    "health": "node scripts/health-check.js"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^2.0.2",

@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from "react-markdown";
 
-const SUPABASE_URL = "https://qqceibvalkoytafynwoc.supabase.co";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const LAB_URL = `${SUPABASE_URL}/functions/v1/lab-tools`;
 
 function useLabStream() {

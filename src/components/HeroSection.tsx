@@ -1,239 +1,309 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { AnimatedTrustBadge } from "./AnimatedTrustBadge";
+import {
+  ArrowRight,
+  Sparkles,
+  Shield,
+  Star,
+  Award,
+} from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
-// Generate random gold particles
-const generateParticles = (count: number) => {
-  return Array.from({
-    length: count,
-  }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    delay: Math.random() * 5,
-    duration: 3 + Math.random() * 4,
-    size: 2 + Math.random() * 4,
-    opacity: 0.3 + Math.random() * 0.5,
-  }));
-};
-const GoldParticles = () => {
-  const [particles] = useState(() => generateParticles(40));
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {particles.map((particle) => (
-        <div
-          key={particle.id}
-          className="absolute rounded-full bg-gradient-to-br from-[#FFC300] to-[#D4AF37]"
-          style={{
-            left: `${particle.left}%`,
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-            opacity: particle.opacity,
-            animation: `floatUp ${particle.duration}s ease-in-out infinite`,
-            animationDelay: `${particle.delay}s`,
-            boxShadow: `0 0 ${particle.size * 2}px rgba(255, 195, 0, 0.6)`,
-          }}
-        />
-      ))}
+const CONCERNS = [
+  { en: "Acne & Blemishes", ar: "حب الشباب", href: "/concerns/acne" },
+  { en: "Anti-Aging", ar: "مكافحة الشيخوخة", href: "/concerns/anti-aging" },
+  { en: "Deep Hydration", ar: "ترطيب عميق", href: "/concerns/hydration" },
+  { en: "Sensitive Skin", ar: "بشرة حساسة", href: "/concerns/sensitivity" },
+  { en: "Pregnancy Safe", ar: "آمن للحمل", href: "/concerns/sensitivity" },
+];
 
-      {/* Keyframe styles */}
-      <style>
-        {`
-        @keyframes floatUp {
-          0% {
-            transform: translateY(100vh) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: ${0.3 + Math.random() * 0.4};
-          }
-          90% {
-            opacity: ${0.3 + Math.random() * 0.4};
-          }
-          100% {
-            transform: translateY(-20vh) rotate(360deg);
-            opacity: 0;
-          }
-        }
-      `}
-      </style>
-    </div>
-  );
-};
+const STATS = [
+  { value: "5,000+", en: "Authentic SKUs", ar: "منتج أصيل" },
+  { value: "100%", en: "Pharmacist Verified", ar: "معتمد صيدلانياً" },
+  { value: "24/7", en: "AI Concierge", ar: "مساعد ذكي" },
+];
+
+const TRUST_ITEMS = [
+  { icon: Shield, en: "100% Authentic", ar: "أصيل 100%" },
+  { icon: Award, en: "Medically Approved", ar: "معتمد طبياً" },
+  { icon: Star, en: "Free Delivery 50+ JOD", ar: "توصيل مجاني +50 JOD" },
+];
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 28 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.75, delay, ease: [0.19, 1, 0.22, 1] },
+});
+
 const HeroSection = () => {
   const [videoLoaded, setVideoLoaded] = useState(false);
-  const { locale } = useLanguage();
+  const { locale, dir } = useLanguage();
   const isAr = locale === "ar";
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-[#FFF8E1] via-[#FFFDF5] to-[#FFF8E1]">
-      {/* --- FLOATING GOLD PARTICLES --- */}
-      <GoldParticles />
+    <section
+      className="relative min-h-screen w-full overflow-hidden bg-[#FAF7F2]"
+      dir={dir}
+    >
+      {/* ─── DESKTOP SPLIT GRID ─── */}
+      <div className="grid min-h-screen lg:grid-cols-[58fr_42fr]">
 
-      {/* --- MAIN CONTENT CONTAINER --- */}
-      <div className="relative z-10 flex flex-col items-center justify-center px-6 py-16 lg:py-20">
-        {/* Rotating Trust Badge */}
+        {/* ══════════════════════════════
+            LEFT — EDITORIAL CONTENT
+        ══════════════════════════════ */}
         <div
-          className="mb-8 animate-fade-in"
-          style={{ animationDelay: "0.2s" }}
+          className={cn(
+            "relative z-10 flex flex-col justify-center px-8 py-28 sm:px-14 lg:px-16 xl:px-24",
+            isAr && "items-end text-right"
+          )}
         >
-          <AnimatedTrustBadge />
-        </div>
-
-        {/* Gold divider above headline */}
-        <div
-          className="mb-6 h-px w-32 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent animate-fade-in"
-          style={{ animationDelay: "0.3s" }}
-        />
-
-        {/* Headline */}
-        <h1
-          className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-asper-charcoal mb-4 drop-shadow-sm text-center animate-fade-in"
-          style={{ animationDelay: "0.4s" }}
-          dir={isAr ? "rtl" : "ltr"}
-        >
-          {isAr ? "اكتشفي طقوسك الجمالية" : "Discover Your Ritual"}
-        </h1>
-
-        {/* Gold divider below headline */}
-        <div
-          className="mb-6 h-px w-32 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent animate-fade-in"
-          style={{ animationDelay: "0.5s" }}
-        />
-
-        {/* Sub-Headline */}
-        <p
-          className="max-w-xl text-lg md:text-xl text-asper-charcoal/70 font-sans mb-10 text-center animate-fade-in"
-          style={{ animationDelay: "0.6s" }}
-          dir={isAr ? "rtl" : "ltr"}
-        >
-          {isAr
-            ? "منتجات فاخرة للعناية بالبشرة والجمال من أرقى العلامات التجارية العالمية — مُعتمدة صيدلانياً"
-            : "Curated luxury skincare & beauty from the world's most prestigious brands — pharmacist verified"}
-        </p>
-
-        {/* --- CINEMATIC VIDEO SHOWCASE --- */}
-        <div
-          className="relative w-full max-w-5xl mx-auto mb-12 animate-fade-in"
-          style={{ animationDelay: "0.7s" }}
-        >
-          {/* Decorative Corner Accents */}
-          <div className="absolute -top-3 -left-3 w-16 h-16 border-l-2 border-t-2 border-[#D4AF37]/60 rounded-tl-lg" />
-          <div className="absolute -top-3 -right-3 w-16 h-16 border-r-2 border-t-2 border-[#D4AF37]/60 rounded-tr-lg" />
-          <div className="absolute -bottom-3 -left-3 w-16 h-16 border-l-2 border-b-2 border-[#D4AF37]/60 rounded-bl-lg" />
-          <div className="absolute -bottom-3 -right-3 w-16 h-16 border-r-2 border-b-2 border-[#D4AF37]/60 rounded-br-lg" />
-
-          {/* Outer Glow */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#D4AF37]/20 via-transparent to-[#D4AF37]/20 blur-2xl -z-10 scale-105" />
-
-          {/* Video Container with Gold Border */}
-          <div className="group relative rounded-2xl overflow-hidden border-2 border-[#D4AF37]/40 shadow-[0_20px_60px_-15px_rgba(212,175,55,0.3),0_10px_30px_-10px_rgba(0,0,0,0.15)] hover:border-[#D4AF37]/70 hover:shadow-[0_25px_70px_-15px_rgba(212,175,55,0.4),0_15px_40px_-10px_rgba(0,0,0,0.2)] transition-all duration-500 cursor-pointer">
-            {/* Shimmer Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer pointer-events-none z-10" />
-
-            {/* Fallback image while video loads */}
-            <img
-              src="/hero-banner.png"
-              alt="Asper Beauty"
-              className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-105 ${
-                videoLoaded ? "opacity-0" : "opacity-100"
-              }`}
-            />
-
-            {/* Main Video */}
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              onLoadedData={() => setVideoLoaded(true)}
-              className={`w-full aspect-video object-cover transition-all duration-700 ease-out group-hover:scale-105 ${
-                videoLoaded ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              <source src="/hero-video.mp4" type="video/mp4" />
-            </video>
-
-            {/* Inner Vignette */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_50%,_rgba(0,0,0,0.15)_100%)] pointer-events-none" />
-          </div>
-
-          {/* "Now Playing" Label */}
-          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-[#D4AF37]/30 shadow-lg">
-            <span className="text-xs uppercase tracking-[0.2em] text-asper-charcoal/60 font-sans">
-              The Asper Experience
+          {/* Top accent */}
+          <motion.div
+            className={cn("mb-8 flex items-center gap-3", isAr && "flex-row-reverse")}
+            {...fadeUp(0)}
+          >
+            <div className="h-px w-10 bg-[#D4AF37]" />
+            <span className="text-[11px] uppercase tracking-[0.35em] text-[#D4AF37] font-medium font-sans">
+              {isAr ? "مُعتمد صيدلانياً" : "Pharmacist Curated"}
             </span>
-          </div>
-        </div>
+          </motion.div>
 
-        {/* Call to Action Buttons */}
-        <div
-          className="flex flex-col gap-4 sm:flex-row animate-fade-in"
-          style={{ animationDelay: "0.9s" }}
-        >
-          <Button
-            asChild
-            size="lg"
-            className="bg-gradient-to-r from-[#800020] to-[#4A0404] text-white font-semibold px-10 py-6 text-base hover:shadow-[0_8px_30px_rgba(128,0,32,0.45)] transition-all duration-300 hover:scale-105 rounded-full"
+          {/* Main headline */}
+          <motion.h1
+            className={cn(
+              "font-serif text-[2.8rem] sm:text-[3.4rem] lg:text-[3.6rem] xl:text-[4.2rem] font-bold text-[#2C1A1D] leading-[1.05] tracking-tight mb-5",
+              isAr && "font-arabic"
+            )}
+            {...fadeUp(0.1)}
           >
+            {isAr ? (
+              <>
+                بإشراف{" "}
+                <span className="text-[#800020] italic">صيدلاني.</span>
+                <br />
+                مدعوم{" "}
+                <span className="relative inline-block">
+                  بالذكاء
+                  <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] via-[#D4AF37]/60 to-transparent" />
+                </span>
+                .
+              </>
+            ) : (
+              <>
+                Curated by{" "}
+                <span className="text-[#800020] italic">Pharmacists.</span>
+                <br />
+                Powered by{" "}
+                <span className="relative inline-block">
+                  Intelligence
+                  <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] via-[#D4AF37]/60 to-transparent" />
+                </span>
+                .
+              </>
+            )}
+          </motion.h1>
+
+          {/* Gold divider */}
+          <motion.div
+            className={cn("mb-6 h-px w-20 bg-gradient-to-r from-[#D4AF37] to-transparent", isAr && "bg-gradient-to-l ml-auto mr-0")}
+            {...fadeUp(0.15)}
+          />
+
+          {/* Subheading */}
+          <motion.p
+            className={cn(
+              "text-base sm:text-[1.05rem] text-[#2C1A1D]/60 font-sans max-w-[420px] leading-relaxed mb-10",
+              isAr && "font-arabic"
+            )}
+            {...fadeUp(0.2)}
+          >
+            {isAr
+              ? "أصالة مضمونة 100% عبر أكثر من 5,000 منتج — من Vichy إلى Maybelline. روتينك الجمالي يبدأ هنا."
+              : "Guaranteeing 100% authenticity across 5,000+ SKUs — from Vichy to Maybelline. Your perfect regimen starts here."}
+          </motion.p>
+
+          {/* Stats row */}
+          <motion.div
+            className={cn("flex gap-8 mb-10", isAr && "flex-row-reverse")}
+            {...fadeUp(0.3)}
+          >
+            {STATS.map((s, i) => (
+              <div key={i} className={cn("flex flex-col", isAr && "items-end")}>
+                <span className="text-2xl font-bold text-[#800020] font-serif leading-none">
+                  {s.value}
+                </span>
+                <span className="text-[11px] text-[#2C1A1D]/45 font-sans mt-1 leading-tight">
+                  {isAr ? s.ar : s.en}
+                </span>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* CTAs */}
+          <motion.div
+            className={cn("flex flex-wrap gap-3 mb-10", isAr && "flex-row-reverse")}
+            {...fadeUp(0.4)}
+          >
+            <Link to="/intelligence">
+              <Button
+                size="lg"
+                className="group bg-[#800020] hover:bg-[#4A0E19] text-white font-sans font-semibold px-8 h-14 rounded-full text-[13px] uppercase tracking-wider transition-all duration-300 hover:shadow-[0_8px_32px_rgba(128,0,32,0.4)] hover:scale-[1.02]"
+              >
+                <Sparkles className={cn("h-4 w-4 flex-shrink-0", isAr ? "ml-2" : "mr-2")} />
+                {isAr ? "ابدئي تحليل بشرتك" : "Start Free AI Analysis"}
+                <ArrowRight
+                  className={cn(
+                    "h-4 w-4 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1",
+                    isAr ? "mr-2 rotate-180 group-hover:-translate-x-1" : "ml-2"
+                  )}
+                />
+              </Button>
+            </Link>
             <Link to="/shop">
-              {isAr ? "تسوّقي المجموعة" : "Shop Collection"}
-              <ArrowRight className={`h-5 w-5 ${isAr ? "mr-2 rotate-180" : "ml-2"}`} />
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-[#D4AF37]/50 text-[#2C1A1D] hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] font-sans font-medium px-8 h-14 rounded-full text-[13px] uppercase tracking-wider transition-all duration-300"
+              >
+                {isAr ? "تسوّقي الآن" : "Shop Collection"}
+              </Button>
             </Link>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            size="lg"
-            className="border-2 border-[#D4AF37]/60 text-asper-charcoal px-10 py-6 text-base hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] transition-all duration-300 rounded-full"
+          </motion.div>
+
+          {/* Concern pills */}
+          <motion.div
+            className={cn("flex flex-wrap gap-2", isAr && "flex-row-reverse")}
+            {...fadeUp(0.55)}
           >
-            <Link to="/skin-concerns">
-              <Sparkles className={`h-4 w-4 ${isAr ? "ms-2" : "me-2"} text-[#D4AF37]`} />
-              {isAr ? "اكتشفي روتينك" : "Find My Ritual"}
-            </Link>
-          </Button>
+            {CONCERNS.map((c) => (
+              <Link
+                key={c.href + c.en}
+                to={c.href}
+                className="px-4 py-1.5 rounded-full border border-[#D4AF37]/30 bg-white/70 text-[11px] font-sans text-[#2C1A1D]/55 hover:border-[#D4AF37] hover:text-[#2C1A1D] hover:bg-white transition-all duration-200"
+              >
+                {isAr ? c.ar : c.en}
+              </Link>
+            ))}
+          </motion.div>
+
+          {/* Bottom tagline */}
+          <motion.p
+            className={cn(
+              "mt-10 text-[11px] uppercase tracking-[0.3em] text-[#D4AF37] font-sans",
+              isAr && "text-right"
+            )}
+            {...fadeUp(0.65)}
+          >
+            {isAr ? "أصالة معتمدة • جودة طبية فاخرة" : "Pharmacist Verified • Medical Luxury"}
+          </motion.p>
         </div>
 
-        {/* Concern shortcut pills */}
-        <div
-          className="mt-8 flex flex-wrap justify-center gap-2 animate-fade-in"
-          style={{ animationDelay: "1.05s" }}
-        >
-          {[
-            { label: isAr ? "حب الشباب" : "Acne Care", href: "/concerns/acne" },
-            { label: isAr ? "مكافحة الشيخوخة" : "Anti-Aging", href: "/concerns/anti-aging" },
-            { label: isAr ? "ترطيب" : "Hydration", href: "/concerns/hydration" },
-            { label: isAr ? "بشرة حساسة" : "Sensitive Skin", href: "/concerns/sensitivity" },
-            { label: isAr ? "آمن للحمل" : "Pregnancy Safe", href: "/concerns/sensitivity" },
-          ].map((pill) => (
-            <Link
-              key={pill.href + pill.label}
-              to={pill.href}
-              className="px-4 py-1.5 rounded-full border border-[#D4AF37]/40 bg-white/60 backdrop-blur-sm text-xs font-sans text-asper-charcoal/70 hover:border-[#D4AF37] hover:text-asper-charcoal hover:bg-white/80 transition-all duration-200"
-            >
-              {pill.label}
-            </Link>
-          ))}
-        </div>
+        {/* ══════════════════════════════
+            RIGHT — VISUAL PANEL
+        ══════════════════════════════ */}
+        <div className="relative hidden lg:block overflow-hidden bg-[#1A0F12]">
+          {/* Video */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            onLoadedData={() => setVideoLoaded(true)}
+            className={cn(
+              "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
+              videoLoaded ? "opacity-100" : "opacity-0"
+            )}
+            aria-hidden="true"
+          >
+            <source src="/hero-video.mp4" type="video/mp4" />
+          </video>
 
-        {/* Tagline */}
-        <p
-          className="mt-10 font-serif text-sm uppercase tracking-[0.3em] text-[#D4AF37] animate-fade-in"
-          style={{ animationDelay: "1.1s" }}
-        >
-          {isAr ? "أصالة معتمدة • جودة طبية" : "Pharmacist Verified • Medical Luxury"}
-        </p>
+          {/* Fallback image */}
+          <img
+            src="/hero-banner.png"
+            alt=""
+            aria-hidden="true"
+            className={cn(
+              "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
+              videoLoaded ? "opacity-0" : "opacity-100"
+            )}
+          />
+
+          {/* Gradient overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1A0F12]/70 via-[#1A0F12]/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1A0F12]/60 via-transparent to-[#1A0F12]/20" />
+
+          {/* Left gold border seam */}
+          <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#D4AF37]/50 to-transparent" />
+
+          {/* Corner decorations */}
+          <div className="absolute top-8 right-8 w-14 h-14 border-r border-t border-[#D4AF37]/35 rounded-tr-lg" />
+          <div className="absolute top-8 left-8 w-14 h-14 border-l border-t border-[#D4AF37]/35 rounded-tl-lg" />
+          <div className="absolute bottom-36 right-8 w-14 h-14 border-r border-b border-[#D4AF37]/35 rounded-br-lg" />
+          <div className="absolute bottom-36 left-8 w-14 h-14 border-l border-b border-[#D4AF37]/35 rounded-bl-lg" />
+
+          {/* Floating glass trust card */}
+          <motion.div
+            className="absolute bottom-10 left-6 right-6 p-5 rounded-2xl bg-white/8 backdrop-blur-xl border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.7, ease: [0.19, 1, 0.22, 1] }}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-px flex-1 bg-gradient-to-r from-[#D4AF37]/50 to-transparent" />
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-sans whitespace-nowrap">
+                {isAr ? "تجربة أسبر" : "The Asper Experience"}
+              </span>
+              <div className="h-px flex-1 bg-gradient-to-l from-[#D4AF37]/50 to-transparent" />
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {TRUST_ITEMS.map((item, i) => (
+                <div key={i} className="flex flex-col items-center gap-1.5 text-center">
+                  <div className="w-8 h-8 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 flex items-center justify-center">
+                    <item.icon className="h-3.5 w-3.5 text-[#D4AF37]" />
+                  </div>
+                  <span className="text-[9.5px] text-white/60 font-sans leading-tight">
+                    {isAr ? item.ar : item.en}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      {/* --- SCROLL INDICATOR --- */}
-      <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 animate-bounce">
-        <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-[#D4AF37]/60 bg-white/70 pt-2 backdrop-blur-sm shadow-lg">
+      {/* ─── MOBILE VIDEO STRIP ─── */}
+      <div className="lg:hidden relative h-[260px] overflow-hidden -mt-4">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          aria-hidden="true"
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+        <img
+          src="/hero-banner.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-transparent to-transparent" />
+      </div>
+
+      {/* ─── SCROLL INDICATOR ─── */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden lg:flex flex-col items-center gap-2 animate-bounce">
+        <div className="h-10 w-6 rounded-full border-2 border-[#D4AF37]/50 flex items-start justify-center pt-2 bg-white/70 backdrop-blur-sm shadow-lg">
           <div className="h-2 w-1 rounded-full bg-[#D4AF37]" />
         </div>
       </div>
     </section>
   );
 };
+
 export default HeroSection;
