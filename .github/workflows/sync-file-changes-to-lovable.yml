@@ -21,11 +21,12 @@ jobs:
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
-          # Validate that LOVABLE_WEBHOOK_URL is set
+          # Skip gracefully when LOVABLE_WEBHOOK_URL is not configured
           if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "Error: LOVABLE_WEBHOOK_URL is not set"
+            echo "Warning: LOVABLE_WEBHOOK_URL is not set"
             echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
-            exit 1
+            echo "Skipping Lovable sync (secret not configured)."
+            exit 0
           fi
 
           # Validate URL format

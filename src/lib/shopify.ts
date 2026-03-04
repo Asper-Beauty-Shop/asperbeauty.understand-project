@@ -36,6 +36,12 @@ export interface ShopifyProduct {
         currencyCode: string;
       };
     };
+    compareAtPriceRange?: {
+      maxVariantPrice: {
+        amount: string;
+        currencyCode: string;
+      };
+    } | null;
     images: {
       edges: Array<{
         node: {

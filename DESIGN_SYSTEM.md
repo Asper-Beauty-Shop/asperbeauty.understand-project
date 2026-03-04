@@ -186,16 +186,20 @@ Custom shadows defined in `tailwind.config.ts`:
 - **Maroon glow (cards, buttons on hover):** `shadow-maroon-glow`
 - **Deep emphasis (modals, dropdowns):** `shadow-maroon-deep`
 
+Additional gold-tinted shadow utilities are available via CSS classes in `src/index.css`:
+`shadow-gold-sm`, `shadow-gold-md`, `shadow-gold-lg`, `shadow-gold-glow`.
+
 ---
 
 ## Animations
 
-All animations use the custom `luxury` easing: `cubic-bezier(0.19, 1, 0.22, 1)`
+All animations use the luxury easing: `cubic-bezier(0.4, 0, 0.2, 1)` (available as `.ease-luxury` CSS class).
 
 Available utility classes:
-- `animate-fade-in` — Fade in with slight upward movement (0.6s)
-- `animate-fade-up` — Fade in with pronounced upward movement
-- `animate-shake` — Shake animation for errors or emphasis
+- `animate-fade-in` — Fade in (opacity only, 0.6s)
+- `animate-fade-in-up` — Fade in with upward movement (0.8s)
+- `animate-fade-up` — Fade in with pronounced upward movement (0.8s)
+- `animate-shake` — Shake animation for errors or emphasis (0.5s)
 - `animate-skeleton-breathe` — Breathing animation for loading skeletons
 
 ---
