@@ -55,3 +55,14 @@ jobs:
               -H "Content-Type: application/json" \
               -d "{\"content\": \"Deploy health: **$STATUS** | Commit \`$SHORT\` | https://asperbeautyshop-com.lovable.app\"}"
           fi
+
+      - name: Notify Lovable webhook (if configured)
+        if: always()
+        env:
+          LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
+        run: |
+          if [ -n "$LOVABLE_WEBHOOK_URL" ]; then
+            curl -s -X POST "$LOVABLE_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d '{"event": "sync", "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'", "source": "github-action"}'
+          fi
