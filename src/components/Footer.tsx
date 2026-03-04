@@ -207,6 +207,64 @@ export const Footer = () => {
         </div>
       </div>
 
+      {/* SEO Block — Top Brands & Categories */}
+      <div className="border-t border-polished-gold/20">
+        <div className="luxury-container py-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Top Brands */}
+            <div>
+              <h4 className="font-display text-sm text-polished-white mb-4 uppercase tracking-wider">
+                {isArabic ? "أبرز العلامات" : "Top Brands"}
+              </h4>
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                {[
+                  "Vichy", "Eucerin", "Bioderma", "Cetaphil", "SVR",
+                  "La Roche-Posay", "Bourjois", "Essence", "IsaDora",
+                  "Maybelline", "L'Oréal Paris", "Garnier",
+                ].map((brand) => (
+                  <Link
+                    key={brand}
+                    to={`/brands/${brand.toLowerCase().replace(/['\s]/g, "-")}`}
+                    className="font-body text-xs text-asper-stone-light/50 hover:text-polished-gold transition-colors duration-300"
+                  >
+                    {brand}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Top Categories */}
+            <div>
+              <h4 className="font-display text-sm text-polished-white mb-4 uppercase tracking-wider">
+                {isArabic ? "أبرز الفئات" : "Top Categories"}
+              </h4>
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                {[
+                  { en: "Skincare", href: "/collections/skincare" },
+                  { en: "Makeup", href: "/collections/makeup" },
+                  { en: "Perfume", href: "/collections/perfume" },
+                  { en: "Hair Care", href: "/collections/hair" },
+                  { en: "Body Care", href: "/collections/body" },
+                  { en: "Sun Protection", href: "/collections/suncare" },
+                  { en: "Anti-Aging", href: "/concerns/anti-aging" },
+                  { en: "Acne Treatment", href: "/concerns/acne" },
+                  { en: "Moisturizers", href: "/collections/moisturizers" },
+                  { en: "Serums", href: "/collections/serums" },
+                ].map((cat) => (
+                  <Link
+                    key={cat.en}
+                    to={cat.href}
+                    className="font-body text-xs text-asper-stone-light/50 hover:text-polished-gold transition-colors duration-300"
+                  >
+                    {cat.en}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Trust & Credentials Bar */}
       <div className="border-t border-polished-gold/30">
         <div className="luxury-container py-8">
@@ -248,6 +306,64 @@ export const Footer = () => {
             © 2026 Asper Beauty Shop.{" "}
             {isArabic ? "جميع الحقوق محفوظة." : "All Rights Reserved."}
           </p>
+        </div>
+      </div>
+
+      {/* SEO Block - Top Brands & Categories */}
+      <div className="border-t border-polished-gold/20 bg-burgundy-light/30">
+        <div className="luxury-container py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Top Brands */}
+            <div>
+              <h3 className="font-heading text-lg text-polished-gold mb-4">
+                {isArabic ? "أفضل العلامات التجارية" : "Top Brands"}
+              </h3>
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
+                {[
+                  "Vichy", "La Roche-Posay", "Maybelline", "L'Oréal Paris", "Garnier",
+                  "Neutrogena", "CeraVe", "Eucerin", "Bioderma", "Avène",
+                  "The Ordinary", "Paula's Choice", "Diptyque", "Byredo", "Augustinus Bader"
+                ].map((brand) => (
+                  <Link
+                    key={brand}
+                    to={`/brands?brand=${encodeURIComponent(brand)}`}
+                    className="text-xs text-asper-stone-light/60 hover:text-polished-gold transition-colors duration-300 font-body"
+                  >
+                    {brand}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Top Categories */}
+            <div>
+              <h3 className="font-heading text-lg text-polished-gold mb-4">
+                {isArabic ? "الفئات الأكثر طلباً" : "Top Categories"}
+              </h3>
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
+                {[
+                  { name: "Skincare", nameAr: "العناية بالبشرة", link: "/collections/skincare" },
+                  { name: "Makeup", nameAr: "المكياج", link: "/collections/makeup" },
+                  { name: "Perfume", nameAr: "العطور", link: "/collections/fragrance" },
+                  { name: "Hair Care", nameAr: "العناية بالشعر", link: "/collections/hair" },
+                  { name: "Anti-Aging", nameAr: "مكافحة الشيخوخة", link: "/concerns/anti-aging" },
+                  { name: "Acne Treatment", nameAr: "علاج حب الشباب", link: "/concerns/acne" },
+                  { name: "Hydration", nameAr: "ترطيب", link: "/concerns/hydration" },
+                  { name: "Sun Protection", nameAr: "حماية من الشمس", link: "/concerns/sun-protection" },
+                  { name: "Brightening", nameAr: "إشراق", link: "/concerns/brightening" },
+                  { name: "Sensitive Skin", nameAr: "البشرة الحساسة", link: "/concerns/sensitivity" },
+                ].map((category) => (
+                  <Link
+                    key={category.link}
+                    to={category.link}
+                    className="text-xs text-asper-stone-light/60 hover:text-polished-gold transition-colors duration-300 font-body"
+                  >
+                    {isArabic ? category.nameAr : category.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
