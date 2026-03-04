@@ -1,11 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+// Staging origins allowed alongside production ALLOWED_ORIGIN
+const STAGING_ORIGINS = new Set([
+  "http://localhost:5173",
+  "http://localhost:8080",
+  "https://id-preview--657fb572-13a5-4a3e-bac9-184d39fdf7e6.lovable.app",
+]);
+
 function getCorsHeaders(req: Request): Record<string, string> {
-  const allowOrigin: string =
-    Deno.env.get("ALLOWED_ORIGIN") ??
-    req.headers.get("Origin") ??
-    "*";
+  const requestOrigin = req.headers.get("Origin") ?? "";
+  const productionOrigin = Deno.env.get("ALLOWED_ORIGIN") ?? "";
+
+  // Allow: exact production match, any staging origin, or fallback
+  let allowOrigin: string;
+  if (productionOrigin && requestOrigin === productionOrigin) {
+    allowOrigin = productionOrigin;
+  } else if (STAGING_ORIGINS.has(requestOrigin)) {
+    allowOrigin = requestOrigin;
+  } else {
+    allowOrigin = productionOrigin || "*";
+  }
+
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers":
@@ -94,10 +111,8 @@ function extractFromGorgias(body: Record<string, unknown>): { message: string } 
   const text =
     typeof last?.body_text === "string" ? last.body_text
     : typeof last?.body_html === "string" ? last.body_html.replace(/<[^>]+>/g, "").trim()
-    : typeof singleMsg?.body_text === "string" ? singleMsg.body_text
-    : typeof singleMsg?.body_html === "string" ? (singleMsg.body_html as string).replace(/<[^>]+>/g, "").trim()
-    : typeof (body as any).body_text === "string" ? (body as any).body_text
-    : typeof (body as any).message === "string" ? (body as any).message
+    : typeof (body as Record<string, unknown>).body_text === "string" ? (body as Record<string, unknown>).body_text
+    : typeof (body as Record<string, unknown>).message === "string" ? (body as Record<string, unknown>).message
     : "";
   return { message: text || "(No message)" };
 }
@@ -109,10 +124,9 @@ function extractFromManyChat(body: Record<string, unknown>): { message: string }
   const msgObj = firstMsg?.message as Record<string, unknown> | undefined;
 
   const text =
-    typeof msgObj?.text === "string" ? msgObj.text
-    : typeof (body.data as any)?.text === "string" ? (body.data as any).text
-    : typeof (body as any).text === "string" ? (body as any).text
-    : typeof (body as any).message === "string" ? (body as any).message
+    typeof data?.text === "string" ? data.text
+    : typeof (body as Record<string, unknown>).text === "string" ? (body as Record<string, unknown>).text
+    : typeof (body as Record<string, unknown>).message === "string" ? (body as Record<string, unknown>).message
     : "";
   return { message: text || "(No message)" };
 }
@@ -152,7 +166,7 @@ function concernSlugToEnum(slug: string): string[] {
 }
 
 /** Format a product row into a readable string for the AI context */
-function formatProduct(p: any): string {
+function formatProduct(p: Record<string, unknown>): string {
   const parts = [`**${p.title}**`];
   if (p.brand) parts[0] += ` (${p.brand})`;
   if (p.price) parts.push(`${p.price} JOD`);
@@ -166,11 +180,11 @@ function formatProduct(p: any): string {
 
 /** Fetch products matching a concern or keywords from the products table */
 async function fetchProductContext(
-  supabaseClient: any,
+  supabaseClient: ReturnType<typeof createClient>,
   userMessage: string,
   detectedSlug: string | null
-): Promise<{ productContext: string; matchedProducts: any[] }> {
-  let matchedProducts: any[] = [];
+): Promise<{ productContext: string; matchedProducts: unknown[] }> {
+  let matchedProducts: unknown[] = [];
   let productContext = "";
 
   // Try concern-based lookup first
@@ -321,12 +335,35 @@ serve(async (req) => {
 
   // ——— Webhook Path (Gorgias / ManyChat) — signature-verified ———
   if (route === "gorgias" || route === "manychat") {
+    const webhookStartMs = Date.now();
+    // Admin client for audit writes (service role bypasses RLS)
+    const auditClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY")!,
+    );
+
+    async function logWebhookAudit(status: string, concernDetected: string | null, errorMessage: string | null) {
+      try {
+        await auditClient.from("webhook_audit_logs").insert({
+          provider: route,
+          event_type: "message",
+          status,
+          concern_detected: concernDetected,
+          response_ms: Date.now() - webhookStartMs,
+          error_message: errorMessage ? errorMessage.slice(0, 500) : null,
+        });
+      } catch (e) {
+        console.error("Audit log insert failed:", e);
+      }
+    }
+
     try {
       // Rate limit BEFORE crypto work to block floods cheaply
       const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
         ?? req.headers.get("x-real-ip") ?? "unknown";
       if (!webhookRateLimit(clientIp, route)) {
         console.warn(`Webhook rate limit exceeded: ${route} from ${clientIp}`);
+        await logWebhookAudit("rate_limited", null, `IP: ${clientIp}`);
         return new Response(JSON.stringify({ error: "Too many requests" }), {
           status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json", "Retry-After": "60" },
         });
@@ -344,6 +381,7 @@ serve(async (req) => {
 
       if (!webhookSecret) {
         console.error(`${route} webhook secret not configured`);
+        await logWebhookAudit("error", null, "Webhook secret not configured");
         return new Response(JSON.stringify({ error: "Webhook not configured" }), {
           status: 503, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
         });
@@ -352,6 +390,7 @@ serve(async (req) => {
       const valid = await verifyWebhookSignature(rawBody, signature, webhookSecret);
       if (!valid) {
         console.warn(`Invalid ${route} webhook signature`);
+        await logWebhookAudit("hmac_failed", null, "Invalid HMAC signature");
         return new Response(JSON.stringify({ error: "Invalid signature" }), {
           status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
         });
@@ -365,6 +404,7 @@ serve(async (req) => {
       const geminiKey = Deno.env.get("GEMINI_API_KEY");
       const apiKey = geminiKey ?? LOVABLE_API_KEY;
       if (!apiKey) {
+        await logWebhookAudit("error", null, "API key not configured");
         return new Response(JSON.stringify({ error: "API key not configured" }), {
           status: 503, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
         });
@@ -374,10 +414,11 @@ serve(async (req) => {
       const supabaseUrl = Deno.env.get("SUPABASE_URL");
       const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
       let productContext = "";
+      let detectedSlug: string | null = null;
       if (supabaseUrl && supabaseKey) {
         const admin = createClient(supabaseUrl, supabaseKey);
-        const slug = detectConcernSlug(userMessage);
-        const result = await fetchProductContext(admin, userMessage, slug);
+        detectedSlug = detectConcernSlug(userMessage);
+        const result = await fetchProductContext(admin, userMessage, detectedSlug);
         productContext = result.productContext;
       }
 
@@ -417,6 +458,9 @@ serve(async (req) => {
         replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
       }
 
+      // Log successful webhook processing
+      await logWebhookAudit("success", detectedSlug, null);
+
       // ManyChat expects { version, content } format for rich responses
       if (route === "manychat") {
         return new Response(
@@ -445,6 +489,7 @@ serve(async (req) => {
       );
     } catch (e) {
       console.error("Webhook error:", e);
+      await logWebhookAudit("error", null, e instanceof Error ? e.message : String(e));
       return new Response(
         JSON.stringify({ error: "beauty-assistant webhook failed", message: e instanceof Error ? e.message : String(e) }),
         { status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
@@ -503,11 +548,12 @@ serve(async (req) => {
     }
 
     // Extract last user message for product matching
-    const lastUserMessage = messages.filter((m: any) => m.role === "user").pop()?.content || "";
-    const lastText = typeof lastUserMessage === "string"
-      ? lastUserMessage
-      : Array.isArray(lastUserMessage)
-        ? lastUserMessage.filter((p: any) => p.type === "text").map((p: any) => p.text).join(" ")
+    const lastUserMessage = messages.filter((m: unknown) => (m as { role?: string }).role === "user").pop() as { content?: string | Array<{ type?: string; text?: string }> } | undefined;
+    const rawContent = lastUserMessage?.content ?? "";
+    const lastText = typeof rawContent === "string"
+      ? rawContent
+      : Array.isArray(rawContent)
+        ? rawContent.filter((p: { type?: string }) => p.type === "text").map((p: { text?: string }) => p.text ?? "").join(" ")
         : "";
 
     const detectedConcernSlug = detectConcernSlug(lastText);

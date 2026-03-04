@@ -40,6 +40,12 @@ const CONCERNS: { tag: SkinConcern; en: string; ar: string }[] = [
   { tag: "Concern_Sensitivity", en: "Sensitivity", ar: "حساسية" },
   { tag: "Concern_Pigmentation", en: "Pigmentation", ar: "تصبغات" },
   { tag: "Concern_Brightening", en: "Brightening", ar: "إشراق" },
+  { tag: "Concern_Dryness", en: "Dryness", ar: "جفاف" },
+  { tag: "Concern_SunProtection", en: "Sun Protection", ar: "حماية من الشمس" },
+  { tag: "Concern_DarkCircles", en: "Dark Circles", ar: "هالات سوداء" },
+  { tag: "Concern_Redness", en: "Redness", ar: "احمرار" },
+  { tag: "Concern_Oiliness", en: "Oiliness", ar: "بشرة دهنية" },
+  { tag: "Concern_Aging", en: "Aging", ar: "شيخوخة" },
 ];
 
 const STEP_META: Record<string, { en: string; ar: string; key: string }> = {
@@ -130,7 +136,7 @@ const CelestialFeaturedCollection = () => {
         </div>
 
         {/* Concern Tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12" dir={isRTL ? "rtl" : "ltr"}>
+        <div className="flex overflow-x-auto pb-2 scrollbar-hide md:flex-wrap justify-start md:justify-center gap-3 mb-12 -mx-6 px-6 md:mx-0 md:px-0" dir={isRTL ? "rtl" : "ltr"}>
           {CONCERNS.map((c) => (
             <button
               key={c.tag}

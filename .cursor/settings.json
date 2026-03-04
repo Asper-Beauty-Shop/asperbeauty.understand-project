@@ -1,0 +1,10 @@
+{
+  "plugins": {
+    "supabase": {
+      "enabled": true
+    },
+    "slack": {
+      "enabled": true
+    }
+  }
+}

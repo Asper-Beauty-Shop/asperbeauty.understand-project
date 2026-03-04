@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -96,9 +97,16 @@ serve(async (req) => {
     const description = descMatch ? descMatch[1].substring(0, 500) : metadata?.description;
 
     if (productId) {
-      const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-      const updates: Record<string, any> = {};
-      if (description && description.length > 20) updates.description = description;
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      );
+
+      const updates: Record<string, unknown> = {};
+
+      if (description && description.length > 20) {
+        updates.description = description;
+      }
       if (price && price > 0) updates.price = price;
       if (productImage) updates.image_url = productImage;
       if (Object.keys(updates).length > 0) {
