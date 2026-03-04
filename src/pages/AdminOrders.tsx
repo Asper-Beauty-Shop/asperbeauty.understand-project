@@ -357,8 +357,8 @@ export default function AdminOrders() {
     setIsUpdating(orderId);
     try {
       const { error } = await supabase
-        .from("cod_orders" as never)
-        .update({ status: newStatus })
+        .from("cod_orders")
+        .update({ status: newStatus } as never)
         .eq("id", orderId);
 
       if (error) throw error;
