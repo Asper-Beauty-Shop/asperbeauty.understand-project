@@ -25,7 +25,7 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
 
-        // --- DESIGN_SYSTEM.md Morning Spa Tokens (HSL via CSS vars) ---
+        // --- DESIGN_SYSTEM.md Clinical Luxury palette (HSL via CSS vars) ---
         "asper-stone": {
           DEFAULT: "hsl(var(--asper-stone))",
           light: "hsl(var(--asper-stone-light))",
@@ -35,6 +35,11 @@ export default {
           DEFAULT: "hsl(var(--rose-clay))",
           light: "hsl(var(--rose-clay-light))",
           dark: "hsl(var(--rose-clay-dark))",
+        },
+        burgundy: {
+          DEFAULT: "hsl(var(--burgundy))",
+          light: "hsl(var(--burgundy-light))",
+          dark: "hsl(var(--burgundy-dark))",
         },
         "polished-gold": "hsl(var(--polished-gold))",
         "polished-white": "hsl(var(--polished-white))",
@@ -90,11 +95,6 @@ export default {
           DEFAULT: "hsl(var(--gold))",
           light: "hsl(var(--gold-light))",
           glow: "hsl(var(--gold-glow))",
-        },
-        burgundy: {
-          DEFAULT: "hsl(var(--burgundy))",
-          light: "hsl(var(--burgundy-light))",
-          dark: "hsl(var(--burgundy-dark))",
         },
         cream: {
           DEFAULT: "hsl(var(--cream))",
