@@ -366,10 +366,6 @@ export default function AIConcierge() {
         onSafetyFlags: (flags) => setSafetyFlags(flags),
       });
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: `⚠️ ${msg}`, persona: currentPersona },
       const errMsg = e instanceof Error ? e.message : String(e);
       setMessages((prev) => [
         ...prev,
