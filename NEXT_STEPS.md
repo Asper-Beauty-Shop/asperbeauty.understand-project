@@ -50,52 +50,16 @@ Example implementation (in React Router):
 - Test locally: `http://localhost:5173/health`
 - Verify returns 200 status
 
-### 2. Configure Discord Notifications (Optional)
+### 2. Configure Lovable Webhook Sync
+- Go to GitHub repository → Settings → Secrets and variables → Actions
+- Add `LOVABLE_WEBHOOK_URL` secret
+- To get the URL: open your Lovable project settings at https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6, navigate to **Settings → Integrations** (or **Settings → GitHub**), and copy the webhook URL
+- If you can't find it in the UI, contact Lovable support with project ID: `657fb572-13a5-4a3e-bac9-184d39fdf7e6`
+
+### 3. Configure Discord Notifications (Optional)
 - Go to GitHub repository → Settings → Secrets and variables → Actions
 - Add `DISCORD_WEBHOOK_URL` secret
 - Get webhook URL from Discord server settings
-
-### 3. Configure Lovable Webhook (Optional)
-
-The `LOVABLE_WEBHOOK_URL` secret enables three GitHub Actions workflows to stay in sync with Lovable:
-- `deploy-health-check.yml` — notifies Lovable after each deployment
-- `sync-file-changes-to-lovable.yml` — forwards file-change lists on every push
-- `sync-issues-prs-to-lovable.yml` — forwards issue and PR events
-
-All three workflows skip gracefully (exit 0) when the secret is absent, so CI will not fail if you choose not to configure it.
-
-**Step 1 — Obtain the webhook URL**
-1. Open the Lovable project dashboard:
-   `https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6`
-   *(This project ID is also documented in `CLAUDE.md` as the canonical reference — keep the two in sync if the project is ever recreated.)*
-2. Go to **Settings → Integrations → GitHub**
-3. Copy the webhook URL shown there
-
-**Step 2 — Set the variable**
-
-*For local development:*
-Add to your `.env` file (already in `.gitignore`, never commit real values):
-```
-LOVABLE_WEBHOOK_URL=https://your.real.lovable.webhook/endpoint
-```
-A placeholder entry is in `env.main-site.example` as a reminder.
-
-*For GitHub Actions (production/CI):*
-1. Go to the repository → **Settings → Secrets and variables → Actions**
-2. Click **New repository secret**
-3. Name: `LOVABLE_WEBHOOK_URL`
-4. Value: the webhook URL from Step 1
-
-**Step 3 — Verify integration**
-- Push a commit to any branch and check the **Actions** tab
-- The `Sync File Changes to Lovable` job should complete successfully and log a masked URL confirmation
-- For the deploy health check, push to `main` and confirm the `Notify Lovable webhook` step shows `200` or no error
-
-**Step 4 — Troubleshoot**
-- **"skipping Lovable sync" warning** — The secret is not set; follow Step 2 above
-- **`curl` returns non-2xx** — Confirm the URL is current; regenerate it in the Lovable dashboard if needed
-- **"does not appear to be a valid URL" error** — The secret value is malformed; ensure it starts with `https://`
-- Check raw logs in GitHub Actions → the run → the failing step for the full `curl` error message
 
 ### 4. Monitor Deployments
 - Check GitHub Actions tab for workflow runs
