@@ -124,6 +124,13 @@ export default {
         "celestial-gradient": "linear-gradient(to bottom, #4A0404, #2b0202)",
         "gold-shimmer": "linear-gradient(45deg, #D4AF37, #F3E5AB, #D4AF37)",
       },
+      boxShadow: {
+        "maroon-glow": "0 4px 20px rgba(107, 45, 58, 0.18)",
+        "maroon-deep": "0 8px 40px rgba(107, 45, 58, 0.32)",
+      },
+      transitionTimingFunction: {
+        luxury: "cubic-bezier(0.19, 1, 0.22, 1)",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -170,6 +177,8 @@ export default {
         },
         shake: {
           "0%, 100%": { transform: "translateX(0)" },
+          "10%, 30%, 50%, 70%, 90%": { transform: "translateX(-4px)" },
+          "20%, 40%, 60%, 80%": { transform: "translateX(4px)" },
           "10%, 50%, 90%": { transform: "translateX(-4px)" },
           "30%, 70%": { transform: "translateX(4px)" },
         },
