@@ -22,14 +22,10 @@ jobs:
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
-          # Validate that LOVABLE_WEBHOOK_URL is set
+          # Skip gracefully when LOVABLE_WEBHOOK_URL is not configured
           if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "Warning: LOVABLE_WEBHOOK_URL is not set. Skipping Lovable sync."
-            echo "To enable sync, add the LOVABLE_WEBHOOK_URL secret:"
-            echo "  GitHub repo → Settings → Secrets and variables → Actions → New repository secret"
-            echo "  Name: LOVABLE_WEBHOOK_URL"
-            echo "  Value: webhook URL from Lovable project settings (Settings → Integrations or Settings → GitHub)"
-            echo "  Lovable project: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6"
+            echo "Warning: LOVABLE_WEBHOOK_URL is not set — skipping Lovable sync."
+            echo "To enable sync, add the LOVABLE_WEBHOOK_URL secret in repository Settings → Secrets and variables → Actions."
             exit 0
           fi
 
