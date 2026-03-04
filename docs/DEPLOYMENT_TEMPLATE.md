@@ -84,7 +84,7 @@ git push origin main
 1. **Lovable Auto-Deploy**
    - Lovable automatically detects push to `main`
    - Deployment begins immediately
-   - Monitor at: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
+   - Monitor at: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
 2. **GitHub Actions**
    - Go to repository → Actions tab
@@ -184,7 +184,13 @@ Ensure these are configured in GitHub repository settings:
 
 #### Lovable Integration
 - `LOVABLE_WEBHOOK_URL` - For file change synchronization
-- Lovable project URL: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
+- Lovable project URL: `https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID`
+
+**How to get the webhook URL:**
+1. Open your Lovable project at the URL above
+2. Go to **Settings → Integrations** (or **Settings → GitHub**) and look for the webhook URL
+3. Copy the URL and add it as a GitHub Actions secret named `LOVABLE_WEBHOOK_URL`
+4. If you cannot find the webhook URL in the Lovable UI, contact Lovable support with your project ID (`REPLACE_WITH_PROJECT_ID`)
 
 #### Optional Notifications
 - `DISCORD_WEBHOOK_URL` - For deployment notifications

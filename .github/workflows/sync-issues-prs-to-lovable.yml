@@ -27,16 +27,13 @@ jobs:
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
-          # Validate that LOVABLE_WEBHOOK_URL is set
+          # Skip gracefully when LOVABLE_WEBHOOK_URL is not configured
           if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "Error: LOVABLE_WEBHOOK_URL is not set"
+            echo "Warning: LOVABLE_WEBHOOK_URL is not set"
             echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
-            exit 1
+            echo "Skipping Lovable sync (secret not configured)."
+            exit 0
           fi
-
-          # Debug: Show masked URL (only show protocol and domain)
-          MASKED_URL=$(echo "$LOVABLE_WEBHOOK_URL" | sed -E 's|(https?://[^/]+).*|\1/...|')
-          echo "LOVABLE_WEBHOOK_URL=$MASKED_URL"
 
           # Validate URL format
           if ! echo "$LOVABLE_WEBHOOK_URL" | grep -qE '^https?://'; then
@@ -44,6 +41,10 @@ jobs:
             echo "Expected format: https://api.lovable.ai/... or similar"
             exit 1
           fi
+
+          # Debug: Show masked URL (only show protocol and domain)
+          MASKED_URL=$(echo "$LOVABLE_WEBHOOK_URL" | sed -E 's|(https?://[^/]+).*|\1/...|')
+          echo "LOVABLE_WEBHOOK_URL=$MASKED_URL"
 
           echo "Sending event to Lovable..."
           PAYLOAD=$(jq -n \
