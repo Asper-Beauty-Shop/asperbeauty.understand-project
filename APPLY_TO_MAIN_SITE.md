@@ -299,8 +299,8 @@ After deploy, confirm these pages on **https://asperbeautyshop-com.lovable.app/*
 
 - [ ] `.env` in understand-project (from example), not committed
 - [ ] Workflows copied; `LOVABLE_WEBHOOK_URL` set if needed
-  - To get the URL: open Lovable project settings → Integrations (or GitHub) and copy the webhook URL
-  - If not visible in the UI, contact Lovable support with project ID: `657fb572-13a5-4a3e-bac9-184d39fdf7e6`
+  - To get the URL: open Lovable project settings (linked at the top of this doc) → Integrations (or GitHub) and copy the webhook URL
+  - If not visible in the UI, contact Lovable support with the project ID shown in the Quick-Reference Links section below
 
 ---
 
