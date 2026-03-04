@@ -136,6 +136,12 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        "maroon-glow":
+          "0 4px 20px -4px hsl(var(--burgundy) / 0.35), 0 0 0 1px hsl(var(--burgundy) / 0.08)",
+        "maroon-deep":
+          "0 8px 30px -4px hsl(var(--burgundy) / 0.5), 0 0 0 1px hsl(var(--burgundy) / 0.12)",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -173,6 +179,8 @@ export default {
           "0%, 100%": { transform: "translateX(0)" },
           "10%, 30%, 50%, 70%, 90%": { transform: "translateX(-4px)" },
           "20%, 40%, 60%, 80%": { transform: "translateX(4px)" },
+          "10%, 50%, 90%": { transform: "translateX(-4px)" },
+          "30%, 70%": { transform: "translateX(4px)" },
         },
       },
       animation: {

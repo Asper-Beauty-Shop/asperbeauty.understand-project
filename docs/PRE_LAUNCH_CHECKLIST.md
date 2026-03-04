@@ -278,6 +278,15 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/health-checks-ingest 
 
 ## §6. Health Checks and Monitoring
 
+### GitHub Actions Secrets
+
+Configure these secrets in GitHub repository **Settings → Secrets and variables → Actions**:
+
+- [ ] `LOVABLE_WEBHOOK_URL` - Webhook URL for syncing file/issue/PR events to Lovable *(optional; workflows skip gracefully if absent)*
+  - **How to get it:** Open https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6 → **Settings → Integrations** (or **Settings → GitHub**) → copy the webhook URL
+  - If not visible in the Lovable UI, contact Lovable support with project ID `657fb572-13a5-4a3e-bac9-184d39fdf7e6`
+- [ ] `DISCORD_WEBHOOK_URL` - Discord webhook for deployment notifications *(optional)*
+
 ### Automated Health Checks
 
 - [ ] `.github/workflows/deploy-health-check.yml` configured
