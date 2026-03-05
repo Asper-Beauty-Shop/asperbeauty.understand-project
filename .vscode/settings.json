@@ -1,0 +1,71 @@
+{
+    "git.enableSmartCommit": true,
+    "emmet.excludeLanguages": [
+        "markdown"
+    ],
+    "github.copilot.chat.reviewSelection.instructions": [
+        {
+            "text": "Resolve all TODO tasks."
+        }
+    ],
+    "chat.mcp.gallery.enabled": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "editor.definitionLinkOpensInPeek": true,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "editor.codeActions.triggerOnFocusChange": true,
+    "git.autofetch": true,
+    "workbench.editorLargeFileConfirmation": 32,
+    "workbench.editor.wrapTabs": true,
+    "workbench.editorAssociations": {
+        "*.ico": "default",
+        "*.jpg": "default"
+    },
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "workbench.editor.closeOnFileDelete": true,
+    "workbench.settings.applyToAllProfiles": [
+        "workbench.editorAssociations",
+        "chat.mcp.access",
+        "npm.scriptExplorerAction"
+    ],
+    "git.confirmSync": false,
+    "http.systemCertificatesNode": true,
+    "git.ignoreRebaseWarning": true,
+    "workbench.startupEditor": "welcomePage",
+    "editor.largeFileOptimizations": false,
+    "git.openRepositoryInParentFolders": "always",
+    "diffEditor.renderSideBySide": false,
+    "typescript.tsserver.web.projectWideIntellisense.suppressSemanticErrors": true,
+    "chat.agent.maxRequests": 100,
+    "editor.formatOnSave": true,
+    "editor.cursorBlinking": "expand",
+    "editor.formatOnPaste": true,
+    "diffEditor.ignoreTrimWhitespace": true,
+    "window.menuBarVisibility": "classic",
+    "files.associations": {
+        "*.tsx": "typescriptreact",
+        "*.yml": "yaml"
+    },
+    "workbench.editor.limit.enabled": true,
+    "npm.scriptExplorerAction": "run",
+    "npm.enableTouchbar": true,
+    "gulp.autoDetect": "on",
+    "jake.autoDetect": "on",
+    "workbench.editor.centeredLayoutFixedWidth": true,
+    "npm-intellisense.importES6": true,
+    "npm-intellisense.importQuotes": "'",
+    "npm-intellisense.importLinebreak": ";\n",
+    "npm-intellisense.importDeclarationType": "const",
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "workbench.editor.scrollToSwitchTabs": true,
+    "workbench.editor.sharedViewState": true,
+    "workbench.editor.limit.perEditorGroup": true,
+    "workbench.editor.limit.excludeDirty": true,
+    "workbench.editor.revealIfOpen": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "workbench.editor.enablePreviewFromCodeNavigation": true,
+    "workbench.editor.alwaysShowEditorActions": true
+}

@@ -4,12 +4,12 @@
 #
 # On every push, sends lists of added/modified/removed files to Lovable via webhook.
 # 
-# REQUIRED SETUP:
+# OPTIONAL SETUP:
 #   1. In GitHub repo → Settings → Secrets and variables → Actions
 #   2. Add secret: LOVABLE_WEBHOOK_URL = (webhook URL from Lovable for file sync)
 #   3. See docs/GITHUB_SECRETS_SETUP.md for detailed instructions
 #
-# This workflow will FAIL if LOVABLE_WEBHOOK_URL is not configured.
+# If LOVABLE_WEBHOOK_URL is not configured, this workflow will skip gracefully (exit 0).
 #
 name: Sync File Changes to Lovable
 
@@ -21,8 +21,6 @@ on:
 jobs:
   sync_files_to_lovable:
     runs-on: ubuntu-latest
-    # Skip this job if LOVABLE_WEBHOOK_URL is not configured
-    if: secrets.LOVABLE_WEBHOOK_URL != ''
     steps:
       - name: Filter commit file changes and send to Lovable
         env:
