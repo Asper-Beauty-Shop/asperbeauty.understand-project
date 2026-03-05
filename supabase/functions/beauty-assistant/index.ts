@@ -562,11 +562,18 @@ serve(async (req) => {
     // The products table uses RLS; service role bypasses those policies so the edge
     // function can always return relevant product recommendations regardless of the
     // calling user's permissions.
-    const serviceClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-    const { productContext, matchedProducts } = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
+    // Credentials may be absent in partial deployments; fall back to empty context
+    // rather than throwing, matching the behaviour of the webhook path.
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
+    let productContext = "";
+    let matchedProducts: unknown[] = [];
+    if (supabaseUrl && supabaseKey) {
+      const serviceClient = createClient(supabaseUrl, supabaseKey);
+      const result = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
+      productContext = result.productContext;
+      matchedProducts = result.matchedProducts;
+    }
 
     // Detect persona from user message
     // Dual-Persona detection — Dr. Sami (clinical) vs Ms. Zain (beauty/aesthetic)
