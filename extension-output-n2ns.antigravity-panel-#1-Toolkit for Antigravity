@@ -1,6 +1,6 @@
 RUN
 PowerShell execution policy
-
+ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 Ran: Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 Completed successfully. This can help the Toolkit’s PowerShell commands (e.g. Get-CimInstance) run without execution policy errors.
 Diagnostic script in the repo
@@ -50,6 +50,82 @@ if (FEATURE_ANTIGRAVITY) {
 UPDATE
 run extension
 ExecutionPolicy
+runs language_server_windows_x64.exe    
+// Antigravity Panel Feature: Connection Diagnostic Runner (Operational-Workflow-Rules-compliant)
+//
+// Controlled by FEATURE_ANTIGRAVITY feature flag.
+// When enabled, this function provides a safe way to trigger the diagnostic PowerShell script from UI/workflow.
+// Includes fail-safe handling and outputs standardized status for integration with Cursor/Asper workflows.
+
+/**
+ * Run Antigravity diagnostic script and return status/result.
+ * Must only run if FEATURE_ANTIGRAVITY is true.
+ * - Executes scripts/antigravity-diagnostic.ps1 via PowerShell.
+ * - Returns { status, details } for UI.
+ * - On error or uncertainty, formats an escalatable object per Monitoring-Quality-Rules.
+ * Note: Cannot be used in browser-only environments.
+ */
+export async function runAntigravityDiagnostic(): Promise<{
+  status: "success" | "no_process" | "error" | "escalate";
+  details: string;
+}> {
+  if (!FEATURE_ANTIGRAVITY) {
+    return {
+      status: "error",
+      details: "Antigravity diagnostics are disabled by feature flag.",
+    };
+  }
+
+  // Only attempt in Node/capable environment.
+  if (
+    typeof window !== "undefined" &&
+    typeof window.process === "undefined"
+  ) {
+    return {
+      status: "error",
+      details: "Cannot run PowerShell diagnostics in browser environment.",
+    };
+  }
+
+  try {
+    // Dynamic import to avoid breaking in browser bundles.
+    const { exec } = await import("child_process");
+    const util = await import("util");
+    const execAsync = util.promisify(exec);
+
+    // Attempt to run the script
+    const { stdout, stderr } = await execAsync(
+      'powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\\antigravity-diagnostic.ps1"'
+    );
+
+    if (
+      stdout?.includes("no language_server_windows_x64.exe") ||
+      stdout?.toLowerCase().includes("no_process")
+    ) {
+      return {
+        status: "no_process",
+        details: stdout.trim(),
+      };
+    }
+
+    return {
+      status: "success",
+      details: stdout?.trim() || "Diagnostic succeeded.",
+    };
+  } catch (err: any) {
+    // Escalate if output suggests uncertainty or script failure
+    const detail =
+      err?.stderr || err?.message || "Unknown error in diagnosis script";
+    return {
+      status:
+        detail.includes("uncertain") || detail.includes("cannot detect")
+          ? "escalate"
+          : "error",
+      details: detail,
+    };
+  }
+}
+
 
 */
 
