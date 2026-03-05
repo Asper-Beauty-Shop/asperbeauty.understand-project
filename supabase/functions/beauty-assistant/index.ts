@@ -5,6 +5,9 @@
  * Project scripts (SNC, health, brain), applyToAllProfiles, and commitDirectlyWarning: see README.
  */
 declare const Deno: { env: { get(key: string): string | undefined } };
+declare const Deno: { env: { get(key: string): string | undefined } };
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 // @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 // @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
@@ -477,27 +480,30 @@ serve(async (req) => {
           const reader = geminiRes.body!.getReader();
           const decoder = new TextDecoder();
           let buffer = "";
+          const processLine = (line: string) => {
+            if (line.startsWith("data: ") && line !== "data: [DONE]") {
+              try {
+                const json = JSON.parse(line.slice(6));
+                const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text) {
+                  const chunk = `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\n\n`;
+                  controller.enqueue(encoder.encode(chunk));
+                }
+              } catch {
+                // skip malformed chunk
+              }
+            }
+          };
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
             buffer += decoder.decode(value, { stream: true });
             const lines = buffer.split("\n");
             buffer = lines.pop() ?? "";
-            for (const line of lines) {
-              if (line.startsWith("data: ") && line !== "data: [DONE]") {
-                try {
-                  const json = JSON.parse(line.slice(6));
-                  const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
-                  if (text) {
-                    const chunk = `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\n\n`;
-                    controller.enqueue(encoder.encode(chunk));
-                  }
-                } catch {
-                  // skip malformed chunk
-                }
-              }
-            }
+            for (const line of lines) processLine(line);
           }
+          // Process any remaining buffer (final message without trailing newline)
+          if (buffer.trim()) processLine(buffer.trim());
           controller.close();
         },
       });

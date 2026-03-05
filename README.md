@@ -1,87 +1,30 @@
-# Welcome to your Lovable project
+# Asper Beauty Shop
+
+**Update:** 2026-03-04-lzdy
+
+## Download
+
+To download or clone this project locally:
+
+```sh
+git clone <YOUR_GIT_URL>
+cd <YOUR_PROJECT_NAME>
+npm i
+```
+
+Then run `npm run dev` to start the development server. See [Available scripts](#available-scripts) for more commands.
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+- **Site:** https://www.asperbeautyshop.com
+- **Stack:** Vite, TypeScript, React, shadcn-ui, Tailwind CSS
+- **Website design:** See [WEBSITE-DESIGN.md](WEBSITE-DESIGN.md) (tokens, components, RTL, Dr. Bot).
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
 ## SNC (sync) and applyToAllProfiles
 
-**Sync check (SNC)** — Verifies frontend health and Beauty Assistant (brain) connectivity:
+**SNC (sync)** — `npm run sync` (frontend + brain); plus `npm run health` (frontend only), `npm run brain` (edge function only).
 
-```sh
-npm run sync
-```
-
-Other scripts: `npm run health` (frontend only), `npm run brain` (edge function only).
-
-**applyToAllProfiles** — Cursor/VS Code user setting so chosen options apply to every profile. In **User** `settings.json` (File → Preferences → Settings → Open Settings JSON), add:
+**applyToAllProfiles** — In **User** `settings.json` (File → Preferences → Settings → Open Settings JSON), add:
 
 ```json
 "workbench.settings.applyToAllProfiles": [
@@ -92,11 +35,11 @@ Other scripts: `npm run health` (frontend only), `npm run brain` (edge function 
 ]
 ```
 
-Include `update.channel` if you want the same update channel (e.g. stable) across all profiles. Use **run-script** (`npm run <script>`) for the commands below; key ones: `npm run sync` (SNC), `npm run health`, `npm run brain`.
-
-**commitDirectlyWarning** — Avoid committing directly to the default branch when branch protection or Windows path issues apply; use a feature branch and PR, or see PUSH-BLOCKER.md if push is blocked.
+**commitDirectlyWarning** — Use a feature branch and PR when branch protection applies; see PUSH-BLOCKER.md if push is blocked.
 
 ## Available scripts
+
+**SNC:** `npm run sync` | `npm run health` | `npm run brain` (see [SNC (sync)](#snc-sync-and-applytoallprofiles)).
 
 | Command | What it does |
 |---------|--------------|
@@ -115,4 +58,3 @@ Include `update.channel` if you want the same update channel (e.g. stable) acros
 | `npm run health` | Frontend + brain health check |
 | `npm run brain` | Brain (Beauty Assistant) only |
 | `npm run sync` | Frontend + brain sync check |
-
