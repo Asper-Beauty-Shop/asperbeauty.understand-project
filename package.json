@@ -16,6 +16,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "health": "node scripts/health-check.js",
+    "brain": "node scripts/brain-check.js",
+    "sync:check": "node scripts/sync-check.js",
     "sync": "tsx scripts/sync-shopify-catalog.ts",
     "sync:dry": "tsx scripts/sync-shopify-catalog.ts --dry-run",
     "sync:publish": "tsx scripts/sync-shopify-catalog.ts --publish"
