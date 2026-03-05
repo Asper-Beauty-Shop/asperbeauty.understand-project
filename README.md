@@ -50,6 +50,25 @@ npm run dev
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
+**Use Claude Code**
+
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) is an agentic coding tool from Anthropic that lets you work with Claude directly from your terminal or IDE.
+
+Install the extension:
+
+```sh
+npm install -g @anthropic-ai/claude-code
+```
+
+Then start a session in your project directory:
+
+```sh
+cd <YOUR_PROJECT_NAME>
+claude
+```
+
+Claude Code can read, edit, and create files, run terminal commands, and assist with complex multi-step coding tasks — all while keeping you in control.
+
 ## What technologies are used for this project?
 
 This project is built with:

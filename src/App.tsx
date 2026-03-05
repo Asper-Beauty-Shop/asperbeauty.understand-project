@@ -41,6 +41,10 @@ const BeautyAssistant = lazy(() =>
   import("@/components/BeautyAssistant").then((m) => ({ default: m.BeautyAssistant })),
 );
 
+const ChatBot = lazy(() =>
+  import("@/components/ChatBot").then((m) => ({ default: m.ChatBot })),
+);
+
 const queryClient = new QueryClient();
 
 // Cart sync wrapper component
@@ -69,6 +73,9 @@ const App = () => {
             <BrowserRouter>
               <Suspense fallback={null}>
                 <BeautyAssistant />
+              </Suspense>
+              <Suspense fallback={null}>
+                <ChatBot />
               </Suspense>
               <Routes>
                 <Route path="/" element={<Index />} />
