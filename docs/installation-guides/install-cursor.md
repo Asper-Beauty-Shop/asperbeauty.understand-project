@@ -51,6 +51,8 @@ So key settings apply across profiles, add this to **User** `settings.json` (Fil
 ]
 ```
 
+**Security:** Do not paste API keys, personal access tokens, or other secrets into this doc or into `settings.json` in the repo. If a token was ever committed (including in git history), revoke it immediately in GitHub: **Settings → Developer settings → Personal access tokens**.
+
 If your `settings.json` is corrupted or shows “Unknown Configuration Setting”, use the fix guide and copy-paste file in the repo root: [CURSOR-SETTINGS-FIX.md](../../CURSOR-SETTINGS-FIX.md) and [cursor-user-settings-FIXED.json](../../cursor-user-settings-FIXED.json).
 
 ---
