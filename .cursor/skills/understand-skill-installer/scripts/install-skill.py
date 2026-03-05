@@ -1,3 +1,4 @@
+run
 """
 Understand Skill Installer — installs skills into $UNDERSTAND_HOME/skills.
 Uses Git sparse checkout when --path is given to avoid cloning the full repo.

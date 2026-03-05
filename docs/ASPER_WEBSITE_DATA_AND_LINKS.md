@@ -61,7 +61,7 @@ Use for link-in-bio, ads, ManyChat/Gorgias.
 | **Google share link** | https://share.google/Zn49LB2qW8pD5owtN |
 
 ---
-
+  
 ## 4. AI Brain (Beauty Assistant)
 
 **Supabase project (correct):** `qqceibvalkoytafynwoc`

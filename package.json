@@ -19,6 +19,7 @@
     "test:bulk-upload": "node scripts/test-bulk-upload-validation.mjs",
     "health": "node scripts/health-check.js",
     "brain": "node scripts/brain-check.js",
+    "sync": "node scripts/sync-check.js",
     "catalog-enrich": "tsx scripts/catalog-enrichment/index.ts"
   },
   "dependencies": {
