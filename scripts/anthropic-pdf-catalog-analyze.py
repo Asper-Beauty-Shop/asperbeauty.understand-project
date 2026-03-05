@@ -6,7 +6,12 @@ Upload a supplier/brand PDF (e.g. Vichy, La Roche-Posay catalog, clinical paper)
 once; Claude Sonnet analyzes it and returns structured JSON suitable for
 mapping into digital_tray_products (SKUs, ingredients, skin concerns, prices).
 
-Use for: external brand catalogs, clinical research on ingredients, strategy docs.
+Use for: parsing external brand catalogs to enrich the Asper database; clinical
+research on ingredients; strategy docs. Output can be fed into a one-off
+import or a separate pipeline step into Supabase (same taxonomy as
+scripts/catalog-enrichment). Cost-efficient: file is stored on Anthropic's
+servers so you can ask follow-up questions without re-uploading.
+
 Complements: scripts/catalog-enrichment (Shopify → Gemini → Supabase).
 API key: ANTHROPIC_API_KEY in env; never commit.
 
@@ -22,10 +27,10 @@ import sys
 
 import anthropic
 
-# Approved skin concerns (match supabase/migrations/20260303000000_digital_tray_products.sql)
+# Approved skin concerns (match scripts/catalog-enrichment + digital_tray_products schema)
 DTP_SKIN_CONCERNS = [
     "brightening", "sun_protection", "dark_circles", "anti_aging",
-    "dryness", "acne", "sensitivity", "hyperpigmentation",
+    "dryness", "acne", "sensitivity", "pores", "firmness", "hyperpigmentation",
 ]
 DTP_SKIN_TYPES = ["oily", "dry", "combination", "sensitive", "normal", "all"]
 

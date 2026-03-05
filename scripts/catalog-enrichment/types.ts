@@ -3,16 +3,15 @@
  * Shared TypeScript types. Aligned with AI-Powered Architecture Implementation Plan.
  */
 
+/** Exactly 8 DB enums for digital_tray_products — single source of truth. */
 export const APPROVED_SKIN_CONCERNS = [
   "brightening",
-  "sun-protection",
-  "dark-circles",
-  "anti-aging",
+  "sun_protection",
+  "dark_circles",
+  "anti_aging",
   "dryness",
   "acne",
   "sensitivity",
-  "pores",
-  "firmness",
   "hyperpigmentation",
 ] as const;
 

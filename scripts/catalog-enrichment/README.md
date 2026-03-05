@@ -2,7 +2,7 @@
 
 **Asper Beauty Shop** — AI catalog enrichment for the 3-Click funnel.
 
-Flow: **Shopify (unenriched) → Gemini Clinical Auditor (per-product) → Supabase `digital_tray_products`** + **`enrichment_pipeline_runs`** audit log.
+Flow: **Shopify (unenriched) → Gemini 2.5 Flash Clinical Auditor (batched, self-healing) → Supabase `digital_tray_products`** + **`enrichment_pipeline_runs`** audit log. Single source of truth: no secondary LLM, no `product_clinical_metadata` table.
 
 ## Usage
 
@@ -22,6 +22,7 @@ Set in `.env` (or export before running). **Do not commit secrets.**
 | `SHOPIFY_STORE_DOMAIN` | e.g. `lovable-project-milns.myshopify.com` |
 | `SHOPIFY_STOREFRONT_ACCESS_TOKEN` **or** `SHOPIFY_ADMIN_ACCESS_TOKEN` | Storefront API token (Storefront mode) or Admin API token (Admin mode) |
 | `GEMINI_API_KEY` | Google AI Studio / Gemini API key |
+| `GEMINI_MODEL` | (Optional) Model id, default `gemini-2.5-flash` |
 | `SUPABASE_URL` | e.g. `https://qqceibvalkoytafynwoc.supabase.co` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Service role key (bypasses RLS for upsert) |
 
@@ -40,9 +41,9 @@ Set in `.env` (or export before running). **Do not commit secrets.**
 ## Behaviour
 
 - Fetches products in pages (Storefront or Admin, see env above).
-- Audits **one product at a time** with Gemini (confidence 0–100, clinical_reasoning, spf_value, review_reason). Invalid categories are stripped via schema validation.
-- Up to **3 retries** per product with backoff; failures are recorded in the pipeline run.
-- Upserts into `digital_tray_products` in sub-batches of 50 (idempotent on `shopify_product_id`).
+- **Batched Gemini 2.5 Flash** audit: products are sent in batches of 10; one API call per batch. **Self-healing:** if a batch fails after 3 retries, that batch’s products are logged as failed and the pipeline continues with the next batch.
+- **Strict taxonomy:** Gemini is constrained to the 8 DB enums: `brightening`, `sun_protection`, `dark_circles`, `anti_aging`, `dryness`, `acne`, `sensitivity`, `hyperpigmentation`. Invalid categories are stripped via schema validation.
+- Confidence 0–100, clinical_reasoning, spf_value, review_reason. Upserts into `digital_tray_products` in sub-batches of 50 (idempotent on `shopify_product_id`).
 - Writes each run to `enrichment_pipeline_runs` (run_id, counts, status, errors).
 - Confidence &lt; 60 or stripped categories set `requires_human_review = true`.
 

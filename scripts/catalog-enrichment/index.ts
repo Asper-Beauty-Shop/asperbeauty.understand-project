@@ -16,6 +16,7 @@
 import "dotenv/config";
 import { randomUUID } from "crypto";
 import {
+  BATCH_SIZE,
   ENRICHMENT_VERSION,
   GEMINI_BATCH_DELAY_MS,
   MAX_RETRIES,
@@ -105,47 +106,55 @@ async function main() {
       return;
     }
 
-    console.log("\nSTAGE 2: Gemini Clinical Analysis\n" + "─".repeat(40));
-    console.log(`🔬 Analyzing ${products.length} products...\n`);
+    console.log("\nSTAGE 2: Gemini Clinical Analysis (batched, self-healing)\n" + "─".repeat(40));
+    console.log(`🔬 Analyzing ${products.length} products in batches of ${BATCH_SIZE}...\n`);
 
     const auditResults: GeminiAuditResult[] = [];
     const analysisErrors: PipelineError[] = [];
 
-    for (let i = 0; i < products.length; i++) {
-      const product = products[i];
-      const progress = `[${i + 1}/${products.length}]`;
-      console.log(`${progress} Auditing: ${product.title.substring(0, 60)}...`);
+    for (let offset = 0; offset < products.length; offset += BATCH_SIZE) {
+      const batch = products.slice(offset, offset + BATCH_SIZE);
+      const batchNum = Math.floor(offset / BATCH_SIZE) + 1;
+      const totalBatches = Math.ceil(products.length / BATCH_SIZE);
+      const progress = `[Batch ${batchNum}/${totalBatches}]`;
 
       let lastError: Error | null = null;
       for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
         try {
-          const result = await auditor.auditProduct(product);
-          auditResults.push(result);
-          const flag = result.requires_human_review ? " ⚠️ REVIEW" : "";
+          const batchResults = await auditor.auditBatch(batch);
+          auditResults.push(...batchResults);
+          const concernsSample = batchResults[0]?.skin_concerns?.join(", ") ?? "—";
           console.log(
-            `  ✅ Concerns: [${result.skin_concerns.join(", ")}] | Confidence: ${result.confidence_score}%${flag}`
+            `${progress} ✅ ${batch.length} products | e.g. concerns: [${concernsSample}]`
           );
           break;
         } catch (err) {
           lastError = err instanceof Error ? err : new Error(String(err));
           if (attempt < MAX_RETRIES) {
-            console.warn(`  ⚠️ Attempt ${attempt} failed, retrying in ${2 * attempt}s...`);
+            console.warn(
+              `${progress} ⚠️ Attempt ${attempt} failed, retrying in ${2 * attempt}s...`
+            );
             await sleep(2000 * attempt);
           }
         }
       }
-      if (lastError && auditResults.length <= i) {
-        console.error(`  ❌ Failed after ${MAX_RETRIES} attempts: ${lastError.message}`);
-        analysisErrors.push({
-          sku: product.variants[0]?.sku ?? product.id,
-          shopify_product_id: product.id,
-          error_message: lastError.message,
-          stage: "analysis",
-          timestamp: new Date().toISOString(),
-        });
+
+      if (lastError && auditResults.length < offset + batch.length) {
+        console.error(
+          `${progress} ❌ Batch failed after ${MAX_RETRIES} attempts: ${lastError.message}`
+        );
+        for (const product of batch) {
+          analysisErrors.push({
+            sku: product.variants[0]?.sku ?? product.id,
+            shopify_product_id: product.id,
+            error_message: lastError!.message,
+            stage: "analysis",
+            timestamp: new Date().toISOString(),
+          });
+        }
       }
 
-      if (i < products.length - 1) await sleep(GEMINI_BATCH_DELAY_MS);
+      if (offset + BATCH_SIZE < products.length) await sleep(GEMINI_BATCH_DELAY_MS);
     }
 
     console.log("\nSTAGE 3: Supabase Idempotent Upsert\n" + "─".repeat(40));
