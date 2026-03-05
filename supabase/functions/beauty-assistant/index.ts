@@ -1,4 +1,13 @@
+/**
+ * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
+ * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). Single AI, context-switching persona.
+ * Webhooks: Gorgias / ManyChat (no auth). Website chat: Supabase Auth + SSE.
+ * Project scripts (SNC, health, brain), applyToAllProfiles, and commitDirectlyWarning: see README.
+ */
+declare const Deno: { env: { get(key: string): string | undefined } };
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // Staging origins allowed alongside production ALLOWED_ORIGIN
@@ -506,8 +515,8 @@ serve(async (req) => {
     }
 
     const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
       { global: { headers: { Authorization: authHeader } } },
     );
 
@@ -525,16 +534,20 @@ serve(async (req) => {
 
     const body = await req.json();
     const { messages, source: campaignSource } = body;
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+    // Same API key fallback as webhook path: GEMINI_API_KEY ?? LOVABLE_API_KEY
+    const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+    const geminiKey = Deno.env.get("GEMINI_API_KEY");
+    const apiKey = geminiKey ?? lovableKey;
+    if (!apiKey) {
+      throw new Error("API key not configured (set LOVABLE_API_KEY or GEMINI_API_KEY)");
     }
+    const useLovable = !!lovableKey && !geminiKey;
 
     // Log campaign source attribution to telemetry_events if present
     if (campaignSource) {
       const adminClient = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY") ?? "",
       );
       adminClient.from("telemetry_events").insert({
         user_id: userId,
@@ -558,15 +571,17 @@ serve(async (req) => {
     const detectedConcernSlug = detectConcernSlug(lastText);
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
-    // Fetch product context using service role key for unrestricted catalog access.
-    // The products table uses RLS; service role bypasses those policies so the edge
-    // function can always return relevant product recommendations regardless of the
-    // calling user's permissions.
-    const serviceClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-    const { productContext, matchedProducts } = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
+    // Fetch product context with service role (or anon fallback), consistent with webhook path.
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
+    let productContext = "";
+    let matchedProducts: any[] = [];
+    if (supabaseUrl && supabaseKey) {
+      const productContextClient = createClient(supabaseUrl, supabaseKey);
+      const result = await fetchProductContext(productContextClient, lastText, detectedConcernSlug);
+      productContext = result.productContext;
+      matchedProducts = result.matchedProducts;
+    }
 
     // Detect persona from user message
     // Dual-Persona detection — Dr. Sami (clinical) vs Ms. Zain (beauty/aesthetic)
@@ -576,30 +591,6 @@ serve(async (req) => {
 
     const systemPrompt = buildSystemPrompt(productContext, shopRoutinePath);
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [{ role: "system", content: systemPrompt }, ...messages],
-        stream: true,
-      }),
-    });
-
-    if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again." }), {
-          status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
-      const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      return new Response(JSON.stringify({ error: "Failed to get response" }), {
-        status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-      });
-    }
-
-    // Stream response with persona header and product data events
     const encoder = new TextEncoder();
     const recommendEvent = shopRoutinePath
       ? `data: ${JSON.stringify({ type: "recommend", detected_concern: detectedConcernSlug, shop_routine_path: shopRoutinePath })}\n\n`
@@ -608,19 +599,108 @@ serve(async (req) => {
       ? `data: ${JSON.stringify({ type: "products", products: matchedProducts.map(p => ({ id: p.id, title: p.title, brand: p.brand, price: p.price, handle: p.handle, image_url: p.image_url })) })}\n\n`
       : "";
 
-    const combinedStream = new ReadableStream({
-      async start(controller) {
-        if (recommendEvent) controller.enqueue(encoder.encode(recommendEvent));
-        if (productDataEvent) controller.enqueue(encoder.encode(productDataEvent));
-        const reader = response.body!.getReader();
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          controller.enqueue(value);
+    let combinedStream: ReadableStream<Uint8Array>;
+
+    if (useLovable) {
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "google/gemini-3-flash-preview",
+          messages: [{ role: "system", content: systemPrompt }, ...messages],
+          stream: true,
+        }),
+      });
+      if (!response.ok) {
+        if (response.status === 429) {
+          return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again." }), {
+            status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+          });
         }
-        controller.close();
-      },
-    });
+        const errorText = await response.text();
+        console.error("AI gateway error:", response.status, errorText);
+        return new Response(JSON.stringify({ error: "Failed to get response" }), {
+          status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+      combinedStream = new ReadableStream({
+        async start(controller) {
+          if (recommendEvent) controller.enqueue(encoder.encode(recommendEvent));
+          if (productDataEvent) controller.enqueue(encoder.encode(productDataEvent));
+          const reader = response.body!.getReader();
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            controller.enqueue(value);
+          }
+          controller.close();
+        },
+      });
+    } else {
+      // Gemini direct: streamGenerateContent, then forward as SSE
+      const model = Deno.env.get("GEMINI_MODEL") ?? "gemini-2.0-flash";
+      const geminiRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?key=${apiKey}&alt=sse`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            contents: messages
+              .filter((m: any) => m.role !== "system")
+              .map((m: any) => {
+                const content = typeof m.content === "string" ? m.content : m.content?.filter((p: any) => p.type === "text").map((p: any) => p.text ?? "").join(" ") ?? "";
+                return { role: m.role === "assistant" ? "model" : "user", parts: [{ text: content }] };
+              })
+              .filter((c: { parts: { text: string }[] }) => c.parts?.[0]?.text),
+            generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
+          }),
+        }
+      );
+      if (!geminiRes.ok) {
+        if (geminiRes.status === 429) {
+          return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again." }), {
+            status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+          });
+        }
+        const errText = await geminiRes.text();
+        console.error("Gemini stream error:", geminiRes.status, errText);
+        return new Response(JSON.stringify({ error: "Failed to get response" }), {
+          status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+      combinedStream = new ReadableStream({
+        async start(controller) {
+          if (recommendEvent) controller.enqueue(encoder.encode(recommendEvent));
+          if (productDataEvent) controller.enqueue(encoder.encode(productDataEvent));
+          const reader = geminiRes.body!.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+            for (const line of lines) {
+              if (line.startsWith("data: ") && line !== "data: [DONE]") {
+                try {
+                  const json = JSON.parse(line.slice(6));
+                  const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+                  if (text) {
+                    const chunk = `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\n\n`;
+                    controller.enqueue(encoder.encode(chunk));
+                  }
+                } catch {
+                  // skip malformed chunk
+                }
+              }
+            }
+          }
+          controller.close();
+        },
+      });
+    }
 
     return new Response(combinedStream, {
       headers: {
