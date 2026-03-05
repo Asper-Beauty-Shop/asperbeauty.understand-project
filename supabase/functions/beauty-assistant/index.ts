@@ -1,3 +1,9 @@
+/**
+ * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
+ * Webhooks: Gorgias / ManyChat (no auth). Website chat: Supabase Auth + SSE.
+ * Project scripts (SNC, health, brain) and applyToAllProfiles: see README.
+ */
+declare const Deno: { env: { get(key: string): string | undefined } };
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -361,13 +367,13 @@ serve(async (req) => {
     const detectedConcernSlug = detectConcernSlug(lastText);
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
-    // Fetch product context with service role when configured (bypasses RLS). Otherwise empty context, consistent with webhook path.
+    // Fetch product context with service role (or anon fallback), consistent with webhook path.
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
     let productContext = "";
     let matchedProducts: any[] = [];
-    if (supabaseUrl && serviceRoleKey) {
-      const productContextClient = createClient(supabaseUrl, serviceRoleKey);
+    if (supabaseUrl && supabaseKey) {
+      const productContextClient = createClient(supabaseUrl, supabaseKey);
       const result = await fetchProductContext(productContextClient, lastText, detectedConcernSlug);
       productContext = result.productContext;
       matchedProducts = result.matchedProducts;

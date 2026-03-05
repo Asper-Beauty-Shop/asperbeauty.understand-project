@@ -92,7 +92,7 @@ Other scripts: `npm run health` (frontend only), `npm run brain` (edge function 
 ]
 ```
 
-Include `update.channel` if you want the same update channel (e.g. stable) across all profiles. Adjust the list to the setting keys you want shared (e.g. npm script explorer, MCP access).
+Include `update.channel` if you want the same update channel (e.g. stable) across all profiles. Use **run-script** (`npm run <script>`) for the commands below; key ones: `npm run sync` (SNC), `npm run health`, `npm run brain`.
 
 ## Available scripts
 
