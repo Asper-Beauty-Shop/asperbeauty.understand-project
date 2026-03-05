@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS public.digital_tray_products (
   title                 TEXT NOT NULL,
 
   -- AI-enriched fields
-  skin_concerns         TEXT[] NOT NULL DEFAULT '{}',
-  skin_types            TEXT[] NOT NULL DEFAULT '{}',
+  skin_concerns         public.dtp_skin_concern[] NOT NULL DEFAULT '{}',
+  skin_types            public.dtp_skin_type[] NOT NULL DEFAULT '{}',
   key_ingredients       TEXT[] NOT NULL DEFAULT '{}',
   clinical_justification TEXT,
   ai_confidence_score   DECIMAL(3,2) CHECK (ai_confidence_score >= 0 AND ai_confidence_score <= 1),
