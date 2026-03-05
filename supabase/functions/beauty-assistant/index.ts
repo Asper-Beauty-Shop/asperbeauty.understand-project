@@ -80,7 +80,13 @@ function concernSlugToEnum(slug: string): string[] {
   return map[slug] || [];
 }
 
-/** Format a product row into a readable string for the AI context */
+run
+
+/** Format
+ *  a 
+ * 
+ * product row 
+ * into a readable string for the AI context */
 function formatProduct(p: any): string {
   const parts = [`**${p.title}**`];
   if (p.brand) parts[0] += ` (${p.brand})`;
@@ -93,7 +99,8 @@ function formatProduct(p: any): string {
   return `- ${parts.join(" | ")}`;
 }
 
-/** Fetch products matching a concern or keywords from the products table */
+/
+** Fetch products matching a concern or keywords from the products table */
 async function fetchProductContext(
   supabaseClient: any,
   userMessage: string,
@@ -361,12 +368,15 @@ serve(async (req) => {
     const detectedConcernSlug = detectConcernSlug(lastText);
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
-    // Fetch product context with service role when configured (bypasses RLS for server-side catalog reads)
+    // Fetch product context with service role (bypasses RLS for server-side catalog reads). Fail fast if not configured.
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    const productContextClient = (supabaseUrl && serviceRoleKey)
-      ? createClient(supabaseUrl, serviceRoleKey)
-      : supabaseClient;
+    if (!supabaseUrl || !serviceRoleKey) {
+      throw new Error(
+        "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set for website chat (product context bypasses RLS)."
+      );
+    }
+    const productContextClient = createClient(supabaseUrl, serviceRoleKey);
     const { productContext, matchedProducts } = await fetchProductContext(productContextClient, lastText, detectedConcernSlug);
 
     // Detect persona from user message
