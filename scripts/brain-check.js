@@ -18,6 +18,7 @@ async function main() {
     } catch {
       body = text;
     }
+    // Only 2xx is success. 401 (auth) and 405 (method) must fail so misconfiguration is visible.
     if (res.ok) {
       console.log("  ✓ Beauty Assistant (Dr. Bot):", res.status);
       if (body && typeof body === "object") {
