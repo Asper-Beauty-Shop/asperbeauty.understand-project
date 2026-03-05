@@ -32,6 +32,10 @@ permissions:
 
 jobs:
   build:
+    # Skip this workflow when Azure credentials are not configured.
+    # To enable Azure deployment, set AZURE_WEBAPP_PUBLISH_PROFILE in
+    # Settings → Secrets and variables → Actions and update AZURE_WEBAPP_NAME above.
+    if: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE != '' }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
