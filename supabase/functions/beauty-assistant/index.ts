@@ -510,9 +510,14 @@ serve(async (req) => {
           if (buffer) {
             const remainingLines = buffer.split("\n");
             for (const line of remainingLines) {
-              if (line.startsWith("data: ") && line !== "data: [DONE]") {
+              const trimmed = line.trimEnd();
+              if (trimmed.startsWith("data:")) {
+                const dataPayload = trimmed.slice("data:".length).trimStart();
+                if (dataPayload === "[DONE]") {
+                  continue;
+                }
                 try {
-                  const json = JSON.parse(line.slice(6));
+                  const json = JSON.parse(dataPayload);
                   const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
                   if (text) {
                     const chunk = `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\n\n`;
