@@ -8,8 +8,6 @@ const FRONTEND_HEALTH = "https://asperbeautyshop-com.lovable.app/health";
 const BRAIN_URL =
   "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
 
-const ACCEPTABLE_BRAIN_STATUSES = [200, 401, 405];
-
 async function check(name, url) {
   try {
     const res = await fetch(url, { method: "GET" });
@@ -34,10 +32,10 @@ async function main() {
     failed = true;
   }
 
-  if (ACCEPTABLE_BRAIN_STATUSES.includes(brain.status)) {
+  if (brain.status === 200) {
     console.log(`  ✓ ${brain.name}: ${brain.status}`);
   } else {
-    console.log(`  ✗ ${brain.name}: ${brain.status || brain.error} (expect 200, 401, or 405)`);
+    console.log(`  ✗ ${brain.name}: ${brain.status || brain.error} (expect 200)`);
     failed = true;
   }
 

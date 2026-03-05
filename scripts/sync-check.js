@@ -26,7 +26,7 @@ async function main() {
   ]);
 
   const frontendOk = frontend.status === 200;
-  const brainOk = [200, 401, 405].includes(brain.status);
+  const brainOk = brain.status === 200;
 
   console.log(
     frontendOk ? "  ✓" : "  ✗",

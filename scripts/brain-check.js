@@ -7,8 +7,6 @@
 const BRAIN_URL =
   "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
 
-const ACCEPTABLE_STATUSES = [200, 401, 405];
-
 async function main() {
   console.log("Asper Beauty Shop — Brain connectivity check\n");
   try {
@@ -20,7 +18,7 @@ async function main() {
     } catch {
       body = text;
     }
-    if (ACCEPTABLE_STATUSES.includes(res.status)) {
+    if (res.ok) {
       console.log("  ✓ Beauty Assistant (Dr. Bot):", res.status);
       if (body && typeof body === "object") {
         console.log("  ", JSON.stringify(body, null, 2));
