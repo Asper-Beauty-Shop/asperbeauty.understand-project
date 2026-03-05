@@ -447,10 +447,13 @@ serve(async (req) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: systemPrompt }] },
-            contents: messages.map((m: any) => {
-              const content = typeof m.content === "string" ? m.content : m.content?.filter((p: any) => p.type === "text").map((p: any) => p.text ?? "").join(" ") ?? "";
-              return { role: m.role === "assistant" ? "model" : "user", parts: [{ text: content }] };
-            }).filter((c: { parts: { text: string }[] }) => c.parts?.[0]?.text),
+            contents: messages
+              .filter((m: any) => m.role !== "system")
+              .map((m: any) => {
+                const content = typeof m.content === "string" ? m.content : m.content?.filter((p: any) => p.type === "text").map((p: any) => p.text ?? "").join(" ") ?? "";
+                return { role: m.role === "assistant" ? "model" : "user", parts: [{ text: content }] };
+              })
+              .filter((c: { parts: { text: string }[] }) => c.parts?.[0]?.text),
             generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
           }),
         }
