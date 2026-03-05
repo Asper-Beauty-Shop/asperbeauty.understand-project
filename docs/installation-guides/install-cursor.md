@@ -9,9 +9,11 @@ Guide to installing Cursor IDE and opening the Asper Beauty Shop project so you 
 1. **Download:** [cursor.com](https://cursor.com) → Download for your OS (Windows / macOS / Linux).
 2. **Install** the app and sign in if required.
 3. **(Windows)** Optional: set PowerShell execution policy so extensions (e.g. Toolkit for Antigravity) can run scripts:
+
    ```powershell
    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
    ```
+
    See [docs/development.md](../development.md) for Toolkit notes.
 
 ---
@@ -46,8 +48,7 @@ So key settings apply across profiles, add this to **User** `settings.json` (Fil
   "npm.scriptExplorerAction",
   "update.channel",
   "stash-push:command"
-]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
-
+]
 ```
 
 If your `settings.json` is corrupted or shows “Unknown Configuration Setting”, use the fix guide and copy-paste file in the repo root: [CURSOR-SETTINGS-FIX.md](../../CURSOR-SETTINGS-FIX.md) and [cursor-user-settings-FIXED.json](../../cursor-user-settings-FIXED.json).
@@ -80,11 +81,11 @@ Use a feature branch and PR when branch protection applies; see [PUSH-BLOCKER.md
 
 ## Quick reference
 
-| Step              | Doc / action |
-|-------------------|--------------|
-| Install Cursor    | cursor.com, then optional ExecutionPolicy (see [development.md](../development.md)) |
-| Clone & open     | `git clone` → `npm i` → Open Folder in Cursor |
-| Env              | [BRAIN-CONFIG.md](../BRAIN-CONFIG.md) → `.env` at repo root |
-| User settings    | applyToAllProfiles in settings.json; if broken → [CURSOR-SETTINGS-FIX.md](../../CURSOR-SETTINGS-FIX.md) |
-| Verify           | `npm run sync` then `npm run health` |
-| Deploy to main   | [APPLY_AND_RUN.md](../APPLY_AND_RUN.md) and [APPLY_TO_MAIN_SITE.md](../../APPLY_TO_MAIN_SITE.md) |
+| Step               | Doc / action                                                                                                                                  |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Install Cursor     | cursor.com, then optional ExecutionPolicy (see [development.md](../development.md))                                                              |
+| Clone & open       | `git clone` → `npm i` → Open Folder in Cursor                                                                                                 |
+| Env                | [BRAIN-CONFIG.md](../BRAIN-CONFIG.md) → `.env` at repo root                                                                                   |
+| User settings      | applyToAllProfiles in settings.json; if broken → [CURSOR-SETTINGS-FIX.md](../../CURSOR-SETTINGS-FIX.md)                                       |
+| Verify             | `npm run sync` then `npm run health`                                                                                                          |
+| Deploy to main     | [APPLY_AND_RUN.md](../APPLY_AND_RUN.md) and [APPLY_TO_MAIN_SITE.md](../../APPLY_TO_MAIN_SITE.md)                                                 |
