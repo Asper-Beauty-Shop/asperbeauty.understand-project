@@ -558,15 +558,20 @@ serve(async (req) => {
     const detectedConcernSlug = detectConcernSlug(lastText);
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
-    // Fetch product context using service role key for unrestricted catalog access.
+    // Fetch product context using service role key for unrestricted catalog access when configured.
     // The products table uses RLS; service role bypasses those policies so the edge
     // function can always return relevant product recommendations regardless of the
-    // calling user's permissions.
-    const serviceClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-    const { productContext, matchedProducts } = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
+    // calling user's permissions. Otherwise empty context, consistent with webhook path.
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    let productContext = "";
+    let matchedProducts: unknown[] = [];
+    if (supabaseUrl && supabaseServiceKey) {
+      const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
+      const result = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
+      productContext = result.productContext;
+      matchedProducts = result.matchedProducts;
+    }
 
     // Detect persona from user message
     // Dual-Persona detection — Dr. Sami (clinical) vs Ms. Zain (beauty/aesthetic)
