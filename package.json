@@ -18,7 +18,10 @@
     "test:watch": "vitest",
     "sync": "tsx scripts/sync-shopify-catalog.ts",
     "sync:dry": "tsx scripts/sync-shopify-catalog.ts --dry-run",
-    "sync:publish": "tsx scripts/sync-shopify-catalog.ts --publish"
+    "sync:publish": "tsx scripts/sync-shopify-catalog.ts --publish",
+    "sync:check": "node scripts/sync-check.js",
+    "health": "node scripts/health-check.js",
+    "test:brain": "node scripts/test-brain.js"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^2.0.2",

@@ -1,0 +1,98 @@
+# CI checks for every commit pushed to any branch
+# Repo: asperpharma/understand-project
+#
+# Runs lint, type-check, sync-check, and (on main only) a live health-check
+# against the production Lovable deployment.
+#
+# No secrets are required — sync-check and health-check skip gracefully when
+# optional credentials are absent.
+#
+name: CI — All Commits
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 1. Code quality: lint + typecheck (runs on every push / PR)
+  # ─────────────────────────────────────────────────────────────────────────────
+  lint-and-typecheck:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 2. Sync check: verify Supabase & Shopify integrations are reachable
+  #    Uses public endpoints only — no secrets required, exits 0 if creds absent
+  # ─────────────────────────────────────────────────────────────────────────────
+  sync-check:
+    name: Sync Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run sync check
+        run: npm run sync:check
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://qqceibvalkoytafynwoc.supabase.co' }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SHOPIFY_STORE_DOMAIN: ${{ secrets.VITE_SHOPIFY_STORE_DOMAIN || 'lovable-project-milns.myshopify.com' }}
+          VITE_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.VITE_SHOPIFY_STOREFRONT_TOKEN }}
+          VITE_SHOPIFY_API_VERSION: ${{ secrets.VITE_SHOPIFY_API_VERSION || '2025-07' }}
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 3. Live health check: ping the production site (main branch only)
+  #    Runs immediately — does NOT wait for a new Lovable deploy.
+  # ─────────────────────────────────────────────────────────────────────────────
+  health-check:
+    name: Health Check (main)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: [lint-and-typecheck, sync-check]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run health check
+        run: npm run health
+        env:
+          SITE_URL: ${{ secrets.SITE_URL || 'https://asperbeautyshop-com.lovable.app' }}
