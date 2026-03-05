@@ -19,7 +19,8 @@
     "test:bulk-upload": "node scripts/test-bulk-upload-validation.mjs",
     "health": "node scripts/health-check.js",
     "brain": "node scripts/brain-check.js",
-    "sync": "node scripts/sync-check.js"
+    "sync": "node scripts/sync-check.js",
+    "antigravity-diagnostic": "node scripts/run-antigravity-diagnostic.mjs"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^2.0.2",
