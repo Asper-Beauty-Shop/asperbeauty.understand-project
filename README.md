@@ -72,9 +72,10 @@ To connect a domain, navigate to Project > Settings > Domains and click Connect 
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
 
+
 ## SNC (sync) and applyToAllProfiles
 
-**Sync check** — Verifies frontend health and Beauty Assistant (brain) connectivity:
+**Sync check (SNC)** — Verifies frontend health and Beauty Assistant (brain) connectivity:
 
 ```sh
 npm run sync
@@ -88,11 +89,12 @@ Other scripts: `npm run health` (frontend only), `npm run brain` (edge function 
 "workbench.settings.applyToAllProfiles": [
   "workbench.editorAssociations",
   "chat.mcp.access",
-  "npm.scriptExplorerAction"
+  "npm.scriptExplorerAction",
+  "update.channel"
 ]
 ```
 
-Adjust the list to the setting keys you want shared across profiles (e.g. npm script explorer, MCP access).
+Include `update.channel` if you want the same update channel (e.g. stable) across all profiles. Adjust the list to the setting keys you want shared (e.g. npm script explorer, MCP access).
 
 ## Available scripts
 

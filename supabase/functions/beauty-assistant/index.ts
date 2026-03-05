@@ -361,16 +361,17 @@ serve(async (req) => {
     const detectedConcernSlug = detectConcernSlug(lastText);
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
-    // Fetch product context with service role (bypasses RLS for server-side catalog reads). Fail fast if not configured.
+    // Fetch product context with service role when configured (bypasses RLS). Otherwise empty context, consistent with webhook path.
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    if (!supabaseUrl || !serviceRoleKey) {
-      throw new Error(
-        "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set for website chat (product context bypasses RLS)."
-      );
+    let productContext = "";
+    let matchedProducts: any[] = [];
+    if (supabaseUrl && serviceRoleKey) {
+      const productContextClient = createClient(supabaseUrl, serviceRoleKey);
+      const result = await fetchProductContext(productContextClient, lastText, detectedConcernSlug);
+      productContext = result.productContext;
+      matchedProducts = result.matchedProducts;
     }
-    const productContextClient = createClient(supabaseUrl, serviceRoleKey);
-    const { productContext, matchedProducts } = await fetchProductContext(productContextClient, lastText, detectedConcernSlug);
 
     // Detect persona from user message
     const drSamiTriggers = /acne|rosacea|eczema|hyperpigment|pregnan|حامل|حمل|ingredient|مكونات|barrier|retinol|spf|sunscreen|allergy|حساسية|salicylic|medical|طبي|clinical|pharmacist|صيدلاني|supplement|dosage|safety/i;
