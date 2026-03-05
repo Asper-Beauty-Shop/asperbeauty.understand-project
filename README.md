@@ -71,7 +71,7 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
-## SNC (sync) and applyToAllProfiles
+## Sync Check and applyToAllProfiles
 
 **Sync check (SNC)** — Verifies frontend health and Beauty Assistant (brain) connectivity:
 
@@ -79,7 +79,7 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/c
 npm run sync
 ```
 
-Other scripts: `npm run health` (frontend only), `npm run brain` (edge function only).
+Other scripts: `npm run health` (frontend + Beauty Assistant), `npm run brain` (edge function / Beauty Assistant only).
 
 **applyToAllProfiles** — Cursor/VS Code user setting so chosen options apply to every profile. In **User** `settings.json` (File → Preferences → Settings → Open Settings JSON), add:
 
@@ -112,7 +112,7 @@ Include `update.channel` if you want the same update channel (e.g. stable) acros
 | `npm run test` | Run Vitest once |
 | `npm run test:watch` | Vitest watch mode |
 | `npm run test:bulk-upload` | Bulk upload validation script |
-| `npm run health` | Frontend + brain health check |
+| `npm run health` | Frontend health check (frontend only) |
 | `npm run brain` | Brain (Beauty Assistant) only |
 | `npm run sync` | Frontend + brain sync check |
 

@@ -1,6 +1,7 @@
 /**
  * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
  * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). Single AI, context-switching persona.
+ * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). Single AI, context-switching persona.
  * Webhooks: Gorgias / ManyChat (no auth). Website chat: Supabase Auth + SSE.
  * Project scripts (SNC, health, brain), applyToAllProfiles, and commitDirectlyWarning: see README.
  */
@@ -375,7 +376,7 @@ serve(async (req) => {
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
     // Fetch product context with service role (or anon fallback), consistent with webhook path.
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    // Fetch product context with service role (or anon fallback), consistent with webhook path.
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
     let productContext = "";
     let matchedProducts: any[] = [];
