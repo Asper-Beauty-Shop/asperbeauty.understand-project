@@ -11,7 +11,7 @@ const colorSwatches = [
   { name: "Soft Ivory", hex: "#F8F8FF", hsl: "240 100% 99.2%", token: "--background", role: "Canvas" },
   { name: "Deep Maroon", hex: "#800020", hsl: "345 100% 25%", token: "--primary", role: "Primary Action" },
   { name: "Shiny Gold", hex: "#C5A028", hsl: "43 69% 46%", token: "--accent", role: "Accent / Trust" },
-  { name: "Pure White", hex: "#FFFFFF", hsl: "0 0% 100%", token: "--card", role: "Digital Tray" },
+  { name: "Ivory Dark (Card)", hex: "#F0F0F8", hsl: "240 33% 97%", token: "--card", role: "Digital Tray surface" },
   { name: "Warm Muted", hex: "#EFEBE4", hsl: "30 20% 94%", token: "--muted", role: "Secondary Surface" },
   { name: "Text Dark", hex: "#333333", hsl: "0 0% 20%", token: "--foreground", role: "Body Text" },
 ];
