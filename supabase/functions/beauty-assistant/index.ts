@@ -80,13 +80,7 @@ function concernSlugToEnum(slug: string): string[] {
   return map[slug] || [];
 }
 
-run
-
-/** Format
- *  a 
- * 
- * product row 
- * into a readable string for the AI context */
+/** Format a product row into a readable string for the AI context */
 function formatProduct(p: any): string {
   const parts = [`**${p.title}**`];
   if (p.brand) parts[0] += ` (${p.brand})`;
@@ -99,8 +93,7 @@ function formatProduct(p: any): string {
   return `- ${parts.join(" | ")}`;
 }
 
-/
-** Fetch products matching a concern or keywords from the products table */
+/** Fetch products matching a concern or keywords from the products table */
 async function fetchProductContext(
   supabaseClient: any,
   userMessage: string,
