@@ -94,6 +94,8 @@ Other scripts: `npm run health` (frontend only), `npm run brain` (edge function 
 
 Include `update.channel` if you want the same update channel (e.g. stable) across all profiles. Use **run-script** (`npm run <script>`) for the commands below; key ones: `npm run sync` (SNC), `npm run health`, `npm run brain`.
 
+**commitDirectlyWarning** — Avoid committing directly to the default branch when branch protection or Windows path issues apply; use a feature branch and PR, or see PUSH-BLOCKER.md if push is blocked.
+
 ## Available scripts
 
 | Command | What it does |
