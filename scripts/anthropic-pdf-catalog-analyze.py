@@ -27,10 +27,10 @@ import sys
 
 import anthropic
 
-# Approved skin concerns (match scripts/catalog-enrichment + digital_tray_products schema)
+# Approved skin concerns (match scripts/catalog-enrichment/types.ts APPROVED_SKIN_CONCERNS — 8 DB enums only)
 DTP_SKIN_CONCERNS = [
     "brightening", "sun_protection", "dark_circles", "anti_aging",
-    "dryness", "acne", "sensitivity", "pores", "firmness", "hyperpigmentation",
+    "dryness", "acne", "sensitivity", "hyperpigmentation",
 ]
 DTP_SKIN_TYPES = ["oily", "dry", "combination", "sensitive", "normal", "all"]
 
