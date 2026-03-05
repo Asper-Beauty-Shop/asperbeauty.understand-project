@@ -302,3 +302,50 @@ For more bulk product upload examples and complete payload structures, see [docs
 - **[docs/DEPLOYMENT_TEMPLATE.md](docs/DEPLOYMENT_TEMPLATE.md)** - Deployment templates, environment variables, concrete bulk-product-upload sample payloads
 - **[docs/PRE_LAUNCH_CHECKLIST.md](docs/PRE_LAUNCH_CHECKLIST.md)** - Pre-deployment checklist including §5 secrets configuration and POST response interpretation
 - **[.github/workflows/deploy-health-check.yml](.github/workflows/deploy-health-check.yml)** - Automated health checks on deployment
+
+## SNC (sync:check) and applyToAllProfiles
+
+**Sync check (SNC)** — Verifies frontend health and Beauty Assistant (brain) connectivity:
+
+```sh
+npm run sync:check
+```
+
+Other scripts: `npm run health` (frontend + brain), `npm run brain` (edge function only).
+
+**applyToAllProfiles** — Cursor/VS Code user setting so chosen options apply to every profile. In **User** `settings.json` (File → Preferences → Settings → Open Settings JSON), add:
+
+```json
+"workbench.settings.applyToAllProfiles": [
+  "workbench.editorAssociations",
+  "chat.mcp.access",
+  "npm.scriptExplorerAction",
+  "update.channel"
+]
+```
+
+Include `update.channel` if you want the same update channel (e.g. stable) across all profiles. Use **run-script** (`npm run <script>`) for the commands below; key ones: `npm run sync:check` (SNC), `npm run health`, `npm run brain`.
+
+**commitDirectlyWarning** — Avoid committing directly to the default branch when branch protection or Windows path issues apply; use a feature branch and PR, or see PUSH-BLOCKER.md if push is blocked.
+
+## Available scripts
+
+| Command | What it does |
+|---------|--------------|
+| `npm run dev` | Start Vite dev server |
+| `npm run build` | Production build |
+| `npm run build:dev` | Build in development mode |
+| `npm run lint` | Run ESLint |
+| `npm run lint:fix` | ESLint with auto-fix |
+| `npm run typecheck` | TypeScript check (no emit) |
+| `npm run check` | Lint + typecheck |
+| `npm run check:all` | Lint + typecheck + build |
+| `npm run preview` | Serve production build |
+| `npm run test` | Run Vitest once |
+| `npm run test:watch` | Vitest watch mode |
+| `npm run health` | Frontend + brain health check |
+| `npm run brain` | Brain (Beauty Assistant) only |
+| `npm run sync:check` | Frontend + brain sync check |
+| `npm run sync` | Sync Shopify product catalog to Supabase |
+| `npm run sync:dry` | Dry-run catalog sync (no writes) |
+| `npm run sync:publish` | Sync + publish catalog |
