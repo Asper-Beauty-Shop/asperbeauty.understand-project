@@ -4,12 +4,12 @@
 #
 # Sends issue/PR open, edit, reopen, close events to Lovable via webhook.
 # 
-# REQUIRED SETUP:
+# OPTIONAL SETUP:
 #   1. In GitHub repo → Settings → Secrets and variables → Actions
 #   2. Add secret: LOVABLE_WEBHOOK_URL = (webhook URL from Lovable)
 #   3. See docs/GITHUB_SECRETS_SETUP.md for detailed instructions
 #
-# This workflow will FAIL if LOVABLE_WEBHOOK_URL is not configured.
+# If LOVABLE_WEBHOOK_URL is not configured, this workflow skips gracefully.
 #
 name: Sync Issues and PRs to Lovable
 
@@ -22,8 +22,6 @@ on:
 jobs:
   sync_to_lovable:
     runs-on: ubuntu-latest
-    # Skip this job if LOVABLE_WEBHOOK_URL is not configured
-    if: secrets.LOVABLE_WEBHOOK_URL != ''
     steps:
       - name: Send event data to Lovable
         env:
