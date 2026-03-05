@@ -22,7 +22,6 @@ export const FeaturedCollection = () => {
   return (
     <section id="featured-collection" className="bg-cream py-20 md:py-28">
       <div className="container mx-auto max-w-7xl px-4">
-        {/* Section Header */}
         <div className="mb-12 text-center md:mb-16">
           <span className="mb-3 inline-block font-sans text-xs font-medium uppercase tracking-[0.3em] text-gold-500">
             Selected For You
@@ -33,11 +32,9 @@ export const FeaturedCollection = () => {
           <div className="mx-auto mt-4 h-px w-16 bg-gold-300" />
         </div>
 
-        {/* Product Grid */}
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
           {isLoading
-            ? (
-              Array.from({ length: 4 }).map((_, i) => (
+            ? Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="flex flex-col">
                   <Skeleton className="aspect-[3/4] w-full bg-cream-dark" />
                   <div className="p-4">
@@ -47,30 +44,25 @@ export const FeaturedCollection = () => {
                   </div>
                 </div>
               ))
-            )
-            : (
-              products?.map((product) => (
+            : products?.map((product) => (
                 <LuxuryProductCard
                   key={product.id}
                   product={{
                     id: product.id,
                     title: product.title,
-                    category: product.category,
+                    category: product.primary_concern || undefined,
                     brand: product.brand || undefined,
-                    price: product.price,
-                    original_price: product.original_price,
-                    discount_percent: product.discount_percent,
+                    price: product.price ?? 0,
+                    original_price: null,
+                    discount_percent: null,
                     image_url: product.image_url || "/placeholder.svg",
-                    description: product.description || undefined,
-                    volume_ml: product.volume_ml || undefined,
-                    is_new: !product.is_on_sale &&
-                      new Date(product.created_at) >
-                        new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-                    is_on_sale: product.is_on_sale || false,
+                    description: product.pharmacist_note || undefined,
+                    volume_ml: undefined,
+                    is_new: new Date(product.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                    is_on_sale: false,
                   }}
                 />
-              ))
-            )}
+              ))}
         </div>
       </div>
     </section>

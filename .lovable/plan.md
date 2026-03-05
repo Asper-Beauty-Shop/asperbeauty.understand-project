@@ -1,39 +1,30 @@
 
 
-## Plan: Enhance Intent-Based Deep Linking
+## Diagnosis: Blank Screen Root Cause
 
-### Current State
-The `AIConcierge.tsx` already has basic deep linking (lines 169-186): it reads `?intent=` and `?source=` from the URL, opens the panel, and pre-fills the input text. However, it has several gaps:
+The console error is definitive:
+```
+Error: VITE_SUPABASE_PUBLISHABLE_KEY environment variable is required
+```
 
-1. **No auto-send** — it only fills the input; the user must manually press Send
-2. **No intent-to-prompt mapping** — raw intent like "acne" becomes generic "I need help with acne" instead of a tailored clinical prompt
-3. **No URL cleanup** — query params remain in the URL bar after handling
-4. **No source tracking** — the `source` param (ig, tiktok, fb) isn't logged or used for analytics
+In `src/integrations/supabase/client.ts` (line 8-10), there's a hard `throw` that kills React before it can mount. The `ErrorBoundary` wraps `<App />` but can't catch errors thrown during **module evaluation** — the `supabase/client.ts` module is imported eagerly by multiple components, so the throw happens before React's render cycle begins.
 
-### Implementation Steps
+The `.env` file shown earlier was created during a previous AI edit session but no longer exists on disk. The Lovable secrets store has no `VITE_SUPABASE_PUBLISHABLE_KEY` entry either.
 
-**1. Add an intent-to-prompt mapping object** in `AIConcierge.tsx` that maps common marketing intents to rich, persona-appropriate opening messages:
-- `acne` → "I'm struggling with acne and oiliness. What's the best clinical routine?"
-- `glow` → "I want radiant, glowing skin. What do you recommend?"
-- `anti-aging` → "I'm looking for an anti-aging routine with proven actives."
-- `hydration` → "My skin is very dry. I need a deep hydration regimen."
-- `bridal` → "I'm getting married soon! Help me with a bridal skincare bootcamp."
-- `pregnancy` → "I'm pregnant and need a safe skincare routine."
-- Fallback: `"I need help with {intent}."`
+## Fix Plan
 
-**2. Modify the deep link `useEffect`** to:
-- Map the intent to a tailored prompt using the mapping
-- Auto-send the message after auth check completes (watch `isAuthenticated` state) instead of just filling the input
-- Clean up the URL using `window.history.replaceState` to remove `?intent=` and `?source=` params
-- Store `source` in a ref so it can optionally be included in the API payload for analytics
+**1. Make the Supabase client resilient to missing env vars**
+- In `src/integrations/supabase/client.ts`, replace the hard `throw` with a fallback to the hardcoded anon key (which is already present as a fallback for `SUPABASE_URL`)
+- The anon key `eyJhbG...` from the original `.env` is a **publishable** key (safe to embed in client code), so hardcoding it as a fallback is the correct pattern — same as `SUPABASE_URL` already does on line 5
 
-**3. Add a `deepLinkIntent` ref** that stores the pending intent text, and trigger `send()` automatically once `isAuthenticated === true` — this solves the timing issue where auth hasn't resolved yet when the deep link fires.
+Concrete change:
+```typescript
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://qqceibvalkoytafynwoc.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxY2VpYnZhbGtveXRhZnlud29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzc1OTUsImV4cCI6MjA4NTkxMzU5NX0.cnstN7JUhkt-hevIWhaeYRu1Y51tPSTi7eOBM6RLz4Y";
 
-### Files Changed
-- `src/components/AIConcierge.tsx` — All changes in this single file
+// Remove the if/throw block entirely
+```
 
-### Technical Notes
-- Uses `window.history.replaceState` for clean URL (no page reload)
-- The auto-send fires only once via the existing `deepLinkHandled` ref
-- Intent mapping is extensible — new campaigns just add a key to the map
+**2. Add `resolve.dedupe` to Vite config**
+- Add `dedupe: ["react", "react-dom"]` to `vite.config.ts` to prevent duplicate React instances after the force push (defensive measure per the stack overflow pattern)
 

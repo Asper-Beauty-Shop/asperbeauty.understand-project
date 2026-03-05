@@ -1,7 +1,7 @@
 /**
  * Real-time product data for 3-Click / "Shop This Routine".
- * Query products by concern (and optional brand). Returns products + optional cross-sell add-ons.
- * Call from frontend to build "Shop This Routine" link or pre-filled collection.
+ * Query products by concern (and optional brand). Returns products aligned with
+ * the actual products table schema (primary_concern enum, regimen_step enum).
  */
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -9,28 +9,25 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const CONCERN_TO_SLUG: Record<string, string> = {
-  acne: "acne",
-  "anti-aging": "anti-aging",
-  hydration: "hydration",
-  dryness: "hydration",
-  sensitivity: "sensitivity",
-  "dark spots": "dark-spots",
-  "dark spots / pigmentation": "dark-spots",
-  pigmentation: "dark-spots",
-  brightening: "dark-spots",
-  "sun protection": "sun-protection",
-  "sun-protection": "sun-protection",
-  redness: "redness",
-  cleansing: "cleansing",
-  wrinkles: "wrinkles",
-  "oily skin": "oily-skin",
-  "oily-skin": "oily-skin",
-  "dry skin": "dry-skin",
-  "dry-skin": "dry-skin",
+/** Map user-friendly concern text to the products.primary_concern enum values */
+const CONCERN_TO_ENUM: Record<string, string[]> = {
+  acne: ["Concern_Acne", "Concern_Oiliness"],
+  "anti-aging": ["Concern_Aging", "Concern_AntiAging"],
+  aging: ["Concern_Aging", "Concern_AntiAging"],
+  hydration: ["Concern_Hydration", "Concern_Dryness"],
+  dryness: ["Concern_Hydration", "Concern_Dryness"],
+  sensitivity: ["Concern_Sensitivity", "Concern_Redness"],
+  "dark-spots": ["Concern_Pigmentation", "Concern_Brightening"],
+  pigmentation: ["Concern_Pigmentation", "Concern_Brightening"],
+  brightening: ["Concern_Brightening", "Concern_Pigmentation"],
+  "sun-protection": ["Concern_SunProtection"],
+  redness: ["Concern_Redness", "Concern_Sensitivity"],
+  "oily-skin": ["Concern_Oiliness", "Concern_Acne"],
+  oiliness: ["Concern_Oiliness"],
+  "dark-circles": ["Concern_DarkCircles"],
 };
 
 serve(async (req) => {
@@ -65,7 +62,6 @@ serve(async (req) => {
     }
   }
 
-  const concernSlug = CONCERN_TO_SLUG[concern] || concern.replace(/\s+/g, "-");
   if (!concern && !brand) {
     return new Response(
       JSON.stringify({ error: "concern or brand is required" }),
@@ -81,89 +77,77 @@ serve(async (req) => {
     Deno.env.get("SUPABASE_ANON_KEY")!,
   );
 
+  // Select only columns that exist in the products table
+  const selectCols =
+    "id, title, price, brand, image_url, handle, primary_concern, regimen_step, tags, is_hero, is_bestseller, bestseller_rank, inventory_total, clinical_badge, pharmacist_note, key_ingredients";
+
   let products: unknown[] = [];
-  let productsError: { message: string } | null = null;
+  let queryError: { message: string } | null = null;
 
   if (concern) {
-    const { data: byConcern, error: e1 } = await supabase
-      .from("products")
-      .select(
-        "id, title, price, brand, category, image_url, skin_concerns, is_on_sale, discount_percent",
-      )
-      .contains("skin_concerns", [concernSlug])
-      .limit(20);
-    if (!e1 && byConcern && byConcern.length > 0) {
-      products = byConcern;
-    } else {
-      const { data: byText, error: e2 } = await supabase
+    // Normalize concern slug
+    const slug = concern.replace(/\s+/g, "-");
+    const enumValues = CONCERN_TO_ENUM[slug] || CONCERN_TO_ENUM[concern] || [];
+
+    if (enumValues.length > 0) {
+      // Primary: match by enum
+      const { data, error } = await supabase
         .from("products")
-        .select(
-          "id, title, price, brand, category, image_url, skin_concerns, is_on_sale, discount_percent",
-        )
-        .or(`title.ilike.%${concern}%,description.ilike.%${concern}%`)
+        .select(selectCols)
+        .in("primary_concern", enumValues)
+        .gt("inventory_total", 0)
+        .order("is_hero", { ascending: false })
+        .order("is_bestseller", { ascending: false })
+        .order("bestseller_rank", { ascending: true })
         .limit(20);
-      productsError = e2 ?? null;
-      products = byText ?? [];
+      queryError = error ?? null;
+      products = data ?? [];
+    }
+
+    // Fallback: text search on title/brand
+    if (products.length === 0 && !queryError) {
+      const { data, error } = await supabase
+        .from("products")
+        .select(selectCols)
+        .or(`title.ilike.%${concern}%,brand.ilike.%${concern}%`)
+        .gt("inventory_total", 0)
+        .limit(20);
+      queryError = error ?? null;
+      products = data ?? [];
     }
   } else if (brand) {
-    const res = await supabase
+    const { data, error } = await supabase
       .from("products")
-      .select(
-        "id, title, price, brand, category, image_url, skin_concerns, is_on_sale, discount_percent",
-      )
+      .select(selectCols)
       .ilike("brand", `%${brand}%`)
+      .gt("inventory_total", 0)
       .limit(20);
-    productsError = res.error ?? null;
-    products = res.data ?? [];
+    queryError = error ?? null;
+    products = data ?? [];
   }
 
-  if (productsError) {
-    console.error("get-products-by-concern error:", productsError);
+  if (queryError) {
+    console.error("get-products-by-concern error:", queryError);
     return new Response(JSON.stringify({ error: "Query failed" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
-  let addOnIds: string[] = [];
-  if (concern) {
-    const { data: rules } = await supabase
-      .from("cross_sell_rules")
-      .select("add_on_product_ids")
-      .eq("trigger_concern", concernSlug)
-      .order("sort_order", { ascending: true })
-      .limit(1)
-      .maybeSingle();
-    if (rules?.add_on_product_ids?.length) {
-      addOnIds = (rules.add_on_product_ids as string[]).filter(Boolean);
-    }
-  }
-
-  let addOns: unknown[] = [];
-  if (addOnIds.length > 0) {
-    const { data: addOnProducts } = await supabase
-      .from("products")
-      .select(
-        "id, title, price, brand, category, image_url, is_on_sale, discount_percent",
-      )
-      .in("id", addOnIds);
-    addOns = addOnProducts ?? [];
-  }
-
-  const shopRoutinePath = concern && concernSlug
-    ? `/concerns/${concernSlug}`
+  const shopRoutinePath = concern
+    ? `/products?concern=${concern.replace(/\s+/g, "-")}`
     : "/shop";
   const siteUrl = Deno.env.get("SITE_URL");
-  const shopRoutineUrl = typeof siteUrl === "string" && siteUrl
-    ? `${siteUrl}${shopRoutinePath}`
-    : shopRoutinePath;
+  const shopRoutineUrl =
+    typeof siteUrl === "string" && siteUrl
+      ? `${siteUrl}${shopRoutinePath}`
+      : shopRoutinePath;
 
   return new Response(
     JSON.stringify({
       concern: concern || null,
       brand: brand || null,
       products: products || [],
-      add_ons: addOns,
       shop_routine_path: shopRoutinePath,
       shop_routine_url: shopRoutineUrl,
     }),

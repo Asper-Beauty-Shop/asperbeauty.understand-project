@@ -320,7 +320,7 @@ export default function Shop() {
         <div className="container mx-auto px-4 max-w-7xl py-8">
           <div className="lg:flex lg:gap-8">
             <aside className="hidden lg:block w-72 flex-shrink-0">
-              <ProductSearchFilters filters={filters} onFilterChange={setFilters} products={filteredProducts} />
+              <ProductSearchFilters filters={filters} onFiltersChange={setFilters} productCount={filteredProducts.length} />
             </aside>
             <div className="flex-1">
               <div className="flex items-center justify-between mb-6">
@@ -385,9 +385,9 @@ export default function Shop() {
       </main>
       <Footer />
       <ProductQuickView
-        product={selectedProduct ? { id: selectedProduct.id, title: selectedProduct.title, price: selectedProduct.price ?? 0, description: selectedProduct.pharmacist_note, image_url: selectedProduct.image_url, brand: selectedProduct.brand } : null}
-        open={isQuickViewOpen}
-        onOpenChange={(open) => { setIsQuickViewOpen(open); if (!open) setTimeout(() => setSelectedProduct(null), 300); }}
+        product={selectedProduct ? { id: selectedProduct.id, title: selectedProduct.title, price: selectedProduct.price ?? 0, description: selectedProduct.pharmacist_note, category: selectedProduct.primary_concern?.replace("Concern_","") ?? "General", image_url: selectedProduct.image_url, brand: selectedProduct.brand, volume_ml: null, is_on_sale: null, original_price: null, discount_percent: null, created_at: selectedProduct.created_at, updated_at: selectedProduct.updated_at } : null}
+        isOpen={isQuickViewOpen}
+        onClose={() => { setIsQuickViewOpen(false); setTimeout(() => setSelectedProduct(null), 300); }}
       />
     </div>
   );

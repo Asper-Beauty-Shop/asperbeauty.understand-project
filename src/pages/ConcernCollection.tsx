@@ -52,7 +52,11 @@ export default function ConcernCollection() {
         setLoading(true);
         const all = await fetchProducts(100);
         if (normalized) {
-          const filtered = filterProductsByConcern(all, normalized);
+          const normalized_products = (all as ShopifyProduct[]).map(p => ({
+            ...p,
+            node: { ...p.node, tags: Array.isArray(p.node.tags) ? p.node.tags : p.node.tags ? [p.node.tags] : [] }
+          }));
+          const filtered = filterProductsByConcern(normalized_products, normalized) as unknown as ShopifyProduct[];
           setProducts(filtered);
         } else {
           setProducts(all);

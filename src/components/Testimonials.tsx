@@ -55,8 +55,8 @@ const StarRating = ({ rating }: { rating: number }) => (
         key={i}
         className={`w-4 h-4 transition-all duration-300 ${
           i < rating
-            ? "fill-gold text-gold drop-shadow-[0_0_4px_rgba(212,175,55,0.5)]"
-            : "text-gold/30"
+            ? "fill-polished-gold text-polished-gold drop-shadow-[0_0_4px_rgba(201,169,98,0.5)]"
+            : "text-polished-gold/30"
         }`}
       />
     ))}
@@ -68,9 +68,9 @@ export const Testimonials = () => {
   const isArabic = language === "ar";
 
   return (
-    <section className="py-20 lg:py-28 bg-burgundy overflow-hidden relative">
-      {/* Decorative Gold Accent Line - Top */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
+    <section className="py-20 lg:py-28 bg-asper-stone overflow-hidden relative">
+      {/* Top accent */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/40 to-transparent" />
 
       <div className="luxury-container">
         {/* Section Header */}
@@ -80,20 +80,20 @@ export const Testimonials = () => {
           duration={800}
         >
           {/* Icon Badge */}
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-gold/30 via-gold/20 to-transparent border-2 border-gold/40 mb-6 shadow-[0_4px_20px_rgba(212,175,55,0.25)]">
-            <Quote className="w-6 h-6 text-gold" />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-polished-gold/20 via-polished-gold/10 to-transparent border-2 border-polished-gold/30 mb-6 shadow-[0_4px_20px_rgba(201,169,98,0.2)]">
+            <Quote className="w-6 h-6 text-polished-gold" />
           </div>
-          <span className="font-script text-2xl lg:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold block mb-2">
+          <p className="font-body text-xs uppercase tracking-[0.25em] text-rose-clay-dark mb-3">
             {isArabic ? "ماذا يقول عملاؤنا" : "What Our Clients Say"}
-          </span>
-          <h2 className="font-display text-3xl lg:text-4xl text-cream mb-4">
+          </p>
+          <h2 className="font-display text-3xl lg:text-4xl text-asper-ink mb-4">
             {isArabic ? "شهادات العملاء" : "Testimonials"}
           </h2>
-          {/* Luxury Divider */}
+          {/* Gold Divider */}
           <div className="flex items-center justify-center gap-3">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold/60" />
-            <div className="w-2 h-2 rounded-full bg-gold shadow-[0_0_10px_rgba(212,175,55,0.5)]" />
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold/60" />
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-polished-gold/60" />
+            <div className="w-2 h-2 rounded-full bg-polished-gold/60 shadow-[0_0_10px_rgba(201,169,98,0.4)]" />
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-polished-gold/60" />
           </div>
         </AnimatedSection>
 
@@ -106,19 +106,19 @@ export const Testimonials = () => {
               delay={index * 200}
               duration={800}
             >
-              <div className="relative bg-gradient-to-br from-cream/10 via-cream/5 to-transparent backdrop-blur-sm border-2 border-gold/30 rounded-xl p-8 transition-all duration-500 hover:border-gold/60 hover:shadow-[0_8px_40px_rgba(212,175,55,0.2)] group h-full overflow-hidden">
+              <div className="relative bg-white/70 backdrop-blur-sm border border-rose-clay-light rounded-xl p-8 transition-all duration-500 hover:border-polished-gold/50 hover:shadow-[0_8px_30px_rgba(201,169,98,0.15)] group h-full overflow-hidden">
                 {/* Shine effect on hover */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-gold/10 to-transparent" />
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-polished-gold/5 to-transparent" />
 
-                {/* Quote Icon with gold glow */}
+                {/* Quote Icon */}
                 <div className="relative mb-6">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold/20 via-gold/10 to-transparent border border-gold/30 flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-shadow duration-500">
-                    <Quote className="w-5 h-5 text-gold" />
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-polished-gold/15 via-polished-gold/10 to-transparent border border-polished-gold/25 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(201,169,98,0.2)] transition-shadow duration-500">
+                    <Quote className="w-5 h-5 text-polished-gold" />
                   </div>
                 </div>
 
                 {/* Review Text */}
-                <p className="relative font-body text-cream/85 leading-relaxed mb-6 min-h-[100px]">
+                <p className="relative font-body text-asper-ink/80 leading-relaxed mb-6 min-h-[100px]">
                   {isArabic ? testimonial.reviewAr : testimonial.review}
                 </p>
 
@@ -127,15 +127,15 @@ export const Testimonials = () => {
                   <StarRating rating={testimonial.rating} />
                 </div>
 
-                {/* Gold Divider with glow */}
-                <div className="relative w-full h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent mb-6" />
+                {/* Divider */}
+                <div className="relative w-full h-px bg-gradient-to-r from-transparent via-rose-clay-light to-transparent mb-6" />
 
                 {/* Author Info */}
                 <div className="relative flex items-center gap-4">
-                  {/* Avatar with Gold Ring */}
+                  {/* Avatar with rose-clay ring */}
                   <div className="relative">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold to-gold-light opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md scale-110" />
-                    <div className="relative w-14 h-14 rounded-full border-2 border-gold overflow-hidden shadow-[0_4px_15px_rgba(212,175,55,0.3)] group-hover:shadow-[0_6px_25px_rgba(212,175,55,0.5)] transition-shadow duration-500">
+                    <div className="absolute inset-0 rounded-full bg-polished-gold/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md scale-110" />
+                    <div className="relative w-14 h-14 rounded-full border-2 border-rose-clay-light overflow-hidden group-hover:border-polished-gold/60 shadow-[0_2px_10px_rgba(196,164,148,0.2)] group-hover:shadow-[0_4px_20px_rgba(201,169,98,0.3)] transition-all duration-500">
                       <LazyImage
                         src={testimonial.avatar}
                         alt={isArabic ? testimonial.nameAr : testimonial.name}
@@ -147,10 +147,10 @@ export const Testimonials = () => {
 
                   {/* Name & Location */}
                   <div>
-                    <h4 className="font-display text-base text-cream group-hover:text-gold transition-colors duration-500">
+                    <h4 className="font-display text-base text-burgundy group-hover:text-polished-gold transition-colors duration-500">
                       {isArabic ? testimonial.nameAr : testimonial.name}
                     </h4>
-                    <p className="font-body text-xs text-gold/70">
+                    <p className="font-body text-xs text-rose-clay-dark/70">
                       {isArabic ? testimonial.locationAr : testimonial.location}
                     </p>
                   </div>
@@ -168,17 +168,17 @@ export const Testimonials = () => {
           className="flex flex-col items-center mt-16"
         >
           <div className="flex items-center gap-3">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold/60" />
-            <span className="font-script text-2xl text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-polished-gold/60" />
+            <span className="font-body text-sm italic text-rose-clay-dark">
               {isArabic ? "الأناقة في كل تفصيل" : "Elegance in every detail"}
             </span>
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold/60" />
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-polished-gold/60" />
           </div>
         </AnimatedSection>
       </div>
 
-      {/* Decorative Gold Accent Line - Bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      {/* Bottom accent */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/40 to-transparent" />
     </section>
   );
 };

@@ -18,7 +18,7 @@ const socialPosts = [
     platform: "facebook" as const,
     caption: "Pharmacist-approved sunscreen picks for summer ☀️",
     hashtag: "#SanctuaryOfScience",
-    link: "https://www.facebook.com/AsperBeautyShop",
+    link: "https://www.facebook.com/robu.sweileh",
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ const socialPosts = [
     platform: "facebook" as const,
     caption: "Pregnancy-safe skincare essentials 🤰",
     hashtag: "#SafeBeauty",
-    link: "https://www.facebook.com/AsperBeautyShop",
+    link: "https://www.facebook.com/robu.sweileh",
   },
   {
     id: 5,
@@ -46,13 +46,13 @@ const socialPosts = [
     platform: "facebook" as const,
     caption: "Customer spotlight: Sara's acne journey ✨",
     hashtag: "#AsperStories",
-    link: "https://www.facebook.com/AsperBeautyShop",
+    link: "https://www.facebook.com/robu.sweileh",
   },
 ];
 
 export default function SocialGallery() {
   const { data } = useShopifyProducts(undefined, 6);
-  const products = data?.products || [];
+  const products = data || [];
 
   return (
     <section className="py-20 sm:py-28 bg-background">
@@ -152,7 +152,7 @@ export default function SocialGallery() {
           </a>
           <span className="text-border">|</span>
           <a
-            href="https://www.facebook.com/AsperBeautyShop"
+            href="https://www.facebook.com/robu.sweileh"
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-accent transition-colors"

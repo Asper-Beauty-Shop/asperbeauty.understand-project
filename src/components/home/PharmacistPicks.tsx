@@ -10,7 +10,7 @@ export default function PharmacistPicks() {
   const { data: picks } = useQuery({
     queryKey: ["pharmacist-picks-shopify"],
     queryFn: async () => {
-      const { products } = await fetchProducts(50);
+      const products = await fetchProducts(50);
       // Beauty/skincare product types to show on homepage
       const beautyTypes = [
         "fragrance", "body care", "skin care", "skincare", "hair care",

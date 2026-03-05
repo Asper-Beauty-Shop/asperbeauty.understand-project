@@ -4,17 +4,17 @@ import { ExternalLink, ShoppingBag, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formatJOD } from "@/lib/productImageUtils";
 
-interface ChatProduct {
+export interface ChatProduct {
   id: string;
-  title: string;
-  brand: string | null;
-  price: number;
-  original_price: number | null;
-  is_on_sale: boolean | null;
-  discount_percent: number | null;
-  image_url: string | null;
-  category: string;
-  skin_concerns: string[] | null;
+  title?: string;
+  brand?: string | null;
+  price?: number | null;
+  original_price?: number | null;
+  is_on_sale?: boolean | null;
+  discount_percent?: number | null;
+  image_url?: string | null;
+  category?: string | null;
+  skin_concerns?: string[] | null;
 }
 
 interface ChatProductCardProps {
@@ -22,89 +22,59 @@ interface ChatProductCardProps {
   onAddToCart?: (product: ChatProduct) => void;
 }
 
-export const ChatProductCard: React.FC<ChatProductCardProps> = (
-  { product, onAddToCart },
-) => {
+export const ChatProductCard: React.FC<ChatProductCardProps> = ({ product, onAddToCart }) => {
   const { language } = useLanguage();
 
   return (
-    <Link
-      to={`/product/${product.id}`}
-      className="flex gap-3 p-3 bg-white/80 rounded-xl border border-gold/20 shadow-sm hover:shadow-md hover:border-gold/40 transition-all duration-300 group cursor-pointer"
-    >
-      {/* Product Image */}
-      <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-cream/50">
-        {product.image_url
-          ? (
-            <img
-              src={product.image_url}
-              alt={product.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          )
-          : (
-            <div className="w-full h-full flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-gold/50" />
-            </div>
-          )}
-      </div>
-
-      {/* Product Info */}
-      <div className="flex-1 min-w-0">
-        <p className="text-[10px] text-gold font-medium uppercase tracking-wider">
-          {product.brand || "Asper"}
-        </p>
-        <h4 className="text-xs font-semibold text-burgundy line-clamp-2 leading-tight mt-0.5">
-          {product.title}
-        </h4>
-
-        {/* Price */}
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-sm font-bold text-burgundy">
-            {formatJOD(product.price)}
-          </span>
-          {product.is_on_sale && product.original_price && (
-            <>
-              <span className="text-[10px] text-muted-foreground line-through">
-                {formatJOD(product.original_price)}
-              </span>
-              <span className="text-[9px] bg-destructive text-destructive-foreground px-1.5 py-0.5 rounded-full font-medium">
-                -{product.discount_percent}%
-              </span>
-            </>
-          )}
-        </div>
-
-        {/* Skin Concerns Tags */}
-        {product.skin_concerns && product.skin_concerns.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-1.5">
-            {product.skin_concerns.slice(0, 2).map((concern, idx) => (
-              <span
-                key={idx}
-                className="text-[8px] px-1.5 py-0.5 bg-burgundy/10 text-burgundy rounded-full"
-              >
-                {concern}
-              </span>
-            ))}
+    <div className="flex items-center gap-3 rounded-lg border border-border/50 bg-card p-2.5 transition-all hover:border-accent/40 hover:shadow-sm">
+      {/* Image */}
+      <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-md bg-muted/30">
+        {product.image_url ? (
+          <img src={product.image_url} alt={product.title || ""} className="h-full w-full object-cover" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <Sparkles className="h-5 w-5 text-muted-foreground/40" />
+          </div>
+        )}
+        {product.is_on_sale && (
+          <div className="absolute -right-1 -top-1 rounded-full bg-destructive px-1 py-0.5 text-[8px] font-bold text-destructive-foreground">
+            {product.discount_percent ? `-${product.discount_percent}%` : "SALE"}
           </div>
         )}
       </div>
 
-      {/* Add Button */}
-      {onAddToCart && (
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onAddToCart(product);
-          }}
-          className="self-center p-2 rounded-full bg-primary hover:bg-primary/80 text-primary-foreground transition-colors duration-300"
-          aria-label={language === "ar" ? "أضف للسلة" : "Add to cart"}
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          {product.brand || product.category || ""}
+        </p>
+        <p className="text-xs font-medium text-foreground line-clamp-1">{product.title || "Product"}</p>
+        <div className="flex items-center gap-1.5 mt-0.5">
+          <span className="text-xs font-semibold text-primary">{formatJOD(product.price ?? 0)}</span>
+          {product.original_price && (
+            <span className="text-[10px] text-muted-foreground line-through">{formatJOD(product.original_price)}</span>
+          )}
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex flex-col gap-1">
+        <Link
+          to={`/product/${product.id}`}
+          className="flex h-7 w-7 items-center justify-center rounded-full bg-muted/50 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
         >
-          <ShoppingBag className="w-3.5 h-3.5" />
-        </button>
-      )}
-    </Link>
+          <ExternalLink className="h-3 w-3" />
+        </Link>
+        {onAddToCart && (
+          <button
+            onClick={() => onAddToCart(product)}
+            className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+          >
+            <ShoppingBag className="h-3 w-3" />
+          </button>
+        )}
+      </div>
+    </div>
   );
 };
 

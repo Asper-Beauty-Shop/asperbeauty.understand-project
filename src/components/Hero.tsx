@@ -6,8 +6,8 @@ import { Sparkles, Volume2, VolumeX } from "lucide-react";
 import { AnimatedTrustBadge } from "./AnimatedTrustBadge";
 
 // Hero assets
-import heroLifestyle from "@/assets/hero/hero-lifestyle.webp";
-import heroVideo from "@/assets/hero/hero-video.mp4";
+const heroLifestyle = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=1920&q=80";
+import heroVideo from "@/assets/hero-sanctuary-video.mp4";
 
 // Toggle between video and image background
 const USE_VIDEO_BACKGROUND = true;

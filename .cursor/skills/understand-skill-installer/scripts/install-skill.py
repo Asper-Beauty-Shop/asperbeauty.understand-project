@@ -35,13 +35,13 @@ def install_skill(repo_url=None, skill_path=None):
     SKILLS_DIR.mkdir(parents=True, exist_ok=True)
     url = normalize_repo_url(repo_url)
     if not url:
-        print("❌ No repo specified. Use --url <github-url> or --repo owner/repo")
+        print(" No repo specified. Use --url <github-url> or --repo owner/repo")
         sys.exit(1)
 
     if skill_path:
         skill_name = get_skill_name_from_path(skill_path)
         if not skill_name:
-            print("❌ Invalid --path; could not derive skill name")
+            print("[X] Invalid --path; could not derive skill name")
             sys.exit(1)
         target_dir = SKILLS_DIR / skill_name
     else:
@@ -50,10 +50,10 @@ def install_skill(repo_url=None, skill_path=None):
         target_dir = SKILLS_DIR / skill_name
 
     if target_dir.exists():
-        print(f"⏭️  {skill_name} already exists at {target_dir}. Skipping to avoid overwrite.")
+        print(f"[SKIP] {skill_name} already exists at {target_dir}. Skipping to avoid overwrite.")
         return
 
-    print(f"📦 Dr. Bot is reaching out to {url}...")
+    print(f"[*] Dr. Bot is reaching out to {url}...")
 
     try:
         if skill_path:
@@ -77,7 +77,7 @@ def install_skill(repo_url=None, skill_path=None):
                 # Move the path content to target_dir
                 path_in_clone = clone_dir / skill_path.replace("/", os.sep)
                 if not path_in_clone.exists():
-                    print(f"❌ Path not found in repo: {skill_path}")
+                    print(f"[X] Path not found in repo: {skill_path}")
                     sys.exit(1)
                 try:
                     path_in_clone.rename(target_dir)
@@ -94,9 +94,9 @@ def install_skill(repo_url=None, skill_path=None):
                 capture_output=True,
                 text=True,
             )
-        print(f"🚀 Integration complete: {skill_name} at {target_dir}")
+        print(f"[OK] Integration complete: {skill_name} at {target_dir}")
     except subprocess.CalledProcessError as e:
-        print(f"❌ Install failed: {e.stderr or e}")
+        print(f"[X] Install failed: {e.stderr or e}")
         sys.exit(1)
 
 

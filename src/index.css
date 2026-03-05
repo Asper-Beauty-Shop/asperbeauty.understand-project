@@ -6,69 +6,85 @@
 
 @layer base {
   :root {
-    /* Asper Beauty Quiet Luxury Palette */
+    /* ─── DESIGN_SYSTEM.md Morning Spa Palette ─── */
 
-    /* Cream #F3E5DC = HSL 25 47% 91% - Global Background */
-    --cream: 25 47% 91%;
-    --cream-dark: 25 35% 85%;
+    /* Asper Stone (Warm Ivory) — #F2EFEB = HSL 36 18% 93% */
+    --asper-stone: 36 18% 93%;
+    --asper-stone-light: 36 16% 96%;
+    --asper-stone-dark: 36 14% 89%;
 
-    /* Gold Foil #D4AF37 = HSL 46 66% 52% - Accents & Borders */
-    --gold: 46 66% 52%;
-    --gold-light: 46 66% 62%;
-    --gold-glow: 46 66% 70%;
+    /* Rose Clay (Muted Pink / Terracotta) — #C4A494 = HSL 20 28% 67% */
+    --rose-clay: 20 28% 67%;
+    --rose-clay-light: 20 30% 74%;
+    --rose-clay-dark: 20 26% 57%;
 
-    /* Deep Burgundy #4A0E19 = HSL 348 68% 17% - Header/Footer */
-    --burgundy: 348 68% 17%;
-    --burgundy-light: 348 58% 25%;
-    --burgundy-dark: 348 68% 12%;
+    /* Burgundy — #6B2D3A = HSL 348 40% 30% */
+    --burgundy: 348 40% 30%;
+    --burgundy-light: 348 36% 39%;
+    --burgundy-dark: 348 42% 22%;
 
-    /* Dark Warm Brown #2C1A1D = HSL 350 25% 14% - Text */
-    --warm-brown: 350 25% 14%;
-    --warm-brown-light: 350 20% 35%;
+    /* Polished Gold — #C9A962 = HSL 42 47% 59% */
+    --polished-gold: 42 47% 59%;
 
-    /* Primary backgrounds - Cream base */
-    --background: 25 47% 91%;
-    --foreground: 350 25% 14%;
+    /* Asper Ink (Soft Charcoal) — #2C2825 = HSL 26 8% 16% */
+    --asper-ink: 26 8% 16%;
+    --asper-ink-muted: 20 6% 33%;
 
-    --card: 25 40% 95%;
-    --card-foreground: 350 25% 14%;
+    /* Polished White — #FAF9F7 = HSL 40 20% 97% */
+    --polished-white: 40 20% 97%;
 
-    --popover: 25 47% 91%;
-    --popover-foreground: 350 25% 14%;
+    /* Legacy compat aliases */
+    --cream: var(--asper-stone);
+    --cream-dark: var(--asper-stone-dark);
+    --gold: 42 47% 59%;
+    --gold-light: 42 47% 69%;
+    --gold-glow: 42 47% 76%;
+    --warm-brown: var(--asper-ink);
+    --warm-brown-light: var(--asper-ink-muted);
 
-    /* Deep Burgundy for primary accent surfaces */
-    --primary: 348 68% 17%;
+    /* Primary backgrounds — Asper Stone base */
+    --background: var(--asper-stone);
+    --foreground: var(--asper-ink);
+
+    --card: var(--polished-white);
+    --card-foreground: var(--asper-ink);
+
+    --popover: var(--asper-stone);
+    --popover-foreground: var(--asper-ink);
+
+    /* Burgundy primary */
+    --primary: var(--burgundy);
     --primary-foreground: 0 0% 100%;
 
-    /* Soft cream for secondary surfaces */
-    --secondary: 25 35% 88%;
-    --secondary-foreground: 350 25% 14%;
+    /* Soft stone secondary */
+    --secondary: var(--asper-stone-dark);
+    --secondary-foreground: var(--asper-ink);
 
-    --muted: 25 30% 85%;
-    --muted-foreground: 350 20% 40%;
+    --muted: var(--asper-stone-dark);
+    --muted-foreground: var(--asper-ink-muted);
 
-    /* Gold accent */
-    --accent: 46 66% 52%;
-    --accent-foreground: 350 25% 14%;
+    /* Polished Gold accent */
+    --accent: var(--polished-gold);
+    --accent-foreground: var(--asper-ink);
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 46 40% 75%;
-    --input: 46 40% 80%;
-    --ring: 46 66% 52%;
+    --border: var(--rose-clay-light);
+    --input: var(--rose-clay-light);
+    --ring: var(--polished-gold);
 
     --radius: 0.5rem;
 
-    /* Legacy token mappings for compatibility */
-    --maroon: 348 68% 17%;
-    --maroon-light: 348 58% 25%;
-    --maroon-dark: 348 68% 12%;
-    --rose: 350 45% 55%;
-    --rose-light: 350 50% 65%;
-    --shiny-gold: 46 66% 52%;
-    --soft-ivory: 25 47% 91%;
-    --dark-charcoal: 350 25% 14%;
+    /* Legacy token aliases */
+    --maroon: var(--burgundy);
+    --maroon-light: var(--burgundy-light);
+    --maroon-dark: var(--burgundy-dark);
+    --rose: var(--rose-clay);
+    --rose-light: var(--rose-clay-light);
+    --shiny-gold: var(--polished-gold);
+    --soft-ivory: var(--asper-stone);
+    --dark-charcoal: var(--asper-ink);
 
     /* Luxury Black/Charcoal #1A1A1A, #2D2D2D */
     --luxury-black: 0 0% 10%;
@@ -703,4 +719,155 @@ body::before {
   transform: translateZ(0);
   will-change: transform;
   transition: transform 0.1s ease-out;
+}
+
+/* ── Dr. Bot Chat Widget ────────────────────────────────────────────────── */
+.dr-bot-root {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 49;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.dr-bot-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.125rem;
+  border-radius: 9999px;
+  background-color: hsl(var(--burgundy));
+  color: hsl(0 0% 100%);
+  box-shadow: 0 4px 14px 0 rgba(107, 45, 58, 0.35);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: background-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.dr-bot-trigger:hover {
+  background-color: hsl(var(--burgundy-light));
+  box-shadow: 0 6px 20px 0 rgba(107, 45, 58, 0.45);
+  transform: translateY(-1px);
+}
+
+.dr-bot-trigger:focus-visible {
+  outline: 2px solid hsl(var(--polished-gold));
+  outline-offset: 2px;
+}
+
+.dr-bot-trigger-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+.dr-bot-trigger-label {
+  white-space: nowrap;
+}
+
+.dr-bot-panel {
+  width: 22rem;
+  max-width: calc(100vw - 2rem);
+  background-color: hsl(var(--polished-white));
+  border: 1px solid hsl(var(--rose-clay-light));
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px 0 rgba(44, 40, 37, 0.16);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dr-bot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1rem;
+  background-color: hsl(var(--burgundy));
+  color: hsl(0 0% 100%);
+}
+
+.dr-bot-title {
+  font-family: var(--font-display, serif);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.dr-bot-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: hsl(0 0% 100% / 0.8);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+.dr-bot-close:hover {
+  color: hsl(0 0% 100%);
+  background-color: hsl(0 0% 100% / 0.15);
+}
+
+.dr-bot-close:focus-visible {
+  outline: 2px solid hsl(var(--polished-gold));
+  outline-offset: 2px;
+}
+
+.dr-bot-close-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dr-bot-body {
+  flex: 1;
+  padding: 1rem;
+  min-height: 8rem;
+  overflow-y: auto;
+}
+
+.dr-bot-welcome {
+  font-size: 0.875rem;
+  color: hsl(var(--asper-ink));
+  line-height: 1.6;
+  background-color: hsl(var(--asper-stone));
+  border-radius: 0.75rem 0.75rem 0.75rem 0.125rem;
+  padding: 0.625rem 0.875rem;
+  display: inline-block;
+  max-width: 90%;
+}
+
+.dr-bot-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid hsl(var(--rose-clay-light));
+}
+
+.dr-bot-input {
+  width: 100%;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid hsl(var(--rose-clay-light));
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-family: var(--font-body, sans-serif);
+  background-color: hsl(var(--asper-stone-light));
+  color: hsl(var(--asper-ink));
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.dr-bot-input::placeholder {
+  color: hsl(var(--asper-ink-muted));
+}
+
+.dr-bot-input:focus {
+  border-color: hsl(var(--polished-gold));
+  box-shadow: 0 0 0 3px hsl(var(--polished-gold) / 0.2);
 }

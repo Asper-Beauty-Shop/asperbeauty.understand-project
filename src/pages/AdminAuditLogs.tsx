@@ -135,7 +135,7 @@ export default function AdminAuditLogs() {
       const { data, error } = await supabase
         .from("user_roles")
         .select("user_id")
-        .eq("role", "driver");
+        .eq("role", "admin" as const);
 
       if (error) throw error;
 
@@ -143,13 +143,13 @@ export default function AdminAuditLogs() {
         const userIds = data.map((d) => d.user_id);
         const { data: profiles, error: profileError } = await supabase
           .from("profiles")
-          .select("id, email")
-          .in("id", userIds);
+          .select("user_id, display_name")
+          .in("user_id", userIds);
 
         if (profileError) throw profileError;
 
         setDrivers(
-          profiles?.map((p) => ({ id: p.id, email: p.email || "Unknown" })) ||
+          profiles?.map((p) => ({ id: p.user_id, email: p.display_name || "Unknown" })) ||
             [],
         );
       }
@@ -211,18 +211,15 @@ export default function AdminAuditLogs() {
 
     const [profilesResult, ordersResult] = await Promise.all([
       driverIds.length > 0
-        ? supabase.from("profiles").select("id, email").in("id", driverIds)
-        : Promise.resolve({ data: [] }),
+        ? supabase.from("profiles").select("user_id, display_name").in("user_id", driverIds)
+        : Promise.resolve({ data: [] as { user_id: string; display_name: string | null }[] }),
       orderIds.length > 0
-        ? supabase.from("cod_orders").select("id, order_number").in(
-          "id",
-          orderIds,
-        )
-        : Promise.resolve({ data: [] }),
+        ? Promise.resolve({ data: [] as { id: string; order_number: string }[] })
+        : Promise.resolve({ data: [] as { id: string; order_number: string }[] }),
     ]);
 
     const profileMap = new Map(
-      (profilesResult.data || []).map((p) => [p.id, p.email]),
+      (profilesResult.data || []).map((p: { user_id: string; display_name: string | null }) => [p.user_id, p.display_name]),
     );
     const orderMap = new Map(
       (ordersResult.data || []).map((o) => [o.id, o.order_number]),

@@ -9,7 +9,8 @@ const advantages = [
 ];
 
 const CommercialTape = () => {
-  const { locale } = useLanguage();
+  const { language } = useLanguage();
+  const locale = language;
 
   const items = [...advantages, ...advantages];
 

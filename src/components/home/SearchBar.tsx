@@ -112,8 +112,8 @@ export default function SearchBar() {
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const { products } = await fetchProducts(6, value);
-        setResults(products);
+        const results = await fetchProducts(6, value);
+        setResults(results);
       } catch {
         setResults([]);
       } finally {

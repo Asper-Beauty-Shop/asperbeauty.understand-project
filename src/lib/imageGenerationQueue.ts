@@ -414,7 +414,7 @@ export function useImageQueue() {
   const [status, setStatus] = useState(imageQueue.getStatus());
 
   useEffect(() => {
-    const unsubStats = imageQueue.on("statsUpdate", (newStats) => {
+    const unsubStats = imageQueue.on("statsUpdate", (newStats: QueueStats) => {
       setStats(newStats);
       setStatus(imageQueue.getStatus());
     });

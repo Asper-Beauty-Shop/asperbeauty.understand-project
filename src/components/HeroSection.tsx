@@ -135,7 +135,7 @@ const HeroSection = () => {
 
             {/* Fallback image while video loads */}
             <img
-              src="/hero-banner.png"
+              src="/hero-banner.jpg"
               alt="Asper Beauty"
               className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-105 ${
                 videoLoaded ? "opacity-0" : "opacity-100"

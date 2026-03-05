@@ -7,10 +7,41 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+async function requireAdmin(req: Request): Promise<{ userId: string } | Response> {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  const supabaseClient = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_ANON_KEY")!,
+    { global: { headers: { Authorization: authHeader } } },
+  );
+  const { data: { user }, error } = await supabaseClient.auth.getUser();
+  if (error || !user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  const adminClient = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  const { data: roleData } = await adminClient.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
+  if (!roleData) {
+    return new Response(JSON.stringify({ error: "Admin access required" }), {
+      status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  return { userId: user.id };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const authResult = await requireAdmin(req);
+  if (authResult instanceof Response) return authResult;
 
   try {
     const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
@@ -23,7 +54,7 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    console.log("🕵️‍♀️ Starting Product Enrichment with Firecrawl Search...");
+    console.log(`🕵️‍♀️ Enrichment started by admin ${authResult.userId}`);
 
     // Find products without images
     const { data: products, error } = await supabase

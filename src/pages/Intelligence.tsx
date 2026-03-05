@@ -12,6 +12,10 @@ import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import AuthButton from "@/components/AuthButton";
 
+type MessageContent =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
+
 // --- Catalog snapshot ---
 const ASPER_CATALOG = [
   { handle: "maybelline-eraser", title: "Maybelline Instant Age Rewind Eraser", price: "12.30", vendor: "Maybelline", type: "Concealer" },
@@ -22,7 +26,7 @@ const ASPER_CATALOG = [
   { handle: "rimmel-stay-matte", title: "Rimmel Stay Matte Pressed Powder", price: "6.50", vendor: "Rimmel London", type: "Makeup" },
 ];
 
-const SUPABASE_URL = "https://qqceibvalkoytafynwoc.supabase.co";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://qqceibvalkoytafynwoc.supabase.co";
 const CHAT_URL = `${SUPABASE_URL}/functions/v1/beauty-assistant`;
 
 type Msg = {
@@ -49,7 +53,7 @@ async function streamChat({
   onDelta,
   onDone,
 }: {
-  messages: { role: string; content: string | any[] }[];
+  messages: { role: string; content: string | MessageContent[] }[];
   forcePersona?: string;
   onPersona: (p: string) => void;
   onDelta: (text: string) => void;
@@ -150,7 +154,7 @@ export default function Intelligence() {
 
     const userText = inputValue.trim() || "Please analyze this image and recommend a routine.";
 
-    let userContent: string | any[];
+    let userContent: string | MessageContent[];
     if (capturedImage) {
       userContent = [
         { type: "text", text: userText },
@@ -184,11 +188,11 @@ export default function Intelligence() {
     };
 
     try {
-      const apiMessages = messages
-        .map((m) => ({ role: m.role, content: m.content }));
+      const apiMessages: { role: string; content: string | MessageContent[] }[] = messages
+        .map((m) => ({ role: m.role, content: m.content as string | MessageContent[] }));
 
       // Add current message
-      apiMessages.push({ role: "user", content: userContent as any });
+      apiMessages.push({ role: "user", content: userContent });
 
       await streamChat({
         messages: apiMessages,
@@ -199,10 +203,11 @@ export default function Intelligence() {
         onDelta: upsert,
         onDone: () => setIsLoading(false),
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: `⚠️ ${err.message}`, persona: detectedPersona },
+        { role: "assistant", content: `⚠️ ${errMsg}`, persona: detectedPersona },
       ]);
       setIsLoading(false);
     }
@@ -215,7 +220,7 @@ export default function Intelligence() {
       return;
     }
     window.speechSynthesis.cancel();
-    const clean = text.replace(/[#*_`~>\[\]()!]/g, "").replace(/\n+/g, ". ");
+    const clean = text.replace(/[#*_`~>[\]()!]/g, "").replace(/\n+/g, ". ");
     const utterance = new SpeechSynthesisUtterance(clean);
     const voices = window.speechSynthesis.getVoices();
     if (isClinical) {

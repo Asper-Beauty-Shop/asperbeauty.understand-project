@@ -126,10 +126,10 @@ export default function BulkUpload() {
             return {
               ...p,
               status: queueItem.status === "queued"
-                ? "pending"
+                ? "pending" as const
                 : queueItem.status === "retrying"
-                ? "processing"
-                : queueItem.status as "pending" | "processing" | "done" | "error",
+                ? "processing" as const
+                : queueItem.status as "pending" | "processing" | "completed" | "failed",
               imageUrl: queueItem.imageUrl,
               error: queueItem.error,
             };

@@ -51,16 +51,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import type { Tables } from "@/integrations/supabase/types";
 import { useAuth } from "@/hooks/useAuth";
-
-/** Parse the `items` JSON column from a cod_orders row into a typed array. */
-function parseOrderItems(row: Tables<"cod_orders">): OrderItem[] {
-  const raw = row.items;
-  if (Array.isArray(raw)) return raw as OrderItem[];
-  if (typeof raw === "string") return JSON.parse(raw) as OrderItem[];
-  return [];
-}
 import { toast } from "sonner";
 import {
   endOfDay,
@@ -182,16 +173,19 @@ export default function AdminOrders() {
     setIsLoading(true);
     try {
       const { data, error } = await supabase
-        .from("cod_orders")
+        .from("cod_orders" as never)
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
-      const parsedOrders: CODOrder[] = (data ?? []).map((order) => ({
+      // Parse the items JSON for each order
+      const parsedOrders = (data || []).map((order) => ({
         ...order,
-        items: parseOrderItems(order),
-      }));
+        items: typeof order.items === "string"
+          ? JSON.parse(order.items)
+          : order.items,
+      })) as CODOrder[];
 
       setOrders(parsedOrders);
     } catch (error) {
@@ -219,17 +213,21 @@ export default function AdminOrders() {
           (payload) => {
             console.log("Order change received:", payload);
             if (payload.eventType === "INSERT") {
-              const newOrder: CODOrder = {
-                ...payload.new as Tables<"cod_orders">,
-                items: parseOrderItems(payload.new as Tables<"cod_orders">),
-              };
+              const newOrder = {
+                ...payload.new,
+                items: typeof payload.new.items === "string"
+                  ? JSON.parse(payload.new.items)
+                  : payload.new.items,
+              } as CODOrder;
               setOrders((prev) => [newOrder, ...prev]);
               toast.info(`New order received: ${newOrder.order_number}`);
             } else if (payload.eventType === "UPDATE") {
-              const updatedOrder: CODOrder = {
-                ...payload.new as Tables<"cod_orders">,
-                items: parseOrderItems(payload.new as Tables<"cod_orders">),
-              };
+              const updatedOrder = {
+                ...payload.new,
+                items: typeof payload.new.items === "string"
+                  ? JSON.parse(payload.new.items)
+                  : payload.new.items,
+              } as CODOrder;
               setOrders((prev) =>
                 prev.map((order) =>
                   order.id === updatedOrder.id ? updatedOrder : order
@@ -360,7 +358,7 @@ export default function AdminOrders() {
     try {
       const { error } = await supabase
         .from("cod_orders")
-        .update({ status: newStatus })
+        .update({ status: newStatus } as never)
         .eq("id", orderId);
 
       if (error) throw error;

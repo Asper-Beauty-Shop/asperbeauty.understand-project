@@ -93,7 +93,7 @@ interface Props {
 
 function PhaseSection({ phase, isAr }: { phase: PhaseConfig; isAr: boolean }) {
   const { data, isLoading } = usePhaseProducts(phase, true);
-  const products = data?.products || [];
+  const products = data || [];
 
   return (
     <div>

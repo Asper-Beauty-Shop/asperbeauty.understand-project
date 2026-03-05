@@ -1,11 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+// Staging origins allowed alongside production ALLOWED_ORIGIN
+const STAGING_ORIGINS = new Set([
+  "http://localhost:5173",
+  "http://localhost:8080",
+  "https://id-preview--657fb572-13a5-4a3e-bac9-184d39fdf7e6.lovable.app",
+]);
+
 function getCorsHeaders(req: Request): Record<string, string> {
-  const allowOrigin: string =
-    Deno.env.get("ALLOWED_ORIGIN") ??
-    req.headers.get("Origin") ??
-    "*";
+  const requestOrigin = req.headers.get("Origin") ?? "";
+  const productionOrigin = Deno.env.get("ALLOWED_ORIGIN") ?? "";
+
+  // Allow: exact production match, any staging origin, or fallback
+  let allowOrigin: string;
+  if (productionOrigin && requestOrigin === productionOrigin) {
+    allowOrigin = productionOrigin;
+  } else if (STAGING_ORIGINS.has(requestOrigin)) {
+    allowOrigin = requestOrigin;
+  } else {
+    allowOrigin = productionOrigin || "*";
+  }
+
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers":
@@ -24,24 +41,92 @@ function getWebhookRoute(req: Request): "gorgias" | "manychat" | null {
   return null;
 }
 
+// ── Webhook Rate Limiter (in-memory, per-isolate) ──
+const WEBHOOK_RATE_LIMIT_MAX = 30; // max requests per window per IP+route
+const WEBHOOK_RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const webhookRateStore = new Map<string, { count: number; resetAt: number }>();
+
+function webhookRateLimit(ip: string, route: string): boolean {
+  const now = Date.now();
+  const key = `wh:${route}:${ip}`;
+  const entry = webhookRateStore.get(key);
+  if (!entry || entry.resetAt < now) {
+    webhookRateStore.set(key, { count: 1, resetAt: now + WEBHOOK_RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= WEBHOOK_RATE_LIMIT_MAX) return false;
+  entry.count++;
+  return true;
+}
+
+// Periodic cleanup to prevent memory leaks (every 5 minutes)
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, entry] of webhookRateStore) {
+    if (entry.resetAt < now) webhookRateStore.delete(key);
+  }
+}, 5 * 60_000);
+
+// ── HMAC Signature Verification ──
+async function verifyWebhookSignature(
+  rawBody: string,
+  signature: string | null,
+  secret: string,
+): Promise<boolean> {
+  if (!signature || !secret) return false;
+  try {
+    // Strip optional "sha256=" prefix
+    const sigHex = signature.startsWith("sha256=") ? signature.slice(7) : signature;
+    const key = await crypto.subtle.importKey(
+      "raw",
+      new TextEncoder().encode(secret),
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"],
+    );
+    const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(rawBody));
+    const expectedHex = Array.from(new Uint8Array(mac))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    // Constant-time comparison
+    if (sigHex.length !== expectedHex.length) return false;
+    let mismatch = 0;
+    for (let i = 0; i < sigHex.length; i++) {
+      mismatch |= sigHex.charCodeAt(i) ^ expectedHex.charCodeAt(i);
+    }
+    return mismatch === 0;
+  } catch (e) {
+    console.error("Signature verification failed:", e);
+    return false;
+  }
+}
+
 function extractFromGorgias(body: Record<string, unknown>): { message: string } {
+  // Try body.messages[] array first
   const messages = Array.isArray(body.messages) ? body.messages : [];
   const last = messages.filter((m: unknown) => m && typeof m === "object").pop() as Record<string, unknown> | undefined;
+  // Try singular body.message object
+  const singleMsg = (body.message && typeof body.message === "object") ? body.message as Record<string, unknown> : undefined;
+
   const text =
     typeof last?.body_text === "string" ? last.body_text
     : typeof last?.body_html === "string" ? last.body_html.replace(/<[^>]+>/g, "").trim()
-    : typeof (body as any).body_text === "string" ? (body as any).body_text
-    : typeof (body as any).message === "string" ? (body as any).message
+    : typeof (body as Record<string, unknown>).body_text === "string" ? (body as Record<string, unknown>).body_text
+    : typeof (body as Record<string, unknown>).message === "string" ? (body as Record<string, unknown>).message
     : "";
   return { message: text || "(No message)" };
 }
 
 function extractFromManyChat(body: Record<string, unknown>): { message: string } {
-  const data = body.data as Record<string, unknown> | undefined;
+  // ManyChat webhook: messaging[0].message.text
+  const messaging = Array.isArray(body.messaging) ? body.messaging : [];
+  const firstMsg = messaging[0] as Record<string, unknown> | undefined;
+  const msgObj = firstMsg?.message as Record<string, unknown> | undefined;
+
   const text =
     typeof data?.text === "string" ? data.text
-    : typeof (body as any).text === "string" ? (body as any).text
-    : typeof (body as any).message === "string" ? (body as any).message
+    : typeof (body as Record<string, unknown>).text === "string" ? (body as Record<string, unknown>).text
+    : typeof (body as Record<string, unknown>).message === "string" ? (body as Record<string, unknown>).message
     : "";
   return { message: text || "(No message)" };
 }
@@ -81,7 +166,7 @@ function concernSlugToEnum(slug: string): string[] {
 }
 
 /** Format a product row into a readable string for the AI context */
-function formatProduct(p: any): string {
+function formatProduct(p: Record<string, unknown>): string {
   const parts = [`**${p.title}**`];
   if (p.brand) parts[0] += ` (${p.brand})`;
   if (p.price) parts.push(`${p.price} JOD`);
@@ -95,11 +180,11 @@ function formatProduct(p: any): string {
 
 /** Fetch products matching a concern or keywords from the products table */
 async function fetchProductContext(
-  supabaseClient: any,
+  supabaseClient: ReturnType<typeof createClient>,
   userMessage: string,
   detectedSlug: string | null
-): Promise<{ productContext: string; matchedProducts: any[] }> {
-  let matchedProducts: any[] = [];
+): Promise<{ productContext: string; matchedProducts: unknown[] }> {
+  let matchedProducts: unknown[] = [];
   let productContext = "";
 
   // Try concern-based lookup first
@@ -152,29 +237,75 @@ async function fetchProductContext(
 // System Prompt Builder
 // ──────────────────────────────────────────────────────────────
 function buildSystemPrompt(productContext: string, shopRoutinePath: string | null): string {
-  return `You are the **Asper Dual-Voice Concierge** for Asper Beauty Shop in Jordan — operating as either **Dr. Sami** (Voice of Science) or **Ms. Zain** (Voice of Luxury) depending on the user's intent. Both voices share the same Medical Luxury identity: pharmacist-curated, authentic, precise, never pushy. Recommend ONLY from the product inventory listed below when available; name title, brand, and price.
+  return `You are the **Asper Dual-Voice Concierge** — "One Brain, Two Voices" — for Asper Beauty Shop (asperbeautyshop.com), Amman, Jordan. You operate as either **Dr. Sami** (Voice of Science) or **Ms. Zain** (Voice of Luxury) depending on the user's intent. Both voices share the same Medical Luxury identity: pharmacist-curated, authentic, precise, never pushy. Recommend ONLY from the product inventory listed below when available; name title, brand, and price.
 
-**DR. SAMI — The Voice of Science** (clinical/safety queries)
-- Trigger: acne, rosacea, eczema, hyperpigmentation, pregnancy, ingredient, barrier, retinol, SPF, allergy, supplement, dosage, safety, pharmacist
-- Tone: Authoritative, precise, empathetic. Intro: "As your clinical pharmacist..."
-- Mandatory guardrail: "I provide wellness guidance, not medical diagnosis."
+## DR. SAMI — The Voice of Science (Clinical Authority)
+- **Triggers on:** medical, clinical, safety, ingredients, pregnancy, supplements, dosage, retinol, SPF, sunscreen, allergy, barrier repair, eczema, rosacea, acne, hyperpigmentation, dermatologist, pharmacist, side effects, contraindications, drug interactions, salicylic acid, benzoyl peroxide, AHA, BHA, hydroquinone, sensitive skin reactions, vitamin deficiency, collagen supplements, hair loss treatment, hormonal acne
+- **Tone:** Authoritative, precise, empathetic. Intro: "As your clinical pharmacist..."
+- **Mandatory guardrail:** Always include: "I provide wellness guidance, not medical diagnosis. Please consult your physician for specific medical concerns."
+- **Safety Interlock:** If pregnancy, breastfeeding, or medication interaction is detected, ALWAYS flag contraindicated ingredients (retinol, salicylic acid, hydroquinone) before any recommendation.
 
-**MS. ZAIN — The Voice of Luxury** (aesthetic/lifestyle queries)
-- Trigger: glow, radiance, makeup, gift, bridal, routine, fragrance, luxury, dewy, pamper
-- Tone: Editorial, warm, enthusiastic. Intro: "Welcome to your personal beauty ritual..."
+## MS. ZAIN — The Voice of Luxury (Beauty Concierge)
+- **Triggers on:** makeup, beauty routines, trends, gifts, aesthetic advice, glow, radiance, bridal, fragrance, luxury, dewy, pamper, skincare routine, morning routine, night routine, self-care, date night look, wedding prep, gift guide, texture, shade matching, contouring, K-beauty, glass skin, clean beauty, editorial looks
+- **Tone:** Editorial, warm, enthusiastic. Intro: "Welcome to your personal beauty ritual..."
+- **Bridal Bootcamp:** For bridal/wedding queries, offer the 3-month countdown program (Month 3: repair & prep → Month 2: targeted treatments → Month 1: glow & protect).
 
-**Rules:** Default Dr. Sami if unclear. Switch seamlessly — never announce. Both share continuous memory.
+## Persona Rules
+- **Default:** Dr. Sami if intent is unclear or mixed.
+- **Seamless switching:** Never announce the persona change. Both share continuous memory and the same patient/client file.
+- **Arabic persona:** Dr. Sami = "دكتور سامي"; Ms. Zain = "مس زين". Match the same tone in Arabic.
 
-**3-Click Solution (first reply):** (1) Confirm concern in one sentence. (2) Recommend ONE authoritative regimen: Step 1 Cleanser → Step 2 Treatment → Step 3 Protection. (3) Close with "Shall I add this tray to your cart?"
+## 3-Click Solution (Structure every first reply)
+1. **Analyze:** Confirm concern in one sentence.
+2. **Recommend:** ONE authoritative regimen → Step 1 Cleanser → Step 2 Treatment → Step 3 Protection.
+3. **Regimen:** Close with "Shall I add this tray to your cart?"
 ${shopRoutinePath ? `\n**Regimen Link:** [See My Regimen](${shopRoutinePath})` : ""}
 
-**Sales Intelligence:** If user hesitates, pivot to trust: "Every bottle carries our Seal of Authenticity — pharmacist-vetted, JFDA certified."
+## Bridal Bootcamp (Ms. Zain leads, Dr. Sami validates safety)
+When the user mentions **bridal, wedding, عروس, زفاف, engagement, خطوبة**, activate the 3-Month Countdown Program:
 
-**Knowledge:** All products 100% authentic. Brands: Bioderma, Kérastase, YSL, Maybelline, Garnier, Beesline, Bio Balance, Seventeen, Petal Fresh.
-**Language:** Respond in the same language as the user (English or Arabic only).
-**Shipping:** Amman 3 JOD; Governorates 5 JOD; FREE over 50 JOD.
+### Month 3 — Repair & Prep (12–9 weeks before)
+- Goal: Barrier repair, gentle exfoliation, establish baseline routine.
+- Recommend: Gentle cleanser (CeraVe/Cetaphil), Vichy Minéral 89 booster, weekly enzyme mask.
+- Dr. Sami note: "Start retinol now if not already using — we need 12 weeks for full turnover."
 
-**Inventory:**
+### Month 2 — Targeted Treatments (8–5 weeks before)
+- Goal: Address specific concerns (pigmentation, texture, fine lines).
+- Recommend: Vitamin C serum (morning), targeted treatment for concern, hydrating overnight mask.
+- Dr. Sami note: "Stop retinol 2 weeks before the wedding to avoid any purging or sensitivity."
+
+### Month 1 — Glow & Protect (4–1 weeks before)
+- Goal: Maximum radiance, no new actives, SPF discipline.
+- Recommend: Hydrating primer with glow, SPF 50+, sheet masks 2x/week, lip treatment.
+- Ms. Zain note: "This is your glow phase — we lock in radiance, no experiments!"
+
+### Week-Of Protocol
+- Only use products skin already knows. Focus: hydration, SPF, calming mist.
+- Emergency kit: Hydrocolloid patches, thermal water spray, tinted moisturizer.
+
+**Always ask:** "When is the big day?" to place them in the correct month. Offer to set WhatsApp check-in reminders.
+
+## Smart Shelf Intelligence
+- **Time-Aware:** Before 12 PM recommend morning routines (Vitamin C, SPF, lightweight moisturizer). After 6 PM recommend night routines (retinol, repair masks, rich creams). Between 12–6 PM, ask about their routine timing preference.
+- **Intelligent Refills:** If a user mentions "running out," "almost done," "reorder," or "نفذ," suggest the same product for repurchase + ONE complementary upgrade (e.g., "Since you loved the cleanser, pair it with the matching toner for better results").
+- **Seasonal Awareness:** Summer → emphasize SPF, lightweight textures, oil control. Winter → emphasize barrier repair, rich moisturizers, overnight masks.
+- **Free Shipping Nudge:** If cart < 50 JOD, suggest a small add-on (lip balm, travel size, sheet mask) to qualify. Frame it as value: "Add a travel-size Thermal Water (3.5 JOD) to unlock free delivery!"
+- **Replenishment Cycle:** Standard skincare products last ~2 months. If a returning user hasn't reordered in 8+ weeks, gently ask: "How's your [product] holding up? Time for a refill?"
+
+## Sales & Trust
+- If user hesitates, pivot to trust: "Every bottle carries our Seal of Authenticity — pharmacist-vetted, JFDA certified."
+- Never invent products. If no match found, say so honestly and invite browsing.
+
+## Store Knowledge
+- **Website:** https://asperbeautyshop.com
+- **WhatsApp:** +962 79 XXX XXXX (direct concierge line)
+- **All products 100% authentic**, sourced directly from brand distributors.
+- **Brands:** Vichy, Eucerin, La Roche-Posay, Cetaphil, SVR, The Ordinary, Olaplex, Dior, YSL, Bioderma, Avène, CeraVe, Filorga, Kérastase, Garnier, Beesline, Bio Balance, Petal Fresh, Maybelline, Seventeen.
+- **Language:** Respond in the same language as the user (English or Arabic).
+- **Shipping:** Amman 3 JOD · Governorates 5 JOD · FREE over 50 JOD.
+- **Returns:** 14-day return policy on unopened items.
+
+## Inventory
 ${productContext}`;
 }
 
@@ -202,17 +333,78 @@ serve(async (req) => {
 
   const route = getWebhookRoute(req);
 
-  // ——— Webhook Path (Gorgias / ManyChat) — no auth ———
+  // ——— Webhook Path (Gorgias / ManyChat) — signature-verified ———
   if (route === "gorgias" || route === "manychat") {
+    const webhookStartMs = Date.now();
+    // Admin client for audit writes (service role bypasses RLS)
+    const auditClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY")!,
+    );
+
+    async function logWebhookAudit(status: string, concernDetected: string | null, errorMessage: string | null) {
+      try {
+        await auditClient.from("webhook_audit_logs").insert({
+          provider: route,
+          event_type: "message",
+          status,
+          concern_detected: concernDetected,
+          response_ms: Date.now() - webhookStartMs,
+          error_message: errorMessage ? errorMessage.slice(0, 500) : null,
+        });
+      } catch (e) {
+        console.error("Audit log insert failed:", e);
+      }
+    }
+
     try {
+      // Rate limit BEFORE crypto work to block floods cheaply
+      const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+        ?? req.headers.get("x-real-ip") ?? "unknown";
+      if (!webhookRateLimit(clientIp, route)) {
+        console.warn(`Webhook rate limit exceeded: ${route} from ${clientIp}`);
+        await logWebhookAudit("rate_limited", null, `IP: ${clientIp}`);
+        return new Response(JSON.stringify({ error: "Too many requests" }), {
+          status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json", "Retry-After": "60" },
+        });
+      }
+
+      const rawBody = await req.text();
+
+      // Verify webhook signature
+      const webhookSecret = route === "gorgias"
+        ? Deno.env.get("GORGIAS_WEBHOOK_SECRET")
+        : Deno.env.get("MANYCHAT_WEBHOOK_SECRET");
+      const signature = route === "gorgias"
+        ? req.headers.get("x-gorgias-signature")
+        : req.headers.get("x-hub-signature-256") ?? req.headers.get("x-hub-signature");
+
+      if (!webhookSecret) {
+        console.error(`${route} webhook secret not configured`);
+        await logWebhookAudit("error", null, "Webhook secret not configured");
+        return new Response(JSON.stringify({ error: "Webhook not configured" }), {
+          status: 503, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+
+      const valid = await verifyWebhookSignature(rawBody, signature, webhookSecret);
+      if (!valid) {
+        console.warn(`Invalid ${route} webhook signature`);
+        await logWebhookAudit("hmac_failed", null, "Invalid HMAC signature");
+        return new Response(JSON.stringify({ error: "Invalid signature" }), {
+          status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+
       let body: Record<string, unknown> = {};
-      try { body = await req.json(); } catch { body = {}; }
+      try { body = JSON.parse(rawBody); } catch { body = {}; }
       const { message: userMessage } = route === "gorgias" ? extractFromGorgias(body) : extractFromManyChat(body);
 
       const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
       const geminiKey = Deno.env.get("GEMINI_API_KEY");
       const apiKey = geminiKey ?? LOVABLE_API_KEY;
       if (!apiKey) {
+        await logWebhookAudit("error", null, "API key not configured");
         return new Response(JSON.stringify({ error: "API key not configured" }), {
           status: 503, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
         });
@@ -222,10 +414,11 @@ serve(async (req) => {
       const supabaseUrl = Deno.env.get("SUPABASE_URL");
       const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
       let productContext = "";
+      let detectedSlug: string | null = null;
       if (supabaseUrl && supabaseKey) {
         const admin = createClient(supabaseUrl, supabaseKey);
-        const slug = detectConcernSlug(userMessage);
-        const result = await fetchProductContext(admin, userMessage, slug);
+        detectedSlug = detectConcernSlug(userMessage);
+        const result = await fetchProductContext(admin, userMessage, detectedSlug);
         productContext = result.productContext;
       }
 
@@ -265,6 +458,9 @@ serve(async (req) => {
         replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
       }
 
+      // Log successful webhook processing
+      await logWebhookAudit("success", detectedSlug, null);
+
       // ManyChat expects { version, content } format for rich responses
       if (route === "manychat") {
         return new Response(
@@ -293,6 +489,7 @@ serve(async (req) => {
       );
     } catch (e) {
       console.error("Webhook error:", e);
+      await logWebhookAudit("error", null, e instanceof Error ? e.message : String(e));
       return new Response(
         JSON.stringify({ error: "beauty-assistant webhook failed", message: e instanceof Error ? e.message : String(e) }),
         { status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
@@ -351,17 +548,21 @@ serve(async (req) => {
     }
 
     // Extract last user message for product matching
-    const lastUserMessage = messages.filter((m: any) => m.role === "user").pop()?.content || "";
-    const lastText = typeof lastUserMessage === "string"
-      ? lastUserMessage
-      : Array.isArray(lastUserMessage)
-        ? lastUserMessage.filter((p: any) => p.type === "text").map((p: any) => p.text ?? "").join(" ")
+    const lastUserMessage = messages.filter((m: unknown) => (m as { role?: string }).role === "user").pop() as { content?: string | Array<{ type?: string; text?: string }> } | undefined;
+    const rawContent = lastUserMessage?.content ?? "";
+    const lastText = typeof rawContent === "string"
+      ? rawContent
+      : Array.isArray(rawContent)
+        ? rawContent.filter((p: { type?: string }) => p.type === "text").map((p: { text?: string }) => p.text ?? "").join(" ")
         : "";
 
     const detectedConcernSlug = detectConcernSlug(lastText);
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
-    // Fetch product context with service role (bypasses RLS for server-side catalog reads)
+    // Fetch product context using service role key for unrestricted catalog access.
+    // The products table uses RLS; service role bypasses those policies so the edge
+    // function can always return relevant product recommendations regardless of the
+    // calling user's permissions.
     const serviceClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
@@ -369,8 +570,10 @@ serve(async (req) => {
     const { productContext, matchedProducts } = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
 
     // Detect persona from user message
-    const drSamiTriggers = /acne|rosacea|eczema|hyperpigment|pregnan|حامل|حمل|ingredient|مكونات|barrier|retinol|spf|sunscreen|allergy|حساسية|salicylic|medical|طبي|clinical|pharmacist|صيدلاني|supplement|dosage|safety/i;
-    const persona = drSamiTriggers.test(lastText) ? "dr_sami" : "ms_zain";
+    // Dual-Persona detection — Dr. Sami (clinical) vs Ms. Zain (beauty/aesthetic)
+    const drSamiTriggers = /acne|rosacea|eczema|hyperpigment|pregnan|حامل|حمل|ingredient|مكونات|barrier|retinol|spf|sunscreen|allergy|حساسية|salicylic|medical|طبي|clinical|pharmacist|صيدلاني|supplement|dosage|safety|side.?effect|contraindic|drug.?interact|benzoyl|hydroquinone|aha|bha|hormone|hair.?loss|vitamin.?deficien|collagen.?supplement/i;
+    const msZainTriggers = /makeup|glow|radiance|bridal|fragrance|luxury|dewy|pamper|routine|gift|مكياج|عروس|هدية|عناية|جمال|trend|editorial|glass.?skin|k.?beauty|contour|shade|self.?care|date.?night|wedding/i;
+    const persona = drSamiTriggers.test(lastText) ? "dr_sami" : msZainTriggers.test(lastText) ? "ms_zain" : "dr_sami";
 
     const systemPrompt = buildSystemPrompt(productContext, shopRoutinePath);
 
@@ -454,8 +657,8 @@ function extractKeywords(text: string): string[] {
     "brightening", "anti-aging", "eye cream", "mask", "exfoliate", "rosacea", "pregnancy",
   ];
   const brandKeywords = [
-    "bioderma", "kerastase", "kérastase", "ysl", "maybelline", "garnier",
-    "beesline", "bio balance", "seventeen", "petal fresh",
+    "vichy", "eucerin", "cetaphil", "svr", "la roche", "ordinary", "olaplex", "dior",
+    "ysl", "bioderma", "avene", "cerave", "filorga", "kerastase",
   ];
 
   const lowerText = text.toLowerCase();

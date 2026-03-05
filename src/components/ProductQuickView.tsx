@@ -27,17 +27,18 @@ import { useCartStore } from "@/stores/cartStore";
 interface Product {
   id: string;
   title: string;
-  price: number;
-  description: string | null;
-  category: string;
+  price: number | null;
+  description?: string | null;
+  category?: string;
   image_url: string | null;
-  brand: string | null;
-  volume_ml: string | null;
-  is_on_sale: boolean | null;
-  original_price: number | null;
-  discount_percent: number | null;
-  created_at: string;
-  updated_at: string;
+  brand?: string | null;
+  volume_ml?: string | null;
+  is_on_sale?: boolean | null;
+  original_price?: number | null;
+  discount_percent?: number | null;
+  created_at?: string;
+  updated_at?: string;
+  [key: string]: unknown;
 }
 
 interface ProductQuickViewProps {
@@ -61,12 +62,13 @@ export const ProductQuickView = (
     product.category,
     product.title,
   );
+  const price = product.price ?? 0;
   const isOnSale = product.is_on_sale && product.original_price &&
-    product.original_price > product.price;
+    product.original_price > price;
   const discountPercent = product.discount_percent ||
     (isOnSale
       ? Math.round(
-        ((product.original_price! - product.price) / product.original_price!) *
+        ((product.original_price! - price) / product.original_price!) *
           100,
       )
       : 0);
@@ -81,7 +83,7 @@ export const ProductQuickView = (
         description: product.description || "",
         priceRange: {
           minVariantPrice: {
-            amount: product.price.toString(),
+        amount: price.toString(),
             currencyCode: "JOD",
           },
         },
@@ -98,7 +100,7 @@ export const ProductQuickView = (
             node: {
               id: product.id,
               title: "Default",
-              price: { amount: product.price.toString(), currencyCode: "JOD" },
+              price: { amount: price.toString(), currencyCode: "JOD" },
               selectedOptions: [],
             },
           }],
@@ -111,7 +113,7 @@ export const ProductQuickView = (
         product: cartProduct as import("@/lib/shopify").ShopifyProduct,
         variantId: product.id,
         variantTitle: "Default",
-        price: { amount: product.price.toString(), currencyCode: "JOD" },
+        price: { amount: price.toString(), currencyCode: "JOD" },
         quantity: 1,
         selectedOptions: [],
       });
@@ -215,17 +217,17 @@ export const ProductQuickView = (
                     isOnSale ? "text-[#E53E3E]" : "text-gray-900"
                   }`}
                 >
-                  {formatJOD(product.price)}
+                  {formatJOD(price)}
                 </span>
               </div>
               {isOnSale && (
                 <p className="text-sm text-[#E53E3E] mt-1 font-medium">
                   {language === "ar"
                     ? `وفر ${
-                      formatJOD(product.original_price! - product.price)
+                      formatJOD(product.original_price! - price)
                     }`
                     : `Save ${
-                      formatJOD(product.original_price! - product.price)
+                      formatJOD(product.original_price! - price)
                     }`}
                 </p>
               )}
@@ -271,7 +273,7 @@ export const ProductQuickView = (
             >
               <ShoppingBag className="w-5 h-5 me-2" />
               {language === "ar" ? "أضف إلى السلة" : "Add to Cart"} -{" "}
-              {formatJOD(product.price * quantity)}
+              {formatJOD(price * quantity)}
             </Button>
 
             {/* Trust Badges - iHerb/BeautyBox style */}

@@ -6,50 +6,343 @@ You are the Lead Full-Stack Engineer, Senior UX Strategist, and "Brand Guardian"
 
 ---
 
-# 1. APPLY_TO_MAIN_SITE
+# 1. APPLY_TO_MAIN_SITE — 9-Step Production Deployment
 
-The full operational checklist for production deployment is in **`APPLY_TO_MAIN_SITE.md`** (in this repo and in VIP).
+The full operational checklist for production deployment is in **`APPLY_TO_MAIN_SITE.md`** (in this repo).
 
-When executing a push to the main site, strictly follow these 9 steps:
+## Pre-Deployment Checklist
 
-| Step | Action |
-| :--- | :--- |
-| **1** | **Lovable env:** Configure VITE_ variables in Lovable |
-| **2** | **Supabase redirects:** Add main URL to Auth allowed callbacks |
-| **3** | **Edge SITE_URL:** Update COD/email functions with live domain |
-| **4** | **Social:** Verify Instagram, WhatsApp, and ManyChat deep links |
-| **5** | **Google Merchant Center:** Ensure product feed is syncing |
-| **6** | **All pages:** Verify frontend routes and omnichannel UI |
-| **7** | **Repo config:** Ensure target repo is set to understand-project |
-| **8** | **Deploy/verify:** Push to main, check build, and test live site |
-| **9** | **Optional catalog sync:** Run Matrixify / Edge function sync |
+| Step | Action | Details |
+| :--- | :--- | :--- |
+| **1** | **Lovable env** | Configure VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY, VITE_SHOPIFY_STORE_DOMAIN, VITE_SHOPIFY_STOREFRONT_TOKEN, VITE_SITE_URL in Lovable settings |
+| **2** | **Supabase redirects** | Add `https://asperbeautyshop-com.lovable.app/**` to Auth allowed callbacks; set Site URL |
+| **3** | **Edge SITE_URL** | Update Supabase Edge Functions secret `SITE_URL` = `https://asperbeautyshop-com.lovable.app/` for COD/email links |
+| **4** | **Social** | Verify Instagram bio link, WhatsApp CTA, ManyChat flows, Facebook, X, TikTok, Pinterest, YouTube all point to main site with deep links |
+| **5** | **Google Merchant Center** | Ensure Shopify feed (ID 5717495012) syncs; product links use main domain; Shopping ads land on main site |
+| **6** | **All pages** | Verify `/`, `/products`, `/products/[handle]`, cart, checkout, login redirects, Find My Ritual, Beauty Assistant, `/health` on main site |
+| **7** | **Repo config** | In understand-project: `.env` from template; Tailwind tokens applied; workflows (deploy-health-check, sync-file-changes-to-lovable, sync-issues-prs-to-lovable) in `.github/workflows/`; `LOVABLE_WEBHOOK_URL` secret is optional (workflows skip gracefully if not set) |
+| **8** | **Deploy/verify** | Push to main → Lovable deploys; run `curl -s https://asperbeautyshop-com.lovable.app/health` (expect `"status": "ok"`); smoke test homepage, products, chatbot |
+| **9** | **Optional catalog sync** | If needed, run Matrixify or Edge function sync to push CSV catalog updates to Shopify; verify on main site `/products` |
 
-Cross-reference APPLY_TO_MAIN_SITE.md whenever preparing a release; do not give generic deployment lectures.
+- [ ] All code changes are committed and tested locally
+- [ ] Linting and build pass without errors
+- [ ] All environment variables are documented in `env.main-site.example`
+- [ ] Design system compliance verified (see section 3 below)
+- [ ] Security vulnerabilities addressed
+
+## Production Deployment Steps
+
+When executing a push to the main site, strictly follow these steps:
+
+### Step 1: Lovable Environment Variables
+Configure in [Lovable Settings](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings):
+- `VITE_SUPABASE_URL` = `https://qqceibvalkoytafynwoc.supabase.co`
+- `VITE_SUPABASE_PUBLISHABLE_KEY` (anon/public key from Supabase)
+- `VITE_SUPABASE_PROJECT_ID` = `qqceibvalkoytafynwoc`
+- `VITE_SHOPIFY_STORE_DOMAIN` = `lovable-project-milns.myshopify.com`
+- `VITE_SHOPIFY_STOREFRONT_TOKEN` (Storefront API token)
+- `VITE_SHOPIFY_API_VERSION` = `2025-07`
+- `VITE_SITE_URL` = `https://asperbeautyshop-com.lovable.app/` (full URL with protocol for auth redirects)
+- `VITE_LOVABLE_URL` = `asperbeautyshop-com.lovable.app` (domain only for API calls)
+
+### Step 2: Supabase Authentication Configuration
+In [Supabase Dashboard](https://supabase.com/dashboard/project/qqceibvalkoytafynwoc) → Authentication → URL Configuration:
+- Add to Redirect URLs: `https://asperbeautyshop-com.lovable.app/**`
+- Set Site URL: `https://asperbeautyshop-com.lovable.app/`
+
+### Step 3: Supabase Edge Functions
+In Supabase → Project Settings → Edge Functions → Secrets:
+- Set `SITE_URL` = `https://asperbeautyshop-com.lovable.app/`
+- Ensure COD/email functions use `SITE_URL` for email links
+
+### Step 4: Social Media & Deep Links
+Update all platform links to main site:
+- Instagram: bio link, story links, shoppable posts (e.g., `?intent=acne&source=ig`)
+- WhatsApp: CTA links, ManyChat/webhook deep links
+- Facebook: page link, shop link, Messenger bot links
+- Other platforms: X, TikTok, Pinterest, YouTube
+
+### Step 5: Google Merchant Center
+- Verify product feed syncing from Shopify
+- Ensure landing pages point to `https://asperbeautyshop-com.lovable.app`
+- Confirm no critical errors in feed
+
+### Step 6: Frontend Verification
+Test these routes on the live site:
+- `/` (home), `/products`, `/products/[handle]`
+- `/mom-baby` (lifecycle nav, RTL support)
+- Cart drawer/page and checkout flow
+- `/health` endpoint (should return 200)
+- Beauty Assistant chat widget
+
+### Step 7: Deploy to Production
+```bash
+cd /path/to/understand-project
+git add .
+git commit -m "feat: [your changes]"
+git push origin main
+```
+Lovable will build and deploy automatically.
+
+### Step 8: Post-Deployment Verification
+- Run health check: `npm run health` (from VIP folder)
+- Verify `/health` returns 200
+- Manual smoke test: home, products, cart, Beauty Assistant
+- Test login redirect flow
+- Verify all omnichannel integrations
+
+### Step 9 (Optional): Catalog Sync
+If updating product catalog:
+```bash
+node scripts/sync-shopify-catalog.js --dry-run --limit 5  # test first
+node scripts/sync-shopify-catalog.js                       # full sync
+```
+
+Cross-reference **APPLY_TO_MAIN_SITE.md** for detailed instructions. Do not give generic deployment advice.
 
 ---
 
-# 2. Env and Deploy
+# 2. Environment & Deployment Configuration
 
 Environment setup must follow the established structure. Use **`env.main-site.example`** (or `.env.example`) as the template for required environment variables. Set vars in Lovable and in local `.env`; do not commit `.env`.
 
 ---
 
-# 3. Design
+# 3. Design — Clinical Luxury Brand Identity
+# 3. Design System & Brand Identity
 
-Strictly enforce the **"Morning Spa"** and **"Authentic Quality"** brand identity.
+Strictly enforce the **"Morning Spa" / Medical Luxury** brand identity. Full documentation in **`DESIGN_SYSTEM.md`** in this repo.
 
-- **Tailwind CSS:** The full styling palette (Soft Ivory, Maroon, Shiny Gold) and typographic rules are in **DESIGN_SYSTEM** (VIP folder). Use design tokens: asper-stone, burgundy, polished-gold, asper-ink. No pure #FFF or #000 for main background or primary text.
-- **Four pillars:** Resilience, Transparency, Refinement, Empathy. Every component and flow should align with at least one.
-- **Configuration:** For environment or build config related to UI and deployment, refer to **APPLY_TO_MAIN_SITE.md** in this repo.
-- **Copy:** Authoritative and clinical where needed; empathetic for skin conditions (acne, rosacea). Transparent pricing and ingredients.
+## Brand Pillars
+Every component and flow must align with at least one of these four pillars:
+1. **Resilience** — Medical authority, dermatologist-approved
+2. **Transparency** — Clear pricing, honest ingredients
+3. **Refinement** — Understated luxury, elegant details
+4. **Empathy** — Warm, nurturing, approachable
+
+## Color Palette (Tailwind Tokens)
+
+All colors are defined in `tailwind.config.ts`. **Never use pure white (#FFF) or pure black (#000).**
+
+### Primary Canvas
+- `asper-stone` (`#F2EFEB`) — Main background, cards
+- `asper-stone-light` (`#F8F6F3`) — Lightest variant
+- `asper-stone-dark` (`#E8E4DE`) — Subtle contrast
+
+### Feminine Softness
+- `rose-clay` (`#C4A494`) — Warm accents, secondary backgrounds
+- `rose-clay-light` (`#D4B8A8`) — Hover states, delicate elements
+- `rose-clay-dark` (`#A88B7A`) — Deeper terracotta
+
+### Primary Actions & Authority
+- `burgundy` (`#6B2D3A`) — Primary buttons, CTAs, navigation
+- `burgundy-light` (`#8B3D4A`) — Hover states
+- `burgundy-dark` (`#4F222C`) — Active states
+
+### Accent
+- `polished-gold` (`#C9A962`) — Borders, icons, badges (use sparingly)
+
+### Text
+- `asper-ink` (`#2C2825`) — Primary body text, headings
+- `asper-ink-muted` (`#5C5652`) — Secondary text, captions
+
+### Utility
+- `polished-white` (`#FAF9F7`) — Off-white for cards on colored backgrounds
+
+## Typography
+
+Defined in `tailwind.config.ts`:
+- **Headings:** `font-heading` → Playfair Display (serif, elegant)
+- **Body:** `font-body` → Montserrat (sans-serif, clinical precision)
+- **Arabic:** `font-arabic` → Tajawal (RTL bilingual support)
+
+## Component Standards
+
+## Design System Tokens
+
+**Tailwind CSS:** Use the Clinical Luxury palette from `tailwind.config.ts`:
+- **Primary canvas:** `asper-stone` (#F2EFEB) — warm ivory/light gray, no pure #FFF
+- **Feminine softness:** `rose-clay` (#C4A494) — muted pink/terracotta
+- **Primary actions/nav/authority:** `burgundy` (#6B2D3A) — deep burgundy
+- **Accent only:** `polished-gold` (#C9A962) — borders, hover ("Midas Touch"), icons
+- **Background highlight:** `polished-white` (#FAF9F7) — softer alternative to pure white
+- **Primary text:** `asper-ink` (#2C2825) — no pure #000
+- **Muted text:** `asper-ink-muted` (#5C5652)
+
+Each color has `DEFAULT`, `light`, and `dark` variants (except polished-gold and polished-white).
+
+## Four Design Pillars
+
+Every component, page, and user flow must embody at least one pillar:
+
+1. **Resilience:** Empowers customers overcoming skin challenges (acne, rosacea, hyperpigmentation). Show progress, hope, and transformation.
+2. **Transparency:** Honest ingredient lists, clear pricing (no hidden fees), authentic product info. Build trust through openness.
+3. **Refinement:** Luxury aesthetics—elegant typography (Playfair Display headings, Montserrat body), smooth animations (luxury easing), tasteful gold accents. Every detail polished.
+4. **Empathy:** Clinical yet caring tone. Address skin concerns with understanding. Personalized AI recommendations that listen first.
+
+## Copy & Tone
+
+- **Authoritative and clinical** where needed (ingredient science, dermatological claims).
+- **Empathetic and supportive** for skin conditions (acne, rosacea).
+- **Transparent** pricing and ingredients—no hidden costs, no misleading claims.
+- Avoid generic wellness buzzwords; be specific and evidence-based.
+
+## Configuration
+
+For environment or build config related to UI and deployment, refer to **APPLY_TO_MAIN_SITE.md** in this repo.
+### Buttons
+- **Primary:** `bg-burgundy text-white hover:bg-burgundy-light rounded-md px-6 py-3 font-body font-semibold`
+- **Secondary:** `border-2 border-burgundy text-burgundy bg-transparent hover:bg-burgundy hover:text-white`
+- **Gold Accent:** Use sparingly — `border-2 border-polished-gold`
+
+### Cards
+- Background: `bg-asper-stone` or `bg-polished-white`
+- Border: `border border-rose-clay-light` (optional)
+- Radius: `rounded-lg` (12px)
+- Shadow: `shadow-maroon-glow` (custom shadow)
+- Padding: `p-6` (desktop), `p-4` (mobile)
+
+### Navigation
+- Background: `bg-burgundy`
+- Text: `text-white`
+- Active/hover: `text-polished-gold`
+
+### Inputs
+- Background: `bg-polished-white`
+- Border: `border border-rose-clay`
+- Focus: `focus:ring-2 focus:ring-polished-gold focus:border-polished-gold`
+
+## Animations
+
+All use custom `luxury` easing: `cubic-bezier(0.19, 1, 0.22, 1)`
+- `animate-fade-in` — Fade in with upward movement
+- `animate-fade-up` — Pronounced upward fade
+- `animate-shake` — Error emphasis
+- `animate-skeleton-breathe` — Loading states
+
+## Accessibility Requirements
+- WCAG AA contrast standards for all text
+- Visible focus rings on all interactive elements: `focus:ring-2 focus:ring-polished-gold`
+- Minimum 44×44px touch targets on mobile
+- Semantic HTML with proper heading hierarchy
+
+## Design Implementation Checklist
+Before committing any UI changes:
+- [ ] Uses only approved color palette (no pure #FFF or #000)
+- [ ] Applies correct font families (`font-heading`, `font-body`)
+- [ ] Uses `rounded-md` or `rounded-lg` for border radius
+- [ ] Adds `shadow-maroon-glow` for elevated elements
+- [ ] Includes hover and focus states for interactive elements
+- [ ] Tests responsive behavior on mobile
+- [ ] Verifies WCAG AA contrast ratios
+- [ ] Aligns with at least one brand pillar
+
+## Copy Guidelines
+- **Clinical authority:** Medical terminology where appropriate, dermatologist-approved language
+- **Empathetic tone:** Sensitive approach to skin conditions (acne, rosacea, hyperpigmentation)
+- **Transparency:** Clear pricing, honest ingredient lists, no hidden fees
+- **Bilingual support:** RTL layout for Arabic content using `font-arabic`
+
+Reference **`DESIGN_SYSTEM.md`** for complete specifications, code examples, and visual guidelines.
 
 ---
 
 # 4. Tech Stack & Architecture
 
-- **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui.
-- **State:** Zustand (persistent cart/wishlist) and TanStack Query.
-- **Backend:** Supabase (Database, Auth, Edge Functions) and Shopify Storefront API.
-- **AI constraints:** Do not hallucinate inventory. Always use Shopify API data for products and catalog.
+## Frontend Stack
+
+- **Framework:** React 18 with TypeScript
+- **Build tool:** Vite (fast dev server, optimized production builds)
+- **Styling:** Tailwind CSS with custom Clinical Luxury tokens
+- **Component library:** shadcn/ui (accessible, composable components)
+- **Fonts:** 
+  - Headings: Playfair Display (Georgia fallback)
+  - Body: Montserrat (Helvetica Neue fallback)
+  - Arabic: Tajawal
+
+## State Management
+
+- **Zustand:** Persistent cart and wishlist with localStorage
+- **TanStack Query (React Query):** Server state, caching, optimistic updates for products, collections, and user data
+
+## Backend & Services
+
+- **Database & Auth:** Supabase (PostgreSQL, Row Level Security, OAuth providers)
+- **Edge Functions:** Supabase Edge (Deno) for COD orders, email notifications, AI chat backend
+- **Product catalog:** Shopify Storefront API (5000+ SKUs)
+- **AI:** Beauty Assistant powered by Supabase + custom prompts; Find My Ritual (skin analysis → product recommendations)
+
+## Key Architectural Patterns
+
+- **Headless commerce:** React frontend consumes Shopify Storefront GraphQL API; checkout redirects to Shopify-hosted flow
+- **Omnichannel:** Deep links from Instagram, WhatsApp, ManyChat; social commerce integration
+- **AI-first:** Conversational product discovery (Beauty Assistant chat widget); personalized skin analysis (Find My Ritual flow)
+- **Edge-optimized:** Supabase Edge Functions handle server logic; Lovable hosts static frontend with CDN
+
+## Critical Constraints
+
+- **Do not hallucinate inventory:** Always use Shopify API data for products, variants, prices, and availability. Never make up product details.
+- **Respect Shopify as source of truth:** Product handles, titles, descriptions, images, metafields come from Shopify. Do not hardcode product data.
+- **Maintain brand consistency:** Use only approved design tokens (no pure #FFF or #000); follow Four Pillars in all UX decisions.
+
+---
+
+# 5. Quick Reference
+
+## Essential Links
+- **Live Site:** https://asperbeautyshop-com.lovable.app/
+- **Lovable Project:** https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
+- **GitHub Repo:** asperpharma/understand-project
+- **Supabase Project:** qqceibvalkoytafynwoc
+
+## Key Documentation
+- **Deployment Checklist:** `APPLY_TO_MAIN_SITE.md` (complete production deployment guide)
+- **Design System:** `DESIGN_SYSTEM.md` (color palette, typography, components, animations)
+- **Project Overview:** `MAIN_PROJECT.md` (single source of truth for project structure)
+- **Environment Template:** `env.main-site.example` (required environment variables)
+- **Role & Mandate:** `docs/ROLE_AND_MANDATE.md` (technical stewardship guidelines)
+
+## Common Commands
+```bash
+# Local development
+npm install
+npm run dev
+
+# Health check (from VIP folder)
+npm run health
+
+# Catalog sync
+node scripts/sync-shopify-catalog.js --dry-run
+node scripts/sync-shopify-catalog.js
+
+# Deploy to production
+git add .
+git commit -m "feat: your change"
+git push origin main
+```
+
+## Design Tokens Quick Reference
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `asper-stone` | `#F2EFEB` | Main background |
+| `burgundy` | `#6B2D3A` | Primary CTAs |
+| `polished-gold` | `#C9A962` | Accents (sparingly) |
+| `asper-ink` | `#2C2825` | Body text |
+| `rose-clay` | `#C4A494` | Warm accents |
+
+## Environment Variables Checklist
+Essential variables for Lovable deployment:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `VITE_SUPABASE_PROJECT_ID`
+- `VITE_SHOPIFY_STORE_DOMAIN`
+- `VITE_SHOPIFY_STOREFRONT_TOKEN`
+- `VITE_SHOPIFY_API_VERSION`
+- `VITE_SITE_URL`
+- `VITE_LOVABLE_URL`
+
+See `env.main-site.example` for complete list.
+
+---
 
 Following these rules keeps the codebase clean and strictly aligned with Asper Beauty Shop brand DNA and Claude/Cursor expectations.

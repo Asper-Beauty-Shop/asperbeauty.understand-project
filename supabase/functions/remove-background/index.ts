@@ -7,10 +7,41 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+async function requireAdmin(req: Request): Promise<{ userId: string } | Response> {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  const supabaseClient = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_ANON_KEY")!,
+    { global: { headers: { Authorization: authHeader } } },
+  );
+  const { data: { user }, error } = await supabaseClient.auth.getUser();
+  if (error || !user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  const adminClient = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  const { data: roleData } = await adminClient.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
+  if (!roleData) {
+    return new Response(JSON.stringify({ error: "Admin access required" }), {
+      status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  return { userId: user.id };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const authResult = await requireAdmin(req);
+  if (authResult instanceof Response) return authResult;
 
   try {
     const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
@@ -18,175 +49,71 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY not configured");
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
     const { productId, imageUrl } = await req.json();
-
     if (!productId || !imageUrl) {
       throw new Error("productId and imageUrl are required");
     }
 
-    console.log(`🎨 Removing background for product: ${productId}`);
-    console.log(`   Source image: ${imageUrl}`);
+    console.log(`🎨 Background removal by admin ${authResult.userId} for product: ${productId}`);
 
-    // Use Lovable AI to remove the background
-    const imageResponse = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${lovableApiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash-image-preview",
-          messages: [
-            {
-              role: "user",
-              content: [
-                {
-                  type: "text",
-                  text:
-                    "Remove the background from this product image. Make the background completely pure white (#FFFFFF). Keep only the product itself with clean, professional edges. The result should look like a professional e-commerce product photo on a pure white background. Do not add any shadows, reflections, or other elements.",
-                },
-                {
-                  type: "image_url",
-                  image_url: {
-                    url: imageUrl,
-                  },
-                },
-              ],
-            },
+    const imageResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash-image-preview",
+        messages: [{
+          role: "user",
+          content: [
+            { type: "text", text: "Remove the background from this product image. Make the background completely pure white (#FFFFFF). Keep only the product itself with clean, professional edges. The result should look like a professional e-commerce product photo on a pure white background. Do not add any shadows, reflections, or other elements." },
+            { type: "image_url", image_url: { url: imageUrl } },
           ],
-          modalities: ["image", "text"],
-        }),
-      },
-    );
+        }],
+        modalities: ["image", "text"],
+      }),
+    });
 
     if (!imageResponse.ok) {
       const errorText = await imageResponse.text();
-      console.error(`❌ AI API Error: ${imageResponse.status} - ${errorText}`);
-
       if (imageResponse.status === 429) {
-        return new Response(
-          JSON.stringify({
-            success: false,
-            error: "Rate limit exceeded. Please try again later.",
-          }),
-          {
-            status: 429,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          },
-        );
+        return new Response(JSON.stringify({ success: false, error: "Rate limit exceeded. Please try again later." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       if (imageResponse.status === 402) {
-        return new Response(
-          JSON.stringify({
-            success: false,
-            error: "AI credits exhausted. Please add credits to continue.",
-          }),
-          {
-            status: 402,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          },
-        );
+        return new Response(JSON.stringify({ success: false, error: "AI credits exhausted." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
-
       throw new Error(`AI processing failed: ${imageResponse.status}`);
     }
 
     const imageData = await imageResponse.json();
-    const generatedImage = imageData.choices?.[0]?.message?.images?.[0]
-      ?.image_url?.url;
+    const generatedImage = imageData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+    if (!generatedImage) throw new Error("AI did not return a processed image");
 
-    if (!generatedImage) {
-      console.log(`⚠️ No processed image returned from AI`);
-      throw new Error("AI did not return a processed image");
-    }
-
-    console.log(`✅ Background removed successfully`);
-
-    // Extract base64 data from data URI
-    const base64Match = generatedImage.match(
-      /^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/,
-    );
-    if (!base64Match) {
-      throw new Error("Invalid image format returned from AI");
-    }
+    const base64Match = generatedImage.match(/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/);
+    if (!base64Match) throw new Error("Invalid image format returned from AI");
 
     const imageFormat = base64Match[1];
-    const base64Data = base64Match[2];
-
-    // Convert base64 to Uint8Array
-    const binaryString = atob(base64Data);
+    const binaryString = atob(base64Match[2]);
     const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
+    for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
 
-    // Generate unique filename with timestamp
-    const timestamp = Date.now();
-    const filename = `bg-removed/${productId}-${timestamp}.${imageFormat}`;
+    const filename = `bg-removed/${productId}-${Date.now()}.${imageFormat}`;
+    const { error: uploadError } = await supabase.storage.from("product-images").upload(filename, bytes, { contentType: `image/${imageFormat}`, upsert: true });
+    if (uploadError) throw new Error(`Failed to upload: ${uploadError.message}`);
 
-    console.log(`📤 Uploading to storage: ${filename}`);
-
-    // Upload to Supabase Storage
-    const { error: uploadError } = await supabase.storage
-      .from("product-images")
-      .upload(filename, bytes, {
-        contentType: `image/${imageFormat}`,
-        upsert: true,
-      });
-
-    if (uploadError) {
-      console.error(`❌ Upload Error: ${uploadError.message}`);
-      throw new Error(
-        `Failed to upload processed image: ${uploadError.message}`,
-      );
-    }
-
-    // Get public URL
-    const { data: publicUrl } = supabase.storage
-      .from("product-images")
-      .getPublicUrl(filename);
-
-    const newImageUrl = publicUrl.publicUrl;
-
-    // Update product with new image URL
-    const { error: updateError } = await supabase
-      .from("products")
-      .update({ image_url: newImageUrl })
-      .eq("id", productId);
-
-    if (updateError) {
-      console.error(`❌ Update Error: ${updateError.message}`);
-      throw new Error(`Failed to update product: ${updateError.message}`);
-    }
-
-    console.log(`✨ Product updated with clean image: ${newImageUrl}`);
+    const { data: publicUrl } = supabase.storage.from("product-images").getPublicUrl(filename);
+    const { error: updateError } = await supabase.from("products").update({ image_url: publicUrl.publicUrl }).eq("id", productId);
+    if (updateError) throw new Error(`Failed to update product: ${updateError.message}`);
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        productId,
-        originalUrl: imageUrl,
-        newImageUrl,
-      }),
+      JSON.stringify({ success: true, productId, originalUrl: imageUrl, newImageUrl: publicUrl.publicUrl }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (error) {
     console.error("Background removal error:", error);
-    const errorMessage = error instanceof Error
-      ? error.message
-      : "Unknown error";
     return new Response(
-      JSON.stringify({ success: false, error: errorMessage }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      },
+      JSON.stringify({ success: false, error: error instanceof Error ? error.message : "Unknown error" }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
 });

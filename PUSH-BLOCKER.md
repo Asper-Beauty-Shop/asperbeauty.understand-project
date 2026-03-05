@@ -1,4 +1,15 @@
-# Unblocking git push on Windows
+    # Unblocking git push on Windows    
+> **Push allowed. No blockers detected.**
+
+If you encounter any new push issues (e.g., path or case conflicts) on the Asper Beauty Shop main site, cross-check [APPLY_TO_MAIN_SITE.md](./APPLY_TO_MAIN_SITE.md) for resolution steps specific to this repo.
+
+For ongoing compliance:
+- Always verify branch status and staging before main pushes.
+- Review Lovable CI logs and run a full internal smoke test after resolving blockers.
+- For urgent help, ping the Engineering/DevOps team and reference the ["Unblocking git push" SOP].
+
+> _Asper Beauty Shop: Clinical-luxury, conversion-focused e-commerce ops. All releases must comply with medical-luxury protocols and operational checklists._
+
 
 Your local `main` has commits that cannot be pushed because the **remote** has a path that is invalid on Windows:
 

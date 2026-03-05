@@ -31,6 +31,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 import { formatJOD } from "@/lib/productImageUtils";
 import {
@@ -53,12 +54,16 @@ import { useLanguage } from "@/contexts/LanguageContext";
 interface Product {
   id: string;
   title: string;
-  price: number;
-  description: string | null;
-  category: string;
+  price: number | null;
+  handle: string;
+  primary_concern: string;
+  regimen_step: string;
   image_url: string | null;
+  brand: string | null;
+  pharmacist_note: string | null;
   created_at: string;
   updated_at: string;
+  [key: string]: unknown;
 }
 
 const categories = ["Best Seller", "New Arrival", "Trending", "Featured"];
@@ -86,8 +91,9 @@ const ManageProducts = () => {
   const [formData, setFormData] = useState({
     title: "",
     price: "",
-    description: "",
-    category: "Featured",
+    handle: "",
+    primary_concern: "Concern_Hydration",
+    regimen_step: "Step_1_Cleanser",
     image_url: "",
   });
 
@@ -139,7 +145,7 @@ const ManageProducts = () => {
           .order("created_at", { ascending: false });
 
         if (error) throw error;
-        setProducts(data || []);
+        setProducts((data || []) as Product[]);
       } catch (err: unknown) {
         console.error("Error fetching products:", err);
         toast.error("Failed to load products");
@@ -155,8 +161,9 @@ const ManageProducts = () => {
     setFormData({
       title: "",
       price: "",
-      description: "",
-      category: "Featured",
+      handle: "",
+      primary_concern: "Concern_Hydration",
+      regimen_step: "Step_1_Cleanser",
       image_url: "",
     });
     setEditingProduct(null);
@@ -167,9 +174,10 @@ const ManageProducts = () => {
       setEditingProduct(product);
       setFormData({
         title: product.title,
-        price: product.price.toString(),
-        description: product.description || "",
-        category: product.category,
+        price: (product.price ?? 0).toString(),
+        handle: product.handle || "",
+        primary_concern: product.primary_concern || "Concern_Hydration",
+        regimen_step: product.regimen_step || "Step_1_Cleanser",
         image_url: product.image_url || "",
       });
     } else {
@@ -235,8 +243,9 @@ const ManageProducts = () => {
       const productData = {
         title: formData.title.trim(),
         price: parseFloat(formData.price),
-        description: formData.description.trim() || null,
-        category: formData.category,
+        handle: formData.handle.trim() || formData.title.trim().toLowerCase().replace(/\s+/g, "-"),
+        primary_concern: formData.primary_concern as Tables<"products">["primary_concern"],
+        regimen_step: formData.regimen_step as Tables<"products">["regimen_step"],
         image_url: formData.image_url.trim() || null,
       };
 
@@ -263,7 +272,7 @@ const ManageProducts = () => {
 
         if (error) throw error;
 
-        setProducts((prev) => [data, ...prev]);
+        setProducts((prev) => [data as Product, ...prev]);
         toast.success("Product created successfully");
       }
 
@@ -310,8 +319,8 @@ const ManageProducts = () => {
 
       setEnrichResults(data.results || []);
 
-      const successCount = data.results?.filter((r: { success?: boolean }) =>
-        r.status === "success"
+      const successCount = data.results?.filter((r: { success?: boolean; status?: string }) =>
+        r.success || r.status === "success"
       ).length || 0;
 
       if (successCount > 0) {
@@ -321,7 +330,7 @@ const ManageProducts = () => {
           .from("products")
           .select("*")
           .order("created_at", { ascending: false });
-        if (refreshedProducts) setProducts(refreshedProducts);
+        if (refreshedProducts) setProducts(refreshedProducts as Product[]);
       } else {
         toast.info("No new images found. Try adding source URLs to products.");
       }
@@ -351,8 +360,8 @@ const ManageProducts = () => {
 
       setEnrichResults(data.results || []);
 
-      const successCount = data.results?.filter((r: { success?: boolean }) =>
-        r.status === "success"
+      const successCount = data.results?.filter((r: { success?: boolean; status?: string }) =>
+        r.success || r.status === "success"
       ).length || 0;
 
       if (successCount > 0) {
@@ -362,7 +371,7 @@ const ManageProducts = () => {
           .from("products")
           .select("*")
           .order("created_at", { ascending: false });
-        if (refreshedProducts) setProducts(refreshedProducts);
+        if (refreshedProducts) setProducts(refreshedProducts as Product[]);
       } else if (data.total === 0) {
         toast.info("All products already have images!");
       } else {
@@ -407,7 +416,7 @@ const ManageProducts = () => {
           .from("products")
           .select("*")
           .order("created_at", { ascending: false });
-        if (refreshedProducts) setProducts(refreshedProducts);
+        if (refreshedProducts) setProducts(refreshedProducts as Product[]);
       } else {
         throw new Error(data.error || "Background removal failed");
       }
@@ -537,22 +546,22 @@ const ManageProducts = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="category">Category</Label>
+                        <Label htmlFor="primary_concern">Concern</Label>
                         <Select
-                          value={formData.category}
+                          value={formData.primary_concern}
                           onValueChange={(value) =>
                             setFormData((prev) => ({
                               ...prev,
-                              category: value,
+                              primary_concern: value,
                             }))}
                         >
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {categories.map((cat) => (
+                            {["Concern_Acne","Concern_Hydration","Concern_Aging","Concern_Sensitivity","Concern_Pigmentation","Concern_Redness","Concern_Oiliness"].map((cat) => (
                               <SelectItem key={cat} value={cat}>
-                                {cat}
+                                {cat.replace("Concern_", "")}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -561,17 +570,16 @@ const ManageProducts = () => {
                     </div>
 
                     <div>
-                      <Label htmlFor="description">Description</Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description}
+                      <Label htmlFor="handle">Handle (URL slug)</Label>
+                      <Input
+                        id="handle"
+                        value={formData.handle}
                         onChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
-                            description: e.target.value,
+                            handle: e.target.value,
                           }))}
-                        placeholder="Product description..."
-                        rows={3}
+                        placeholder="product-handle"
                       />
                     </div>
 
@@ -734,7 +742,7 @@ const ManageProducts = () => {
                             <img
                               src={getProductImage(
                                 product.image_url,
-                                product.category,
+                                product.primary_concern as string,
                                 product.title,
                               )}
                               alt={product.title}
@@ -748,13 +756,13 @@ const ManageProducts = () => {
                               {product.title}
                             </p>
                             <p className="text-xs text-muted-foreground line-clamp-1">
-                              {product.description || "No description"}
+                              {(product.pharmacist_note as string) || "No notes"}
                             </p>
                           </div>
                         </TableCell>
                         <TableCell>
                           <span className="text-xs uppercase tracking-wider text-muted-foreground">
-                            {product.category}
+                            {(product.primary_concern as string)?.replace("Concern_", "") || "—"}
                           </span>
                         </TableCell>
                         <TableCell className="text-right font-semibold text-burgundy">

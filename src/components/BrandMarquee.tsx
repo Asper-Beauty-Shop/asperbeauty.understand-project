@@ -10,18 +10,17 @@ import {
   Sparkles,
 } from "lucide-react";
 
-// Premium brand logos with elegant styling - High quality luxury logos
-import ceraveLogo from "@/assets/brands/cerave-luxury.png";
-import theOrdinaryLogo from "@/assets/brands/the-ordinary-luxury.png";
-import laRochePosayLogo from "@/assets/brands/la-roche-posay-luxury.png";
-import paulasChoiceLogo from "@/assets/brands/paulas-choice-luxury.png";
-import olaplexLogo from "@/assets/brands/olaplex-luxury.png";
-import diorLogo from "@/assets/brands/dior-luxury.png";
-import esteeLauderLogo from "@/assets/brands/estee-lauder-luxury.png";
-import kerastaseLogo from "@/assets/brands/kerastase-luxury.png";
-import cliniqueLogo from "@/assets/brands/clinique-luxury.png";
-import lancomeLogo from "@/assets/brands/lancome-luxury.png";
-import yslLogo from "@/assets/brands/ysl-luxury.png";
+const ceraveLogo = "https://placehold.co/200x60/800020/C5A028?text=CERAVE";
+const theOrdinaryLogo = "https://placehold.co/200x60/800020/C5A028?text=THE+ORDINARY";
+const laRochePosayLogo = "https://placehold.co/200x60/800020/C5A028?text=LA+ROCHE-POSAY";
+const paulasChoiceLogo = "https://placehold.co/200x60/800020/C5A028?text=PAULA'S+CHOICE";
+const olaplexLogo = "https://placehold.co/200x60/800020/C5A028?text=OLAPLEX";
+const diorLogo = "https://placehold.co/200x60/800020/C5A028?text=DIOR";
+const esteeLauderLogo = "https://placehold.co/200x60/800020/C5A028?text=ESTÉE+LAUDER";
+const kerastaseLogo = "https://placehold.co/200x60/800020/C5A028?text=KÉRASTASE";
+const cliniqueLogo = "https://placehold.co/200x60/800020/C5A028?text=CLINIQUE";
+const lancomeLogo = "https://placehold.co/200x60/800020/C5A028?text=LANCÔME";
+const yslLogo = "https://placehold.co/200x60/800020/C5A028?text=YSL";
 
 const BRANDS = [
   { name: "Dior", logo: diorLogo },

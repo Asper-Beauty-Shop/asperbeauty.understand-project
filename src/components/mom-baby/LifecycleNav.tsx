@@ -57,7 +57,7 @@ export default function LifecycleNav({ activePhase, onPhaseChange }: Props) {
   const isAr = locale === "ar";
 
   return (
-    <section className="py-8 border-b border-border">
+    <section id="lifecycle-nav" className="py-8 border-b border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-lg text-foreground mb-4 text-center">
           {isAr ? "اختاري مرحلتك" : "Choose Your Stage"}

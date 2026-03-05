@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from "react-markdown";
 
-const SUPABASE_URL = "https://qqceibvalkoytafynwoc.supabase.co";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://qqceibvalkoytafynwoc.supabase.co";
 const LAB_URL = `${SUPABASE_URL}/functions/v1/lab-tools`;
 
 function useLabStream() {
@@ -75,8 +75,8 @@ function useLabStream() {
           }
         }
       }
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
     }
@@ -201,7 +201,7 @@ function GiftRitualistTab() {
     let catalogText = "";
     try {
       const { fetchProducts, normalizePrice } = await import("@/lib/shopify");
-      const { products } = await fetchProducts(100);
+      const products = await fetchProducts(100);
       catalogText = products
         .map((p) => {
           const n = p.node;

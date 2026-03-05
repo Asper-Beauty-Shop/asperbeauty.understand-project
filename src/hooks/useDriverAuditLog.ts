@@ -57,8 +57,8 @@ export function useDriverAuditLog() {
 
       // Use rpc or raw insert - the table may not be in types yet
       const { error } = await supabase
-        .from("driver_access_logs" as "cod_orders") // Type assertion workaround until types regenerate
-        .insert(logEntry as never);
+        .from("telemetry_events")
+        .insert([{ event: "driver_access", source: "driver_audit", payload: JSON.parse(JSON.stringify(logEntry)), user_id: user?.id || null }]);
 
       if (error) {
         // Silent fail - don't interrupt user flow for audit logging
