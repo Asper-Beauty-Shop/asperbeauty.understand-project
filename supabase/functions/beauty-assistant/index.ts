@@ -1,4 +1,13 @@
+/**
+ * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
+ * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). Single AI, context-switching persona.
+ * Webhooks: Gorgias / ManyChat (no auth). Website chat: Supabase Auth + SSE.
+ * Project scripts (health, brain, sync:check), applyToAllProfiles, and commitDirectlyWarning: see README.
+ */
+declare const Deno: { env: { get(key: string): string | undefined } };
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // Staging origins allowed alongside production ALLOWED_ORIGIN
@@ -532,10 +541,9 @@ serve(async (req) => {
 
     // Log campaign source attribution to telemetry_events if present
     if (campaignSource) {
-      const adminClient = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-      );
+      const adminUrl = Deno.env.get("SUPABASE_URL");
+      const adminKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
+      const adminClient = adminUrl && adminKey ? createClient(adminUrl, adminKey) : supabaseClient;
       adminClient.from("telemetry_events").insert({
         user_id: userId,
         event: "deep_link_campaign",
@@ -558,15 +566,17 @@ serve(async (req) => {
     const detectedConcernSlug = detectConcernSlug(lastText);
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
-    // Fetch product context using service role key for unrestricted catalog access.
-    // The products table uses RLS; service role bypasses those policies so the edge
-    // function can always return relevant product recommendations regardless of the
-    // calling user's permissions.
-    const serviceClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-    const { productContext, matchedProducts } = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
+    // Fetch product context with service role (or anon fallback), consistent with webhook path.
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
+    let productContext = "";
+    let matchedProducts: unknown[] = [];
+    if (supabaseUrl && supabaseKey) {
+      const productContextClient = createClient(supabaseUrl, supabaseKey);
+      const result = await fetchProductContext(productContextClient, lastText, detectedConcernSlug);
+      productContext = result.productContext;
+      matchedProducts = result.matchedProducts;
+    }
 
     // Detect persona from user message
     // Dual-Persona detection — Dr. Sami (clinical) vs Ms. Zain (beauty/aesthetic)
