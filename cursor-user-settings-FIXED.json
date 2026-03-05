@@ -1,0 +1,200 @@
+{
+    "workbench.settings.applyToAllProfiles": [
+        "workbench.editorAssociations",
+        "chat.mcp.access",
+        "npm.scriptExplorerAction",
+        "update.channel",
+        "stash-push:command"
+    ],
+    "git.enableSmartCommit": true,
+    "emmet.excludeLanguages": [
+        "markdown",
+        "english"
+    ],
+    "github.copilot.chat.reviewSelection.instructions": [
+        {
+            "text": "Resolve all TODO tasks."
+        }
+    ],
+    "chat.mcp.gallery.enabled": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "editor.definitionLinkOpensInPeek": true,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "editor.codeActions.triggerOnFocusChange": true,
+    "remote.defaultExtensionsIfInstalledLocally": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "GitHub.vscode-pull-request-github",
+        "",
+        "GitHub.copilot"
+    ],
+    "git.autofetch": true,
+    "workbench.editorLargeFileConfirmation": 32,
+    "workbench.editor.wrapTabs": true,
+    "remoteHub.commitDirectlyWarning": "off",
+    "workbench.editorAssociations": {
+        "*.ico": "default",
+        "*.csv": "vscode.markdown.preview.editor",
+        "*.jpg": "default",
+        "JSON": "default"
+    },
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "workbench.editor.autoLockGroups": {
+        "default": true,
+        "workbench.editor.chatSession": true,
+        "workbench.editorinputs.searchEditorInput": true,
+        "notebookOutputEditor": true,
+        "jupyter-notebook": true,
+        "luna.editor": true,
+        "repl": true,
+        "jsProfileVisualizer.cpuprofile.table": true,
+        "vscode.videoPreview": true,
+        "imagePreview.previewEditor": true,
+        "workbench.editors.gettingStartedInput": true,
+        "workbench.editor.browserEditor": true,
+        "workbench.input.externalTerminal": true,
+        "robotframework-repl": true,
+        "mainThreadWebview-markdown.preview": true,
+        "workbench.editor.markdownPlan": true,
+        "workbench.editor.reviewchanges.input": true,
+        "gitlens.rebase": true,
+        "workbench.editor.markdown": true,
+        "envBrowser.envEditor": true,
+        "jsProfileVisualizer.heapprofile.table": true,
+        "workbench.editor.cursorfileblame": true,
+        "workbench.editor.cursorblame": true,
+        "cc-wf-studio.workflowPreview": true,
+        "vscode.audioPreview": true,
+        "workbench.editor.allpullrequests.input": true,
+        "pdf.preview": true,
+        "workbench.editor.reviewpr.input": true,
+        "jsProfileVisualizer.heapsnapshot.table": true
+    },
+    "workbench.editor.closeOnFileDelete": true,
+    "workbench.editor.defaultBinaryEditor": "default",
+    "gitlens.ai.model": "gitkraken",
+    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+    "gitlens.ai.gitkraken.model": "openai:gpt-5-nano",
+    "git.confirmSync": false,
+    "http.systemCertificatesNode": true,
+    "chat.mcp.serverSampling": {
+        "Global in Code: my-mcp-server-74ce28e0": {
+            "allowedModels": [
+                "copilot/claude-sonnet-4.5",
+                "copilot/auto",
+                "copilot/claude-haiku-4.5",
+                "copilot/claude-opus-4.5",
+                "copilot/claude-sonnet-4",
+                "copilot/gemini-2.5-pro",
+                "copilot/gemini-3-flash-preview",
+                "copilot/gemini-3-pro-preview",
+                "copilot/gpt-4.1",
+                "copilot/gpt-4o",
+                "copilot/gpt-5",
+                "copilot/gpt-5-mini",
+                "copilot/gpt-5-codex"
+            ]
+        }
+    },
+    "javascript.preferences.autoImportFileExcludePatterns": [
+        ""
+    ],
+    "git.ignoreRebaseWarning": true,
+    "chat.tools.terminal.autoApprove": {
+        "uniq": true
+    },
+    "workbench.startupEditor": "welcomePage",
+    "editor.largeFileOptimizations": false,
+    "git.openRepositoryInParentFolders": "always",
+    "claudeCodeChat.wsl.enabled": true,
+    "claudeCodeChat.wsl.distro": "Ubuntu",
+    "claudeCodeChat.wsl.nodePath": "/usr/bin/node",
+    "claudeCodeChat.wsl.claudePath": "/usr/local/bin/claude",
+    "claudeCodeChat.thinking.intensity": "think-harder",
+    "http.electronFetch": true,
+    "settingsSync.ignoredExtensions": [],
+    "diffEditor.renderSideBySide": false,
+    "typescript.tsserver.web.projectWideIntellisense.suppressSemanticErrors": true,
+    "chat.agent.maxRequests": 100,
+    "vue.suggest.propNameCasing": "alwaysCamelCase",
+    "editor.formatOnSave": true,
+    "typescript-web.trace.server": "verbose",
+    "markdown.styles": [
+        ""
+    ],
+    "editor.cursorBlinking": "expand",
+    "editor.formatOnPaste": true,
+    "gitlens.ai.generateCommits.customInstructions": "check",
+    "diffEditor.ignoreTrimWhitespace": true,
+    "mssql.connectionGroups": [
+        {
+            "name": "ROOT",
+            "id": "ROOT"
+        }
+    ],
+    "window.menuBarVisibility": "classic",
+    "postCommitReviewer.groqApiKey": "",
+    "files.associations": {
+        "*.yml": "chatagent",
+        "*.tsx": "apex-anon"
+    },
+    "mssql.autoDisableNonTSqlLanguageService": true,
+    "workbench.editor.limit.enabled": true,
+    "npm.keybindingsChangedWarningShown": true,
+    "npm.enableTouchbar": true,
+    "geminicodeassist.project": "lustrous-vista-f6m3m",
+    "mermaid-chat.enabled": true,
+    "chat.mcp.assisted.nuget.enabled": true,
+    "gulp.autoDetect": "on",
+    "jake.autoDetect": "on",
+    "workbench.editor.centeredLayoutFixedWidth": true,
+    "terminal.integrated.commandsToSkipShell": [
+        ""
+    ],
+    "cloudcode.updateChannel": "Insiders",
+    "geminicodeassist.updateChannel": "Insiders",
+    "redhat.telemetry.enabled": true,
+    "npm.scriptExplorerAction": "run",
+    "npm.oldKeybindings.enable": true,
+    "vs-kubernetes": {
+        "vs-kubernetes.knownKubeconfigs": [
+            "c:\\Users\\C-R\\Desktop\\Asper-Beauty-Shop\\Asper Shop Images\\.vscode\\extensions.json"
+        ],
+        "vs-kubernetes.kubeconfig": "c:\\Users\\C-R\\Desktop\\Asper-Beauty-Shop\\Asper Shop Images\\.vscode\\extensions.json"
+    },
+    "gitlens.gitCommands.skipConfirmations": [
+        "fetch:command",
+        "stash-push:command",
+        "branch-create:command"
+    ],
+    "workbench.colorTheme": "Supabase Theme Soft",
+    "gitlens.rebaseEditor.ordering": "asc",
+    "npm-intellisense.importES6": true,
+    "npm-intellisense.importQuotes": "'",
+    "npm-intellisense.importLinebreak": ";\r\n",
+    "npm-intellisense.importDeclarationType": "const",
+    "cursor.cpp.enablePartialAccepts": true,
+    "gitlens.ai.largePromptWarningThreshold": 40000,
+    "cursor.rpcFileLogger.enabled": true,
+    "antigravity-plus.autoApprove.enabled": true,
+    "cursor.terminal.usePreviewBox": true,
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "claudeCode.preferredLocation": "panel",
+    "workbench.editor.scrollToSwitchTabs": true,
+    "workbench.editor.sharedViewState": true,
+    "workbench.editor.limit.perEditorGroup": true,
+    "workbench.editor.limit.excludeDirty": true,
+    "workbench.editor.revealIfOpen": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "workbench.editor.enablePreviewFromCodeNavigation": true,
+    "github-actions.workflows.pinned.refresh.enabled": true,
+    "claude-history.database.storeMessages": true,
+    "workbench.editor.alwaysShowEditorActions": true,
+    "[apex-anon]": {
+        "editor.defaultFormatter": "default"
+    }
+}

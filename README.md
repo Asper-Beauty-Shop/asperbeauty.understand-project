@@ -1,6 +1,6 @@
 # Asper Beauty Shop
 
-**Update:** 2026-03-04-lzdyA
+**Update:** 2026-03-04-lzdy
 
 ## Download
 
@@ -42,7 +42,6 @@ Then run `npm run dev` to start the development server. See [Available scripts](
 
 **SNC:** `npm run sync` | `npm run health` | `npm run brain` (see [SNC (sync)](#snc-sync-and-applytoallprofiles)).
 
-
 | Command                    | What it does                  |
 | -------------------------- | ----------------------------- |
 | `npm run dev`              | Start Vite dev server         |
@@ -60,5 +59,3 @@ Then run `npm run dev` to start the development server. See [Available scripts](
 | `npm run health`           | Frontend + brain health check |
 | `npm run brain`            | Brain (Beauty Assistant) only |
 | `npm run sync`             | Frontend + brain sync check   |
-
-

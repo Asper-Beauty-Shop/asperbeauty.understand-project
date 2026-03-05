@@ -2,6 +2,8 @@
 
 **File:** `C:\Users\C-R\AppData\Roaming\Cursor\User\settings.json`
 
+**Copy-paste option:** A full corrected JSON is in [cursor-user-settings-FIXED.json](cursor-user-settings-FIXED.json). Copy its entire contents and paste into your User `settings.json`, then save and reload Cursor.
+
 ---
 
 ## A. Corrupted structure (fix first)
