@@ -4,15 +4,15 @@
 **Repo:** asperpharma/understand-project  
 **Lovable:** https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings
 **Lovable:** https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings  
-**Supabase project:** `qqceibvalkoytafynwoc` *(correct — do NOT use old ID rgehleqcubtmcwyipyvi)*
+**Supabase project:** `qqceibvalkoytafynwoc`
 
 ---
 
-## Perfect update in 4 steps (copy-paste)
+## Quick Deploy (4 Steps)
 
 Do this whenever you want the **latest code live** on the main site.
 
-**1. Open a terminal in your understand-project folder.**  
+**1. Open a terminal in your understand-project folder.**
 If you don't have it yet:
 ```bash
 gh repo clone asperpharma/understand-project
@@ -25,18 +25,17 @@ git pull origin main
 npm install
 ```
 
-**3. Deploy to the live site.**  
+**3. Deploy to the live site.**
 (If you have no new changes, skip the commit; otherwise:)
 ```bash
 git add .
 git commit -m "Your message"
 git push origin main
 ```
-Lovable will build and deploy; the site updates in a few minutes at https://asperbeautyshop-com.lovable.app/
+Lovable will build and deploy; the site updates in a few minutes.
 
 **4. Verify.**
 ```bash
-# From this VIP folder (Asper Shop ALL Files VIP):
 npm run health
 ```
 Then open https://asperbeautyshop-com.lovable.app/ and spot-check: Home, Products, Cart, Beauty Assistant.
@@ -82,10 +81,9 @@ Then open https://asperbeautyshop-com.lovable.app/ and spot-check: Home, Product
 
 Do these **in your dashboards** so the live site can use the Brain and Commerce Engine. Tick each when done.
 
-### Step 1 — Lovable environment variables
+### Step 1 — Lovable Environment Variables
 
-**Where:** <a href="https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings">Lovable → asper-beauty-shop → Settings → Environment variables</a>
-**Where:** [Lovable → asper-beauty-shop → Settings → Environment variables](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings)
+**Where:** [Lovable → Settings → Environment variables](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings)
 
 Set (or confirm) these production variables:
 
@@ -103,22 +101,24 @@ Also set if not already: `VITE_SUPABASE_PROJECT_ID` = `qqceibvalkoytafynwoc`, `V
 
 - [ ] All Lovable env vars saved; redeploy or push to `main` so build uses them
 
-### Step 2 — Supabase Auth redirects
+### Step 2 — Supabase Auth Redirects
 
 **Where:** <a href="https://supabase.com/dashboard/project/rgehleqcubtmcwyipyvi">Supabase Dashboard</a> → **Authentication** → **URL Configuration**
 **Where:** [Supabase Dashboard](https://supabase.com/dashboard/project/qqceibvalkoytafynwoc) → **Authentication** → **URL Configuration**
 
-- Under **Redirect URLs**, add: `https://asperbeautyshop-com.lovable.app/**`
-- Set **Site URL** to: `https://asperbeautyshop-com.lovable.app/`
+- Under **Redirect URLs**, add:
+  - `https://www.asperbeautyshop.com/**`
+  - `https://asperbeautyshop-com.lovable.app/**`
+- Set **Site URL** to: `https://www.asperbeautyshop.com/`
 - Save
 
-- [ ] Redirect URLs include main site; Site URL points to main site
+- [ ] Redirect URLs include production and staging domains; Site URL points to production
 
-### Step 3 — Edge Function SITE_URL secret (COD emails)
+### Step 3 — Edge Function SITE_URL Secret
 
 **Where:** Supabase → **Project Settings** → **Edge Functions** → **Secrets**
 
-- Add or update: **`SITE_URL`** = `https://asperbeautyshop-com.lovable.app/`
+- Add or update: **`SITE_URL`** = `https://www.asperbeautyshop.com/`
 
 - [ ] `SITE_URL` secret set so COD/confirmation emails link to the live site
 
@@ -126,15 +126,34 @@ Also set if not already: `VITE_SUPABASE_PROJECT_ID` = `qqceibvalkoytafynwoc`, `V
 
 - Log into <a href="https://merchant.google.com/">Google Merchant Center</a>.
 - Log into [Google Merchant Center](https://merchant.google.com/).
-- Confirm your Shopify product feed (and new JSON-LD markup) is syncing 5,000+ SKUs without critical errors.
-- Ensure product and storefront links point to `https://asperbeautyshop-com.lovable.app` (or your custom domain).
+- Confirm your Shopify product feed is syncing 5,000+ SKUs without critical errors.
+- Ensure product and storefront links point to `https://www.asperbeautyshop.com`.
 
-- [ ] Feed syncing; no critical errors; links point to main site
+- [ ] Feed syncing; no critical errors; links point to production domain
 
-### Step 8 — Deploy and verify
-### Step 5 — Deploy and verify
+### Step 5 — Social Media Platforms
 
-**Deploy from the understand-project repo** (not this VIP folder):
+Base URL for all: **https://www.asperbeautyshop.com/**
+
+| Platform | Handle / URL | What to update |
+|---|---|---|
+| Instagram | `@asper.beauty.shop` | Bio link, story links, shoppable posts landing URL |
+| Facebook | `AsperBeautyShop` | Page link, shop link, ads landing URL |
+| WhatsApp | `+962 79 065 6666` | CTA links, catalog links, ManyChat webhook deep links |
+| TikTok | `@asper.beauty.shop` | Bio link, ads landing URL |
+| X (Twitter) | `@asperbeautyshop` | Bio link, pinned post, ads landing URL |
+| YouTube | `@asperbeautyshop` | Description link, end screen, Community posts |
+| LinkedIn | `company/asper-beauty-shop` | About page link |
+| Snapchat | `@asperbeautyshop` | Profile link |
+| Pinterest | `asperbeautyshop` | Profile link, product pins |
+| ManyChat / Meta | — | All flow buttons and quick replies |
+
+- [ ] All social platform links point to production domain
+- [ ] No old/staging URLs on any social platform
+
+### Step 6 — Deploy and Verify
+
+**Deploy from the understand-project repo:**
 
 ```bash
 cd path/to/understand-project
@@ -144,41 +163,20 @@ git commit -m "feat: complete apply_to_main_site checklist"
 git push origin main
 ```
 
-Lovable will build and deploy. Then **verify** (from this VIP folder):
+Lovable will build and deploy. Then **verify:**
 
 ```bash
 npm run health
 ```
 
-Then open https://asperbeautyshop-com.lovable.app/ and https://asperbeautyshop-com.lovable.app/health — expect 200. Optionally run `npm run test:brain` for full Brain/Beauty Assistant check.
+Open https://www.asperbeautyshop.com/ and https://www.asperbeautyshop.com/health — expect 200.
 
-- [ ] Pushed to `main` from understand-project; Lovable deploy successful
+- [ ] Pushed to `main`; Lovable deploy successful
 - [ ] `npm run health` passes; `/health` returns 200; site and Brain connected
 
 ---
 
-## How to get and deploy the latest updates (reference)
-
-| Goal | What to do |
-|------|------------|
-| **Get latest code** | In the **understand-project** folder: run `git pull origin main` (or `git pull`). If you don't have the repo yet: `gh repo clone asperpharma/understand-project` then `cd understand-project` and `git pull`. |
-| **Deploy latest to the live site** | Push to `main`: `git add .` → `git commit -m "Your message"` → `git push origin main`. Lovable will build and deploy to https://asperbeautyshop-com.lovable.app/ in a few minutes. |
-| **Redeploy without code changes** | In <a href="https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6">Lovable → your project → Deployments</a>, trigger a new deploy or "Redeploy" the latest. |
-| **Update this VIP folder (docs/workflows)** | If this folder is a git repo: `git pull`. If it's a copy, re-copy from your source or pull the latest from wherever you keep these files. |
-| **Install/update dependencies** | In **understand-project**: `npm install`. In this VIP folder (scripts): `npm install` if you added or changed scripts. |
-| **Verify the site** | Run `npm run health` in this VIP folder, or open https://asperbeautyshop-com.lovable.app/ and check home, products, cart, and Beauty Assistant. |
-
-**One-liner:** Pull in understand-project → push to `main` → Lovable deploys → `npm run health` and open the site.
-Then open https://asperbeautyshop-com.lovable.app/ and https://asperbeautyshop-com.lovable.app/health — expect 200.
-
-- [ ] Pushed to `main` from understand-project; Lovable deploy successful
-- [ ] `npm run health` passes; `/health` returns 200; site and Brain connected
-
----
-
-## 1. Lovable — Environment variables (Brain + Shopify + URL)
-
-In **Lovable** → your project → **Settings** → **Environment variables**, set (or confirm) these so the built app has the brain and catalog:
+## Post-Deploy Smoke Test
 
 | Variable | Value | Purpose |
 |----------|--------|----------|
@@ -200,13 +198,6 @@ In **Lovable** → your project → **Settings** → **Environment variables**, 
 
 So users can log in on https://asperbeautyshop-com.lovable.app/:
 
-1. Open **Supabase Dashboard** → project **rgehleqcubtmcwyipyvi**  
-2. **Authentication** → **URL Configuration**  
-3. Add to **Redirect URLs**:  
-   - `https://asperbeautyshop-com.lovable.app/**`  
-   - `https://asperbeautyshop-com.lovable.app`  
-4. Set **Site URL** to: `https://asperbeautyshop-com.lovable.app/`  
-5. Save  
 1. Open **Supabase Dashboard** → project **qqceibvalkoytafynwoc**
 2. **Authentication** → **URL Configuration**
 3. Add to **Redirect URLs**:
@@ -278,62 +269,17 @@ After deploy, confirm these pages on **https://asperbeautyshop-com.lovable.app/*
 | **Checkout** | Shopify checkout in main site context |
 | **Account / Login** | Auth redirects back to main site |
 | **Beauty Assistant** | Chat widget loads and responds |
-| **Health** | `/health` returns 200 |
+| **Health** `/health` | Returns 200 JSON |
 
-- [ ] Home, products, product detail, mom-baby load
-- [ ] Cart and checkout work; login redirects to main site
-- [ ] Beauty Assistant works; `/health` returns 200
-
----
-
-## 7. understand-project repo — config and workflows
-
-**A) Local `.env` (for local dev)** — Copy from `env.main-site.example`, fill in real values, keep in `.gitignore`.
-
-**B) Design system** — Copy Tailwind color tokens from **DESIGN_SYSTEM.md** into `tailwind.config.ts`.
-
-**C) GitHub Actions** — Copy workflow files into `.github/workflows/`:
-  - `deploy-health-check.yml`
-  - `sync-file-changes-to-lovable.yml`
-  - `sync-issues-prs-to-lovable.yml`
-
-- [ ] `.env` in understand-project (from example), not committed
-- [ ] Workflows copied; `LOVABLE_WEBHOOK_URL` set if needed
+- [ ] All critical routes load correctly
+- [ ] Cart and checkout work; login redirects to production site
+- [ ] Beauty Assistant responds; `/health` returns 200
 
 ---
 
-## 8. Deploy and verify
+## Optional — Catalog Sync (CSV to Shopify)
 
-1. **Push to `main`** (or trigger deploy in Lovable) so the latest code and env are live.  
-2. **Health check** (from this VIP folder):  
-   ```bash
-   npm run health
-   ```  
-   Confirms: main site, `/health`, Bulk Upload, Beauty Assistant, Shopify.  
-3. **Manual smoke test:**  
-   - Open https://asperbeautyshop-com.lovable.app/  
-   - Open a product page and a collection (e.g. `/products?category=skincare`)  
-   - Open the Beauty Assistant / AI Concierge and send a test message  
-   - If you have login: test sign-in redirect back to the main site  
-
-- [ ] Deploy triggered and successful  
-- [ ] `npm run health` passes (from this VIP folder)  
-- [ ] Homepage, products, and chatbot work on main URL  
-1. **Push to `main`** so the latest code and env are live.
-2. **Health check:** `npm run health`
-3. **Manual smoke test:** Home, products, cart, Beauty Assistant, login redirect.
-
-- [ ] Deploy triggered and successful
-- [ ] Homepage, products, and chatbot work on main URL
-
----
-
-## 9. Optional — Catalog sync (CSV → Shopify)
-
-**Full spec:** See **docs/PLAN_AND_SPEC.md** (architecture, CSV mapping, idempotency, env, frontend verification).
-
-If you have a new or updated CSV catalog to push to the store that feeds the main site:
-See **docs/PLAN_AND_SPEC.md** for full spec.
+If you have a new or updated CSV catalog:
 
 ```bash
 node scripts/sync-shopify-catalog.js --dry-run --limit 5  # dry-run
@@ -344,11 +290,12 @@ node scripts/sync-shopify-catalog.js                       # full sync
 
 ---
 
-## Quick reference
+## Quick Reference
 
 | What | Where |
-|------|--------|
-| Main site | https://asperbeautyshop-com.lovable.app/ |
+|---|---|
+| Production site | https://www.asperbeautyshop.com/ |
+| Staging site | https://asperbeautyshop-com.lovable.app/ |
 | Lovable settings | https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings |
 | GitHub repo | https://github.com/asperpharma/understand-project |
 | Supabase project | rgehleqcubtmcwyipyvi |
@@ -359,8 +306,12 @@ node scripts/sync-shopify-catalog.js                       # full sync
 | Test brain & chatbot | `TEST_BRAIN_AND_CHATBOT.md` — run `npm run test:brain` |
 | Supabase project | qqceibvalkoytafynwoc |
 | Env template | `env.main-site.example` |
+| Design system | `DESIGN_SYSTEM.md` |
+| Single source of truth | `MAIN_PROJECT.md` |
+| Plan + CSV sync spec + Master Breakdown | `docs/PLAN_AND_SPEC.md` |
+| Test brain & chatbot | `TEST_BRAIN_AND_CHATBOT.md` — run `npm run test:brain` |
 | Perfect update (4 steps) | See top of this file |
 
 ---
 
-*Last updated: Feb 2026.*
+*Last updated: March 2026.*

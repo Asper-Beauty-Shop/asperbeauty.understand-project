@@ -20,7 +20,7 @@ The full operational checklist for production deployment is in **`APPLY_TO_MAIN_
 | **4** | **Social** | Verify Instagram bio link, WhatsApp CTA, ManyChat flows, Facebook, X, TikTok, Pinterest, YouTube all point to main site with deep links |
 | **5** | **Google Merchant Center** | Ensure Shopify feed (ID 5717495012) syncs; product links use main domain; Shopping ads land on main site |
 | **6** | **All pages** | Verify `/`, `/products`, `/products/[handle]`, cart, checkout, login redirects, Find My Ritual, Beauty Assistant, `/health` on main site |
-| **7** | **Repo config** | In understand-project: `.env` from template; Tailwind tokens applied; workflows (deploy-health-check, sync-file-changes-to-lovable, sync-issues-prs-to-lovable) in `.github/workflows/`; `LOVABLE_WEBHOOK_URL` secret set |
+| **7** | **Repo config** | In understand-project: `.env` from template; Tailwind tokens applied; workflows (deploy-health-check, sync-file-changes-to-lovable, sync-issues-prs-to-lovable) in `.github/workflows/`; `LOVABLE_WEBHOOK_URL` secret is optional (workflows skip gracefully if not set) |
 | **8** | **Deploy/verify** | Push to main → Lovable deploys; run `curl -s https://asperbeautyshop-com.lovable.app/health` (expect `"status": "ok"`); smoke test homepage, products, chatbot |
 | **9** | **Optional catalog sync** | If needed, run Matrixify or Edge function sync to push CSV catalog updates to Shopify; verify on main site `/products` |
 

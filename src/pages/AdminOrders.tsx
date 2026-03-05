@@ -172,8 +172,8 @@ export default function AdminOrders() {
 
     setIsLoading(true);
     try {
-      const { data, error } = await (supabase as any)
-        .from("cod_orders")
+      const { data, error } = await supabase
+        .from("cod_orders" as never)
         .select("*")
         .order("created_at", { ascending: false });
 
@@ -358,7 +358,7 @@ export default function AdminOrders() {
     try {
       const { error } = await (supabase as any)
         .from("cod_orders")
-        .update({ status: newStatus })
+        .update({ status: newStatus } as never)
         .eq("id", orderId);
 
       if (error) throw error;

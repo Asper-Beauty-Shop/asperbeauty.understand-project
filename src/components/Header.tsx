@@ -21,7 +21,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import type { User as UserType } from "@supabase/supabase-js";
 
-// 3-Click Solution: Hover Brands/Concerns → Select item → Collection page. Mega Menu = "Morning Spa" nav for 5,000 SKUs.
+// 3-Click Solution: Hover Brands/Concerns → Select item → Collection page.
 const megaMenus = {
   brands: [
     { name: "Vichy", href: "/brands/vichy", label: "Dermocosmetic" },
@@ -35,11 +35,7 @@ const megaMenus = {
     { name: "Acne & Blemishes", href: "/concerns/acne", icon: "✨" },
     { name: "Anti-Aging & Wrinkles", href: "/concerns/anti-aging", icon: "⏳" },
     { name: "Dryness & Hydration", href: "/concerns/dryness", icon: "💧" },
-    {
-      name: "Sensitivity & Redness",
-      href: "/concerns/sensitivity",
-      icon: "🛡️",
-    },
+    { name: "Sensitivity & Redness", href: "/concerns/sensitivity", icon: "🛡️" },
     { name: "Pigmentation", href: "/concerns/pigmentation", icon: "☀️" },
     { name: "Hair Loss", href: "/concerns/hair-loss", icon: "💆‍♀️" },
   ],
@@ -81,8 +77,8 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full">
-      {/* 1. TOP ANNOUNCEMENT BAR: "The Promise" */}
-      <div className="bg-maroon text-white text-xs font-body font-medium py-2 text-center tracking-wide">
+      {/* 1. TOP ANNOUNCEMENT BAR */}
+      <div className="bg-burgundy text-polished-white text-xs font-body font-medium py-2 text-center tracking-wide">
         <p>
           {language === "ar"
             ? "توصيل مجاني للطلبات فوق 50 د.أ • أصالة معتمدة من الصيدلي"
@@ -93,10 +89,10 @@ export const Header = () => {
       {/* 2. MAIN NAVIGATION BAR */}
       <div
         className={cn(
-          "w-full transition-all duration-300 border-b border-gray-100",
+          "w-full transition-all duration-300 border-b border-rose-clay-light/30",
           isScrolled
-            ? "bg-white/95 backdrop-blur-md shadow-sm"
-            : "bg-soft-ivory",
+            ? "bg-asper-stone-light/95 backdrop-blur-md shadow-sm"
+            : "bg-asper-stone",
         )}
       >
         <div className="container mx-auto px-4">
@@ -105,25 +101,23 @@ export const Header = () => {
             <div className="flex items-center gap-4">
               <button
                 type="button"
-                className="lg:hidden p-2 text-dark-charcoal hover:text-maroon"
+                className="lg:hidden p-2 text-asper-ink hover:text-burgundy"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               >
-                {isMobileMenuOpen
-                  ? <X className="h-5 w-5" />
-                  : <Menu className="h-5 w-5" />}
+                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
               <Link to="/" className="flex flex-col" dir="ltr">
-                <span className="font-display text-2xl font-bold text-maroon tracking-tight">
+                <span className="font-display text-2xl font-bold text-burgundy tracking-tight">
                   ASPER
                 </span>
-                <span className="text-[10px] font-body tracking-[0.2em] text-dark-charcoal uppercase">
+                <span className="text-[10px] font-body tracking-[0.2em] text-asper-ink uppercase">
                   {language === "ar" ? "متجر الجمال" : "Beauty Shop"}
                 </span>
               </Link>
             </div>
 
-            {/* CENTER: Desktop Navigation (3-Click Solution) */}
+            {/* CENTER: Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-8 h-full">
               {/* Brands Mega Menu */}
               <div
@@ -133,35 +127,33 @@ export const Header = () => {
               >
                 <Link
                   to="/brands"
-                  className="flex items-center gap-1 font-body text-sm font-medium text-dark-charcoal hover:text-maroon transition-colors py-8"
+                  className="flex items-center gap-1 font-body text-sm font-medium text-asper-ink hover:text-burgundy transition-colors py-8"
                 >
                   {language === "ar" ? "العلامات" : "Brands"}{" "}
                   <ChevronDown className="h-3 w-3" />
                 </Link>
                 {activeMegaMenu === "brands" && (
-                  <div className="absolute top-full left-0 w-[600px] bg-white shadow-xl border-t-2 border-shiny-gold p-6 grid grid-cols-2 gap-4 animate-fade-in rounded-b-sm z-50">
+                  <div className="absolute top-full left-0 w-[600px] bg-polished-white shadow-xl border-t-2 border-polished-gold p-6 grid grid-cols-2 gap-4 animate-fade-in rounded-b-sm z-50">
                     {megaMenus.brands.map((brand) => (
                       <Link
                         key={brand.name}
                         to={brand.href}
-                        className="flex items-center justify-between p-3 rounded-md hover:bg-soft-ivory group/item transition-colors"
+                        className="flex items-center justify-between p-3 rounded-md hover:bg-asper-stone group/item transition-colors"
                       >
-                        <span className="font-display font-medium text-dark-charcoal group-hover/item:text-maroon">
+                        <span className="font-display font-medium text-asper-ink group-hover/item:text-burgundy">
                           {brand.name}
                         </span>
-                        <span className="text-xs text-gray-400 uppercase tracking-wider">
+                        <span className="text-xs text-asper-ink-muted uppercase tracking-wider">
                           {brand.label}
                         </span>
                       </Link>
                     ))}
-                    <div className="col-span-2 mt-2 pt-4 border-t border-gray-100 text-center">
+                    <div className="col-span-2 mt-2 pt-4 border-t border-rose-clay-light/30 text-center">
                       <Link
                         to="/brands"
-                        className="text-xs font-bold text-maroon hover:underline uppercase tracking-widest"
+                        className="text-xs font-bold text-burgundy hover:underline uppercase tracking-widest"
                       >
-                        {language === "ar"
-                          ? "عرض كل العلامات 50+"
-                          : "View All 50+ Brands"}
+                        {language === "ar" ? "عرض كل العلامات 50+" : "View All 50+ Brands"}
                       </Link>
                     </div>
                   </div>
@@ -176,28 +168,26 @@ export const Header = () => {
               >
                 <Link
                   to="/skin-concerns"
-                  className="flex items-center gap-1 font-body text-sm font-medium text-dark-charcoal hover:text-maroon transition-colors py-8"
+                  className="flex items-center gap-1 font-body text-sm font-medium text-asper-ink hover:text-burgundy transition-colors py-8"
                 >
                   {language === "ar" ? "مشاكل البشرة" : "Skin Concerns"}{" "}
                   <ChevronDown className="h-3 w-3" />
                 </Link>
                 {activeMegaMenu === "concerns" && (
-                  <div className="absolute top-full left-0 min-w-[320px] w-[500px] bg-white shadow-xl border-t-2 border-shiny-gold p-6 grid grid-cols-1 gap-2 animate-fade-in rounded-b-sm z-50">
-                    <div className="mb-2 pb-2 border-b border-gray-100">
-                      <span className="text-xs font-bold text-maroon uppercase tracking-widest">
-                        {language === "ar"
-                          ? "وضع الاستشارة"
-                          : "Consultation Mode"}
+                  <div className="absolute top-full left-0 min-w-[320px] w-[500px] bg-polished-white shadow-xl border-t-2 border-polished-gold p-6 grid grid-cols-1 gap-2 animate-fade-in rounded-b-sm z-50">
+                    <div className="mb-2 pb-2 border-b border-rose-clay-light/30">
+                      <span className="text-xs font-bold text-burgundy uppercase tracking-widest">
+                        {language === "ar" ? "وضع الاستشارة" : "Consultation Mode"}
                       </span>
                     </div>
                     {megaMenus.concerns.map((concern) => (
                       <Link
                         key={concern.name}
                         to={concern.href}
-                        className="flex items-center gap-3 p-2 rounded-md hover:bg-soft-ivory group/item transition-colors"
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-asper-stone group/item transition-colors"
                       >
                         <span className="text-lg">{concern.icon}</span>
-                        <span className="font-display font-medium text-dark-charcoal group-hover/item:text-maroon">
+                        <span className="font-display font-medium text-asper-ink group-hover/item:text-burgundy">
                           {concern.name}
                         </span>
                       </Link>
@@ -205,11 +195,9 @@ export const Header = () => {
                     <div className="mt-2 pt-2 text-center">
                       <Link
                         to="/skin-concerns"
-                        className="text-xs font-bold text-shiny-gold hover:text-maroon transition-colors"
+                        className="text-xs font-bold text-polished-gold hover:text-burgundy transition-colors"
                       >
-                        {language === "ar"
-                          ? "ابدأ تحليل البشرة ←"
-                          : "Start AI Skin Analysis →"}
+                        {language === "ar" ? "ابدأ تحليل البشرة ←" : "Start AI Skin Analysis →"}
                       </Link>
                     </div>
                   </div>
@@ -218,13 +206,13 @@ export const Header = () => {
 
               <Link
                 to="/best-sellers"
-                className="font-body text-sm font-medium text-dark-charcoal hover:text-maroon transition-colors"
+                className="font-body text-sm font-medium text-asper-ink hover:text-burgundy transition-colors"
               >
                 {language === "ar" ? "الأكثر مبيعاً" : "Best Sellers"}
               </Link>
               <Link
                 to="/offers"
-                className="font-body text-sm font-medium text-maroon hover:text-shiny-gold transition-colors"
+                className="font-body text-sm font-medium text-burgundy hover:text-polished-gold transition-colors"
               >
                 {language === "ar" ? "العروض" : "Offers"}
               </Link>
@@ -232,19 +220,17 @@ export const Header = () => {
 
             {/* RIGHT: Search, Account, Wishlist, Cart, Language */}
             <div className="flex items-center gap-2 md:gap-4">
-              {/* Desktop Search (expandable, wired to SearchDropdown) */}
-              <div className="hidden md:flex items-center bg-white/50 border border-gray-200 rounded-full px-3 py-1.5 focus-within:border-shiny-gold focus-within:ring-1 focus-within:ring-shiny-gold transition-all w-48 focus-within:w-64">
-                <Search className="h-4 w-4 text-gray-400 flex-shrink-0" />
+              {/* Desktop Search */}
+              <div className="hidden md:flex items-center bg-polished-white/50 border border-rose-clay-light/40 rounded-full px-3 py-1.5 focus-within:border-polished-gold focus-within:ring-1 focus-within:ring-polished-gold transition-all w-48 focus-within:w-64">
+                <Search className="h-4 w-4 text-asper-ink-muted flex-shrink-0" />
                 <input
                   ref={searchInputRef}
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setSearchFocused(true)}
-                  placeholder={language === "ar"
-                    ? "ابحث في آلاف المنتجات..."
-                    : "Search 5,000+ items..."}
-                  className="bg-transparent border-none outline-none text-xs ml-2 w-full placeholder:text-gray-400 text-dark-charcoal font-body"
+                  placeholder={language === "ar" ? "ابحث في آلاف المنتجات..." : "Search 5,000+ items..."}
+                  className="bg-transparent border-none outline-none text-xs ml-2 w-full placeholder:text-asper-ink-muted text-asper-ink font-body"
                   dir={isRTL ? "rtl" : "ltr"}
                 />
               </div>
@@ -256,7 +242,7 @@ export const Header = () => {
               />
               <button
                 type="button"
-                className="md:hidden p-2 text-dark-charcoal hover:text-maroon"
+                className="md:hidden p-2 text-asper-ink hover:text-burgundy"
                 onClick={() => setMobileSearchFocused(true)}
                 aria-label="Search"
               >
@@ -266,14 +252,14 @@ export const Header = () => {
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant"))}
-                className="hidden md:block p-2 text-dark-charcoal hover:text-maroon transition-colors"
+                className="hidden md:block p-2 text-asper-ink hover:text-burgundy transition-colors"
                 aria-label={language === "ar" ? "استشارة الصيدلي" : "Ask the Pharmacist"}
               >
                 <MessageCircle className="h-5 w-5" />
               </button>
               <Link
                 to={user ? "/account" : "/auth"}
-                className="hidden md:block p-2 text-dark-charcoal hover:text-maroon transition-colors"
+                className="hidden md:block p-2 text-asper-ink hover:text-burgundy transition-colors"
                 aria-label={user ? "Account" : "Sign in"}
               >
                 <User className="h-5 w-5" />
@@ -281,12 +267,12 @@ export const Header = () => {
               <button
                 type="button"
                 onClick={() => setWishlistOpen(true)}
-                className="hidden md:block relative p-2 text-dark-charcoal hover:text-maroon transition-colors"
+                className="hidden md:block relative p-2 text-asper-ink hover:text-burgundy transition-colors"
                 aria-label="Wishlist"
               >
                 <Heart className="h-5 w-5" />
                 {wishlistItems.length > 0 && (
-                  <span className="absolute top-1 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-maroon text-[10px] font-bold text-white ring-2 ring-white">
+                  <span className="absolute top-1 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-burgundy text-[10px] font-bold text-polished-white ring-2 ring-polished-white">
                     {wishlistItems.length}
                   </span>
                 )}
@@ -294,11 +280,11 @@ export const Header = () => {
               <button
                 type="button"
                 onClick={() => setCartOpen(true)}
-                className="relative p-2 text-dark-charcoal hover:text-maroon transition-colors group"
+                className="relative p-2 text-asper-ink hover:text-burgundy transition-colors group"
                 aria-label="Cart"
               >
                 <ShoppingBag className="h-5 w-5" />
-                <span className="absolute top-1 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-maroon text-[10px] font-bold text-white ring-2 ring-white group-hover:bg-shiny-gold transition-colors">
+                <span className="absolute top-1 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-burgundy text-[10px] font-bold text-polished-white ring-2 ring-polished-white group-hover:bg-polished-gold transition-colors">
                   {totalItems}
                 </span>
               </button>
@@ -308,9 +294,9 @@ export const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Search (full width, when opened via SearchDropdown) */}
+      {/* Mobile Search */}
       {mobileSearchFocused && (
-        <div className="md:hidden border-t border-gray-100 bg-white p-3">
+        <div className="md:hidden border-t border-rose-clay-light/30 bg-polished-white p-3">
           <div className="relative">
             <input
               ref={mobileSearchInputRef}
@@ -318,14 +304,12 @@ export const Header = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onBlur={() => {}}
-              placeholder={language === "ar"
-                ? "ابحث في المنتجات..."
-                : "Search 5,000+ items..."}
-              className="w-full px-4 py-2 pl-10 rounded-full border border-gray-200 text-dark-charcoal font-body text-sm"
+              placeholder={language === "ar" ? "ابحث في المنتجات..." : "Search 5,000+ items..."}
+              className="w-full px-4 py-2 pl-10 rounded-full border border-rose-clay-light/40 text-asper-ink font-body text-sm"
               dir={isRTL ? "rtl" : "ltr"}
               autoFocus
             />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-asper-ink-muted" />
           </div>
           <SearchDropdown
             isOpen={mobileSearchFocused}
@@ -339,23 +323,20 @@ export const Header = () => {
 
       {/* MOBILE MENU OVERLAY */}
       {isMobileMenuOpen && (
-        <div
-          className="lg:hidden fixed inset-0 z-40"
-          aria-hidden
-        >
+        <div className="lg:hidden fixed inset-0 z-40" aria-hidden>
           <div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-asper-ink/50"
             onClick={() => setIsMobileMenuOpen(false)}
           />
           <div
             className={cn(
-              "absolute top-0 h-[calc(100vh-80px)] w-full max-w-sm bg-white border-t border-gray-100 shadow-xl overflow-y-auto p-4 animate-fade-in",
+              "absolute top-0 h-[calc(100vh-80px)] w-full max-w-sm bg-polished-white border-t border-rose-clay-light/30 shadow-xl overflow-y-auto p-4 animate-fade-in",
               isRTL ? "right-0" : "left-0",
             )}
           >
             <div className="space-y-6">
               <div className="space-y-3">
-                <h3 className="font-display text-lg font-bold text-maroon">
+                <h3 className="font-display text-lg font-bold text-burgundy">
                   {language === "ar" ? "تسوق حسب العلامة" : "Shop by Brand"}
                 </h3>
                 {megaMenus.brands.slice(0, 4).map((b) => (
@@ -363,7 +344,7 @@ export const Header = () => {
                     key={b.name}
                     to={b.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 text-dark-charcoal border-b border-gray-50 font-body"
+                    className="block py-2 text-asper-ink border-b border-rose-clay-light/20 font-body"
                   >
                     {b.name}
                   </Link>
@@ -371,13 +352,13 @@ export const Header = () => {
                 <Link
                   to="/brands"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2 text-maroon font-bold text-sm"
+                  className="block py-2 text-burgundy font-bold text-sm"
                 >
                   {language === "ar" ? "عرض كل العلامات" : "View All Brands"}
                 </Link>
               </div>
               <div className="space-y-3">
-                <h3 className="font-display text-lg font-bold text-maroon">
+                <h3 className="font-display text-lg font-bold text-burgundy">
                   {language === "ar" ? "مشاكل البشرة" : "Skin Concerns"}
                 </h3>
                 {megaMenus.concerns.map((c) => (
@@ -385,7 +366,7 @@ export const Header = () => {
                     key={c.name}
                     to={c.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 text-dark-charcoal border-b border-gray-50 font-body"
+                    className="block py-2 text-asper-ink border-b border-rose-clay-light/20 font-body"
                   >
                     {c.name}
                   </Link>
@@ -397,30 +378,30 @@ export const Header = () => {
                   window.dispatchEvent(new CustomEvent("open-beauty-assistant"));
                   setIsMobileMenuOpen(false);
                 }}
-                className="flex items-center gap-2 w-full py-2 text-dark-charcoal font-body border-b border-gray-50 text-left"
+                className="flex items-center gap-2 w-full py-2 text-asper-ink font-body border-b border-rose-clay-light/20 text-left"
               >
-                <MessageCircle className="h-4 w-4 text-maroon" />
+                <MessageCircle className="h-4 w-4 text-burgundy" />
                 {language === "ar" ? "اسأل الصيدلي" : "Ask the Pharmacist"}
               </button>
-              <div className="pt-4 border-t border-gray-100 flex flex-wrap gap-4">
+              <div className="pt-4 border-t border-rose-clay-light/30 flex flex-wrap gap-4">
                 <Link
                   to="/best-sellers"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-body text-maroon font-medium"
+                  className="font-body text-burgundy font-medium"
                 >
                   {language === "ar" ? "الأكثر مبيعاً" : "Best Sellers"}
                 </Link>
                 <Link
                   to="/offers"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-body text-maroon font-medium"
+                  className="font-body text-burgundy font-medium"
                 >
                   {language === "ar" ? "العروض" : "Offers"}
                 </Link>
                 <Link
                   to={user ? "/account" : "/auth"}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-body text-dark-charcoal"
+                  className="font-body text-asper-ink"
                 >
                   {user
                     ? (language === "ar" ? "حسابي" : "My Account")

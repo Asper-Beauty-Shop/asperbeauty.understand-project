@@ -1,58 +1,30 @@
 
 
-## Analysis
+## Diagnosis: Blank Screen Root Cause
 
-After thorough review, the four named components (**BestSellersSection**, **DealOfTheDay**, **DriverAssignment**, **FeaturedCollection**) do not have TypeScript compilation errors. They correctly map Supabase `products` Row fields to their local interfaces. However, there are two real issues:
-
-### Issue 1: `is_bestseller` column missing from `products` table
-
-The `build_digital_tray` DB function (used by the AI Concierge regimen builder) references `is_bestseller` on the `products` table:
-
-```sql
-order by is_bestseller desc nulls last, is_hero desc nulls last ...
+The console error is definitive:
+```
+Error: VITE_SUPABASE_PUBLISHABLE_KEY environment variable is required
 ```
 
-But the `products` table does NOT have an `is_bestseller` column (only `digital_tray_products` does). This causes a **runtime SQL error** whenever the concierge tries to build a 3-step regimen.
+In `src/integrations/supabase/client.ts` (line 8-10), there's a hard `throw` that kills React before it can mount. The `ErrorBoundary` wraps `<App />` but can't catch errors thrown during **module evaluation** — the `supabase/client.ts` module is imported eagerly by multiple components, so the throw happens before React's render cycle begins.
 
-### Issue 2: `cod_orders` table not in generated types
+The `.env` file shown earlier was created during a previous AI edit session but no longer exists on disk. The Lovable secrets store has no `VITE_SUPABASE_PUBLISHABLE_KEY` entry either.
 
-`AdminOrders.tsx` and `DriverDashboard.tsx` use `(supabase as any).from("cod_orders")` to bypass TypeScript because the table isn't in the generated types. This is a type-safety gap, not a compilation error.
+## Fix Plan
 
----
+**1. Make the Supabase client resilient to missing env vars**
+- In `src/integrations/supabase/client.ts`, replace the hard `throw` with a fallback to the hardcoded anon key (which is already present as a fallback for `SUPABASE_URL`)
+- The anon key `eyJhbG...` from the original `.env` is a **publishable** key (safe to embed in client code), so hardcoding it as a fallback is the correct pattern — same as `SUPABASE_URL` already does on line 5
 
-## Plan
+Concrete change:
+```typescript
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://qqceibvalkoytafynwoc.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxY2VpYnZhbGtveXRhZnlud29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMzc1OTUsImV4cCI6MjA4NTkxMzU5NX0.cnstN7JUhkt-hevIWhaeYRu1Y51tPSTi7eOBM6RLz4Y";
 
-### A. Add `is_bestseller` column to `products` table
-
-Apply migration:
-
-```sql
-ALTER TABLE public.products
-  ADD COLUMN IF NOT EXISTS is_bestseller boolean NOT NULL DEFAULT false;
+// Remove the if/throw block entirely
 ```
 
-### B. Regenerate TypeScript types
-
-After the migration, regenerate `src/integrations/supabase/types.ts` so the new column is available to TypeScript.
-
-### C. Refresh PostgREST schema cache
-
-```sql
-NOTIFY pgrst, 'reload schema';
-```
-
-This fixes the `build_digital_tray` runtime failure and makes the `is_bestseller` field available in TypeScript for any future component use.
-
----
-
-### Technical Detail
-
-| Component | Status | Notes |
-|-----------|--------|-------|
-| BestSellersSection | No TS errors | Maps `pharmacist_note` to `description` correctly |
-| FeaturedCollection | No TS errors | Same mapping pattern |
-| DealOfTheDay | No TS errors | Accesses only existing columns |
-| DriverAssignment | No TS errors | Uses `user_roles` + `profiles` tables correctly |
-| `build_digital_tray` | **Runtime SQL error** | References missing `is_bestseller` on `products` |
-| AdminOrders / DriverDashboard | Type-safety gap | Uses `as any` cast for `cod_orders` |
+**2. Add `resolve.dedupe` to Vite config**
+- Add `dedupe: ["react", "react-dom"]` to `vite.config.ts` to prevent duplicate React instances after the force push (defensive measure per the stack overflow pattern)
 

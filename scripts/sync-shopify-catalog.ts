@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Asper Beauty Shop — CSV → Shopify Admin API Catalog Sync
  *
@@ -77,32 +78,15 @@ const THROTTLE_MS = 500;
 // Helpers
 // ---------------------------------------------------------------------------
 
-const MAX_RETRIES = 3;
-
-async function adminGraphQL(
-  query: string,
-  variables: Record<string, any> = {},
-  attempt = 1
-): Promise<any> {
-  let res: Response;
-  try {
-    res = await fetch(ADMIN_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Shopify-Access-Token": SHOPIFY_ADMIN_ACCESS_TOKEN,
-      },
-      body: JSON.stringify({ query, variables }),
-    });
-  } catch (err: any) {
-    if (attempt < MAX_RETRIES) {
-      const wait = Math.pow(2, attempt) * 1000;
-      console.warn(`  ⏳ Network error, retrying in ${wait / 1000}s (attempt ${attempt}/${MAX_RETRIES})...`);
-      await sleep(wait);
-      return adminGraphQL(query, variables, attempt + 1);
-    }
-    throw err;
-  }
+async function adminGraphQL(query: string, variables: Record<string, unknown> = {}) {
+  const res = await fetch(ADMIN_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shopify-Access-Token": SHOPIFY_ADMIN_ACCESS_TOKEN,
+    },
+    body: JSON.stringify({ query, variables }),
+  });
 
   // Rate limit handling
   if (res.status === 429) {
@@ -125,7 +109,7 @@ async function adminGraphQL(
 
   const json = await res.json();
   if (json.errors) {
-    throw new Error(json.errors.map((e: any) => e.message).join("; "));
+    throw new Error(json.errors.map((e: { message?: string }) => e.message ?? "").join("; "));
   }
   return json.data;
 }
@@ -566,7 +550,7 @@ async function syncProduct(product: ProductGroup, index: number, total: number) 
     existing = skuLookup?.products?.edges?.[0]?.node;
   }
 
-  const input: Record<string, any> = {
+  const input: Record<string, unknown> = {
     title: product.title,
     handle: product.handle,
     descriptionHtml: product.bodyHtml,
@@ -606,7 +590,7 @@ async function syncProduct(product: ProductGroup, index: number, total: number) 
     }));
 
   let productId: string;
-  let variantEdges: any[];
+  let variantEdges: { node: { id: string } }[];
 
   if (existing) {
     // ---- UPDATE ----
@@ -658,7 +642,7 @@ async function syncProduct(product: ProductGroup, index: number, total: number) 
   // 2. Update variant prices/SKUs
   if (product.variants.length > 0 && variantEdges?.length > 0) {
     const variantUpdates = variantEdges
-      .map((edge: any, i: number) => {
+      .map((edge: { node: { id: string } }, i: number) => {
         const csvVariant = product.variants[i];
         if (!csvVariant) return null;
         return {
@@ -754,7 +738,7 @@ async function main() {
   );
 
   const results = { created: 0, updated: 0, skipped: 0, errors: 0, dryRun: 0 };
-  const errorLog: any[] = [];
+  const errorLog: { handle: string; error: string }[] = [];
 
   for (let i = 0; i < toSync.length; i++) {
     try {
@@ -766,14 +750,11 @@ async function main() {
         results.errors++;
         errorLog.push(result);
       } else if (result.status === "dry-run") results.dryRun++;
-    } catch (err: any) {
+    } catch (err: unknown) {
       results.errors++;
-      errorLog.push({
-        handle: toSync[i].handle,
-        error: err.message,
-        timestamp: new Date().toISOString(),
-      });
-      console.error(`  ❌ [${i + 1}/${toSync.length}] ${toSync[i].handle}: ${err.message}`);
+      const msg = err instanceof Error ? err.message : String(err);
+      errorLog.push({ handle: toSync[i].handle, error: msg });
+      console.error(`  ❌ [${i + 1}] ${toSync[i].handle}: ${msg}`);
     }
 
     // Throttle between products to avoid rate limits

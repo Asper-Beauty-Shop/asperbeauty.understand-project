@@ -49,7 +49,7 @@ export const Newsletter = () => {
           </div>
 
           <p className="font-script text-xl lg:text-2xl text-gold mb-4">
-            {isArabic ? "ابقي على تواصل" : "Stay Connected"}
+            {isArabic ? "عرض خاص" : "Exclusive Offer"}
           </p>
           <h2
             style={{
@@ -61,7 +61,9 @@ export const Newsletter = () => {
             }}
             className="font-display text-4xl md:text-5xl mb-6 drop-shadow-[0_2px_10px_rgba(212,175,55,0.2)]"
           >
-            {isArabic ? "انضمي إلى عالمنا" : "Join Our World"}
+            {isArabic
+              ? "خصم 15% لعشّاق الجمال"
+              : "15% Off for Beauty Insiders"}
           </h2>
 
           {/* Luxury Divider */}
@@ -73,8 +75,8 @@ export const Newsletter = () => {
 
           <p className="font-body text-charcoal/70 mb-10 leading-relaxed text-lg">
             {isArabic
-              ? "اشتركي لتحصلي على عروض حصرية، وصول مبكر للمنتجات الجديدة، ونصائح خبراء الجمال مباشرة إلى بريدك."
-              : "Subscribe to receive exclusive offers, early access to new arrivals, and expert beauty insights delivered to your inbox."}
+              ? "اشتركي واحصلي على خصم 15% على طلبك الأول، بالإضافة إلى عروض حصرية ونصائح خبراء الجمال."
+              : "Sign up and get 15% off your first order, plus exclusive offers, early access to new arrivals, and expert beauty insights."}
           </p>
 
           <AnimatedSection animation="fade-up" delay={200}>

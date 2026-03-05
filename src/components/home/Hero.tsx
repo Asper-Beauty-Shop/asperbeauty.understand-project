@@ -1,118 +1,107 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Leaf, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import heroVideo from "@/assets/hero-sanctuary-video.mp4";
+import { AnimatedSection } from "@/components/AnimatedSection";
 
 export default function Hero() {
   const { dir, locale } = useLanguage();
   const isAr = locale === "ar";
 
   return (
-    <section className="relative min-h-[90vh] lg:min-h-screen overflow-hidden flex items-center justify-center">
-      {/* Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        aria-hidden="true"
-      >
-        <source src={heroVideo} type="video/mp4" />
-      </video>
+    <section className="relative overflow-hidden bg-asper-stone">
+      {/* Full-width editorial banner */}
+      <div className="relative w-full">
+        {/* Banner image — editorial style */}
+        <div className="relative w-full aspect-[16/7] md:aspect-[16/6] lg:aspect-[16/5]">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage:
+                "url('https://images.unsplash.com/photo-1556745753-b2904692b3cd?w=1920&q=80&auto=format&fit=crop')",
+            }}
+          />
+          {/* Gradient overlay for text contrast */}
+          <div className="absolute inset-0 bg-gradient-to-r from-asper-ink/70 via-asper-ink/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-asper-ink/50 via-transparent to-asper-ink/20" />
 
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-foreground/40 via-foreground/30 to-foreground/60" />
-
-      {/* Content */}
-      <div className="relative z-10 mx-auto max-w-4xl px-6 sm:px-10 lg:px-16 text-center">
-        <motion.div
-          className="space-y-8"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
-        >
-          {/* Glassmorphism Card */}
-          <div className="bg-background/80 backdrop-blur-xl border border-accent/40 rounded-2xl p-8 sm:p-12 lg:p-16 shadow-2xl">
-            {/* Gold decorative line */}
-            <div className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-accent to-transparent mb-8" />
-
-            <h1
-              className={cn(
-                "font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary leading-[1.05] tracking-tight",
-                isAr && "font-arabic"
-              )}
-            >
-              {isAr ? (
-                <>
-                  بإشراف <span className="text-accent">صيدلاني</span>.
-                  <br />
-                  مدعوم بالذكاء.
-                </>
-              ) : (
-                <>
-                  Curated by <span className="text-accent">Pharmacists</span>.
-                  <br />
-                  Powered by Intelligence.
-                </>
-              )}
-            </h1>
-
-            <p
-              className={cn(
-                "mt-6 text-base sm:text-lg text-foreground/80 max-w-2xl mx-auto leading-relaxed",
-                isAr ? "font-arabic" : "font-body"
-              )}
-            >
-              {isAr
-                ? "أصالة مضمونة 100% عبر أكثر من 5,000 منتج — من Vichy إلى Maybelline. روتينك المثالي يبدأ هنا."
-                : "Guaranteeing 100% authenticity across 5,000+ SKUs — from Vichy to Maybelline. Your perfect regimen starts here."}
-            </p>
-
-            {/* Trust micro-badges */}
-            <div className={cn("flex flex-wrap justify-center gap-3 mt-6")}>
-              {[
-                { icon: Shield, label: isAr ? "أصالة مضمونة" : "100% Authentic" },
-                { icon: Leaf, label: isAr ? "خالٍ من القسوة" : "Cruelty-Free" },
-                { icon: Sparkles, label: isAr ? "بإشراف صيدلاني" : "Pharmacist-Led" },
-              ].map((item) => (
-                <span
-                  key={item.label}
-                  className="inline-flex items-center gap-1.5 text-xs font-body text-muted-foreground border border-border rounded-full px-3 py-1 bg-card/60"
-                >
-                  <item.icon className="h-3 w-3 text-accent" />
-                  {item.label}
-                </span>
-              ))}
-            </div>
-
-            {/* Gold decorative line */}
-            <div className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-accent to-transparent my-8" />
-
-            {/* CTA */}
-            <Link to="/intelligence">
-              <Button
-                size="lg"
-                className="group bg-primary text-primary-foreground hover:bg-primary/90 border border-transparent hover:border-accent hover:shadow-lg hover:shadow-accent/20 text-sm uppercase tracking-widest px-10 h-14 font-semibold transition-all duration-400"
+          {/* Content overlay */}
+          <div className="absolute inset-0 flex items-center">
+            <div className="luxury-container w-full">
+              <motion.div
+                className={cn("max-w-xl", isAr && "ml-auto text-right")}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
               >
-                {isAr ? "ابدئي تحليل بشرتك المجاني" : "Start Free AI Skin Analysis"}
-                <ArrowRight
+                {/* Campaign tag */}
+                <span className="inline-block font-body text-xs uppercase tracking-[0.3em] text-polished-gold mb-4 border border-polished-gold/40 px-4 py-1.5 rounded-full bg-asper-ink/30 backdrop-blur-sm">
+                  {isAr ? "حصري" : "Exclusive Edit"}
+                </span>
+
+                <h1
                   className={cn(
-                    "h-4 w-4 transition-transform duration-300 group-hover:translate-x-1",
-                    dir === "rtl" ? "mr-2 rotate-180 group-hover:-translate-x-1" : "ml-2"
+                    "font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-polished-white leading-[1.05] tracking-tight",
+                    isAr && "font-arabic"
                   )}
-                />
-              </Button>
-            </Link>
+                >
+                  {isAr ? (
+                    <>
+                      رائدات <span className="text-polished-gold">الجمال</span>
+                    </>
+                  ) : (
+                    <>
+                      Wonder Women{" "}
+                      <span className="text-polished-gold">Edit</span>
+                    </>
+                  )}
+                </h1>
+
+                <p
+                  className={cn(
+                    "mt-4 text-base sm:text-lg text-polished-white/80 max-w-md leading-relaxed",
+                    isAr ? "font-arabic" : "font-body"
+                  )}
+                >
+                  {isAr
+                    ? "اكتشفي العلامات التجارية التي أسستها نساء ملهمات — من العطور الراقية إلى العناية بالبشرة."
+                    : "Discover the brands built by visionary female founders — from niche fragrance houses to clean skincare pioneers."}
+                </p>
+
+                {/* CTA */}
+                <div className="mt-8">
+                  <Link to="/shop">
+                    <Button
+                      size="lg"
+                      className={cn(
+                        "group bg-polished-gold text-asper-ink hover:bg-polished-gold/90",
+                        "border border-transparent hover:border-polished-gold",
+                        "text-sm uppercase tracking-widest px-10 h-14 font-semibold",
+                        "transition-all duration-400 shadow-lg hover:shadow-xl"
+                      )}
+                    >
+                      {isAr ? "تسوقي الآن" : "Shop Now"}
+                      <ArrowRight
+                        className={cn(
+                          "h-4 w-4 transition-transform duration-300 group-hover:translate-x-1",
+                          dir === "rtl"
+                            ? "mr-2 rotate-180 group-hover:-translate-x-1"
+                            : "ml-2"
+                        )}
+                      />
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Bottom gradient fade into page */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
+      {/* Bottom accent */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/50 to-transparent" />
     </section>
   );
 }

@@ -58,7 +58,7 @@ export function useDriverAuditLog() {
       // Use rpc or raw insert - the table may not be in types yet
       const { error } = await supabase
         .from("telemetry_events")
-        .insert([{ event: "driver_access", source: "driver_audit", payload: logEntry as any, user_id: user?.id || null }]);
+        .insert([{ event: "driver_access", source: "driver_audit", payload: JSON.parse(JSON.stringify(logEntry)), user_id: user?.id || null }]);
 
       if (error) {
         // Silent fail - don't interrupt user flow for audit logging

@@ -64,7 +64,7 @@ const socialLinks = [
   {
     name: "Facebook",
     icon: FacebookIcon,
-    url: "https://www.facebook.com/asper.beauty.shop",
+    url: "https://www.facebook.com/AsperBeautyShop",
     color: "hover:bg-[#1877F2]",
   },
   {

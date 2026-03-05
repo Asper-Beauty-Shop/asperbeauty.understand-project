@@ -102,7 +102,7 @@ const XIcon = () => (
 export const socialLinks = [
   { key: "whatsapp", href: "https://wa.me/962790656666", label: "WhatsApp", Icon: WhatsAppIcon },
   { key: "instagram", href: "https://www.instagram.com/asper.beauty.shop/", label: "Instagram", Icon: InstagramIcon },
-  { key: "facebook", href: "https://www.facebook.com/robu.sweileh", label: "Facebook", Icon: FacebookIcon },
+  { key: "facebook", href: "https://www.facebook.com/AsperBeautyShop", label: "Facebook", Icon: FacebookIcon },
   { key: "tiktok", href: "https://tiktok.com/@asper.beauty.shop", label: "TikTok", Icon: TikTokIcon },
   { key: "youtube", href: "https://youtube.com/@asperbeautyshop", label: "YouTube", Icon: YouTubeIcon },
   { key: "snapchat", href: "https://snapchat.com/add/asperbeautyshop", label: "Snapchat", Icon: SnapchatIcon },

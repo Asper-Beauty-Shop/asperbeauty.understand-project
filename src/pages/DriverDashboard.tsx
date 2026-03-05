@@ -151,8 +151,8 @@ export default function DriverDashboard() {
     if (!user) return;
 
     try {
-      const { data, error } = await (supabase as any)
-        .from("cod_orders")
+      const { data, error } = await supabase
+        .from("cod_orders" as never)
         .select("*")
         .eq("driver_id", user.id)
         .order("assigned_at", { ascending: false });
@@ -198,7 +198,7 @@ export default function DriverDashboard() {
 
       const { error } = await (supabase as any)
         .from("cod_orders")
-        .update(updateData)
+        .update(updateData as never)
         .eq("id", orderId);
 
       if (error) throw error;

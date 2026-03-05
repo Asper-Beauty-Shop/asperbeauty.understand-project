@@ -1,0 +1,40 @@
+# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
+# Ignore environment files and sensitive configs
+.env*
+env.*.local
+*.local
+
+# Ignore build outputs and dependencies
+dist/
+build/
+node_modules/
+.vercel/
+.next/
+out/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore OS and editor files
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+.cursor/
+# Re-include rules so Cursor can index and apply them
+!.cursor/rules/
+
+# Ignore test snapshots and coverage
+coverage/
+*.snap
+
+# Ignore VIP/private folders (Asper Beauty Shop specific)
+VIP/
+private/
+designer_tokens/
+looker_exports/
