@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**URL**: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
 
 ## How can I edit this code?
 
@@ -10,7 +10,7 @@ There are several ways of editing your application.
 
 **Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Simply visit the [Lovable Project](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
@@ -24,10 +24,10 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/asperpharma/understand-project.git
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd understand-project
 
 # Step 3: Install the necessary dependencies.
 npm i
@@ -63,7 +63,7 @@ npm install -g @anthropic-ai/claude-code
 Then start a session in your project directory:
 
 ```sh
-cd <YOUR_PROJECT_NAME>
+cd understand-project
 claude
 ```
 
@@ -83,7 +83,7 @@ This project is built with:
 
 ### Quick Deploy
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Simply open [Lovable](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6) and click on Share -> Publish.
 
 ### Required Setup
 
@@ -150,7 +150,7 @@ After deployment, monitor:
 
 ### Quick Deployment via Lovable
 
-For simple deployments, open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click Share → Publish.
+For simple deployments, open [Lovable](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6) and click Share → Publish.
 
 ### Production Deployment Workflow
 
@@ -222,7 +222,7 @@ The GitHub Actions workflow (`.github/workflows/deploy-health-check.yml`) will a
 
 After merging to main:
 
-1. Open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID)
+1. Open [Lovable](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6)
 2. Click **Share** → **Publish**
 3. Wait for deployment to complete (~2-3 minutes)
 4. Verify deployment at https://asperbeautyshop-com.lovable.app
