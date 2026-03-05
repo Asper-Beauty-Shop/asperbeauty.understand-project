@@ -127,7 +127,7 @@ export const Footer = () => {
                 <InstagramIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://www.facebook.com/AsperBeautyShop"
+                href="https://www.facebook.com/robu.sweileh"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full border border-gold flex items-center justify-center text-gold hover:bg-[#C5A028] hover:border-[#C5A028] hover:text-[#800020] transition-all duration-400"

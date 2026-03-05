@@ -1,0 +1,22 @@
+BRAND_NAME,BRAND_POSITIONING,DESIGN_SYSTEM,REPOSITORY_NAME,LIVE_APP_URLS,SHOPIFY_DOMAIN,SUPABASE_PROJECT_ID,AI_PERSONA_NAME,Model Output: Asper n\l (v7),Rating: Asper n\l (v7),Model Output: Asper n\l (v6),Rating: Asper n\l (v6),Model Output: Asper n\l (v5),Rating: Asper n\l (v5)
+Asper Beauty Shop,"""Medical Luxury"" and ""Authentic Quality."" The experience should feel like a trusted, high-end pharmacist presenting meticulously curated products on a sterile tray.","## 2. VISUAL DESIGN SYSTEM (""MORNING SPA"" AESTHETIC)
+You must strictly enforce these exact Tailwind CSS design tokens and typography rules across all UI components:
+*   **Canvas/Backgrounds:** Always use **Soft Ivory (`#F8F8FF`)**. This provides clinical cleanliness and reduces eye strain. *Never* use pure white (`#FFFFFF`) or pure black (`#000000`) for main backgrounds.
+*   **Primary Actions/Headers:** Use **Deep Maroon (`#800020`)** for buttons, critical CTAs, and primary headers to convey medical heritage and authority.
+*   **Accents & Interaction:** Use **Shiny Gold (`#C5A028`)** sparingly. Apply it for the ""Gold Stitch"" — a fine 1px border that appears strictly on hover as a ""Seal of Authenticity"" (The ""Midas Touch"").
+*   **Text/Readability:** Use **Dark Charcoal (`#333333`)** for high readability on clinical data and ingredient lists.
+*   **Typography Architecture:** 
+    *   Headings: `Playfair Display` (The Voice of Luxury)
+    *   Body/UI: `Montserrat` (The Voice of Science)
+    *   Arabic (RTL): `Tajawal` (Mandatory for all localized text)",asperpharma/understand-project,`https://asperbeautyshop-com.lovable.app/` mapping to `https://www.asperbeautyshop.com`,lovable-project-milns.myshopify.com,qqceibvalkoytafynwoc,Dr. Bot,,5,,,,
+Lumina Wellness Collective,"""Clinical Elegance"" and ""Transparent Efficacy."" The experience should feel like entering a Nordic wellness sanctuary where every product is backed by dermatological research and presented with museum-level curation. We bridge evidence-based skincare with mindful self-care rituals.","## 2. VISUAL DESIGN SYSTEM (""NORDIC SANCTUARY"" AESTHETIC)
+You must strictly enforce these exact Tailwind CSS design tokens and typography rules across all UI components:
+*   **Canvas/Backgrounds:** Always use **Warm Porcelain (`#FAF7F2`)**. This provides a soft, organic warmth while maintaining clinical precision. *Never* use pure white (`#FFFFFF`) or stark grays for main backgrounds.
+*   **Primary Actions/Headers:** Use **Forest Teal (`#2C5F5D`)** for buttons, navigation elements, and section headers to evoke natural wellness and calm authority.
+*   **Accents & Interaction:** Use **Rose Gold (`#D4A574`)** selectively. Apply it for the ""Glow Thread"" — a refined 1-2px border or underline that appears on hover states and active selections, suggesting premium quality without ostentation.
+*   **Text/Readability:** Use **Slate Gray (`#3A3A3C`)** for optimal readability across product descriptions and scientific claims.
+*   **Typography Architecture:** 
+    *   Headings: `Cormorant Garamond` (The Voice of Refinement)
+    *   Body/UI: `Inter` (The Voice of Clarity)
+    *   Arabic (RTL): `Cairo` (Required for all bilingual content)
+*   **Spacing Philosophy:** Use generous whitespace (minimum 24px between major sections) to create breathing room and reduce cognitive load.",lumina-collective/storefront-main,`https://lumina-wellness.vercel.app/` mapping to `https://shop.luminawellness.co`,lumina-wellness-collective.myshopify.com,xmkpqrstvwzabcdefghi,Luna,,,,,,

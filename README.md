@@ -1,6 +1,6 @@
 # Welcome to your Lovable project
 
-**Backend (official 2026):** Supabase project `qqceibvalkoytafynwoc` — see [SUPABASE_MASTER_PROFILE.md](./SUPABASE_MASTER_PROFILE.md). Branch: `understand-project`.
+**Backend (official 2026):** Supabase project `qqceibvalkoytafynwoc` — see [SUPABASE_MASTER_PROFILE.md](./SUPABASE_MASTER_PROFILE.md). Branch: `understand-project`. **Website domain, social links, GMC, AI webhooks:** [docs/ASPER_WEBSITE_DATA_AND_LINKS.md](./docs/ASPER_WEBSITE_DATA_AND_LINKS.md). **Daily monitor (orders, health, chatbot):** [docs/MONITOR_WHERE_TO_CHECK.md](./docs/MONITOR_WHERE_TO_CHECK.md).
 
 ## Project info
 

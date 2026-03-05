@@ -1,4 +1,4 @@
-/**
+accept /**
  * Dr. Bot — Dual-Persona AI Assistant (Medical Luxury)
  * Persona A: Dr. Sami (Clinical Authority) — Shield, Deep Burgundy #6A1E2A
  * Persona B: Ms. Zain (Beauty Advisor) — Sparkle, Shiny Gold #C5A028

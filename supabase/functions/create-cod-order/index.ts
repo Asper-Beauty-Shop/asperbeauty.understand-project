@@ -723,7 +723,7 @@ serve(async (req) => {
     // ========== SEND CONFIRMATION EMAIL ==========
     const siteUrl =
       Deno.env.get("SITE_URL") ??
-      "https://https-www-asperbeautyshop-com.lovable.app";
+      "https://asperbeautyshop-com.lovable.app";
 
     if (data.customerEmail) {
       await sendOrderConfirmationEmail(

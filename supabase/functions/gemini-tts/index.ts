@@ -1,11 +1,20 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
 // ── Asper Beauty Shop — Gemini TTS Edge Function ───────────────────────────
+//
+// REQUEST (POST, application/json):
+//   { "text": string, "persona"?: "dr-sami" | "ms-zain" }
+//
+// RESPONSE:
+//   Success: 200, Content-Type: audio/wav, body = RIFF WAV (playable in <audio>)
+//   Headers: X-Voice, X-Persona, Cache-Control: no-store
+//   Error: 4xx/5xx, application/json { "error": string, "detail"?: string }
+//
 // Persona → Voice mapping
 //   Dr. Sami (Clinical Pharmacist)  → Puck   (authoritative, precise)
 //   Ms. Zain (Beauty Concierge)     → Aoede  (warm, lyrical)
 //
-// Flow: POST {text, persona} → Gemini REST API → PCM → WAV → audio/wav
+// Flow: POST {text, persona} → Gemini REST API (raw PCM) → pcmToWav() → audio/wav
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",

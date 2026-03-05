@@ -1,19 +1,17 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import HeroSlider, { type Slide } from "@/components/HeroSlider";
-import BrandStory from "@/components/BrandStory";
 import CelestialFeaturedCollection from "@/components/CelestialFeaturedCollection";
+import BrandStory from "@/components/BrandStory";
+import ShopByConcern from "@/components/home/ShopByConcern";
+import ConciergeShowcase from "@/components/home/ConciergeShowcase";
 import { Footer } from "@/components/Footer";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Lazy load below-the-fold components for better initial load performance
+// Lazy-load below-the-fold sections
 const FeaturedBrands = lazy(() =>
-  import("@/components/FeaturedBrands").then((m) => ({
-    default: m.FeaturedBrands,
-  }))
+  import("@/components/FeaturedBrands").then((m) => ({ default: m.FeaturedBrands }))
 );
 const Testimonials = lazy(() =>
   import("@/components/Testimonials").then((m) => ({ default: m.Testimonials }))
@@ -28,15 +26,12 @@ const ScrollToTop = lazy(() =>
   import("@/components/ScrollToTop").then((m) => ({ default: m.ScrollToTop }))
 );
 const FloatingSocials = lazy(() =>
-  import("@/components/FloatingSocials").then((m) => ({
-    default: m.FloatingSocials,
-  }))
+  import("@/components/FloatingSocials").then((m) => ({ default: m.FloatingSocials }))
 );
 
-// Lightweight skeleton for lazy sections
 const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
-  <div className={`${height} bg-cream animate-pulse`}>
-    <div className="luxury-container py-12">
+  <div className={`${height} bg-background animate-pulse`}>
+    <div className="max-w-7xl mx-auto px-6 py-12">
       <Skeleton className="h-8 w-48 mx-auto mb-8" />
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[1, 2, 3, 4].map((i) => (
@@ -48,60 +43,63 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
 );
 
 const Index = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
     const handleLoad = () => setIsLoading(false);
-
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1200);
-
     window.addEventListener("load", handleLoad);
-
     return () => {
       clearTimeout(timer);
       window.removeEventListener("load", handleLoad);
     };
   }, []);
 
-  if (isLoading) {
-    return <PageLoadingSkeleton />;
-  }
+  if (isLoading) return <PageLoadingSkeleton />;
 
   return (
     <div className="min-h-screen bg-background animate-fade-in">
       <Header />
+
       <main>
+        {/* 1 — HERO: Split editorial, video right */}
         <HeroSection />
 
-        {/* Featured Collection with Glass & Gold Cards */}
+        {/* 2 — SHOP BY CONCERN: Conversion-first, direct to categories */}
+        <ShopByConcern />
+
+        {/* 3 — FEATURED COLLECTION: Live Shopify products */}
         <CelestialFeaturedCollection />
 
-        {/* Brand Story Section */}
+        {/* 4 — AI CONCIERGE SHOWCASE: Dr. Sami / Ms. Zain demo */}
+        <ConciergeShowcase />
+
+        {/* 5 — BRAND STORY: Credibility & trust */}
         <BrandStory />
 
-        {/* Lazy-loaded below-the-fold sections */}
+        {/* 6 — FEATURED BRANDS: Brand logos & marquee (lazy) */}
         <Suspense fallback={<SectionSkeleton height="h-32" />}>
           <FeaturedBrands />
         </Suspense>
 
+        {/* 7 — TESTIMONIALS: Social proof (lazy) */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <Testimonials />
         </Suspense>
 
+        {/* 8 — NEWSLETTER: Email capture (lazy) */}
         <Suspense fallback={<SectionSkeleton height="h-48" />}>
           <Newsletter />
         </Suspense>
 
+        {/* 9 — TRUST BANNER: Final conversion anchor (lazy) */}
         <Suspense fallback={<SectionSkeleton height="h-24" />}>
           <TrustBanner />
         </Suspense>
       </main>
+
       <Footer />
 
-      {/* Lazy-loaded floating components (BeautyAssistant is global in App) */}
       <Suspense fallback={null}>
         <ScrollToTop />
       </Suspense>

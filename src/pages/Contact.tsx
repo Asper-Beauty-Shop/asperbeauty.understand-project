@@ -182,7 +182,7 @@ export default function Contact() {
                       <InstagramIcon className="w-4 h-4" />
                     </a>
                     <a
-                      href="https://www.facebook.com/asper.beauty.shop"
+                      href="https://www.facebook.com/robu.sweileh"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center text-gold hover:bg-[#1877F2] hover:border-transparent hover:text-white transition-all duration-300"
