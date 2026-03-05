@@ -68,5 +68,5 @@ jobs:
           )
           curl -s -X POST "$LOVABLE_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d "$PAYLOAD"
+            -d "$PAYLOAD" || echo "Warning: Lovable webhook call failed (non-fatal)."
           echo "Done."
