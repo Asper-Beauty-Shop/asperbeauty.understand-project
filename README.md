@@ -19,10 +19,11 @@ Then run `npm run dev` to start the development server. See [Available scripts](
 - **Site:** [https://www.asperbeautyshop.com](https://www.asperbeautyshop.com)
 - **Stack:** Vite, TypeScript, React, shadcn-ui, Tailwind CSS
 - **Website design:** See [WEBSITE-DESIGN.md](WEBSITE-DESIGN.md) (tokens, components, RTL, Dr. Bot).
+- **Apply to main site and all channels:** See [docs/APPLY_AND_RUN.md](docs/APPLY_AND_RUN.md) (run commands, all sites, social, webhooks). Full checklist: [APPLY_TO_MAIN_SITE.md](APPLY_TO_MAIN_SITE.md).
 
 ## SNC (sync) and applyToAllProfiles
 
-**SNC (sync)** — `npm run sync` (frontend + brain); plus `npm run health` (frontend only), `npm run brain` (edge function only).
+**SNC (sync)** — `npm run sync` (frontend + brain); plus `npm run health` (frontend + brain), `npm run brain` (edge function only).
 
 **applyToAllProfiles** — In **User** `settings.json` (File → Preferences → Settings → Open Settings JSON), add:
 
@@ -40,7 +41,7 @@ Then run `npm run dev` to start the development server. See [Available scripts](
 
 ## Available scripts
 
-**SNC:** `npm run sync` | `npm run health` | `npm run brain` (see [SNC (sync)](#snc-sync-and-applytoallprofiles)).
+**SNC:** `npm run sync` | `npm run health` | `npm run brain` (see above).
 
 | Command                    | What it does                  |
 | -------------------------- | ----------------------------- |

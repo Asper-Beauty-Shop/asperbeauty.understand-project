@@ -1,0 +1,55 @@
+RUN
+PowerShell execution policy
+
+Ran: Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
+Completed successfully. This can help the Toolkit’s PowerShell commands (e.g. Get-CimInstance) run without execution policy errors.
+Diagnostic script in the repo
+
+Added scripts\antigravity-diagnostic.ps1 so you can run the same process check the extension uses, without $_ being stripped when invoked from the shell.
+Run it with:
+powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\antigravity-diagnostic.ps1"
+Diagnostic result
+
+The process check found no language_server_windows_x64.exe or Antigravity-related processes.
+So the failure in the Toolkit log (Reason: no_process) is expected: the Antigravity language server / Antigravity IDE is not running on this machine.
+What you need for the Toolkit to connect
+
+The extension is designed to connect to an external Antigravity process (e.g. Antigravity IDE or its language server).
+Until that process is running (e.g. you start Antigravity IDE or whatever normally launches language_server_windows_x64.exe), the Toolkit will keep reporting “no_process” and “Cannot fetch quota: server info not available.”
+Next steps
+
+Start Antigravity IDE (or the app that runs language_server_windows_x64.exe) if you use it.
+Reload Cursor / run the Toolkit again after that process is running.
+If you don’t use Antigravity, you can disable or uninstall the “Toolkit for Antigravity” extension to avoid the repeated connection attempts and quota messages.
+So: the execution policy fix and the diagnostic script are in place; the remaining step is to run the Antigravity language server/IDE when you want the Toolkit to connect.
+RUN
+extension
+// 
+// Feature Flag Example for Antigravity Panel
+// All new connection/diagnostic UI or workflow changes must be wrapped with a feature flag,
+// per Operational-Workflow-Rules. This enables safe, incremental rollout and easy toggling.
+//
+// To control via environment (recommended for Cursor/Asper): set VITE_FEATURE_ANTIGRAVITY=true|false
+// (Refer to env.main-site.example and APPLY_TO_MAIN_SITE.md for environment flag conventions.)
+
+export const FEATURE_ANTIGRAVITY = (
+  typeof import.meta !== "undefined" &&
+  import.meta.env &&
+  typeof import.meta.env.VITE_FEATURE_ANTIGRAVITY !== "undefined"
+    ? String(import.meta.env.VITE_FEATURE_ANTIGRAVITY).toLowerCase() === "true"
+    : false
+);
+
+// Example usage:
+/*
+if (FEATURE_ANTIGRAVITY) {
+  // Show new Antigravity info panel, diagnostics, or connection wizard UI here.
+} else {
+  // Fallback to legacy/disabled state.
+}Ran
+UPDATE
+run extension
+ExecutionPolicy
+
+*/
+

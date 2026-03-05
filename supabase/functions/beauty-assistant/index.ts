@@ -1,6 +1,7 @@
 /**
  * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
  * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). Single AI, context-switching persona.
+ * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). Single AI, context-switching persona.
  * Webhooks: Gorgias / ManyChat (no auth). Website chat: Supabase Auth + SSE.
  * Project scripts (SNC, health, brain), applyToAllProfiles, and commitDirectlyWarning: see README.
  */
@@ -9,7 +10,9 @@ declare const Deno: { env: { get(key: string): string | undefined } };
 // @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 // @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 // @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 // @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -378,15 +381,18 @@ serve(async (req) => {
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
     // Fetch product context with service role (or anon fallback), consistent with webhook path.
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    // Fetch product context with service role (or anon fallback), consistent with webhook path.
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
-    let productContext = "";
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
     let matchedProducts: any[] = [];
     if (supabaseUrl && supabaseKey) {
       const productContextClient = createClient(supabaseUrl, supabaseKey);
       const result = await fetchProductContext(productContextClient, lastText, detectedConcernSlug);
       productContext = result.productContext;
       matchedProducts = result.matchedProducts;
+    } else {
+      // Keep system prompt behavior consistent when product lookup is skipped
+      productContext = "(No matching products found in catalog.)";
     }
 
     // Detect persona from user message
@@ -501,6 +507,33 @@ serve(async (req) => {
             const lines = buffer.split("\n");
             buffer = lines.pop() ?? "";
             for (const line of lines) processLine(line);
+<<<<<<< HEAD
+=======
+          }
+          // Flush any remaining decoded data and process the final buffer
+          buffer += decoder.decode();
+          if (buffer) {
+            const remainingLines = buffer.split("\n");
+            for (const line of remainingLines) {
+              const trimmed = line.trimEnd();
+              if (trimmed.startsWith("data:")) {
+                const dataPayload = trimmed.slice("data:".length).trimStart();
+                if (dataPayload === "[DONE]") {
+                  continue;
+                }
+                try {
+                  const json = JSON.parse(dataPayload);
+                  const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+                  if (text) {
+                    const chunk = `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\n\n`;
+                    controller.enqueue(encoder.encode(chunk));
+                  }
+                } catch {
+                  // skip malformed chunk
+                }
+              }
+            }
+>>>>>>> 1164a387ba6726c241c737a856e7eb7ad0b17e05
           }
           // Process any remaining buffer (final message without trailing newline)
           if (buffer.trim()) processLine(buffer.trim());
