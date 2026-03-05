@@ -532,10 +532,10 @@ serve(async (req) => {
 
     // Log campaign source attribution to telemetry_events if present
     if (campaignSource) {
-      const adminClient = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-      );
+      const serviceRoleKeyForTelemetry = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      const adminClient = serviceRoleKeyForTelemetry
+        ? createClient(Deno.env.get("SUPABASE_URL")!, serviceRoleKeyForTelemetry)
+        : supabaseClient;
       adminClient.from("telemetry_events").insert({
         user_id: userId,
         event: "deep_link_campaign",
@@ -562,10 +562,10 @@ serve(async (req) => {
     // The products table uses RLS; service role bypasses those policies so the edge
     // function can always return relevant product recommendations regardless of the
     // calling user's permissions.
-    const serviceClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const serviceClient = serviceRoleKey
+      ? createClient(Deno.env.get("SUPABASE_URL")!, serviceRoleKey)
+      : supabaseClient;
     const { productContext, matchedProducts } = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
 
     // Detect persona from user message
