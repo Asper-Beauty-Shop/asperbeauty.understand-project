@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Asper Beauty Shop — Sync check (frontend + brain connectivity).
- * Run: npm run sync
+ * Run: npm run sync:check
  */
 
 const FRONTEND_HEALTH = "https://asperbeautyshop-com.lovable.app/health";
@@ -25,8 +25,8 @@ async function main() {
     fetchStatus("Beauty Assistant (brain)", BRAIN_URL),
   ]);
 
-  const frontendOk = frontend.status === 200;
-  const brainOk = brain.status === 200;
+  const frontendOk = frontend.ok;
+  const brainOk = brain.ok;
 
   console.log(
     frontendOk ? "  ✓" : "  ✗",

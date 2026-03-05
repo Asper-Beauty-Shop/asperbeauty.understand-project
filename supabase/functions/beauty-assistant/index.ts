@@ -1,7 +1,8 @@
+/**
  * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
  * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). Single AI, context-switching persona.
  * Webhooks: Gorgias / ManyChat (no auth). Website chat: Supabase Auth + SSE.
- * Project scripts (SNC, health, brain), applyToAllProfiles, and commitDirectlyWarning: see README.
+ * Project scripts (health, brain, sync:check), applyToAllProfiles, and commitDirectlyWarning: see README.
  */
 declare const Deno: { env: { get(key: string): string | undefined } };
 // @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
@@ -348,10 +349,9 @@ serve(async (req) => {
 
     // Log campaign source attribution to telemetry_events if present
     if (campaignSource) {
-      const adminClient = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-      );
+      const adminUrl = Deno.env.get("SUPABASE_URL");
+      const adminKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
+      const adminClient = adminUrl && adminKey ? createClient(adminUrl, adminKey) : supabaseClient;
       adminClient.from("telemetry_events").insert({
         user_id: userId,
         event: "deep_link_campaign",
@@ -377,7 +377,7 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
     let productContext = "";
-    let matchedProducts: any[] = [];
+    let matchedProducts: unknown[] = [];
     if (supabaseUrl && supabaseKey) {
       const productContextClient = createClient(supabaseUrl, supabaseKey);
       const result = await fetchProductContext(productContextClient, lastText, detectedConcernSlug);

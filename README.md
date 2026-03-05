@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**URL**: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
 
 ## How can I edit this code?
 
@@ -10,7 +10,7 @@ There are several ways of editing your application.
 
 **Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Simply visit the [Lovable Project](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
@@ -24,10 +24,10 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/asperpharma/understand-project.git
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd understand-project
 
 # Step 3: Install the necessary dependencies.
 npm i
@@ -63,7 +63,7 @@ npm install -g @anthropic-ai/claude-code
 Then start a session in your project directory:
 
 ```sh
-cd <YOUR_PROJECT_NAME>
+cd understand-project
 claude
 ```
 
@@ -83,7 +83,7 @@ This project is built with:
 
 ### Quick Deploy
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Simply open [Lovable](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6) and click on Share -> Publish.
 
 ### Required Setup
 
@@ -150,7 +150,7 @@ After deployment, monitor:
 
 ### Quick Deployment via Lovable
 
-For simple deployments, open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click Share → Publish.
+For simple deployments, open [Lovable](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6) and click Share → Publish.
 
 ### Production Deployment Workflow
 
@@ -222,7 +222,7 @@ The GitHub Actions workflow (`.github/workflows/deploy-health-check.yml`) will a
 
 After merging to main:
 
-1. Open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID)
+1. Open [Lovable](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6)
 2. Click **Share** → **Publish**
 3. Wait for deployment to complete (~2-3 minutes)
 4. Verify deployment at https://asperbeautyshop-com.lovable.app
@@ -303,15 +303,22 @@ For more bulk product upload examples and complete payload structures, see [docs
 - **[docs/PRE_LAUNCH_CHECKLIST.md](docs/PRE_LAUNCH_CHECKLIST.md)** - Pre-deployment checklist including §5 secrets configuration and POST response interpretation
 - **[.github/workflows/deploy-health-check.yml](.github/workflows/deploy-health-check.yml)** - Automated health checks on deployment
 
-## SNC (sync) and applyToAllProfiles
+## Health & Connectivity Scripts
 
-**Sync check (SNC)** — Verifies frontend health and Beauty Assistant (brain) connectivity:
+Quickly verify that the frontend and the Beauty Assistant edge function are reachable:
+
+| Command | What it checks |
+|---------|----------------|
+| `npm run health` | Frontend `/health` endpoint |
+| `npm run brain` | Beauty Assistant (edge function) |
+| `npm run sync:check` | Frontend + Beauty Assistant together |
 
 ```sh
-npm run sync
+# Full connectivity check
+npm run sync:check
 ```
 
-Other scripts: `npm run health` (frontend only), `npm run brain` (edge function only).
+## Development Environment
 
 **applyToAllProfiles** — Cursor/VS Code user setting so chosen options apply to every profile. In **User** `settings.json` (File → Preferences → Settings → Open Settings JSON), add:
 
@@ -324,11 +331,11 @@ Other scripts: `npm run health` (frontend only), `npm run brain` (edge function 
 ]
 ```
 
-Include `update.channel` if you want the same update channel (e.g. stable) across all profiles. Use **run-script** (`npm run <script>`) for the commands below; key ones: `npm run sync` (SNC), `npm run health`, `npm run brain`.
+Include `update.channel` if you want the same update channel (e.g. stable) across all profiles.
 
-**commitDirectlyWarning** — Avoid committing directly to the default branch when branch protection or Windows path issues apply; use a feature branch and PR, or see PUSH-BLOCKER.md if push is blocked.
+**commitDirectlyWarning** — Avoid committing directly to the default branch when branch protection applies; use a feature branch and PR instead.
 
-## Available scripts
+## Available Scripts
 
 | Command | What it does |
 |---------|--------------|
@@ -343,7 +350,9 @@ Include `update.channel` if you want the same update channel (e.g. stable) acros
 | `npm run preview` | Serve production build |
 | `npm run test` | Run Vitest once |
 | `npm run test:watch` | Vitest watch mode |
-| `npm run test:bulk-upload` | Bulk upload validation script |
-| `npm run health` | Frontend + brain health check |
-| `npm run brain` | Brain (Beauty Assistant) only |
-| `npm run sync` | Frontend + brain sync check |
+| `npm run health` | Frontend `/health` check |
+| `npm run brain` | Beauty Assistant connectivity check |
+| `npm run sync:check` | Frontend + brain sync check |
+| `npm run sync` | Sync Shopify product catalog to Supabase |
+| `npm run sync:dry` | Sync dry-run (no writes) |
+| `npm run sync:publish` | Sync + publish |
