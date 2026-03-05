@@ -7,7 +7,9 @@
  */
 declare const Deno: { env: { get(key: string): string | undefined } };
 // @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 // @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -378,13 +380,16 @@ serve(async (req) => {
     // Fetch product context with service role (or anon fallback), consistent with webhook path.
     // Fetch product context with service role (or anon fallback), consistent with webhook path.
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
-    let productContext = "";
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
     let matchedProducts: any[] = [];
     if (supabaseUrl && supabaseKey) {
       const productContextClient = createClient(supabaseUrl, supabaseKey);
       const result = await fetchProductContext(productContextClient, lastText, detectedConcernSlug);
       productContext = result.productContext;
       matchedProducts = result.matchedProducts;
+    } else {
+      // Keep system prompt behavior consistent when product lookup is skipped
+      productContext = "(No matching products found in catalog.)";
     }
 
     // Detect persona from user message
@@ -478,13 +483,33 @@ serve(async (req) => {
           const reader = geminiRes.body!.getReader();
           const decoder = new TextDecoder();
           let buffer = "";
+          const processLine = (line: string) => {
+            if (line.startsWith("data: ") && line !== "data: [DONE]") {
+              try {
+                const json = JSON.parse(line.slice(6));
+                const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text) {
+                  const chunk = `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\n\n`;
+                  controller.enqueue(encoder.encode(chunk));
+                }
+              } catch {
+                // skip malformed chunk
+              }
+            }
+          };
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
             buffer += decoder.decode(value, { stream: true });
             const lines = buffer.split("\n");
             buffer = lines.pop() ?? "";
-            for (const line of lines) {
+            for (const line of lines) processLine(line);
+          }
+          // Flush any remaining decoded data and process the final buffer
+          buffer += decoder.decode();
+          if (buffer) {
+            const remainingLines = buffer.split("\n");
+            for (const line of remainingLines) {
               if (line.startsWith("data: ") && line !== "data: [DONE]") {
                 try {
                   const json = JSON.parse(line.slice(6));
@@ -499,6 +524,8 @@ serve(async (req) => {
               }
             }
           }
+          // Process any remaining buffer (final message without trailing newline)
+          if (buffer.trim()) processLine(buffer.trim());
           controller.close();
         },
       });
