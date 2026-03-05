@@ -3,7 +3,7 @@
 Asper Beauty Shop — PDF catalog analysis via Anthropic Files API (Beta).
 
 Upload a supplier/brand PDF (e.g. Vichy, La Roche-Posay catalog, clinical paper)
-once; Claude 3.7 Sonnet analyzes it and returns structured JSON suitable for
+once; Claude Sonnet analyzes it and returns structured JSON suitable for
 mapping into digital_tray_products (SKUs, ingredients, skin concerns, prices).
 
 Use for: external brand catalogs, clinical research on ingredients, strategy docs.
@@ -95,10 +95,10 @@ def main() -> int:
     print(f"✅ File uploaded. File ID: {uploaded_file.id}")
 
     # Step 2: Ask Claude to analyze
-    print("Analyzing document with Claude 3.7 Sonnet (Files API)...")
+    print("Analyzing document with Claude Sonnet (Files API)...")
     try:
         message = client.beta.messages.create(
-            model="claude-3-7-sonnet-20250219",
+            model="claude-sonnet-4-6",
             max_tokens=8192,
             betas=["files-api-2025-04-14"],
             system=SYSTEM_PROMPT,
