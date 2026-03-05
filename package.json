@@ -16,7 +16,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "sync": "tsx scripts/sync-shopify-catalog.ts",
+    "test:bulk-upload": "node scripts/test-bulk-upload-validation.mjs",
+    "health": "node scripts/health-check.js",
+    "brain": "node scripts/brain-check.js",
+    "sync": "node scripts/sync-check.js",
     "sync:dry": "tsx scripts/sync-shopify-catalog.ts --dry-run",
     "sync:publish": "tsx scripts/sync-shopify-catalog.ts --publish"
   },
