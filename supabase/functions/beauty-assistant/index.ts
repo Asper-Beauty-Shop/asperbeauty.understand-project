@@ -532,18 +532,19 @@ serve(async (req) => {
 
     // Log campaign source attribution to telemetry_events if present
     if (campaignSource) {
-      const adminClient = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-      );
-      adminClient.from("telemetry_events").insert({
-        user_id: userId,
-        event: "deep_link_campaign",
-        source: "ai_concierge",
-        payload: { campaign_source: campaignSource },
-      }).then(({ error }) => {
-        if (error) console.error("Telemetry insert error:", error.message);
-      });
+      const supabaseUrl = Deno.env.get("SUPABASE_URL");
+      const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (supabaseUrl && serviceRoleKey) {
+        const adminClient = createClient(supabaseUrl, serviceRoleKey);
+        adminClient.from("telemetry_events").insert({
+          user_id: userId,
+          event: "deep_link_campaign",
+          source: "ai_concierge",
+          payload: { campaign_source: campaignSource },
+        }).then(({ error }) => {
+          if (error) console.error("Telemetry insert error:", error.message);
+        });
+      }
     }
 
     // Extract last user message for product matching
@@ -558,15 +559,15 @@ serve(async (req) => {
     const detectedConcernSlug = detectConcernSlug(lastText);
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
-    // Fetch product context using service role key for unrestricted catalog access.
-    // The products table uses RLS; service role bypasses those policies so the edge
-    // function can always return relevant product recommendations regardless of the
-    // calling user's permissions.
-    const serviceClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-    const { productContext, matchedProducts } = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
+    // Fetch product context. Prefer the service role key to bypass RLS and get
+    // full catalog access. Fall back to the anon key for graceful degradation
+    // when the service role key is not configured (e.g. local/staging without
+    // secrets) — product results may be limited by RLS policies in that case.
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY");
+    const { productContext, matchedProducts } = supabaseUrl && supabaseKey
+      ? await fetchProductContext(createClient(supabaseUrl, supabaseKey), lastText, detectedConcernSlug)
+      : { productContext: "", matchedProducts: [] as unknown[] };
 
     // Detect persona from user message
     // Dual-Persona detection — Dr. Sami (clinical) vs Ms. Zain (beauty/aesthetic)

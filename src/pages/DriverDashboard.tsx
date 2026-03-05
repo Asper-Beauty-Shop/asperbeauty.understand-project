@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { useAuth } from "@/hooks/useAuth";
 import { useDriverAuditLog } from "@/hooks/useDriverAuditLog";
 import { Button } from "@/components/ui/button";
@@ -187,7 +188,7 @@ export default function DriverDashboard() {
     const oldStatus = currentOrder?.status || "unknown";
 
     try {
-      const updateData: Record<string, unknown> = {
+      const updateData: Database["public"]["Tables"]["cod_orders"]["Update"] = {
         status: newStatus,
         delivery_notes: deliveryNote || null,
       };
@@ -196,9 +197,9 @@ export default function DriverDashboard() {
         updateData.delivered_at = new Date().toISOString();
       }
 
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("cod_orders")
-        .update(updateData as never)
+        .update(updateData)
         .eq("id", orderId);
 
       if (error) throw error;
