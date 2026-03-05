@@ -1,4 +1,13 @@
+/**
+ * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
+ * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). Single AI, context-switching persona.
+ * Webhooks: Gorgias / ManyChat (no auth). Website chat: Supabase Auth + SSE.
+ * Project scripts (SNC, health, brain), applyToAllProfiles, and commitDirectlyWarning: see README.
+ */
+declare const Deno: { env: { get(key: string): string | undefined } };
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // Staging origins allowed alongside production ALLOWED_ORIGIN
@@ -236,7 +245,7 @@ async function fetchProductContext(
 // System Prompt Builder
 // ──────────────────────────────────────────────────────────────
 function buildSystemPrompt(productContext: string, shopRoutinePath: string | null): string {
-  return `You are the **Asper Dual-Voice Concierge** — "One Brain, Two Voices" — for Asper Beauty Shop (asperbeautyshop.com), Amman, Jordan. You operate as either **Dr. Sami** (Voice of Science) or **Ms. Zain** (Voice of Luxury) depending on the user's intent. Both voices share the same Medical Luxury identity: pharmacist-curated, authentic, precise, never pushy. Recommend ONLY from the product inventory listed below when available; name title, brand, and price.
+  return `You are **Dr. Bot** — the Asper Dual-Voice Concierge for Asper Beauty Shop (asperbeautyshop.com) in Jordan. You operate as **Dr. Sami** (Voice of Science) or **Ms. Zain** (Voice of Luxury) depending on the user's intent. Both voices share the same Medical Luxury identity: pharmacist-curated, authentic, precise, never pushy. Recommend ONLY from the product inventory listed below when available; name title, brand, and price.
 
 ## DR. SAMI — The Voice of Science (Clinical Authority)
 - **Triggers on:** medical, clinical, safety, ingredients, pregnancy, supplements, dosage, retinol, SPF, sunscreen, allergy, barrier repair, eczema, rosacea, acne, hyperpigmentation, dermatologist, pharmacist, side effects, contraindications, drug interactions, salicylic acid, benzoyl peroxide, AHA, BHA, hydroquinone, sensitive skin reactions, vitamin deficiency, collagen supplements, hair loss treatment, hormonal acne
@@ -291,8 +300,8 @@ When the user mentions **bridal, wedding, عروس, زفاف, engagement, خطو
 - **Free Shipping Nudge:** If cart < 50 JOD, suggest a small add-on (lip balm, travel size, sheet mask) to qualify. Frame it as value: "Add a travel-size Thermal Water (3.5 JOD) to unlock free delivery!"
 - **Replenishment Cycle:** Standard skincare products last ~2 months. If a returning user hasn't reordered in 8+ weeks, gently ask: "How's your [product] holding up? Time for a refill?"
 
-## Sales & Trust
-- If user hesitates, pivot to trust: "Every bottle carries our Seal of Authenticity — pharmacist-vetted, JFDA certified."
+## Trust & Authenticity
+- **Trust & Authenticity:** Every bottle carries our Seal of Authenticity — pharmacist-vetted, JFDA certified. Gold Standard: 100% guaranteed authenticity. If user hesitates, pivot to this.
 - Never invent products. If no match found, say so honestly and invite browsing.
 
 ## Store Knowledge
@@ -561,12 +570,17 @@ serve(async (req) => {
     // Fetch product context using service role key for unrestricted catalog access.
     // The products table uses RLS; service role bypasses those policies so the edge
     // function can always return relevant product recommendations regardless of the
-    // calling user's permissions.
-    const serviceClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-    const { productContext, matchedProducts } = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
+    // calling user's permissions. Falls back gracefully if credentials are absent.
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    let productContext = "";
+    let matchedProducts: unknown[] = [];
+    if (supabaseUrl && supabaseServiceKey) {
+      const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
+      const result = await fetchProductContext(serviceClient, lastText, detectedConcernSlug);
+      productContext = result.productContext;
+      matchedProducts = result.matchedProducts;
+    }
 
     // Detect persona from user message
     // Dual-Persona detection — Dr. Sami (clinical) vs Ms. Zain (beauty/aesthetic)
