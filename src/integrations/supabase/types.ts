@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.4"
   }
   public: {
     Tables: {
@@ -617,6 +617,108 @@ export type Database = {
         }
         Relationships: []
       }
+      pipeline_error_log: {
+        Row: {
+          error_message: string
+          id: number
+          resolved: boolean
+          run_id: string | null
+          run_timestamp: string
+          shopify_product_id: string
+          sku: string
+          stage: string
+        }
+        Insert: {
+          error_message: string
+          id?: number
+          resolved?: boolean
+          run_id?: string | null
+          run_timestamp?: string
+          shopify_product_id: string
+          sku: string
+          stage: string
+        }
+        Update: {
+          error_message?: string
+          id?: number
+          resolved?: boolean
+          run_id?: string | null
+          run_timestamp?: string
+          shopify_product_id?: string
+          sku?: string
+          stage?: string
+        }
+        Relationships: []
+      }
+      pipeline_requeue_queue: {
+        Row: {
+          id: number
+          requested_at: string
+          requested_by: string | null
+          shopify_product_id: string
+          sku: string
+          stage: string
+        }
+        Insert: {
+          id?: number
+          requested_at?: string
+          requested_by?: string | null
+          shopify_product_id: string
+          sku: string
+          stage: string
+        }
+        Update: {
+          id?: number
+          requested_at?: string
+          requested_by?: string | null
+          shopify_product_id?: string
+          sku?: string
+          stage?: string
+        }
+        Relationships: []
+      }
+      product_clinical_metadata: {
+        Row: {
+          audit_model: string
+          clinical_summary: string
+          concern_tags: string[]
+          confidence_score: number
+          detected_ingredients: string[]
+          id: number
+          last_audited_at: string
+          last_run_id: string | null
+          pipeline_version: string
+          shopify_product_id: string
+          sku: string
+        }
+        Insert: {
+          audit_model: string
+          clinical_summary: string
+          concern_tags: string[]
+          confidence_score: number
+          detected_ingredients: string[]
+          id?: number
+          last_audited_at: string
+          last_run_id?: string | null
+          pipeline_version: string
+          shopify_product_id: string
+          sku: string
+        }
+        Update: {
+          audit_model?: string
+          clinical_summary?: string
+          concern_tags?: string[]
+          confidence_score?: number
+          detected_ingredients?: string[]
+          id?: number
+          last_audited_at?: string
+          last_run_id?: string | null
+          pipeline_version?: string
+          shopify_product_id?: string
+          sku?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           ai_persona_lead: Database["public"]["Enums"]["persona_type"] | null
@@ -1144,6 +1246,14 @@ export type Database = {
       product_usage_hint: {
         Args: { regimen_step: string; title: string }
         Returns: Json
+      }
+      requeue_failed_skus: {
+        Args: { p_limit?: number; p_run_id?: string; p_stage?: string }
+        Returns: {
+          shopify_product_id: string
+          sku: string
+          stage: string
+        }[]
       }
       resolve_concierge_brain: {
         Args: { brain_name: string }
