@@ -51,6 +51,9 @@ const ScrollToTop = lazy(() =>
 const DermoBrands = lazy(() =>
   import("@/components/home/DermoBrands").then((m) => ({ default: m.DermoBrands }))
 );
+const EliteBrandShowcase = lazy(() =>
+  import("@/components/home/EliteBrandShowcase")
+);
 const FloatingSocials = lazy(() =>
   import("@/components/FloatingSocials").then((m) => ({
     default: m.FloatingSocials,
@@ -173,6 +176,11 @@ const Index = () => {
         {/* 2b. Dermocosmetic Brands Grid */}
         <Suspense fallback={<SectionSkeleton height="h-48" />}>
           <DermoBrands />
+        </Suspense>
+
+        {/* 2c. Elite Brand Showcase — Portrait Editorial */}
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <EliteBrandShowcase />
         </Suspense>
 
         {/* 3. Product Slider — Just Landed / What's New */}
