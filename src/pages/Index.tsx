@@ -168,6 +168,11 @@ const Index = () => {
         {/* 2. USP Bar — Trust Signals */}
         <USPBar />
 
+        {/* 2.5. Dermocosmetic Brands — Clickable Squares */}
+        <Suspense fallback={<SectionSkeleton height="h-48" />}>
+          <DermoBrands />
+        </Suspense>
+
         {/* 3. Product Slider — Just Landed / What's New */}
         <ProductSlider
           title={{ en: "Just Landed! What's New", ar: "وصل حديثاً! الجديد لدينا" }}
