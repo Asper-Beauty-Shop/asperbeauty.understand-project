@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Loader2, Send, Stethoscope, X } from "lucide-react";
 import { toast } from "sonner";
@@ -29,16 +29,16 @@ function getIntentMessage(intent: string, language: string): string {
     "dark spots": "What's best for dark spots and pigmentation?",
   };
   const ar: Record<string, string> = {
-    acne: "ما أفضل روتين للبشرة المعرضة لحب الشباب؟",
-    "anti-aging": "أحتاج مساعدة في مكافحة الشيخوخة والتجاعيد.",
-    hydration: "ماذا تنصح للبشرة الجافة والجافة؟",
-    sensitivity: "بشرتي حساسة. ما الروتين الذي تقترحه؟",
-    "dark spots": "ما الأفضل للبقع الداكنة والتصبغ؟",
+    acne: "Ù…Ø§ Ø£ÙØ¶Ù„ Ø±ÙˆØªÙŠÙ† Ù„Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ù…Ø¹Ø±Ø¶Ø© Ù„Ø­Ø¨ Ø§Ù„Ø´Ø¨Ø§Ø¨ØŸ",
+    "anti-aging": "Ø£Ø­ØªØ§Ø¬ Ù…Ø³Ø§Ø¹Ø¯Ø© ÙÙŠ Ù…ÙƒØ§ÙØ­Ø© Ø§Ù„Ø´ÙŠØ®ÙˆØ®Ø© ÙˆØ§Ù„ØªØ¬Ø§Ø¹ÙŠØ¯.",
+    hydration: "Ù…Ø§Ø°Ø§ ØªÙ†ØµØ­ Ù„Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ø¬Ø§ÙØ© ÙˆØ§Ù„Ø¬Ø§ÙØ©ØŸ",
+    sensitivity: "Ø¨Ø´Ø±ØªÙŠ Ø­Ø³Ø§Ø³Ø©. Ù…Ø§ Ø§Ù„Ø±ÙˆØªÙŠÙ† Ø§Ù„Ø°ÙŠ ØªÙ‚ØªØ±Ø­Ù‡ØŸ",
+    "dark spots": "Ù…Ø§ Ø§Ù„Ø£ÙØ¶Ù„ Ù„Ù„Ø¨Ù‚Ø¹ Ø§Ù„Ø¯Ø§ÙƒÙ†Ø© ÙˆØ§Ù„ØªØµØ¨ØºØŸ",
   };
   const map = language === "ar" ? ar : en;
   return map[i] ||
     (language === "ar"
-      ? `أحتاج مساعدة بخصوص: ${intent}`
+      ? `Ø£Ø­ØªØ§Ø¬ Ù…Ø³Ø§Ø¹Ø¯Ø© Ø¨Ø®ØµÙˆØµ: ${intent}`
       : `I need help with: ${intent}`);
 }
 
@@ -72,35 +72,35 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "";
 const concernToMessage: Record<string, { en: string; ar: string }> = {
   acne: {
     en: "What is the best skincare routine for acne-prone skin?",
-    ar: "ما هو أفضل روتين للعناية بالبشرة المعرضة لحب الشباب؟",
+    ar: "Ù…Ø§ Ù‡Ùˆ Ø£ÙØ¶Ù„ Ø±ÙˆØªÙŠÙ† Ù„Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ù…Ø¹Ø±Ø¶Ø© Ù„Ø­Ø¨ Ø§Ù„Ø´Ø¨Ø§Ø¨ØŸ",
   },
   "anti-aging": {
     en: "I need help with anti-aging and fine lines.",
-    ar: "أحتاج مساعدة في مكافحة الشيخوخة والتجاعيد.",
+    ar: "Ø£Ø­ØªØ§Ø¬ Ù…Ø³Ø§Ø¹Ø¯Ø© ÙÙŠ Ù…ÙƒØ§ÙØ­Ø© Ø§Ù„Ø´ÙŠØ®ÙˆØ®Ø© ÙˆØ§Ù„ØªØ¬Ø§Ø¹ÙŠØ¯.",
   },
   hydration: {
     en: "My skin feels tight and dry. What do you recommend?",
-    ar: "بشرتي تشعر بالجفاف والشد. ماذا تنصح؟",
+    ar: "Ø¨Ø´Ø±ØªÙŠ ØªØ´Ø¹Ø± Ø¨Ø§Ù„Ø¬ÙØ§Ù ÙˆØ§Ù„Ø´Ø¯. Ù…Ø§Ø°Ø§ ØªÙ†ØµØ­ØŸ",
   },
   sensitivity: {
     en: "I have sensitive skin. What regimen do you suggest?",
-    ar: "بشرتي حساسة. ما الروتين الذي تقترحه؟",
+    ar: "Ø¨Ø´Ø±ØªÙŠ Ø­Ø³Ø§Ø³Ø©. Ù…Ø§ Ø§Ù„Ø±ÙˆØªÙŠÙ† Ø§Ù„Ø°ÙŠ ØªÙ‚ØªØ±Ø­Ù‡ØŸ",
   },
   "dark-spots": {
     en: "What's best for dark spots and pigmentation?",
-    ar: "ما الأفضل للبقع الداكنة والتصبغ؟",
+    ar: "Ù…Ø§ Ø§Ù„Ø£ÙØ¶Ù„ Ù„Ù„Ø¨Ù‚Ø¹ Ø§Ù„Ø¯Ø§ÙƒÙ†Ø© ÙˆØ§Ù„ØªØµØ¨ØºØŸ",
   },
   "sun-protection": {
     en: "I need a good sunscreen and sun protection routine.",
-    ar: "أحتاج واقي شمس جيد وروتين للحماية من الشمس.",
+    ar: "Ø£Ø­ØªØ§Ø¬ ÙˆØ§Ù‚ÙŠ Ø´Ù…Ø³ Ø¬ÙŠØ¯ ÙˆØ±ÙˆØªÙŠÙ† Ù„Ù„Ø­Ù…Ø§ÙŠØ© Ù…Ù† Ø§Ù„Ø´Ù…Ø³.",
   },
   wrinkles: {
     en: "I want to address wrinkles and firmness.",
-    ar: "أريد التخلص من التجاعيد والترهلات.",
+    ar: "Ø£Ø±ÙŠØ¯ Ø§Ù„ØªØ®Ù„Øµ Ù…Ù† Ø§Ù„ØªØ¬Ø§Ø¹ÙŠØ¯ ÙˆØ§Ù„ØªØ±Ù‡Ù„Ø§Øª.",
   },
   cleansing: {
     en: "What cleanser and cleansing routine do you recommend?",
-    ar: "ما المنظف وروتين التنظيف الذي تنصح به؟",
+    ar: "Ù…Ø§ Ø§Ù„Ù…Ù†Ø¸Ù ÙˆØ±ÙˆØªÙŠÙ† Ø§Ù„ØªÙ†Ø¸ÙŠÙ Ø§Ù„Ø°ÙŠ ØªÙ†ØµØ­ Ø¨Ù‡ØŸ",
   },
 };
 
@@ -110,19 +110,19 @@ function buildQuickPrompts(language: string) {
     label: isAr ? c.labelAr : c.labelEn,
     message: concernToMessage[c.id]?.[isAr ? "ar" : "en"] ??
       (isAr
-        ? `أحتاج مساعدة بخصوص: ${c.labelAr}`
+        ? `Ø£Ø­ØªØ§Ø¬ Ù…Ø³Ø§Ø¹Ø¯Ø© Ø¨Ø®ØµÙˆØµ: ${c.labelAr}`
         : `I need help with: ${c.labelEn}`),
   }));
   const extra = isAr
     ? [
       {
-        label: "آمن للحمل؟",
-        message: "ما هي مكونات العناية بالبشرة الآمنة للاستخدام أثناء الحمل؟",
+        label: "Ø¢Ù…Ù† Ù„Ù„Ø­Ù…Ù„ØŸ",
+        message: "Ù…Ø§ Ù‡ÙŠ Ù…ÙƒÙˆÙ†Ø§Øª Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ø¢Ù…Ù†Ø© Ù„Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø£Ø«Ù†Ø§Ø¡ Ø§Ù„Ø­Ù…Ù„ØŸ",
       },
       {
-        label: "مقارنة السيروم",
+        label: "Ù…Ù‚Ø§Ø±Ù†Ø© Ø§Ù„Ø³ÙŠØ±ÙˆÙ…",
         message:
-          "هل يمكنك مقارنة سيروم فيتامين سي مع سيروم الريتينول لمكافحة الشيخوخة؟",
+          "Ù‡Ù„ ÙŠÙ…ÙƒÙ†Ùƒ Ù…Ù‚Ø§Ø±Ù†Ø© Ø³ÙŠØ±ÙˆÙ… ÙÙŠØªØ§Ù…ÙŠÙ† Ø³ÙŠ Ù…Ø¹ Ø³ÙŠØ±ÙˆÙ… Ø§Ù„Ø±ÙŠØªÙŠÙ†ÙˆÙ„ Ù„Ù…ÙƒØ§ÙØ­Ø© Ø§Ù„Ø´ÙŠØ®ÙˆØ®Ø©ØŸ",
       },
     ]
     : [
@@ -166,12 +166,12 @@ export const BeautyAssistant = () => {
       buttonText: "Ask the Pharmacist",
     },
     ar: {
-      title: "استشارة آسبر الرقمية",
-      subtitle: "خبير العناية بالبشرة السريرية",
-      placeholder: "صف مشكلة بشرتك...",
+      title: "Ø§Ø³ØªØ´Ø§Ø±Ø© Ø¢Ø³Ø¨Ø± Ø§Ù„Ø±Ù‚Ù…ÙŠØ©",
+      subtitle: "Ø®Ø¨ÙŠØ± Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ø³Ø±ÙŠØ±ÙŠØ©",
+      placeholder: "ØµÙ Ù…Ø´ÙƒÙ„Ø© Ø¨Ø´Ø±ØªÙƒ...",
       welcome:
-        "مرحباً. أنا مدرب على بيانات العناية بالبشرة السريرية. أخبرني عن مشكلة بشرتك (مثل حب الشباب، الجفاف) أو اسأل عن مكون معين.",
-      buttonText: "اسأل الصيدلي",
+        "Ù…Ø±Ø­Ø¨Ø§Ù‹. Ø£Ù†Ø§ Ù…Ø¯Ø±Ø¨ Ø¹Ù„Ù‰ Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ø³Ø±ÙŠØ±ÙŠØ©. Ø£Ø®Ø¨Ø±Ù†ÙŠ Ø¹Ù† Ù…Ø´ÙƒÙ„Ø© Ø¨Ø´Ø±ØªÙƒ (Ù…Ø«Ù„ Ø­Ø¨ Ø§Ù„Ø´Ø¨Ø§Ø¨ØŒ Ø§Ù„Ø¬ÙØ§Ù) Ø£Ùˆ Ø§Ø³Ø£Ù„ Ø¹Ù† Ù…ÙƒÙˆÙ† Ù…Ø¹ÙŠÙ†.",
+      buttonText: "Ø§Ø³Ø£Ù„ Ø§Ù„ØµÙŠØ¯Ù„ÙŠ",
     },
   };
 
@@ -201,7 +201,7 @@ export const BeautyAssistant = () => {
     ? `I am honored to serve. Based on your description, it appears you are experiencing ${detectedLabel}. May I recommend a regimen tailored to this concern?`
     : null;
   const diagnosticScriptAr = detectedLabel
-    ? `يشرفني أن أخدمك. بناءً على وصفك، يبدو أنك تعانين من ${detectedLabel}. هل أستطيع أن أوصي بروتين مصمم لهذا الاهتمام؟`
+    ? `ÙŠØ´Ø±ÙÙ†ÙŠ Ø£Ù† Ø£Ø®Ø¯Ù…Ùƒ. Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ ÙˆØµÙÙƒØŒ ÙŠØ¨Ø¯Ùˆ Ø£Ù†Ùƒ ØªØ¹Ø§Ù†ÙŠÙ† Ù…Ù† ${detectedLabel}. Ù‡Ù„ Ø£Ø³ØªØ·ÙŠØ¹ Ø£Ù† Ø£ÙˆØµÙŠ Ø¨Ø±ÙˆØªÙŠÙ† Ù…ØµÙ…Ù… Ù„Ù‡Ø°Ø§ Ø§Ù„Ø§Ù‡ØªÙ…Ø§Ù…ØŸ`
     : null;
   const diagnosticScript = language === "ar"
     ? diagnosticScriptAr
@@ -465,7 +465,7 @@ export const BeautyAssistant = () => {
       setSaveWhatsapp("");
       toast.success(
         language === "ar"
-          ? "تم الحفظ. سنرسل لك الرابط قريباً."
+          ? "ØªÙ… Ø§Ù„Ø­ÙØ¸. Ø³Ù†Ø±Ø³Ù„ Ù„Ùƒ Ø§Ù„Ø±Ø§Ø¨Ø· Ù‚Ø±ÙŠØ¨Ø§Ù‹."
           : "Saved. We'll send you the link shortly.",
       );
     } catch {
@@ -584,7 +584,7 @@ export const BeautyAssistant = () => {
                   <div className="space-y-2 ml-2">
                     <p className="text-[10px] text-gold font-medium uppercase tracking-wider">
                       {language === "ar"
-                        ? "المنتجات الموصى بها"
+                        ? "Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…ÙˆØµÙ‰ Ø¨Ù‡Ø§"
                         : "Recommended Products"}
                     </p>
                     {msg.products.slice(0, 3).map((product, pIdx) => (
@@ -616,7 +616,7 @@ export const BeautyAssistant = () => {
                           className="inline-flex items-center justify-center gap-2 w-full py-2 px-3 rounded-lg bg-burgundy text-gold text-xs font-medium border border-gold/30 hover:bg-burgundy/90 transition-colors"
                         >
                           {language === "ar"
-                            ? "اعرض روتيني في المتجر"
+                            ? "Ø§Ø¹Ø±Ø¶ Ø±ÙˆØªÙŠÙ†ÙŠ ÙÙŠ Ø§Ù„Ù…ØªØ¬Ø±"
                             : "See My Regimen"}
                         </Link>
                       )}
@@ -629,7 +629,7 @@ export const BeautyAssistant = () => {
                         className="w-full py-2 px-3 rounded-lg border border-gold/40 text-burgundy text-xs font-medium hover:bg-gold/10 transition-colors"
                       >
                         {language === "ar"
-                          ? "احفظ روتيني وأرسله لي"
+                          ? "Ø§Ø­ÙØ¸ Ø±ÙˆØªÙŠÙ†ÙŠ ÙˆØ£Ø±Ø³Ù„Ù‡ Ù„ÙŠ"
                           : "Save My Routine"}
                       </button>
                     </div>
@@ -638,7 +638,7 @@ export const BeautyAssistant = () => {
                         <Input
                           type="email"
                           placeholder={language === "ar"
-                            ? "البريد الإلكتروني"
+                            ? "Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ"
                             : "Email"}
                           value={saveEmail}
                           onChange={(e) => setSaveEmail(e.target.value)}
@@ -647,7 +647,7 @@ export const BeautyAssistant = () => {
                         <Input
                           type="tel"
                           placeholder={language === "ar"
-                            ? "واتساب (اختياري)"
+                            ? "ÙˆØ§ØªØ³Ø§Ø¨ (Ø§Ø®ØªÙŠØ§Ø±ÙŠ)"
                             : "WhatsApp (optional)"}
                           value={saveWhatsapp}
                           onChange={(e) => setSaveWhatsapp(e.target.value)}
@@ -663,9 +663,9 @@ export const BeautyAssistant = () => {
                           >
                             {saveSaving
                               ? (language === "ar"
-                                ? "جاري الحفظ..."
+                                ? "Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø­ÙØ¸..."
                                 : "Saving...")
-                              : (language === "ar" ? "إرسال" : "Send")}
+                              : (language === "ar" ? "Ø¥Ø±Ø³Ø§Ù„" : "Send")}
                           </Button>
                           <Button
                             size="sm"
@@ -677,7 +677,7 @@ export const BeautyAssistant = () => {
                             }}
                             className="border-gold/40 text-xs"
                           >
-                            {language === "ar" ? "إلغاء" : "Cancel"}
+                            {language === "ar" ? "Ø¥Ù„ØºØ§Ø¡" : "Cancel"}
                           </Button>
                         </div>
                       </div>
@@ -694,7 +694,7 @@ export const BeautyAssistant = () => {
                       className="inline-flex items-center justify-center gap-2 w-full py-2 px-3 rounded-lg bg-burgundy text-gold text-xs font-medium border border-gold/30 hover:bg-burgundy/90 transition-colors"
                     >
                       {language === "ar"
-                        ? "اعرض روتيني في المتجر"
+                        ? "Ø§Ø¹Ø±Ø¶ Ø±ÙˆØªÙŠÙ†ÙŠ ÙÙŠ Ø§Ù„Ù…ØªØ¬Ø±"
                         : "See My Regimen"}
                     </Link>
                     <button
@@ -706,7 +706,7 @@ export const BeautyAssistant = () => {
                       className="w-full py-2 px-3 rounded-lg border border-gold/40 text-burgundy text-xs font-medium hover:bg-gold/10 transition-colors"
                     >
                       {language === "ar"
-                        ? "احفظ روتيني وأرسله لي"
+                        ? "Ø§Ø­ÙØ¸ Ø±ÙˆØªÙŠÙ†ÙŠ ÙˆØ£Ø±Ø³Ù„Ù‡ Ù„ÙŠ"
                         : "Save My Routine"}
                     </button>
                     {saveRoutineMsgIdx === idx && (
@@ -714,7 +714,7 @@ export const BeautyAssistant = () => {
                         <Input
                           type="email"
                           placeholder={language === "ar"
-                            ? "البريد الإلكتروني"
+                            ? "Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ"
                             : "Email"}
                           value={saveEmail}
                           onChange={(e) => setSaveEmail(e.target.value)}
@@ -723,7 +723,7 @@ export const BeautyAssistant = () => {
                         <Input
                           type="tel"
                           placeholder={language === "ar"
-                            ? "واتساب (اختياري)"
+                            ? "ÙˆØ§ØªØ³Ø§Ø¨ (Ø§Ø®ØªÙŠØ§Ø±ÙŠ)"
                             : "WhatsApp (optional)"}
                           value={saveWhatsapp}
                           onChange={(e) => setSaveWhatsapp(e.target.value)}
@@ -739,9 +739,9 @@ export const BeautyAssistant = () => {
                           >
                             {saveSaving
                               ? (language === "ar"
-                                ? "جاري الحفظ..."
+                                ? "Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø­ÙØ¸..."
                                 : "Saving...")
-                              : (language === "ar" ? "إرسال" : "Send")}
+                              : (language === "ar" ? "Ø¥Ø±Ø³Ø§Ù„" : "Send")}
                           </Button>
                           <Button
                             size="sm"
@@ -753,7 +753,7 @@ export const BeautyAssistant = () => {
                             }}
                             className="border-gold/40 text-xs"
                           >
-                            {language === "ar" ? "إلغاء" : "Cancel"}
+                            {language === "ar" ? "Ø¥Ù„ØºØ§Ø¡" : "Cancel"}
                           </Button>
                         </div>
                       </div>
@@ -794,7 +794,7 @@ export const BeautyAssistant = () => {
         {detectedLabel && input.trim() && (
           <div className="px-4 pb-3 pt-2 border-t border-gold/10 bg-cream/20 space-y-2">
             <p className="text-[10px] text-gold font-medium uppercase tracking-wider">
-              {language === "ar" ? "تم التعرف على الاهتمام" : "Detected concern"}
+              {language === "ar" ? "ØªÙ… Ø§Ù„ØªØ¹Ø±Ù Ø¹Ù„Ù‰ Ø§Ù„Ø§Ù‡ØªÙ…Ø§Ù…" : "Detected concern"}
             </p>
             <span className="inline-block px-2 py-1 rounded-md bg-gold/10 text-burgundy text-xs font-body">
               {detectedLabel}
@@ -811,7 +811,7 @@ export const BeautyAssistant = () => {
                   disabled={isLoading}
                   className="w-full bg-burgundy hover:bg-burgundy/90 text-gold border border-gold/30"
                 >
-                  {language === "ar" ? "اعرض روتيني" : "See My Regimen"}
+                  {language === "ar" ? "Ø§Ø¹Ø±Ø¶ Ø±ÙˆØªÙŠÙ†ÙŠ" : "See My Regimen"}
                 </Button>
               </>
             )}
@@ -851,3 +851,4 @@ export const BeautyAssistant = () => {
 };
 
 export default BeautyAssistant;
+
