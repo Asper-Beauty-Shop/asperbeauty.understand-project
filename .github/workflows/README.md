@@ -34,4 +34,6 @@ If you see messages like:
 
 ## Recent Changes
 
+**2026-03-05**: Fixed `sync-file-changes-to-lovable.yml` and `sync-issues-prs-to-lovable.yml` to remove invalid job-level `if: secrets.*` conditions. GitHub Actions does not allow the `secrets` context in job-level `if` expressions; the runtime check inside the step already handles missing secrets gracefully. Also disabled the automatic push trigger for `azure-webapps-node.yml` since Azure is not configured for this project.
+
 **2026-03-03**: Made `LOVABLE_WEBHOOK_URL` optional to prevent build failures when the secret is not configured. Previously, workflows would fail with `exit 1` if the secret was missing. Now they skip gracefully with `exit 0`.
