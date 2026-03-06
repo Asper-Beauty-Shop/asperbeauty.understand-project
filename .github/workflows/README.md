@@ -5,7 +5,7 @@
 This repository contains GitHub Actions workflows for synchronizing with the Lovable platform:
 
 1. **sync-file-changes-to-lovable.yml** - Syncs file changes on every push
-2. **sync-issues-prs-to-lovable.yml** - Syncs issue and PR events
+2. **sync-issues-prs-to-lovable.yml** - Syncs issue, PR, and comment events
 3. **deploy-health-check.yml** - Performs health checks after deployment
 
 ## Lovable Integration (Optional)

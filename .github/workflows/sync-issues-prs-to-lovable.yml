@@ -16,8 +16,10 @@ name: Sync Issues and PRs to Lovable
 on:
   issues:
     types: [opened, edited, closed, reopened]
+  issue_comment:
+    types: [created, edited]
   pull_request:
-    types: [opened, edited, reopened, closed]
+    types: [opened, edited, reopened, closed, synchronize]
 
 jobs:
   sync_to_lovable:
@@ -54,7 +56,7 @@ jobs:
             --arg action "${{ github.event.action }}" \
             --arg repo "${{ github.repository }}" \
             --arg sender "${{ github.actor }}" \
-            --arg url "${{ github.event.issue.html_url || github.event.pull_request.html_url }}" \
+            --arg url "${{ github.event.issue.html_url || github.event.pull_request.html_url || github.event.comment.html_url }}" \
             --argjson event_data "$(cat "$GITHUB_EVENT_PATH")" \
             '{
               event_name: $event_name,
@@ -63,7 +65,8 @@ jobs:
               sender: $sender,
               url: $url,
               title: ($event_data.issue.title // $event_data.pull_request.title // ""),
-              body: ($event_data.issue.body // $event_data.pull_request.body // "")
+              body: ($event_data.issue.body // $event_data.pull_request.body // ""),
+              comment: ($event_data.comment.body // null)
             }'
           )
           curl -s -X POST "$LOVABLE_WEBHOOK_URL" \
