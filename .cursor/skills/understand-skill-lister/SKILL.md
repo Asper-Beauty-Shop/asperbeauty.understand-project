@@ -1,5 +1,5 @@
 ---
-name: Asper Beaut Shop
+name: Understand Skill Lister
       
 understand-skill-lister
 description: Lists Understand Project skills from curated, experimental, or system catalogs and shows install status. Use when the user asks to list skills, see what Understand skills are available, check installed skills, or list curated/experimental/system skills.
