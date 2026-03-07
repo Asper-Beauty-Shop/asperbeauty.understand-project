@@ -10,7 +10,7 @@ export const EditorialSpotlight = () => {
   const isArabic = language === "ar";
 
   return (
-    <section className="py-16 lg:py-24 bg-card relative overflow-hidden">
+    <section className="py-20 lg:py-28 bg-card relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
 
       <div className="luxury-container">
@@ -63,15 +63,15 @@ export const EditorialSpotlight = () => {
                 {[
                   {
                     step: isArabic ? "الخطوة ١" : "Step 1",
-                    name: isArabic ? "جل منظف مرطب" : "Hydrating Cleansing Gel",
+                    name: isArabic ? "جل منظف مرطب · تنظيف يومي لطيف" : "Hydrating Cleansing Gel · Gentle Daily Purifier",
                   },
                   {
                     step: isArabic ? "الخطوة ٢" : "Step 2",
-                    name: isArabic ? "سيروم الهيالورونيك" : "Hyaluronic Acid Serum",
+                    name: isArabic ? "سيروم الهيالورونيك · ترطيب مكثف" : "Hyaluronic Acid Serum · Intense Moisture Surge",
                   },
                   {
                     step: isArabic ? "الخطوة ٣" : "Step 3",
-                    name: isArabic ? "كريم ترطيب عميق" : "Rich Moisture Barrier Cream",
+                    name: isArabic ? "كريم ترطيب عميق · إعادة بناء الحاجز" : "Rich Moisture Barrier Cream · Deep Repair Treatment",
                   },
                 ].map((item) => (
                   <div

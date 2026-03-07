@@ -40,7 +40,7 @@ export const ProductSlider = ({
   };
 
   return (
-    <section className="py-16 lg:py-20 bg-asper-stone-light relative overflow-hidden">
+    <section className="py-20 lg:py-28 bg-asper-stone-light relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
 
       <div className="luxury-container">
@@ -111,11 +111,11 @@ export const ProductSlider = ({
                   </div>
 
                   {/* Info */}
-                  <div className="p-4 space-y-1.5">
-                    <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-body">
+                  <div className="p-5 space-y-1.5">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-body font-semibold">
                       {product.brand}
                     </p>
-                    <h3 className="font-display text-sm text-foreground line-clamp-2 leading-snug">
+                    <h3 className="font-display text-sm text-foreground line-clamp-2 leading-snug font-semibold">
                       {product.title}
                     </h3>
                     <span
