@@ -11,6 +11,9 @@ import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load below-the-fold components for better initial load performance
+const ValuePropositionBoxes = lazy(() =>
+  import("@/components/home/ValuePropositionBoxes")
+);
 const EditorialSpotlight = lazy(() =>
   import("@/components/home/EditorialSpotlight").then((m) => ({
     default: m.EditorialSpotlight,
