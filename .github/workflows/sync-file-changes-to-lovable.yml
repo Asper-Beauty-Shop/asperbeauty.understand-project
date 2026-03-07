@@ -1,0 +1,35 @@
+name: Sync File Changes to Lovable
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Sync file changes to Lovable
+        if: ${{ secrets.LOVABLE_WEBHOOK_URL != '' }}
+        env:
+          LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
+        run: |
+          COMMIT_SHA="${{ github.sha }}"
+          BRANCH="${{ github.ref_name }}"
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+          BEFORE="${{ github.event.before }}"
+
+          # Get file changes between previous and current commit
+          ADDED=$(git diff --name-only --diff-filter=A "${BEFORE}" "${COMMIT_SHA}" 2>/dev/null | jq -R . | jq -s . || echo "[]")
+          MODIFIED=$(git diff --name-only --diff-filter=M "${BEFORE}" "${COMMIT_SHA}" 2>/dev/null | jq -R . | jq -s . || echo "[]")
+          REMOVED=$(git diff --name-only --diff-filter=D "${BEFORE}" "${COMMIT_SHA}" 2>/dev/null | jq -R . | jq -s . || echo "[]")
+
+          curl -fsSL -X POST "${LOVABLE_WEBHOOK_URL}" \\
+            -H "Content-Type: application/json" \\
+            -d "{\"event\":\"sync_file_changes\",\"commit\":\"${COMMIT_SHA}\",\"branch\":\"${BRANCH}\",\"message\":\"${COMMIT_MESSAGE}\",\"added\":${ADDED},\"modified\":${MODIFIED},\"removed\":${REMOVED}}"
