@@ -58,56 +58,55 @@ const socialLinks = [
     name: "Instagram",
     icon: InstagramIcon,
     url: "https://www.instagram.com/asper.beauty.shop/",
-    color:
-      "hover:bg-gradient-to-br hover:from-purple-500 hover:via-pink-500 hover:to-orange-400",
+    bg: "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400",
   },
   {
     name: "Facebook",
     icon: FacebookIcon,
     url: "https://www.facebook.com/AsperBeautyShop",
-    color: "hover:bg-[#1877F2]",
+    bg: "bg-[#1877F2]",
   },
   {
     name: "TikTok",
     icon: TikTokIcon,
     url: "https://www.tiktok.com/@asper.beauty.shop",
-    color: "hover:bg-black",
+    bg: "bg-black",
   },
   {
     name: "WhatsApp",
     icon: WhatsAppIcon,
     url: "https://wa.me/962790656666",
-    color: "hover:bg-[#25D366]",
+    bg: "bg-[#25D366]",
   },
   {
     name: "X",
     icon: XIcon,
     url: "https://x.com/asperbeautyshop",
-    color: "hover:bg-black",
+    bg: "bg-black",
   },
   {
     name: "YouTube",
     icon: YouTubeIcon,
     url: "https://www.youtube.com/@asperbeautyshop",
-    color: "hover:bg-[#FF0000]",
+    bg: "bg-[#FF0000]",
   },
   {
     name: "LinkedIn",
     icon: LinkedInIcon,
     url: "https://www.linkedin.com/company/asper-beauty-shop",
-    color: "hover:bg-[#0A66C2]",
+    bg: "bg-[#0A66C2]",
   },
   {
     name: "Snapchat",
     icon: SnapchatIcon,
     url: "https://www.snapchat.com/add/asperbeautyshop",
-    color: "hover:bg-[#FFFC00] hover:text-black",
+    bg: "bg-[#FFFC00] text-black",
   },
   {
     name: "Pinterest",
     icon: PinterestIcon,
     url: "https://www.pinterest.com/asperbeautyshop",
-    color: "hover:bg-[#E60023]",
+    bg: "bg-[#E60023]",
   },
 ];
 
@@ -122,7 +121,7 @@ export const FloatingSocials = () => {
             href={social.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`group flex items-center bg-foreground/90 text-cream transition-all duration-300 ${social.color} hover:text-white`}
+            className={`group flex items-center ${social.bg} text-white hover:opacity-90 transition-all duration-300`}
             aria-label={social.name}
           >
             <div className="w-10 h-10 flex items-center justify-center">
