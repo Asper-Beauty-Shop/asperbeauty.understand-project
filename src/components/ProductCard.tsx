@@ -139,19 +139,20 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             )}
           </div>
 
-          {/* Typography Hierarchy */}
+          {/* Typography Hierarchy — Inline · Separator */}
           <div className="space-y-1.5">
             {node.vendor && (
               <p className="text-[10px] uppercase tracking-[0.15em] text-polished-gold font-body font-semibold truncate">
                 {node.vendor}
               </p>
             )}
-            <h3 className="font-display text-[15px] leading-snug text-asper-ink font-semibold line-clamp-2">
+            <h3 className="font-display text-[15px] leading-relaxed text-asper-ink font-semibold line-clamp-2">
               {displayTitle}
+              <span className="text-polished-gold mx-1 font-bold">&middot;</span>
+              <span className="font-body text-[13px] font-normal italic text-muted-foreground">
+                {keyBenefit}
+              </span>
             </h3>
-            <p className="text-[12px] text-muted-foreground font-body italic truncate">
-              {keyBenefit}
-            </p>
 
             <div className="flex items-center gap-2 pt-2">
               <span className="text-sm font-body font-bold text-burgundy">

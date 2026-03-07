@@ -773,6 +773,7 @@ export type Database = {
           inventory_total: number
           is_bestseller: boolean
           is_hero: boolean
+          key_benefit: string | null
           key_ingredients: string[] | null
           mpn: string | null
           pharmacist_note: string | null
@@ -802,6 +803,7 @@ export type Database = {
           inventory_total?: number
           is_bestseller?: boolean
           is_hero?: boolean
+          key_benefit?: string | null
           key_ingredients?: string[] | null
           mpn?: string | null
           pharmacist_note?: string | null
@@ -831,6 +833,7 @@ export type Database = {
           inventory_total?: number
           is_bestseller?: boolean
           is_hero?: boolean
+          key_benefit?: string | null
           key_ingredients?: string[] | null
           mpn?: string | null
           pharmacist_note?: string | null
