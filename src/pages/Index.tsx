@@ -176,6 +176,11 @@ const Index = () => {
         {/* 2. USP Bar — Trust Signals */}
         <USPBar />
 
+        {/* 2a. Value Proposition Pillars */}
+        <Suspense fallback={<SectionSkeleton height="h-64" />}>
+          <ValuePropositionBoxes />
+        </Suspense>
+
         {/* 2b. Dermocosmetic Brands Grid */}
         <Suspense fallback={<SectionSkeleton height="h-48" />}>
           <DermoBrands />
