@@ -66,6 +66,7 @@ export default function Profile() {
   const [skinType, setSkinType] = useState<string | null>(null);
   const [routine, setRoutine] = useState<Record<string, unknown> | null>(null);
   const [consultationCount, setConsultationCount] = useState(0);
+  const [ledgerEntries, setLedgerEntries] = useState<import("@/components/AsperAccessCard").LedgerEntry[]>([]);
 
   useEffect(() => {
     if (!user) return;
