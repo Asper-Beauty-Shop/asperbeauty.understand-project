@@ -1,6 +1,19 @@
 import { useState, MouseEvent } from "react";
+import { format } from "date-fns";
 
-export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION" }: { name?: string; protocol?: string }) {
+export interface LedgerEntry {
+  persona: string;
+  title: string;
+  date: string;
+}
+
+interface AsperAccessCardProps {
+  name?: string;
+  protocol?: string;
+  ledger?: LedgerEntry[];
+}
+
+export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION", ledger = [] }: AsperAccessCardProps) {
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [glareX, setGlareX] = useState(50);
@@ -40,6 +53,25 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
     }
   };
 
+  const displayLedger = ledger.length > 0
+    ? ledger.slice(0, 3)
+    : [
+        { persona: "System", title: "No consultations yet", date: new Date().toISOString() },
+      ];
+
+  const personaColor = (persona: string) => {
+    const lower = persona.toLowerCase();
+    if (lower.includes("sami") || lower === "dr_sami") return "text-burgundy";
+    if (lower.includes("zain") || lower === "ms_zain") return "text-polished-gold";
+    return "text-burgundy";
+  };
+
+  const personaLabel = (persona: string) => {
+    if (persona === "dr_sami") return "Dr. Sami";
+    if (persona === "ms_zain") return "Ms. Zain";
+    return persona;
+  };
+
   return (
     <div
       className="relative w-[400px] h-[250px] cursor-pointer"
@@ -64,7 +96,6 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
           className="absolute inset-0 rounded-2xl bg-background border border-polished-gold overflow-hidden"
           style={{ backfaceVisibility: "hidden" }}
         >
-          {/* DNA dot pattern */}
           <div
             className="absolute inset-0 opacity-20"
             style={{
@@ -72,8 +103,6 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
               backgroundSize: "24px 24px",
             }}
           />
-
-          {/* Dynamic Glare */}
           <div
             className="absolute inset-0 z-20 transition-opacity duration-300 pointer-events-none mix-blend-overlay"
             style={{
@@ -81,8 +110,6 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
               background: `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.8) 10%, transparent 60%)`,
             }}
           />
-
-          {/* Content */}
           <div className="relative z-30 p-6 flex flex-col justify-between h-full">
             <div className="flex justify-between items-start">
               <div>
@@ -97,7 +124,6 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
                 <div className="w-6 h-4 border border-background/50 rounded-sm" />
               </div>
             </div>
-
             <div className="flex justify-between items-end">
               <div>
                 <p className="font-body text-xs text-muted-foreground mb-1 uppercase tracking-widest">
@@ -127,7 +153,6 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
             transform: "rotateY(180deg)",
           }}
         >
-          {/* Left: QR Code Area */}
           <div className="w-1/3 flex flex-col items-center justify-center border-r border-polished-gold/30 pr-6">
             <div className="w-24 h-24 bg-background p-2 rounded-lg border border-border shadow-sm flex items-center justify-center">
               <div
@@ -140,42 +165,29 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
             </p>
           </div>
 
-          {/* Right: Consultation Ledger */}
           <div className="w-2/3 flex flex-col justify-center h-full">
             <h3 className="font-heading text-sm text-foreground uppercase tracking-widest mb-3 border-b border-border pb-2">
               Clinical Ledger
             </h3>
-
             <ul className="space-y-3">
-              <li className="flex justify-between items-start">
-                <div>
-                  <p className="font-body text-[10px] font-bold text-burgundy">Dr. Sami</p>
-                  <p className="font-heading text-xs text-foreground">Acne & Barrier Protocol</p>
-                </div>
-                <span className="font-body text-[9px] text-muted-foreground">Mar 07</span>
-              </li>
-
-              <li className="flex justify-between items-start">
-                <div>
-                  <p className="font-body text-[10px] font-bold text-polished-gold">Ms. Zain</p>
-                  <p className="font-heading text-xs text-foreground">Glass Skin Routine</p>
-                </div>
-                <span className="font-body text-[9px] text-muted-foreground">Feb 28</span>
-              </li>
-
-              <li className="flex justify-between items-start">
-                <div>
-                  <p className="font-body text-[10px] font-bold text-burgundy">System</p>
-                  <p className="font-heading text-xs text-foreground">Order #AS-8892 Delivered</p>
-                </div>
-                <span className="font-body text-[9px] text-muted-foreground">Feb 14</span>
-              </li>
+              {displayLedger.map((entry, i) => (
+                <li key={i} className="flex justify-between items-start">
+                  <div>
+                    <p className={`font-body text-[10px] font-bold ${personaColor(entry.persona)}`}>
+                      {personaLabel(entry.persona)}
+                    </p>
+                    <p className="font-heading text-xs text-foreground">{entry.title}</p>
+                  </div>
+                  <span className="font-body text-[9px] text-muted-foreground whitespace-nowrap ml-2">
+                    {format(new Date(entry.date), "MMM dd")}
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
       </div>
 
-      {/* Reflection */}
       <div
         className="absolute -bottom-12 left-10 right-10 h-8 transition-all duration-700 blur-md rounded-[100%]"
         style={{
