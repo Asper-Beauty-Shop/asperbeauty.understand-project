@@ -88,7 +88,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     }
   };
 
-  return (
+   return (
     <>
       <Link
         to={`/product/${node.handle}`}
@@ -96,16 +96,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div
-          className="relative bg-white rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-[#C5A028]/30"
-          style={{ boxShadow: "0 2px 16px rgba(0,0,0,0.07)" }}
-        >
+        <div className="relative bg-asper-stone overflow-hidden transition-all duration-300 border border-border/60 hover:border-polished-gold/40 p-5">
+          {/* Clinical Shimmer Beam */}
+          <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/50 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
+
           {dnaTag && (
-            <div className="absolute top-3 left-3 z-10">
-              <span
-                className="text-[10px] font-semibold px-2.5 py-1 rounded-full tracking-wide"
-                style={{ backgroundColor: dnaTag.bg, color: dnaTag.color, fontFamily: "Montserrat, sans-serif" }}
-              >
+            <div className="absolute top-4 left-4 z-10">
+              <span className="text-[10px] font-body font-semibold px-2.5 py-1 tracking-wider uppercase bg-burgundy text-polished-white">
                 {dnaTag.label}
               </span>
             </div>
@@ -115,68 +112,71 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             aria-label={isWishlistedItem
               ? (language === "ar" ? "إزالة من المفضلة" : "Remove from wishlist")
               : (language === "ar" ? "إضافة إلى المفضلة" : "Add to wishlist")}
-            className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm transition-all hover:bg-white shadow-sm"
+            className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-polished-white/80 backdrop-blur-sm transition-all hover:bg-polished-white shadow-sm"
           >
-            <Heart className={`w-4 h-4 transition-colors ${isWishlistedItem ? "fill-[#800020] text-[#800020]" : "text-gray-400 hover:text-[#800020]"}`} />
+            <Heart className={`w-4 h-4 transition-colors ${isWishlistedItem ? "fill-burgundy text-burgundy" : "text-muted-foreground hover:text-burgundy"}`} />
           </button>
           {isVerified && (
-            <div className="absolute top-3 right-12 z-10">
-              <Badge className="bg-[#F8F8FF] text-[#C5A028] border border-[#C5A028]/40 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5">
+            <div className="absolute top-4 right-14 z-10">
+              <Badge className="bg-asper-stone text-polished-gold border border-polished-gold/40 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5">
                 Verified
               </Badge>
             </div>
           )}
-          <div className="aspect-square overflow-hidden bg-gray-50">
+
+          {/* Image — taller aspect for elegance */}
+          <div className="aspect-[5/6] overflow-hidden bg-polished-white mb-4">
             {firstImage ? (
               <OptimizedImage
                 src={displayImage?.url || firstImage.url}
                 alt={displayImage?.altText || firstImage.altText || node.title || ""}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                <Sparkles className="w-8 h-8 text-gray-300" />
+              <div className="w-full h-full flex items-center justify-center bg-secondary">
+                <Sparkles className="w-8 h-8 text-muted-foreground/30" />
               </div>
             )}
           </div>
-          <div className="p-4">
+
+          {/* Typography Hierarchy */}
+          <div className="space-y-1.5">
             {node.vendor && (
-              <p className="text-[10px] uppercase tracking-widest mb-1 truncate"
-                style={{ color: "#333333", fontFamily: "Montserrat, sans-serif", fontWeight: 600 }}>
+              <p className="text-[10px] uppercase tracking-[0.15em] text-polished-gold font-body font-semibold truncate">
                 {node.vendor}
               </p>
             )}
-            <h3 className="text-sm leading-snug mb-1 line-clamp-2"
-              style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#1a1a1a", fontWeight: 600 }}>
+            <h3 className="font-display text-[15px] leading-snug text-asper-ink font-semibold line-clamp-2">
               {displayTitle}
             </h3>
-            <p className="text-[11px] mb-3 truncate" style={{ color: "#888", fontFamily: "Montserrat, sans-serif" }}>
+            <p className="text-[12px] text-muted-foreground font-body italic truncate">
               {keyBenefit}
             </p>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-sm font-bold" style={{ color: "#800020", fontFamily: "Montserrat, sans-serif" }}>
+
+            <div className="flex items-center gap-2 pt-2">
+              <span className="text-sm font-body font-bold text-burgundy">
                 {formatJOD(parseFloat(price || "0"))}
               </span>
               {hasDiscount && (
-                <span className="text-xs line-through text-gray-400">
+                <span className="text-xs line-through text-muted-foreground">
                   {formatJOD(parseFloat(comparePrice))}
                 </span>
               )}
             </div>
-            <div className={`transition-all duration-200 ${isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"}`}>
+
+            {/* Conversion CTA — appears on hover */}
+            <div className={`pt-3 transition-all duration-300 ${isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}>
               <button
                 onClick={handleAddToCart}
-                className="w-full py-2 text-xs font-semibold text-white rounded-md transition-all hover:opacity-90 active:scale-95"
-                style={{ backgroundColor: "#800020", fontFamily: "Montserrat, sans-serif", borderRadius: "6px" }}
+                className="w-full py-2.5 text-xs font-body font-semibold uppercase tracking-wider text-polished-white bg-burgundy transition-all hover:opacity-90 active:scale-[0.98]"
               >
                 {language === "ar" ? "إضافة إلى النظام" : "Add to Regimen"}
               </button>
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsQuickViewOpen(true); }}
-                className="w-full text-center text-[11px] mt-2 font-medium transition-colors hover:text-[#800020]"
-                style={{ color: "#888", fontFamily: "Montserrat, sans-serif" }}
+                className="w-full text-center text-[11px] mt-2 font-body font-medium text-muted-foreground transition-colors hover:text-burgundy"
               >
-                View Ingredients
+                {language === "ar" ? "عرض المكونات" : "View Ingredients"}
               </button>
             </div>
           </div>
