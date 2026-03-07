@@ -7,14 +7,12 @@ import Hero from "@/components/home/AmbientVideoHero";
 import DualPersonaTriage from "@/components/home/DualPersonaTriage";
 import { USPBar } from "@/components/home/USPBar";
 import { ProductSlider } from "@/components/home/ProductSlider";
+import { ShopByProtocol } from "@/components/home/ShopByProtocol";
 import { Footer } from "@/components/Footer";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Lazy load below-the-fold components for better initial load performance
-const ValuePropositionBoxes = lazy(() =>
-  import("@/components/home/ValuePropositionBoxes")
-);
+// Lazy load below-the-fold components
 const EditorialSpotlight = lazy(() =>
   import("@/components/home/EditorialSpotlight").then((m) => ({
     default: m.EditorialSpotlight,
@@ -23,11 +21,6 @@ const EditorialSpotlight = lazy(() =>
 const BrandOfTheWeek = lazy(() =>
   import("@/components/home/BrandOfTheWeek").then((m) => ({
     default: m.BrandOfTheWeek,
-  }))
-);
-const ShopByCategory = lazy(() =>
-  import("@/components/home/ShopByCategory").then((m) => ({
-    default: m.ShopByCategory,
   }))
 );
 const CelestialFeaturedCollection = lazy(() =>
@@ -84,7 +77,7 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
   </div>
 );
 
-// Sample product data for sliders - Medical Luxury & Botanical Precision Aesthetic
+// Sample product data for sliders
 const NEW_ARRIVALS = [
   { id: "1", handle: "lumiere-bio-active-ceramide", title: "Lumière Bio-Active Ceramide · Barrier Repair Serum", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80", tag: "Dermat-Tested" },
   { id: "2", handle: "botanical-barrier-recovery", title: "Botanical Barrier Recovery · Deep Hydration Cream", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1608248593842-8021c6475a6c?auto=format&fit=crop&w=800&q=80", tag: "Clinical" },
@@ -107,7 +100,6 @@ const Index = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch new arrivals
   const { data: newArrivals = [] } = useQuery({
     queryKey: ["new-arrivals"],
     queryFn: async () => {
@@ -116,7 +108,6 @@ const Index = () => {
         .select("*")
         .order("created_at", { ascending: false })
         .limit(8);
-
       if (error) throw error;
       return (data || []).map((p) => ({
         id: p.id,
@@ -131,7 +122,6 @@ const Index = () => {
     },
   });
 
-  // Fetch bestsellers
   const { data: bestsellers = [] } = useQuery({
     queryKey: ["bestsellers"],
     queryFn: async () => {
@@ -140,7 +130,6 @@ const Index = () => {
         .select("*")
         .order("created_at", { ascending: true })
         .limit(8);
-
       if (error) throw error;
       return (data || []).map((p) => ({
         id: p.id,
@@ -156,13 +145,8 @@ const Index = () => {
 
   useEffect(() => {
     const handleLoad = () => setIsLoading(false);
-
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1200);
-
+    const timer = setTimeout(() => setIsLoading(false), 1200);
     window.addEventListener("load", handleLoad);
-
     return () => {
       clearTimeout(timer);
       window.removeEventListener("load", handleLoad);
@@ -177,13 +161,16 @@ const Index = () => {
     <div className="min-h-screen bg-background animate-fade-in">
       <Header />
       <main>
-        {/* ═══ ZONE 1: Ambient Video Hero (The Hook) ═══ */}
+        {/* ═══ ZONE 1: Split Editorial Hero (Magazine Cover) ═══ */}
         <Hero />
 
-        {/* ═══ ZONE 2: Dual-Persona Triage (The AI Gatekeeper) ═══ */}
+        {/* ═══ ZONE 2: Dual-Persona Triage (AI Gatekeeper) ═══ */}
         <DualPersonaTriage />
 
-        {/* ═══ ZONE 3: Texture & Benefit Bestsellers (Consideration) ═══ */}
+        {/* ═══ ZONE 3: Shop by Protocol (Editorial Navigation) ═══ */}
+        <ShopByProtocol />
+
+        {/* ═══ ZONE 4: Product Sliders (Bestsellers + New Arrivals) ═══ */}
         <ProductSlider
           title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
           subtitle={{ en: "Most Loved", ar: "الأكثر حباً" }}
@@ -195,7 +182,7 @@ const Index = () => {
           products={newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS}
         />
 
-        {/* ═══ ZONE 4: DermoBrands Authority Grid (Trust) ═══ */}
+        {/* ═══ ZONE 5: DermoBrands + EliteBrandShowcase (Authority) ═══ */}
         <Suspense fallback={<SectionSkeleton height="h-48" />}>
           <DermoBrands />
         </Suspense>
@@ -203,34 +190,28 @@ const Index = () => {
           <EliteBrandShowcase />
         </Suspense>
 
-        {/* ═══ ZONE 5: Clinical Truth Banner (Transparency) ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-48" />}>
-          <ClinicalTruthBanner />
-        </Suspense>
-
-        {/* ═══ ZONE 6: Contextual Social Proof & Editorial (Validation) ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-96" />}>
-          <ContextualSocialProof />
-        </Suspense>
+        {/* ═══ ZONE 6: Clinical Dispatch (Editorial) ═══ */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <EditorialSpotlight />
         </Suspense>
+
+        {/* ═══ ZONE 7: Clinical Truth + Social Proof ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-48" />}>
+          <ClinicalTruthBanner />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <ContextualSocialProof />
+        </Suspense>
+
+        {/* ═══ ZONE 8: Conversion Close ═══ */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <BrandOfTheWeek />
         </Suspense>
-
-        {/* ═══ ZONE 7: Intelligent Conversion Close ═══ */}
-        {/* Digital Tray — 3-Click Routine */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <CelestialFeaturedCollection />
         </Suspense>
 
-        {/* Shop by Category */}
-        <Suspense fallback={<SectionSkeleton height="h-48" />}>
-          <ShopByCategory />
-        </Suspense>
-
-        {/* USP Bar — Trust Signals */}
+        {/* USP Bar */}
         <USPBar />
 
         {/* Featured Brands */}
@@ -255,7 +236,6 @@ const Index = () => {
       </main>
       <Footer />
 
-      {/* Lazy-loaded floating components (BeautyAssistant is global in App) */}
       <Suspense fallback={null}>
         <ScrollToTop />
       </Suspense>
@@ -267,4 +247,3 @@ const Index = () => {
 };
 
 export default Index;
-

@@ -7,11 +7,14 @@ import { cn } from "@/lib/utils";
 
 interface SliderProduct {
   id: string;
-  handle: string;
+  handle?: string;
   title: string;
-  brand: string;
-  image: string;
+  brand?: string | null;
+  image?: string;
+  image_url?: string;
   tag?: string;
+  tags?: string[];
+  clinical_badge?: string | null;
 }
 
 interface ProductSliderProps {
@@ -46,7 +49,7 @@ export const ProductSlider = ({
       <div className="luxury-container">
         {/* Section Header */}
         <AnimatedSection
-          className="flex items-end justify-between mb-10"
+          className="flex items-end justify-between mb-12"
           animation="fade-up"
         >
           <div>
@@ -55,7 +58,7 @@ export const ProductSlider = ({
                 {isArabic ? subtitle.ar : subtitle.en}
               </span>
             )}
-            <h2 className="font-display text-2xl lg:text-3xl text-asper-ink">
+            <h2 className="font-heading text-2xl lg:text-3xl text-asper-ink font-bold">
               {isArabic ? title.ar : title.en}
             </h2>
           </div>
@@ -79,61 +82,75 @@ export const ProductSlider = ({
           </div>
         </AnimatedSection>
 
-        {/* Product Carousel */}
+        {/* Product Carousel — Floating Cards */}
         <AnimatedSection animation="fade-up" delay={150}>
           <div
             ref={scrollRef}
-            className="flex gap-5 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+            className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {products.map((product) => (
-              <Link
-                key={product.id}
-                to={`/product/${product.handle}`}
-                className="group flex-shrink-0 w-64 lg:w-72"
-              >
-                {/* ILIA-Inspired Product Card */}
-                <div className="relative overflow-hidden border border-border/60 hover:border-polished-gold/40 bg-asper-stone p-4 transition-all duration-300">
-                  {/* Clinical Shimmer Beam */}
-                  <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/50 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
+            {products.map((product) => {
+              const imgSrc = product.image || product.image_url || "/placeholder.svg";
+              const handle = product.handle || product.id;
+              const clinicalTag = product.clinical_badge || product.tag;
 
-                  {/* Image */}
-                  <div className="relative aspect-[5/6] bg-polished-white overflow-hidden mb-4">
-                    <img
-                      src={product.image}
-                      alt={product.title}
-                      className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                    {/* Product tag */}
-                    {product.tag && (
-                      <span className="absolute top-3 left-3 bg-burgundy text-polished-white text-[10px] uppercase tracking-wider font-body font-semibold px-3 py-1">
-                        {product.tag}
-                      </span>
-                    )}
-                  </div>
+              return (
+                <Link
+                  key={product.id}
+                  to={`/product/${handle}`}
+                  className="group flex-shrink-0 w-64 lg:w-72"
+                >
+                  {/* Floating Card — No borders, no background */}
+                  <div className="relative">
+                    {/* Clinical Shimmer Beam */}
+                    <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-polished-white/50 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
 
-                  {/* Typography Hierarchy */}
-                  <div className="space-y-1.5">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-polished-gold font-body font-semibold">
-                      {product.brand}
-                    </p>
-                    <h3 className="font-display text-sm text-asper-ink line-clamp-2 leading-snug font-semibold">
-                      {product.title}
-                    </h3>
-                    <span
-                      className={cn(
-                        "inline-flex items-center gap-1.5 text-xs font-body text-burgundy font-semibold uppercase tracking-wider mt-2",
-                        "group-hover:text-polished-gold transition-colors duration-300"
+                    {/* Image — floats directly on background */}
+                    <div className="relative aspect-[5/6] overflow-hidden mb-5">
+                      <img
+                        src={imgSrc}
+                        alt={product.title}
+                        className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    {/* Typography Hierarchy */}
+                    <div className="space-y-2">
+                      {/* Clinical pill tag */}
+                      {clinicalTag && (
+                        <span className="inline-block font-body text-[9px] uppercase tracking-[0.15em] text-polished-gold border border-polished-gold/40 px-3 py-1 rounded-full">
+                          {clinicalTag}
+                        </span>
                       )}
-                    >
-                      {isArabic ? "تسوق الآن" : "Add to Regimen"}
-                      <ChevronRight className="w-3 h-3" />
-                    </span>
+
+                      {/* Brand — Gold micro label */}
+                      {product.brand && (
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-polished-gold font-body font-semibold">
+                          {product.brand}
+                        </p>
+                      )}
+
+                      {/* Product Name — Playfair */}
+                      <h3 className="font-heading text-sm text-asper-ink line-clamp-2 leading-snug font-semibold">
+                        {product.title}
+                      </h3>
+
+                      {/* CTA text */}
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1.5 text-xs font-body text-burgundy font-semibold uppercase tracking-wider mt-1",
+                          "group-hover:text-polished-gold transition-colors duration-300"
+                        )}
+                      >
+                        {isArabic ? "تسوق الآن" : "Add to Regimen"}
+                        <ChevronRight className="w-3 h-3" />
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </AnimatedSection>
       </div>
@@ -142,4 +159,3 @@ export const ProductSlider = ({
     </section>
   );
 };
-

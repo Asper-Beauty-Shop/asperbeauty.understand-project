@@ -5,6 +5,10 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { cn } from "@/lib/utils";
 
+/**
+ * Clinical Dispatch — Dr. Sami Editorial Block
+ * Asymmetric layout: B&W editorial photo + AI-pharmacist content
+ */
 export const EditorialSpotlight = () => {
   const { language, dir } = useLanguage();
   const isArabic = language === "ar";
@@ -15,36 +19,37 @@ export const EditorialSpotlight = () => {
 
       <div className="luxury-container">
         <AnimatedSection animation="fade-up">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Lifestyle Image */}
-            <div className="relative rounded-2xl overflow-hidden aspect-[4/5] lg:aspect-[3/4]">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-16 items-center">
+            {/* Editorial Photo — 3 columns, asymmetric */}
+            <div className="lg:col-span-3 relative overflow-hidden aspect-[4/5] lg:aspect-[3/4]">
               <img
-                src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=800&q=80&auto=format&fit=crop"
-                alt="Hydration trio skincare products in luxury setting"
-                className="h-full w-full object-cover"
+                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&auto=format&fit=crop"
+                alt="Laboratory setting with clinical precision"
+                className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
                 loading="lazy"
               />
+              {/* Overlay badge */}
               <div className="absolute top-6 left-6">
-                <span className="bg-burgundy text-polished-white text-xs uppercase tracking-[0.2em] font-body font-semibold px-4 py-2 rounded-full">
-                  {isArabic ? "مطلوب!" : "WANTED!"}
+                <span className="bg-burgundy text-polished-white text-[10px] uppercase tracking-[0.2em] font-body font-semibold px-4 py-2 rounded-full">
+                  {isArabic ? "ملف سريري" : "Clinical Dossier"}
                 </span>
               </div>
             </div>
 
-            {/* Descriptive Content */}
-            <div className={cn(isArabic && "text-right")}>
+            {/* Content — 2 columns */}
+            <div className={cn("lg:col-span-2", isArabic && "text-right")}>
               <span className="font-body text-xs uppercase tracking-[0.3em] text-polished-gold mb-4 block">
-                {isArabic ? "منتجات مميزة" : "Hero Products"}
+                {isArabic ? "من مكتب الدكتور سامي" : "From Dr. Sami's Desk"}
               </span>
               <h2
                 className={cn(
-                  "font-heading text-3xl lg:text-4xl xl:text-5xl font-bold text-asper-ink mb-6 leading-tight",
+                  "font-heading text-2xl lg:text-3xl xl:text-4xl font-bold text-asper-ink mb-6 leading-tight",
                   isArabic && "font-arabic"
                 )}
               >
                 {isArabic
-                  ? "ثلاثي الترطيب المثالي"
-                  : "The Ultimate Hydration Trio"}
+                  ? "لماذا يصف الدكتور سامي الببتيدات للبيئات الحضرية"
+                  : "Why Dr. Sami Prescribes Peptides for Urban Environments"}
               </h2>
 
               <p
@@ -54,35 +59,21 @@ export const EditorialSpotlight = () => {
                 )}
               >
                 {isArabic
-                  ? "تركيبة علمية مدروسة تمنح بشرتك ترطيباً عميقاً يدوم 72 ساعة. من التنظيف إلى الحماية — كل خطوة مصممة لإشراقة طبيعية."
-                  : "A clinically formulated trio delivering 72-hour deep hydration. From cleansing to protection — every step is designed for a natural, healthy glow."}
+                  ? "التلوث الحضري يُسرّع شيخوخة البشرة بنسبة 20%. اكتشفي كيف تعمل الببتيدات النحاسية والنياسيناميد على إعادة بناء حاجز بشرتك وحمايتها من التأكسد اليومي."
+                  : "Urban pollution accelerates skin aging by 20%. Discover how copper peptides and niacinamide rebuild your barrier and defend against daily oxidative stress."}
               </p>
 
-              {/* Product mini-list */}
-              <div className="space-y-4 mb-8">
+              {/* Key points */}
+              <div className="space-y-3 mb-8">
                 {[
-                  {
-                    step: isArabic ? "الخطوة ١" : "Step 1",
-                    name: isArabic ? "جل منظف مرطب · تنظيف يومي لطيف" : "Hydrating Cleansing Gel · Gentle Daily Purifier",
-                  },
-                  {
-                    step: isArabic ? "الخطوة ٢" : "Step 2",
-                    name: isArabic ? "سيروم الهيالورونيك · ترطيب مكثف" : "Hyaluronic Acid Serum · Intense Moisture Surge",
-                  },
-                  {
-                    step: isArabic ? "الخطوة ٣" : "Step 3",
-                    name: isArabic ? "كريم ترطيب عميق · إعادة بناء الحاجز" : "Rich Moisture Barrier Cream · Deep Repair Treatment",
-                  },
-                ].map((item) => (
-                  <div
-                    key={item.step}
-                    className="flex items-center gap-4 border-b border-border pb-3"
-                  >
-                    <span className="text-xs uppercase tracking-wider text-polished-gold font-body font-semibold w-16 flex-shrink-0">
-                      {item.step}
-                    </span>
+                  { en: "Copper Peptides stimulate collagen synthesis", ar: "ببتيدات النحاس تحفز تخليق الكولاجين" },
+                  { en: "Niacinamide strengthens the skin barrier", ar: "النياسيناميد يعزز حاجز البشرة" },
+                  { en: "Antioxidant defense against urban pollutants", ar: "دفاع مضاد للأكسدة ضد الملوثات" },
+                ].map((point) => (
+                  <div key={point.en} className="flex items-center gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-polished-gold flex-shrink-0" />
                     <span className="font-body text-sm text-asper-ink">
-                      {item.name}
+                      {isArabic ? point.ar : point.en}
                     </span>
                   </div>
                 ))}
@@ -90,10 +81,11 @@ export const EditorialSpotlight = () => {
 
               <Link to="/skin-concerns">
                 <Button
+                  variant="outline"
                   size="lg"
-                  className="group bg-burgundy text-primary-foreground hover:bg-burgundy-light border border-transparent hover:border-polished-gold text-sm uppercase tracking-widest px-8 h-12 font-semibold transition-all duration-400"
+                  className="group border-2 border-burgundy text-burgundy bg-transparent hover:bg-burgundy hover:text-polished-white text-sm uppercase tracking-widest px-8 h-12 font-semibold transition-all duration-400 rounded-none"
                 >
-                  {isArabic ? "اكتشفي الآن" : "Discover Now"}
+                  {isArabic ? "اقرأ الملف" : "Read the Dossier"}
                   <ArrowRight
                     className={cn(
                       "h-4 w-4 transition-transform duration-300 group-hover:translate-x-1",
