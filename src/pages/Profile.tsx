@@ -259,6 +259,7 @@ export default function Profile() {
               <AsperAccessCard
                 name={displayName || user.user_metadata?.full_name || "Guest"}
                 protocol={skinConcern ? skinConcern.replace("Concern_", "").toUpperCase() : "HYDRATION"}
+                ledger={ledgerEntries}
               />
               <button
                 className="mt-2 py-3 px-8 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white flex items-center justify-center gap-2 transition-all duration-300 bg-foreground hover:bg-foreground/90"
