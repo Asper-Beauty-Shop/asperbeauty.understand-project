@@ -190,7 +190,7 @@ export default {
         "spin-slow": "spin-slow 20s linear infinite",
         "fade-up": "fadeUp 0.8s ease-out forwards",
         "fade-in": "fadeIn 0.6s ease-out forwards",
-        shimmer: "shimmer 2s linear infinite",
+        shimmer: "shimmer 1.5s ease-in-out infinite",
         "skeleton-breathe": "skeleton-breathe 2s ease-in-out infinite",
         shake: "shake 0.5s ease-in-out",
       },
