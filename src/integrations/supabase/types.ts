@@ -1368,6 +1368,56 @@ export type Database = {
         }
         Relationships: []
       }
+      product_reviews_public: {
+        Row: {
+          age_range: string | null
+          body: string | null
+          created_at: string | null
+          helpful_count: number | null
+          id: string | null
+          primary_concern: string | null
+          product_id: string | null
+          rating: number | null
+          skin_type: string | null
+          title: string | null
+          verified_purchase: boolean | null
+        }
+        Insert: {
+          age_range?: string | null
+          body?: string | null
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: string | null
+          primary_concern?: string | null
+          product_id?: string | null
+          rating?: number | null
+          skin_type?: string | null
+          title?: string | null
+          verified_purchase?: boolean | null
+        }
+        Update: {
+          age_range?: string | null
+          body?: string | null
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: string | null
+          primary_concern?: string | null
+          product_id?: string | null
+          rating?: number | null
+          skin_type?: string | null
+          title?: string | null
+          verified_purchase?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       apply_concierge_brain_rules: {
@@ -1419,6 +1469,22 @@ export type Database = {
           isOneToOne: false
           isSetofReturn: true
         }
+      }
+      get_product_reviews: {
+        Args: { p_product_id: string }
+        Returns: {
+          age_range: string
+          body: string
+          created_at: string
+          helpful_count: number
+          id: string
+          primary_concern: string
+          product_id: string
+          rating: number
+          skin_type: string
+          title: string
+          verified_purchase: boolean
+        }[]
       }
       get_tray_by_concern: {
         Args: { concern_tag: Database["public"]["Enums"]["skin_concern"] }
