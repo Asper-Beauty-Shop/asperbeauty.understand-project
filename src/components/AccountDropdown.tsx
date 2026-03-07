@@ -158,10 +158,10 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                 <DropdownMenuGroup>
                   <DropdownMenuItem
                     className="py-3 px-3 cursor-pointer rounded-none hover:bg-cream"
-                    onClick={() => navigate("/account?tab=settings")}
+                    onClick={() => navigate("/profile")}
                   >
                     <Settings className="h-4 w-4 mr-3 text-muted-foreground" />
-                    {isAr ? "الإعدادات" : "Preferences"}
+                    {isAr ? "ملفي الشخصي" : "My Profile — The Mirror"}
                   </DropdownMenuItem>
 
                   <DropdownMenuItem

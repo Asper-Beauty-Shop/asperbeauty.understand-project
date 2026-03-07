@@ -24,6 +24,7 @@ import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 import Philosophy from "./pages/Philosophy";
 import BulkUpload from "./pages/BulkUpload";
 import AdminOrders from "./pages/AdminOrders";
@@ -104,6 +105,7 @@ const App = () => {
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/account" element={<Account />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/philosophy" element={<Philosophy />} />
                 <Route path="/intelligence" element={<AsperIntelligence />} />
                 <Route path="/health" element={<Health />} />
