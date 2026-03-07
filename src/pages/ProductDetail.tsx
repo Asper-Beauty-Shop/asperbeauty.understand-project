@@ -411,6 +411,14 @@ const ProductDetail = () => {
       )}
 
       <Footer />
+
+      {/* Sticky Add-to-Cart Bar */}
+      <StickyAddToCart
+        productTitle={product.title}
+        price={currentPrice}
+        onAddToCart={handleAddToCart}
+        triggerRef={ctaRef as React.RefObject<HTMLElement>}
+      />
     </div>
   );
 };
