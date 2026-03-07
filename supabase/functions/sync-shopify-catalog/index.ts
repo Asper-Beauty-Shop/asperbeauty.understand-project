@@ -254,6 +254,7 @@ Deno.serve(async (req) => {
       synced,
       skipped,
       failed,
+      next_cursor: cursor ?? null,
       errors: errors.slice(0, 20),
     };
 
