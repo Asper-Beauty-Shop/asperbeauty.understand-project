@@ -210,6 +210,9 @@ const Index = () => {
 
         {/* ═══ ZONE 6: Contextual Social Proof & Editorial (Validation) ═══ */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <ContextualSocialProof />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <EditorialSpotlight />
         </Suspense>
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
