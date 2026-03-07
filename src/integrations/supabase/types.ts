@@ -119,6 +119,7 @@ export type Database = {
       brands: {
         Row: {
           created_at: string
+          description: string | null
           featured: boolean
           id: string
           image_url: string
@@ -129,6 +130,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          description?: string | null
           featured?: boolean
           id?: string
           image_url: string
@@ -139,6 +141,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          description?: string | null
           featured?: boolean
           id?: string
           image_url?: string
