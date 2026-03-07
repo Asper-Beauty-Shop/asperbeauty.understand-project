@@ -58,6 +58,9 @@ const DermoBrands = lazy(() =>
 const EliteBrandShowcase = lazy(() =>
   import("@/components/home/EliteBrandShowcase")
 );
+const ClinicalTruthBanner = lazy(() =>
+  import("@/components/home/ClinicalTruthBanner")
+);
 const FloatingSocials = lazy(() =>
   import("@/components/FloatingSocials").then((m) => ({
     default: m.FloatingSocials,
