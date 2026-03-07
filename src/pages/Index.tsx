@@ -164,6 +164,11 @@ const Index = () => {
         {/* ═══ ZONE 1: Split Editorial Hero (Magazine Cover) ═══ */}
         <Hero />
 
+        {/* ═══ DermoBrands Bar — Right below hero ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-16" />}>
+          <DermoBrands />
+        </Suspense>
+
         {/* ═══ ZONE 2: Dual-Persona Triage (AI Gatekeeper) ═══ */}
         <DualPersonaTriage />
 
@@ -182,10 +187,7 @@ const Index = () => {
           products={newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS}
         />
 
-        {/* ═══ ZONE 5: DermoBrands + EliteBrandShowcase (Authority) ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-48" />}>
-          <DermoBrands />
-        </Suspense>
+        {/* ═══ ZONE 5: EliteBrandShowcase (Authority) ═══ */}
         <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
           <EliteBrandShowcase />
         </Suspense>
