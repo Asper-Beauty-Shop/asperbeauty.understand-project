@@ -63,15 +63,15 @@ export const EditorialSpotlight = () => {
                 {[
                   {
                     step: isArabic ? "الخطوة ١" : "Step 1",
-                    name: isArabic ? "جل منظف مرطب" : "Hydrating Cleansing Gel",
+                    name: isArabic ? "جل منظف مرطب · تنظيف يومي لطيف" : "Hydrating Cleansing Gel · Gentle Daily Purifier",
                   },
                   {
                     step: isArabic ? "الخطوة ٢" : "Step 2",
-                    name: isArabic ? "سيروم الهيالورونيك" : "Hyaluronic Acid Serum",
+                    name: isArabic ? "سيروم الهيالورونيك · ترطيب مكثف" : "Hyaluronic Acid Serum · Intense Moisture Surge",
                   },
                   {
                     step: isArabic ? "الخطوة ٣" : "Step 3",
-                    name: isArabic ? "كريم ترطيب عميق" : "Rich Moisture Barrier Cream",
+                    name: isArabic ? "كريم ترطيب عميق · إعادة بناء الحاجز" : "Rich Moisture Barrier Cream · Deep Repair Treatment",
                   },
                 ].map((item) => (
                   <div
