@@ -14,6 +14,7 @@ const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 export default function DualPersonaTriage() {
   const { locale, dir } = useLanguage();
   const isAr = locale === "ar";
+  const navigate = useNavigate();
 
   return (
     <section className="w-full bg-asper-stone py-20 px-4 md:px-8 border-b border-foreground/5">
