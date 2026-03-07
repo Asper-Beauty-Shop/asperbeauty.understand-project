@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
 import pdpIngredients from "@/assets/pdp-ingredients.jpg";
