@@ -92,30 +92,33 @@ export const ProductSlider = ({
                 to={`/product/${product.handle}`}
                 className="group flex-shrink-0 w-64 lg:w-72"
               >
-                {/* Product Card */}
-                <div className="rounded-xl overflow-hidden border border-border bg-white gold-stitch-hover hover:shadow-maroon-glow transition-all duration-400">
+                {/* ILIA-Inspired Product Card */}
+                <div className="relative overflow-hidden border border-border/60 hover:border-polished-gold/40 bg-asper-stone p-4 transition-all duration-300">
+                  {/* Clinical Shimmer Beam */}
+                  <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/50 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
+
                   {/* Image */}
-                  <div className="relative aspect-[3/4] bg-secondary overflow-hidden">
+                  <div className="relative aspect-[5/6] bg-polished-white overflow-hidden mb-4">
                     <img
                       src={product.image}
                       alt={product.title}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                     />
                     {/* Product tag */}
                     {product.tag && (
-                      <span className="absolute top-3 left-3 bg-polished-gold text-asper-ink text-[10px] uppercase tracking-wider font-body font-semibold px-3 py-1 rounded-full">
+                      <span className="absolute top-3 left-3 bg-burgundy text-polished-white text-[10px] uppercase tracking-wider font-body font-semibold px-3 py-1">
                         {product.tag}
                       </span>
                     )}
                   </div>
 
-                  {/* Info */}
-                  <div className="p-5 space-y-1.5">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-body font-semibold">
+                  {/* Typography Hierarchy */}
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-polished-gold font-body font-semibold">
                       {product.brand}
                     </p>
-                    <h3 className="font-display text-sm text-foreground line-clamp-2 leading-snug font-semibold">
+                    <h3 className="font-display text-sm text-asper-ink line-clamp-2 leading-snug font-semibold">
                       {product.title}
                     </h3>
                     <span
