@@ -30,10 +30,11 @@ jobs:
           fi
           supabase --experimental branches create \
             --project-ref qqceibvalkoytafynwoc \
-            --name "${{ github.head_ref }}" || \
+            --name "$HEAD_REF" || \
             echo "Branch creation failed or branch already exists, continuing..."
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          HEAD_REF: ${{ github.head_ref }}
 
   delete-preview-branch:
     name: Delete Supabase Preview Branch
@@ -54,7 +55,7 @@ jobs:
             echo "SUPABASE_ACCESS_TOKEN is not set, skipping branch deletion."
             exit 0
           fi
-          BRANCH_NAME="${{ github.head_ref }}"
+          BRANCH_NAME="$HEAD_REF"
           BRANCH_ID=$(supabase --experimental branches list \
             --project-ref qqceibvalkoytafynwoc \
             --output json 2>/dev/null | \
@@ -67,3 +68,4 @@ jobs:
           fi
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          HEAD_REF: ${{ github.head_ref }}
