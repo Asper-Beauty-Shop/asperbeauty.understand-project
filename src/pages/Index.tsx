@@ -174,77 +174,75 @@ const Index = () => {
     <div className="min-h-screen bg-background animate-fade-in">
       <Header />
       <main>
-        {/* 1. Hero Banner — Wonder Women Edit / Female Founders */}
+        {/* ═══ ZONE 1: Ambient Video Hero (The Hook) ═══ */}
         <Hero />
 
-        {/* 2. USP Bar — Trust Signals */}
-        <USPBar />
+        {/* ═══ ZONE 2: Dual-Persona Triage (The AI Gatekeeper) ═══ */}
+        <DualPersonaTriage />
 
-        {/* 2a. Value Proposition Pillars */}
-        <Suspense fallback={<SectionSkeleton height="h-64" />}>
-          <ValuePropositionBoxes />
-        </Suspense>
-
-        {/* 2b. Dermocosmetic Brands Grid */}
-        <Suspense fallback={<SectionSkeleton height="h-48" />}>
-          <DermoBrands />
-        </Suspense>
-
-        {/* 2c. Elite Brand Showcase — Portrait Editorial */}
-        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
-          <EliteBrandShowcase />
-        </Suspense>
-
-        {/* 3. Product Slider — Just Landed / What's New */}
+        {/* ═══ ZONE 3: Texture & Benefit Bestsellers (Consideration) ═══ */}
+        <ProductSlider
+          title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
+          subtitle={{ en: "Most Loved", ar: "الأكثر حباً" }}
+          products={bestsellers.length > 0 ? bestsellers : BESTSELLERS}
+        />
         <ProductSlider
           title={{ en: "Just Landed! What's New", ar: "وصل حديثاً! الجديد لدينا" }}
           subtitle={{ en: "New Arrivals", ar: "وصل حديثاً" }}
           products={newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS}
         />
 
-        {/* 4. Product Slider — Bestsellers */}
-        <ProductSlider
-          title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
-          subtitle={{ en: "Most Loved", ar: "الأكثر حباً" }}
-          products={bestsellers.length > 0 ? bestsellers : BESTSELLERS}
-        />
+        {/* ═══ ZONE 4: DermoBrands Authority Grid (Trust) ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-48" />}>
+          <DermoBrands />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <EliteBrandShowcase />
+        </Suspense>
 
-        {/* 5. Editorial Spotlight — WANTED! Hero Products */}
+        {/* ═══ ZONE 5: Clinical Truth Banner (Transparency) ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-48" />}>
+          <ClinicalTruthBanner />
+        </Suspense>
+
+        {/* ═══ ZONE 6: Contextual Social Proof & Editorial (Validation) ═══ */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <EditorialSpotlight />
         </Suspense>
-
-        {/* 6. Brand of the Week */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <BrandOfTheWeek />
         </Suspense>
 
-        {/* 7. Shop by Category Grid */}
-        <Suspense fallback={<SectionSkeleton height="h-48" />}>
-          <ShopByCategory />
-        </Suspense>
-
-        {/* 8. Digital Tray — Clinical Routine */}
+        {/* ═══ ZONE 7: Intelligent Conversion Close ═══ */}
+        {/* Digital Tray — 3-Click Routine */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <CelestialFeaturedCollection />
         </Suspense>
 
-        {/* 9. Featured Brands Carousel */}
+        {/* Shop by Category */}
+        <Suspense fallback={<SectionSkeleton height="h-48" />}>
+          <ShopByCategory />
+        </Suspense>
+
+        {/* USP Bar — Trust Signals */}
+        <USPBar />
+
+        {/* Featured Brands */}
         <Suspense fallback={<SectionSkeleton height="h-32" />}>
           <FeaturedBrands />
         </Suspense>
 
-        {/* 10. Newsletter — 15% Off for Beauty Insiders */}
+        {/* Newsletter */}
         <Suspense fallback={<SectionSkeleton height="h-48" />}>
           <Newsletter />
         </Suspense>
 
-        {/* 11. NPS Survey */}
+        {/* NPS Survey */}
         <Suspense fallback={<SectionSkeleton height="h-20" />}>
           <NPSSurvey />
         </Suspense>
 
-        {/* 12. Trust Banner */}
+        {/* Trust Banner */}
         <Suspense fallback={<SectionSkeleton height="h-24" />}>
           <TrustBanner />
         </Suspense>
