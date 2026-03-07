@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Stethoscope, Sparkles, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
@@ -14,6 +14,7 @@ const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 export default function DualPersonaTriage() {
   const { locale, dir } = useLanguage();
   const isAr = locale === "ar";
+  const navigate = useNavigate();
 
   return (
     <section className="w-full bg-asper-stone py-20 px-4 md:px-8 border-b border-foreground/5">
@@ -51,9 +52,9 @@ export default function DualPersonaTriage() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, ease: LUXURY_EASE }}
           >
-            <Link
-              to="/skin-concerns"
-              className="group relative bg-card p-10 md:p-14 border border-border flex flex-col items-center text-center transition-all duration-500 hover:shadow-2xl hover:shadow-foreground/5 hover:-translate-y-1 cursor-pointer overflow-hidden block"
+            <button
+              onClick={() => navigate("/?intent=sensitivity&source=dr-sami")}
+              className="group relative bg-card p-10 md:p-14 border border-border flex flex-col items-center text-center transition-all duration-500 hover:shadow-2xl hover:shadow-foreground/5 hover:-translate-y-1 cursor-pointer overflow-hidden w-full"
             >
               {/* Clinical Shimmer Beam */}
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-card/60 to-transparent group-hover:animate-[shimmer_1.5s_infinite] skew-x-[-20deg]" />
@@ -86,7 +87,7 @@ export default function DualPersonaTriage() {
                 {isAr ? "ابدئي الاستشارة الطبية" : "START CLINICAL CONSULTATION"}
                 <ArrowRight size={16} className={cn(dir === "rtl" && "rotate-180")} />
               </span>
-            </Link>
+            </button>
           </motion.div>
 
           {/* Card B: Ms. Zain (Aesthetic / Glow) */}
@@ -96,9 +97,9 @@ export default function DualPersonaTriage() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, delay: 0.15, ease: LUXURY_EASE }}
           >
-            <Link
-              to="/skin-concerns"
-              className="group relative bg-asper-stone p-10 md:p-14 border border-polished-gold/30 flex flex-col items-center text-center transition-all duration-500 hover:shadow-2xl hover:shadow-polished-gold/10 hover:-translate-y-1 cursor-pointer overflow-hidden block"
+            <button
+              onClick={() => navigate("/?intent=hydration&source=ms-zain")}
+              className="group relative bg-asper-stone p-10 md:p-14 border border-polished-gold/30 flex flex-col items-center text-center transition-all duration-500 hover:shadow-2xl hover:shadow-polished-gold/10 hover:-translate-y-1 cursor-pointer overflow-hidden w-full"
             >
               {/* Luxury Shimmer Beam */}
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-polished-gold/10 to-transparent group-hover:animate-[shimmer_1.5s_infinite] skew-x-[-20deg]" />
@@ -131,7 +132,7 @@ export default function DualPersonaTriage() {
                 {isAr ? "ابدئي استشارة الجمال" : "START BEAUTY CONSULTATION"}
                 <ArrowRight size={16} className={cn(dir === "rtl" && "rotate-180")} />
               </span>
-            </Link>
+            </button>
           </motion.div>
         </div>
       </div>
