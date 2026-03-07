@@ -1,0 +1,65 @@
+name: Build and Push to Lovable
+
+  on:
+    push:
+      branches:
+        - main
+    workflow_dispatch:
+  
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+  
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+  
+        - name: Set up Node.js 20
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+            cache: 'npm'
+  
+        - name: Install dependencies
+          run: npm ci
+  
+        - name: Build
+          run: npm run build
+  
+        - name: Run tests
+          run: npm run test
+          continue-on-error: true
+  
+        - name: Upload build artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: build-output
+            path: dist/
+            retention-days: 7
+  
+        - name: Notify Lovable
+          if: ${{ secrets.LOVABLE_WEBHOOK_URL != '' }}
+          env:
+            LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
+          run: |
+            COMMIT_SHA="${{ github.sha }}"
+            BRANCH="${{ github.ref_name }}"
+            COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+  
+            if [ "${{ github.event_name }}" = "push" ]; then
+              BEFORE="${{ github.event.before }}"
+              AFTER="${{ github.sha }}"
+              ADDED=$(git diff --name-only --diff-filter=A "${BEFORE}" "${AFTER}" 2>/dev/null | jq -R . | jq -s . || echo "[]")
+              MODIFIED=$(git diff --name-only --diff-filter=M "${BEFORE}" "${AFTER}" 2>/dev/null | jq -R . | jq -s . || echo "[]")
+              REMOVED=$(git diff --name-only --diff-filter=D "${BEFORE}" "${AFTER}" 2>/dev/null | jq -R . | jq -s . || echo "[]")
+            else
+              ADDED="[]"
+            MODIFIED="[]"
+            REMOVED="[]"
+          fi
+
+          curl -fsSL -X POST "${LOVABLE_WEBHOOK_URL}" \\
+            -H "Content-Type: application/json" \\
+            -d "{\"event\":\"build_and_push\",\"commit\":\"${COMMIT_SHA}\",\"branch\":\"${BRANCH}\",\"message\":\"${COMMIT_MESSAGE}\",\"added\":${ADDED},\"modified\":${MODIFIED},\"removed\":${REMOVED}}"
