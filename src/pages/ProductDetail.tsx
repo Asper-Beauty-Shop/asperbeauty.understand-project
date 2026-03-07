@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
 import pdpIngredients from "@/assets/pdp-ingredients.jpg";
@@ -18,8 +18,11 @@ import {
   ShieldCheck,
   ShoppingBag,
   Sparkles,
+  Star,
 } from "lucide-react";
 import { ShareButtons } from "@/components/ShareButtons";
+import { StickyAddToCart } from "@/components/StickyAddToCart";
+import { ProductReviews } from "@/components/ProductReviews";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -56,6 +59,7 @@ const ProductDetail = () => {
   const [relatedProducts, setRelatedProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   const addItem = useCartStore((state) => state.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
@@ -223,7 +227,7 @@ const ProductDetail = () => {
             <div className="w-16 h-px bg-polished-gold mb-10" />
 
             {/* Add to Cart — Primary CTA */}
-            <div className="space-y-6 mb-10">
+            <div ref={ctaRef} className="space-y-6 mb-10">
               <div className="flex items-center justify-center gap-8 py-4 border border-polished-gold/30">
                 <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-burgundy transition-colors"><Minus className="w-4 h-4" /></button>
                 <span className="text-lg font-body font-medium w-8 text-center text-asper-ink">{quantity}</span>
@@ -368,6 +372,19 @@ const ProductDetail = () => {
                   </div>
                 </AccordionContent>
               </AccordionItem>
+
+              {/* Reviews with Contextual Social Proof */}
+              <AccordionItem value="reviews" className="border-border">
+                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
+                  <span className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-polished-gold" />
+                    {isArabic ? "التقييمات" : "Reviews"}
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <ProductReviews productId={product.id} />
+                </AccordionContent>
+              </AccordionItem>
             </Accordion>
           </div>
         </div>
@@ -395,6 +412,14 @@ const ProductDetail = () => {
       )}
 
       <Footer />
+
+      {/* Sticky Add-to-Cart Bar */}
+      <StickyAddToCart
+        productTitle={product.title}
+        price={currentPrice}
+        onAddToCart={handleAddToCart}
+        triggerRef={ctaRef as React.RefObject<HTMLElement>}
+      />
     </div>
   );
 };

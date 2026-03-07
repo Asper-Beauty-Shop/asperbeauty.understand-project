@@ -755,6 +755,62 @@ export type Database = {
         }
         Relationships: []
       }
+      product_reviews: {
+        Row: {
+          age_range: string | null
+          body: string | null
+          created_at: string
+          helpful_count: number
+          id: string
+          primary_concern: string | null
+          product_id: string
+          rating: number
+          skin_type: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+          verified_purchase: boolean
+        }
+        Insert: {
+          age_range?: string | null
+          body?: string | null
+          created_at?: string
+          helpful_count?: number
+          id?: string
+          primary_concern?: string | null
+          product_id: string
+          rating: number
+          skin_type?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+          verified_purchase?: boolean
+        }
+        Update: {
+          age_range?: string | null
+          body?: string | null
+          created_at?: string
+          helpful_count?: number
+          id?: string
+          primary_concern?: string | null
+          product_id?: string
+          rating?: number
+          skin_type?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+          verified_purchase?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           ai_persona_lead: Database["public"]["Enums"]["persona_type"] | null

@@ -14,6 +14,7 @@ import Collections from "./pages/Collections";
 import CollectionDetail from "./pages/CollectionDetail";
 import Brands from "./pages/Brands";
 import BrandVichy from "./pages/BrandVichy";
+import BrandDetail from "./pages/BrandDetail";
 import BestSellers from "./pages/BestSellers";
 import Offers from "./pages/Offers";
 import Contact from "./pages/Contact";
@@ -91,6 +92,7 @@ const App = () => {
                 />
                 <Route path="/brands" element={<Brands />} />
                 <Route path="/brands/vichy" element={<BrandVichy />} />
+                <Route path="/brands/:slug" element={<BrandDetail />} />
                 <Route path="/best-sellers" element={<BestSellers />} />
                 <Route path="/offers" element={<Offers />} />
                 <Route path="/contact" element={<Contact />} />
