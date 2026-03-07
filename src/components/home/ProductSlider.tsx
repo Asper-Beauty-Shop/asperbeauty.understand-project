@@ -40,7 +40,7 @@ export const ProductSlider = ({
   };
 
   return (
-    <section className="py-16 lg:py-20 bg-asper-stone-light relative overflow-hidden">
+    <section className="py-20 lg:py-28 bg-asper-stone-light relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
 
       <div className="luxury-container">

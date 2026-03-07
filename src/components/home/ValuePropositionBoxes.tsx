@@ -45,7 +45,7 @@ export default function ValuePropositionBoxes() {
   ];
 
   return (
-    <section className="bg-asper-stone py-16 px-6 md:px-12 w-full">
+    <section className="bg-asper-stone py-20 lg:py-24 px-6 md:px-12 w-full">
       <div className="luxury-container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {pillars.map((pillar) => (

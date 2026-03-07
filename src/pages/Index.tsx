@@ -79,21 +79,21 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
 
 // Sample product data for sliders - Medical Luxury & Botanical Precision Aesthetic
 const NEW_ARRIVALS = [
-  { id: "1", handle: "lumiere-bio-active-ceramide", title: "Lumière Bio-Active Ceramide Serum", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80", tag: "Dermat-Tested" },
-  { id: "2", handle: "botanical-barrier-recovery", title: "Botanical Barrier Recovery Cream", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1608248593842-8021c6475a6c?auto=format&fit=crop&w=800&q=80", tag: "Clinical" },
-  { id: "3", handle: "phyto-retinol-elixir", title: "Phyto-Retinol Evening Elixir", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=800&q=80", tag: "Just In" },
-  { id: "4", handle: "niacinamide-clarifying-fluid", title: "Niacinamide 10% Clarifying Fluid", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=800&q=80" },
-  { id: "5", handle: "marine-collagen-mask", title: "Marine Collagen Hydration Mask", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1615397323758-1f196ebbaeb5?auto=format&fit=crop&w=800&q=80", tag: "Clinical" },
-  { id: "6", handle: "aha-bha-resurfacing-peel", title: "AHA/BHA Resurfacing Peel", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=80" },
+  { id: "1", handle: "lumiere-bio-active-ceramide", title: "Lumière Bio-Active Ceramide · Barrier Repair Serum", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80", tag: "Dermat-Tested" },
+  { id: "2", handle: "botanical-barrier-recovery", title: "Botanical Barrier Recovery · Deep Hydration Cream", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1608248593842-8021c6475a6c?auto=format&fit=crop&w=800&q=80", tag: "Clinical" },
+  { id: "3", handle: "phyto-retinol-elixir", title: "Phyto-Retinol Evening Elixir · Anti-Aging Treatment", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=800&q=80", tag: "Just In" },
+  { id: "4", handle: "niacinamide-clarifying-fluid", title: "Niacinamide 10% Clarifying Fluid · Pore-Refining Serum", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=800&q=80" },
+  { id: "5", handle: "marine-collagen-mask", title: "Marine Collagen Mask · 72-Hour Hydration Treatment", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1615397323758-1f196ebbaeb5?auto=format&fit=crop&w=800&q=80", tag: "Clinical" },
+  { id: "6", handle: "aha-bha-resurfacing-peel", title: "AHA/BHA Resurfacing Peel · Brightening Exfoliant", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=80" },
 ];
 
 const BESTSELLERS = [
-  { id: "7", handle: "hyaluronic-acid-booster", title: "Pure Hyaluronic Acid Booster", brand: "La Roche-Posay", image: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
-  { id: "8", handle: "lipid-replenishing-balm", title: "Lipid-Replenishing Daily Balm", brand: "CeraVe", image: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
-  { id: "9", handle: "mineral-uv-shield", title: "Mineral UV Shield SPF 50+", brand: "Vichy", image: "https://images.unsplash.com/photo-1629532587596-f94dd6d9de4c?auto=format&fit=crop&w=800&q=80" },
-  { id: "10", handle: "peptide-firming-eye", title: "Peptide Firming Eye Concentrate", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1599305090598-fe179d501227?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
-  { id: "11", handle: "thermal-spring-water", title: "Thermal Spring Water Mist", brand: "Vichy", image: "https://images.unsplash.com/photo-1556228720-1c27bef8b5e6?auto=format&fit=crop&w=800&q=80" },
-  { id: "12", handle: "soothing-cleansing-milk", title: "Soothing Cleansing Milk", brand: "Eucerin", image: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
+  { id: "7", handle: "hyaluronic-acid-booster", title: "Pure Hyaluronic Acid Booster · Intense Moisture Surge", brand: "La Roche-Posay", image: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
+  { id: "8", handle: "lipid-replenishing-balm", title: "Lipid-Replenishing Balm · Daily Barrier Protectant", brand: "CeraVe", image: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
+  { id: "9", handle: "mineral-uv-shield", title: "Mineral UV Shield SPF 50+ · Broad Spectrum Protection", brand: "Vichy", image: "https://images.unsplash.com/photo-1629532587596-f94dd6d9de4c?auto=format&fit=crop&w=800&q=80" },
+  { id: "10", handle: "peptide-firming-eye", title: "Peptide Firming Eye Concentrate · Dark Circle Treatment", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1599305090598-fe179d501227?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
+  { id: "11", handle: "thermal-spring-water", title: "Thermal Spring Water Mist · Soothing Mineral Tonic", brand: "Vichy", image: "https://images.unsplash.com/photo-1556228720-1c27bef8b5e6?auto=format&fit=crop&w=800&q=80" },
+  { id: "12", handle: "soothing-cleansing-milk", title: "Soothing Cleansing Milk · Gentle Daily Purifier", brand: "Eucerin", image: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
 ];
 
 const Index = () => {
