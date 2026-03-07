@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Zaid!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1080px;
+      height: 1080px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    .poster {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* Confetti dots */
+    .dot {
+      position: absolute;
+      border-radius: 50%;
+      animation: float 6s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+    }
+
+    /* Stars */
+    .star {
+      position: absolute;
+      color: #fff;
+      font-size: 18px;
+      animation: twinkle 3s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.4); }
+    }
+
+    .top-label {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 8px;
+      color: #f0c040;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .main-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 90px;
+      background: linear-gradient(90deg, #f9d423, #ff4e50, #f9d423);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      drop-shadow: 0 0 30px rgba(249,212,35,0.6);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+    }
+
+    .name {
+      font-family: 'Pacifico', cursive;
+      font-size: 90px;
+      color: #ffffff;
+      text-shadow: 0 0 40px rgba(255,255,255,0.4), 0 0 80px rgba(120,80,255,0.6);
+      margin-top: 8px;
+      letter-spacing: 2px;
+    }
+
+    .emoji-row {
+      font-size: 50px;
+      margin: 20px 0;
+      letter-spacing: 10px;
+    }
+
+    .message {
+      font-size: 22px;
+      color: rgba(255,255,255,0.85);
+      max-width: 680px;
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
+    .message strong {
+      color: #f9d423;
+    }
+
+    .divider {
+      width: 300px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #f9d423, #ff4e50, #f9d423, transparent);
+      margin: 22px auto;
+      border-radius: 2px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 36px;
+      font-size: 16px;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+    }
+
+    .balloons {
+      position: absolute;
+      font-size: 60px;
+      animation: sway 4s infinite ease-in-out;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-8deg); }
+      50% { transform: rotate(8deg); }
+    }
+
+    .balloon-left { left: 60px; bottom: 80px; animation-delay: 0s; }
+    .balloon-right { right: 60px; bottom: 80px; animation-delay: 1s; }
+    .balloon-tl { left: 60px; top: 60px; animation-delay: 0.5s; font-size: 50px; }
+    .balloon-tr { right: 60px; top: 60px; animation-delay: 1.5s; font-size: 50px; }
+
+    .cake { font-size: 70px; margin-top: 14px; animation: bounce 1.5s infinite ease-in-out; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="poster">
+
+    <!-- Balloons -->
+    <div class="balloons balloon-tl">🎈</div>
+    <div class="balloons balloon-tr">🎈</div>
+    <div class="balloons balloon-left">🎈</div>
+    <div class="balloons balloon-right">🎈</div>
+
+    <!-- Floating dots -->
+    <div class="dot" style="width:14px;height:14px;background:#f9d423;top:12%;left:15%;animation-delay:0s;"></div>
+    <div class="dot" style="width:10px;height:10px;background:#ff4e50;top:20%;left:75%;animation-delay:1s;"></div>
+    <div class="dot" style="width:18px;height:18px;background:#a855f7;top:70%;left:10%;animation-delay:2s;"></div>
+    <div class="dot" style="width:12px;height:12px;background:#38bdf8;top:80%;left:85%;animation-delay:0.5s;"></div>
+    <div class="dot" style="width:8px;height:8px;background:#4ade80;top:50%;left:5%;animation-delay:1.5s;"></div>
+    <div class="dot" style="width:16px;height:16px;background:#fb923c;top:35%;left:90%;animation-delay:2.5s;"></div>
+
+    <!-- Stars -->
+    <div class="star" style="top:8%;left:35%;animation-delay:0.2s;">✦</div>
+    <div class="star" style="top:8%;left:60%;animation-delay:1s;">✦</div>
+    <div class="star" style="top:90%;left:25%;animation-delay:0.7s;">✦</div>
+    <div class="star" style="top:88%;left:68%;animation-delay:1.4s;">✦</div>
+    <div class="star" style="top:45%;left:2%;animation-delay:0.9s;">✦</div>
+    <div class="star" style="top:45%;left:97%;animation-delay:0.3s;">✦</div>
+
+    <!-- Content -->
+    <div class="top-label">✨ &nbsp; Wishing You &nbsp; ✨</div>
+
+    <div class="main-title">Happy Birthday</div>
+    <div class="name">Zaid Zurigat</div>
+
+    <div class="emoji-row">🎉 🎊 🥳 🎂 🎁</div>
+
+    <div class="divider"></div>
+
+    <p class="message">
+      May this special day bring you <strong>endless joy</strong>,<br/>
+      laughter, and all the love you deserve.<br/>
+      Wishing you a year full of <strong>success, health,</strong><br/>
+      and beautiful moments. 🌟
+    </p>
+
+    <div class="cake">🎂</div>
+
+    <div class="footer">🎂 &nbsp; March 7, 2026 &nbsp; 🎂</div>
+  </div>
+</body>
+</html>
