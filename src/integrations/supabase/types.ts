@@ -116,6 +116,39 @@ export type Database = {
         }
         Relationships: []
       }
+      brands: {
+        Row: {
+          created_at: string
+          featured: boolean
+          id: string
+          image_url: string
+          logo_image_path: string | null
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          featured?: boolean
+          id?: string
+          image_url: string
+          logo_image_path?: string | null
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          featured?: boolean
+          id?: string
+          image_url?: string
+          logo_image_path?: string | null
+          name?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       chat_logs: {
         Row: {
           created_at: string | null
@@ -991,6 +1024,62 @@ export type Database = {
         }
         Relationships: []
       }
+      regimen_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      regimen_steps: {
+        Row: {
+          created_at: string
+          id: string
+          instruction: string | null
+          plan_id: string
+          product_id: string | null
+          step_number: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          instruction?: string | null
+          plan_id: string
+          product_id?: string | null
+          step_number: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          instruction?: string | null
+          plan_id?: string
+          product_id?: string | null
+          step_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "regimen_steps_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "regimen_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       "Shopify pub": {
         Row: {
           created_at: string | null
@@ -1059,6 +1148,53 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          skin_concerns: string[] | null
+          skin_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          skin_concerns?: string[] | null
+          skin_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          skin_concerns?: string[] | null
+          skin_type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_regimen_choices: {
+        Row: {
+          created_at: string
+          plan_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          plan_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          plan_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_regimen_choices_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "regimen_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
