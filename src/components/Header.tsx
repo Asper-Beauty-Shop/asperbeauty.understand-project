@@ -304,7 +304,7 @@ export const Header = () => {
                 type="button"
                 onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant"))}
                 className={cn("hidden md:block p-2 transition-colors", iconColor, textColorHover)}
-                aria-label={language === "ar" ? "استشارة الصيدلي" : "Ask the Pharmacist"}
+                aria-label={language === "ar" ? "Dr.Bot" : "Dr.Bot"}
               >
                 <MessageCircle className="h-5 w-5" />
               </button>
@@ -432,7 +432,7 @@ export const Header = () => {
                 className="flex items-center gap-2 w-full py-2 text-burgundy font-body border-b border-rose-clay-light/20 text-left"
               >
                 <MessageCircle className="h-4 w-4 text-burgundy" />
-                {language === "ar" ? "اسأل الصيدلي" : "Ask the Pharmacist"}
+                {language === "ar" ? "Dr.Bot" : "Dr.Bot"}
               </button>
               <div className="pt-4 border-t border-rose-clay-light/30 flex flex-wrap gap-4">
                 <Link

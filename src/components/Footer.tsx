@@ -139,7 +139,7 @@ export const Footer = () => {
                   onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant"))}
                   className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400 text-left"
                 >
-                  {isArabic ? "استشارة رقمية • اسأل الصيدلي" : "Digital Consult • Ask the Pharmacist"}
+                  {isArabic ? "استشارة رقمية • Dr.Bot" : "Digital Consult • Dr.Bot"}
                 </button>
               </li>
               {conciergLinks.map((item) => (

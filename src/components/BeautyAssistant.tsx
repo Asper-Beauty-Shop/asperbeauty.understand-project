@@ -163,7 +163,7 @@ export const BeautyAssistant = () => {
       placeholder: "Describe your skin concern...",
       welcome:
         "Hello. I am trained on clinical skincare data. Tell me your skin concern (e.g., Acne, Dryness) or ask about a specific ingredient.",
-      buttonText: "Ask the Pharmacist",
+      buttonText: "Dr.Bot",
     },
     ar: {
       title: "استشارة آسبر الرقمية",
