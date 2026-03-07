@@ -1,5 +1,4 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { Link } from "react-router-dom";
 import { AlertTriangle, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ASPER_PROTOCOL } from "@/lib/asperProtocol";
@@ -52,7 +51,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 Reload Application
               </Button>
               <Button variant="outline" asChild className="w-full">
-                <Link to="/contact">Contact Concierge</Link>
+                <a href="/contact">Contact Concierge</a>
               </Button>
             </div>
           </div>
