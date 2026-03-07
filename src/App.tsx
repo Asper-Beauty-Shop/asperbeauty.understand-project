@@ -24,6 +24,7 @@ import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 import Philosophy from "./pages/Philosophy";
 import BulkUpload from "./pages/BulkUpload";
 import AdminOrders from "./pages/AdminOrders";
