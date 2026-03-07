@@ -51,7 +51,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 Reload Application
               </Button>
               <Button variant="outline" asChild className="w-full">
-                <Link to="/contact">Contact Concierge</Link>
+                <a href="/contact">Contact Concierge</a>
               </Button>
             </div>
           </div>
