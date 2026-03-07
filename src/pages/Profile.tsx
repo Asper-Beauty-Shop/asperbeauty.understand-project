@@ -231,36 +231,29 @@ export default function Profile() {
               )}
             </motion.div>
 
-            {/* ─── WALLET CARD MOCKUP ─── */}
+            {/* ─── 3D CLINICAL ACCESS CARD ─── */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6, ease: LUXURY_EASE }}
-              className="relative overflow-hidden border border-polished-gold/20"
-              style={{ backgroundColor: "hsl(var(--polished-white))" }}
+              className="flex flex-col items-center gap-6 pb-8"
             >
-              <div className="p-6">
-                <span className="font-body text-[10px] uppercase tracking-[0.2em] text-polished-gold block mb-4">
-                  {isArabic ? "بطاقة الوصول السريري" : "Clinical Access Card"}
-                </span>
-                <img
-                  src={walletCard}
-                  alt="Asper Clinical Access Card"
-                  className="w-full rounded-lg shadow-lg mb-6"
-                />
-                <div className="space-y-3">
-                  <button
-                    className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white flex items-center justify-center gap-2 transition-all duration-300"
-                    style={{ backgroundColor: "hsl(var(--asper-ink))" }}
-                  >
-                    <CreditCard className="w-4 h-4" />
-                    {isArabic ? "أضف إلى المحفظة" : "Add to Apple Wallet"}
-                  </button>
-                  <p className="font-body text-[10px] text-muted-foreground text-center">
-                    {isArabic ? "متاح قريباً مع شهادات Apple Developer" : "Coming soon — requires Apple Developer certificates"}
-                  </p>
-                </div>
-              </div>
+              <span className="font-body text-[10px] uppercase tracking-[0.2em] text-polished-gold">
+                {isArabic ? "بطاقة الوصول السريري" : "Clinical Access Card"}
+              </span>
+              <AsperAccessCard
+                name={displayName || user.user_metadata?.full_name || "Guest"}
+                protocol={skinConcern ? skinConcern.replace("Concern_", "").toUpperCase() : "HYDRATION"}
+              />
+              <button
+                className="mt-2 py-3 px-8 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white flex items-center justify-center gap-2 transition-all duration-300 bg-foreground hover:bg-foreground/90"
+              >
+                <CreditCard className="w-4 h-4" />
+                {isArabic ? "أضف إلى المحفظة" : "Add to Apple Wallet"}
+              </button>
+              <p className="font-body text-[10px] text-muted-foreground text-center">
+                {isArabic ? "متاح قريباً" : "Coming soon — requires Apple Developer certificates"}
+              </p>
             </motion.div>
           </div>
 
