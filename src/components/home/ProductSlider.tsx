@@ -111,11 +111,11 @@ export const ProductSlider = ({
                   </div>
 
                   {/* Info */}
-                  <div className="p-4 space-y-1.5">
-                    <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-body">
+                  <div className="p-5 space-y-1.5">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-body font-semibold">
                       {product.brand}
                     </p>
-                    <h3 className="font-display text-sm text-foreground line-clamp-2 leading-snug">
+                    <h3 className="font-display text-sm text-foreground line-clamp-2 leading-snug font-semibold">
                       {product.title}
                     </h3>
                     <span
