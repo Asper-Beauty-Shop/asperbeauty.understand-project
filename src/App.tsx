@@ -14,6 +14,7 @@ import Collections from "./pages/Collections";
 import CollectionDetail from "./pages/CollectionDetail";
 import Brands from "./pages/Brands";
 import BrandVichy from "./pages/BrandVichy";
+import BrandDetail from "./pages/BrandDetail";
 import BestSellers from "./pages/BestSellers";
 import Offers from "./pages/Offers";
 import Contact from "./pages/Contact";
