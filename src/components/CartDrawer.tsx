@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -12,6 +11,8 @@ import {
   Lock,
   Minus,
   Plus,
+  Stethoscope,
+  Sparkles,
   Trash2,
   Truck,
   X,
@@ -26,9 +27,7 @@ import { CODCheckoutForm, OrderSuccess } from "./CODCheckoutForm";
 const FREE_SHIPPING_THRESHOLD = 50; // JOD
 
 export const CartDrawer = () => {
-  const [checkoutMode, setCheckoutMode] = useState<"cart" | "cod" | "success">(
-    "cart",
-  );
+  const [checkoutMode, setCheckoutMode] = useState<"cart" | "cod" | "success">("cart");
   const [orderNumber, setOrderNumber] = useState<string>("");
 
   const {
@@ -47,15 +46,8 @@ export const CartDrawer = () => {
   const { t, isRTL, language } = useLanguage();
   const isArabic = language === "ar";
 
-  // Calculate shipping progress
-  const amountToFreeShipping = Math.max(
-    0,
-    FREE_SHIPPING_THRESHOLD - totalPrice,
-  );
-  const shippingProgress = Math.min(
-    100,
-    (totalPrice / FREE_SHIPPING_THRESHOLD) * 100,
-  );
+  const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalPrice);
+  const shippingProgress = Math.min(100, (totalPrice / FREE_SHIPPING_THRESHOLD) * 100);
   const hasFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
 
   const handleCheckout = () => {
@@ -68,7 +60,6 @@ export const CartDrawer = () => {
     }
   };
 
-  // Sync cart when drawer opens
   const handleDrawerOpen = (open: boolean) => {
     if (open) syncCart();
     handleOpenChange(open);
@@ -89,24 +80,32 @@ export const CartDrawer = () => {
     setCheckoutMode("cart");
   };
 
-  // Reset checkout mode when drawer closes
   const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      setCheckoutMode("cart");
-    }
+    if (!open) setCheckoutMode("cart");
     setOpen(open);
   };
+
+  // Determine if cart is clinical or aesthetic for persona touch
+  const isClinical = items.some((item) => {
+    const vendor = item.product.node.vendor?.toLowerCase() || "";
+    return ["la roche-posay", "vichy", "eucerin", "bioderma", "cerave", "sesderma"].some(b => vendor.includes(b.toLowerCase()));
+  });
 
   return (
     <Sheet open={isOpen} onOpenChange={handleDrawerOpen}>
       <SheetContent
-        className={`w-full sm:max-w-md flex flex-col h-full bg-background p-0 ${
-          isRTL ? "border-r border-l-0" : "border-l"
-        } border-[#C5A028]/20`}
+        className={`w-full sm:max-w-[450px] flex flex-col h-full p-0 ${
+          isRTL ? "border-r-0" : ""
+        }`}
         side={isRTL ? "left" : "right"}
+        style={{
+          backgroundColor: "hsl(240 20% 99%)",
+          borderLeftWidth: "2px",
+          borderLeftColor: "hsl(var(--polished-gold))",
+        }}
       >
-        {/* Header */}
-        <SheetHeader className="flex-shrink-0 px-6 pt-6 pb-4 border-b border-[#C5A028]/20">
+        {/* ─── Header: "Your Curated Regimen" ─── */}
+        <SheetHeader className="flex-shrink-0 px-8 pt-8 pb-5 border-b" style={{ borderColor: "hsl(var(--asper-stone-dark))" }}>
           <div className="flex items-center justify-between">
             {checkoutMode === "cod" && (
               <button
@@ -116,12 +115,12 @@ export const CartDrawer = () => {
                 <ArrowLeft className="w-5 h-5" />
               </button>
             )}
-            <SheetTitle className="font-serif text-xl text-foreground tracking-wide flex-1">
+            <SheetTitle className="font-heading text-2xl tracking-wide flex-1" style={{ color: "hsl(var(--asper-ink))" }}>
               {checkoutMode === "success"
-                ? (isArabic ? "تم الطلب" : "Order Placed")
+                ? (isArabic ? "تم الطلب بنجاح" : "Order Confirmed")
                 : checkoutMode === "cod"
                 ? (isArabic ? "الدفع عند الاستلام" : "Cash on Delivery")
-                : (isArabic ? "اختياراتك" : "Your Selection")}
+                : (isArabic ? "روتينك المختار" : "Your Curated Regimen")}
             </SheetTitle>
             <button
               onClick={() => handleOpenChange(false)}
@@ -131,27 +130,21 @@ export const CartDrawer = () => {
             </button>
           </div>
 
-          {/* Shipping Progress Bar - Only show in cart mode */}
+          {/* Shipping Progress */}
           {checkoutMode === "cart" && items.length > 0 && (
             <div className="mt-4">
-              <div className="h-1 bg-muted rounded-full overflow-hidden">
+              <div className="h-[2px] rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--asper-stone-dark))" }}>
                 <div
-                  className="h-full bg-[#C5A028] transition-all duration-500 ease-out rounded-full"
-                  style={{ width: `${shippingProgress}%` }}
+                  className="h-full transition-all duration-500 ease-out rounded-full"
+                  style={{ width: `${shippingProgress}%`, backgroundColor: "hsl(var(--polished-gold))" }}
                 />
               </div>
-              <p className="text-xs text-muted-foreground mt-2 text-center">
+              <p className="font-body text-[11px] text-muted-foreground mt-2 text-center tracking-wide">
                 {hasFreeShipping
-                  ? (isArabic
-                    ? "🎁 شحن مجاني مفعّل!"
-                    : "🎁 Complimentary Shipping Unlocked!")
+                  ? (isArabic ? "🎁 شحن مجاني مفعّل!" : "🎁 Complimentary Shipping Unlocked!")
                   : (isArabic
-                    ? `أنت على بعد ${
-                      amountToFreeShipping.toFixed(0)
-                    } دينار من الشحن المجاني`
-                    : `You are ${
-                      amountToFreeShipping.toFixed(0)
-                    } JOD away from Complimentary Shipping`)}
+                    ? `أنت على بعد ${amountToFreeShipping.toFixed(0)} دينار من الشحن المجاني`
+                    : `You are ${amountToFreeShipping.toFixed(0)} JOD away from Complimentary Shipping`)}
               </p>
             </div>
           )}
@@ -160,166 +153,203 @@ export const CartDrawer = () => {
         <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
           {/* Success Mode */}
           {checkoutMode === "success" && (
-            <div className="flex-1 p-6">
-              <OrderSuccess
-                orderNumber={orderNumber}
-                onClose={handleCloseAfterSuccess}
-              />
+            <div className="flex-1 p-8">
+              <OrderSuccess orderNumber={orderNumber} onClose={handleCloseAfterSuccess} />
             </div>
           )}
 
           {/* COD Checkout Mode */}
           {checkoutMode === "cod" && (
-            <div className="flex-1 p-6 overflow-y-auto">
-              <CODCheckoutForm
-                onSuccess={handleCODSuccess}
-                onCancel={handleBackToCart}
-              />
+            <div className="flex-1 p-8 overflow-y-auto">
+              <CODCheckoutForm onSuccess={handleCODSuccess} onCancel={handleBackToCart} />
             </div>
           )}
 
           {/* Cart Mode */}
           {checkoutMode === "cart" && (
             <>
-              {items.length === 0
-                ? (
-                  <div className="flex-1 flex items-center justify-center p-6">
-                    <div className="text-center">
-                      <p className="text-muted-foreground text-sm">
-                        {isArabic ? "سلتك فارغة" : "Your selection is empty"}
-                      </p>
+              {items.length === 0 ? (
+                <div className="flex-1 flex items-center justify-center p-8">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: "hsl(var(--asper-stone))" }}>
+                      <Stethoscope className="w-7 h-7 text-muted-foreground" />
                     </div>
+                    <p className="font-heading text-lg mb-1" style={{ color: "hsl(var(--asper-ink))" }}>
+                      {isArabic ? "لم يُوصف شيء بعد" : "No Prescriptions Yet"}
+                    </p>
+                    <p className="font-body text-sm text-muted-foreground">
+                      {isArabic ? "تصفحي المنتجات أو استشيري الدكتور سامي" : "Browse products or consult with Dr. Sami"}
+                    </p>
                   </div>
-                )
-                : (
-                  <>
-                    {/* Cart Items - Scrollable */}
-                    <div className="flex-1 overflow-y-auto px-6 py-4 min-h-0">
-                      <div className="space-y-4">
-                        {items.map((item) => (
-                          <div
-                            key={item.variantId}
-                            className="flex gap-4 group"
-                          >
-                            {/* Thumbnail */}
-                            <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden flex-shrink-0">
-                              {item.product.node.images?.edges?.[0]?.node && (
-                                <img
-                                  src={item.product.node.images.edges[0].node
-                                    .url}
-                                  alt={item.product.node.title}
-                                  className="w-full h-full object-cover"
-                                />
-                              )}
-                            </div>
+                </div>
+              ) : (
+                <>
+                  {/* ─── Cart Items — Spacious Clinical Rows ─── */}
+                  <div className="flex-1 overflow-y-auto px-8 py-6 min-h-0">
+                    <div className="space-y-6">
+                      {items.map((item) => (
+                        <div key={item.variantId} className="flex gap-4 group">
+                          {/* Thumbnail */}
+                          <div className="w-20 h-20 overflow-hidden flex-shrink-0" style={{ backgroundColor: "hsl(var(--asper-stone))" }}>
+                            {item.product.node.images?.edges?.[0]?.node && (
+                              <img
+                                src={item.product.node.images.edges[0].node.url}
+                                alt={item.product.node.title}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
 
-                            {/* Info */}
-                            <div className="flex-1 min-w-0 flex flex-col justify-center">
-                              <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                                {item.product.node.vendor || "Brand"}
-                              </p>
-                              <h4 className="font-serif text-sm text-foreground leading-tight line-clamp-2 mt-0.5">
-                                {translateTitle(
-                                  item.product.node.title,
-                                  language,
-                                )}
-                              </h4>
-                              <p className="text-sm text-foreground mt-1">
-                                {parseFloat(item.price.amount).toFixed(3)}{" "}
-                                {item.price.currencyCode}
-                              </p>
-                            </div>
+                          {/* Info */}
+                          <div className="flex-1 min-w-0 flex flex-col justify-center">
+                            <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                              {item.product.node.vendor || "Brand"}
+                            </p>
+                            <h4 className="font-heading text-sm leading-tight line-clamp-2 mt-0.5" style={{ color: "hsl(var(--asper-ink))" }}>
+                              {translateTitle(item.product.node.title, language)}
+                            </h4>
+                            <p className="font-body text-sm font-medium mt-1" style={{ color: "hsl(var(--asper-ink))" }}>
+                              {parseFloat(item.price.amount).toFixed(3)} {item.price.currencyCode}
+                            </p>
+                          </div>
 
-                            {/* Quantity Stepper & Remove */}
-                            <div className="flex flex-col items-end justify-between flex-shrink-0">
+                          {/* Quantity & Remove */}
+                          <div className="flex flex-col items-end justify-between flex-shrink-0">
+                            <button
+                              onClick={() => removeItem(item.variantId)}
+                              className="text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                            <div className="flex items-center border overflow-hidden" style={{ borderColor: "hsl(var(--asper-stone-dark))" }}>
                               <button
-                                onClick={() => removeItem(item.variantId)}
-                                className="text-muted-foreground hover:text-foreground transition-colors opacity-0 group-hover:opacity-100"
+                                onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+                                className="w-7 h-7 flex items-center justify-center hover:bg-muted transition-colors"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Minus className="h-3 w-3" />
                               </button>
-
-                              {/* Stepper */}
-                              <div className="flex items-center border border-border rounded overflow-hidden">
-                                <button
-                                  onClick={() =>
-                                    updateQuantity(
-                                      item.variantId,
-                                      item.quantity - 1,
-                                    )}
-                                  className="w-7 h-7 flex items-center justify-center text-foreground hover:bg-muted transition-colors"
-                                >
-                                  <Minus className="h-3 w-3" />
-                                </button>
-                                <span className="w-8 text-center text-sm text-foreground">
-                                  {item.quantity}
-                                </span>
-                                <button
-                                  onClick={() =>
-                                    updateQuantity(
-                                      item.variantId,
-                                      item.quantity + 1,
-                                    )}
-                                  className="w-7 h-7 flex items-center justify-center text-foreground hover:bg-muted transition-colors"
-                                >
-                                  <Plus className="h-3 w-3" />
-                                </button>
-                              </div>
+                              <span className="w-8 text-center text-sm font-body">{item.quantity}</span>
+                              <button
+                                onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+                                className="w-7 h-7 flex items-center justify-center hover:bg-muted transition-colors"
+                              >
+                                <Plus className="h-3 w-3" />
+                              </button>
                             </div>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
 
-                    {/* Footer - Pinned to Bottom */}
-                    <div className="flex-shrink-0 p-6 border-t border-[#C5A028]/20 bg-background">
-                      {/* Subtotal */}
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="text-muted-foreground">
-                          {isArabic ? "المجموع الفرعي" : "Subtotal"}
-                        </span>
-                        <span className="font-serif text-lg text-foreground">
-                          {totalPrice.toFixed(3)}{" "}
-                          {items[0]?.price.currencyCode || "JOD"}
-                        </span>
-                      </div>
+                    {/* ─── AI Prescription Upsell Block ─── */}
+                    {items.length > 0 && (
+                      <div
+                        className="mt-8 p-6 relative"
+                        style={{
+                          border: "1px dashed hsl(var(--polished-gold))",
+                          backgroundColor: "hsl(var(--polished-white))",
+                        }}
+                      >
+                        {/* Floating label */}
+                        <div className="absolute -top-3 left-4 px-2" style={{ backgroundColor: "hsl(var(--polished-white))" }}>
+                          <span className="font-body text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: "hsl(var(--burgundy))" }}>
+                            {isClinical
+                              ? (isArabic ? "وصفة الدكتور سامي" : "Dr. Sami Prescribes")
+                              : (isArabic ? "اقتراح مس زين" : "Ms. Zain Suggests")}
+                          </span>
+                        </div>
 
-                      {/* Checkout: Shopify (card) or COD */}
-                      <div className="flex flex-col gap-2">
-                        <button
-                          onClick={handleCheckout}
-                          disabled={
-                            items.length === 0 ||
-                            isLoading ||
-                            !getCheckoutUrl()
-                          }
-                          className="w-full py-3 border-2 border-[#800020] text-[#800020] font-medium text-sm tracking-wide uppercase transition-all hover:bg-[#800020] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                          {isLoading
-                            ? <Loader2 className="w-4 h-4 animate-spin" />
-                            : (
-                              <>
-                                <Lock className="w-4 h-4" />
-                                {isArabic
-                                  ? "الدفع بالبطاقة (Shopify)"
-                                  : "Pay with Card (Shopify)"}
-                              </>
-                            )}
-                        </button>
-                        <button
-                          onClick={() => setCheckoutMode("cod")}
-                          disabled={items.length === 0 || isLoading}
-                          className="w-full py-3.5 bg-[#800020] text-white hover:bg-[#800020]/90 font-medium text-sm tracking-wide uppercase transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                          <Truck className="w-4 h-4" />
-                          {isArabic
-                            ? "الدفع عند الاستلام"
-                            : "Cash on Delivery"}
-                        </button>
+                        <div className="flex gap-4 items-start mt-2">
+                          {/* Persona icon */}
+                          <div
+                            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                            style={{
+                              backgroundColor: isClinical ? "hsl(var(--burgundy) / 0.1)" : "hsl(var(--polished-gold) / 0.15)",
+                            }}
+                          >
+                            {isClinical
+                              ? <Stethoscope className="w-5 h-5 text-burgundy" />
+                              : <Sparkles className="w-5 h-5 text-polished-gold" />
+                            }
+                          </div>
+
+                          <div className="flex-1">
+                            <p className="font-body text-xs text-muted-foreground leading-relaxed">
+                              {isArabic
+                                ? `لتعزيز فعالية ${items[0]?.product.node.title?.slice(0, 30) || "منتجك"}، ننصح بإضافة مكمّل فعّال.`
+                                : `To maximize the efficacy of your ${items[0]?.product.node.title?.slice(0, 30) || "product"}, we prescribe adding a complementary active.`}
+                            </p>
+                            <button
+                              className="mt-3 font-body text-[11px] font-semibold uppercase tracking-[0.15em] transition-colors duration-300"
+                              style={{ color: "hsl(var(--burgundy))" }}
+                              onMouseEnter={(e) => e.currentTarget.style.color = "hsl(var(--polished-gold))"}
+                              onMouseLeave={(e) => e.currentTarget.style.color = "hsl(var(--burgundy))"}
+                            >
+                              {isArabic ? "+ أضف إلى الروتين" : "+ Add to Regimen"}
+                            </button>
+                          </div>
+                        </div>
                       </div>
+                    )}
+                  </div>
+
+                  {/* ─── Checkout Footer ─── */}
+                  <div className="flex-shrink-0 p-8 border-t" style={{ borderColor: "hsl(var(--asper-stone-dark))", backgroundColor: "hsl(var(--polished-white))" }}>
+                    {/* Subtotal */}
+                    <div className="flex justify-between items-center mb-6">
+                      <span className="font-body text-sm text-muted-foreground tracking-wide">
+                        {isArabic ? "المجموع المقدّر" : "Estimated Total"}
+                      </span>
+                      <span className="font-heading text-xl" style={{ color: "hsl(var(--asper-ink))" }}>
+                        {totalPrice.toFixed(3)} {items[0]?.price.currencyCode || "JOD"}
+                      </span>
                     </div>
-                  </>
-                )}
+
+                    {/* Checkout Buttons */}
+                    <div className="flex flex-col gap-3">
+                      {/* Primary: COD */}
+                      <button
+                        onClick={() => setCheckoutMode("cod")}
+                        disabled={items.length === 0 || isLoading}
+                        className="w-full py-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        style={{ backgroundColor: "hsl(var(--burgundy))" }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy-dark))"}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))"}
+                      >
+                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                          <>
+                            <Truck className="w-4 h-4" />
+                            {isArabic ? "تأمين الروتين والدفع عند الاستلام" : "Secure Regimen & Checkout"}
+                          </>
+                        )}
+                      </button>
+
+                      {/* Secondary: Card */}
+                      <button
+                        onClick={handleCheckout}
+                        disabled={items.length === 0 || isLoading || !getCheckoutUrl()}
+                        className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        style={{
+                          border: "2px solid hsl(var(--burgundy))",
+                          color: "hsl(var(--burgundy))",
+                          backgroundColor: "transparent",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))";
+                          e.currentTarget.style.color = "white";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                          e.currentTarget.style.color = "hsl(var(--burgundy))";
+                        }}
+                      >
+                        <Lock className="w-4 h-4" />
+                        {isArabic ? "الدفع بالبطاقة" : "Pay with Card"}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </>
           )}
         </div>
@@ -327,4 +357,3 @@ export const CartDrawer = () => {
     </Sheet>
   );
 };
-
