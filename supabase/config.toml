@@ -2,3 +2,6 @@ project_id = "qqceibvalkoytafynwoc"
 
 [functions.sync-shopify-catalog]
 verify_jwt = false
+
+[functions.concierge-tip]
+verify_jwt = false
