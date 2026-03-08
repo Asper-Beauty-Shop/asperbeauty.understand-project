@@ -10,7 +10,7 @@ const PROTOCOLS = [
     en: "The Acne Protocol",
     ar: "بروتوكول حب الشباب",
     ingredients: { en: "Salicylic Acid · Niacinamide · Zinc", ar: "حمض الساليسيليك · نياسيناميد · زنك" },
-    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c?w=600&q=80&auto=format&fit=crop",
     href: "/concerns/acne",
   },
   {
@@ -18,7 +18,7 @@ const PROTOCOLS = [
     en: "Cellular Repair",
     ar: "إصلاح خلوي",
     ingredients: { en: "Retinol · Peptides · Ceramides", ar: "ريتينول · ببتيدات · سيراميدات" },
-    image: "/editorial-showcase-1.jpg?w=600&q=80&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1570194065650-d99fb4ee4037?w=600&q=80&auto=format&fit=crop",
     href: "/concerns/anti-aging",
   },
   {
@@ -26,7 +26,7 @@ const PROTOCOLS = [
     en: "Barrier Defense",
     ar: "حماية الحاجز",
     ingredients: { en: "Ceramides · Squalane · Panthenol", ar: "سيراميدات · سكوالين · بانثينول" },
-    image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&q=80&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=600&q=80&auto=format&fit=crop",
     href: "/concerns/sensitivity",
   },
   {
@@ -34,7 +34,7 @@ const PROTOCOLS = [
     en: "Radiance Revival",
     ar: "إحياء الإشراق",
     ingredients: { en: "Vitamin C · AHA · Arbutin", ar: "فيتامين سي · أحماض الفا · أربوتين" },
-    image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=600&q=80&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80&auto=format&fit=crop",
     href: "/concerns/pigmentation",
   },
   {
@@ -42,7 +42,7 @@ const PROTOCOLS = [
     en: "Sun Shield",
     ar: "الحماية من الشمس",
     ingredients: { en: "SPF 50+ · Tinosorb · Vitamin E", ar: "SPF 50+ · تينوسورب · فيتامين إي" },
-    image: "https://images.unsplash.com/photo-1629532587596-f94dd6d9de4c?w=600&q=80&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1532947974358-a218d18d8d14?w=600&q=80&auto=format&fit=crop",
     href: "/collections/suncare",
   },
   {
@@ -50,7 +50,7 @@ const PROTOCOLS = [
     en: "Deep Hydration",
     ar: "ترطيب عميق",
     ingredients: { en: "Hyaluronic Acid · B5 · Aloe", ar: "هيالورونيك أسيد · B5 · ألوفيرا" },
-    image: "https://images.unsplash.com/photo-1615397323758-1f196ebbaeb5?w=600&q=80&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80&auto=format&fit=crop",
     href: "/concerns/dryness",
   },
 ];
