@@ -105,31 +105,31 @@ export function ScienceMeetsStyle() {
                 {isAr ? "الركيزة السريرية — وصفات الصيدلي" : "The Clinical Core — Pharmacist Prescriptions"}
               </p>
 
-              {/* Brand mini-grid */}
-              <div className="grid grid-cols-3 gap-3 md:gap-4">
-                {SCIENCE_BRANDS.map((brand, i) => (
-                  <motion.div
-                    key={brand.slug}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.06, duration: 0.4 }}
-                  >
-                    <Link
-                      to={`/shop?brand=${encodeURIComponent(brand.slug)}`}
-                      className="group/card flex items-center justify-center p-6 md:p-8 rounded-xl bg-white shadow-sm hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:-translate-y-2 border-2 border-transparent hover:border-accent will-change-transform transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer"
-                      aria-label={brand.name}
-                    >
-                      <img
-                        src={brand.logo}
-                        alt={`${brand.name} logo`}
-                        className="w-20 md:w-28 h-auto max-h-14 md:max-h-20 object-contain mix-blend-multiply grayscale opacity-60 group-hover/card:grayscale-0 group-hover/card:opacity-100 group-hover/card:scale-105 will-change-transform transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-                        loading="lazy"
-                      />
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
+               {/* Brand mini-grid */}
+               <div className="grid grid-cols-3 gap-3 md:gap-4">
+                 {SCIENCE_BRANDS.map((brand, i) => (
+                   <motion.div
+                     key={brand.slug}
+                     initial={{ opacity: 0, scale: 0.9 }}
+                     whileInView={{ opacity: 1, scale: 1 }}
+                     viewport={{ once: true }}
+                     transition={{ delay: i * 0.06, duration: 0.4 }}
+                   >
+                     <Link
+                       to={`/shop?brand=${encodeURIComponent(brand.slug)}`}
+                       className="group/card flex items-center justify-center p-6 md:p-10 rounded-xl bg-white shadow-sm hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:-translate-y-2 border-2 border-transparent hover:border-accent will-change-transform transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer"
+                       aria-label={brand.name}
+                     >
+                       <img
+                         src={brand.logo}
+                         alt={`${brand.name} logo`}
+                         className="w-24 md:w-32 h-auto max-h-16 md:max-h-24 object-contain mix-blend-multiply grayscale-50 opacity-70 group-hover/card:grayscale-0 group-hover/card:opacity-100 group-hover/card:scale-110 will-change-transform transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                         loading="lazy"
+                       />
+                     </Link>
+                   </motion.div>
+                 ))}
+               </div>
 
               {/* CTA */}
               <Link
@@ -183,31 +183,31 @@ export function ScienceMeetsStyle() {
                 {isAr ? "محركات الإقبال — المكياج والعناية اليومية" : "The Traffic Drivers — Makeup & Daily Beauty"}
               </p>
 
-              {/* Brand mini-grid */}
-              <div className="grid grid-cols-3 gap-3 md:gap-4">
-                {STYLE_BRANDS.map((brand, i) => (
-                  <motion.div
-                    key={brand.slug}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.06, duration: 0.4 }}
-                  >
-                    <Link
-                      to={`/shop?brand=${encodeURIComponent(brand.slug)}`}
-                      className="group/card flex items-center justify-center p-6 md:p-8 rounded-xl bg-white shadow-sm hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:-translate-y-2 border-2 border-transparent hover:border-accent will-change-transform transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer"
-                      aria-label={brand.name}
-                    >
-                      <img
-                        src={brand.logo}
-                        alt={`${brand.name} logo`}
-                        className="w-20 md:w-28 h-auto max-h-14 md:max-h-20 object-contain mix-blend-multiply grayscale opacity-60 group-hover/card:grayscale-0 group-hover/card:opacity-100 group-hover/card:scale-105 will-change-transform transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-                        loading="lazy"
-                      />
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
+               {/* Brand mini-grid */}
+               <div className="grid grid-cols-3 gap-3 md:gap-4">
+                 {STYLE_BRANDS.map((brand, i) => (
+                   <motion.div
+                     key={brand.slug}
+                     initial={{ opacity: 0, scale: 0.9 }}
+                     whileInView={{ opacity: 1, scale: 1 }}
+                     viewport={{ once: true }}
+                     transition={{ delay: i * 0.06, duration: 0.4 }}
+                   >
+                     <Link
+                       to={`/shop?brand=${encodeURIComponent(brand.slug)}`}
+                       className="group/card flex items-center justify-center p-6 md:p-10 rounded-xl bg-white shadow-sm hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:-translate-y-2 border-2 border-transparent hover:border-accent will-change-transform transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer"
+                       aria-label={brand.name}
+                     >
+                       <img
+                         src={brand.logo}
+                         alt={`${brand.name} logo`}
+                         className="w-24 md:w-32 h-auto max-h-16 md:max-h-24 object-contain mix-blend-multiply grayscale-50 opacity-70 group-hover/card:grayscale-0 group-hover/card:opacity-100 group-hover/card:scale-110 will-change-transform transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                         loading="lazy"
+                       />
+                     </Link>
+                   </motion.div>
+                 ))}
+               </div>
 
               {/* CTA */}
               <Link
