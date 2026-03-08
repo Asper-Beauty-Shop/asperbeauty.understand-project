@@ -18,7 +18,8 @@ export default function CinematicHero() {
         muted
         playsInline
         disablePictureInPicture
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        poster="/images/hero-poster-cinematic.jpg"
+        className="absolute inset-0 w-full h-full object-cover object-center z-0"
       >
         <source src="/videos/cinematic-hero.mp4" type="video/mp4" />
       </video>
@@ -79,11 +80,11 @@ export default function CinematicHero() {
               <button
                 className="relative z-20 inline-flex items-center justify-center
                            min-h-[48px] min-w-[200px] px-8 md:px-12 py-4
-                           border border-accent text-foreground
+                           border-2 border-maroon bg-maroon text-white
                            font-body text-[12px] md:text-[13px] uppercase tracking-[0.3em]
-                           bg-soft-ivory/85 hover:bg-accent/10
+                           hover:bg-maroon/90 hover:shadow-maroon-glow
                            transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]
-                           hover:-translate-y-0.5 hover:shadow-lg"
+                           hover:-translate-y-0.5"
               >
                 {isAr ? "اكتشفي الإكسير" : "Discover the Elixir"}
               </button>

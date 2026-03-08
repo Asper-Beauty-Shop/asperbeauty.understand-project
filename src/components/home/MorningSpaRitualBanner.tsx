@@ -69,10 +69,10 @@ export function MorningSpaRitualBanner() {
 
           <Link
             to="/shop?brand=Vichy"
-            className="inline-block font-body text-[11px] uppercase tracking-[0.3em] text-foreground
+            className="inline-flex items-center justify-center font-body text-[11px] uppercase tracking-[0.3em] text-foreground
                        border-b border-accent pb-1 hover:text-primary
                        transition-colors duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]
-                       min-h-[44px] flex items-center justify-center"
+                       min-h-[44px] px-4"
           >
             {isAr ? "اكتشفي الآن" : "Discover Now"}
           </Link>
