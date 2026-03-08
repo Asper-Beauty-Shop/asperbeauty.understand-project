@@ -49,12 +49,12 @@ export default function Hero() {
                 >
                   {isAr ? (
                     <>
-                      رائدات <span className="text-polished-gold">الجمال</span>
+                      مُنتقاة من <span className="text-polished-gold">الصيادلة.</span>
                     </>
                   ) : (
                     <>
-                      Wonder Women{" "}
-                      <span className="text-polished-gold">Edit</span>
+                      Curated by Pharmacists.{" "}
+                      <span className="text-polished-gold">Built for Trust.</span>
                     </>
                   )}
                 </h1>
