@@ -97,10 +97,10 @@ export const Header = () => {
       {/* 2. MAIN NAVIGATION BAR */}
       <div
         className={cn(
-          "w-full transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
-          isTransparent
-            ? "bg-transparent border-b border-polished-white/10"
-            : "bg-asper-stone-light/95 backdrop-blur-xl shadow-sm border-b border-rose-clay-light/30"
+          "w-full transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]",
+          isScrolled
+            ? "bg-[#F8F8FF]/80 backdrop-blur-md border-b border-[#C5A028]/30 shadow-sm"
+            : "bg-[#F8F8FF]/95 backdrop-blur-xl border-b border-[#C5A028]/20"
         )}
       >
         <div className="container mx-auto px-4">
@@ -234,13 +234,8 @@ export const Header = () => {
             {/* 2. CENTER BRAND ZONE â€” flex-shrink-0 keeps logo untouchable */}
             <div className="flex-shrink-0 flex items-center justify-center px-2 md:px-4">
               <Link to="/" className="block transition-transform duration-300 hover:scale-105" dir="ltr">
-                <img
-                  src={asperLogoHorizontal}
-                  alt="Asper Beauty Shop"
-                  className={cn(
-                    "h-10 sm:h-14 md:h-16 lg:h-20 w-auto max-w-[140px] sm:max-w-[180px] md:max-w-none object-contain transition-all duration-500",
-                    isTransparent && "brightness-0 invert"
-                  )}
+                <AsperWordmark
+                  className={isTransparent ? "text-white after:bg-white" : "text-burgundy"}
                 />
               </Link>
             </div>

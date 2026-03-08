@@ -183,6 +183,10 @@ export default {
           "10%, 50%, 90%": { transform: "translateX(-4px)" },
           "30%, 70%": { transform: "translateX(4px)" },
         },
+        "marquee-float": {
+          "0%": { transform: "translate3d(0, 0, 0)" },
+          "100%": { transform: "translate3d(-50%, 0, 0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -194,6 +198,7 @@ export default {
         shimmer: "shimmer 1.5s ease-in-out infinite",
         "skeleton-breathe": "skeleton-breathe 2s ease-in-out infinite",
         shake: "shake 0.5s ease-in-out",
+        "marquee-float": "marquee-float 35s linear infinite",
       },
     },
   },

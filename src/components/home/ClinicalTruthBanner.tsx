@@ -41,7 +41,7 @@ export default function ClinicalTruthBanner() {
   return (
     <section className="w-full bg-burgundy py-16 px-4 md:px-8 relative overflow-hidden">
       {/* Ambient glow texture to prevent flat appearance */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-burgundy-light/20 to-transparent pointer-events-none" />
       <div className="absolute -top-24 -right-24 w-64 h-64 bg-polished-gold/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-polished-gold/10 rounded-full blur-3xl pointer-events-none" />
 

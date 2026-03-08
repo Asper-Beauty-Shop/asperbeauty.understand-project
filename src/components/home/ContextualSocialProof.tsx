@@ -54,7 +54,7 @@ const REVIEWS: Review[] = [
 
 function ContextTag({ label, value }: { label: string; value: string }) {
   return (
-    <span className="inline-block px-2.5 py-1 bg-card border border-border text-muted-foreground text-xs font-sans tracking-wide">
+    <span className="inline-block px-2.5 py-1 bg-card border border-border text-muted-foreground text-xs font-body tracking-wide">
       {label}: <span className="font-semibold text-foreground">{value}</span>
     </span>
   );
@@ -72,12 +72,12 @@ export default function ContextualSocialProof() {
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif text-foreground mb-4">
+          <h2 className="text-3xl md:text-4xl font-display text-foreground mb-4">
             {isAr
               ? "نتائج سريرية. روتين حقيقي."
               : "Clinical Results. Real Routines."}
           </h2>
-          <p className="text-muted-foreground font-sans text-lg font-light max-w-2xl mx-auto">
+          <p className="text-muted-foreground font-body text-lg font-light max-w-2xl mx-auto">
             {isAr
               ? "اكتشفي كيف تعمل تركيباتنا المختارة عبر مختلف أنواع البشرة والأهداف الجمالية."
               : "Discover how our curated formulations perform across different skin profiles and aesthetic goals."}
@@ -104,7 +104,7 @@ export default function ContextualSocialProof() {
                   ))}
                 </div>
                 {review.verified && (
-                  <span className="flex items-center gap-1 text-xs font-sans font-semibold text-primary uppercase tracking-wider">
+                  <span className="flex items-center gap-1 text-xs font-body font-semibold text-primary uppercase tracking-wider">
                     <CheckCircle2 size={14} />
                     {isAr ? "مشتري موثق" : "Verified Buyer"}
                   </span>
@@ -112,16 +112,16 @@ export default function ContextualSocialProof() {
               </div>
 
               {/* Review Content */}
-              <h3 className="font-serif text-lg text-foreground mb-3 leading-tight font-semibold">
+              <h3 className="font-display text-lg text-foreground mb-3 leading-tight font-semibold">
                 "{review.title}"
               </h3>
-              <p className="font-sans text-muted-foreground text-sm leading-relaxed mb-8 flex-grow">
+              <p className="font-body text-muted-foreground text-sm leading-relaxed mb-8 flex-grow">
                 {review.content}
               </p>
 
               {/* Clinical Context Footer */}
               <div className="mt-auto pt-5 border-t border-foreground/10">
-                <p className="font-sans text-sm font-semibold text-foreground mb-3">
+                <p className="font-body text-sm font-semibold text-foreground mb-3">
                   {review.author}
                 </p>
                 <div className="flex flex-wrap gap-2">

@@ -1211,6 +1211,127 @@ export type Database = {
         }
         Relationships: []
       }
+      ui_check_artifacts: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          meta: Json
+          run_id: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          meta?: Json
+          run_id: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          meta?: Json
+          run_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ui_check_artifacts_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "ui_check_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ui_check_runs: {
+        Row: {
+          check_id: string
+          created_at: string
+          diff_url: string | null
+          environment: Json
+          finished_at: string | null
+          id: string
+          message: string | null
+          metrics: Json
+          screenshot_url: string | null
+          started_at: string
+          status: string
+        }
+        Insert: {
+          check_id: string
+          created_at?: string
+          diff_url?: string | null
+          environment?: Json
+          finished_at?: string | null
+          id?: string
+          message?: string | null
+          metrics?: Json
+          screenshot_url?: string | null
+          started_at?: string
+          status?: string
+        }
+        Update: {
+          check_id?: string
+          created_at?: string
+          diff_url?: string | null
+          environment?: Json
+          finished_at?: string | null
+          id?: string
+          message?: string | null
+          metrics?: Json
+          screenshot_url?: string | null
+          started_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ui_check_runs_check_id_fkey"
+            columns: ["check_id"]
+            isOneToOne: false
+            referencedRelation: "ui_checks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ui_checks: {
+        Row: {
+          created_at: string
+          device: string
+          id: string
+          is_active: boolean
+          name: string
+          page_url: string
+          selector: string
+          tags: string[]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          device?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          page_url: string
+          selector: string
+          tags?: string[]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          device?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          page_url?: string
+          selector?: string
+          tags?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_profiles: {
         Row: {
           skin_concerns: string[] | null

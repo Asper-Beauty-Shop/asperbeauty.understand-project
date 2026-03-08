@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ShieldCheck, Award, CheckCircle, Stethoscope } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
-import asperLogo from "@/assets/asper-logo-burgundy.png";
+import { AsperWordmark } from "@/components/ui/AsperWordmark";
 
 
 // Brand-accurate social media icon components
@@ -90,7 +90,7 @@ export const Footer = () => {
           {/* Column 1 - Brand Identity */}
           <div>
             <Link to="/" className="inline-block mb-6">
-              <img src={asperLogo} alt="Asper Beauty Shop" className="h-16 rounded" />
+              <AsperWordmark size="lg" className="text-polished-white" />
             </Link>
             <p className="font-body text-asper-stone-light mb-6">
               {isArabic ? "إعادة تعريف الجمال في الأردن." : "Redefining Beauty in Jordan."}
@@ -143,8 +143,8 @@ export const Footer = () => {
                   {isArabic ? "استشارة رقمية • Dr.Bot" : "Digital Consult • Dr.Bot"}
                 </button>
               </li>
-              {conciergLinks.map((item) => (
-                <li key={item.href}>
+              {conciergLinks.map((item, index) => (
+                <li key={`${item.href}-${index}`}>
                   <Link to={item.href} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
                     {item.name}
                   </Link>
@@ -159,8 +159,8 @@ export const Footer = () => {
               {isArabic ? "عن آسبر" : "About Asper"}
             </h3>
             <ul className="space-y-3 mb-8">
-              {aboutLinks.map((item) => (
-                <li key={item.href}>
+              {aboutLinks.map((item, index) => (
+                <li key={`about-${item.href}-${index}`}>
                   <Link to={item.href} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
                     {item.name}
                   </Link>
@@ -299,44 +299,52 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Circular Authenticity Seal — Inline SVG */}
+          {/* Circular Authenticity Seal — Inline SVG (Caduceus) */}
           <div className="flex justify-center my-8">
-            <div className="w-20 h-20 rounded-full border-2 border-polished-gold/60 p-1.5 shadow-[0_0_20px_rgba(197,160,40,0.15)] hover:scale-105 transition-transform duration-500 cursor-default">
+            <div className="w-20 h-20 rounded-full border-2 border-polished-gold/60 p-1.5 shadow-[0_0_20px_rgba(197,160,40,0.15)] hover:scale-105 transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] cursor-default">
               <svg
                 viewBox="0 0 200 200"
                 className="w-full h-full"
-                aria-label="Asper Beauty — Pharmacist Seal of Authenticity"
+                aria-label="Asper Certified — Authentic Quality — Pharmacist Curated"
                 role="img"
               >
-                {/* Outer ring */}
-                <circle cx="100" cy="100" r="95" fill="none" stroke="#C5A028" strokeWidth="2.5" />
-                <circle cx="100" cy="100" r="85" fill="none" stroke="#C5A028" strokeWidth="0.8" opacity="0.5" />
+                {/* Outer rings */}
+                <circle cx="100" cy="100" r="96" fill="none" stroke="#C5A028" strokeWidth="2" />
+                <circle cx="100" cy="100" r="88" fill="none" stroke="#C5A028" strokeWidth="0.6" opacity="0.4" />
 
-                {/* Mortar & pestle icon */}
-                <g transform="translate(100,72)" fill="#C5A028">
-                  {/* Pestle */}
-                  <ellipse cx="0" cy="-18" rx="4" ry="16" transform="rotate(-35)" />
-                  <circle cx="-12" cy="-22" r="5" />
-                  {/* Mortar bowl */}
-                  <path d="M-28,0 Q-30,-8 -24,-12 L24,-12 Q30,-8 28,0 Q26,18 0,22 Q-26,18 -28,0 Z" fillOpacity="0.15" stroke="#C5A028" strokeWidth="2" fill="#C5A028" />
-                  <path d="M-24,-12 L24,-12" stroke="#C5A028" strokeWidth="2.5" strokeLinecap="round" />
+                {/* Caduceus — medical staff with wings */}
+                <g transform="translate(100,90)" fill="none" stroke="#C5A028" strokeWidth="2" strokeLinecap="round">
+                  {/* Central staff */}
+                  <line x1="0" y1="-38" x2="0" y2="22" />
+                  {/* Staff top ornament */}
+                  <circle cx="0" cy="-42" r="4" fill="#C5A028" />
+                  {/* Left wing */}
+                  <path d="M-4,-32 Q-18,-40 -22,-28 Q-20,-22 -8,-26" fill="#C5A028" fillOpacity="0.15" stroke="#C5A028" strokeWidth="1.5" />
+                  <path d="M-8,-26 Q-22,-18 -20,-12" stroke="#C5A028" strokeWidth="1" opacity="0.6" />
+                  {/* Right wing */}
+                  <path d="M4,-32 Q18,-40 22,-28 Q20,-22 8,-26" fill="#C5A028" fillOpacity="0.15" stroke="#C5A028" strokeWidth="1.5" />
+                  <path d="M8,-26 Q22,-18 20,-12" stroke="#C5A028" strokeWidth="1" opacity="0.6" />
+                  {/* Left serpent */}
+                  <path d="M0,-24 Q-12,-18 -10,-10 Q-8,-2 0,0 Q8,2 10,10 Q12,18 0,22" stroke="#C5A028" strokeWidth="1.8" fill="none" />
+                  {/* Right serpent */}
+                  <path d="M0,-24 Q12,-18 10,-10 Q8,-2 0,0 Q-8,2 -10,10 Q-12,18 0,22" stroke="#C5A028" strokeWidth="1.8" fill="none" />
                 </g>
 
-                {/* Circular text — top arc */}
+                {/* Circular text */}
                 <defs>
-                  <path id="topArc" d="M 30,100 a 70,70 0 0,1 140,0" fill="none" />
-                  <path id="bottomArc" d="M 170,100 a 70,70 0 0,1 -140,0" fill="none" />
+                  <path id="sealTopArc" d="M 25,100 a 75,75 0 0,1 150,0" fill="none" />
+                  <path id="sealBottomArc" d="M 175,100 a 75,75 0 0,1 -150,0" fill="none" />
                 </defs>
-                <text fill="#C5A028" fontSize="11" fontFamily="'Montserrat', sans-serif" letterSpacing="3" fontWeight="600">
-                  <textPath href="#topArc" startOffset="50%" textAnchor="middle">ASPER BEAUTY</textPath>
+                <text fill="#C5A028" fontSize="9.5" fontFamily="'Montserrat', sans-serif" letterSpacing="2.5" fontWeight="600">
+                  <textPath href="#sealTopArc" startOffset="50%" textAnchor="middle">ASPER CERTIFIED</textPath>
                 </text>
-                <text fill="#C5A028" fontSize="9" fontFamily="'Montserrat', sans-serif" letterSpacing="2.5" fontWeight="500">
-                  <textPath href="#bottomArc" startOffset="50%" textAnchor="middle">PHARMACIST APPROVED</textPath>
+                <text fill="#C5A028" fontSize="7.5" fontFamily="'Montserrat', sans-serif" letterSpacing="2" fontWeight="500">
+                  <textPath href="#sealBottomArc" startOffset="50%" textAnchor="middle">AUTHENTIC QUALITY • PHARMACIST CURATED</textPath>
                 </text>
 
-                {/* Small decorative dots */}
-                <circle cx="30" cy="100" r="2.5" fill="#C5A028" />
-                <circle cx="170" cy="100" r="2.5" fill="#C5A028" />
+                {/* Decorative separator dots */}
+                <circle cx="25" cy="100" r="2" fill="#C5A028" />
+                <circle cx="175" cy="100" r="2" fill="#C5A028" />
               </svg>
             </div>
           </div>
