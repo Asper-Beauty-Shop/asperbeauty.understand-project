@@ -142,7 +142,9 @@ export function DualPersonaBestsellers() {
       let query = supabase.from("products").select("*").neq("availability_status", "Pending_Purge").limit(12);
 
       const filter = TAB_FILTERS[activeTab];
-      if (filter?.concerns?.length) {
+      if (filter?.asper_categories?.length) {
+        query = query.in("asper_category", filter.asper_categories);
+      } else if (filter?.concerns?.length) {
         query = query.in("primary_concern", filter.concerns);
       }
 
