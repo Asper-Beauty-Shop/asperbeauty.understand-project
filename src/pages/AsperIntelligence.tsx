@@ -19,11 +19,7 @@ import {
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-
-// --- Configuration & Constants ---
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY ?? "";
-const TEXT_MODEL = "gemini-2.5-flash-preview-09-2025";
-const TTS_MODEL = "gemini-2.5-flash-preview-tts";
+import { supabase } from "@/integrations/supabase/client";
 
 // --- Catalog Data (Refined based on uploaded product data) ---
 const ASPER_CATALOG = [
