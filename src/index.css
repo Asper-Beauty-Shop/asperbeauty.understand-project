@@ -6,75 +6,76 @@
 
 @layer base {
   :root {
-    /* ─── DESIGN_SYSTEM.md Morning Spa Palette ─── */
+    /* ─── DNA Morning Spa Palette ─── */
 
-    /* Asper Stone (Warm Ivory) — #F2EFEB = HSL 36 18% 93% */
-    --asper-stone: 36 18% 93%;
-    --asper-stone-light: 36 16% 96%;
-    --asper-stone-dark: 36 14% 89%;
+    /* Soft Ivory (Canvas) — #F8F8FF = HSL 240 100% 99% */
+    --asper-stone: 240 100% 99%;
+    --asper-stone-light: 240 50% 99.5%;
+    --asper-stone-dark: 30 20% 94%;
 
     /* Rose Clay (Muted Pink / Terracotta) — #C4A494 = HSL 20 28% 67% */
     --rose-clay: 20 28% 67%;
     --rose-clay-light: 20 30% 74%;
     --rose-clay-dark: 20 26% 57%;
 
-    /* Burgundy — #6B2D3A = HSL 348 40% 30% */
-    --burgundy: 348 40% 30%;
-    --burgundy-light: 348 36% 39%;
-    --burgundy-dark: 348 42% 22%;
+    /* Deep Maroon (Anchor) — #800020 = HSL 345 100% 25% */
+    --burgundy: 345 100% 25%;
+    --burgundy-light: 345 80% 35%;
+    --burgundy-dark: 345 100% 18%;
 
-    /* Polished Gold — #C9A962 = HSL 42 47% 59% */
-    --polished-gold: 42 47% 59%;
+    /* Shiny Gold (Seal) — #C5A028 = HSL 43 69% 46% */
+    --polished-gold: 43 69% 46%;
 
-    /* Asper Ink (Soft Charcoal) — #2C2825 = HSL 26 8% 16% */
-    --asper-ink: 26 8% 16%;
-    --asper-ink-muted: 20 6% 33%;
+    /* Dark Charcoal (Text) — #333333 = HSL 0 0% 20% */
+    --asper-ink: 0 0% 20%;
+    --asper-ink-muted: 0 0% 40%;
 
-    /* Polished White — #FAF9F7 = HSL 40 20% 97% */
-    --polished-white: 40 20% 97%;
+    /* Pure White (Digital Tray / Cards) — #FFFFFF */
+    --polished-white: 0 0% 100%;
 
     /* Legacy compat aliases */
     --cream: var(--asper-stone);
     --cream-dark: var(--asper-stone-dark);
-    --gold: 42 47% 59%;
-    --gold-light: 42 47% 69%;
-    --gold-glow: 42 47% 76%;
+    --gold: 43 69% 46%;
+    --gold-light: 43 69% 56%;
+    --gold-glow: 43 69% 66%;
     --warm-brown: var(--asper-ink);
     --warm-brown-light: var(--asper-ink-muted);
 
-    /* Primary backgrounds — Asper Stone base */
+    /* Primary backgrounds — Soft Ivory base */
     --background: var(--asper-stone);
     --foreground: var(--asper-ink);
 
     --card: var(--polished-white);
     --card-foreground: var(--asper-ink);
 
-    --popover: var(--asper-stone);
+    --popover: var(--polished-white);
     --popover-foreground: var(--asper-ink);
 
-    /* Burgundy primary */
+    /* Deep Maroon primary */
     --primary: var(--burgundy);
     --primary-foreground: 0 0% 100%;
 
-    /* Soft stone secondary */
+    /* Soft ivory secondary */
     --secondary: var(--asper-stone-dark);
     --secondary-foreground: var(--asper-ink);
 
     --muted: var(--asper-stone-dark);
     --muted-foreground: var(--asper-ink-muted);
 
-    /* Polished Gold accent */
+    /* Shiny Gold accent */
     --accent: var(--polished-gold);
-    --accent-foreground: var(--asper-ink);
+    --accent-foreground: 0 0% 20%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: var(--rose-clay-light);
-    --input: var(--rose-clay-light);
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
     --ring: var(--polished-gold);
 
-    --radius: 0.5rem;
+    /* Sharp edges per DNA — "rounded-none" clinical aesthetic */
+    --radius: 0rem;
 
     /* Legacy token aliases */
     --maroon: var(--burgundy);
@@ -86,68 +87,68 @@
     --soft-ivory: var(--asper-stone);
     --dark-charcoal: var(--asper-ink);
 
-    /* Luxury Black/Charcoal #1A1A1A, #2D2D2D */
+    /* Luxury Black/Charcoal */
     --luxury-black: 0 0% 10%;
     --luxury-charcoal: 0 0% 18%;
 
     --font-display: "Playfair Display", serif;
-    --font-body: "Inter", "Lato", sans-serif;
+    --font-body: "Montserrat", sans-serif;
     --font-script: "Great Vibes", cursive;
 
-    --sidebar-background: 348 68% 17%;
+    --sidebar-background: 345 100% 17%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 348 68% 17%;
-    --sidebar-accent: 348 58% 25%;
+    --sidebar-primary-foreground: 345 100% 17%;
+    --sidebar-accent: 345 80% 25%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 348 58% 22%;
-    --sidebar-ring: 46 66% 52%;
+    --sidebar-border: 345 80% 22%;
+    --sidebar-ring: 43 69% 46%;
   }
 
   .dark {
-    /* Dark mode with Burgundy base */
-    --background: 348 68% 10%;
-    --foreground: 25 47% 91%;
+    /* Dark mode with Deep Maroon base */
+    --background: 345 100% 8%;
+    --foreground: 240 100% 99%;
 
-    --card: 348 68% 14%;
-    --card-foreground: 25 47% 91%;
+    --card: 345 80% 12%;
+    --card-foreground: 240 100% 99%;
 
-    --popover: 348 68% 14%;
-    --popover-foreground: 25 47% 91%;
+    --popover: 345 80% 12%;
+    --popover-foreground: 240 100% 99%;
 
-    --primary: 25 47% 91%;
-    --primary-foreground: 348 68% 10%;
+    --primary: 240 100% 99%;
+    --primary-foreground: 345 100% 8%;
 
-    --secondary: 348 58% 18%;
-    --secondary-foreground: 25 47% 91%;
+    --secondary: 345 60% 16%;
+    --secondary-foreground: 240 100% 99%;
 
-    --muted: 348 50% 20%;
-    --muted-foreground: 25 30% 70%;
+    --muted: 345 50% 18%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 46 66% 52%;
-    --accent-foreground: 348 68% 10%;
+    --accent: 43 69% 46%;
+    --accent-foreground: 345 100% 8%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 25 47% 91%;
+    --destructive-foreground: 240 100% 99%;
 
-    --border: 348 50% 22%;
-    --input: 348 50% 22%;
-    --ring: 46 66% 52%;
+    --border: 345 50% 20%;
+    --input: 345 50% 20%;
+    --ring: 43 69% 46%;
 
-    --burgundy: 348 68% 10%;
-    --burgundy-light: 348 58% 18%;
-    --cream: 25 47% 91%;
-    --gold: 46 66% 52%;
-    --gold-light: 46 66% 62%;
+    --burgundy: 345 100% 8%;
+    --burgundy-light: 345 60% 16%;
+    --cream: 240 100% 99%;
+    --gold: 43 69% 46%;
+    --gold-light: 43 69% 56%;
 
-    --sidebar-background: 348 68% 10%;
-    --sidebar-foreground: 25 47% 91%;
-    --sidebar-primary: 25 47% 91%;
-    --sidebar-primary-foreground: 348 68% 10%;
-    --sidebar-accent: 348 58% 18%;
-    --sidebar-accent-foreground: 25 47% 91%;
-    --sidebar-border: 348 50% 22%;
-    --sidebar-ring: 46 66% 52%;
+    --sidebar-background: 345 100% 8%;
+    --sidebar-foreground: 240 100% 99%;
+    --sidebar-primary: 240 100% 99%;
+    --sidebar-primary-foreground: 345 100% 8%;
+    --sidebar-accent: 345 60% 16%;
+    --sidebar-accent-foreground: 240 100% 99%;
+    --sidebar-border: 345 50% 18%;
+    --sidebar-ring: 43 69% 46%;
   }
 }
 
@@ -872,7 +873,7 @@ body::before {
   box-shadow: 0 0 0 3px hsl(var(--polished-gold) / 0.2);
 }
 
-body { background-color: #F8F8FF; color: #1A1A1A; }
+body { background-color: hsl(240 100% 99%); color: #333333; }
 
 .gold-stitch-hover {
   position: relative;

@@ -26,7 +26,8 @@ export default {
         foreground: "hsl(var(--foreground))",
 
         // --- DESIGN_SYSTEM.md Clinical Luxury palette (HSL via CSS vars) ---
-        "asper-emerald": "#005C45",`n        "asper-stone": {
+        "asper-emerald": "#005C45",
+        "asper-stone": {
           DEFAULT: "hsl(var(--asper-stone))",
           light: "hsl(var(--asper-stone-light))",
           dark: "hsl(var(--asper-stone-dark))",
