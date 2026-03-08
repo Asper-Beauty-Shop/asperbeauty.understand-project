@@ -143,8 +143,8 @@ export const Footer = () => {
                   {isArabic ? "استشارة رقمية • Dr.Bot" : "Digital Consult • Dr.Bot"}
                 </button>
               </li>
-              {conciergLinks.map((item) => (
-                <li key={item.href}>
+              {conciergLinks.map((item, index) => (
+                <li key={`${item.href}-${index}`}>
                   <Link to={item.href} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
                     {item.name}
                   </Link>
