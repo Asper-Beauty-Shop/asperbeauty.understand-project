@@ -873,7 +873,7 @@ body::before {
   box-shadow: 0 0 0 3px hsl(var(--polished-gold) / 0.2);
 }
 
-body { background-color: #F8F8FF; color: #1A1A1A; }
+body { background-color: hsl(240 100% 99%); color: #333333; }
 
 .gold-stitch-hover {
   position: relative;
