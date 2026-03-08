@@ -25,16 +25,16 @@ const LUXURY_TABS = [
   { key: "body", en: "Body & Bath", ar: "الجسم والاستحمام" },
 ] as const;
 
-/* ── Tab→query mapping ── */
-const TAB_FILTERS: Record<string, { concerns?: string[]; categories?: string[] }> = {
-  skincare: { concerns: ["Concern_Acne", "Concern_Hydration", "Concern_Aging", "Concern_Sensitivity", "Concern_Pigmentation"] },
-  supplements: { categories: ["supplements", "wellness"] },
-  "sun-protection": { concerns: ["Concern_SunProtection"] },
-  baby: { categories: ["baby", "mom"] },
-  makeup: { categories: ["makeup", "cosmetics"] },
-  fragrance: { categories: ["fragrance", "perfume"] },
-  hair: { categories: ["hair"] },
-  body: { categories: ["body", "bath"] },
+/* ── Tab→asper_category mapping ── */
+const TAB_FILTERS: Record<string, { concerns?: string[]; asper_categories?: string[] }> = {
+  skincare: { asper_categories: ["Clinical Serums & Actives", "Daily Hydration & Barrier", "Targeted Treatments"] },
+  supplements: { asper_categories: ["Requires_Manual_Review"] }, // supplements need manual tagging
+  "sun-protection": { asper_categories: ["Sun Protection (SPF)"] },
+  baby: { asper_categories: [] }, // purged
+  makeup: { asper_categories: ["Evening Radiance & Glamour"] },
+  fragrance: { asper_categories: ["Fragrance"] },
+  hair: { asper_categories: ["Hair Care"] },
+  body: { asper_categories: ["Body Care"] },
 };
 
 type PersonaKey = "dr_sami" | "ms_zain";
@@ -142,7 +142,9 @@ export function DualPersonaBestsellers() {
       let query = supabase.from("products").select("*").neq("availability_status", "Pending_Purge").limit(12);
 
       const filter = TAB_FILTERS[activeTab];
-      if (filter?.concerns?.length) {
+      if (filter?.asper_categories?.length) {
+        query = query.in("asper_category", filter.asper_categories);
+      } else if (filter?.concerns?.length) {
         query = query.in("primary_concern", filter.concerns);
       }
 

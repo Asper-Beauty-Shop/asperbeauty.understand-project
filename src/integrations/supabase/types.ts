@@ -814,6 +814,7 @@ export type Database = {
       products: {
         Row: {
           ai_persona_lead: Database["public"]["Enums"]["persona_type"] | null
+          asper_category: string | null
           availability_status: string | null
           bestseller_rank: number | null
           brand: string | null
@@ -844,6 +845,7 @@ export type Database = {
         }
         Insert: {
           ai_persona_lead?: Database["public"]["Enums"]["persona_type"] | null
+          asper_category?: string | null
           availability_status?: string | null
           bestseller_rank?: number | null
           brand?: string | null
@@ -874,6 +876,7 @@ export type Database = {
         }
         Update: {
           ai_persona_lead?: Database["public"]["Enums"]["persona_type"] | null
+          asper_category?: string | null
           availability_status?: string | null
           bestseller_rank?: number | null
           brand?: string | null

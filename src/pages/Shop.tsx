@@ -250,8 +250,14 @@ export default function Shop() {
     fetchProducts();
   }, []);
 
+  // Support ?category= URL param for asper_category filtering
+  const categoryParam = searchParams.get("category");
+
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
+      // Filter by asper_category URL param
+      if (categoryParam && (product as any).asper_category !== categoryParam) return false;
+
       if (filters.searchQuery) {
         const q = filters.searchQuery.toLowerCase();
         const matches = product.title.toLowerCase().includes(q) || product.brand?.toLowerCase().includes(q) || product.pharmacist_note?.toLowerCase().includes(q);
@@ -270,7 +276,7 @@ export default function Shop() {
       if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
       return true;
     });
-  }, [products, filters]);
+  }, [products, filters, categoryParam]);
 
   return (
     <div className="min-h-screen bg-background">
