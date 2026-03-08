@@ -218,51 +218,21 @@ export default function AsperIntelligence() {
     prompt: string,
     image: string | null = null
   ): Promise<string> => {
-    if (!hasApiKey) {
-      return "Configure VITE_GEMINI_API_KEY in .env to enable Asper Intelligence.";
-    }
     try {
-      const inventory = ASPER_CATALOG.map(
-        (p) => `${p.title} (${p.price} JOD)`
-      ).join(", ");
-      const systemInstruction = `
-        You are the Asper AI Protocol. Inventory: ${inventory}.
-        ${
-          isClinical
-            ? "Role: Dr. Sami (Pharmacist). Tone: Clinical, safety-first, authoritative. Jordan market context. Sign: '- Dr. Sami, Asper Clinical'."
-            : "Role: Ms. Zain (Beauty Concierge). Tone: Radiant, high-end, friendly. Focus on rituals. Sign: '- Ms. Zain, Concierge'."
-        }
-        Limit to 3 concise sentences. Priority: Catalog recommendations.
-      `;
-
-      const parts: Array<{ text?: string; inlineData?: { mimeType: string; data: string } }> = [
-        {
-          text: `Context: ${systemInstruction}\n\nUser Query: ${prompt}`,
+      const { data, error } = await supabase.functions.invoke("asper-intelligence", {
+        body: {
+          action: "chat",
+          prompt,
+          image,
+          persona,
+          catalog: ASPER_CATALOG,
         },
-      ];
-      if (image) {
-        const base64 = image.split(",")[1];
-        if (base64) {
-          parts.push({
-            inlineData: { mimeType: "image/png", data: base64 },
-          });
-        }
-      }
+      });
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts }],
-          }),
-        }
-      );
-
-      const data = await response.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Intelligence protocol reset required. Please standby.";
+      if (error) throw error;
+      return data?.reply ?? "Intelligence protocol reset required. Please standby.";
     } catch (error) {
+      console.error("Intelligence error:", error);
       return "Intelligence protocol reset required. Please standby.";
     }
   };
