@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import protocolRadiance from "@/assets/protocols/protocol-radiance.jpg";
+import protocolBarrier from "@/assets/protocols/protocol-barrier.jpg";
 
 interface LuxuryPromoBannerProps {
   title?: string;
