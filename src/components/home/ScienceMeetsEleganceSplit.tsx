@@ -75,7 +75,7 @@ export function ScienceMeetsEleganceSplit() {
 
         {/* RIGHT — Luxury Side */}
         <Link
-          to="/shop"
+          to="/shop?category=Evening+Radiance+%26+Glamour"
           className="group relative flex flex-col justify-center items-center text-center
                      bg-primary px-8 md:px-14 py-20 overflow-hidden
                      transition-all duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)]"
