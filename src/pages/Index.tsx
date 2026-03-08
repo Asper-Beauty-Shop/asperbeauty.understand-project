@@ -181,6 +181,11 @@ const Index = () => {
           <DermoBrands />
         </Suspense>
 
+        {/* ═══ Science Meets Style Split Showcase ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <ScienceMeetsStyle />
+        </Suspense>
+
         {/* ═══ ZONE 2: Dual-Persona Triage (AI Gatekeeper) ═══ */}
         <DualPersonaTriage />
 
