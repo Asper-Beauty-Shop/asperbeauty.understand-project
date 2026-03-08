@@ -33,7 +33,7 @@ export default function AmbientVideoHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: LUXURY_EASE }}
           >
-            {isAr ? "جمال طبّي فاخر" : "Clinical Luxury"}
+            {isAr ? "مستقبل التجزئة الجلدية" : "The Future of Dermo-Retail"}
           </motion.span>
 
           {/* Headline */}
