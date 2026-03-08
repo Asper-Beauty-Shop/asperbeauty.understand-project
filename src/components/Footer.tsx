@@ -3,6 +3,7 @@ import { ShieldCheck, Award, CheckCircle, Stethoscope } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
 import asperLogo from "@/assets/asper-logo-burgundy.png";
+import asperBadge from "@/assets/asper-logo-badge.png";
 
 // Brand-accurate social media icon components
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -295,6 +296,17 @@ export const Footer = () => {
               <span className="text-xs font-body uppercase tracking-wider">
                 {isArabic ? "تمت مراجعته من صيدلي" : "Pharmacist Reviewed"}
               </span>
+            </div>
+          </div>
+
+          {/* Circular Authenticity Seal */}
+          <div className="flex justify-center my-8">
+            <div className="w-20 h-20 rounded-full border-2 border-polished-gold/60 p-1.5 shadow-[0_0_20px_rgba(197,160,40,0.15)]">
+              <img
+                src={asperBadge}
+                alt="Asper Beauty — Pharmacist Seal of Authenticity"
+                className="w-full h-full object-contain rounded-full"
+              />
             </div>
           </div>
           <p className="text-center text-[10px] text-asper-stone-light/40 font-body max-w-2xl mx-auto mb-4">
