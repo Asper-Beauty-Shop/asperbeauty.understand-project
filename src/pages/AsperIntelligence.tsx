@@ -486,7 +486,7 @@ export default function AsperIntelligence() {
                   <div className="flex items-center gap-4">
                     <div
                       className={`p-3 rounded-2xl ${
-                        isClinical ? "bg-[#800020]" : "bg-[#C5A028]"
+                        isClinical ? "bg-maroon" : "bg-polished-gold"
                       } text-white shadow-xl`}
                     >
                       {isClinical ? (
