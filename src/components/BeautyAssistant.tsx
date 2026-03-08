@@ -114,7 +114,7 @@ export const BeautyAssistant = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-polished-gold/10 to-transparent -skew-x-12 translate-x-[-100%] animate-[shimmer_3s_infinite]"></div>
               <div className="flex items-center gap-4 relative z-10">
                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-polished-gold/60 shadow-lg bg-white">
-                  <img src="/dr-bot-character.png" className="w-full h-full object-cover object-top" alt="Dr. Sami" style={DR_SAMI_BLEND_FIX} />
+                  <img src="/dr-bot-character.png" className="w-full h-full object-cover object-top" alt="Dr. Sami" />
                 </div>
                 <div>
                   <h3 className="text-polished-white text-sm uppercase tracking-[0.15em] font-bold">
@@ -139,7 +139,7 @@ export const BeautyAssistant = () => {
               {messages.length === 0 && (
                 <div className="text-center py-10">
                   <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-polished-gold/20 to-transparent flex items-center justify-center border border-polished-gold/30">
-                    <img src="/dr-bot-character.png" className="w-16 h-16 object-contain" alt="Dr. Sami Icon" style={DR_SAMI_BLEND_FIX} />
+                    <img src="/dr-bot-character.png" className="w-16 h-16 object-contain" alt="Dr. Sami Icon" />
                   </div>
                   <h4 className="text-asper-ink font-heading text-xl font-bold mb-2">
                     {isAr ? "استشارة مجانية" : "Private Consultation"}
