@@ -90,7 +90,7 @@ export const BeautyAssistant = () => {
                 className="w-full h-full object-contain object-bottom relative z-10"
                 style={{
                   mixBlendMode: "multiply",
-                  filter: "drop-shadow(0 20px 35px rgba(0,0,0,0.25)) drop-shadow(0 0 15px rgba(212,175,55,0.4)) brightness(1.08) contrast(1.22) saturate(0.92)",
+                  filter: "brightness(1.08) contrast(1.22) saturate(0.92)",
                 }}
               />
               {/* Soft glow behind the character */}
