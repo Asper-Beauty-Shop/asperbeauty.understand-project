@@ -4,6 +4,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import luxuryHeroDisplay from "@/assets/luxury-hero-display.png";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
