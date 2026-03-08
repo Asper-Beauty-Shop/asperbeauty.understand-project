@@ -136,6 +136,7 @@ export default function AmbientVideoHero() {
             loop
             playsInline
             disablePictureInPicture
+            poster={video.poster}
             preload={i === 0 ? "auto" : "none"}
             className="absolute inset-0 w-full h-full object-cover scale-105 will-change-[opacity]"
             style={{
