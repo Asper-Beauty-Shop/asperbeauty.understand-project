@@ -41,11 +41,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
   useEffect(() => {
     const fetchReviews = async () => {
       const { data } = await supabase
-        .from("product_reviews")
-        .select("id, rating, title, body, skin_type, primary_concern, age_range, verified_purchase, helpful_count, created_at")
-        .eq("product_id", productId)
-        .order("created_at", { ascending: false })
-        .limit(20);
+        .rpc("get_product_reviews", { p_product_id: productId });
 
       setReviews((data as Review[]) || []);
       setLoading(false);

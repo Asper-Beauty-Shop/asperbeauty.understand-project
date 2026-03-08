@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ShieldCheck, Award, CheckCircle, Stethoscope } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
-import asperLogo from "@/assets/asper-logo.png";
+import asperLogo from "@/assets/asper-logo-burgundy.png";
 
 // Brand-accurate social media icon components
 const InstagramIcon = ({ className }: { className?: string }) => (

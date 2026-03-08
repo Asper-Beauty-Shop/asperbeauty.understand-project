@@ -7,7 +7,7 @@ import { AnimatedTrustBadge } from "./AnimatedTrustBadge";
 
 // Hero assets
 const heroLifestyle = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=1920&q=80";
-import heroVideo from "@/assets/hero-sanctuary-video.mp4";
+import heroVideo from "@/assets/brand-video-1.mp4";
 
 // Toggle between video and image background
 const USE_VIDEO_BACKGROUND = true;
@@ -232,7 +232,7 @@ export const Hero = () => {
               animation: "gold-pulse 3s ease-in-out infinite",
             }}
           >
-            {isArabic ? "علم باريسي. أناقة أردنية." : "Parisian Science."}
+            {isArabic ? "مُنتقاة من الصيادلة." : "Curated by Pharmacists."}
           </span>
 
           {/* Main Headline with Gold Underline */}
@@ -245,7 +245,7 @@ export const Hero = () => {
                 transition: "transform 0.1s ease-out",
               }}
             >
-              {isArabic ? "المعيار الجديد للجمال" : "Jordanian Elegance."}
+              {isArabic ? "مدعومة بالذكاء." : "Powered by Intelligence."}
             </h1>
             {/* Gold Underline */}
             <div
@@ -274,8 +274,8 @@ export const Hero = () => {
             }}
           >
             {isArabic
-              ? "اكتشف فيلورغا، الرائد العالمي في مكافحة الشيخوخة، متوفر الآن مع خدمة التوصيل السريع في عمّان."
-              : "Discover Filorga, the world leader in anti-aging, now available with same-day concierge delivery in Amman."}
+              ? "نحن لا نبيع مستحضرات التجميل فحسب؛ بل نوزّع الجمال بذكاء."
+              : "We are not just selling cosmetics; we are dispensing beauty through intelligence."}
           </p>
 
           {/* CTA Buttons with luxury styling */}

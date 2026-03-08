@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import luxurySliderDisplay from "@/assets/luxury-slider-display.png";
 
 /* ------------------------------------------------------------------ */
 /*  Slide data                                                         */
@@ -63,14 +64,14 @@ const slides: Slide[] = [
   /* ---- Slide 2 — "Wonder Women Edit" ---- */
   {
     id: 2,
-    bg: "/src/assets/asper-shelf-display.png",
+    bg: luxurySliderDisplay,
     overlayClass: "bg-gradient-to-r from-black/50 via-black/30 to-transparent",
     href: "/collections",
     render: (isAr) => (
       <div className="relative flex flex-col items-start justify-center h-full px-6 sm:px-12 lg:px-20">
         {/* Small caps label */}
         <span className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.35em] text-white/70 mb-3">
-          {isAr ? "إصدار خاص" : "EXCLUSIVE EDIT"}
+          {isAr ? "ذكي. أصيل. خالد." : "INTELLIGENT. AUTHENTIC. ETERNAL."}
         </span>
 
         {/* Title — editorial serif */}
@@ -81,7 +82,7 @@ const slides: Slide[] = [
               isAr ? "font-arabic" : "font-serif italic"
             )}
           >
-            {isAr ? "نساء" : "Wonder Women"}
+            {isAr ? "مُنتقاة من الصيادلة" : "Curated by Pharmacists"}
           </span>
           <span
             className={cn(
@@ -89,7 +90,7 @@ const slides: Slide[] = [
               isAr ? "font-arabic" : "font-serif"
             )}
           >
-            {isAr ? "ملهمات" : "Edit"}
+            {isAr ? "مصمّمة للثقة" : "Built for Trust"}
           </span>
         </h2>
 
@@ -101,8 +102,8 @@ const slides: Slide[] = [
           )}
         >
           {isAr
-            ? "تعرّفي على المؤسسات اللواتي يعيدن تعريف صناعة الجمال"
-            : "Meet the female founders redefining the beauty industry"}
+            ? "نحن لا نبيع مستحضرات التجميل فحسب؛ بل نوزّع الجمال بذكاء."
+            : "We are not just selling cosmetics; we are dispensing beauty through intelligence."}
         </p>
 
         {/* CTA */}

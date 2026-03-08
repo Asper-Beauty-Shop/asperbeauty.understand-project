@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import asperLogoHorizontal from "@/assets/asper-logo-horizontal.png";
 import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown,
@@ -76,14 +77,13 @@ export const Header = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // On homepage: transparent over hero, frosted glass on scroll
-  // Other pages: always solid
-  const isTransparent = isHomepage && !isScrolled;
+  // Always solid ivory background — text always visible
+  const isTransparent = false;
 
-  // Dynamic text color class
-  const textColor = isTransparent ? "text-polished-white" : "text-burgundy";
-  const textColorHover = isTransparent ? "hover:text-polished-gold" : "hover:text-polished-gold";
-  const iconColor = isTransparent ? "text-polished-white/90" : "text-burgundy";
+  // Dynamic text color class — always dark on ivory
+  const textColor = "text-burgundy";
+  const textColorHover = "hover:text-polished-gold";
+  const iconColor = "text-burgundy";
 
   return (
     <header className={cn("fixed top-0 z-50 w-full", isHomepage && "")}>
@@ -124,23 +124,15 @@ export const Header = () => {
               >
                 {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
-              <Link to="/" className="flex flex-col" dir="ltr">
-                <span
+              <Link to="/" className="flex items-center" dir="ltr">
+                <img
+                  src={asperLogoHorizontal}
+                  alt="Asper Beauty Shop"
                   className={cn(
-                    "font-display text-2xl font-bold tracking-tight transition-colors duration-500",
-                    isTransparent ? "text-polished-white" : "text-burgundy"
+                    "h-10 w-auto object-contain transition-all duration-500",
+                    isTransparent && "brightness-0 invert"
                   )}
-                >
-                  ASPER
-                </span>
-                <span
-                  className={cn(
-                    "text-[10px] font-body tracking-[0.2em] uppercase transition-colors duration-500",
-                    isTransparent ? "text-polished-white/70" : "text-burgundy/70"
-                  )}
-                >
-                  {language === "ar" ? "متجر الجمال" : "Beauty Shop"}
-                </span>
+                />
               </Link>
             </div>
 
