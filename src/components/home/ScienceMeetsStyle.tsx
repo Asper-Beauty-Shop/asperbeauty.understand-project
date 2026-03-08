@@ -63,25 +63,29 @@ export function ScienceMeetsStyle() {
         </motion.div>
 
         {/* Floating Brand Logos Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 md:gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 md:gap-16 lg:gap-20">
           {[...SCIENCE_BRANDS, ...STYLE_BRANDS].map((brand, i) =>
             <motion.div
               key={brand.slug}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ delay: i * 0.05, duration: 0.5, ease: LUXURY_EASE }}>
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ delay: i * 0.08, duration: 0.6, ease: LUXURY_EASE }}
+              animate={{ y: [0, -15, 0] }}
+              style={{ animationDuration: `${3 + i * 0.2}s` }}
+              className="flex items-center justify-center">
               
               <Link
                 to={`/shop?brand=${encodeURIComponent(brand.slug)}`}
-                className="group/logo flex items-center justify-center cursor-pointer h-32"
+                className="group/logo flex items-center justify-center cursor-pointer transition-all duration-500"
                 aria-label={brand.name}
                 title={brand.name}>
                 
-                <img
+                <motion.img
                   src={brand.logo}
                   alt={`${brand.name} logo`}
-                  className="w-28 md:w-40 h-auto object-contain grayscale opacity-40 group-hover/logo:grayscale-0 group-hover/logo:opacity-100 group-hover/logo:scale-125 will-change-transform transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
+                  className="w-48 md:w-56 lg:w-72 h-auto object-contain grayscale opacity-30 group-hover/logo:grayscale-0 group-hover/logo:opacity-100 will-change-transform transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] drop-shadow-lg"
+                  whileHover={{ scale: 1.15, y: -10 }}
                   loading="lazy" />
               </Link>
             </motion.div>
