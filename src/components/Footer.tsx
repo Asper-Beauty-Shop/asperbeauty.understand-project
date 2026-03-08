@@ -184,11 +184,16 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Column 4 - VIP Club */}
+          {/* Column 4 - Morning Spa Club */}
           <div>
-            <h3 className="font-display text-lg text-polished-white mb-6">
-              {isArabic ? "اكتشف الحصريات" : "Unlock Exclusives"}
+            <h3 className="font-display text-lg text-polished-white mb-2">
+              {isArabic ? "انضم إلى سبا الصباح" : "Join the Morning Spa"}
             </h3>
+            <p className="font-body text-xs text-asper-stone-light/70 mb-4 leading-relaxed">
+              {isArabic
+                ? "نصائح حصرية من الدكتور سامي والآنسة زين، مع روتينات مخصصة تصل إلى بريدك."
+                : "Exclusive insights from Dr. Sami & Ms. Zain — tailored regimens, clinical tips, and early access delivered to your inbox."}
+            </p>
             <form onSubmit={handleSubmit} className="space-y-3">
               <input
                 type="email"
@@ -201,9 +206,12 @@ export const Footer = () => {
                 type="submit"
                 className="w-full px-6 py-3 bg-polished-gold text-burgundy font-display text-sm tracking-wider hover:bg-polished-gold/80 transition-colors duration-400 rounded"
               >
-                {isArabic ? "اشترك" : "Subscribe"}
+                {isArabic ? "انضم الآن" : "Enter the Morning Spa"}
               </button>
             </form>
+            <p className="font-body text-[10px] text-asper-stone-light/40 mt-2">
+              {isArabic ? "🔬 رؤى الصيدلي · ✨ نصائح التجميل · مجاناً" : "🔬 Pharmacist Insights · ✨ Beauty Wisdom · Always Free"}
+            </p>
           </div>
         </div>
       </div>
