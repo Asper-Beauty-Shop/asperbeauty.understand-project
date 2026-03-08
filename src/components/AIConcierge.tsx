@@ -598,11 +598,10 @@ export default function AIConcierge() {
 
             {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="mb-3 flex gap-2">
-                <Avatar className="h-7 w-7 shrink-0">
-                  <AvatarFallback className={cn("text-[10px]", persona.bgColor, persona.color)}>
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  </AvatarFallback>
-                </Avatar>
+                <div className="relative">
+                  <persona.avatar size={28} />
+                  <Loader2 className="absolute inset-0 m-auto h-3 w-3 animate-spin text-polished-gold" />
+                </div>
                 <div className="rounded-xl rounded-bl-sm bg-background border border-accent/30 px-3 py-2">
                   <div className="flex gap-1.5">
                     <span className="h-2 w-2 animate-bounce rounded-full bg-accent [animation-delay:0ms]" />
