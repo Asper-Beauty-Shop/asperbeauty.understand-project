@@ -151,7 +151,7 @@ export default function AmbientVideoHero() {
         transition={{ duration: 1.2, delay: 0.3, ease: LUXURY_EASE }}
       >
         <img
-          src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=1200&q=80&auto=format&fit=crop"
+          src={luxuryHeroDisplay}
           alt="Golden serum texture macro close-up"
           className="absolute inset-0 w-full h-full object-cover"
         />
