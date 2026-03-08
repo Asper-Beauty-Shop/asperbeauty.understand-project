@@ -10,7 +10,7 @@ export default function CinematicHero() {
   const isAr = locale === "ar";
 
   return (
-    <section className="relative w-full h-screen min-h-[600px] overflow-hidden">
+    <section className="relative w-full min-h-[600px] overflow-hidden bg-dark-charcoal" style={{ height: '100dvh' }}>
       {/* Full-bleed video background */}
       <video
         autoPlay
@@ -77,10 +77,11 @@ export default function CinematicHero() {
           >
             <Link to="/shop">
               <button
-                className="inline-flex items-center justify-center px-12 py-4
+                className="relative z-20 inline-flex items-center justify-center
+                           min-h-[48px] min-w-[200px] px-8 md:px-12 py-4
                            border border-accent text-foreground
                            font-body text-[12px] md:text-[13px] uppercase tracking-[0.3em]
-                           bg-transparent hover:bg-accent/10
+                           bg-soft-ivory/85 hover:bg-accent/10
                            transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]
                            hover:-translate-y-0.5 hover:shadow-lg"
               >
