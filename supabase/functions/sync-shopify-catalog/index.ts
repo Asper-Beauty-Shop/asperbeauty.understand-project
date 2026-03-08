@@ -14,7 +14,8 @@ const KNOWN_BRANDS: string[] = [
   "La Roche-Posay", "La Roche Posay",
   "CeraVe", "Bioderma", "Vichy", "Eucerin", "Sesderma", "COSRX", "SVR",
   "Avene", "Avène", "Uriage", "Ducray", "Noreva", "ACM", "Isdin",
-  "The NewLab", "NewLab",
+  "The NewLab", "NewLab", "Rilastil", "Exuviance", "Cetaphil",
+  "Acnecinamide", "Bio Balance",
   // L'Oréal Group
   "Lancôme", "Lancome", "Kérastase", "Kerastase", "YSL",
   "Yves Saint Laurent", "Giorgio Armani", "Armani",
@@ -25,17 +26,20 @@ const KNOWN_BRANDS: string[] = [
   "Burberry", "Calvin Klein", "Ralph Lauren", "Hugo Boss",
   "Mont Blanc", "Montblanc", "Coach", "Bvlgari", "Bulgari",
   "Narciso Rodriguez", "Jimmy Choo", "Azzaro",
+  "Mancera", "Mercedes-Benz", "Mercedes Benz", "Boucheron",
+  "Paco Rabanne", "Jean Paul Gaultier",
   // Premium Care
   "Clarins", "Guerlain", "Nuxe", "Dior", "Olaplex", "NeoCell",
   "Estée Lauder", "Estee Lauder", "Clinique", "Origins",
+  "Anastasia Beverly Hills",
   // Regional & Jordanian
   "Beesline", "Amina's", "Aminas", "Natalifé", "Natalife",
   // Mid-range
   "Babaria", "Revlon", "Rimmel", "Bourjois", "Max Factor",
-  "Essence", "Catrice", "Seventeen",
+  "Essence", "Catrice", "Seventeen", "Eveline", "Pastel",
   // Baby & Mom
   "Medela", "Chicco", "Mustela", "Bepanthen", "Sudocrem",
-  "Philips Avent", "NUK", "MAM",
+  "Philips Avent", "NUK", "MAM", "Baby Safe",
   // Hair
   "Tresemme", "TRESemmé", "Schwarzkopf", "Wella",
   // Supplements
