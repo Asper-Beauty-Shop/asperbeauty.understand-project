@@ -453,9 +453,9 @@ export default function AsperIntelligence() {
                   )}
                 </div>
 
-                <div className="bg-white rounded-[2.5rem] p-8 border border-[#C5A028]/10 shadow-xl shadow-black/5">
-                  <h3 className="text-[10px] font-black uppercase tracking-widest text-[#333333] mb-6 flex items-center gap-2">
-                    <Database size={14} className="text-[#C5A028]" /> Catalog
+                <div className="bg-white rounded-[2.5rem] p-8 border border-polished-gold/10 shadow-xl shadow-black/5">
+                  <h3 className="text-[10px] font-black uppercase tracking-widest text-dark-charcoal mb-6 flex items-center gap-2">
+                    <Database size={14} className="text-polished-gold" /> Catalog
                     Snapshot
                   </h3>
                   <div className="space-y-3">
