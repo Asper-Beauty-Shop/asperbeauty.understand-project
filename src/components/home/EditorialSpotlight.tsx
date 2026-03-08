@@ -22,7 +22,7 @@ export const EditorialSpotlight = () => {
               <div className="relative overflow-hidden aspect-[4/5] lg:aspect-[3/4] shadow-2xl">
                 <img
                   src={alchemistHero}
-                  alt="Asper Beauty Editorial"
+                  alt="The Alchemist's Touch — Gold serum on marble"
                   className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   loading="lazy"
                 />
