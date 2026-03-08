@@ -1,5 +1,6 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import asperLogoHorizontal from "@/assets/asper-logo-horizontal.png";
+import { AsperWordmark } from "@/components/ui/AsperWordmark";
 import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown,
