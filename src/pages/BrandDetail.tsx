@@ -34,6 +34,7 @@ const BrandDetail = () => {
           .from("products")
           .select("*")
           .ilike("brand", `%${b.name}%`)
+          .neq("availability_status", "Pending_Purge")
           .order("is_bestseller", { ascending: false })
           .limit(20);
         setProducts(prods || []);

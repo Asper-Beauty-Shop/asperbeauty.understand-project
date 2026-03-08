@@ -139,7 +139,7 @@ export function DualPersonaBestsellers() {
   const { data: products = [] } = useQuery({
     queryKey: ["persona-bestsellers", activePersona, activeTab],
     queryFn: async () => {
-      let query = supabase.from("products").select("*").limit(12);
+      let query = supabase.from("products").select("*").neq("availability_status", "Pending_Purge").limit(12);
 
       const filter = TAB_FILTERS[activeTab];
       if (filter?.concerns?.length) {

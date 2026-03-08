@@ -11,6 +11,7 @@ export const FeaturedCollection = () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
+        .neq("availability_status", "Pending_Purge")
         .order("created_at", { ascending: false })
         .limit(4);
 

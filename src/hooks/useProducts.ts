@@ -21,6 +21,7 @@ export function useProducts(concern: string | null) {
       let query = supabase
         .from("products")
         .select("*")
+        .neq("availability_status", "Pending_Purge")
         .order("bestseller_rank", { ascending: true, nullsFirst: false });
 
       if (concern) {
