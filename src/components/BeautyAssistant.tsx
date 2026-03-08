@@ -87,6 +87,7 @@ export const BeautyAssistant = () => {
                 src="/dr-bot-character.png" 
                 alt="Dr. Sami Mini Character" 
                 className="w-full h-full object-contain object-bottom relative z-10 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]"
+                style={{ mixBlendMode: "multiply" }}
               />
               {/* Soft glow behind the character */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-polished-gold/30 blur-2xl rounded-[100%] z-0 animate-pulse"></div>
@@ -109,7 +110,7 @@ export const BeautyAssistant = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-polished-gold/10 to-transparent -skew-x-12 translate-x-[-100%] animate-[shimmer_3s_infinite]"></div>
               <div className="flex items-center gap-4 relative z-10">
                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-polished-gold/60 shadow-lg bg-white">
-                  <img src="/dr-bot-character.png" className="w-full h-full object-cover object-top" alt="Dr. Sami" />
+                  <img src="/dr-bot-character.png" className="w-full h-full object-cover object-top" alt="Dr. Sami" style={{ mixBlendMode: "multiply" }} />
                 </div>
                 <div>
                   <h3 className="text-polished-white text-sm uppercase tracking-[0.15em] font-bold">
@@ -134,7 +135,7 @@ export const BeautyAssistant = () => {
               {messages.length === 0 && (
                 <div className="text-center py-10">
                   <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-polished-gold/20 to-transparent flex items-center justify-center border border-polished-gold/30">
-                    <img src="/dr-bot-character.png" className="w-16 h-16 object-contain" alt="Dr. Sami Icon" />
+                    <img src="/dr-bot-character.png" className="w-16 h-16 object-contain" alt="Dr. Sami Icon" style={{ mixBlendMode: "multiply" }} />
                   </div>
                   <h4 className="text-asper-ink font-heading text-xl font-bold mb-2">
                     {isAr ? "استشارة مجانية" : "Private Consultation"}
