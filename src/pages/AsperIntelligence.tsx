@@ -433,7 +433,7 @@ export default function AsperIntelligence() {
                       ) : (
                         <>
                           <Upload
-                            className="text-[#C5A028] mb-4 opacity-50"
+                            className="text-polished-gold mb-4 opacity-50"
                             size={32}
                           />
                           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
