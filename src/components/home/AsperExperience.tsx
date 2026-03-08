@@ -104,6 +104,7 @@ export function AsperExperience() {
                   muted
                   playsInline
                   disablePictureInPicture
+                  poster="/images/hero-poster-carousel.jpg"
                   className={cn(
                     "absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)]",
                     i === currentIdx ? "opacity-100" : "opacity-0 pointer-events-none"
