@@ -64,7 +64,6 @@ export const BeautyAssistant = () => {
             exit={{ y: 150, opacity: 0, transition: { duration: 0.3 } }}
             transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1 }}
             className="fixed bottom-0 right-4 sm:right-12 z-[100] flex flex-col items-end group"
-            style={{ isolation: "isolate" }}
           >
             {/* Speech Bubble */}
             <motion.div
