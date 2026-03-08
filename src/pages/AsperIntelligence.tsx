@@ -607,7 +607,7 @@ export default function AsperIntelligence() {
                           ? "Inquire about clinical results or product safety..."
                           : "Ask Ms. Zain for a luxury ritual recommendation..."
                       }
-                      className="w-full bg-white border-none rounded-[1.5rem] px-8 py-5 text-sm outline-none shadow-xl shadow-black/5 focus:ring-2 focus:ring-[#800020]/10 transition-all font-medium pr-16 text-[#333333]"
+                      className="w-full bg-white border-none rounded-[1.5rem] px-8 py-5 text-sm outline-none shadow-xl shadow-black/5 focus:ring-2 focus:ring-maroon/10 transition-all font-medium pr-16 text-dark-charcoal"
                     />
                     <div className="absolute right-4 flex items-center gap-2">
                       <Info size={18} className="text-gray-300" />
