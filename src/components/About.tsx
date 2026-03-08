@@ -1,3 +1,5 @@
+import aboutVisual from "@/assets/about-visual.avif";
+
 export const About = () => {
   return (
     <section id="about" className="py-24 bg-background">
