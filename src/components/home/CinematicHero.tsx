@@ -10,7 +10,7 @@ export default function CinematicHero() {
   const isAr = locale === "ar";
 
   return (
-    <section className="relative w-full h-screen min-h-[600px] overflow-hidden">
+    <section className="relative w-full min-h-[600px] overflow-hidden bg-dark-charcoal" style={{ height: '100dvh' }}>
       {/* Full-bleed video background */}
       <video
         autoPlay
