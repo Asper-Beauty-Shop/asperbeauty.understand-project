@@ -62,163 +62,30 @@ export function ScienceMeetsStyle() {
           <div className="luxury-divider mt-6" />
         </motion.div>
 
-        {/* Split Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-          {/* ── Side A: Science / Dr. Sami ── */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: LUXURY_EASE }}
-            className="group bg-white rounded-none p-8 md:p-10 shadow-sm hover:shadow-xl hover:-translate-y-2 border border-transparent hover:border-accent transition-all duration-700 relative overflow-hidden">
-            
-            {/* Subtle clinical gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] to-transparent pointer-events-none" />
-
-            <div className="relative z-10">
-              {/* Persona badge */}
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="font-body text-[10px] uppercase tracking-[0.3em] text-accent font-bold">
-                    {isAr ? "د. سامي" : "Dr. Sami"}
-                  </p>
-                  <p className="font-body text-xs text-muted-foreground">
-                    {isAr ? "السلطة السريرية" : "Clinical Authority"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Title */}
-              <h3 className={cn(
-                "font-display text-xl md:text-2xl text-foreground mb-2",
-                isAr && "font-arabic"
-              )}>
-                {isAr ? "مستحضرات الجلدية الطبية" : "Dermocosmetics"}
-              </h3>
-              <p className={cn(
-                "font-body text-sm italic text-muted-foreground mb-8",
-                isAr && "font-arabic"
-              )}>
-                {isAr ? "الركيزة السريرية — وصفات الصيدلي" : "The Clinical Core — Pharmacist Prescriptions"}
-              </p>
-
-              {/* Brand mini-grid */}
-               <div className="grid grid-cols-3 gap-8 md:gap-12">
-                 {SCIENCE_BRANDS.map((brand, i) =>
-                 <motion.div
-                   key={brand.slug}
-                   initial={{ opacity: 0, scale: 0.9 }}
-                   whileInView={{ opacity: 1, scale: 1 }}
-                   viewport={{ once: true }}
-                   transition={{ delay: i * 0.06, duration: 0.4 }}>
-                   
-                     <Link
-                     to={`/shop?brand=${encodeURIComponent(brand.slug)}`}
-                     className="group/card flex items-center justify-center cursor-pointer"
-                     aria-label={brand.name}>
-                     
-                       <img
-                       src={brand.logo}
-                       alt={`${brand.name} logo`}
-                       className="w-40 md:w-56 h-auto object-contain grayscale opacity-50 group-hover/card:grayscale-0 group-hover/card:opacity-100 group-hover/card:scale-110 group-hover/card:-translate-y-2 will-change-transform transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
-                       loading="lazy" />
-                     
-                     </Link>
-                   </motion.div>
-                 )}
-               </div>
-
-              {/* CTA */}
+        {/* Floating Brand Logos Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 md:gap-12">
+          {[...SCIENCE_BRANDS, ...STYLE_BRANDS].map((brand, i) =>
+            <motion.div
+              key={brand.slug}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: i * 0.05, duration: 0.5, ease: LUXURY_EASE }}>
+              
               <Link
-                to="/shop?category=dermocosmetics"
-                className="mt-8 inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] text-primary hover:text-accent transition-colors duration-300">
+                to={`/shop?brand=${encodeURIComponent(brand.slug)}`}
+                className="group/logo flex items-center justify-center cursor-pointer h-32"
+                aria-label={brand.name}
+                title={brand.name}>
                 
-                <Stethoscope className="w-3.5 h-3.5" />
-                {isAr ? "تصفح الوصفات الطبية" : "Browse Clinical Range"}
+                <img
+                  src={brand.logo}
+                  alt={`${brand.name} logo`}
+                  className="w-28 md:w-40 h-auto object-contain grayscale opacity-40 group-hover/logo:grayscale-0 group-hover/logo:opacity-100 group-hover/logo:scale-125 will-change-transform transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
+                  loading="lazy" />
               </Link>
-            </div>
-          </motion.div>
-
-          {/* ── Side B: Style / Ms. Zain ── */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: LUXURY_EASE, delay: 0.1 }}
-            className="group bg-white rounded-none p-8 md:p-10 shadow-sm hover:shadow-xl hover:-translate-y-2 border border-transparent hover:border-accent transition-all duration-700 relative overflow-hidden">
-            
-            {/* Warm editorial gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.03] to-transparent pointer-events-none" />
-
-            <div className="relative z-10">
-              {/* Persona badge */}
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <p className="font-body text-[10px] uppercase tracking-[0.3em] text-accent font-bold">
-                    {isAr ? "مس زين" : "Ms. Zain"}
-                  </p>
-                  <p className="font-body text-xs text-muted-foreground">
-                    {isAr ? "أيقونة الجمال" : "Beauty Curator"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Title */}
-              <h3 className={cn(
-                "font-display text-xl md:text-2xl text-foreground mb-2",
-                isAr && "font-arabic"
-              )}>
-                {isAr ? "أساسيات الجمال اليومي" : "Everyday Essentials"}
-              </h3>
-              <p className={cn(
-                "font-body text-sm italic text-muted-foreground mb-8",
-                isAr && "font-arabic"
-              )}>
-                {isAr ? "محركات الإقبال — المكياج والعناية اليومية" : "The Traffic Drivers — Makeup & Daily Beauty"}
-              </p>
-
-              {/* Brand mini-grid */}
-               <div className="grid grid-cols-3 gap-8 md:gap-12">
-                 {STYLE_BRANDS.map((brand, i) =>
-                 <motion.div
-                   key={brand.slug}
-                   initial={{ opacity: 0, scale: 0.9 }}
-                   whileInView={{ opacity: 1, scale: 1 }}
-                   viewport={{ once: true }}
-                   transition={{ delay: i * 0.06, duration: 0.4 }}>
-                   
-                     <Link
-                     to={`/shop?brand=${encodeURIComponent(brand.slug)}`}
-                     className="group/card flex items-center justify-center cursor-pointer"
-                     aria-label={brand.name}>
-                     
-                       <img
-                       src={brand.logo}
-                       alt={`${brand.name} logo`}
-                       className="w-40 md:w-56 h-auto object-contain grayscale opacity-50 group-hover/card:grayscale-0 group-hover/card:opacity-100 group-hover/card:scale-110 group-hover/card:-translate-y-2 will-change-transform transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
-                       loading="lazy" />
-                     
-                     </Link>
-                   </motion.div>
-                 )}
-               </div>
-
-              {/* CTA */}
-              <Link
-                to="/shop?category=beauty"
-                className="mt-8 inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] text-accent hover:text-primary transition-colors duration-300">
-                
-                <Flower2 className="w-3.5 h-3.5" />
-                {isAr ? "تصفح مجموعة الجمال" : "Browse Beauty Edit"}
-              </Link>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
         </div>
       </div>
 
