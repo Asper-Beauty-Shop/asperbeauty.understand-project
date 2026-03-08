@@ -302,7 +302,7 @@ export default function AsperIntelligence() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F8FF]">
+    <div className="min-h-screen bg-soft-ivory">
       <Header />
       <div className="pt-24 md:pt-32 p-4 md:p-10 font-sans text-[#333333] transition-colors duration-700">
         <header className="max-w-6xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-end gap-6 border-b border-[#C5A028]/10 pb-8">
