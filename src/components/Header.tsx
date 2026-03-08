@@ -76,14 +76,13 @@ export const Header = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // On homepage: transparent over hero, frosted glass on scroll
-  // Other pages: always solid
-  const isTransparent = isHomepage && !isScrolled;
+  // Always solid ivory background — text always visible
+  const isTransparent = false;
 
-  // Dynamic text color class
-  const textColor = isTransparent ? "text-polished-white" : "text-burgundy";
-  const textColorHover = isTransparent ? "hover:text-polished-gold" : "hover:text-polished-gold";
-  const iconColor = isTransparent ? "text-polished-white/90" : "text-burgundy";
+  // Dynamic text color class — always dark on ivory
+  const textColor = "text-burgundy";
+  const textColorHover = "hover:text-polished-gold";
+  const iconColor = "text-burgundy";
 
   return (
     <header className={cn("fixed top-0 z-50 w-full", isHomepage && "")}>
