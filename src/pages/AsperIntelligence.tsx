@@ -654,12 +654,12 @@ export default function AsperIntelligence() {
           )}
         </main>
 
-        <footer className="max-w-6xl mx-auto mt-20 pt-10 border-t border-[#C5A028]/10 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-gray-400 uppercase tracking-[0.3em] font-medium pb-10">
+        <footer className="max-w-6xl mx-auto mt-20 pt-10 border-t border-polished-gold/10 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-gray-400 uppercase tracking-[0.3em] font-medium pb-10">
           <div className="flex items-center gap-6">
-            <span className="text-[#800020] font-black italic text-sm">
+            <span className="text-maroon font-black italic text-sm">
               ASPER.AI
             </span>
-            <span className="w-px h-4 bg-[#C5A028]/20" />
+            <span className="w-px h-4 bg-polished-gold/20" />
             <span>Amman Headquarters • Strategic Launch 2026</span>
           </div>
           <div className="flex items-center gap-8">
