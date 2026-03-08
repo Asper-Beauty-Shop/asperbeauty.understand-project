@@ -1549,6 +1549,8 @@ export type Database = {
         Returns: Json
       }
       build_digital_tray: { Args: { in_concern: string }; Returns: Json }
+      bulk_delete_purged: { Args: { p_ids: string[] }; Returns: number }
+      bulk_restore_purged: { Args: { p_ids: string[] }; Returns: number }
       convert_lead: {
         Args: { lead_id: string; p_order_id: string; p_order_value: number }
         Returns: undefined
