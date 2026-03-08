@@ -36,26 +36,28 @@ export default function AmbientVideoHero() {
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  // Preload subsequent videos when first video is halfway
+  // Preload subsequent videos via IntersectionObserver (hardware-accelerated)
   useEffect(() => {
-    const firstVideo = videoRefs.current[0];
-    if (!firstVideo) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    const handleTimeUpdate = () => {
-      if (firstVideo.currentTime > firstVideo.duration * 0.5) {
-        // Trigger load on remaining videos
-        videoRefs.current.forEach((v, i) => {
-          if (i > 0 && v && v.preload === "none") {
-            v.preload = "auto";
-            v.load();
-          }
-        });
-        firstVideo.removeEventListener("timeupdate", handleTimeUpdate);
-      }
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          videoRefs.current.forEach((v, i) => {
+            if (i > 0 && v && v.preload === "none") {
+              v.preload = "auto";
+              v.load();
+            }
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: "100px 0px" },
+    );
 
-    firstVideo.addEventListener("timeupdate", handleTimeUpdate);
-    return () => firstVideo.removeEventListener("timeupdate", handleTimeUpdate);
+    observer.observe(container);
+    return () => observer.disconnect();
   }, []);
 
   // Advance slides and manage playback
