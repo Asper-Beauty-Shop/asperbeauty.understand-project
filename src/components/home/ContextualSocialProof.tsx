@@ -104,7 +104,7 @@ export default function ContextualSocialProof() {
                   ))}
                 </div>
                 {review.verified && (
-                  <span className="flex items-center gap-1 text-xs font-sans font-semibold text-primary uppercase tracking-wider">
+                  <span className="flex items-center gap-1 text-xs font-body font-semibold text-primary uppercase tracking-wider">
                     <CheckCircle2 size={14} />
                     {isAr ? "مشتري موثق" : "Verified Buyer"}
                   </span>
