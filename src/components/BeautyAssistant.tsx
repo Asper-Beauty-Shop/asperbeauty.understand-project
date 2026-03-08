@@ -13,10 +13,6 @@ import { DigitalTray } from "./chat/DigitalTray";
 import { cn } from "@/lib/utils";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
-const DR_SAMI_BLEND_FIX = {
-  mixBlendMode: "multiply" as const,
-  filter: "brightness(1.08) contrast(1.22) saturate(0.92)",
-};
 
 export const BeautyAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -90,8 +86,11 @@ export const BeautyAssistant = () => {
               <img 
                 src="/dr-bot-character.png" 
                 alt="Dr. Sami Mini Character" 
-                className="w-full h-full object-contain object-bottom relative z-10 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]"
-                style={DR_SAMI_BLEND_FIX}
+                className="w-full h-full object-contain object-bottom relative z-10"
+                style={{
+                  mixBlendMode: "multiply",
+                  filter: "drop-shadow(0 20px 35px rgba(0,0,0,0.25)) drop-shadow(0 0 15px rgba(212,175,55,0.4)) brightness(1.08) contrast(1.22) saturate(0.92)",
+                }}
               />
               {/* Soft glow behind the character */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-polished-gold/30 blur-2xl rounded-[100%] z-0 animate-pulse"></div>
