@@ -18,7 +18,8 @@ export default function CinematicHero() {
         muted
         playsInline
         disablePictureInPicture
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        poster="/images/hero-poster-cinematic.jpg"
+        className="absolute inset-0 w-full h-full object-cover object-center z-0"
       >
         <source src="/videos/cinematic-hero.mp4" type="video/mp4" />
       </video>
