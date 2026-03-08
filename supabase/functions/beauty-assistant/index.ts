@@ -4,9 +4,7 @@
  * Upgraded to "Super Smart" Architecture (March 2026).
  */
 declare const Deno: { env: { get(key: string): string | undefined } };
-// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-// @ts-expect-error — Deno URL imports; resolved at runtime by Supabase Edge
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const CONCERN_MAPPING: Record<string, string[]> = {
@@ -49,7 +47,8 @@ function extractFromGorgias(body: Record<string, unknown>): { message: string } 
 
 function extractFromManyChat(body: Record<string, unknown>): { message: string } {
   const data = body.data as Record<string, unknown> | undefined;
-  return { message: (data?.text as string) || (body as Record<string, unknown>).message || "" };
+  const msg = (data?.text as string) || (body.message as string) || "";
+  return { message: msg };
 }
 
 function detectConcernSlug(text: string): string | null {
@@ -66,10 +65,12 @@ function detectConcernSlug(text: string): string | null {
 }
 
 function formatProduct(p: Record<string, unknown>): string {
-  return `- **${p.title}** (${p.brand}) | ${p.price} JOD | Step: ${p.regimen_step?.replace("Step_", "")} | Note: ${p.pharmacist_note || "Pharmacist-curated"}`;
+  const step = typeof p.regimen_step === "string" ? p.regimen_step.replace("Step_", "") : "";
+  return `- **${p.title}** (${p.brand}) | ${p.price} JOD | Step: ${step} | Note: ${p.pharmacist_note || "Pharmacist-curated"}`;
 }
 
-async function fetchProductContext(supabase: ReturnType<typeof createClient>, userMessage: string, slug: string | null) {
+// deno-lint-ignore no-explicit-any
+async function fetchProductContext(supabase: any, userMessage: string, slug: string | null) {
   let matched: Record<string, unknown>[] = [];
   if (slug) {
     const enums = CONCERN_MAPPING[slug] || [];
@@ -95,7 +96,7 @@ You operate in **Controlled AI Mode** as a Digital Dermatologist Assistant.
 
 ## LANGUAGE & MIRRORING
 1. **STRICT MIRRORING**: Always respond in the EXACT language the customer uses. If they speak Arabic, respond in premium Arabic (Tajawal font style). If English, use elegant English.
-2. **BILINGUAL SALES**: Use persuasive marketing terminology native to the chosen language (e.g., "??????? ??????" for Arabic sales).
+2. **BILINGUAL SALES**: Use persuasive marketing terminology native to the chosen language.
 
 ## SALES & MARKETING INTELLIGENCE
 You are a high-performance Sales Consultant. Your goal is to maximize Basket Value (AOV) and Conversion.
@@ -140,7 +141,7 @@ serve(async (req) => {
   try {
     const route = getWebhookRoute(req);
     let userMessage = "";
-    let messages: Record<string, unknown>[] = [];
+    let messages: Array<{ role: string; content: string }> = [];
 
     if (route) {
       const body = await req.json();
@@ -184,13 +185,10 @@ serve(async (req) => {
       }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
     }
 
-    return new Response(JSON.stringify({ reply: replyText, products: products.map(p => ({ id: p.id, title: p.title, handle: p.handle })) }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ reply: replyText, products: products.map((p: Record<string, unknown>) => ({ id: p.id, title: p.title, handle: p.handle })) }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
 
-  } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : "Unknown error";
+    return new Response(JSON.stringify({ error: message }), { status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
   }
 });
-
-
-
-
