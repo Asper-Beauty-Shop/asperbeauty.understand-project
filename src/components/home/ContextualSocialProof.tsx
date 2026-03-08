@@ -77,7 +77,7 @@ export default function ContextualSocialProof() {
               ? "نتائج سريرية. روتين حقيقي."
               : "Clinical Results. Real Routines."}
           </h2>
-          <p className="text-muted-foreground font-sans text-lg font-light max-w-2xl mx-auto">
+          <p className="text-muted-foreground font-body text-lg font-light max-w-2xl mx-auto">
             {isAr
               ? "اكتشفي كيف تعمل تركيباتنا المختارة عبر مختلف أنواع البشرة والأهداف الجمالية."
               : "Discover how our curated formulations perform across different skin profiles and aesthetic goals."}
