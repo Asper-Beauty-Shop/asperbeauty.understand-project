@@ -468,7 +468,7 @@ export default function AsperIntelligence() {
                           <p className="text-[9px] font-black text-gray-400 uppercase mb-0.5">
                             {item.vendor}
                           </p>
-                          <p className="text-[11px] font-bold truncate text-[#333333] group-hover:text-[#800020] transition-colors">
+                          <p className="text-[11px] font-bold truncate text-dark-charcoal group-hover:text-maroon transition-colors">
                             {item.title}
                           </p>
                         </div>
