@@ -473,22 +473,45 @@ export default function Shop() {
 
             {/* Main content area */}
             <div className="flex-1 min-w-0">
-              {/* Mobile category pills */}
-              <div className="lg:hidden mb-4 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-                {ASPER_CATEGORIES.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={cn(
-                      "flex-shrink-0 px-3 py-1.5 rounded-full border text-xs font-body font-medium transition-all duration-200",
-                      categoryParam === cat
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-card text-muted-foreground border-border hover:border-accent"
-                    )}
-                  >
-                    {cat}
-                  </button>
-                ))}
+              {/* Mobile category pills — sticky, scroll-snap, 44px touch targets */}
+              <div className="lg:hidden sticky top-16 z-30 bg-background -mx-4 px-4 py-3 border-b border-border/50">
+                <div
+                  className="flex gap-3 overflow-x-auto pb-1"
+                  style={{
+                    scrollSnapType: "x mandatory",
+                    overscrollBehaviorX: "contain",
+                    msOverflowStyle: "none",
+                    scrollbarWidth: "none",
+                  }}
+                >
+                  {ASPER_CATEGORIES.map((cat) => {
+                    const isActive = categoryParam === cat;
+                    const count = cat === "All Curation" ? undefined : categoryCounts[cat];
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => setActiveCategory(cat)}
+                        className={cn(
+                          "flex-shrink-0 min-h-[44px] px-5 rounded-full border text-sm font-body font-medium transition-all duration-300 flex items-center gap-1.5",
+                          isActive
+                            ? "bg-card text-primary border-accent shadow-sm"
+                            : "bg-transparent text-muted-foreground border-border/40"
+                        )}
+                        style={{
+                          scrollSnapAlign: "start",
+                          transitionTimingFunction: "cubic-bezier(0.19, 1, 0.22, 1)",
+                        }}
+                      >
+                        <span className="whitespace-nowrap">{cat}</span>
+                        {count !== undefined && (
+                          <span className={cn("text-[10px] tabular-nums", isActive ? "text-accent" : "text-muted-foreground/50")}>
+                            {count}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="flex items-center justify-between mb-6">
