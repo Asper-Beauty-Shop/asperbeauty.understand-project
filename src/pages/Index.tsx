@@ -240,6 +240,16 @@ const Index = () => {
         {/* ═══ Shop by Protocol (Editorial Navigation) ═══ */}
         <ShopByProtocol />
 
+        {/* ═══ Dual-Persona Tabbed Bestsellers ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <DualPersonaBestsellers />
+        </Suspense>
+
+        {/* ═══ AI-Guided Discovery (Ms. Zain's Shade Guide) ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <GuidedDiscovery />
+        </Suspense>
+
         {/* ═══ Product Sliders (Bestsellers + New Arrivals) ═══ */}
         <ProductSlider
           title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
