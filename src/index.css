@@ -639,6 +639,15 @@
   }
 }
 
+@keyframes shimmerBeam {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 @keyframes goldShimmer {
   0%, 100% {
     background-position: 0% 50%;
