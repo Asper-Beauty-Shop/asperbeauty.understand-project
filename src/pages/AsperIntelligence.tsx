@@ -560,7 +560,7 @@ export default function AsperIntelligence() {
                             <button
                               onClick={() => handleSpeech(msg.content)}
                               disabled={isSpeaking}
-                              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#800020] hover:opacity-100 transition-opacity opacity-50 disabled:opacity-30"
+                              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-maroon hover:opacity-100 transition-opacity opacity-50 disabled:opacity-30"
                             >
                               {isSpeaking ? (
                                 <Loader2 size={14} className="animate-spin" />
