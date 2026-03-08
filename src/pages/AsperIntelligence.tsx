@@ -332,8 +332,8 @@ export default function AsperIntelligence() {
                 onClick={() => setActiveTab(tab)}
                 className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${
                   activeTab === tab
-                    ? "bg-[#800020] text-white shadow-lg"
-                    : "text-gray-400 hover:text-[#800020]"
+                    ? "bg-maroon text-white shadow-lg"
+                    : "text-gray-400 hover:text-maroon"
                 }`}
               >
                 {tab.toUpperCase()}
