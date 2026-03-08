@@ -1,0 +1,1 @@
+UPDATE products SET price = price / 100.0 WHERE (brand ILIKE '%chicco%' OR brand ILIKE '%mustela%' OR brand ILIKE '%bio balance%') AND price > 100;
