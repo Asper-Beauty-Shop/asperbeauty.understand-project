@@ -107,10 +107,10 @@ export const Header = () => {
       {/* 2. MAIN NAVIGATION BAR */}
       <div
         className={cn(
-          "w-full transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
-          isTransparent
-            ? "bg-transparent border-b border-polished-white/10"
-            : "bg-asper-stone-light/95 backdrop-blur-xl shadow-sm border-b border-rose-clay-light/30"
+          "w-full transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]",
+          isScrolled
+            ? "bg-[#F8F8FF]/80 backdrop-blur-md border-b border-[#C5A028]/30 shadow-sm"
+            : "bg-[#F8F8FF]/95 backdrop-blur-xl border-b border-[#C5A028]/20"
         )}
       >
         <div className="container mx-auto px-4">
