@@ -8,7 +8,7 @@ interface ConcernFilterProps {
 
 export function ConcernFilter({ selected, onSelect }: ConcernFilterProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div data-testid="concern-filter" className="flex flex-wrap gap-2">
       <FilterChip
         label="All"
         isSelected={selected === null}

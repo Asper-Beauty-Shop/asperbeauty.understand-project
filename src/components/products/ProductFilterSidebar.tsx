@@ -16,7 +16,7 @@ export function ProductFilterSidebar({
   onSelectVendors,
 }: ProductFilterSidebarProps) {
   return (
-    <div className="space-y-4">
+    <div data-testid="filter-sidebar" className="space-y-4">
       <CategoryFilter selected={selectedTypes} onSelect={onSelectTypes} />
       <Separator />
       <VendorFilter selected={selectedVendors} onSelect={onSelectVendors} />
