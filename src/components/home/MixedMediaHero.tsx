@@ -5,9 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
-import heroRosewater from "@/assets/hero-rosewater-ritual.jpg";
-import heroSerums from "@/assets/hero-golden-serums.jpg";
-import heroDiscovery from "@/assets/hero-serum-discovery.png";
+import heroDiscovery from "@/assets/hero-serum-discovery-wide.png";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
@@ -111,27 +109,15 @@ export default function MixedMediaHero() {
           </motion.div>
         </div>
 
-        {/* Cell 3 — Image (bottom-left) */}
-        <div className="relative overflow-hidden">
+        {/* Cell 3 — Wide landscape image spanning both columns */}
+        <div className="relative overflow-hidden col-span-2">
           <motion.img
             src={heroDiscovery}
             alt="Discover your ideal serum — ISDIN, Vichy, La Mer"
-            className="w-full h-full object-cover"
-            initial={{ scale: 1.08 }}
+            className="w-full h-full object-cover max-h-[45vh]"
+            initial={{ scale: 1.05 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.5, ease: LUXURY_EASE }}
-          />
-        </div>
-
-        {/* Cell 4 — Image (bottom-right) */}
-        <div className="relative overflow-hidden">
-          <motion.img
-            src={heroRosewater}
-            alt="Rosewater hydration ritual — crystal-infused skincare"
-            className="w-full h-full object-cover"
-            initial={{ scale: 1.08 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1.5, delay: 0.2, ease: LUXURY_EASE }}
           />
         </div>
       </div>
@@ -199,19 +185,23 @@ export default function MixedMediaHero() {
           </Link>
         </div>
 
-        {/* Image grid — 2 cols */}
-        <div className="grid grid-cols-2">
-          <div className="aspect-square overflow-hidden">
-            <img src={heroDiscovery} alt="Serum discovery" className="w-full h-full object-cover" />
-          </div>
-          <div className="aspect-square overflow-hidden">
-            <img src={heroRosewater} alt="Rosewater ritual" className="w-full h-full object-cover" />
-          </div>
+        {/* Landscape image */}
+        <div className="w-full aspect-[16/9] overflow-hidden">
+          <img src={heroDiscovery} alt="Serum discovery" className="w-full h-full object-cover" />
         </div>
 
-        {/* Full-width hero image */}
-        <div className="w-full aspect-[3/2] overflow-hidden">
-          <img src={heroSerums} alt="Golden serums on marble" className="w-full h-full object-cover" />
+        {/* Second video */}
+        <div className="relative w-full aspect-[16/9] overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            disablePictureInPicture
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/videos/hero-skincare-ritual.mp4" type="video/mp4" />
+          </video>
         </div>
       </div>
 
