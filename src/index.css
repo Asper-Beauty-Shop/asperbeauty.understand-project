@@ -902,5 +902,47 @@ body { background-color: hsl(240 100% 99%); color: #333333; }
   opacity: 1;
 }
 
+/* ─── Clinical Shimmer Beam ─── */
+/* High-key sunlight sweep — mimics natural light catching glass/serum */
+@keyframes clinical-shimmer-sweep {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+.hover-clinical-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-clinical-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 35%,
+    rgba(255, 255, 255, 0.4) 45%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.4) 55%,
+    rgba(255, 255, 255, 0) 65%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  opacity: 0;
+  transition: opacity 400ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.hover-clinical-shimmer:hover::before {
+  opacity: 1;
+  animation: clinical-shimmer-sweep 0.8s 400ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
 /* postcss rebuild trigger */
 
