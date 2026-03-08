@@ -148,7 +148,7 @@ export function ScienceMeetsStyle() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7, ease: LUXURY_EASE, delay: 0.1 }}
-            className="group bg-card rounded-none p-8 md:p-10 shadow-sm border border-transparent hover:border-accent hover:shadow-xl transition-all duration-500 relative overflow-hidden"
+            className="group bg-white rounded-none p-8 md:p-10 shadow-sm hover:shadow-xl hover:-translate-y-2 border border-transparent hover:border-accent transition-all duration-700 relative overflow-hidden"
           >
             {/* Warm editorial gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.03] to-transparent pointer-events-none" />
