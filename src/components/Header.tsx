@@ -243,14 +243,14 @@ export const Header = () => {
             {/* 2. CENTER BRAND ZONE — flex-shrink-0 keeps logo untouchable */}
             <div className="flex-shrink-0 flex items-center justify-center px-2 md:px-4">
               <Link to="/" className="block transition-transform duration-300 hover:scale-105" dir="ltr">
-                <img
-                  src={asperLogoHorizontal}
-                  alt="Asper Beauty Shop"
+                <span
                   className={cn(
-                    "h-10 sm:h-14 md:h-16 lg:h-20 w-auto max-w-[140px] sm:max-w-[180px] md:max-w-none object-contain transition-all duration-500",
-                    isTransparent && "brightness-0 invert"
+                    "font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-[0.15em] uppercase transition-colors duration-500",
+                    isTransparent ? "text-white" : "text-burgundy"
                   )}
-                />
+                >
+                  Asper
+                </span>
               </Link>
             </div>
 
