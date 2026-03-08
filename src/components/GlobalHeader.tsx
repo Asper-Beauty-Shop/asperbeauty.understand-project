@@ -108,10 +108,7 @@ export const GlobalHeader = () => {
             {/* CENTER: The Luxury Logo */}
             <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
               <Link to="/" className="block">
-                <h1 className="font-serif text-2xl font-light tracking-wider text-foreground md:text-3xl">
-                  <span className="font-normal text-gold">ASPER</span>
-                  <span className="text-primary ml-1 text-sm font-sans tracking-widest uppercase">
-                    Beauty
+                <AsperWordmark size="sm" className="text-burgundy" />
                   </span>
                 </h1>
               </Link>

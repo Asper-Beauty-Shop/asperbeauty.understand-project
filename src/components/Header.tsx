@@ -243,14 +243,9 @@ export const Header = () => {
             {/* 2. CENTER BRAND ZONE — flex-shrink-0 keeps logo untouchable */}
             <div className="flex-shrink-0 flex items-center justify-center px-2 md:px-4">
               <Link to="/" className="block transition-transform duration-300 hover:scale-105" dir="ltr">
-                <span
-                  className={cn(
-                    "font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-[0.15em] uppercase transition-colors duration-500",
-                    isTransparent ? "text-white" : "text-burgundy"
-                  )}
-                >
-                  Asper
-                </span>
+                <AsperWordmark
+                  className={isTransparent ? "text-white after:bg-white" : "text-burgundy"}
+                />
               </Link>
             </div>
 
