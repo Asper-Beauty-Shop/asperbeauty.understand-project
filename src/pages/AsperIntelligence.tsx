@@ -519,13 +519,13 @@ export default function AsperIntelligence() {
                   {messages.length === 0 && (
                     <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
                       <AsperLogo mode={persona} style={logoStyle} size="xl" />
-                      <p className="mt-8 font-serif text-2xl italic text-[#333333]">
+                      <p className="mt-8 font-serif text-2xl italic text-dark-charcoal">
                         "Nature Contained. Intelligence Active."
                       </p>
                       <div className="mt-6 flex gap-4 items-center">
-                        <div className="w-12 h-0.5 bg-[#C5A028]" />
-                        <Sparkle size={16} className="text-[#C5A028]" />
-                        <div className="w-12 h-0.5 bg-[#C5A028]" />
+                        <div className="w-12 h-0.5 bg-polished-gold" />
+                        <Sparkle size={16} className="text-polished-gold" />
+                        <div className="w-12 h-0.5 bg-polished-gold" />
                       </div>
                     </div>
                   )}
