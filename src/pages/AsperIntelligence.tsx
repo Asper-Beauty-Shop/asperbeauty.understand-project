@@ -365,7 +365,7 @@ export default function AsperIntelligence() {
                 onClick={() => setPersona("aesthetic")}
                 className={`flex items-center gap-4 px-8 py-3 rounded-2xl transition-all ${
                   !isClinical
-                    ? "bg-[#C5A028] text-white shadow-xl"
+                    ? "bg-polished-gold text-white shadow-xl"
                     : "text-gray-400 grayscale"
                 }`}
               >
