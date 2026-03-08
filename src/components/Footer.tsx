@@ -3,7 +3,7 @@ import { ShieldCheck, Award, CheckCircle, Stethoscope } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
 import asperLogo from "@/assets/asper-logo-burgundy.png";
-import asperBadge from "@/assets/asper-logo-badge.png";
+
 
 // Brand-accurate social media icon components
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -299,14 +299,45 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Circular Authenticity Seal */}
+          {/* Circular Authenticity Seal — Inline SVG */}
           <div className="flex justify-center my-8">
-            <div className="w-20 h-20 rounded-full border-2 border-polished-gold/60 p-1.5 shadow-[0_0_20px_rgba(197,160,40,0.15)]">
-              <img
-                src={asperBadge}
-                alt="Asper Beauty — Pharmacist Seal of Authenticity"
-                className="w-full h-full object-contain rounded-full"
-              />
+            <div className="w-20 h-20 rounded-full border-2 border-polished-gold/60 p-1.5 shadow-[0_0_20px_rgba(197,160,40,0.15)] hover:scale-105 transition-transform duration-500 cursor-default">
+              <svg
+                viewBox="0 0 200 200"
+                className="w-full h-full"
+                aria-label="Asper Beauty — Pharmacist Seal of Authenticity"
+                role="img"
+              >
+                {/* Outer ring */}
+                <circle cx="100" cy="100" r="95" fill="none" stroke="#C5A028" strokeWidth="2.5" />
+                <circle cx="100" cy="100" r="85" fill="none" stroke="#C5A028" strokeWidth="0.8" opacity="0.5" />
+
+                {/* Mortar & pestle icon */}
+                <g transform="translate(100,72)" fill="#C5A028">
+                  {/* Pestle */}
+                  <ellipse cx="0" cy="-18" rx="4" ry="16" transform="rotate(-35)" />
+                  <circle cx="-12" cy="-22" r="5" />
+                  {/* Mortar bowl */}
+                  <path d="M-28,0 Q-30,-8 -24,-12 L24,-12 Q30,-8 28,0 Q26,18 0,22 Q-26,18 -28,0 Z" fillOpacity="0.15" stroke="#C5A028" strokeWidth="2" fill="#C5A028" />
+                  <path d="M-24,-12 L24,-12" stroke="#C5A028" strokeWidth="2.5" strokeLinecap="round" />
+                </g>
+
+                {/* Circular text — top arc */}
+                <defs>
+                  <path id="topArc" d="M 30,100 a 70,70 0 0,1 140,0" fill="none" />
+                  <path id="bottomArc" d="M 170,100 a 70,70 0 0,1 -140,0" fill="none" />
+                </defs>
+                <text fill="#C5A028" fontSize="11" fontFamily="'Montserrat', sans-serif" letterSpacing="3" fontWeight="600">
+                  <textPath href="#topArc" startOffset="50%" textAnchor="middle">ASPER BEAUTY</textPath>
+                </text>
+                <text fill="#C5A028" fontSize="9" fontFamily="'Montserrat', sans-serif" letterSpacing="2.5" fontWeight="500">
+                  <textPath href="#bottomArc" startOffset="50%" textAnchor="middle">PHARMACIST APPROVED</textPath>
+                </text>
+
+                {/* Small decorative dots */}
+                <circle cx="30" cy="100" r="2.5" fill="#C5A028" />
+                <circle cx="170" cy="100" r="2.5" fill="#C5A028" />
+              </svg>
             </div>
           </div>
           <p className="text-center text-[10px] text-asper-stone-light/40 font-body max-w-2xl mx-auto mb-4">
