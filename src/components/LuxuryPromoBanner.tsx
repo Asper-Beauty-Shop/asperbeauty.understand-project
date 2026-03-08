@@ -38,8 +38,7 @@ export const LuxuryPromoBanner = ({
       subtitle: isAr
         ? "اكتشف أحدث المنتجات من أفضل العلامات التجارية"
         : "Discover the freshest picks from world-class brands",
-      image:
-        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      image: protocolBarrier,
     },
   };
 
