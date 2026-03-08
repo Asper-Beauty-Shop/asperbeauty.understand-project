@@ -33,7 +33,7 @@ export default function AmbientVideoHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: LUXURY_EASE }}
           >
-            {isAr ? "جمال طبّي فاخر" : "Clinical Luxury"}
+            {isAr ? "مستقبل التجزئة الجلدية" : "The Future of Dermo-Retail"}
           </motion.span>
 
           {/* Headline */}
@@ -50,15 +50,15 @@ export default function AmbientVideoHero() {
           >
             {isAr ? (
               <>
-                هندسة البشرة
+                مُنتقاة من الصيادلة.
                 <br />
-                <span className="italic text-burgundy">الصحية.</span>
+                <span className="italic text-burgundy">مدعومة بالذكاء.</span>
               </>
             ) : (
               <>
-                The Architecture
+                Curated by Pharmacists.
                 <br />
-                of <span className="italic text-burgundy">Healthy Skin.</span>
+                <span className="italic text-burgundy">Powered by Intelligence.</span>
               </>
             )}
           </motion.h1>
@@ -86,8 +86,8 @@ export default function AmbientVideoHero() {
             dir={isAr ? "rtl" : "ltr"}
           >
             {isAr
-              ? "اكتشفي التقاء العلم الجلدي والجمال الأصيل — معتمد صيدلانياً."
-              : "Where dermatological science meets authentic beauty — pharmacist verified, clinically proven."}
+              ? "نحن لا نبيع مستحضرات التجميل فحسب؛ بل نوزّع الجمال بذكاء."
+              : "We are not just selling cosmetics; we are dispensing beauty through intelligence."}
           </motion.p>
 
           {/* CTAs */}

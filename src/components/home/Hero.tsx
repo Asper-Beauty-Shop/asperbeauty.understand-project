@@ -38,7 +38,7 @@ export default function Hero() {
               >
                 {/* Campaign tag */}
                 <span className="inline-block font-body text-xs uppercase tracking-[0.3em] text-polished-gold mb-4 border border-polished-gold/40 px-4 py-1.5 rounded-full bg-asper-ink/30 backdrop-blur-sm">
-                  {isAr ? "حصري" : "Exclusive Edit"}
+                  {isAr ? "ذكي. أصيل. خالد." : "Intelligent. Authentic. Eternal."}
                 </span>
 
                 <h1
@@ -49,12 +49,12 @@ export default function Hero() {
                 >
                   {isAr ? (
                     <>
-                      رائدات <span className="text-polished-gold">الجمال</span>
+                      مُنتقاة من <span className="text-polished-gold">الصيادلة.</span>
                     </>
                   ) : (
                     <>
-                      Wonder Women{" "}
-                      <span className="text-polished-gold">Edit</span>
+                      Curated by Pharmacists.{" "}
+                      <span className="text-polished-gold">Built for Trust.</span>
                     </>
                   )}
                 </h1>
@@ -66,8 +66,8 @@ export default function Hero() {
                   )}
                 >
                   {isAr
-                    ? "اكتشفي العلامات التجارية التي أسستها نساء ملهمات — من العطور الراقية إلى العناية بالبشرة."
-                    : "Discover the brands built by visionary female founders — from niche fragrance houses to clean skincare pioneers."}
+                    ? "حلول موثوقة لإشراقة خالدة"
+                    : "Trusted Solutions for Ageless Radiance"}
                 </p>
 
                 {/* CTA */}
