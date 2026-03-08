@@ -110,7 +110,7 @@ export const BeautyAssistant = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-polished-gold/10 to-transparent -skew-x-12 translate-x-[-100%] animate-[shimmer_3s_infinite]"></div>
               <div className="flex items-center gap-4 relative z-10">
                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-polished-gold/60 shadow-lg bg-white">
-                  <img src="/dr-bot-character.png" className="w-full h-full object-cover object-top" alt="Dr. Sami" />
+                  <img src="/dr-bot-character.png" className="w-full h-full object-cover object-top" alt="Dr. Sami" style={{ mixBlendMode: "multiply" }} />
                 </div>
                 <div>
                   <h3 className="text-polished-white text-sm uppercase tracking-[0.15em] font-bold">
