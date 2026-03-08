@@ -80,6 +80,8 @@ const BUDGET_BRANDS = new Set([
   "essence", "rimmel", "seventeen", "catrice", "bourjois",
   "acnecinamide", "bio balance", "cetaphil", "eveline",
   "pastel", "baby safe",
+  "chicco", "mustela", "medela", "philips avent", "nuk", "mam",
+  "sudocrem", "bepanthen",
 ]);
 
 /** Mid-range brands: fils if price > 50 */
