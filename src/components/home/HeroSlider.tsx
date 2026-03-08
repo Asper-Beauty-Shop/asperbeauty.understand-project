@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import luxurySliderDisplay from "@/assets/luxury-slider-display.png";
 
 /* ------------------------------------------------------------------ */
 /*  Slide data                                                         */
