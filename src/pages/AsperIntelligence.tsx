@@ -462,7 +462,7 @@ export default function AsperIntelligence() {
                     {ASPER_CATALOG.slice(0, 4).map((item) => (
                       <div
                         key={item.handle}
-                        className="p-3 bg-[#F8F8FF] rounded-xl flex justify-between items-center border border-transparent hover:border-[#C5A028]/10 transition-all cursor-default group"
+                        className="p-3 bg-soft-ivory rounded-xl flex justify-between items-center border border-transparent hover:border-polished-gold/10 transition-all cursor-default group"
                       >
                         <div className="flex-1 min-w-0 mr-2">
                           <p className="text-[9px] font-black text-gray-400 uppercase mb-0.5">
