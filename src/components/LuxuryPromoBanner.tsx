@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import protocolRadiance from "@/assets/protocols/protocol-radiance.jpg";
+import protocolBarrier from "@/assets/protocols/protocol-barrier.jpg";
 
 interface LuxuryPromoBannerProps {
   title?: string;
@@ -29,16 +31,14 @@ export const LuxuryPromoBanner = ({
       subtitle: isAr
         ? "خصم 25% على جميع منتجات العناية بالبشرة المتميزة"
         : "25% Off All Premium Skincare Essentials",
-      image:
-        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
+      image: protocolRadiance,
     },
     secondary: {
       title: isAr ? "وصل حديثاً - مجموعة الربيع" : "New Arrivals — Spring Edit",
       subtitle: isAr
         ? "اكتشف أحدث المنتجات من أفضل العلامات التجارية"
         : "Discover the freshest picks from world-class brands",
-      image:
-        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      image: protocolBarrier,
     },
   };
 

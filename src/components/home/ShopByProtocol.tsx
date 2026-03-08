@@ -4,13 +4,20 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { cn } from "@/lib/utils";
 
+import protocolAcne from "@/assets/protocols/protocol-acne.jpg";
+import protocolRepair from "@/assets/protocols/protocol-repair.jpg";
+import protocolBarrier from "@/assets/protocols/protocol-barrier.jpg";
+import protocolRadiance from "@/assets/protocols/protocol-radiance.jpg";
+import protocolSun from "@/assets/protocols/protocol-sun.jpg";
+import protocolHydration from "@/assets/protocols/protocol-hydration.jpg";
+
 const PROTOCOLS = [
   {
     id: "acne",
     en: "The Acne Protocol",
     ar: "بروتوكول حب الشباب",
     ingredients: { en: "Salicylic Acid · Niacinamide · Zinc", ar: "حمض الساليسيليك · نياسيناميد · زنك" },
-    image: "https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c?w=600&q=80&auto=format&fit=crop",
+    image: protocolAcne,
     href: "/concerns/acne",
   },
   {
@@ -18,7 +25,7 @@ const PROTOCOLS = [
     en: "Cellular Repair",
     ar: "إصلاح خلوي",
     ingredients: { en: "Retinol · Peptides · Ceramides", ar: "ريتينول · ببتيدات · سيراميدات" },
-    image: "https://images.unsplash.com/photo-1570194065650-d99fb4ee4037?w=600&q=80&auto=format&fit=crop",
+    image: protocolRepair,
     href: "/concerns/anti-aging",
   },
   {
@@ -26,7 +33,7 @@ const PROTOCOLS = [
     en: "Barrier Defense",
     ar: "حماية الحاجز",
     ingredients: { en: "Ceramides · Squalane · Panthenol", ar: "سيراميدات · سكوالين · بانثينول" },
-    image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=600&q=80&auto=format&fit=crop",
+    image: protocolBarrier,
     href: "/concerns/sensitivity",
   },
   {
@@ -34,7 +41,7 @@ const PROTOCOLS = [
     en: "Radiance Revival",
     ar: "إحياء الإشراق",
     ingredients: { en: "Vitamin C · AHA · Arbutin", ar: "فيتامين سي · أحماض الفا · أربوتين" },
-    image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80&auto=format&fit=crop",
+    image: protocolRadiance,
     href: "/concerns/pigmentation",
   },
   {
@@ -42,7 +49,7 @@ const PROTOCOLS = [
     en: "Sun Shield",
     ar: "الحماية من الشمس",
     ingredients: { en: "SPF 50+ · Tinosorb · Vitamin E", ar: "SPF 50+ · تينوسورب · فيتامين إي" },
-    image: "https://images.unsplash.com/photo-1532947974358-a218d18d8d14?w=600&q=80&auto=format&fit=crop",
+    image: protocolSun,
     href: "/collections/suncare",
   },
   {
@@ -50,7 +57,7 @@ const PROTOCOLS = [
     en: "Deep Hydration",
     ar: "ترطيب عميق",
     ingredients: { en: "Hyaluronic Acid · B5 · Aloe", ar: "هيالورونيك أسيد · B5 · ألوفيرا" },
-    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80&auto=format&fit=crop",
+    image: protocolHydration,
     href: "/concerns/dryness",
   },
 ];
