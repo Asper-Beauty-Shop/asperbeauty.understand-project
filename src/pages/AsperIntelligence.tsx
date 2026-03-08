@@ -208,7 +208,7 @@ export default function AsperIntelligence() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const isClinical = persona === "clinical";
-  const hasApiKey = Boolean(apiKey);
+  
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
