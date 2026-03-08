@@ -25,6 +25,7 @@ import ceraveMoisturizingCreamImg from "@/assets/products/cerave-moisturizing-cr
 import olaplexNo7Img from "@/assets/products/olaplex-no7-bonding-oil.png";
 import neocellCollagenImg from "@/assets/products/neocell-collagen-c.png";
 import eucerinSunImg from "@/assets/products/eucerin-sun-hydro-spf50.png";
+import aminasCalendulaImg from "@/assets/products/aminas-calendula-cream.png";
 
 // Lazy load below-the-fold components
 const EditorialSpotlight = lazy(() =>
@@ -115,6 +116,7 @@ const BESTSELLERS = [
   { id: "12", handle: "lrp-toleriane-hydrating-wash", title: "Toleriane Hydrating Gentle Face Wash", brand: "La Roche-Posay", image: lrpTolerianewashImg, tag: "Bestseller" },
   { id: "13", handle: "vichy-capital-soleil-uv-age", title: "Capital Soleil UV-Age Daily SPF 50+", brand: "Vichy", image: vichyCapitalSoleilImg },
   { id: "14", handle: "vichy-normaderm-phytosolution", title: "Normaderm Phytosolution Double-Correction Care", brand: "Vichy", image: vichyNormadermImg, tag: "Bestseller" },
+  { id: "15", handle: "aminas-calendula-face-body-cream", title: "Calendula Face & Body Cream", brand: "Amina's Natural Skincare", image: aminasCalendulaImg, tag: "Jordanian Heritage" },
 ];
 
 const Index = () => {

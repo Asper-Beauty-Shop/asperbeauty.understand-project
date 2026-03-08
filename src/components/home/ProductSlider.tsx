@@ -117,9 +117,14 @@ export const ProductSlider = ({
 
                     {/* Typography Hierarchy */}
                     <div className="space-y-2">
-                      {/* Clinical pill tag */}
+                    {/* Clinical pill tag — gold for heritage badges */}
                       {clinicalTag && (
-                        <span className="inline-block font-body text-[9px] uppercase tracking-[0.15em] text-polished-gold border border-polished-gold/40 px-3 py-1 rounded-full">
+                        <span className={cn(
+                          "inline-block font-body text-[9px] uppercase tracking-[0.15em] px-3 py-1 rounded-full",
+                          clinicalTag === "Jordanian Heritage" || clinicalTag === "Local Favorite"
+                            ? "bg-polished-gold/10 text-polished-gold border border-polished-gold/50 font-semibold"
+                            : "text-polished-gold border border-polished-gold/40"
+                        )}>
                           {clinicalTag}
                         </span>
                       )}
