@@ -173,17 +173,17 @@ export function AsperExperience() {
           </div>
 
           {/* Progress dots */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-3">
             {VIDEOS.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentIdx(i)}
                 aria-label={`Video ${i + 1}`}
                 className={cn(
-                  "h-2 rounded-full transition-all duration-[400ms] min-w-[8px]",
+                  "h-3 rounded-full transition-all duration-[400ms] min-h-[12px] min-w-[12px]",
                   i === currentIdx
-                    ? "bg-accent w-6"
-                    : "bg-white/50 hover:bg-white/80 w-2"
+                    ? "bg-accent w-8"
+                    : "bg-white/50 hover:bg-white/80 w-3"
                 )}
               />
             ))}
