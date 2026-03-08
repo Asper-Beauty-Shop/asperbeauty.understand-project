@@ -617,7 +617,7 @@ export default function AsperIntelligence() {
                     type="submit"
                     disabled={isLoading}
                     className={`p-5 rounded-[1.5rem] text-white shadow-2xl transition-all transform hover:scale-[1.05] active:scale-[0.95] disabled:opacity-50 ${
-                      isClinical ? "bg-[#800020]" : "bg-[#C5A028]"
+                      isClinical ? "bg-maroon" : "bg-polished-gold"
                     }`}
                   >
                     {isLoading ? (
