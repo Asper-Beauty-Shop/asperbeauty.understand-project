@@ -46,20 +46,31 @@ const KNOWN_BRANDS: string[] = [
   "Solgar", "Nature's Bounty", "Centrum", "Vitabiotics",
 ].sort((a, b) => b.length - a.length);
 
+/** Product-type keywords that should NOT be captured as brand names */
+const PRODUCT_TERM_PATTERN = /^(serum|cream|lotion|gel|foam|wash|cleanser|moistur|mask|oil|spray|toner|peel|scrub|sunscreen|spf|balm|mist|essence|ampoule|eye|lip|hand|body|foot|hair|nail|baby|anti|ultra|hydra|aqua|vitamin|retinol|hyaluronic|salicylic|glycolic|niacin|collagen|peptide|ceramide|whitening|brightening|matte|glow|peeling|exfoli)/i;
+
 function extractBrand(title: string, vendor: string): string {
   const titleLower = title.toLowerCase();
+  // 1. Check known brands list (longest match first)
   for (const brand of KNOWN_BRANDS) {
     if (titleLower.startsWith(brand.toLowerCase())) {
       return brand;
     }
   }
-  // Fallback: first word(s) before known product terms
-  const firstWord = title.split(/\s+/).slice(0, 2).join(" ");
-  // If vendor is generic "Asper Beauty", use the extracted first words
-  if (vendor === "Asper Beauty" || !vendor) {
-    return firstWord;
+  // 2. Try first word only — but reject if it looks like a product term
+  const words = title.split(/\s+/);
+  const firstWord = words[0] || "";
+  if (firstWord && !PRODUCT_TERM_PATTERN.test(firstWord) && firstWord.length > 2) {
+    // If vendor is generic "Asper Beauty", use first word as brand
+    if (vendor === "Asper Beauty" || !vendor) {
+      return firstWord;
+    }
   }
-  return vendor;
+  // 3. Use vendor if it's not the generic store name
+  if (vendor && vendor !== "Asper Beauty") {
+    return vendor;
+  }
+  return firstWord || "Unknown";
 }
 
 // ── Brand-tier price normalization ───────────────────────────────────
