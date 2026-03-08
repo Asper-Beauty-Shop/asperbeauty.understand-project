@@ -16,8 +16,8 @@ export const About = () => {
                 backgroundClip: "text",
               }}
             >
-              Beauty in
-              <span className="italic block">Simplicity</span>
+              Where Science
+              <span className="italic block">Meets Soul</span>
             </h2>
             <div className="w-16 h-px bg-gradient-to-r from-gold to-gold-light mb-8" />
             <div className="space-y-6 text-charcoal font-body leading-relaxed">
