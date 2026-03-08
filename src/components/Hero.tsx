@@ -274,8 +274,8 @@ export const Hero = () => {
             }}
           >
             {isArabic
-              ? "اكتشف فيلورغا، الرائد العالمي في مكافحة الشيخوخة، متوفر الآن مع خدمة التوصيل السريع في عمّان."
-              : "Discover Filorga, the world leader in anti-aging, now available with same-day concierge delivery in Amman."}
+              ? "نحن لا نبيع مستحضرات التجميل فحسب؛ بل نوزّع الجمال بذكاء."
+              : "We are not just selling cosmetics; we are dispensing beauty through intelligence."}
           </p>
 
           {/* CTA Buttons with luxury styling */}

@@ -22,19 +22,19 @@ export const About = () => {
             <div className="w-16 h-px bg-gradient-to-r from-gold to-gold-light mb-8" />
             <div className="space-y-6 text-charcoal font-body leading-relaxed">
               <p>
-                At Asper Beauty Shop, we believe true beauty emerges from the
-                harmony of premium ingredients, thoughtful formulations, and
-                mindful rituals.
+                We are not just selling cosmetics; we are dispensing beauty
+                through intelligence. Every product at Asper is curated by
+                pharmacists who understand the science behind healthy skin.
               </p>
               <p>
-                Each product in our collection is meticulously selected to
-                deliver exceptional results while honoring your skin's natural
-                balance. We partner exclusively with brands that share our
-                commitment to quality, sustainability, and efficacy.
+                Our clinical-grade approach blends dermatological precision with
+                AI-powered recommendations, ensuring each product in your
+                regimen is verified for efficacy, authenticity, and safety.
               </p>
               <p>
-                Experience the difference of luxury beauty, where every detail
-                matters and every product tells a story of excellence.
+                Intelligent. Authentic. Eternal. — This is the future of
+                dermo-retail, where pharmacist expertise meets cutting-edge
+                technology to deliver trusted solutions for ageless radiance.
               </p>
             </div>
 

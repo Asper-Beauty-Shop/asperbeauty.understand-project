@@ -86,8 +86,8 @@ export default function AmbientVideoHero() {
             dir={isAr ? "rtl" : "ltr"}
           >
             {isAr
-              ? "اكتشفي التقاء العلم الجلدي والجمال الأصيل — معتمد صيدلانياً."
-              : "Where dermatological science meets authentic beauty — pharmacist verified, clinically proven."}
+              ? "نحن لا نبيع مستحضرات التجميل فحسب؛ بل نوزّع الجمال بذكاء."
+              : "We are not just selling cosmetics; we are dispensing beauty through intelligence."}
           </motion.p>
 
           {/* CTAs */}

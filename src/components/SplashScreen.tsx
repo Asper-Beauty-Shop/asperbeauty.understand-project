@@ -58,7 +58,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <p className="font-heading text-lg sm:text-xl text-primary-foreground/90 tracking-wide">
-            The Sanctuary of Science
+            Where Science Meets Soul
           </p>
           <div className="mt-3 mx-auto w-16 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
         </motion.div>

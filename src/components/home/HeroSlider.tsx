@@ -70,7 +70,7 @@ const slides: Slide[] = [
       <div className="relative flex flex-col items-start justify-center h-full px-6 sm:px-12 lg:px-20">
         {/* Small caps label */}
         <span className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.35em] text-white/70 mb-3">
-          {isAr ? "إصدار خاص" : "EXCLUSIVE EDIT"}
+          {isAr ? "ذكي. أصيل. خالد." : "INTELLIGENT. AUTHENTIC. ETERNAL."}
         </span>
 
         {/* Title — editorial serif */}
@@ -81,7 +81,7 @@ const slides: Slide[] = [
               isAr ? "font-arabic" : "font-serif italic"
             )}
           >
-            {isAr ? "نساء" : "Wonder Women"}
+            {isAr ? "مُنتقاة من الصيادلة" : "Curated by Pharmacists"}
           </span>
           <span
             className={cn(
@@ -89,7 +89,7 @@ const slides: Slide[] = [
               isAr ? "font-arabic" : "font-serif"
             )}
           >
-            {isAr ? "ملهمات" : "Edit"}
+            {isAr ? "مصمّمة للثقة" : "Built for Trust"}
           </span>
         </h2>
 
@@ -101,8 +101,8 @@ const slides: Slide[] = [
           )}
         >
           {isAr
-            ? "تعرّفي على المؤسسات اللواتي يعيدن تعريف صناعة الجمال"
-            : "Meet the female founders redefining the beauty industry"}
+            ? "نحن لا نبيع مستحضرات التجميل فحسب؛ بل نوزّع الجمال بذكاء."
+            : "We are not just selling cosmetics; we are dispensing beauty through intelligence."}
         </p>
 
         {/* CTA */}

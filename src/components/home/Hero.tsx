@@ -66,8 +66,8 @@ export default function Hero() {
                   )}
                 >
                   {isAr
-                    ? "اكتشفي العلامات التجارية التي أسستها نساء ملهمات — من العطور الراقية إلى العناية بالبشرة."
-                    : "Discover the brands built by visionary female founders — from niche fragrance houses to clean skincare pioneers."}
+                    ? "حلول موثوقة لإشراقة خالدة"
+                    : "Trusted Solutions for Ageless Radiance"}
                 </p>
 
                 {/* CTA */}
