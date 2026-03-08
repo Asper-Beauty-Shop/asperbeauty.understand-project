@@ -664,10 +664,10 @@ export default function AsperIntelligence() {
           </div>
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2">
-              <Globe size={14} className="text-[#C5A028]" /> Levant Region Active
+              <Globe size={14} className="text-polished-gold" /> Levant Region Active
             </div>
             <div className="flex items-center gap-2">
-              <ShoppingCart size={14} className="text-[#800020]" /> JOD Currency
+              <ShoppingCart size={14} className="text-maroon" /> JOD Currency
               Verified
             </div>
             <span>© 2025 Asper Beauty Shop</span>
