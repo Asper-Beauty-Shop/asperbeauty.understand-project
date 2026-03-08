@@ -13,6 +13,14 @@ import { Footer } from "@/components/Footer";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isHomepageBrand } from "@/constants/premiumBrands";
+import ceraveCleanserImg from "@/assets/products/cerave-foaming-cleanser.png";
+import vichyAmpoulesImg from "@/assets/products/vichy-liftactiv-ampoules.png";
+import biodermaSensibioImg from "@/assets/products/bioderma-sensibio-h2o.png";
+import lrpTolerianeMoisturizerImg from "@/assets/products/lrp-toleriane-ultra.png";
+import biodermaSensibioArImg from "@/assets/products/bioderma-sensibio-ar.png";
+import lrpTolerianewashImg from "@/assets/products/lrp-toleriane-wash.png";
+import vichyCapitalSoleilImg from "@/assets/products/vichy-capital-soleil.png";
+import vichyNormadermImg from "@/assets/products/vichy-normaderm.png";
 
 // Lazy load below-the-fold components
 const EditorialSpotlight = lazy(() =>
@@ -95,12 +103,14 @@ const NEW_ARRIVALS = [
 ];
 
 const BESTSELLERS = [
-  { id: "7", handle: "hyaluronic-acid-booster", title: "Pure Hyaluronic Acid Booster Â· Intense Moisture Surge", brand: "La Roche-Posay", image: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
-  { id: "8", handle: "lipid-replenishing-balm", title: "Lipid-Replenishing Balm Â· Daily Barrier Protectant", brand: "CeraVe", image: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
-  { id: "9", handle: "mineral-uv-shield", title: "Mineral UV Shield SPF 50+ Â· Broad Spectrum Protection", brand: "Vichy", image: "https://images.unsplash.com/photo-1629532587596-f94dd6d9de4c?auto=format&fit=crop&w=800&q=80" },
-  { id: "10", handle: "peptide-firming-eye", title: "Peptide Firming Eye Concentrate Â· Dark Circle Treatment", brand: "Asper Clinical", image: "https://images.unsplash.com/photo-1599305090598-fe179d501227?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
-  { id: "11", handle: "thermal-spring-water", title: "Thermal Spring Water Mist Â· Soothing Mineral Tonic", brand: "Vichy", image: "https://images.unsplash.com/photo-1556228720-1c27bef8b5e6?auto=format&fit=crop&w=800&q=80" },
-  { id: "12", handle: "soothing-cleansing-milk", title: "Soothing Cleansing Milk Â· Gentle Daily Purifier", brand: "Eucerin", image: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=800&q=80", tag: "Bestseller" },
+  { id: "7", handle: "cerave-foaming-facial-cleanser", title: "Foaming Facial Cleanser", brand: "CeraVe", image: ceraveCleanserImg, tag: "Bestseller" },
+  { id: "8", handle: "vichy-liftactiv-peptide-c-ampoules", title: "LiftActiv Peptide-C Ampoules", brand: "Vichy", image: vichyAmpoulesImg, tag: "Bestseller" },
+  { id: "9", handle: "bioderma-sensibio-h2o", title: "Sensibio H2O Micellar Water", brand: "Bioderma", image: biodermaSensibioImg },
+  { id: "10", handle: "lrp-toleriane-ultra-moisturizer", title: "Toleriane Ultra Soothing Repair Moisturizer", brand: "La Roche-Posay", image: lrpTolerianeMoisturizerImg, tag: "Bestseller" },
+  { id: "11", handle: "bioderma-sensibio-ar-cream", title: "Sensibio AR Anti-Redness Cream SPF 30", brand: "Bioderma", image: biodermaSensibioArImg },
+  { id: "12", handle: "lrp-toleriane-hydrating-wash", title: "Toleriane Hydrating Gentle Face Wash", brand: "La Roche-Posay", image: lrpTolerianewashImg, tag: "Bestseller" },
+  { id: "13", handle: "vichy-capital-soleil-uv-age", title: "Capital Soleil UV-Age Daily SPF 50+", brand: "Vichy", image: vichyCapitalSoleilImg },
+  { id: "14", handle: "vichy-normaderm-phytosolution", title: "Normaderm Phytosolution Double-Correction Care", brand: "Vichy", image: vichyNormadermImg, tag: "Bestseller" },
 ];
 
 const Index = () => {
