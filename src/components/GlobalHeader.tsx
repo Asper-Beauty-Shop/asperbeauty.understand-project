@@ -110,8 +110,6 @@ export const GlobalHeader = () => {
             <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
               <Link to="/" className="block">
                 <AsperWordmark size="sm" className="text-burgundy" />
-                  </span>
-                </h1>
               </Link>
             </div>
 
