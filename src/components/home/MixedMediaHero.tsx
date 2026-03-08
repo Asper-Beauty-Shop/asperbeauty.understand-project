@@ -17,16 +17,25 @@ export default function MixedMediaHero() {
     <section className="relative w-full bg-background overflow-hidden">
       {/* ── Desktop: 2×2 Split Grid ── */}
       <div className="hidden md:grid grid-cols-2 grid-rows-2 min-h-[90vh]">
-        {/* Cell 1 — Video (top-left) */}
+        {/* Cell 1 — Video (top-left) with poster for fast LCP */}
         <div className="relative overflow-hidden">
+          <img
+            src="/images/hero-poster-1.jpg"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
+            fetchPriority="high"
+          />
           <video
             autoPlay
             loop
             muted
             playsInline
             disablePictureInPicture
+            poster="/images/hero-poster-1.jpg"
             className="absolute inset-0 w-full h-full object-cover"
           >
+            <source src="/videos/hero-spa-ritual.webm" type="video/webm" />
             <source src="/videos/hero-spa-ritual.mp4" type="video/mp4" />
           </video>
         </div>
@@ -118,22 +127,32 @@ export default function MixedMediaHero() {
             initial={{ scale: 1.05 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.5, ease: LUXURY_EASE }}
+            loading="eager"
           />
         </div>
       </div>
 
-      {/* ── Mobile: Stacked Layout ── */}
+      {/* ── Mobile: Stacked Layout with focal-point cropping ── */}
       <div className="md:hidden">
-        {/* Video */}
+        {/* Video with poster fallback */}
         <div className="relative w-full aspect-[4/3] overflow-hidden">
+          <img
+            src="/images/hero-poster-1.jpg"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            fetchPriority="high"
+          />
           <video
             autoPlay
             loop
             muted
             playsInline
             disablePictureInPicture
-            className="absolute inset-0 w-full h-full object-cover"
+            poster="/images/hero-poster-1.jpg"
+            className="absolute inset-0 w-full h-full object-cover object-center"
           >
+            <source src="/videos/hero-spa-ritual.webm" type="video/webm" />
             <source src="/videos/hero-spa-ritual.mp4" type="video/mp4" />
           </video>
         </div>
@@ -187,21 +206,7 @@ export default function MixedMediaHero() {
 
         {/* Landscape image */}
         <div className="w-full aspect-[16/9] overflow-hidden">
-          <img src={heroDiscovery} alt="Serum discovery" className="w-full h-full object-cover" />
-        </div>
-
-        {/* Second video */}
-        <div className="relative w-full aspect-[16/9] overflow-hidden">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            disablePictureInPicture
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src="/videos/hero-skincare-ritual.mp4" type="video/mp4" />
-          </video>
+          <img src={heroDiscovery} alt="Serum discovery" className="w-full h-full object-cover" loading="lazy" />
         </div>
       </div>
 
