@@ -5,8 +5,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
-import heroRosewater from "@/assets/hero-rosewater-ritual.jpg";
-import heroSerums from "@/assets/hero-golden-serums.jpg";
 import heroDiscovery from "@/assets/hero-serum-discovery-wide.png";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
