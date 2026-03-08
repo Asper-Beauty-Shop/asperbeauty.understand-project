@@ -371,22 +371,8 @@ export default function AsperIntelligence() {
             </div>
           </div>
 
-          {!hasApiKey && (
-            <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-amber-800 text-sm">
-              Add <code className="font-mono">VITE_GEMINI_API_KEY</code> to your{" "}
-              <code className="font-mono">.env</code> to enable chat and TTS. Get
-              a key at{" "}
-              <a
-                href="https://aistudio.google.com/apikey"
-                target="_blank"
-                rel="noreferrer"
-                className="underline"
-              >
-                Google AI Studio
-              </a>
-              .
-            </div>
-          )}
+
+
 
           {activeTab === "intelligence" && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
