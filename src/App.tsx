@@ -76,6 +76,7 @@ const App = () => {
             <BrowserRouter>
               <Suspense fallback={null}>
                 <BeautyAssistant />
+                <FloatingConciergeWidget />
               </Suspense>
               <Routes>
                 <Route path="/" element={<Index />} />
