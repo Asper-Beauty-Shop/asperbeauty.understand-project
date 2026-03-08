@@ -286,10 +286,37 @@ export const Header = () => {
                 <Search className="h-5 w-5" />
               </button>
 
+              {/* Desktop Dual-Persona Consultation CTA */}
+              <div className="hidden lg:flex items-center">
+                <div className="flex items-center rounded-full border border-polished-gold/30 overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant", { detail: { persona: "dr_sami" } }))}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-body font-medium text-burgundy hover:bg-polished-gold/10 transition-all duration-300"
+                    aria-label="Consult Dr. Sami"
+                  >
+                    <ShieldCheck className="h-3.5 w-3.5 text-polished-gold" />
+                    <span className="hidden xl:inline">{language === "ar" ? "د. سامي" : "Dr. Sami"}</span>
+                    <span className="text-[9px] text-polished-gold/70 hidden xl:inline">{language === "ar" ? "عافية" : "Wellness"}</span>
+                  </button>
+                  <div className="w-px h-5 bg-polished-gold/20" />
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant", { detail: { persona: "ms_zain" } }))}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-body font-medium text-burgundy hover:bg-polished-gold/10 transition-all duration-300"
+                    aria-label="Chat with Ms. Zain"
+                  >
+                    <Sparkles className="h-3.5 w-3.5 text-polished-gold" />
+                    <span className="hidden xl:inline">{language === "ar" ? "مس زين" : "Ms. Zain"}</span>
+                    <span className="text-[9px] text-polished-gold/70 hidden xl:inline">{language === "ar" ? "جمال" : "Beauty"}</span>
+                  </button>
+                </div>
+              </div>
+              {/* Mobile chat icon */}
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant"))}
-                className={cn("hidden md:block p-2 transition-colors", iconColor, textColorHover)}
+                className={cn("lg:hidden p-2 transition-colors", iconColor, textColorHover)}
                 aria-label="Dr.Bot"
               >
                 <MessageCircle className="h-5 w-5" />
