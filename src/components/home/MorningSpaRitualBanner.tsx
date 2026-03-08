@@ -42,7 +42,7 @@ export function MorningSpaRitualBanner() {
 
           <p
             className={cn(
-              "font-display text-lg md:text-xl lg:text-2xl text-foreground leading-relaxed mb-8",
+              "font-display text-lg md:text-xl lg:text-2xl text-foreground leading-relaxed mb-6",
               isAr && "font-arabic"
             )}
           >
@@ -51,11 +51,28 @@ export function MorningSpaRitualBanner() {
               : "Our deepest dermatological research provides intensive hydration. Discover your ideal mineral balance."}
           </p>
 
+          {/* Gold-highlighted key benefits */}
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-8">
+            {(isAr
+              ? ["حمض الهيالورونيك", "89% ماء بركاني", "ترطيب 48 ساعة"]
+              : ["Hyaluronic Acid", "89% Volcanic Water", "48h Hydration"]
+            ).map((benefit) => (
+              <span
+                key={benefit}
+                className="inline-flex items-center gap-1.5 text-[11px] font-body uppercase tracking-[0.15em] text-accent font-semibold"
+              >
+                <span className="w-1 h-1 rounded-full bg-accent" />
+                {benefit}
+              </span>
+            ))}
+          </div>
+
           <Link
             to="/shop?brand=Vichy"
             className="inline-block font-body text-[11px] uppercase tracking-[0.3em] text-foreground
                        border-b border-accent pb-1 hover:text-primary
-                       transition-colors duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]"
+                       transition-colors duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]
+                       min-h-[44px] flex items-center justify-center"
           >
             {isAr ? "اكتشفي الآن" : "Discover Now"}
           </Link>
