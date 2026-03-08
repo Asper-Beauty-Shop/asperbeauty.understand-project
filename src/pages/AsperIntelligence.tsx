@@ -308,11 +308,11 @@ export default function AsperIntelligence() {
         <header className="max-w-6xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-end gap-6 border-b border-polished-gold/10 pb-8">
           <div>
             <h1
-              className="text-5xl font-serif text-[#800020] mb-2 tracking-tight"
+              className="text-5xl font-serif text-maroon mb-2 tracking-tight"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Asper{" "}
-              <span className="font-light italic text-[#C5A028]">
+              <span className="font-light italic text-polished-gold">
                 Intelligence
               </span>
             </h1>
