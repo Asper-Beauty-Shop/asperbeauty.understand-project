@@ -526,14 +526,22 @@ export default function Shop() {
               {!isLoading && filteredProducts.length === 0 && renderEmptyState()}
 
               {!isLoading && filteredProducts.length > 0 && (
-                <div className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" : "space-y-4"}>
-                  {filteredProducts.map((product) => (
-                    <ShopProductCard
+                <div
+                  key={categoryParam}
+                  className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" : "space-y-4"}
+                >
+                  {filteredProducts.map((product, index) => (
+                    <div
                       key={product.id}
-                      product={product}
-                      onQuickView={(p) => { setSelectedProduct(p); setIsQuickViewOpen(true); }}
-                      viewMode={viewMode}
-                    />
+                      className="staggered-reveal-card"
+                      style={{ animationDelay: `${index * 0.06}s` }}
+                    >
+                      <ShopProductCard
+                        product={product}
+                        onQuickView={(p) => { setSelectedProduct(p); setIsQuickViewOpen(true); }}
+                        viewMode={viewMode}
+                      />
+                    </div>
                   ))}
                 </div>
               )}
