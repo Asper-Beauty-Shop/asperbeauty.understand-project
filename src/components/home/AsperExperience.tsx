@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
 const VIDEOS = [
+  "/videos/brand-philosophy.mp4",
   "/videos/hero-reel-1.mp4",
   "/videos/hero-reel-2.mp4",
   "/videos/hero-reel-3.mp4",

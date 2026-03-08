@@ -21,9 +21,9 @@ export function MorningSpaRitualBanner() {
           transition={{ duration: 0.8, ease: LUXURY_EASE }}
         >
           <img
-            src="https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=1440&q=80"
-            alt="The Morning Spa Ritual — volcanic mineral water skincare"
-            className="w-full h-auto object-cover max-h-[55vh]"
+            src="/images/vichy-mineral89-ritual.png"
+            alt="Morning Spa — Clinical Precision. Eternal Elegance. Vichy Minéral 89"
+            className="w-full h-auto object-cover"
             loading="lazy"
           />
         </motion.div>
