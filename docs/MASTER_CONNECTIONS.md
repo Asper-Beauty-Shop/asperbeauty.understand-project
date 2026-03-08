@@ -271,3 +271,8 @@ These domains are allowed in the CSP header (`index.html`):
 - [x] Shopify Catalog: SYNCED (4,311 Items)
 - [x] GoDaddy Domain: SECURED
 - [x] Real-Image Lab: ONLINE
+
+## 16. Google Cloud / Gemini Project Info
+*   **Project Name:** Asper Beauty Shop
+*   **Project Number:** 147143724210
+*   **Project ID:** gen-lang-client-0019655668

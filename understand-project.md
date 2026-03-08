@@ -141,3 +141,8 @@ VITE_SHOPIFY_STOREFRONT_TOKEN="79d7870bb2e8b940752bdee2af19edbb"
 ## 15. Brand Integrity & Realistic Media Mandate
 *   **Media Policy:** ABS uses only realistic, high-fidelity brand assets. AI-generated imagery must follow the "Asper Shine" guidelines and represent actual physical product packaging accurately. No broken URLs or placeholder images are permitted in production.
 *   **SEO Strategy:** Every product and brand page is optimized for Jordan/MENA beauty search intents (e.g., "Best Acne treatment Amman", "Pharmacy-grade skincare Jordan").
+
+## 16. Google Cloud / Gemini Project Info
+*   **Project Name:** Asper Beauty Shop
+*   **Project Number:** 147143724210
+*   **Project ID:** gen-lang-client-0019655668
