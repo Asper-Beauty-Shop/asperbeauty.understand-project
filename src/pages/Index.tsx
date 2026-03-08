@@ -77,6 +77,16 @@ const ScienceMeetsStyle = lazy(() =>
     default: m.ScienceMeetsStyle,
   }))
 );
+const DualPersonaBestsellers = lazy(() =>
+  import("@/components/home/DualPersonaBestsellers").then((m) => ({
+    default: m.DualPersonaBestsellers,
+  }))
+);
+const GuidedDiscovery = lazy(() =>
+  import("@/components/home/GuidedDiscovery").then((m) => ({
+    default: m.GuidedDiscovery,
+  }))
+);
 const ClinicalTruthBanner = lazy(() =>
   import("@/components/home/ClinicalTruthBanner")
 );
@@ -229,6 +239,16 @@ const Index = () => {
 
         {/* ═══ Shop by Protocol (Editorial Navigation) ═══ */}
         <ShopByProtocol />
+
+        {/* ═══ Dual-Persona Tabbed Bestsellers ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <DualPersonaBestsellers />
+        </Suspense>
+
+        {/* ═══ AI-Guided Discovery (Ms. Zain's Shade Guide) ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <GuidedDiscovery />
+        </Suspense>
 
         {/* ═══ Product Sliders (Bestsellers + New Arrivals) ═══ */}
         <ProductSlider
