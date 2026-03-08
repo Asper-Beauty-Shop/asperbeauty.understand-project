@@ -111,27 +111,15 @@ export default function MixedMediaHero() {
           </motion.div>
         </div>
 
-        {/* Cell 3 — Image (bottom-left) */}
-        <div className="relative overflow-hidden">
+        {/* Cell 3 — Wide landscape image spanning both columns */}
+        <div className="relative overflow-hidden col-span-2">
           <motion.img
             src={heroDiscovery}
             alt="Discover your ideal serum — ISDIN, Vichy, La Mer"
-            className="w-full h-full object-cover"
-            initial={{ scale: 1.08 }}
+            className="w-full h-full object-cover max-h-[45vh]"
+            initial={{ scale: 1.05 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.5, ease: LUXURY_EASE }}
-          />
-        </div>
-
-        {/* Cell 4 — Image (bottom-right) */}
-        <div className="relative overflow-hidden">
-          <motion.img
-            src={heroRosewater}
-            alt="Rosewater hydration ritual — crystal-infused skincare"
-            className="w-full h-full object-cover"
-            initial={{ scale: 1.08 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1.5, delay: 0.2, ease: LUXURY_EASE }}
           />
         </div>
       </div>
