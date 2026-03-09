@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Asper Beauty - 3-Click Funnel Tracking
  * Purpose: Identify drop-off points in the "Morning Spa" consultation for the 24-Hour Clinical Audit and Customer Success Report.
  */

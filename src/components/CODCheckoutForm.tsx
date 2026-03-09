@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+﻿import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -125,13 +125,13 @@ export const CODCheckoutForm = (
 
     if (!validateForm()) return;
     if (items.length === 0) {
-      toast.error(isArabic ? "سلة التسوق فارغة" : "Cart is empty");
+      toast.error(isArabic ? "Ø³Ù„Ø© Ø§Ù„ØªØ³ÙˆÙ‚ ÙØ§Ø±ØºØ©" : "Cart is empty");
       return;
     }
     if (!captchaToken) {
       toast.error(
         isArabic
-          ? "يرجى التحقق من أنك لست روبوت"
+          ? "ÙŠØ±Ø¬Ù‰ Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø£Ù†Ùƒ Ù„Ø³Øª Ø±ÙˆØ¨ÙˆØª"
           : "Please verify you're not a robot",
       );
       return;
@@ -195,7 +195,7 @@ export const CODCheckoutForm = (
       console.error("Failed to place COD order:", error);
       toast.error(
         isArabic
-          ? "فشل في إرسال الطلب. حاول مرة أخرى."
+          ? "ÙØ´Ù„ ÙÙŠ Ø¥Ø±Ø³Ø§Ù„ Ø§Ù„Ø·Ù„Ø¨. Ø­Ø§ÙˆÙ„ Ù…Ø±Ø© Ø£Ø®Ø±Ù‰."
           : "Failed to place order. Please try again.",
       );
     } finally {
@@ -208,14 +208,14 @@ export const CODCheckoutForm = (
       {/* Order Summary */}
       <div className="bg-[#F8F8FF]/50 rounded-lg p-4 space-y-3">
         <h3 className="font-display text-sm font-medium text-foreground">
-          {isArabic ? "ملخص الطلب" : "Order Summary"}
+          {isArabic ? "Ù…Ù„Ø®Øµ Ø§Ù„Ø·Ù„Ø¨" : "Order Summary"}
         </h3>
 
         <div className="space-y-2 max-h-32 overflow-y-auto">
           {items.map((item) => (
             <div key={item.variantId} className="flex justify-between text-sm">
               <span className="text-muted-foreground truncate max-w-[200px]">
-                {translateTitle(item.product.node.title, language)} ×{" "}
+                {translateTitle(item.product.node.title, language)} Ã—{" "}
                 {item.quantity}
               </span>
               <span className="text-foreground font-medium">
@@ -228,22 +228,22 @@ export const CODCheckoutForm = (
         <div className="border-t border-[#C5A028]/20 pt-2 space-y-1">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">
-              {isArabic ? "المجموع الفرعي" : "Subtotal"}
+              {isArabic ? "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹ Ø§Ù„ÙØ±Ø¹ÙŠ" : "Subtotal"}
             </span>
             <span>{subtotal.toFixed(2)} JOD</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">
-              {isArabic ? "الشحن" : "Shipping"}
+              {isArabic ? "Ø§Ù„Ø´Ø­Ù†" : "Shipping"}
             </span>
             <span className={shippingCost === 0 ? "text-green-600" : ""}>
               {shippingCost === 0
-                ? (isArabic ? "مجاني" : "Free")
+                ? (isArabic ? "Ù…Ø¬Ø§Ù†ÙŠ" : "Free")
                 : `${shippingCost.toFixed(2)} JOD`}
             </span>
           </div>
           <div className="flex justify-between font-display text-base font-bold pt-1">
-            <span>{isArabic ? "الإجمالي" : "Total"}</span>
+            <span>{isArabic ? "Ø§Ù„Ø¥Ø¬Ù…Ø§Ù„ÙŠ" : "Total"}</span>
             <span className="text-[#800020]">{total.toFixed(2)} JOD</span>
           </div>
         </div>
@@ -257,13 +257,13 @@ export const CODCheckoutForm = (
             className="flex items-center gap-2 text-sm"
           >
             <User className="w-4 h-4 text-[#C5A028]" />
-            {isArabic ? "الاسم الكامل" : "Full Name"} *
+            {isArabic ? "Ø§Ù„Ø§Ø³Ù… Ø§Ù„ÙƒØ§Ù…Ù„" : "Full Name"} *
           </Label>
           <Input
             id="customerName"
             value={formData.customerName}
             onChange={(e) => handleInputChange("customerName", e.target.value)}
-            placeholder={isArabic ? "أدخل اسمك الكامل" : "Enter your full name"}
+            placeholder={isArabic ? "Ø£Ø¯Ø®Ù„ Ø§Ø³Ù…Ùƒ Ø§Ù„ÙƒØ§Ù…Ù„" : "Enter your full name"}
             className="border-[#C5A028]/30 focus:border-[#C5A028]"
             required
           />
@@ -275,7 +275,7 @@ export const CODCheckoutForm = (
             className="flex items-center gap-2 text-sm"
           >
             <Phone className="w-4 h-4 text-[#C5A028]" />
-            {isArabic ? "رقم الهاتف" : "Phone Number"} *
+            {isArabic ? "Ø±Ù‚Ù… Ø§Ù„Ù‡Ø§ØªÙ" : "Phone Number"} *
           </Label>
           <Input
             id="customerPhone"
@@ -294,8 +294,8 @@ export const CODCheckoutForm = (
             className="flex items-center gap-2 text-sm"
           >
             <Mail className="w-4 h-4 text-[#C5A028]" />
-            {isArabic ? "البريد الإلكتروني" : "Email"}{" "}
-            ({isArabic ? "اختياري" : "optional"})
+            {isArabic ? "Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ" : "Email"}{" "}
+            ({isArabic ? "Ø§Ø®ØªÙŠØ§Ø±ÙŠ" : "optional"})
           </Label>
           <Input
             id="customerEmail"
@@ -310,7 +310,7 @@ export const CODCheckoutForm = (
         <div className="space-y-2">
           <Label htmlFor="city" className="flex items-center gap-2 text-sm">
             <MapPin className="w-4 h-4 text-[#C5A028]" />
-            {isArabic ? "المدينة" : "City"} *
+            {isArabic ? "Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©" : "City"} *
           </Label>
           <Select
             value={formData.city}
@@ -318,7 +318,7 @@ export const CODCheckoutForm = (
           >
             <SelectTrigger className="border-[#C5A028]/30 focus:border-[#C5A028]">
               <SelectValue
-                placeholder={isArabic ? "اختر المدينة" : "Select city"}
+                placeholder={isArabic ? "Ø§Ø®ØªØ± Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©" : "Select city"}
               />
             </SelectTrigger>
             <SelectContent>
@@ -337,7 +337,7 @@ export const CODCheckoutForm = (
             className="flex items-center gap-2 text-sm"
           >
             <MapPin className="w-4 h-4 text-[#C5A028]" />
-            {isArabic ? "عنوان التوصيل" : "Delivery Address"} *
+            {isArabic ? "Ø¹Ù†ÙˆØ§Ù† Ø§Ù„ØªÙˆØµÙŠÙ„" : "Delivery Address"} *
           </Label>
           <Textarea
             id="deliveryAddress"
@@ -345,7 +345,7 @@ export const CODCheckoutForm = (
             onChange={(e) =>
               handleInputChange("deliveryAddress", e.target.value)}
             placeholder={isArabic
-              ? "أدخل عنوان التوصيل بالتفصيل"
+              ? "Ø£Ø¯Ø®Ù„ Ø¹Ù†ÙˆØ§Ù† Ø§Ù„ØªÙˆØµÙŠÙ„ Ø¨Ø§Ù„ØªÙØµÙŠÙ„"
               : "Enter detailed delivery address"}
             className="border-[#C5A028]/30 focus:border-[#C5A028] min-h-[80px]"
             required
@@ -355,15 +355,15 @@ export const CODCheckoutForm = (
         <div className="space-y-2">
           <Label htmlFor="notes" className="flex items-center gap-2 text-sm">
             <FileText className="w-4 h-4 text-[#C5A028]" />
-            {isArabic ? "ملاحظات" : "Notes"}{" "}
-            ({isArabic ? "اختياري" : "optional"})
+            {isArabic ? "Ù…Ù„Ø§Ø­Ø¸Ø§Øª" : "Notes"}{" "}
+            ({isArabic ? "Ø§Ø®ØªÙŠØ§Ø±ÙŠ" : "optional"})
           </Label>
           <Textarea
             id="notes"
             value={formData.notes}
             onChange={(e) => handleInputChange("notes", e.target.value)}
             placeholder={isArabic
-              ? "أي ملاحظات إضافية للتوصيل"
+              ? "Ø£ÙŠ Ù…Ù„Ø§Ø­Ø¸Ø§Øª Ø¥Ø¶Ø§ÙÙŠØ© Ù„Ù„ØªÙˆØµÙŠÙ„"
               : "Any additional delivery notes"}
             className="border-[#C5A028]/30 focus:border-[#C5A028] min-h-[60px]"
           />
@@ -374,7 +374,7 @@ export const CODCheckoutForm = (
       <div className="space-y-2">
         <Label className="flex items-center gap-2 text-sm">
           <ShieldCheck className="w-4 h-4 text-[#C5A028]" />
-          {isArabic ? "التحقق الأمني" : "Security Verification"} *
+          {isArabic ? "Ø§Ù„ØªØ­Ù‚Ù‚ Ø§Ù„Ø£Ù…Ù†ÙŠ" : "Security Verification"} *
         </Label>
         <div className="flex justify-center bg-[#F8F8FF]/30 rounded-lg p-3">
           <HCaptcha
@@ -388,7 +388,7 @@ export const CODCheckoutForm = (
         {captchaToken && (
           <p className="text-xs text-green-600 flex items-center gap-1 justify-center">
             <CheckCircle className="w-3 h-3" />
-            {isArabic ? "تم التحقق بنجاح" : "Verified successfully"}
+            {isArabic ? "ØªÙ… Ø§Ù„ØªØ­Ù‚Ù‚ Ø¨Ù†Ø¬Ø§Ø­" : "Verified successfully"}
           </p>
         )}
       </div>
@@ -396,11 +396,11 @@ export const CODCheckoutForm = (
       {/* COD Notice */}
       <div className="bg-[#C5A028]/10 border border-[#C5A028]/30 rounded-lg p-3 text-center">
         <p className="text-sm text-foreground font-medium">
-          💵 {isArabic ? "الدفع عند الاستلام" : "Cash on Delivery"}
+          ðŸ’µ {isArabic ? "Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…" : "Cash on Delivery"}
         </p>
         <p className="text-xs text-muted-foreground mt-1">
           {isArabic
-            ? "ادفع نقداً عند استلام طلبك"
+            ? "Ø§Ø¯ÙØ¹ Ù†Ù‚Ø¯Ø§Ù‹ Ø¹Ù†Ø¯ Ø§Ø³ØªÙ„Ø§Ù… Ø·Ù„Ø¨Ùƒ"
             : "Pay cash when you receive your order"}
         </p>
       </div>
@@ -414,7 +414,7 @@ export const CODCheckoutForm = (
           className="flex-1 border-[#C5A028]/30"
           disabled={isSubmitting}
         >
-          {isArabic ? "إلغاء" : "Cancel"}
+          {isArabic ? "Ø¥Ù„ØºØ§Ø¡" : "Cancel"}
         </Button>
         <Button
           type="submit"
@@ -425,11 +425,11 @@ export const CODCheckoutForm = (
             ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                {isArabic ? "جاري الإرسال..." : "Placing Order..."}
+                {isArabic ? "Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø¥Ø±Ø³Ø§Ù„..." : "Placing Order..."}
               </span>
             )
             : (
-              isArabic ? "تأكيد الطلب" : "Confirm Order"
+              isArabic ? "ØªØ£ÙƒÙŠØ¯ Ø§Ù„Ø·Ù„Ø¨" : "Confirm Order"
             )}
         </Button>
       </div>
@@ -452,16 +452,16 @@ export const OrderSuccess = (
 
       <div>
         <h3 className="font-display text-xl font-bold text-foreground">
-          {isArabic ? "تم استلام طلبك!" : "Order Received!"}
+          {isArabic ? "ØªÙ… Ø§Ø³ØªÙ„Ø§Ù… Ø·Ù„Ø¨Ùƒ!" : "Order Received!"}
         </h3>
         <p className="text-muted-foreground mt-1">
-          {isArabic ? "شكراً لطلبك" : "Thank you for your order"}
+          {isArabic ? "Ø´ÙƒØ±Ø§Ù‹ Ù„Ø·Ù„Ø¨Ùƒ" : "Thank you for your order"}
         </p>
       </div>
 
       <div className="bg-[#F8F8FF]/50 rounded-lg p-4">
         <p className="text-sm text-muted-foreground">
-          {isArabic ? "رقم الطلب" : "Order Number"}
+          {isArabic ? "Ø±Ù‚Ù… Ø§Ù„Ø·Ù„Ø¨" : "Order Number"}
         </p>
         <p className="font-display text-lg font-bold text-[#800020]">
           {orderNumber}
@@ -470,7 +470,7 @@ export const OrderSuccess = (
 
       <p className="text-sm text-muted-foreground">
         {isArabic
-          ? "سنتواصل معك قريباً لتأكيد طلبك"
+          ? "Ø³Ù†ØªÙˆØ§ØµÙ„ Ù…Ø¹Ùƒ Ù‚Ø±ÙŠØ¨Ø§Ù‹ Ù„ØªØ£ÙƒÙŠØ¯ Ø·Ù„Ø¨Ùƒ"
           : "We will contact you soon to confirm your order"}
       </p>
 
@@ -478,7 +478,7 @@ export const OrderSuccess = (
         onClick={onClose}
         className="w-full bg-[#800020] hover:bg-[#800020]-light text-white"
       >
-        {isArabic ? "متابعة التسوق" : "Continue Shopping"}
+        {isArabic ? "Ù…ØªØ§Ø¨Ø¹Ø© Ø§Ù„ØªØ³ÙˆÙ‚" : "Continue Shopping"}
       </Button>
     </div>
   );

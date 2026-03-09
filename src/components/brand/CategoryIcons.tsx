@@ -1,11 +1,11 @@
-/**
- * Asper Beauty Shop — "Nature Meets Science" Category Icon Set
+﻿/**
+ * Asper Beauty Shop â€” "Nature Meets Science" Category Icon Set
  *
  * Design DNA:
- * - Style: Nano minimalist — 1.2px ultra-thin lines
+ * - Style: Nano minimalist â€” 1.2px ultra-thin lines
  * - Primary: Emerald Green (inherits from parent via currentColor)
  * - Accent: Gold highlights on specific elements
- * - Canvas: 24×24 grid
+ * - Canvas: 24Ã—24 grid
  * - Corners: 2px radius, slightly softened
  */
 
@@ -31,7 +31,7 @@ const base = (size: number, className?: string) => ({
 
 const GOLD = "#C5A028";
 
-/** Dropper bottle — Skincare */
+/** Dropper bottle â€” Skincare */
 export function IconCatSkincare({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -44,7 +44,7 @@ export function IconCatSkincare({ className, size = 24, goldAccent = true }: Ico
   );
 }
 
-/** Capsule — Vitamins & Supplements */
+/** Capsule â€” Vitamins & Supplements */
 export function IconCatVitamins({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -58,7 +58,7 @@ export function IconCatVitamins({ className, size = 24, goldAccent = true }: Ico
   );
 }
 
-/** Mortar & Pestle — Prescriptions */
+/** Mortar & Pestle â€” Prescriptions */
 export function IconCatPrescriptions({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -71,7 +71,7 @@ export function IconCatPrescriptions({ className, size = 24, goldAccent = true }
   );
 }
 
-/** Leaf & Drop — Mother & Baby */
+/** Leaf & Drop â€” Mother & Baby */
 export function IconCatMomBaby({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -84,7 +84,7 @@ export function IconCatMomBaby({ className, size = 24, goldAccent = true }: Icon
   );
 }
 
-/** Pump Bottle — Personal Care */
+/** Pump Bottle â€” Personal Care */
 export function IconCatPersonalCare({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -97,7 +97,7 @@ export function IconCatPersonalCare({ className, size = 24, goldAccent = true }:
   );
 }
 
-/** Medical Cross — First Aid */
+/** Medical Cross â€” First Aid */
 export function IconCatFirstAid({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -109,7 +109,7 @@ export function IconCatFirstAid({ className, size = 24, goldAccent = true }: Ico
   );
 }
 
-/** Toothbrush — Oral Care */
+/** Toothbrush â€” Oral Care */
 export function IconCatOralCare({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -121,7 +121,7 @@ export function IconCatOralCare({ className, size = 24, goldAccent = true }: Ico
   );
 }
 
-/** Shield — Men's Health */
+/** Shield â€” Men's Health */
 export function IconCatMensHealth({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -132,7 +132,7 @@ export function IconCatMensHealth({ className, size = 24, goldAccent = true }: I
   );
 }
 
-/** Floral — Beauty */
+/** Floral â€” Beauty */
 export function IconCatBeauty({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -147,7 +147,7 @@ export function IconCatBeauty({ className, size = 24, goldAccent = true }: IconP
   );
 }
 
-/** Zen Stones — Wellness */
+/** Zen Stones â€” Wellness */
 export function IconCatWellness({ className, size = 24, goldAccent = true }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -163,15 +163,15 @@ export function IconCatWellness({ className, size = 24, goldAccent = true }: Ico
 
 /** Full category list for navigation */
 export const categoryList = [
-  { key: "skincare", label: "Skincare", labelAr: "العناية بالبشرة", Icon: IconCatSkincare, href: "/products?category=skincare" },
-  { key: "vitamins", label: "Vitamins", labelAr: "فيتامينات", Icon: IconCatVitamins, href: "/products?category=vitamins" },
-  { key: "prescriptions", label: "Prescriptions", labelAr: "وصفات طبية", Icon: IconCatPrescriptions, href: "/products?category=prescriptions" },
-  { key: "mom-baby", label: "Mother & Baby", labelAr: "الأم والطفل", Icon: IconCatMomBaby, href: "/mom-baby" },
-  { key: "personal-care", label: "Personal Care", labelAr: "العناية الشخصية", Icon: IconCatPersonalCare, href: "/products?category=personal-care" },
-  { key: "first-aid", label: "First Aid", labelAr: "إسعافات أولية", Icon: IconCatFirstAid, href: "/products?category=first-aid" },
-  { key: "oral-care", label: "Oral Care", labelAr: "العناية بالفم", Icon: IconCatOralCare, href: "/products?category=oral-care" },
-  { key: "mens-health", label: "Men's Health", labelAr: "صحة الرجل", Icon: IconCatMensHealth, href: "/products?category=mens-health" },
-  { key: "beauty", label: "Beauty", labelAr: "الجمال", Icon: IconCatBeauty, href: "/products?category=beauty" },
-  { key: "wellness", label: "Wellness", labelAr: "العافية", Icon: IconCatWellness, href: "/products?category=wellness" },
+  { key: "skincare", label: "Skincare", labelAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©", Icon: IconCatSkincare, href: "/products?category=skincare" },
+  { key: "vitamins", label: "Vitamins", labelAr: "ÙÙŠØªØ§Ù…ÙŠÙ†Ø§Øª", Icon: IconCatVitamins, href: "/products?category=vitamins" },
+  { key: "prescriptions", label: "Prescriptions", labelAr: "ÙˆØµÙØ§Øª Ø·Ø¨ÙŠØ©", Icon: IconCatPrescriptions, href: "/products?category=prescriptions" },
+  { key: "mom-baby", label: "Mother & Baby", labelAr: "Ø§Ù„Ø£Ù… ÙˆØ§Ù„Ø·ÙÙ„", Icon: IconCatMomBaby, href: "/mom-baby" },
+  { key: "personal-care", label: "Personal Care", labelAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ø´Ø®ØµÙŠØ©", Icon: IconCatPersonalCare, href: "/products?category=personal-care" },
+  { key: "first-aid", label: "First Aid", labelAr: "Ø¥Ø³Ø¹Ø§ÙØ§Øª Ø£ÙˆÙ„ÙŠØ©", Icon: IconCatFirstAid, href: "/products?category=first-aid" },
+  { key: "oral-care", label: "Oral Care", labelAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„ÙÙ…", Icon: IconCatOralCare, href: "/products?category=oral-care" },
+  { key: "mens-health", label: "Men's Health", labelAr: "ØµØ­Ø© Ø§Ù„Ø±Ø¬Ù„", Icon: IconCatMensHealth, href: "/products?category=mens-health" },
+  { key: "beauty", label: "Beauty", labelAr: "Ø§Ù„Ø¬Ù…Ø§Ù„", Icon: IconCatBeauty, href: "/products?category=beauty" },
+  { key: "wellness", label: "Wellness", labelAr: "Ø§Ù„Ø¹Ø§ÙÙŠØ©", Icon: IconCatWellness, href: "/products?category=wellness" },
 ] as const;
 

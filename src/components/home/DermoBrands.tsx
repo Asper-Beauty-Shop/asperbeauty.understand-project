@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 
@@ -10,7 +10,7 @@ const DERMO_BRANDS = [
   { name: "Vichy", slug: "Vichy", logo: "/brands/vichy.svg" },
   { name: "Sesderma", slug: "Sesderma", logo: "/brands/sesderma.svg" },
   { name: "COSRX", slug: "COSRX", logo: "/brands/cosrx.svg" },
-  { name: "Kérastase", slug: "Kerastase", logo: "/brands/kerastase.svg" },
+  { name: "KÃ©rastase", slug: "Kerastase", logo: "/brands/kerastase.svg" },
   { name: "Guerlain", slug: "Guerlain", logo: "/brands/guerlain.svg" },
   { name: "Nuxe", slug: "Nuxe", logo: "/brands/nuxe.svg" },
 ];
@@ -49,7 +49,7 @@ export function DermoBrands() {
       className="relative py-10 md:py-14 bg-background overflow-hidden
                  border-b border-foreground/5 transition-all duration-[400ms]"
     >
-      {/* Header — font switches with locale */}
+      {/* Header â€” font switches with locale */}
       <div className="text-center mb-8">
         <p
           className={cn(
@@ -57,11 +57,11 @@ export function DermoBrands() {
             isAr ? "font-arabic" : "font-body"
           )}
         >
-          {isAr ? "موزّع معتمد" : "Authorized Retailer"}
+          {isAr ? "Ù…ÙˆØ²Ù‘Ø¹ Ù…Ø¹ØªÙ…Ø¯" : "Authorized Retailer"}
         </p>
       </div>
 
-      {/* Infinite marquee — direction-aware animation */}
+      {/* Infinite marquee â€” direction-aware animation */}
       <div
         className="flex w-max hover:[animation-play-state:paused]"
         style={{

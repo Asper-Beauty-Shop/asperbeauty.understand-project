@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -51,7 +51,7 @@ export const StickyAddToCart = ({ productTitle, price, onAddToCart, triggerRef }
           className="shrink-0 px-6"
         >
           <ShoppingBag className="w-4 h-4 me-2" />
-          {isArabic ? "أضف للحقيبة" : "Add to Bag"}
+          {isArabic ? "Ø£Ø¶Ù Ù„Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Bag"}
         </Button>
       </div>
     </div>

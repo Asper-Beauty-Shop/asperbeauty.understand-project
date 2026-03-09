@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+﻿import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Truck, Sparkles, Crown, ArrowRight } from "lucide-react";
@@ -8,19 +8,19 @@ const services = [
   {
     icon: Truck,
     title: "Amman Concierge Delivery",
-    description: "Same-day, temperature-controlled delivery across Amman. Your regimen arrives in pristine clinical condition — cold-chain sealed from our pharmacy to your doorstep.",
+    description: "Same-day, temperature-controlled delivery across Amman. Your regimen arrives in pristine clinical condition â€” cold-chain sealed from our pharmacy to your doorstep.",
     badge: "FREE OVER 50 JOD",
   },
   {
     icon: Sparkles,
     title: "AI Beauty Advisor",
-    description: "Upload a photo and receive a pharmacist-grade skin assessment powered by Gemini Vision. Personalized routines crafted by our dual-persona AI — Dr. Sami for clinical needs, Ms. Zain for beauty goals.",
+    description: "Upload a photo and receive a pharmacist-grade skin assessment powered by Gemini Vision. Personalized routines crafted by our dual-persona AI â€” Dr. Sami for clinical needs, Ms. Zain for beauty goals.",
     badge: "AI-POWERED",
   },
   {
     icon: Crown,
     title: "The Elite Subscription",
-    description: "Never run out of your routine. Our Smart Shelf tracks your usage and sends a gentle reminder before you're due — ensuring uninterrupted clinical care with exclusive VIP pricing.",
+    description: "Never run out of your routine. Our Smart Shelf tracks your usage and sends a gentle reminder before you're due â€” ensuring uninterrupted clinical care with exclusive VIP pricing.",
     badge: "VIP PERKS",
   },
 ];

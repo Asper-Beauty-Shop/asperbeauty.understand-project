@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const promotions = {
   en: [
     "Complimentary Delivery on orders over 50 JOD",
     "Gifting Service Available",
-    "Expert Skincare Consultations • In-store & Online",
+    "Expert Skincare Consultations â€¢ In-store & Online",
   ],
   ar: [
-    "توصيل مجاني للطلبات فوق 50 دينار",
-    "خدمة الهدايا متوفرة",
-    "استشارات العناية بالبشرة • في المتجر وأونلاين",
+    "ØªÙˆØµÙŠÙ„ Ù…Ø¬Ø§Ù†ÙŠ Ù„Ù„Ø·Ù„Ø¨Ø§Øª ÙÙˆÙ‚ 50 Ø¯ÙŠÙ†Ø§Ø±",
+    "Ø®Ø¯Ù…Ø© Ø§Ù„Ù‡Ø¯Ø§ÙŠØ§ Ù…ØªÙˆÙØ±Ø©",
+    "Ø§Ø³ØªØ´Ø§Ø±Ø§Øª Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© â€¢ ÙÙŠ Ø§Ù„Ù…ØªØ¬Ø± ÙˆØ£ÙˆÙ†Ù„Ø§ÙŠÙ†",
   ],
 };
 

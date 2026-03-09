@@ -1,4 +1,4 @@
-import { toast } from "sonner";
+﻿import { toast } from "sonner";
 
 // Use your own store: set VITE_SHOPIFY_STORE_DOMAIN and VITE_SHOPIFY_STOREFRONT_TOKEN in .env and production env
 const SHOPIFY_API_VERSION = import.meta.env.VITE_SHOPIFY_API_VERSION ??

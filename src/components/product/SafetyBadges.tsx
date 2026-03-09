@@ -1,4 +1,4 @@
-import { Baby, Leaf, ShieldCheck, Sparkles, FlaskConical } from "lucide-react";
+﻿import { Baby, Leaf, ShieldCheck, Sparkles, FlaskConical } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Tables } from "@/integrations/supabase/types";
@@ -17,35 +17,35 @@ const ALL_BADGES: SafetyBadge[] = [
   {
     key: "jfda_certified",
     labelEn: "JFDA Certified",
-    labelAr: "معتمد من الغذاء والدواء",
+    labelAr: "Ù…Ø¹ØªÙ…Ø¯ Ù…Ù† Ø§Ù„ØºØ°Ø§Ø¡ ÙˆØ§Ù„Ø¯ÙˆØ§Ø¡",
     icon: <ShieldCheck className="w-4 h-4" />,
     colorClass: "text-primary border-primary/30 bg-primary/5",
   },
   {
     key: "cruelty_free",
     labelEn: "Cruelty-Free",
-    labelAr: "خالٍ من القسوة",
+    labelAr: "Ø®Ø§Ù„Ù Ù…Ù† Ø§Ù„Ù‚Ø³ÙˆØ©",
     icon: <Leaf className="w-4 h-4" />,
     colorClass: "text-emerald-700 border-emerald-300 bg-emerald-50",
   },
   {
     key: "pregnancy_safe",
     labelEn: "Pregnancy Safe",
-    labelAr: "آمن للحوامل",
+    labelAr: "Ø¢Ù…Ù† Ù„Ù„Ø­ÙˆØ§Ù…Ù„",
     icon: <Baby className="w-4 h-4" />,
     colorClass: "text-pink-700 border-pink-300 bg-pink-50",
   },
   {
     key: "dermatologist_tested",
     labelEn: "Derm Tested",
-    labelAr: "مختبر من أطباء جلدية",
+    labelAr: "Ù…Ø®ØªØ¨Ø± Ù…Ù† Ø£Ø·Ø¨Ø§Ø¡ Ø¬Ù„Ø¯ÙŠØ©",
     icon: <FlaskConical className="w-4 h-4" />,
     colorClass: "text-sky-700 border-sky-300 bg-sky-50",
   },
   {
     key: "vegan",
     labelEn: "Vegan",
-    labelAr: "نباتي",
+    labelAr: "Ù†Ø¨Ø§ØªÙŠ",
     icon: <Sparkles className="w-4 h-4" />,
     colorClass: "text-green-700 border-green-300 bg-green-50",
   },

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+﻿import { useCallback, useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -67,10 +67,10 @@ interface RawProduct {
 
 // Column name mappings for Arabic Excel files
 const COLUMN_MAPPINGS = {
-  sku: ["الرمز", "رمز", "SKU", "Code", "Barcode", "الباركود"],
-  name: ["اسم المادة", "اسم المنتج", "Product Name", "Name", "المنتج", "الاسم"],
-  costPrice: ["الكلفة", "سعر الشراء", "Cost", "Cost Price", "التكلفة"],
-  sellingPrice: ["سعر البيع", "السعر", "Price", "Selling Price", "Sale Price"],
+  sku: ["Ø§Ù„Ø±Ù…Ø²", "Ø±Ù…Ø²", "SKU", "Code", "Barcode", "Ø§Ù„Ø¨Ø§Ø±ÙƒÙˆØ¯"],
+  name: ["Ø§Ø³Ù… Ø§Ù„Ù…Ø§Ø¯Ø©", "Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬", "Product Name", "Name", "Ø§Ù„Ù…Ù†ØªØ¬", "Ø§Ù„Ø§Ø³Ù…"],
+  costPrice: ["Ø§Ù„ÙƒÙ„ÙØ©", "Ø³Ø¹Ø± Ø§Ù„Ø´Ø±Ø§Ø¡", "Cost", "Cost Price", "Ø§Ù„ØªÙƒÙ„ÙØ©"],
+  sellingPrice: ["Ø³Ø¹Ø± Ø§Ù„Ø¨ÙŠØ¹", "Ø§Ù„Ø³Ø¹Ø±", "Price", "Selling Price", "Sale Price"],
 };
 
 // Find the matching column name from the headers
@@ -725,8 +725,8 @@ export default function BulkUpload() {
                           </Button>
                         </label>
                         <p className="text-sm text-taupe mt-4">
-                          Supports Arabic columns: الرمز، اسم المادة، سعر البيع،
-                          الكلفة
+                          Supports Arabic columns: Ø§Ù„Ø±Ù…Ø²ØŒ Ø§Ø³Ù… Ø§Ù„Ù…Ø§Ø¯Ø©ØŒ Ø³Ø¹Ø± Ø§Ù„Ø¨ÙŠØ¹ØŒ
+                          Ø§Ù„ÙƒÙ„ÙØ©
                         </p>
                       </div>
 
@@ -752,7 +752,7 @@ export default function BulkUpload() {
                           Load Your Product Data
                         </span>
                         <span className="text-xs text-taupe">
-                          1,526 products from كشف المواد
+                          1,526 products from ÙƒØ´Ù Ø§Ù„Ù…ÙˆØ§Ø¯
                         </span>
                       </Button>
 
@@ -922,7 +922,7 @@ export default function BulkUpload() {
                         variant="outline"
                         onClick={() => setStep("upload")}
                       >
-                        ← Back
+                        â† Back
                       </Button>
                       <Button
                         onClick={categorizeProducts}
@@ -1206,7 +1206,7 @@ export default function BulkUpload() {
                       disabled={products.filter((p) => p.status === "completed")
                         .length === 0}
                     >
-                      Continue to Review →
+                      Continue to Review â†’
                     </Button>
                   </div>
                 )}

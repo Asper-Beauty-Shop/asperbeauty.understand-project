@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 
 interface ClinicalScoreRingProps {
-  /** Score from 0–100 */
+  /** Score from 0â€“100 */
   score: number;
   /** e.g. "Based on 420 verified trials" */
   label?: string;

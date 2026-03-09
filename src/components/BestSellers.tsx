@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { ProductCard } from "./ProductCard";
@@ -17,11 +17,11 @@ const filterData = {
     { id: "bioderma", name: "Bioderma" },
   ],
   concerns: [
-    { id: "acne", name: "Acne", nameAr: "حب الشباب" },
-    { id: "anti-aging", name: "Anti-Aging", nameAr: "مكافحة الشيخوخة" },
-    { id: "dryness", name: "Dryness", nameAr: "الجفاف" },
-    { id: "sensitivity", name: "Sensitivity", nameAr: "البشرة الحساسة" },
-    { id: "dark-spots", name: "Dark Spots", nameAr: "البقع الداكنة" },
+    { id: "acne", name: "Acne", nameAr: "Ø­Ø¨ Ø§Ù„Ø´Ø¨Ø§Ø¨" },
+    { id: "anti-aging", name: "Anti-Aging", nameAr: "Ù…ÙƒØ§ÙØ­Ø© Ø§Ù„Ø´ÙŠØ®ÙˆØ®Ø©" },
+    { id: "dryness", name: "Dryness", nameAr: "Ø§Ù„Ø¬ÙØ§Ù" },
+    { id: "sensitivity", name: "Sensitivity", nameAr: "Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ø­Ø³Ø§Ø³Ø©" },
+    { id: "dark-spots", name: "Dark Spots", nameAr: "Ø§Ù„Ø¨Ù‚Ø¹ Ø§Ù„Ø¯Ø§ÙƒÙ†Ø©" },
   ],
   ingredients: [
     { id: "hyaluronic-acid", name: "Hyaluronic Acid" },
@@ -96,7 +96,7 @@ export const BestSellers = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="font-display text-3xl lg:text-4xl text-foreground mb-2">
-            {isArabic ? "الأكثر مبيعاً" : "Best Sellers"}
+            {isArabic ? "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹" : "Best Sellers"}
           </h2>
           <div className="w-16 h-px bg-gold mx-auto mt-4" />
         </div>
@@ -107,12 +107,12 @@ export const BestSellers = () => {
           <aside className="hidden lg:block lg:w-1/5 lg:sticky lg:top-36 lg:self-start">
             <div className="bg-card p-6 rounded-lg border border-gold/20 shadow-sm">
               <h3 className="font-display text-lg text-burgundy mb-6 pb-3 border-b border-gold/30">
-                {isArabic ? "تصفية حسب" : "Filter By"}
+                {isArabic ? "ØªØµÙÙŠØ© Ø­Ø³Ø¨" : "Filter By"}
               </h3>
 
               {/* Brand Filter */}
               <FilterGroup
-                title={isArabic ? "العلامة التجارية" : "Brand"}
+                title={isArabic ? "Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©" : "Brand"}
                 isOpen={openFilters.brands}
                 onToggle={() => toggleFilter("brands")}
               >
@@ -143,7 +143,7 @@ export const BestSellers = () => {
 
               {/* Skin Concern Filter */}
               <FilterGroup
-                title={isArabic ? "مشاكل البشرة" : "Skin Concern"}
+                title={isArabic ? "Ù…Ø´Ø§ÙƒÙ„ Ø§Ù„Ø¨Ø´Ø±Ø©" : "Skin Concern"}
                 isOpen={openFilters.concerns}
                 onToggle={() => toggleFilter("concerns")}
               >
@@ -177,7 +177,7 @@ export const BestSellers = () => {
 
               {/* Price Range Filter */}
               <FilterGroup
-                title={isArabic ? "نطاق السعر" : "Price Range"}
+                title={isArabic ? "Ù†Ø·Ø§Ù‚ Ø§Ù„Ø³Ø¹Ø±" : "Price Range"}
                 isOpen={openFilters.price}
                 onToggle={() => toggleFilter("price")}
               >
@@ -199,7 +199,7 @@ export const BestSellers = () => {
 
               {/* Ingredients Filter */}
               <FilterGroup
-                title={isArabic ? "المكونات" : "Ingredients"}
+                title={isArabic ? "Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª" : "Ingredients"}
                 isOpen={openFilters.ingredients}
                 onToggle={() => toggleFilter("ingredients")}
               >
@@ -260,7 +260,7 @@ export const BestSellers = () => {
             {!isLoading && filteredProducts.length === 0 && (
               <div className="text-center py-16">
                 <p className="font-body text-muted-foreground">
-                  {isArabic ? "لا توجد منتجات" : "No products found"}
+                  {isArabic ? "Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª" : "No products found"}
                 </p>
               </div>
             )}

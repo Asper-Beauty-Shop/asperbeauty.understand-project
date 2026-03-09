@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -115,11 +115,11 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
             </h3>
           </div>
 
-          {/* Pharmacist Note — "Why it's here" */}
+          {/* Pharmacist Note â€” "Why it's here" */}
           {enrichment?.pharmacist_note && (
             <div className="flex items-start gap-1.5 bg-secondary/50 rounded-md px-2.5 py-1.5 border border-border/30">
               <span className="text-accent text-xs mt-0.5 shrink-0">
-                {enrichment.ai_persona_lead === "ms_zain" ? "✨" : "🔬"}
+                {enrichment.ai_persona_lead === "ms_zain" ? "âœ¨" : "ðŸ”¬"}
               </span>
               <p className="text-[11px] text-muted-foreground italic leading-snug line-clamp-2">
                 {enrichment.pharmacist_note}
@@ -178,7 +178,7 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
             <div className="space-y-2">
               {enrichment.ai_persona_lead && (
                 <Badge variant="outline" className="text-[10px] font-medium border-accent/50">
-                  {enrichment.ai_persona_lead === "dr_sami" ? "🔬 Dr. Sami" : "✨ Ms. Zain"}
+                  {enrichment.ai_persona_lead === "dr_sami" ? "ðŸ”¬ Dr. Sami" : "âœ¨ Ms. Zain"}
                 </Badge>
               )}
               {enrichment.key_ingredients && enrichment.key_ingredients.length > 0 && (
@@ -224,10 +224,10 @@ export function ShopifyProductCard({ product, enrichment }: Props) {
                   });
                 }}
               >
-                🔔 Notify Me
+                ðŸ”” Notify Me
               </Button>
               <p className="text-[10px] text-muted-foreground italic font-body text-center">
-                🔬 Dr. Sami suggests a similar alternative
+                ðŸ”¬ Dr. Sami suggests a similar alternative
               </p>
             </div>
           )}

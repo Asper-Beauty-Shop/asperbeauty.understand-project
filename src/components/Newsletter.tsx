@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { AnimatedSection } from "./AnimatedSection";
@@ -15,10 +15,10 @@ export const Newsletter = () => {
     e.preventDefault();
     if (email) {
       toast.success(
-        isArabic ? "مرحباً بك في آسبر بيوتي" : "Welcome to Asper Beauty",
+        isArabic ? "Ù…Ø±Ø­Ø¨Ø§Ù‹ Ø¨Ùƒ ÙÙŠ Ø¢Ø³Ø¨Ø± Ø¨ÙŠÙˆØªÙŠ" : "Welcome to Asper Beauty",
         {
           description: isArabic
-            ? "ستصلك آخر العروض الحصرية قريباً."
+            ? "Ø³ØªØµÙ„Ùƒ Ø¢Ø®Ø± Ø§Ù„Ø¹Ø±ÙˆØ¶ Ø§Ù„Ø­ØµØ±ÙŠØ© Ù‚Ø±ÙŠØ¨Ø§Ù‹."
             : "You'll receive our exclusive updates soon.",
           position: "top-center",
         },
@@ -49,7 +49,7 @@ export const Newsletter = () => {
           </div>
 
           <p className="font-script text-xl lg:text-2xl text-gold mb-4">
-            {isArabic ? "عرض خاص" : "Exclusive Offer"}
+            {isArabic ? "Ø¹Ø±Ø¶ Ø®Ø§Øµ" : "Exclusive Offer"}
           </p>
           <h2
             style={{
@@ -62,7 +62,7 @@ export const Newsletter = () => {
             className="font-display text-4xl md:text-5xl mb-6 drop-shadow-[0_2px_10px_rgba(212,175,55,0.2)]"
           >
             {isArabic
-              ? "خصم 15% لعشّاق الجمال"
+              ? "Ø®ØµÙ… 15% Ù„Ø¹Ø´Ù‘Ø§Ù‚ Ø§Ù„Ø¬Ù…Ø§Ù„"
               : "15% Off for Beauty Insiders"}
           </h2>
 
@@ -75,7 +75,7 @@ export const Newsletter = () => {
 
           <p className="font-body text-charcoal/70 mb-10 leading-relaxed text-lg">
             {isArabic
-              ? "اشتركي واحصلي على خصم 15% على طلبك الأول، بالإضافة إلى عروض حصرية ونصائح خبراء الجمال."
+              ? "Ø§Ø´ØªØ±ÙƒÙŠ ÙˆØ§Ø­ØµÙ„ÙŠ Ø¹Ù„Ù‰ Ø®ØµÙ… 15% Ø¹Ù„Ù‰ Ø·Ù„Ø¨Ùƒ Ø§Ù„Ø£ÙˆÙ„ØŒ Ø¨Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø¹Ø±ÙˆØ¶ Ø­ØµØ±ÙŠØ© ÙˆÙ†ØµØ§Ø¦Ø­ Ø®Ø¨Ø±Ø§Ø¡ Ø§Ù„Ø¬Ù…Ø§Ù„."
               : "Sign up and get 15% off your first order, plus exclusive offers, early access to new arrivals, and expert beauty insights."}
           </p>
 
@@ -97,7 +97,7 @@ export const Newsletter = () => {
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                   placeholder={isArabic
-                    ? "أدخلي بريدك الإلكتروني"
+                    ? "Ø£Ø¯Ø®Ù„ÙŠ Ø¨Ø±ÙŠØ¯Ùƒ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ"
                     : "Enter your email"}
                   className={`w-full px-6 py-4 bg-white border-2 rounded-full text-charcoal placeholder:text-charcoal/40 font-body text-sm 
                     focus:outline-none transition-all duration-500 shadow-gold-sm
@@ -123,7 +123,7 @@ export const Newsletter = () => {
               >
                 <span className="relative z-10 flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
-                  {isArabic ? "اشتركي" : "Subscribe"}
+                  {isArabic ? "Ø§Ø´ØªØ±ÙƒÙŠ" : "Subscribe"}
                 </span>
                 {/* Shine effect */}
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
@@ -133,7 +133,7 @@ export const Newsletter = () => {
 
           <p className="text-xs text-charcoal/50 font-body mt-8">
             {isArabic
-              ? "بالاشتراك، أنتِ توافقين على سياسة الخصوصية. يمكنك إلغاء الاشتراك في أي وقت."
+              ? "Ø¨Ø§Ù„Ø§Ø´ØªØ±Ø§ÙƒØŒ Ø£Ù†ØªÙ ØªÙˆØ§ÙÙ‚ÙŠÙ† Ø¹Ù„Ù‰ Ø³ÙŠØ§Ø³Ø© Ø§Ù„Ø®ØµÙˆØµÙŠØ©. ÙŠÙ…ÙƒÙ†Ùƒ Ø¥Ù„ØºØ§Ø¡ Ø§Ù„Ø§Ø´ØªØ±Ø§Ùƒ ÙÙŠ Ø£ÙŠ ÙˆÙ‚Øª."
               : "By subscribing, you agree to our Privacy Policy. Unsubscribe anytime."}
           </p>
         </AnimatedSection>

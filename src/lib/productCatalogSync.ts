@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Product Brain sync: parse Shopify/Matrixify product into product_catalog row.
  * Use from Edge Function (sync-product-catalog) or webhook/scheduled job.
  *

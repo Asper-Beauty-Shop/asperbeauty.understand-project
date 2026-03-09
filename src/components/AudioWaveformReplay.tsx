@@ -1,17 +1,17 @@
-import React, { useMemo } from "react";
+﻿import React, { useMemo } from "react";
 import { RotateCcw, Square, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// ── Asper Beauty Shop — Audio Waveform + Replay Component ───────────────────
+// â”€â”€ Asper Beauty Shop â€” Audio Waveform + Replay Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Design tokens (strict):
-//   Background  : Soft Ivory  (#F8F8FF) — blends with page canvas
-//   Active bar  : Deep Maroon (#800020) — progress & active waveform
-//   Inactive bar: rose clay alpha       — unplayed bars
-//   Replay hover: Shiny Gold  (#C5A028) — "Midas Touch"
+//   Background  : Soft Ivory  (#F8F8FF) â€” blends with page canvas
+//   Active bar  : Deep Maroon (#800020) â€” progress & active waveform
+//   Inactive bar: rose clay alpha       â€” unplayed bars
+//   Replay hover: Shiny Gold  (#C5A028) â€” "Midas Touch"
 //   Text        : Dark Charcoal #333333
 
 interface AudioWaveformReplayProps {
-  /** 0–1 playback progress */
+  /** 0â€“1 playback progress */
   progress?: number;
   /** Duration in seconds */
   duration?: number;
@@ -31,7 +31,7 @@ interface AudioWaveformReplayProps {
   className?: string;
 }
 
-// ── Static waveform shape (looks like a voice print) ───────────────────────
+// â”€â”€ Static waveform shape (looks like a voice print) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Heights are pre-seeded so the bars look natural without dynamic analysis.
 const BAR_HEIGHTS = [
   30, 55, 45, 70, 60, 85, 50, 75, 40, 90, 65, 80, 55, 95, 70,
@@ -97,11 +97,11 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
     >
       {pulseStyle}
 
-      {/* ── Persona label row ─────────────────────────────────────────────── */}
+      {/* â”€â”€ Persona label row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="flex items-center justify-between text-xs text-[#333333]/60 font-[Montserrat,sans-serif]">
         <span>
           <span className="font-semibold text-[#800020]">{personaLabel.name}</span>
-          {" · "}
+          {" Â· "}
           {personaLabel.title}
         </span>
         {/* Duration */}
@@ -110,10 +110,10 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
         </span>
       </div>
 
-      {/* ── Waveform SVG ──────────────────────────────────────────────────── */}
+      {/* â”€â”€ Waveform SVG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="relative h-16 flex items-center overflow-hidden rounded-md">
         {isLoading ? (
-          /* Loading state — shimmer bars */
+          /* Loading state â€” shimmer bars */
           <div className="flex items-end gap-[2px] w-full h-full px-1">
             {BAR_HEIGHTS.map((h, i) => (
               <div
@@ -160,7 +160,7 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
         )}
       </div>
 
-      {/* ── Progress bar ─────────────────────────────────────────────────── */}
+      {/* â”€â”€ Progress bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="h-[3px] w-full rounded-full bg-[#800020]/15 overflow-hidden">
         <div
           className="h-full bg-[#800020] rounded-full transition-all duration-100"
@@ -168,9 +168,9 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
         />
       </div>
 
-      {/* ── Controls row ─────────────────────────────────────────────────── */}
+      {/* â”€â”€ Controls row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="flex items-center justify-end gap-2 pt-1">
-        {/* Stop button — shown while playing */}
+        {/* Stop button â€” shown while playing */}
         {isPlaying && onStop && (
           <button
             onClick={onStop}
@@ -207,7 +207,7 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
               className="text-[#800020] group-hover:text-[#C5A028] transition-colors duration-200"
             />
           )}
-          {isLoading ? "Generating…" : "Replay"}
+          {isLoading ? "Generatingâ€¦" : "Replay"}
         </button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useLanguage } from "@/contexts/LanguageContext";
+﻿import { useLanguage } from "@/contexts/LanguageContext";
 import { Globe } from "lucide-react";
 
 export const LanguageSwitcher = (
@@ -33,7 +33,7 @@ export const LanguageSwitcher = (
         aria-label="Toggle language"
       >
         <Globe className="w-3.5 h-3.5" />
-        <span>{language === "en" ? "العربية" : "EN"}</span>
+        <span>{language === "en" ? "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©" : "EN"}</span>
       </button>
     );
   }
@@ -46,7 +46,7 @@ export const LanguageSwitcher = (
         aria-label="Toggle language"
       >
         <Globe className="w-4 h-4" />
-        <span>{language === "en" ? "العربية" : "English"}</span>
+        <span>{language === "en" ? "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©" : "English"}</span>
       </button>
     );
   }
@@ -59,9 +59,9 @@ export const LanguageSwitcher = (
     >
       <Globe className="w-4 h-4" />
       <span className="hidden sm:inline">
-        {language === "en" ? "العربية" : "EN"}
+        {language === "en" ? "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©" : "EN"}
       </span>
-      <span className="sm:hidden">{language === "en" ? "ع" : "EN"}</span>
+      <span className="sm:hidden">{language === "en" ? "Ø¹" : "EN"}</span>
     </button>
   );
 };

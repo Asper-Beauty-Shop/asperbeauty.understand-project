@@ -1,17 +1,17 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+﻿import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, Loader2, Stethoscope, Package, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { fetchProducts, normalizePrice, ShopifyProduct } from "@/lib/shopify";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ─── Dynamic Placeholder Typing Effect ─── */
+/* â”€â”€â”€ Dynamic Placeholder Typing Effect â”€â”€â”€ */
 const PLACEHOLDER_PHRASES = [
-  "Try searching for 'Acne'…",
-  "Try searching for 'CeraVe'…",
-  "Try searching for 'Sunscreen'…",
-  "Try searching for 'Niacinamide'…",
-  "Try searching for 'Moisturizer'…",
+  "Try searching for 'Acne'â€¦",
+  "Try searching for 'CeraVe'â€¦",
+  "Try searching for 'Sunscreen'â€¦",
+  "Try searching for 'Niacinamide'â€¦",
+  "Try searching for 'Moisturizer'â€¦",
 ];
 
 function useTypingPlaceholder() {
@@ -55,7 +55,7 @@ function useTypingPlaceholder() {
   return text;
 }
 
-/* ─── Concern Suggestions ─── */
+/* â”€â”€â”€ Concern Suggestions â”€â”€â”€ */
 const CONCERN_MAP: Record<string, { label: string; query: string }[]> = {
   dry: [{ label: "Dry Skin", query: "dry skin" }, { label: "Dehydration", query: "dehydration" }],
   acne: [{ label: "Acne-Prone Skin", query: "acne" }, { label: "Blemish Control", query: "blemish" }],
@@ -149,9 +149,9 @@ export default function SearchBar() {
         className="flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-background hover:border-accent/50 hover:shadow-maroon-glow transition-all text-sm text-muted-foreground"
       >
         <Search className="h-4 w-4 text-primary/50" />
-        <span className="hidden sm:inline">Search 5,000+ products…</span>
+        <span className="hidden sm:inline">Search 5,000+ productsâ€¦</span>
         <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono bg-muted border border-border rounded">
-          ⌘K
+          âŒ˜K
         </kbd>
       </button>
     );
@@ -166,7 +166,7 @@ export default function SearchBar() {
             ref={inputRef}
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
-            placeholder={typingPlaceholder || "Search products, brands, ingredients…"}
+            placeholder={typingPlaceholder || "Search products, brands, ingredientsâ€¦"}
             className="pl-10 pr-8 h-[50px] w-[300px] sm:w-[400px] text-sm rounded-full border-primary/20 bg-secondary font-body"
           />
           {query && (

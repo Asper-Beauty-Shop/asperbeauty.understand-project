@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Clock, Flame } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -56,7 +56,7 @@ export const DealOfTheDay = () => {
               <Flame className="h-5 w-5 text-destructive" />
             </div>
             <h2 className="font-serif text-2xl font-light tracking-tight text-foreground md:text-3xl">
-              {isAr ? "عروض اليوم" : "Specials & Offers"}
+              {isAr ? "Ø¹Ø±ÙˆØ¶ Ø§Ù„ÙŠÙˆÙ…" : "Specials & Offers"}
             </h2>
           </div>
 
@@ -73,7 +73,7 @@ export const DealOfTheDay = () => {
               to="/offers"
               className="ml-4 flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80"
             >
-              {isAr ? "عرض الكل" : "View All"}
+              {isAr ? "Ø¹Ø±Ø¶ Ø§Ù„ÙƒÙ„" : "View All"}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -106,7 +106,7 @@ export const DealOfTheDay = () => {
                     />
                     {product.gold_stitch_tier && (
                       <div className="absolute left-2 top-2 rounded-full bg-accent px-2 py-1 text-xs font-bold text-accent-foreground">
-                        ★ Gold
+                        â˜… Gold
                       </div>
                     )}
                   </div>
@@ -128,10 +128,10 @@ export const DealOfTheDay = () => {
             : (
               <div className="col-span-full py-12 text-center">
                 <p className="text-muted-foreground">
-                  {isAr ? "لا توجد عروض حالياً" : "No deals available right now"}
+                  {isAr ? "Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¹Ø±ÙˆØ¶ Ø­Ø§Ù„ÙŠØ§Ù‹" : "No deals available right now"}
                 </p>
                 <Button asChild variant="outline" className="mt-4">
-                  <Link to="/shop">{isAr ? "تصفح المنتجات" : "Browse Products"}</Link>
+                  <Link to="/shop">{isAr ? "ØªØµÙØ­ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª" : "Browse Products"}</Link>
                 </Button>
               </div>
             )}

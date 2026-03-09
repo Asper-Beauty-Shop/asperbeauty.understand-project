@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { fetchProducts, fetchProductByHandle } from "@/lib/shopify";
 
 export function useShopifyProducts(searchQuery?: string, first = 24, after?: string) {

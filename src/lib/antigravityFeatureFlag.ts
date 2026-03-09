@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Feature Flag: Antigravity Panel
  *
  * All Antigravity connection/diagnostic UI or workflow changes must be wrapped
@@ -6,8 +6,8 @@
  * rollout and easy toggling without redeployment.
  *
  * Control via environment variable (recommended):
- *   VITE_FEATURE_ANTIGRAVITY=true   — enable
- *   VITE_FEATURE_ANTIGRAVITY=false  — disable (default)
+ *   VITE_FEATURE_ANTIGRAVITY=true   â€” enable
+ *   VITE_FEATURE_ANTIGRAVITY=false  â€” disable (default)
  *
  * See env.main-site.example and APPLY_TO_MAIN_SITE.md for conventions.
  */
@@ -28,10 +28,10 @@ export const FEATURE_ANTIGRAVITY: boolean =
  * - Follows Monitoring-Quality-Rules: errors produce an escalatable object.
  *
  * Possible status values:
- *   "success"    — language server process was found.
- *   "no_process" — script ran but found no language server process.
- *   "error"      — flag disabled, wrong environment, or script failed.
- *   "escalate"   — script output signals uncertainty; human review needed.
+ *   "success"    â€” language server process was found.
+ *   "no_process" â€” script ran but found no language server process.
+ *   "error"      â€” flag disabled, wrong environment, or script failed.
+ *   "escalate"   â€” script output signals uncertainty; human review needed.
  */
 export async function runAntigravityDiagnostic(): Promise<{
   status: "success" | "no_process" | "error" | "escalate";

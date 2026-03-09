@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -44,44 +44,44 @@ export const GlobalHeader = () => {
   }, []);
   const navItems = [{
     name: "Skin",
-    nameAr: "البشرة",
+    nameAr: "Ø§Ù„Ø¨Ø´Ø±Ø©",
     href: "/shop?category=Skin%20Care",
   }, {
     name: "Hair",
-    nameAr: "الشعر",
+    nameAr: "Ø§Ù„Ø´Ø¹Ø±",
     href: "/shop?category=Hair%20Care",
   }, {
     name: "Makeup",
-    nameAr: "المكياج",
+    nameAr: "Ø§Ù„Ù…ÙƒÙŠØ§Ø¬",
     href: "/shop?category=Makeup",
   }, {
     name: "Brands",
-    nameAr: "العلامات",
+    nameAr: "Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª",
     href: "/brands",
   }, {
     name: "Offers",
-    nameAr: "العروض",
+    nameAr: "Ø§Ù„Ø¹Ø±ÙˆØ¶",
     href: "/offers",
   }];
   const mobileNavItems = [{
     name: "Skin Care",
-    nameAr: "العناية بالبشرة",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©",
     href: "/shop?category=Skin%20Care",
   }, {
     name: "Hair Care",
-    nameAr: "العناية بالشعر",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø´Ø¹Ø±",
     href: "/shop?category=Hair%20Care",
   }, {
     name: "Makeup",
-    nameAr: "المكياج",
+    nameAr: "Ø§Ù„Ù…ÙƒÙŠØ§Ø¬",
     href: "/shop?category=Makeup",
   }, {
     name: "New Arrivals",
-    nameAr: "وصل حديثاً",
+    nameAr: "ÙˆØµÙ„ Ø­Ø¯ÙŠØ«Ø§Ù‹",
     href: "/shop",
   }, {
     name: "Special Offers",
-    nameAr: "عروض خاصة",
+    nameAr: "Ø¹Ø±ÙˆØ¶ Ø®Ø§ØµØ©",
     href: "/offers",
   }];
   return (
@@ -141,7 +141,7 @@ export const GlobalHeader = () => {
                       : "text-foreground/60 border-foreground/20 group-hover:border-primary",
                   )}
                 >
-                  {isAr ? "بحث..." : "Search products..."}
+                  {isAr ? "Ø¨Ø­Ø«..." : "Search products..."}
                 </span>
                 <Search
                   className={cn(
@@ -190,7 +190,7 @@ export const GlobalHeader = () => {
                 </div>
                 {isScrolled && (
                   <span className="hidden md:inline text-sm font-medium">
-                    {isAr ? "السلة" : "Bag"}
+                    {isAr ? "Ø§Ù„Ø³Ù„Ø©" : "Bag"}
                   </span>
                 )}
               </button>

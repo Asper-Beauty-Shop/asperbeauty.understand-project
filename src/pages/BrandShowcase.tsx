@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ const typographyScale = [
   { label: "Heading 2", font: "Playfair Display", weight: "600", size: "1.875rem", sample: "Intelligent. Authentic. Eternal." },
   { label: "Subtitle", font: "Montserrat", weight: "500", size: "1.125rem", sample: "Curated by Pharmacists. Built for Trust. Designed for Elegance." },
   { label: "Body", font: "Montserrat", weight: "400", size: "1rem", sample: "We are not just selling cosmetics; we are dispensing beauty through intelligence." },
-  { label: "Caption", font: "Montserrat", weight: "300", size: "0.75rem", sample: "PHARMACIST VERIFIED • BATCH TESTED" },
+  { label: "Caption", font: "Montserrat", weight: "300", size: "0.75rem", sample: "PHARMACIST VERIFIED â€¢ BATCH TESTED" },
 ];
 
 export default function BrandShowcase() {
@@ -57,7 +57,7 @@ export default function BrandShowcase() {
               Two Marks, <span className="text-primary">One Voice</span>
             </h1>
             <p className="mt-4 text-muted-foreground font-body max-w-xl mx-auto">
-              Toggle between the Architectural Seal and the Molecular Bloom — 
+              Toggle between the Architectural Seal and the Molecular Bloom â€” 
               two expressions of the same pharmacist-grade integrity.
             </p>
           </div>
@@ -146,7 +146,7 @@ export default function BrandShowcase() {
                 <div className="flex items-baseline gap-4 mb-2">
                   <Badge variant="outline" className="text-[9px] tracking-wider shrink-0">{t.label}</Badge>
                   <span className="text-[10px] text-muted-foreground font-body">
-                    {t.font} · {t.weight} · {t.size}
+                    {t.font} Â· {t.weight} Â· {t.size}
                   </span>
                 </div>
                 <p
@@ -183,7 +183,7 @@ export default function BrandShowcase() {
                         <span className="text-muted-foreground font-body text-xs uppercase tracking-wider">Product Image</span>
                         {/* Gold Seal */}
                         <div className="absolute top-2 right-2 w-6 h-6 rounded-full border border-accent flex items-center justify-center">
-                          <span className="text-accent text-[6px] font-bold">✓</span>
+                          <span className="text-accent text-[6px] font-bold">âœ“</span>
                         </div>
                       </div>
                       <p className="font-heading text-lg font-semibold text-foreground">{name}</p>
@@ -282,7 +282,7 @@ export default function BrandShowcase() {
         <div className="mx-auto max-w-7xl px-4 text-center">
           <div className="h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent mb-6" />
           <p className="text-xs text-muted-foreground font-body">
-            © {new Date().getFullYear()} Asper Beauty Shop · Brand Identity Guide v1.0
+            Â© {new Date().getFullYear()} Asper Beauty Shop Â· Brand Identity Guide v1.0
           </p>
         </div>
       </footer>

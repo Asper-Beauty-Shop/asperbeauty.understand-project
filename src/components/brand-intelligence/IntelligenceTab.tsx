@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 type Persona = "dr-sami" | "ms-zain";
 
 /**
- * Intelligence tab: Dual-Persona Chat + clinical tools → Gemini/Supabase Edge Functions.
+ * Intelligence tab: Dual-Persona Chat + clinical tools â†’ Gemini/Supabase Edge Functions.
  */
 const TOOLS = [
   {
@@ -43,7 +43,7 @@ export function IntelligenceTab() {
         <CardHeader>
           <CardTitle className="font-serif text-maroon">Dual-Persona Chat</CardTitle>
           <CardDescription className="font-sans">
-            Dr. Sami (Clinical Authority) · Ms. Zain (Beauty Concierge). Connect to Edge Function for live responses.
+            Dr. Sami (Clinical Authority) Â· Ms. Zain (Beauty Concierge). Connect to Edge Function for live responses.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

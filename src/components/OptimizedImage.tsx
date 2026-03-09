@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Helper to generate Shopify CDN image URLs with size optimization
  */
 export const getOptimizedShopifyImageUrl = (

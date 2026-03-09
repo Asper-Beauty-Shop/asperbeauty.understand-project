@@ -1,4 +1,4 @@
-import { Star, CheckCircle2 } from "lucide-react";
+﻿import { Star, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Review {
@@ -74,12 +74,12 @@ export default function ContextualSocialProof() {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-display text-foreground mb-4">
             {isAr
-              ? "نتائج سريرية. روتين حقيقي."
+              ? "Ù†ØªØ§Ø¦Ø¬ Ø³Ø±ÙŠØ±ÙŠØ©. Ø±ÙˆØªÙŠÙ† Ø­Ù‚ÙŠÙ‚ÙŠ."
               : "Clinical Results. Real Routines."}
           </h2>
           <p className="text-muted-foreground font-body text-lg font-light max-w-2xl mx-auto">
             {isAr
-              ? "اكتشفي كيف تعمل تركيباتنا المختارة عبر مختلف أنواع البشرة والأهداف الجمالية."
+              ? "Ø§ÙƒØªØ´ÙÙŠ ÙƒÙŠÙ ØªØ¹Ù…Ù„ ØªØ±ÙƒÙŠØ¨Ø§ØªÙ†Ø§ Ø§Ù„Ù…Ø®ØªØ§Ø±Ø© Ø¹Ø¨Ø± Ù…Ø®ØªÙ„Ù Ø£Ù†ÙˆØ§Ø¹ Ø§Ù„Ø¨Ø´Ø±Ø© ÙˆØ§Ù„Ø£Ù‡Ø¯Ø§Ù Ø§Ù„Ø¬Ù…Ø§Ù„ÙŠØ©."
               : "Discover how our curated formulations perform across different skin profiles and aesthetic goals."}
           </p>
         </div>
@@ -106,7 +106,7 @@ export default function ContextualSocialProof() {
                 {review.verified && (
                   <span className="flex items-center gap-1 text-xs font-body font-semibold text-primary uppercase tracking-wider">
                     <CheckCircle2 size={14} />
-                    {isAr ? "مشتري موثق" : "Verified Buyer"}
+                    {isAr ? "Ù…Ø´ØªØ±ÙŠ Ù…ÙˆØ«Ù‚" : "Verified Buyer"}
                   </span>
                 )}
               </div>
@@ -126,15 +126,15 @@ export default function ContextualSocialProof() {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <ContextTag
-                    label={isAr ? "النوع" : "Type"}
+                    label={isAr ? "Ø§Ù„Ù†ÙˆØ¹" : "Type"}
                     value={review.skinType}
                   />
                   <ContextTag
-                    label={isAr ? "الهدف" : "Goal"}
+                    label={isAr ? "Ø§Ù„Ù‡Ø¯Ù" : "Goal"}
                     value={review.primaryConcern}
                   />
                   <ContextTag
-                    label={isAr ? "العمر" : "Age"}
+                    label={isAr ? "Ø§Ù„Ø¹Ù…Ø±" : "Age"}
                     value={review.age}
                   />
                 </div>

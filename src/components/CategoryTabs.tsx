@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 import { CATEGORIES } from "@/lib/categoryMapping";
 import { useRef, useEffect } from "react";
 
 const PARENT_TABS = Object.values(CATEGORIES).map((cat) => ({
   label: cat.title,
-  icon: cat.slug === "skin-care" ? "🧴" : cat.slug === "hair-care" ? "💇" : cat.slug === "make-up" ? "💄" : cat.slug === "body-care" ? "🧼" : cat.slug === "fragrances" ? "🌸" : "🔧",
+  icon: cat.slug === "skin-care" ? "ðŸ§´" : cat.slug === "hair-care" ? "ðŸ’‡" : cat.slug === "make-up" ? "ðŸ’„" : cat.slug === "body-care" ? "ðŸ§¼" : cat.slug === "fragrances" ? "ðŸŒ¸" : "ðŸ”§",
 }));
 
 interface CategoryTabsProps {

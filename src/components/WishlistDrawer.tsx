@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -62,7 +62,7 @@ export const WishlistDrawer = () => {
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C5A028]/30 via-[#C5A028]/20 to-transparent border border-[#C5A028]/40 flex items-center justify-center shadow-gold-sm">
               <Heart className="w-5 h-5 text-[#C5A028] fill-[#C5A028]" />
             </div>
-            {language === "ar" ? "قائمة الرغبات" : "My Wishlist"}
+            {language === "ar" ? "Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø±ØºØ¨Ø§Øª" : "My Wishlist"}
           </SheetTitle>
         </SheetHeader>
 
@@ -75,12 +75,12 @@ export const WishlistDrawer = () => {
                 </div>
                 <h3 className="font-display text-xl text-foreground mb-2">
                   {language === "ar"
-                    ? "قائمة الرغبات فارغة"
+                    ? "Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø±ØºØ¨Ø§Øª ÙØ§Ø±ØºØ©"
                     : "Your wishlist is empty"}
                 </h3>
                 <p className="font-body text-muted-foreground mb-6">
                   {language === "ar"
-                    ? "احفظي منتجاتك المفضلة لشرائها لاحقاً"
+                    ? "Ø§Ø­ÙØ¸ÙŠ Ù…Ù†ØªØ¬Ø§ØªÙƒ Ø§Ù„Ù…ÙØ¶Ù„Ø© Ù„Ø´Ø±Ø§Ø¦Ù‡Ø§ Ù„Ø§Ø­Ù‚Ø§Ù‹"
                     : "Save your favorite products to purchase them later"}
                 </p>
                 <Button
@@ -88,7 +88,7 @@ export const WishlistDrawer = () => {
                   className="border-[#C5A028]/40 hover:border-[#C5A028] hover:bg-[#C5A028]/10 transition-all duration-500"
                   onClick={() => setOpen(false)}
                 >
-                  {language === "ar" ? "متابعة التسوق" : "Continue Shopping"}
+                  {language === "ar" ? "Ù…ØªØ§Ø¨Ø¹Ø© Ø§Ù„ØªØ³ÙˆÙ‚" : "Continue Shopping"}
                 </Button>
               </div>
             )
@@ -146,7 +146,7 @@ export const WishlistDrawer = () => {
                             onClick={() => handleAddToCart(product)}
                           >
                             <ShoppingBag className="w-3 h-3 me-1" />
-                            {language === "ar" ? "أضف للحقيبة" : "Add to Bag"}
+                            {language === "ar" ? "Ø£Ø¶Ù Ù„Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Bag"}
                           </Button>
                           <Button
                             size="sm"
@@ -170,7 +170,7 @@ export const WishlistDrawer = () => {
             <p className="font-body text-sm text-muted-foreground text-center">
               {language === "ar"
                 ? `${items.length} ${
-                  items.length === 1 ? "منتج محفوظ" : "منتجات محفوظة"
+                  items.length === 1 ? "Ù…Ù†ØªØ¬ Ù…Ø­ÙÙˆØ¸" : "Ù…Ù†ØªØ¬Ø§Øª Ù…Ø­ÙÙˆØ¸Ø©"
                 }`
                 : `${items.length} item${items.length !== 1 ? "s" : ""} saved`}
             </p>
@@ -179,7 +179,7 @@ export const WishlistDrawer = () => {
               className="w-full border-[#C5A028]/40 hover:border-[#C5A028] hover:bg-[#C5A028]/10 transition-all duration-500"
               onClick={() => setOpen(false)}
             >
-              {language === "ar" ? "متابعة التسوق" : "Continue Shopping"}
+              {language === "ar" ? "Ù…ØªØ§Ø¨Ø¹Ø© Ø§Ù„ØªØ³ÙˆÙ‚" : "Continue Shopping"}
             </Button>
           </div>
         )}

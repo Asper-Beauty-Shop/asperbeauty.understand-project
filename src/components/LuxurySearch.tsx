@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from "react";
 import {
@@ -121,7 +121,7 @@ export const LuxurySearch = (
               }
             >
               <div className="flex flex-wrap gap-2 p-4">
-                {["Dior", "Olaplex", "Estée Lauder", "CeraVe", "Kérastase"].map(
+                {["Dior", "Olaplex", "EstÃ©e Lauder", "CeraVe", "KÃ©rastase"].map(
                   (brand) => (
                     <button
                       key={brand}

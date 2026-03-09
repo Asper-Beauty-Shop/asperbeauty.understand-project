@@ -1,4 +1,4 @@
-import { Gift, Truck, Tag } from "lucide-react";
+﻿import { Gift, Truck, Tag } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const USP_ITEMS = [
@@ -6,22 +6,22 @@ const USP_ITEMS = [
     icon: Gift,
     en: "2 Free Samples",
     enSub: "With every order",
-    ar: "عيّنتان مجانيتان",
-    arSub: "مع كل طلب",
+    ar: "Ø¹ÙŠÙ‘Ù†ØªØ§Ù† Ù…Ø¬Ø§Ù†ÙŠØªØ§Ù†",
+    arSub: "Ù…Ø¹ ÙƒÙ„ Ø·Ù„Ø¨",
   },
   {
     icon: Truck,
     en: "Fast Delivery",
     enSub: "3-6 business days",
-    ar: "توصيل سريع",
-    arSub: "٣-٦ أيام عمل",
+    ar: "ØªÙˆØµÙŠÙ„ Ø³Ø±ÙŠØ¹",
+    arSub: "Ù£-Ù¦ Ø£ÙŠØ§Ù… Ø¹Ù…Ù„",
   },
   {
     icon: Tag,
     en: "Free Beauty Deals",
     enSub: "Exclusive offers weekly",
-    ar: "عروض جمال مجانية",
-    arSub: "عروض حصرية أسبوعياً",
+    ar: "Ø¹Ø±ÙˆØ¶ Ø¬Ù…Ø§Ù„ Ù…Ø¬Ø§Ù†ÙŠØ©",
+    arSub: "Ø¹Ø±ÙˆØ¶ Ø­ØµØ±ÙŠØ© Ø£Ø³Ø¨ÙˆØ¹ÙŠØ§Ù‹",
   },
 ];
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+﻿import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
@@ -6,7 +6,7 @@ import { Sparkles, Volume2, VolumeX } from "lucide-react";
 import { AnimatedTrustBadge } from "./AnimatedTrustBadge";
 
 // Hero assets
-const heroLifestyle = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=1920&q=80";
+const heroLifestyle = "/assets/luxury-asset-19.png";
 import heroVideo from "@/assets/brand-video-1.mp4";
 
 // Toggle between video and image background
@@ -130,7 +130,7 @@ export const Hero = () => {
                 <img
                   src={heroLifestyle}
                   alt={isArabic
-                    ? "مجموعة الجمال الفاخرة"
+                    ? "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø¬Ù…Ø§Ù„ Ø§Ù„ÙØ§Ø®Ø±Ø©"
                     : "Luxury Beauty Collection"}
                   className="w-full h-full object-cover"
                 />
@@ -140,7 +140,7 @@ export const Hero = () => {
               <img
                 src={heroLifestyle}
                 alt={isArabic
-                  ? "مجموعة الجمال الفاخرة"
+                  ? "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø¬Ù…Ø§Ù„ Ø§Ù„ÙØ§Ø®Ø±Ø©"
                   : "Luxury Beauty Collection"}
                 className="w-full h-full object-cover"
                 fetchPriority="high"
@@ -232,7 +232,7 @@ export const Hero = () => {
               animation: "gold-pulse 3s ease-in-out infinite",
             }}
           >
-            {isArabic ? "مُنتقاة من الصيادلة." : "Curated by Pharmacists."}
+            {isArabic ? "Ù…ÙÙ†ØªÙ‚Ø§Ø© Ù…Ù† Ø§Ù„ØµÙŠØ§Ø¯Ù„Ø©." : "Curated by Pharmacists."}
           </span>
 
           {/* Main Headline with Gold Underline */}
@@ -245,7 +245,7 @@ export const Hero = () => {
                 transition: "transform 0.1s ease-out",
               }}
             >
-              {isArabic ? "مدعومة بالذكاء." : "Powered by Intelligence."}
+              {isArabic ? "Ù…Ø¯Ø¹ÙˆÙ…Ø© Ø¨Ø§Ù„Ø°ÙƒØ§Ø¡." : "Powered by Intelligence."}
             </h1>
             {/* Gold Underline */}
             <div
@@ -274,7 +274,7 @@ export const Hero = () => {
             }}
           >
             {isArabic
-              ? "نحن لا نبيع مستحضرات التجميل فحسب؛ بل نوزّع الجمال بذكاء."
+              ? "Ù†Ø­Ù† Ù„Ø§ Ù†Ø¨ÙŠØ¹ Ù…Ø³ØªØ­Ø¶Ø±Ø§Øª Ø§Ù„ØªØ¬Ù…ÙŠÙ„ ÙØ­Ø³Ø¨Ø› Ø¨Ù„ Ù†ÙˆØ²Ù‘Ø¹ Ø§Ù„Ø¬Ù…Ø§Ù„ Ø¨Ø°ÙƒØ§Ø¡."
               : "We are not just selling cosmetics; we are dispensing beauty through intelligence."}
           </p>
 
@@ -296,7 +296,7 @@ export const Hero = () => {
                   hover:-translate-y-1 hover:scale-105 group">
                 <span className="relative z-10 flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
-                  {isArabic ? "استكشف المختبر" : "Explore the Laboratory"}
+                  {isArabic ? "Ø§Ø³ØªÙƒØ´Ù Ø§Ù„Ù…Ø®ØªØ¨Ø±" : "Explore the Laboratory"}
                 </span>
                 {/* Shine effect */}
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -314,7 +314,7 @@ export const Hero = () => {
                   hover:-translate-y-1 group"
               >
                 <span className="relative z-10">
-                  {isArabic ? "تسوق حسب العلامة التجارية" : "Shop by Brand"}
+                  {isArabic ? "ØªØ³ÙˆÙ‚ Ø­Ø³Ø¨ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©" : "Shop by Brand"}
                 </span>
                 {/* Shine effect */}
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
@@ -330,7 +330,7 @@ export const Hero = () => {
         style={{ opacity: scrollY > 100 ? 0 : 1 }}
       >
         <span className="text-cream/70 text-xs font-body tracking-widest uppercase">
-          {isArabic ? "اكتشف المزيد" : "Scroll to explore"}
+          {isArabic ? "Ø§ÙƒØªØ´Ù Ø§Ù„Ù…Ø²ÙŠØ¯" : "Scroll to explore"}
         </span>
         <div className="w-6 h-10 border-2 border-gold/40 rounded-full flex justify-center pt-2 shadow-[0_0_15px_rgba(212,175,55,0.2)]">
           <div className="w-1.5 h-3 bg-gold rounded-full animate-bounce shadow-[0_0_8px_rgba(212,175,55,0.4)]" />
@@ -367,8 +367,8 @@ export const Hero = () => {
           <span className="absolute bottom-full mb-2 px-3 py-1 bg-foreground text-cream text-xs font-body 
             rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
             {isMuted
-              ? (isArabic ? "تشغيل الصوت" : "Unmute")
-              : (isArabic ? "كتم الصوت" : "Mute")}
+              ? (isArabic ? "ØªØ´ØºÙŠÙ„ Ø§Ù„ØµÙˆØª" : "Unmute")
+              : (isArabic ? "ÙƒØªÙ… Ø§Ù„ØµÙˆØª" : "Mute")}
           </span>
         </button>
       )}

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Premium brand tiers for homepage curation.
  * Only these brands appear in homepage modules.
  * Mass-market brands are accessible via search & AI concierge only.
@@ -15,7 +15,7 @@ export const CLINICAL_AUTHORITY_BRANDS = [
 ] as const;
 
 export const AESTHETIC_LUXURY_BRANDS = [
-  "Kérastase",
+  "KÃ©rastase",
   "Guerlain",
   "Giorgio Armani",
   "Augustinus Bader",

@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,17 +31,17 @@ export const BestSellersSection = () => {
         <div className="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row md:mb-16">
           <div className="text-center md:text-left">
             <span className="mb-3 inline-block font-sans text-xs font-medium uppercase tracking-[0.3em] text-gold-500">
-              {isAr ? "مفضلات عالمية" : "World-Class Favorites"}
+              {isAr ? "Ù…ÙØ¶Ù„Ø§Øª Ø¹Ø§Ù„Ù…ÙŠØ©" : "World-Class Favorites"}
             </span>
             <h2 className="font-serif text-4xl font-light tracking-tight text-luxury-black md:text-5xl">
-              {isAr ? "الأكثر مبيعاً" : "Global Best Sellers"}
+              {isAr ? "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹" : "Global Best Sellers"}
             </h2>
           </div>
           <Link
             to="/best-sellers"
             className="group flex items-center gap-2 font-sans text-sm font-medium uppercase tracking-widest text-luxury-black transition-colors hover:text-gold-500"
           >
-            {isAr ? "عرض الكل" : "View All"}
+            {isAr ? "Ø¹Ø±Ø¶ Ø§Ù„ÙƒÙ„" : "View All"}
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>

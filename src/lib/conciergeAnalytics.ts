@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Concierge analytics: Top Skin Concern + Prescription Conversion.
  * Sends events to Supabase Edge Function log-concierge-events.
  */

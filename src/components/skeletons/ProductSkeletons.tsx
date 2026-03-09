@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Slow-breathing skeleton grid mimicking product card layout.
  * Uses a 2s ease-in-out "spa breathing" animation instead of default fast pulse.
  */

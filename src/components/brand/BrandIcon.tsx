@@ -1,11 +1,11 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
 /**
- * Asper Beauty Shop — Gold Line Navigation Icons
+ * Asper Beauty Shop â€” Gold Line Navigation Icons
  * 
  * Stroke: 1.2px, matching the Clinical Elegance icon system
- * Color: Inherits from parent (currentColor) — styled gold via text-accent
+ * Color: Inherits from parent (currentColor) â€” styled gold via text-accent
  * Fill: None (pure line art)
  */
 const icons: Record<string, ReactNode> = {

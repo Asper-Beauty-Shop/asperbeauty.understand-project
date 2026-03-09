@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -60,7 +60,7 @@ export default function MegaMenu({ label }: Props) {
             className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[680px] bg-card border border-border rounded-lg shadow-xl z-50 p-6"
           >
             <div className="grid grid-cols-3 gap-8">
-              {/* Categories Column — with Clinical Icons */}
+              {/* Categories Column â€” with Clinical Icons */}
               <div>
                 <p className="text-xs font-body font-semibold uppercase tracking-[0.15em] text-primary mb-4">
                   Departments
@@ -119,7 +119,7 @@ export default function MegaMenu({ label }: Props) {
                   onClick={() => setOpen(false)}
                   className="inline-flex items-center text-xs font-body font-semibold text-primary hover:text-primary/80 transition-colors"
                 >
-                  Browse All Products →
+                  Browse All Products â†’
                 </Link>
               </div>
             </div>

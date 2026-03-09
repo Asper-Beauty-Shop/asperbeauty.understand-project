@@ -199,8 +199,10 @@ Deno.serve(async (req) => {
 
       for (const p of page.products) {
         try {
-          // Skip products without images
-          if (!p.images.edges.length) { skipped++; continue; }
+          // Asper Enhancement: Use placeholder if image is missing instead of skipping
+          const image_url = p.images.edges.length > 0 
+            ? p.images.edges[0].node.url 
+            : 'https://qqceibvalkoytafynwoc.supabase.co/storage/v1/object/public/assets/placeholder-clinical.png';
 
           const rawPrice = parseFloat(p.priceRange.minVariantPrice.amount);
           const price = rawPrice / 10; // normalize 10x factor
@@ -213,7 +215,7 @@ Deno.serve(async (req) => {
             title: p.title,
             brand: p.vendor || null,
             price,
-            image_url: p.images.edges[0].node.url,
+            image_url,
             primary_concern,
             regimen_step,
             inventory_total: p.availableForSale ? 10 : 0,

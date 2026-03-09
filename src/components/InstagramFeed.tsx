@@ -1,4 +1,4 @@
-import { useLanguage } from "@/contexts/LanguageContext";
+﻿import { useLanguage } from "@/contexts/LanguageContext";
 import { Heart, Instagram } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
@@ -19,31 +19,31 @@ export const InstagramFeed = () => {
     {
       id: 2,
       image:
-        "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=400&h=400&fit=crop",
+        "/assets/luxury-asset-20.png",
       likes: 287,
     },
     {
       id: 3,
       image:
-        "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop",
+        "/assets/luxury-asset-21.png",
       likes: 456,
     },
     {
       id: 4,
       image:
-        "https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&h=400&fit=crop",
+        "/assets/luxury-asset-22.png",
       likes: 198,
     },
     {
       id: 5,
       image:
-        "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400&h=400&fit=crop",
+        "/assets/luxury-asset-23.png",
       likes: 523,
     },
     {
       id: 6,
       image:
-        "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&h=400&fit=crop",
+        "/assets/luxury-asset-24.png",
       likes: 389,
     },
   ];
@@ -61,7 +61,7 @@ export const InstagramFeed = () => {
           }`}
         >
           <h2 className="luxury-heading text-3xl md:text-4xl mb-3">
-            {isArabic ? "تابعنا على انستغرام" : "Follow Us on Instagram"}
+            {isArabic ? "ØªØ§Ø¨Ø¹Ù†Ø§ Ø¹Ù„Ù‰ Ø§Ù†Ø³ØªØºØ±Ø§Ù…" : "Follow Us on Instagram"}
           </h2>
           <a
             href="https://www.instagram.com/asper.beauty.shop/"
@@ -160,7 +160,7 @@ export const InstagramFeed = () => {
               transform hover:-translate-y-1 transition-all duration-400"
           >
             <Instagram className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-            {isArabic ? "تابعنا على انستغرام" : "Follow on Instagram"}
+            {isArabic ? "ØªØ§Ø¨Ø¹Ù†Ø§ Ø¹Ù„Ù‰ Ø§Ù†Ø³ØªØºØ±Ø§Ù…" : "Follow on Instagram"}
           </a>
         </div>
       </div>

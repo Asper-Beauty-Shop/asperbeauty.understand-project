@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
@@ -606,7 +606,7 @@ export default function Auth() {
                       <Input
                         id="login-password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
+                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="pl-10 pr-10"
@@ -733,7 +733,7 @@ export default function Auth() {
                       <Input
                         id="signup-password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
+                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="pl-10 pr-10"

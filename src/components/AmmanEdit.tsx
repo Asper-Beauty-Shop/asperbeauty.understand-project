@@ -1,47 +1,47 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "./AnimatedSection";
 import { LazyImage } from "./LazyImage";
 
-const anthelios = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80";
-const olaplex = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80";
-const eucerin = "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&q=80";
-const diorSauvage = "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&q=80";
+const anthelios = "/assets/luxury-asset-6.png";
+const olaplex = "/assets/luxury-asset-7.png";
+const eucerin = "/assets/luxury-asset-8.png";
+const diorSauvage = "/assets/luxury-asset-9.png";
 
 const products = [
   {
     id: "anthelios",
     name: "La Roche-Posay Anthelios UVMune 400",
-    nameAr: "لاروش بوزيه أنثيليوس",
+    nameAr: "Ù„Ø§Ø±ÙˆØ´ Ø¨ÙˆØ²ÙŠÙ‡ Ø£Ù†Ø«ÙŠÙ„ÙŠÙˆØ³",
     label: "The Invisible Shield",
-    labelAr: "الدرع غير المرئي",
+    labelAr: "Ø§Ù„Ø¯Ø±Ø¹ ØºÙŠØ± Ø§Ù„Ù…Ø±Ø¦ÙŠ",
     image: anthelios,
     href: "/collections/skin-care",
   },
   {
     id: "olaplex",
     name: "Olaplex No. 3 Hair Perfector",
-    nameAr: "أولابليكس رقم ٣",
+    nameAr: "Ø£ÙˆÙ„Ø§Ø¨Ù„ÙŠÙƒØ³ Ø±Ù‚Ù… Ù£",
     label: "The Bond Builder",
-    labelAr: "باني الروابط",
+    labelAr: "Ø¨Ø§Ù†ÙŠ Ø§Ù„Ø±ÙˆØ§Ø¨Ø·",
     image: olaplex,
     href: "/collections/hair-care",
   },
   {
     id: "eucerin",
     name: "Eucerin Anti-Pigment Dual Serum",
-    nameAr: "يوسيرين سيروم مزدوج",
+    nameAr: "ÙŠÙˆØ³ÙŠØ±ÙŠÙ† Ø³ÙŠØ±ÙˆÙ… Ù…Ø²Ø¯ÙˆØ¬",
     label: "Radiance Restored",
-    labelAr: "إشراقة متجددة",
+    labelAr: "Ø¥Ø´Ø±Ø§Ù‚Ø© Ù…ØªØ¬Ø¯Ø¯Ø©",
     image: eucerin,
     href: "/collections/skin-care",
   },
   {
     id: "dior",
     name: "Dior Sauvage Elixir",
-    nameAr: "ديور سوفاج إليكسير",
+    nameAr: "Ø¯ÙŠÙˆØ± Ø³ÙˆÙØ§Ø¬ Ø¥Ù„ÙŠÙƒØ³ÙŠØ±",
     label: "The Modern Signature",
-    labelAr: "التوقيع العصري",
+    labelAr: "Ø§Ù„ØªÙˆÙ‚ÙŠØ¹ Ø§Ù„Ø¹ØµØ±ÙŠ",
     image: diorSauvage,
     href: "/collections/fragrances",
   },
@@ -57,7 +57,7 @@ export const AmmanEdit = () => {
         {/* Section Header */}
         <AnimatedSection className="text-center mb-12">
           <h2 className="font-display text-3xl lg:text-4xl text-foreground mb-2">
-            {isArabic ? "اختيارات عمّان" : "The Amman Edit"}
+            {isArabic ? "Ø§Ø®ØªÙŠØ§Ø±Ø§Øª Ø¹Ù…Ù‘Ø§Ù†" : "The Amman Edit"}
           </h2>
           <div className="w-16 h-px bg-gold mx-auto mt-4" />
         </AnimatedSection>
@@ -99,7 +99,7 @@ export const AmmanEdit = () => {
                   {/* Shop Link - appears on hover */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <span className="font-display text-sm uppercase tracking-widest text-burgundy bg-cream/90 px-6 py-3 rounded-full shadow-lg">
-                      {isArabic ? "تسوق" : "Shop"}
+                      {isArabic ? "ØªØ³ÙˆÙ‚" : "Shop"}
                     </span>
                   </div>
                 </div>

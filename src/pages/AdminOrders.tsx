@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+﻿import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -1011,7 +1011,7 @@ export default function AdminOrders() {
                           <p className="text-sm mt-1">
                             {item.currency} {parseFloat(item.price).toFixed(2)}
                             {" "}
-                            × {item.quantity}
+                            Ã— {item.quantity}
                           </p>
                         </div>
                         <div className="text-right">

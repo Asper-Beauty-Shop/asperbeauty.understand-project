@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+﻿import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Instagram, Facebook, ExternalLink, ArrowRight } from "lucide-react";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
@@ -9,42 +9,42 @@ const socialPosts = [
   {
     id: 1,
     platform: "instagram" as const,
-    caption: "Morning glow routine with La Roche-Posay 🌅",
+    caption: "Morning glow routine with La Roche-Posay ðŸŒ…",
     hashtag: "#AsperGlow",
     link: "https://www.instagram.com/asper.beauty.shop/",
   },
   {
     id: 2,
     platform: "facebook" as const,
-    caption: "Pharmacist-approved sunscreen picks for summer ☀️",
+    caption: "Pharmacist-approved sunscreen picks for summer â˜€ï¸",
     hashtag: "#SanctuaryOfScience",
     link: "https://www.facebook.com/robu.sweileh",
   },
   {
     id: 3,
     platform: "instagram" as const,
-    caption: "Hydration heroes: CeraVe vs Vichy deep dive 💧",
+    caption: "Hydration heroes: CeraVe vs Vichy deep dive ðŸ’§",
     hashtag: "#AsperReviews",
     link: "https://www.instagram.com/asper.beauty.shop/",
   },
   {
     id: 4,
     platform: "facebook" as const,
-    caption: "Pregnancy-safe skincare essentials 🤰",
+    caption: "Pregnancy-safe skincare essentials ðŸ¤°",
     hashtag: "#SafeBeauty",
     link: "https://www.facebook.com/robu.sweileh",
   },
   {
     id: 5,
     platform: "instagram" as const,
-    caption: "Behind the scenes: how we vet every product 🔬",
+    caption: "Behind the scenes: how we vet every product ðŸ”¬",
     hashtag: "#PharmacistLed",
     link: "https://www.instagram.com/asper.beauty.shop/",
   },
   {
     id: 6,
     platform: "facebook" as const,
-    caption: "Customer spotlight: Sara's acne journey ✨",
+    caption: "Customer spotlight: Sara's acne journey âœ¨",
     hashtag: "#AsperStories",
     link: "https://www.facebook.com/robu.sweileh",
   },
@@ -74,7 +74,7 @@ export default function SocialGallery() {
           </p>
         </div>
 
-        {/* Social Posts Grid — using real product images as backgrounds */}
+        {/* Social Posts Grid â€” using real product images as backgrounds */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           {socialPosts.map((post, i) => {
             const productImage = products[i]?.node?.images?.edges?.[0]?.node?.url;

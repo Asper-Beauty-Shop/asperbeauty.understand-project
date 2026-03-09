@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import {
   Droplets,
   Minus,
@@ -42,9 +42,9 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
   // Mock additional images for gallery effect
   const images = [
     product.image_url ||
-    "https://images.unsplash.com/photo-1571781535014-53bd44f29186?q=80&w=1200",
-    "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=1200",
-    "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1200",
+    "/assets/luxury-asset-1.png",
+    "/assets/luxury-asset-2.png",
+    "/assets/luxury-asset-3.png",
   ];
 
   const handleAddToBag = () => {
@@ -77,7 +77,7 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
       selectedOptions: [],
     };
     addItem(cartItem);
-    toast.success(isAr ? "تمت الإضافة إلى الحقيبة" : "Added to your ritual");
+    toast.success(isAr ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Added to your ritual");
   };
 
   return (
@@ -100,7 +100,7 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
                 />
                 {/* Subtle Image Caption */}
                 <div className="absolute bottom-6 left-6 text-xs font-light tracking-widest text-white/70 uppercase">
-                  Figure 0{idx + 1} — {idx === 0
+                  Figure 0{idx + 1} â€” {idx === 0
                     ? "The Vessel"
                     : idx === 1
                     ? "The Texture"
@@ -138,7 +138,7 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
                     ))}
                   </div>
                   <span className="text-sm text-muted-foreground">
-                    (1,240 {isAr ? "تقييم" : "Reviews"})
+                    (1,240 {isAr ? "ØªÙ‚ÙŠÙŠÙ…" : "Reviews"})
                   </span>
                 </div>
               </div>
@@ -155,7 +155,7 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                   <Droplets className="w-4 h-4 text-primary" />
-                  {isAr ? "القوام" : "Texture"}
+                  {isAr ? "Ø§Ù„Ù‚ÙˆØ§Ù…" : "Texture"}
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Silky, oil-free serum
@@ -164,7 +164,7 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                   <Sparkles className="w-4 h-4 text-primary" />
-                  {isAr ? "العطر" : "Scent"}
+                  {isAr ? "Ø§Ù„Ø¹Ø·Ø±" : "Scent"}
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Fragrance-free, natural notes
@@ -199,15 +199,15 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
                 className="w-full py-6 text-base font-medium tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground rounded-none"
               >
                 <ShoppingBag className="w-5 h-5 mr-3" />
-                {isAr ? "أضف إلى الحقيبة" : "Add to Ritual"} —{" "}
+                {isAr ? "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Ritual"} â€”{" "}
                 {formatJOD(product.price * quantity)}
               </Button>
 
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <ShieldCheck className="w-4 h-4 text-primary" />
                 {isAr
-                  ? "موزع معتمد • منتج أصلي 100%"
-                  : "Authorized Retailer • 100% Authentic"}
+                  ? "Ù…ÙˆØ²Ø¹ Ù…Ø¹ØªÙ…Ø¯ â€¢ Ù…Ù†ØªØ¬ Ø£ØµÙ„ÙŠ 100%"
+                  : "Authorized Retailer â€¢ 100% Authentic"}
               </div>
             </div>
 
@@ -222,15 +222,15 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
                 </svg>
               </div>
               <p className="font-display text-sm text-primary mb-2 mt-1 text-center tracking-wide">
-                {isAr ? "نصيحة الكونسيرج" : "Concierge Tip"}
+                {isAr ? "Ù†ØµÙŠØ­Ø© Ø§Ù„ÙƒÙˆÙ†Ø³ÙŠØ±Ø¬" : "Concierge Tip"}
               </p>
               <p className="font-body text-xs text-muted-foreground leading-relaxed text-center italic">
                 {product.category?.toLowerCase().includes("acne") || product.title?.toLowerCase().includes("cleanser")
                   ? (isAr
-                    ? "\"د. سامي ينصح: ضعيه على بشرة رطبة لتعزيز امتصاص حمض الهيالورونيك.\""
+                    ? "\"Ø¯. Ø³Ø§Ù…ÙŠ ÙŠÙ†ØµØ­: Ø¶Ø¹ÙŠÙ‡ Ø¹Ù„Ù‰ Ø¨Ø´Ø±Ø© Ø±Ø·Ø¨Ø© Ù„ØªØ¹Ø²ÙŠØ² Ø§Ù…ØªØµØ§Øµ Ø­Ù…Ø¶ Ø§Ù„Ù‡ÙŠØ§Ù„ÙˆØ±ÙˆÙ†ÙŠÙƒ.\""
                     : "\"Dr. Sami recommends: Apply to damp skin to lock in hyaluronic acid for maximum hydration.\"")
                   : (isAr
-                    ? "\"مس زين تنصح: امزجيه مع قطرة سيروم للحصول على إشراقة زجاجية.\""
+                    ? "\"Ù…Ø³ Ø²ÙŠÙ† ØªÙ†ØµØ­: Ø§Ù…Ø²Ø¬ÙŠÙ‡ Ù…Ø¹ Ù‚Ø·Ø±Ø© Ø³ÙŠØ±ÙˆÙ… Ù„Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø¥Ø´Ø±Ø§Ù‚Ø© Ø²Ø¬Ø§Ø¬ÙŠØ©.\""
                     : "\"Ms. Zain suggests: Mix with a drop of serum for a glass-skin finish.\"")}
               </p>
             </div>
@@ -239,14 +239,14 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="ritual" className="border-border">
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline">
-                  {isAr ? "طريقة الاستخدام" : "The Ritual"}
+                  {isAr ? "Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…" : "The Ritual"}
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="flex items-start gap-3 py-2">
                     <Sparkles className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {isAr
-                        ? "ضعيه صباحاً ومساءً على بشرة نظيفة قبل المرطب. استخدمي قطرة واحدة ووزعيها بلطف على الوجه والرقبة."
+                        ? "Ø¶Ø¹ÙŠÙ‡ ØµØ¨Ø§Ø­Ø§Ù‹ ÙˆÙ…Ø³Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ Ø¨Ø´Ø±Ø© Ù†Ø¸ÙŠÙØ© Ù‚Ø¨Ù„ Ø§Ù„Ù…Ø±Ø·Ø¨. Ø§Ø³ØªØ®Ø¯Ù…ÙŠ Ù‚Ø·Ø±Ø© ÙˆØ§Ø­Ø¯Ø© ÙˆÙˆØ²Ø¹ÙŠÙ‡Ø§ Ø¨Ù„Ø·Ù Ø¹Ù„Ù‰ Ø§Ù„ÙˆØ¬Ù‡ ÙˆØ§Ù„Ø±Ù‚Ø¨Ø©."
                         : "Apply AM and PM on clean skin before your moisturizer. Use one dropper. Gently smooth over face and throat."}
                     </p>
                   </div>
@@ -255,7 +255,7 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
 
               <AccordionItem value="ingredients" className="border-border">
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline">
-                  {isAr ? "المكونات الرئيسية" : "Key Ingredients"}
+                  {isAr ? "Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Key Ingredients"}
                 </AccordionTrigger>
                 <AccordionContent>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -267,12 +267,12 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
 
               <AccordionItem value="shipping" className="border-border">
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline">
-                  {isAr ? "الشحن والإرجاع" : "Shipping & Returns"}
+                  {isAr ? "Ø§Ù„Ø´Ø­Ù† ÙˆØ§Ù„Ø¥Ø±Ø¬Ø§Ø¹" : "Shipping & Returns"}
                 </AccordionTrigger>
                 <AccordionContent>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {isAr
-                      ? "شحن مجاني للطلبات فوق 50 دينار. التوصيل خلال 24-48 ساعة في عمان."
+                      ? "Ø´Ø­Ù† Ù…Ø¬Ø§Ù†ÙŠ Ù„Ù„Ø·Ù„Ø¨Ø§Øª ÙÙˆÙ‚ 50 Ø¯ÙŠÙ†Ø§Ø±. Ø§Ù„ØªÙˆØµÙŠÙ„ Ø®Ù„Ø§Ù„ 24-48 Ø³Ø§Ø¹Ø© ÙÙŠ Ø¹Ù…Ø§Ù†."
                       : "Free shipping on all orders over 50 JOD. Delivered within 24-48 hours in Amman."}
                   </p>
                 </AccordionContent>
@@ -286,7 +286,7 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
       <section className="py-20 px-8 lg:px-16 bg-muted/30">
         <div className="max-w-7xl mx-auto">
           <h2 className="font-serif text-2xl lg:text-3xl text-center mb-12">
-            {isAr ? "أكملي طقوسك" : "Complete The Ritual"}
+            {isAr ? "Ø£ÙƒÙ…Ù„ÙŠ Ø·Ù‚ÙˆØ³Ùƒ" : "Complete The Ritual"}
           </h2>
           {/* Product recommendations would go here */}
         </div>

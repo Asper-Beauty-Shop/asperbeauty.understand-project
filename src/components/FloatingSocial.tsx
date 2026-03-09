@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 import { socialLinks } from "@/components/brand/SocialLinks";
 
 /**
- * Floating Social Sidebar — Desktop only
+ * Floating Social Sidebar â€” Desktop only
  * Shows Instagram, WhatsApp, Facebook for quick access
- * Deep Maroon default → Shiny Gold hover ("Midas Touch")
+ * Deep Maroon default â†’ Shiny Gold hover ("Midas Touch")
  */
 const floatingLinks = socialLinks.filter(l =>
   ["whatsapp", "instagram", "facebook"].includes(l.key)

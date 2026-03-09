@@ -1,16 +1,17 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { ShopifyProduct } from "@/lib/shopify";
-import { useCartStore } from "@/stores/cartStore";
+import { useCartStore } from "@/stores/cartStore";        
 import { useWishlistStore } from "@/stores/wishlistStore";
 import { toast } from "sonner";
-import { Heart, Sparkles } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { QuickViewModal } from "./QuickViewModal";
-import { translateTitle } from "@/lib/productUtils";
-import { formatJOD } from "@/lib/productImageUtils";
-import { OptimizedImage } from "./OptimizedImage";
+import { Heart, Sparkles, Star } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext"; 
+import { QuickViewModal } from "./QuickViewModal";        
+import { translateTitle } from "@/lib/productUtils";      
+import { formatJOD } from "@/lib/productImageUtils";      
+import { OptimizedImage } from "./OptimizedImage";        
+import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -18,28 +19,11 @@ interface ProductCardProps {
 
 const getDNATag = (node: ShopifyProduct["node"]) => {
   const tags = Array.isArray(node.tags) ? node.tags : [];
-  const vendor = (node.vendor || "").toLowerCase();
   if (tags.includes("best-seller") || tags.includes("bestseller"))
-    return { label: "Best Seller", bg: "#800020", color: "#fff" };
-  if (tags.includes("organic"))
-    return { label: "Organic", bg: "#2D6A4F", color: "#fff" };
-  if (tags.includes("dermatologist") || vendor.includes("cerave") || vendor.includes("la roche"))
-    return { label: "Dermatologist Tested", bg: "#C5A028", color: "#fff" };
+    return { label: "Bestseller", bg: "bg-polished-gold", color: "text-asper-ink" };
   if (tags.includes("new-arrival"))
-    return { label: "New Arrival", bg: "#800020", color: "#fff" };
+    return { label: "New Arrival", bg: "bg-burgundy", color: "text-white" };
   return null;
-};
-
-const getKeyBenefit = (node: ShopifyProduct["node"]) => {
-  const type = (node.productType || "").toLowerCase();
-  if (type.includes("serum")) return "Advanced Treatment Serum";
-  if (type.includes("moisturizer")) return "Hydration & Repair";
-  if (type.includes("cleanser")) return "Gentle Daily Cleansing";
-  if (type.includes("sunscreen") || type.includes("spf")) return "Broad Spectrum UV Protection";
-  if (type.includes("toner")) return "Balancing & Pore-Refining";
-  if (type.includes("eye")) return "Targeted Eye Treatment";
-  if (type.includes("supplement")) return "Clinical Nutritional Support";
-  return "Clinically Formulated";
 };
 
 export const ProductCard = ({ product }: ProductCardProps) => {
@@ -49,20 +33,18 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const addItem = useCartStore((state) => state.addItem);
   const setCartOpen = useCartStore((state) => state.setOpen);
   const { toggleItem, isInWishlist } = useWishlistStore();
-  const { language } = useLanguage();
+  const { language, locale } = useLanguage();
+  const isAr = locale === "ar";
 
   const isWishlistedItem = isInWishlist(node.id);
   const dnaTag = getDNATag(node);
-  const keyBenefit = getKeyBenefit(node);
   const firstImage = node.images?.edges?.[0]?.node;
-  const secondImage = node.images?.edges?.[1]?.node;
-  const displayImage = isHovered && secondImage ? secondImage : firstImage;
   const price = node.priceRange?.minVariantPrice?.amount;
   const firstVariant = node.variants?.edges?.[0]?.node;
-  const comparePrice = firstVariant?.compareAtPrice?.amount;
-  const hasDiscount = comparePrice && parseFloat(comparePrice) > parseFloat(price || "0");
-  const isVerified = node.tags?.includes("authentic") || node.tags?.includes("verified");
   const displayTitle = translateTitle(node.title || "", language);
+
+  // Asper Execution: Clinical Benefit Line
+  const clinicalBenefit = node.productType || "Dermatologist Approved";
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -77,115 +59,83 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       selectedOptions: firstVariant.selectedOptions,
     });
     setCartOpen(true);
+    toast.success(isAr ? "تم الإضافة إلى السلة" : "Added to bag", { position: "bottom-right" });
   };
 
-  const handleWishlistToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggleItem(product);
-    if (!isWishlistedItem) {
-      toast.success("Added to wishlist", { description: node.title, position: "top-center" });
-    }
-  };
-
-   return (
+  return (
     <>
-      <Link
-        to={`/product/${node.handle}`}
-        className="group block"
+      <div 
+        className="group relative bg-white border border-border/40 overflow-hidden transition-all duration-500 hover:shadow-xl hover:border-polished-gold/30"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="relative bg-asper-stone overflow-hidden transition-all duration-300 border border-border/60 hover:border-polished-gold/40 p-5">
-          {/* Clinical Shimmer Beam */}
-          <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/50 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
+        {/* 1. Image & Interaction Overlay */}
+        <Link to={`/product/${node.handle}`} className="block relative aspect-[4/5] bg-asper-stone-light overflow-hidden">
+          <OptimizedImage
+            src={firstImage?.url || "/editorial-showcase-2.jpg"}
+            alt={node.title}
+            className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110"
+          />
+          
+          {/* Shimmer Beam */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
 
-          {dnaTag && (
-            <div className="absolute top-4 left-4 z-10">
-              <span className="text-[10px] font-body font-semibold px-2.5 py-1 tracking-wider uppercase bg-burgundy text-polished-white">
+          {/* Badges */}
+          <div className="absolute top-4 left-4 flex flex-col gap-2">
+            {dnaTag && (
+              <span className={cn("text-[9px] uppercase tracking-[0.2em] font-bold px-3 py-1 shadow-sm", dnaTag.bg, dnaTag.color)}>
                 {dnaTag.label}
               </span>
-            </div>
-          )}
-          <button
-            onClick={handleWishlistToggle}
-            aria-label={isWishlistedItem
-              ? (language === "ar" ? "إزالة من المفضلة" : "Remove from wishlist")
-              : (language === "ar" ? "إضافة إلى المفضلة" : "Add to wishlist")}
-            className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-polished-white/80 backdrop-blur-sm transition-all hover:bg-polished-white shadow-sm"
-          >
-            <Heart className={`w-4 h-4 transition-colors ${isWishlistedItem ? "fill-burgundy text-burgundy" : "text-muted-foreground hover:text-burgundy"}`} />
-          </button>
-          {isVerified && (
-            <div className="absolute top-4 right-14 z-10">
-              <Badge className="bg-asper-stone text-polished-gold border border-polished-gold/40 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5">
-                Verified
-              </Badge>
-            </div>
-          )}
-
-          {/* Image — taller aspect for elegance */}
-          <div className="aspect-[5/6] overflow-hidden bg-polished-white mb-4">
-            {firstImage ? (
-              <OptimizedImage
-                src={displayImage?.url || firstImage.url}
-                alt={displayImage?.altText || firstImage.altText || node.title || ""}
-                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-secondary">
-                <Sparkles className="w-8 h-8 text-muted-foreground/30" />
-              </div>
             )}
           </div>
 
-          {/* Typography Hierarchy — Inline · Separator */}
-          <div className="space-y-1.5">
-            {node.vendor && (
-              <p className="text-[10px] uppercase tracking-[0.15em] text-polished-gold font-body font-semibold truncate">
-                {node.vendor}
-              </p>
-            )}
-            <h3 className="font-display text-[15px] leading-relaxed text-asper-ink font-semibold line-clamp-2">
-              {displayTitle}
-              <span className="text-polished-gold mx-1 font-bold">&middot;</span>
-              <span className="font-body text-[13px] font-normal italic text-muted-foreground">
-                {keyBenefit}
-              </span>
-            </h3>
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleItem(product); }}
+            className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white"
+          >
+            <Heart className={cn("w-5 h-5", isWishlistedItem ? "fill-burgundy text-burgundy" : "text-asper-ink")} />
+          </button>
 
-            <div className="flex items-center gap-2 pt-2">
-              <span className="text-sm font-body font-bold text-burgundy">
-                {formatJOD(parseFloat(price || "0"))}
-              </span>
-              {hasDiscount && (
-                <span className="text-xs line-through text-muted-foreground">
-                  {formatJOD(parseFloat(comparePrice))}
-                </span>
-              )}
-            </div>
+          {/* Quick Add Button Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-luxury">
+            <Button 
+              onClick={handleAddToCart}
+              className="w-full bg-burgundy hover:bg-burgundy-light text-white rounded-none h-12 uppercase tracking-[0.2em] text-xs font-bold"
+            >
+              {isAr ? "إضافة إلى السلة" : "Add to Bag"}
+            </Button>
+          </div>
+        </Link>
 
-            {/* Conversion CTA — appears on hover */}
-            <div className={`pt-3 transition-all duration-300 ${isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}>
-              <button
-                onClick={handleAddToCart}
-                className="w-full py-2.5 text-xs font-body font-semibold uppercase tracking-wider text-polished-white bg-burgundy transition-all hover:opacity-90 active:scale-[0.98]"
-              >
-                {language === "ar" ? "إضافة إلى النظام" : "Add to Regimen"}
-              </button>
-              <button
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsQuickViewOpen(true); }}
-                className="w-full text-center text-[11px] mt-2 font-body font-medium text-muted-foreground transition-colors hover:text-burgundy"
-              >
-                {language === "ar" ? "عرض المكونات" : "View Ingredients"}
-              </button>
+        {/* 2. Content Block */}
+        <div className="p-6 text-center">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-polished-gold font-bold mb-2">
+            {node.vendor}
+          </p>
+          
+          <h3 className="font-heading text-lg text-asper-ink mb-1 line-clamp-1">
+            {displayTitle}
+          </h3>
+
+          {/* Clinical Benefit Line */}
+          <p className="text-[11px] uppercase tracking-[0.1em] text-muted-foreground mb-4 font-semibold italic">
+            {clinicalBenefit}
+          </p>
+
+          <div className="flex items-center justify-center gap-4">
+            <span className="font-body text-sm font-bold text-asper-ink">
+              {formatJOD(parseFloat(price || "0"))}
+            </span>
+            {/* Rating Stars (Shiny Gold) */}
+            <div className="flex items-center gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-3 h-3 fill-polished-gold text-polished-gold" />
+              ))}
             </div>
           </div>
         </div>
-      </Link>
+      </div>
       <QuickViewModal product={product} isOpen={isQuickViewOpen} onClose={() => setIsQuickViewOpen(false)} />
     </>
   );
 };
-
-

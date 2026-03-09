@@ -1,12 +1,12 @@
-import { Badge } from "@/components/ui/badge";
+﻿import { Badge } from "@/components/ui/badge";
 import { Shield, Lightbulb, Award } from "lucide-react";
 import botanicalElegance from "@/assets/asper-botanical-elegance.png";
 import minimalistBottle from "@/assets/asper-minimalist-bottle.png";
 
 const features = [
-  { icon: Shield, en: "Curated Authority", ar: "سلطة طبية مختارة" },
-  { icon: Lightbulb, en: "Smart Solutions", ar: "حلول ذكية" },
-  { icon: Award, en: "Guaranteed Originality", ar: "جودة أصلية مضمونة" },
+  { icon: Shield, en: "Curated Authority", ar: "Ø³Ù„Ø·Ø© Ø·Ø¨ÙŠØ© Ù…Ø®ØªØ§Ø±Ø©" },
+  { icon: Lightbulb, en: "Smart Solutions", ar: "Ø­Ù„ÙˆÙ„ Ø°ÙƒÙŠØ©" },
+  { icon: Award, en: "Guaranteed Originality", ar: "Ø¬ÙˆØ¯Ø© Ø£ØµÙ„ÙŠØ© Ù…Ø¶Ù…ÙˆÙ†Ø©" },
 ];
 
 export default function BrandStory() {
@@ -23,14 +23,14 @@ export default function BrandStory() {
           <p className="font-body text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             Asper Beauty Shop is not merely a retailer; it is a pharmacist-curated authority. 
             We have shifted from the &lsquo;Evening Gala&rsquo; of exclusivity to the &lsquo;Morning Spa&rsquo; of transparent trust. 
-            Every product — from the clinical precision of La Roche-Posay to the daily style of Maybelline — is 
+            Every product â€” from the clinical precision of La Roche-Posay to the daily style of Maybelline â€” is 
             vetted, sourced directly, and guaranteed original.
           </p>
         </div>
 
         {/* Visual showcase */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 max-w-5xl mx-auto">
-          {/* Product bottle — dramatic maroon scene */}
+          {/* Product bottle â€” dramatic maroon scene */}
           <div className="relative group overflow-hidden rounded-lg aspect-[4/3]">
             <img
               src={botanicalElegance}
@@ -46,7 +46,7 @@ export default function BrandStory() {
             </div>
           </div>
 
-          {/* Skincare closeup — soft spa feel */}
+          {/* Skincare closeup â€” soft spa feel */}
           <div className="relative group overflow-hidden rounded-lg aspect-[4/3]">
             <img
               src={minimalistBottle}

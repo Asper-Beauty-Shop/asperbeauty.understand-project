@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+﻿import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
 interface ActiveFilterPillsProps {
@@ -41,7 +41,7 @@ export function ActiveFilterPills({
           className="rounded-full text-xs h-7 gap-1 border-primary/30"
           onClick={() => onRemoveVendor(vendor)}
         >
-          🏷️ {vendor}
+          ðŸ·ï¸ {vendor}
           <X className="h-3 w-3" />
         </Button>
       ))}

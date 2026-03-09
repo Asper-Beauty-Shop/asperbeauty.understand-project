@@ -1,9 +1,9 @@
-import { useLanguage } from "@/contexts/LanguageContext";
+﻿import { useLanguage } from "@/contexts/LanguageContext";
 
 const brands = [
   "Mustela", "Medela", "Bioderma", "Uriage", "Isdin", "A-Derma",
-  "Nuk", "Tommee Tippee", "Suavinéx", "Klorane", "Barral",
-  "La Roche-Posay", "MomCozy", "Babé", "Avène", "Eucerin",
+  "Nuk", "Tommee Tippee", "SuavinÃ©x", "Klorane", "Barral",
+  "La Roche-Posay", "MomCozy", "BabÃ©", "AvÃ¨ne", "Eucerin",
 ];
 
 export default function MomBabyBrands() {
@@ -14,7 +14,7 @@ export default function MomBabyBrands() {
     <section className="py-12 border-t border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
         <h3 className="font-heading text-lg text-foreground mb-6">
-          {isAr ? "العلامات التجارية الموثوقة" : "Trusted Brands"}
+          {isAr ? "Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ© Ø§Ù„Ù…ÙˆØ«ÙˆÙ‚Ø©" : "Trusted Brands"}
         </h3>
         <div className="flex flex-wrap justify-center gap-4">
           {brands.map((brand) => (

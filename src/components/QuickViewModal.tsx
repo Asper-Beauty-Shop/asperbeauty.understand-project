@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -69,7 +69,7 @@ export const QuickViewModal = (
     });
 
     toast.success(t.addedToBag, {
-      description: `${node.title} × ${quantity}`,
+      description: `${node.title} Ã— ${quantity}`,
       position: "top-center",
     });
 
@@ -205,7 +205,7 @@ export const QuickViewModal = (
             {/* Quantity */}
             <div className="mb-6">
               <label className="font-display text-sm text-foreground mb-2 block">
-                {language === "ar" ? "الكمية" : "Quantity"}
+                {language === "ar" ? "Ø§Ù„ÙƒÙ…ÙŠØ©" : "Quantity"}
               </label>
               <div className="flex items-center gap-3">
                 <button
@@ -259,7 +259,7 @@ export const QuickViewModal = (
                 >
                   <Eye className="w-4 h-4 me-2" />
                   {language === "ar"
-                    ? "عرض التفاصيل الكاملة"
+                    ? "Ø¹Ø±Ø¶ Ø§Ù„ØªÙØ§ØµÙŠÙ„ Ø§Ù„ÙƒØ§Ù…Ù„Ø©"
                     : "View Full Details"}
                 </Button>
               </Link>

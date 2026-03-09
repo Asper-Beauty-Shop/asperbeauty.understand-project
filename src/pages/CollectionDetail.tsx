@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+﻿import { useParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductGrid } from "@/components/ProductGrid";
@@ -23,11 +23,11 @@ export default function CollectionDetail() {
         <main className="pt-32 pb-20">
           <div className="luxury-container text-center">
             <h1 className="font-display text-4xl text-cream mb-4">
-              {isRtl ? "المجموعة غير موجودة" : "Collection Not Found"}
+              {isRtl ? "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø© ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©" : "Collection Not Found"}
             </h1>
             <p className="font-body text-cream/60">
               {isRtl
-                ? "المجموعة التي تبحث عنها غير موجودة."
+                ? "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„ØªÙŠ ØªØ¨Ø­Ø« Ø¹Ù†Ù‡Ø§ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©."
                 : "The collection you're looking for doesn't exist."}
             </p>
           </div>
@@ -60,7 +60,7 @@ export default function CollectionDetail() {
               {/* Category Icon/Flourish */}
               <div className="flex justify-center mb-6 text-rose-900">
                 <div className="w-12 h-12 rounded-full border border-gold/40 flex items-center justify-center">
-                  <span className="text-gold text-xl">✦</span>
+                  <span className="text-gold text-xl">âœ¦</span>
                 </div>
               </div>
 

@@ -1,5 +1,5 @@
-/**
- * Concern slug → keywords for client-side filtering and optional Shopify tag.
+﻿/**
+ * Concern slug â†’ keywords for client-side filtering and optional Shopify tag.
  * Aligns with "Concern_" tags (Acne, AntiAging) for chatbot/collection logic.
  */
 export const CONCERN_CONFIG: Record<
@@ -151,7 +151,7 @@ export function concernToShopifyTag(concernSlug: string): string | null {
 }
 
 /**
- * Detect concern from free text (e.g. "My skin feels tight and dry" → "hydration").
+ * Detect concern from free text (e.g. "My skin feels tight and dry" â†’ "hydration").
  * Use for "Detected: [Concern]" chip in chat or analytics.
  * Order of CONCERN_CONFIG keys determines priority when multiple match.
  */

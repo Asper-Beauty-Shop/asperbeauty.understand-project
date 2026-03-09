@@ -201,7 +201,7 @@ export const Footer = () => {
                 type="submit"
                 className="w-full px-6 py-3 bg-polished-gold text-burgundy font-display text-sm tracking-wider hover:bg-polished-gold/80 transition-colors duration-400 rounded"
               >
-                {isArabic ? "اشترك" : "Subscribe"}
+                {isArabic ? "???? ????" : "Sign Up for Rituals"}
               </button>
             </form>
           </div>
@@ -420,6 +420,7 @@ export const Footer = () => {
     </footer>
   );
 };
+
 
 
 

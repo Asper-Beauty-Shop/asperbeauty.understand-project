@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Loader2, Send, Stethoscope, X, Sparkles, HeartPulse, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -75,7 +75,7 @@ export const BeautyAssistant = () => {
               <div className="flex items-center gap-3">
                 <Sparkles className="h-4 w-4 text-polished-gold" />
                 <span className="text-sm font-semibold tracking-wide">
-                  {isAr ? "مرحباً، أنا د. سامي. كيف يمكنني مساعدتك؟" : "Hi, I'm Dr. Sami. How can I help?"}
+                  {isAr ? "Ù…Ø±Ø­Ø¨Ø§Ù‹ØŒ Ø£Ù†Ø§ Ø¯. Ø³Ø§Ù…ÙŠ. ÙƒÙŠÙ ÙŠÙ…ÙƒÙ†Ù†ÙŠ Ù…Ø³Ø§Ø¹Ø¯ØªÙƒØŸ" : "Hi, I'm Dr. Sami. How can I help?"}
                 </span>
               </div>
               <div className="absolute -bottom-3 right-6 w-0 h-0 border-l-[12px] border-l-transparent border-t-[12px] border-t-polished-white border-r-[12px] border-r-transparent filter drop-shadow-md"></div>
@@ -118,14 +118,14 @@ export const BeautyAssistant = () => {
                 </div>
                 <div>
                   <h3 className="text-polished-white text-sm uppercase tracking-[0.15em] font-bold">
-                    {isAr ? "الدكتور سامي" : "Dr. Sami"}
+                    {isAr ? "Ø§Ù„Ø¯ÙƒØªÙˆØ± Ø³Ø§Ù…ÙŠ" : "Dr. Sami"}
                   </h3>
                   <span className="text-polished-gold/80 text-[10px] uppercase tracking-widest flex items-center gap-1.5 mt-0.5">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                     </span>
-                    {isAr ? "متصل الآن" : "Online & Ready"}
+                    {isAr ? "Ù…ØªØµÙ„ Ø§Ù„Ø¢Ù†" : "Online & Ready"}
                   </span>
                 </div>
               </div>
@@ -142,11 +142,11 @@ export const BeautyAssistant = () => {
                     <img src="/dr-bot-character.png" className="w-16 h-16 object-contain" alt="Dr. Sami Icon" />
                   </div>
                   <h4 className="text-asper-ink font-heading text-xl font-bold mb-2">
-                    {isAr ? "استشارة مجانية" : "Private Consultation"}
+                    {isAr ? "Ø§Ø³ØªØ´Ø§Ø±Ø© Ù…Ø¬Ø§Ù†ÙŠØ©" : "Private Consultation"}
                   </h4>
                   <p className="text-asper-ink/70 text-sm max-w-xs mx-auto leading-relaxed">
                     {isAr 
-                      ? "أهلاً بكِ في عيادتنا الرقمية. صفي لي حالة بشرتكِ أو ما تبحثين عنه."
+                      ? "Ø£Ù‡Ù„Ø§Ù‹ Ø¨ÙƒÙ ÙÙŠ Ø¹ÙŠØ§Ø¯ØªÙ†Ø§ Ø§Ù„Ø±Ù‚Ù…ÙŠØ©. ØµÙÙŠ Ù„ÙŠ Ø­Ø§Ù„Ø© Ø¨Ø´Ø±ØªÙƒÙ Ø£Ùˆ Ù…Ø§ ØªØ¨Ø­Ø«ÙŠÙ† Ø¹Ù†Ù‡."
                       : "Welcome to our digital clinic. Tell me about your skin concerns or what you're looking for."}
                   </p>
                 </div>
@@ -174,7 +174,7 @@ export const BeautyAssistant = () => {
                 <div className="flex justify-start">
                   <div className="bg-white border border-polished-gold/20 p-4 rounded-2xl rounded-bl-sm flex items-center gap-2 shadow-sm">
                     <Loader2 className="h-4 w-4 animate-spin text-polished-gold" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-widest">{isAr ? "يحلل البيانات..." : "Analyzing..."}</span>
+                    <span className="text-xs text-muted-foreground uppercase tracking-widest">{isAr ? "ÙŠØ­Ù„Ù„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª..." : "Analyzing..."}</span>
                   </div>
                 </div>
               )}
@@ -187,7 +187,7 @@ export const BeautyAssistant = () => {
                   value={inputValue}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder={isAr ? "اكتبي رسالتك هنا..." : "Type your message..."}
+                  placeholder={isAr ? "Ø§ÙƒØªØ¨ÙŠ Ø±Ø³Ø§Ù„ØªÙƒ Ù‡Ù†Ø§..." : "Type your message..."}
                   className="rounded-full border-polished-gold/30 focus:border-polished-gold focus:ring-1 focus:ring-polished-gold/50 transition-all h-12 pr-14 pl-5 shadow-inner bg-asper-stone-light/30"
                 />
                 <Button 

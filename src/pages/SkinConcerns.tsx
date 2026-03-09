@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -16,20 +16,20 @@ import {
   Umbrella,
 } from "lucide-react";
 import { logSkinConcernClick } from "@/lib/conciergeAnalytics";
-const antiAgingImage = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&q=80";
-const hydrationImage = "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=800&q=80";
-const acneImage = "https://images.unsplash.com/photo-1559181567-c3190ca9be8a?w=800&q=80";
-const brighteningImage = "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=800&q=80";
-const sensitivityImage = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80";
-const sunProtectionImage = "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80";
-const darkCirclesImage = "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&q=80";
+const antiAgingImage = "/assets/luxury-asset-10.png";
+const hydrationImage = "/assets/luxury-asset-11.png";
+const acneImage = "/assets/luxury-asset-12.png";
+const brighteningImage = "/assets/luxury-asset-13.png";
+const sensitivityImage = "/assets/luxury-asset-14.png";
+const sunProtectionImage = "/assets/luxury-asset-15.png";
+const darkCirclesImage = "/assets/luxury-asset-16.png";
 const skinConcerns = [{
   id: "anti-aging",
   nameEn: "Anti-Aging",
-  nameAr: "مكافحة الشيخوخة",
+  nameAr: "Ù…ÙƒØ§ÙØ­Ø© Ø§Ù„Ø´ÙŠØ®ÙˆØ®Ø©",
   descriptionEn:
     "Turn back time with powerful anti-aging formulas featuring retinol, collagen, and peptides.",
-  descriptionAr: "استعيدي شباب بشرتك مع تركيبات قوية لمكافحة الشيخوخة.",
+  descriptionAr: "Ø§Ø³ØªØ¹ÙŠØ¯ÙŠ Ø´Ø¨Ø§Ø¨ Ø¨Ø´Ø±ØªÙƒ Ù…Ø¹ ØªØ±ÙƒÙŠØ¨Ø§Øª Ù‚ÙˆÙŠØ© Ù„Ù…ÙƒØ§ÙØ­Ø© Ø§Ù„Ø´ÙŠØ®ÙˆØ®Ø©.",
   image: antiAgingImage,
   icon: Sparkles,
   keywords: [
@@ -45,10 +45,10 @@ const skinConcerns = [{
 }, {
   id: "hydration",
   nameEn: "Hydration",
-  nameAr: "الترطيب",
+  nameAr: "Ø§Ù„ØªØ±Ø·ÙŠØ¨",
   descriptionEn:
     "Quench your skin's thirst with intense hydration boosters and hyaluronic acid.",
-  descriptionAr: "رطبي بشرتك بعمق مع معززات الترطيب وحمض الهيالورونيك.",
+  descriptionAr: "Ø±Ø·Ø¨ÙŠ Ø¨Ø´Ø±ØªÙƒ Ø¨Ø¹Ù…Ù‚ Ù…Ø¹ Ù…Ø¹Ø²Ø²Ø§Øª Ø§Ù„ØªØ±Ø·ÙŠØ¨ ÙˆØ­Ù…Ø¶ Ø§Ù„Ù‡ÙŠØ§Ù„ÙˆØ±ÙˆÙ†ÙŠÙƒ.",
   image: hydrationImage,
   icon: Droplets,
   keywords: [
@@ -64,10 +64,10 @@ const skinConcerns = [{
 }, {
   id: "acne",
   nameEn: "Acne & Blemishes",
-  nameAr: "حب الشباب والبقع",
+  nameAr: "Ø­Ø¨ Ø§Ù„Ø´Ø¨Ø§Ø¨ ÙˆØ§Ù„Ø¨Ù‚Ø¹",
   descriptionEn:
     "Clear and purify your skin with targeted treatments for acne-prone skin.",
-  descriptionAr: "نقي بشرتك مع علاجات مستهدفة للبشرة المعرضة لحب الشباب.",
+  descriptionAr: "Ù†Ù‚ÙŠ Ø¨Ø´Ø±ØªÙƒ Ù…Ø¹ Ø¹Ù„Ø§Ø¬Ø§Øª Ù…Ø³ØªÙ‡Ø¯ÙØ© Ù„Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ù…Ø¹Ø±Ø¶Ø© Ù„Ø­Ø¨ Ø§Ù„Ø´Ø¨Ø§Ø¨.",
   image: acneImage,
   icon: Shield,
   keywords: [
@@ -84,10 +84,10 @@ const skinConcerns = [{
 }, {
   id: "brightening",
   nameEn: "Brightening",
-  nameAr: "التفتيح والإشراق",
+  nameAr: "Ø§Ù„ØªÙØªÙŠØ­ ÙˆØ§Ù„Ø¥Ø´Ø±Ø§Ù‚",
   descriptionEn:
     "Reveal radiant, glowing skin with vitamin C and brightening serums.",
-  descriptionAr: "اكشفي عن بشرة مشرقة ومتألقة مع فيتامين سي وسيرومات التفتيح.",
+  descriptionAr: "Ø§ÙƒØ´ÙÙŠ Ø¹Ù† Ø¨Ø´Ø±Ø© Ù…Ø´Ø±Ù‚Ø© ÙˆÙ…ØªØ£Ù„Ù‚Ø© Ù…Ø¹ ÙÙŠØªØ§Ù…ÙŠÙ† Ø³ÙŠ ÙˆØ³ÙŠØ±ÙˆÙ…Ø§Øª Ø§Ù„ØªÙØªÙŠØ­.",
   image: brighteningImage,
   icon: Sun,
   keywords: [
@@ -103,10 +103,10 @@ const skinConcerns = [{
 }, {
   id: "sensitivity",
   nameEn: "Sensitivity",
-  nameAr: "البشرة الحساسة",
+  nameAr: "Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ø­Ø³Ø§Ø³Ø©",
   descriptionEn:
     "Gentle, soothing formulas designed for delicate and reactive skin types.",
-  descriptionAr: "تركيبات لطيفة ومهدئة مصممة للبشرة الحساسة والمتفاعلة.",
+  descriptionAr: "ØªØ±ÙƒÙŠØ¨Ø§Øª Ù„Ø·ÙŠÙØ© ÙˆÙ…Ù‡Ø¯Ø¦Ø© Ù…ØµÙ…Ù…Ø© Ù„Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ø­Ø³Ø§Ø³Ø© ÙˆØ§Ù„Ù…ØªÙØ§Ø¹Ù„Ø©.",
   image: sensitivityImage,
   icon: Heart,
   keywords: [
@@ -122,10 +122,10 @@ const skinConcerns = [{
 }, {
   id: "sun-protection",
   nameEn: "Sun Protection",
-  nameAr: "الحماية من الشمس",
+  nameAr: "Ø§Ù„Ø­Ù…Ø§ÙŠØ© Ù…Ù† Ø§Ù„Ø´Ù…Ø³",
   descriptionEn:
     "Shield your skin from harmful UV rays with advanced SPF protection.",
-  descriptionAr: "احمي بشرتك من أشعة الشمس الضارة مع حماية متقدمة.",
+  descriptionAr: "Ø§Ø­Ù…ÙŠ Ø¨Ø´Ø±ØªÙƒ Ù…Ù† Ø£Ø´Ø¹Ø© Ø§Ù„Ø´Ù…Ø³ Ø§Ù„Ø¶Ø§Ø±Ø© Ù…Ø¹ Ø­Ù…Ø§ÙŠØ© Ù…ØªÙ‚Ø¯Ù…Ø©.",
   image: sunProtectionImage,
   icon: Umbrella,
   keywords: ["spf", "sun", "uv", "protect", "sunscreen", "broad spectrum"],
@@ -133,10 +133,10 @@ const skinConcerns = [{
 }, {
   id: "dark-circles",
   nameEn: "Dark Circles",
-  nameAr: "الهالات السوداء",
+  nameAr: "Ø§Ù„Ù‡Ø§Ù„Ø§Øª Ø§Ù„Ø³ÙˆØ¯Ø§Ø¡",
   descriptionEn:
     "Target under-eye concerns with specialized eye care treatments.",
-  descriptionAr: "عالجي مشاكل منطقة العين مع علاجات متخصصة للعناية بالعين.",
+  descriptionAr: "Ø¹Ø§Ù„Ø¬ÙŠ Ù…Ø´Ø§ÙƒÙ„ Ù…Ù†Ø·Ù‚Ø© Ø§Ù„Ø¹ÙŠÙ† Ù…Ø¹ Ø¹Ù„Ø§Ø¬Ø§Øª Ù…ØªØ®ØµØµØ© Ù„Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¹ÙŠÙ†.",
   image: darkCirclesImage,
   icon: Eye,
   keywords: [
@@ -201,16 +201,16 @@ export default function SkinConcerns() {
           <div className="luxury-container relative z-10">
             <div className="text-center max-w-3xl mx-auto">
               <span className="inline-block px-4 py-1.5 bg-shiny-gold/10 text-shiny-gold rounded-full text-sm font-medium mb-4 bg-gold text-rose-950">
-                {language === "ar" ? "العناية المستهدفة" : "Targeted Care"}
+                {language === "ar" ? "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ù…Ø³ØªÙ‡Ø¯ÙØ©" : "Targeted Care"}
               </span>
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-dark-charcoal mb-6">
                 {language === "ar"
-                  ? "تسوقي حسب مشكلة البشرة"
+                  ? "ØªØ³ÙˆÙ‚ÙŠ Ø­Ø³Ø¨ Ù…Ø´ÙƒÙ„Ø© Ø§Ù„Ø¨Ø´Ø±Ø©"
                   : "Shop by Skin Concern"}
               </h1>
               <p className="font-body text-lg text-gray-600 max-w-2xl mx-auto">
                 {language === "ar"
-                  ? "اكتشفي المنتجات المثالية التي تستهدف احتياجات بشرتك الخاصة"
+                  ? "Ø§ÙƒØªØ´ÙÙŠ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ø«Ø§Ù„ÙŠØ© Ø§Ù„ØªÙŠ ØªØ³ØªÙ‡Ø¯Ù Ø§Ø­ØªÙŠØ§Ø¬Ø§Øª Ø¨Ø´Ø±ØªÙƒ Ø§Ù„Ø®Ø§ØµØ©"
                   : "Discover the perfect products that target your specific skin needs"}
               </p>
             </div>
@@ -296,12 +296,12 @@ export default function SkinConcerns() {
                 <div>
                   <h2 className="font-display text-2xl md:text-3xl text-dark-charcoal">
                     {language === "ar"
-                      ? `منتجات ${activeConcern?.nameAr}`
+                      ? `Ù…Ù†ØªØ¬Ø§Øª ${activeConcern?.nameAr}`
                       : `${activeConcern?.nameEn} Products`}
                   </h2>
                   <p className="font-body text-gray-600 mt-2">
                     {language === "ar"
-                      ? `${filteredProducts.length} منتج`
+                      ? `${filteredProducts.length} Ù…Ù†ØªØ¬`
                       : `${filteredProducts.length} products found`}
                   </p>
                 </div>
@@ -309,7 +309,7 @@ export default function SkinConcerns() {
                   onClick={() => setSelectedConcern(null)}
                   className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-dark-charcoal border border-gray-300 rounded-full hover:border-shiny-gold transition-colors"
                 >
-                  {language === "ar" ? "مسح الفلتر" : "Clear Filter"}
+                  {language === "ar" ? "Ù…Ø³Ø­ Ø§Ù„ÙÙ„ØªØ±" : "Clear Filter"}
                 </button>
               </div>
 
@@ -331,7 +331,7 @@ export default function SkinConcerns() {
                   <div className="text-center py-16">
                     <p className="font-body text-gray-500 text-lg">
                       {language === "ar"
-                        ? "لم يتم العثور على منتجات لهذه الفئة"
+                        ? "Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ù…Ù†ØªØ¬Ø§Øª Ù„Ù‡Ø°Ù‡ Ø§Ù„ÙØ¦Ø©"
                         : "No products found for this concern"}
                     </p>
                     <Link
@@ -339,7 +339,7 @@ export default function SkinConcerns() {
                       className="inline-block mt-4 px-6 py-3 bg-shiny-gold text-black font-medium rounded-full hover:bg-shiny-gold/90 transition-colors"
                     >
                       {language === "ar"
-                        ? "تصفحي جميع منتجات العناية بالبشرة"
+                        ? "ØªØµÙØ­ÙŠ Ø¬Ù…ÙŠØ¹ Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©"
                         : "Browse All Skin Care"}
                     </Link>
                   </div>
@@ -354,12 +354,12 @@ export default function SkinConcerns() {
             <div className="luxury-container text-center">
               <h2 className="font-display text-3xl md:text-4xl text-white mb-4">
                 {language === "ar"
-                  ? "لم تجدي ما تبحثين عنه؟"
+                  ? "Ù„Ù… ØªØ¬Ø¯ÙŠ Ù…Ø§ ØªØ¨Ø­Ø«ÙŠÙ† Ø¹Ù†Ù‡ØŸ"
                   : "Didn't find what you're looking for?"}
               </h2>
               <p className="font-body text-gray-300 mb-8 max-w-xl mx-auto">
                 {language === "ar"
-                  ? "تصفحي مجموعتنا الكاملة من منتجات العناية بالبشرة"
+                  ? "ØªØµÙØ­ÙŠ Ù…Ø¬Ù…ÙˆØ¹ØªÙ†Ø§ Ø§Ù„ÙƒØ§Ù…Ù„Ø© Ù…Ù† Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©"
                   : "Browse our complete collection of skincare products"}
               </p>
               <Link
@@ -367,7 +367,7 @@ export default function SkinConcerns() {
                 className="inline-block px-8 py-4 bg-shiny-gold text-black font-display tracking-wide rounded-full hover:bg-white transition-colors"
               >
                 {language === "ar"
-                  ? "تصفحي جميع المنتجات"
+                  ? "ØªØµÙØ­ÙŠ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª"
                   : "View All Products"}
               </Link>
             </div>

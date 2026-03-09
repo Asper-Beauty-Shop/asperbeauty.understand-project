@@ -1,41 +1,41 @@
-import React from "react";
+﻿import React from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const CATS = [
   {
     name: "Skin",
-    nameAr: "البشرة",
+    nameAr: "Ø§Ù„Ø¨Ø´Ø±Ø©",
     img:
-      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=300",
+      "/assets/luxury-asset-25.png",
     href: "/shop?category=Skin%20Care",
   },
   {
     name: "Hair",
-    nameAr: "الشعر",
+    nameAr: "Ø§Ù„Ø´Ø¹Ø±",
     img:
-      "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=300",
+      "/assets/luxury-asset-26.png",
     href: "/shop?category=Hair%20Care",
   },
   {
     name: "Makeup",
-    nameAr: "المكياج",
+    nameAr: "Ø§Ù„Ù…ÙƒÙŠØ§Ø¬",
     img:
-      "https://images.unsplash.com/photo-1522338228045-9b68e7751395?auto=format&fit=crop&w=300",
+      "/assets/luxury-asset-27.png",
     href: "/shop?category=Makeup",
   },
   {
     name: "Fragrance",
-    nameAr: "العطور",
+    nameAr: "Ø§Ù„Ø¹Ø·ÙˆØ±",
     img:
-      "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=300",
+      "/assets/luxury-asset-28.png",
     href: "/shop?category=Fragrances",
   },
   {
     name: "Body",
-    nameAr: "الجسم",
+    nameAr: "Ø§Ù„Ø¬Ø³Ù…",
     img:
-      "https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=300",
+      "/assets/luxury-asset-29.png",
     href: "/shop?category=Body%20Care",
   },
 ];

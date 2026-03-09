@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -104,7 +104,7 @@ export const CartDrawer = () => {
           borderLeftColor: "hsl(var(--polished-gold))",
         }}
       >
-        {/* ─── Header: "Your Curated Regimen" ─── */}
+        {/* â”€â”€â”€ Header: "Your Curated Regimen" â”€â”€â”€ */}
         <SheetHeader className="flex-shrink-0 px-8 pt-8 pb-5 border-b" style={{ borderColor: "hsl(var(--asper-stone-dark))" }}>
           <div className="flex items-center justify-between">
             {checkoutMode === "cod" && (
@@ -117,10 +117,10 @@ export const CartDrawer = () => {
             )}
             <SheetTitle className="font-heading text-2xl tracking-wide flex-1" style={{ color: "hsl(var(--asper-ink))" }}>
               {checkoutMode === "success"
-                ? (isArabic ? "تم الطلب بنجاح" : "Order Confirmed")
+                ? (isArabic ? "ØªÙ… Ø§Ù„Ø·Ù„Ø¨ Ø¨Ù†Ø¬Ø§Ø­" : "Order Confirmed")
                 : checkoutMode === "cod"
-                ? (isArabic ? "الدفع عند الاستلام" : "Cash on Delivery")
-                : (isArabic ? "روتينك المختار" : "Your Curated Regimen")}
+                ? (isArabic ? "Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…" : "Cash on Delivery")
+                : (isArabic ? "Ø±ÙˆØªÙŠÙ†Ùƒ Ø§Ù„Ù…Ø®ØªØ§Ø±" : "Your Curated Regimen")}
             </SheetTitle>
             <button
               onClick={() => handleOpenChange(false)}
@@ -141,9 +141,9 @@ export const CartDrawer = () => {
               </div>
               <p className="font-body text-[11px] text-muted-foreground mt-2 text-center tracking-wide">
                 {hasFreeShipping
-                  ? (isArabic ? "🎁 شحن مجاني مفعّل!" : "🎁 Complimentary Shipping Unlocked!")
+                  ? (isArabic ? "ðŸŽ Ø´Ø­Ù† Ù…Ø¬Ø§Ù†ÙŠ Ù…ÙØ¹Ù‘Ù„!" : "ðŸŽ Complimentary Shipping Unlocked!")
                   : (isArabic
-                    ? `أنت على بعد ${amountToFreeShipping.toFixed(0)} دينار من الشحن المجاني`
+                    ? `Ø£Ù†Øª Ø¹Ù„Ù‰ Ø¨Ø¹Ø¯ ${amountToFreeShipping.toFixed(0)} Ø¯ÙŠÙ†Ø§Ø± Ù…Ù† Ø§Ù„Ø´Ø­Ù† Ø§Ù„Ù…Ø¬Ø§Ù†ÙŠ`
                     : `You are ${amountToFreeShipping.toFixed(0)} JOD away from Complimentary Shipping`)}
               </p>
             </div>
@@ -175,16 +175,16 @@ export const CartDrawer = () => {
                       <Stethoscope className="w-7 h-7 text-muted-foreground" />
                     </div>
                     <p className="font-heading text-lg mb-1" style={{ color: "hsl(var(--asper-ink))" }}>
-                      {isArabic ? "لم يُوصف شيء بعد" : "No Prescriptions Yet"}
+                      {isArabic ? "Ù„Ù… ÙŠÙÙˆØµÙ Ø´ÙŠØ¡ Ø¨Ø¹Ø¯" : "No Prescriptions Yet"}
                     </p>
                     <p className="font-body text-sm text-muted-foreground">
-                      {isArabic ? "تصفحي المنتجات أو استشيري الدكتور سامي" : "Browse products or consult with Dr. Sami"}
+                      {isArabic ? "ØªØµÙØ­ÙŠ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø£Ùˆ Ø§Ø³ØªØ´ÙŠØ±ÙŠ Ø§Ù„Ø¯ÙƒØªÙˆØ± Ø³Ø§Ù…ÙŠ" : "Browse products or consult with Dr. Sami"}
                     </p>
                   </div>
                 </div>
               ) : (
                 <>
-                  {/* ─── Cart Items — Spacious Clinical Rows ─── */}
+                  {/* â”€â”€â”€ Cart Items â€” Spacious Clinical Rows â”€â”€â”€ */}
                   <div className="flex-1 overflow-y-auto px-8 py-6 min-h-0">
                     <div className="space-y-6">
                       {items.map((item) => (
@@ -241,7 +241,7 @@ export const CartDrawer = () => {
                       ))}
                     </div>
 
-                    {/* ─── AI Prescription Upsell Block ─── */}
+                    {/* â”€â”€â”€ AI Prescription Upsell Block â”€â”€â”€ */}
                     {items.length > 0 && (
                       <div
                         className="mt-8 p-6 relative"
@@ -254,8 +254,8 @@ export const CartDrawer = () => {
                         <div className="absolute -top-3 left-4 px-2" style={{ backgroundColor: "hsl(var(--polished-white))" }}>
                           <span className="font-body text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: "hsl(var(--burgundy))" }}>
                             {isClinical
-                              ? (isArabic ? "وصفة الدكتور سامي" : "Dr. Sami Prescribes")
-                              : (isArabic ? "اقتراح مس زين" : "Ms. Zain Suggests")}
+                              ? (isArabic ? "ÙˆØµÙØ© Ø§Ù„Ø¯ÙƒØªÙˆØ± Ø³Ø§Ù…ÙŠ" : "Dr. Sami Prescribes")
+                              : (isArabic ? "Ø§Ù‚ØªØ±Ø§Ø­ Ù…Ø³ Ø²ÙŠÙ†" : "Ms. Zain Suggests")}
                           </span>
                         </div>
 
@@ -276,7 +276,7 @@ export const CartDrawer = () => {
                           <div className="flex-1">
                             <p className="font-body text-xs text-muted-foreground leading-relaxed">
                               {isArabic
-                                ? `لتعزيز فعالية ${items[0]?.product.node.title?.slice(0, 30) || "منتجك"}، ننصح بإضافة مكمّل فعّال.`
+                                ? `Ù„ØªØ¹Ø²ÙŠØ² ÙØ¹Ø§Ù„ÙŠØ© ${items[0]?.product.node.title?.slice(0, 30) || "Ù…Ù†ØªØ¬Ùƒ"}ØŒ Ù†Ù†ØµØ­ Ø¨Ø¥Ø¶Ø§ÙØ© Ù…ÙƒÙ…Ù‘Ù„ ÙØ¹Ù‘Ø§Ù„.`
                                 : `To maximize the efficacy of your ${items[0]?.product.node.title?.slice(0, 30) || "product"}, we prescribe adding a complementary active.`}
                             </p>
                             <button
@@ -285,7 +285,7 @@ export const CartDrawer = () => {
                               onMouseEnter={(e) => e.currentTarget.style.color = "hsl(var(--polished-gold))"}
                               onMouseLeave={(e) => e.currentTarget.style.color = "hsl(var(--burgundy))"}
                             >
-                              {isArabic ? "+ أضف إلى الروتين" : "+ Add to Regimen"}
+                              {isArabic ? "+ Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø±ÙˆØªÙŠÙ†" : "+ Add to Regimen"}
                             </button>
                           </div>
                         </div>
@@ -293,12 +293,12 @@ export const CartDrawer = () => {
                     )}
                   </div>
 
-                  {/* ─── Checkout Footer ─── */}
+                  {/* â”€â”€â”€ Checkout Footer â”€â”€â”€ */}
                   <div className="flex-shrink-0 p-8 border-t" style={{ borderColor: "hsl(var(--asper-stone-dark))", backgroundColor: "hsl(var(--polished-white))" }}>
                     {/* Subtotal */}
                     <div className="flex justify-between items-center mb-6">
                       <span className="font-body text-sm text-muted-foreground tracking-wide">
-                        {isArabic ? "المجموع المقدّر" : "Estimated Total"}
+                        {isArabic ? "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹ Ø§Ù„Ù…Ù‚Ø¯Ù‘Ø±" : "Estimated Total"}
                       </span>
                       <span className="font-heading text-xl" style={{ color: "hsl(var(--asper-ink))" }}>
                         {totalPrice.toFixed(3)} {items[0]?.price.currencyCode || "JOD"}
@@ -319,7 +319,7 @@ export const CartDrawer = () => {
                         {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                           <>
                             <Truck className="w-4 h-4" />
-                            {isArabic ? "تأمين الروتين والدفع عند الاستلام" : "Secure Regimen & Checkout"}
+                            {isArabic ? "ØªØ£Ù…ÙŠÙ† Ø§Ù„Ø±ÙˆØªÙŠÙ† ÙˆØ§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…" : "Secure Regimen & Checkout"}
                           </>
                         )}
                       </button>
@@ -344,7 +344,7 @@ export const CartDrawer = () => {
                         }}
                       >
                         <Lock className="w-4 h-4" />
-                        {isArabic ? "الدفع بالبطاقة" : "Pay with Card"}
+                        {isArabic ? "Ø§Ù„Ø¯ÙØ¹ Ø¨Ø§Ù„Ø¨Ø·Ø§Ù‚Ø©" : "Pay with Card"}
                       </button>
                     </div>
                   </div>

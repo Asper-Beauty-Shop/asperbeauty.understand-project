@@ -1,4 +1,4 @@
-import { BrandIntelligenceLayout } from "@/components/brand-intelligence/BrandIntelligenceLayout";
+﻿import { BrandIntelligenceLayout } from "@/components/brand-intelligence/BrandIntelligenceLayout";
 
 /**
  * Brand Intelligence admin dashboard (Intelligence, Identity, Creative Studio tabs).

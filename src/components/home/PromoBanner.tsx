@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -22,13 +22,13 @@ export interface PromoBannerProps {
   campaign: string;
   /** Optional subtitle */
   subtitle?: string;
-  /** Slides — defaults to built-in set */
+  /** Slides â€” defaults to built-in set */
   slides?: PromoSlide[];
-  /** CTA link — defaults to /products */
+  /** CTA link â€” defaults to /products */
   ctaLink?: string;
   /** CTA label */
   ctaLabel?: string;
-  /** Auto-advance interval in ms — default 2500 */
+  /** Auto-advance interval in ms â€” default 2500 */
   interval?: number;
 }
 
@@ -87,7 +87,7 @@ export default function PromoBanner({
     const timer = setInterval(() => {
       setActiveIndex((prev) => {
         if (prev < slides.length - 1) return prev + 1;
-        // Last slide done — show closing
+        // Last slide done â€” show closing
         setTimeout(() => setShowClosing(true), interval * 0.6);
         return prev;
       });
@@ -159,7 +159,7 @@ export default function PromoBanner({
                 </div>
               </motion.div>
             ) : (
-              /* Closing — Golden Lotus */
+              /* Closing â€” Golden Lotus */
               <motion.div
                 key="closing"
                 initial={{ opacity: 0, scale: 0.9 }}

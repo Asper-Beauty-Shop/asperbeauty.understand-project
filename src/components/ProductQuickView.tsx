@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -120,9 +120,9 @@ export const ProductQuickView = (
     }
 
     toast.success(
-      language === "ar" ? "تمت الإضافة إلى السلة" : "Added to cart",
+      language === "ar" ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©" : "Added to cart",
       {
-        description: `${product.title} × ${quantity}`,
+        description: `${product.title} Ã— ${quantity}`,
         position: "top-center",
       },
     );
@@ -223,7 +223,7 @@ export const ProductQuickView = (
               {isOnSale && (
                 <p className="text-sm text-[#E53E3E] mt-1 font-medium">
                   {language === "ar"
-                    ? `وفر ${
+                    ? `ÙˆÙØ± ${
                       formatJOD(product.original_price! - price)
                     }`
                     : `Save ${
@@ -237,7 +237,7 @@ export const ProductQuickView = (
             <div className="mb-6 flex-grow">
               <p className="text-sm text-gray-600 leading-relaxed">
                 {product.description || (language === "ar"
-                  ? "منتج فاخر عالي الجودة من مجموعتنا المميزة. يتميز بأفضل المكونات لبشرة مشرقة وصحية. مصرح من هيئة الغذاء والدواء الأردنية."
+                  ? "Ù…Ù†ØªØ¬ ÙØ§Ø®Ø± Ø¹Ø§Ù„ÙŠ Ø§Ù„Ø¬ÙˆØ¯Ø© Ù…Ù† Ù…Ø¬Ù…ÙˆØ¹ØªÙ†Ø§ Ø§Ù„Ù…Ù…ÙŠØ²Ø©. ÙŠØªÙ…ÙŠØ² Ø¨Ø£ÙØ¶Ù„ Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ù„Ø¨Ø´Ø±Ø© Ù…Ø´Ø±Ù‚Ø© ÙˆØµØ­ÙŠØ©. Ù…ØµØ±Ø­ Ù…Ù† Ù‡ÙŠØ¦Ø© Ø§Ù„ØºØ°Ø§Ø¡ ÙˆØ§Ù„Ø¯ÙˆØ§Ø¡ Ø§Ù„Ø£Ø±Ø¯Ù†ÙŠØ©."
                   : "Premium quality beauty product from our curated collection. Formulated with the finest ingredients for radiant, healthy skin. JFDA approved and authorized retailer.")}
               </p>
             </div>
@@ -245,7 +245,7 @@ export const ProductQuickView = (
             {/* Quantity Selector */}
             <div className="mb-6">
               <label className="text-xs uppercase tracking-wide text-gray-700 mb-2 block font-medium">
-                {language === "ar" ? "الكمية" : "Quantity"}
+                {language === "ar" ? "Ø§Ù„ÙƒÙ…ÙŠØ©" : "Quantity"}
               </label>
               <div className="flex items-center gap-1">
                 <button
@@ -272,7 +272,7 @@ export const ProductQuickView = (
               className="w-full bg-burgundy hover:bg-burgundy-light text-white text-sm uppercase tracking-wide py-6 shadow-md hover:shadow-lg transition-all duration-200"
             >
               <ShoppingBag className="w-5 h-5 me-2" />
-              {language === "ar" ? "أضف إلى السلة" : "Add to Cart"} -{" "}
+              {language === "ar" ? "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©" : "Add to Cart"} -{" "}
               {formatJOD(price * quantity)}
             </Button>
 
@@ -281,19 +281,19 @@ export const ProductQuickView = (
               <div className="flex flex-col items-center text-center">
                 <Shield className="w-5 h-5 text-emerald-600 mb-1" />
                 <span className="text-[10px] text-gray-500 uppercase tracking-wide">
-                  {language === "ar" ? "أصلي 100%" : "100% Authentic"}
+                  {language === "ar" ? "Ø£ØµÙ„ÙŠ 100%" : "100% Authentic"}
                 </span>
               </div>
               <div className="flex flex-col items-center text-center">
                 <Truck className="w-5 h-5 text-blue-600 mb-1" />
                 <span className="text-[10px] text-gray-500 uppercase tracking-wide">
-                  {language === "ar" ? "شحن سريع" : "Fast Shipping"}
+                  {language === "ar" ? "Ø´Ø­Ù† Ø³Ø±ÙŠØ¹" : "Fast Shipping"}
                 </span>
               </div>
               <div className="flex flex-col items-center text-center">
                 <Package className="w-5 h-5 text-purple-600 mb-1" />
                 <span className="text-[10px] text-gray-500 uppercase tracking-wide">
-                  {language === "ar" ? "مرخص JFDA" : "JFDA Approved"}
+                  {language === "ar" ? "Ù…Ø±Ø®Øµ JFDA" : "JFDA Approved"}
                 </span>
               </div>
             </div>

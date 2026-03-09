@@ -1,4 +1,4 @@
-import aboutVisual from "@/assets/about-visual.avif";
+﻿import aboutVisual from "@/assets/about-visual.avif";
 
 export const About = () => {
   return (
@@ -34,7 +34,7 @@ export const About = () => {
                 regimen is verified for efficacy, authenticity, and safety.
               </p>
               <p>
-                Intelligent. Authentic. Eternal. — This is the future of
+                Intelligent. Authentic. Eternal. â€” This is the future of
                 dermo-retail, where pharmacist expertise meets cutting-edge
                 technology to deliver trusted solutions for ageless radiance.
               </p>

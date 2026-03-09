@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -11,7 +11,7 @@ const FEATURED_BRANDS = [
     name: "Vichy",
     description:
       "French pharmacy skincare powered by Volcanic Mineralizing Water",
-    descriptionAr: "العناية الفرنسية بالبشرة بقوة مياه فيشي البركانية المعدنية",
+    descriptionAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„ÙØ±Ù†Ø³ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø¨Ù‚ÙˆØ© Ù…ÙŠØ§Ù‡ ÙÙŠØ´ÙŠ Ø§Ù„Ø¨Ø±ÙƒØ§Ù†ÙŠØ© Ø§Ù„Ù…Ø¹Ø¯Ù†ÙŠØ©",
     icon: Droplets,
     color: "from-cyan-500/20 to-cyan-700/20",
     iconColor: "text-cyan-400",
@@ -24,7 +24,7 @@ const FEATURED_BRANDS = [
     id: "eucerin",
     name: "Eucerin",
     description: "Dermatological skincare for sensitive and problem skin",
-    descriptionAr: "العناية بالبشرة الحساسة والمشاكل الجلدية",
+    descriptionAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ø­Ø³Ø§Ø³Ø© ÙˆØ§Ù„Ù…Ø´Ø§ÙƒÙ„ Ø§Ù„Ø¬Ù„Ø¯ÙŠØ©",
     icon: Heart,
     color: "from-blue-500/20 to-blue-700/20",
     iconColor: "text-blue-400",
@@ -37,7 +37,7 @@ const FEATURED_BRANDS = [
     id: "cetaphil",
     name: "Cetaphil",
     description: "Gentle skincare trusted by dermatologists worldwide",
-    descriptionAr: "العناية اللطيفة بالبشرة الموثوقة عالمياً",
+    descriptionAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ù„Ø·ÙŠÙØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ù…ÙˆØ«ÙˆÙ‚Ø© Ø¹Ø§Ù„Ù…ÙŠØ§Ù‹",
     icon: Sparkles,
     color: "from-emerald-500/20 to-emerald-700/20",
     iconColor: "text-emerald-400",
@@ -50,7 +50,7 @@ const FEATURED_BRANDS = [
     id: "bioten",
     name: "Bioten",
     description: "Anti-aging skincare with innovative formulations",
-    descriptionAr: "العناية المضادة للشيخوخة بتركيبات مبتكرة",
+    descriptionAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ù…Ø¶Ø§Ø¯Ø© Ù„Ù„Ø´ÙŠØ®ÙˆØ®Ø© Ø¨ØªØ±ÙƒÙŠØ¨Ø§Øª Ù…Ø¨ØªÙƒØ±Ø©",
     icon: Sun,
     color: "from-amber-500/20 to-amber-700/20",
     iconColor: "text-amber-400",
@@ -74,13 +74,13 @@ export default function Brands() {
           {/* Header */}
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-gold/10 text-gold border-gold/30">
-              {isAr ? "شركاؤنا" : "Our Partners"}
+              {isAr ? "Ø´Ø±ÙƒØ§Ø¤Ù†Ø§" : "Our Partners"}
             </Badge>
             <h1 className="font-display text-4xl md:text-5xl text-cream mb-4">
               {isAr
                 ? (
                   <>
-                    علاماتنا <span className="text-gold">التجارية</span>
+                    Ø¹Ù„Ø§Ù…Ø§ØªÙ†Ø§ <span className="text-gold">Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©</span>
                   </>
                 )
                 : (
@@ -92,7 +92,7 @@ export default function Brands() {
             <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
             <p className="font-body text-cream/60 max-w-2xl mx-auto">
               {isAr
-                ? "نتعاون مع أرقى العلامات التجارية العالمية للجمال لنقدم لك جودة استثنائية."
+                ? "Ù†ØªØ¹Ø§ÙˆÙ† Ù…Ø¹ Ø£Ø±Ù‚Ù‰ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ© Ø§Ù„Ø¹Ø§Ù„Ù…ÙŠØ© Ù„Ù„Ø¬Ù…Ø§Ù„ Ù„Ù†Ù‚Ø¯Ù… Ù„Ùƒ Ø¬ÙˆØ¯Ø© Ø§Ø³ØªØ«Ù†Ø§Ø¦ÙŠØ©."
                 : "We partner with the world's most prestigious beauty brands to bring you exceptional quality."}
             </p>
           </div>
@@ -128,7 +128,7 @@ export default function Brands() {
 
                     <div className="flex-1 text-center md:text-left">
                       <Badge className="mb-3 bg-gold/20 text-gold border-gold/30">
-                        {isAr ? "علامة مميزة" : "Featured Brand"}
+                        {isAr ? "Ø¹Ù„Ø§Ù…Ø© Ù…Ù…ÙŠØ²Ø©" : "Featured Brand"}
                       </Badge>
                       <h2 className="font-display text-4xl md:text-5xl text-cream mb-3">
                         {brand.name}
@@ -144,7 +144,7 @@ export default function Brands() {
                           {brand.productCount}
                         </div>
                         <div className="text-cream/60 text-sm">
-                          {isAr ? "منتج" : "Products"}
+                          {isAr ? "Ù…Ù†ØªØ¬" : "Products"}
                         </div>
                       </div>
                       <div
@@ -154,7 +154,7 @@ export default function Brands() {
                       `}
                       >
                         <span>
-                          {isAr ? "تصفح المنتجات" : "Browse Products"}
+                          {isAr ? "ØªØµÙØ­ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª" : "Browse Products"}
                         </span>
                         <ArrowRight className="w-4 h-4" />
                       </div>
@@ -167,7 +167,7 @@ export default function Brands() {
 
           {/* Other Brands Grid */}
           <h3 className="font-display text-2xl text-cream mb-8">
-            {isAr ? "المزيد من العلامات التجارية" : "More Brands"}
+            {isAr ? "Ø§Ù„Ù…Ø²ÙŠØ¯ Ù…Ù† Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©" : "More Brands"}
           </h3>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -210,7 +210,7 @@ export default function Brands() {
 
                     <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/10">
                       <span className="text-cream/50 text-sm">
-                        {brand.productCount} {isAr ? "منتج" : "products"}
+                        {brand.productCount} {isAr ? "Ù…Ù†ØªØ¬" : "products"}
                       </span>
                       <ArrowRight
                         className={`w-4 h-4 ${brand.iconColor} group-hover:translate-x-1 transition-transform`}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -94,7 +94,7 @@ const HeroSection = () => {
           style={{ animationDelay: "0.4s" }}
           dir={isAr ? "rtl" : "ltr"}
         >
-          {isAr ? "اكتشفي طقوسك الجمالية" : "Discover Your Ritual"}
+          {isAr ? "Ø§ÙƒØªØ´ÙÙŠ Ø·Ù‚ÙˆØ³Ùƒ Ø§Ù„Ø¬Ù…Ø§Ù„ÙŠØ©" : "Discover Your Ritual"}
         </h1>
 
         {/* Gold divider below headline */}
@@ -110,8 +110,8 @@ const HeroSection = () => {
           dir={isAr ? "rtl" : "ltr"}
         >
           {isAr
-            ? "منتجات فاخرة للعناية بالبشرة والجمال من أرقى العلامات التجارية العالمية — مُعتمدة صيدلانياً"
-            : "Curated luxury skincare & beauty from the world's most prestigious brands — pharmacist verified"}
+            ? "Ù…Ù†ØªØ¬Ø§Øª ÙØ§Ø®Ø±Ø© Ù„Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© ÙˆØ§Ù„Ø¬Ù…Ø§Ù„ Ù…Ù† Ø£Ø±Ù‚Ù‰ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ© Ø§Ù„Ø¹Ø§Ù„Ù…ÙŠØ© â€” Ù…ÙØ¹ØªÙ…Ø¯Ø© ØµÙŠØ¯Ù„Ø§Ù†ÙŠØ§Ù‹"
+            : "Curated luxury skincare & beauty from the world's most prestigious brands â€” pharmacist verified"}
         </p>
 
         {/* --- CINEMATIC VIDEO SHOWCASE --- */}
@@ -179,7 +179,7 @@ const HeroSection = () => {
             className="bg-gradient-to-r from-[#800020] to-[#4A0404] text-white font-semibold px-10 py-6 text-base hover:shadow-[0_8px_30px_rgba(128,0,32,0.45)] transition-all duration-300 hover:scale-105 rounded-full"
           >
             <Link to="/shop">
-              {isAr ? "تسوّقي المجموعة" : "Shop Collection"}
+              {isAr ? "ØªØ³ÙˆÙ‘Ù‚ÙŠ Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø©" : "Shop Collection"}
               <ArrowRight className={`h-5 w-5 ${isAr ? "mr-2 rotate-180" : "ml-2"}`} />
             </Link>
           </Button>
@@ -191,7 +191,7 @@ const HeroSection = () => {
           >
             <Link to="/skin-concerns">
               <Sparkles className={`h-4 w-4 ${isAr ? "ms-2" : "me-2"} text-[#D4AF37]`} />
-              {isAr ? "اكتشفي روتينك" : "Find My Ritual"}
+              {isAr ? "Ø§ÙƒØªØ´ÙÙŠ Ø±ÙˆØªÙŠÙ†Ùƒ" : "Find My Ritual"}
             </Link>
           </Button>
         </div>
@@ -202,11 +202,11 @@ const HeroSection = () => {
           style={{ animationDelay: "1.05s" }}
         >
           {[
-            { label: isAr ? "حب الشباب" : "Acne Care", href: "/concerns/acne" },
-            { label: isAr ? "مكافحة الشيخوخة" : "Anti-Aging", href: "/concerns/anti-aging" },
-            { label: isAr ? "ترطيب" : "Hydration", href: "/concerns/hydration" },
-            { label: isAr ? "بشرة حساسة" : "Sensitive Skin", href: "/concerns/sensitivity" },
-            { label: isAr ? "آمن للحمل" : "Pregnancy Safe", href: "/concerns/sensitivity" },
+            { label: isAr ? "Ø­Ø¨ Ø§Ù„Ø´Ø¨Ø§Ø¨" : "Acne Care", href: "/concerns/acne" },
+            { label: isAr ? "Ù…ÙƒØ§ÙØ­Ø© Ø§Ù„Ø´ÙŠØ®ÙˆØ®Ø©" : "Anti-Aging", href: "/concerns/anti-aging" },
+            { label: isAr ? "ØªØ±Ø·ÙŠØ¨" : "Hydration", href: "/concerns/hydration" },
+            { label: isAr ? "Ø¨Ø´Ø±Ø© Ø­Ø³Ø§Ø³Ø©" : "Sensitive Skin", href: "/concerns/sensitivity" },
+            { label: isAr ? "Ø¢Ù…Ù† Ù„Ù„Ø­Ù…Ù„" : "Pregnancy Safe", href: "/concerns/sensitivity" },
           ].map((pill) => (
             <Link
               key={pill.href + pill.label}
@@ -223,7 +223,7 @@ const HeroSection = () => {
           className="mt-10 font-serif text-sm uppercase tracking-[0.3em] text-[#D4AF37] animate-fade-in"
           style={{ animationDelay: "1.1s" }}
         >
-          {isAr ? "أصالة معتمدة • جودة طبية" : "Pharmacist Verified • Medical Luxury"}
+          {isAr ? "Ø£ØµØ§Ù„Ø© Ù…Ø¹ØªÙ…Ø¯Ø© â€¢ Ø¬ÙˆØ¯Ø© Ø·Ø¨ÙŠØ©" : "Pharmacist Verified â€¢ Medical Luxury"}
         </p>
       </div>
 

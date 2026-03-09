@@ -1,4 +1,4 @@
-import { useLanguage } from "@/contexts/LanguageContext";
+﻿import { useLanguage } from "@/contexts/LanguageContext";
 import type { LifecyclePhase } from "@/pages/MomBaby";
 import { cn } from "@/lib/utils";
 import { Heart, Baby, Sparkles, ShoppingBag, LayoutGrid } from "lucide-react";
@@ -13,37 +13,37 @@ const phases: {
   {
     id: "all",
     en: "All",
-    ar: "الكل",
+    ar: "Ø§Ù„ÙƒÙ„",
     icon: LayoutGrid,
-    description: { en: "Browse everything", ar: "تصفح الكل" },
+    description: { en: "Browse everything", ar: "ØªØµÙØ­ Ø§Ù„ÙƒÙ„" },
   },
   {
     id: "before-birth",
     en: "Before Birth",
-    ar: "قبل الولادة",
+    ar: "Ù‚Ø¨Ù„ Ø§Ù„ÙˆÙ„Ø§Ø¯Ø©",
     icon: Heart,
-    description: { en: "Prenatal care & supplements", ar: "رعاية ما قبل الولادة والمكملات" },
+    description: { en: "Prenatal care & supplements", ar: "Ø±Ø¹Ø§ÙŠØ© Ù…Ø§ Ù‚Ø¨Ù„ Ø§Ù„ÙˆÙ„Ø§Ø¯Ø© ÙˆØ§Ù„Ù…ÙƒÙ…Ù„Ø§Øª" },
   },
   {
     id: "after-birth",
     en: "After Birth",
-    ar: "بعد الولادة",
+    ar: "Ø¨Ø¹Ø¯ Ø§Ù„ÙˆÙ„Ø§Ø¯Ø©",
     icon: Sparkles,
-    description: { en: "Recovery & lactation", ar: "التعافي والرضاعة" },
+    description: { en: "Recovery & lactation", ar: "Ø§Ù„ØªØ¹Ø§ÙÙŠ ÙˆØ§Ù„Ø±Ø¶Ø§Ø¹Ø©" },
   },
   {
     id: "first-years",
     en: "First Years",
-    ar: "السنوات الأولى",
+    ar: "Ø§Ù„Ø³Ù†ÙˆØ§Øª Ø§Ù„Ø£ÙˆÙ„Ù‰",
     icon: Baby,
-    description: { en: "Pediatric skincare & feeding", ar: "العناية بالبشرة والتغذية" },
+    description: { en: "Pediatric skincare & feeding", ar: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© ÙˆØ§Ù„ØªØºØ°ÙŠØ©" },
   },
   {
     id: "essentials",
     en: "Essentials",
-    ar: "أساسيات الأمومة",
+    ar: "Ø£Ø³Ø§Ø³ÙŠØ§Øª Ø§Ù„Ø£Ù…ÙˆÙ…Ø©",
     icon: ShoppingBag,
-    description: { en: "Hospital bags & hardware", ar: "حقيبة المستشفى والمستلزمات" },
+    description: { en: "Hospital bags & hardware", ar: "Ø­Ù‚ÙŠØ¨Ø© Ø§Ù„Ù…Ø³ØªØ´ÙÙ‰ ÙˆØ§Ù„Ù…Ø³ØªÙ„Ø²Ù…Ø§Øª" },
   },
 ];
 
@@ -60,7 +60,7 @@ export default function LifecycleNav({ activePhase, onPhaseChange }: Props) {
     <section id="lifecycle-nav" className="py-8 border-b border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-lg text-foreground mb-4 text-center">
-          {isAr ? "اختاري مرحلتك" : "Choose Your Stage"}
+          {isAr ? "Ø§Ø®ØªØ§Ø±ÙŠ Ù…Ø±Ø­Ù„ØªÙƒ" : "Choose Your Stage"}
         </h2>
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide justify-center flex-wrap">
           {phases.map((phase) => {

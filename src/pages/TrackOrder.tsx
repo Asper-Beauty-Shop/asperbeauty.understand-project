@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -45,25 +45,25 @@ const statusConfig: Record<
   string,
   { label: string; color: string; labelAr: string }
 > = {
-  pending: { label: "Pending", labelAr: "قيد الانتظار", color: "bg-yellow-500" },
-  confirmed: { label: "Confirmed", labelAr: "مؤكد", color: "bg-blue-500" },
+  pending: { label: "Pending", labelAr: "Ù‚ÙŠØ¯ Ø§Ù„Ø§Ù†ØªØ¸Ø§Ø±", color: "bg-yellow-500" },
+  confirmed: { label: "Confirmed", labelAr: "Ù…Ø¤ÙƒØ¯", color: "bg-blue-500" },
   processing: {
     label: "Processing",
-    labelAr: "قيد المعالجة",
+    labelAr: "Ù‚ÙŠØ¯ Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø©",
     color: "bg-purple-500",
   },
-  shipped: { label: "Shipped", labelAr: "تم الشحن", color: "bg-indigo-500" },
+  shipped: { label: "Shipped", labelAr: "ØªÙ… Ø§Ù„Ø´Ø­Ù†", color: "bg-indigo-500" },
   out_for_delivery: {
     label: "Out for Delivery",
-    labelAr: "في طريقه للتوصيل",
+    labelAr: "ÙÙŠ Ø·Ø±ÙŠÙ‚Ù‡ Ù„Ù„ØªÙˆØµÙŠÙ„",
     color: "bg-orange-500",
   },
   delivered: {
     label: "Delivered",
-    labelAr: "تم التوصيل",
+    labelAr: "ØªÙ… Ø§Ù„ØªÙˆØµÙŠÙ„",
     color: "bg-green-500",
   },
-  cancelled: { label: "Cancelled", labelAr: "ملغي", color: "bg-red-500" },
+  cancelled: { label: "Cancelled", labelAr: "Ù…Ù„ØºÙŠ", color: "bg-red-500" },
 };
 
 const TrackOrder = () => {

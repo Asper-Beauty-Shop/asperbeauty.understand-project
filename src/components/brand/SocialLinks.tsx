@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 
 /**
- * Asper Beauty Shop — 9 Social Platform Icons
+ * Asper Beauty Shop â€” 9 Social Platform Icons
  * Style: Clean SVG, 1.2px stroke
- * Default: Deep Maroon (text-primary) → Hover: Shiny Gold (text-accent) "Midas Touch"
+ * Default: Deep Maroon (text-primary) â†’ Hover: Shiny Gold (text-accent) "Midas Touch"
  */
 
 interface SocialLinkProps {

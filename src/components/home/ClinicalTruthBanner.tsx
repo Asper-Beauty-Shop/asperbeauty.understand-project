@@ -1,4 +1,4 @@
-import { ShieldCheck, FlaskConical, Droplets } from "lucide-react";
+﻿import { ShieldCheck, FlaskConical, Droplets } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
 /**
- * Zone 5 — Clinical Truth Banner
+ * Zone 5 â€” Clinical Truth Banner
  * Deep Burgundy banner with gold-seal trust pillars, ambient glow blobs,
  * and responsive gold dividers between pillars.
  */
@@ -17,23 +17,23 @@ export default function ClinicalTruthBanner() {
   const pillars = [
     {
       icon: ShieldCheck,
-      title: isAr ? "جودة أصيلة" : "Authentic Quality",
+      title: isAr ? "Ø¬ÙˆØ¯Ø© Ø£ØµÙŠÙ„Ø©" : "Authentic Quality",
       description: isAr
-        ? "سلسلة توريد موثّقة ١٠٠٪. نضمن شفافية كاملة في المكونات ومصادر مباشرة من أرقى المختبرات الطبية."
+        ? "Ø³Ù„Ø³Ù„Ø© ØªÙˆØ±ÙŠØ¯ Ù…ÙˆØ«Ù‘Ù‚Ø© Ù¡Ù Ù Ùª. Ù†Ø¶Ù…Ù† Ø´ÙØ§ÙÙŠØ© ÙƒØ§Ù…Ù„Ø© ÙÙŠ Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª ÙˆÙ…ØµØ§Ø¯Ø± Ù…Ø¨Ø§Ø´Ø±Ø© Ù…Ù† Ø£Ø±Ù‚Ù‰ Ø§Ù„Ù…Ø®ØªØ¨Ø±Ø§Øª Ø§Ù„Ø·Ø¨ÙŠØ©."
         : "100% verified supply chain. We guarantee full ingredient transparency and direct sourcing from leading dermatological laboratories.",
     },
     {
       icon: FlaskConical,
-      title: isAr ? "مُثبت سريرياً" : "Clinically Proven",
+      title: isAr ? "Ù…ÙØ«Ø¨Øª Ø³Ø±ÙŠØ±ÙŠØ§Ù‹" : "Clinically Proven",
       description: isAr
-        ? "كل تركيبة مُختبرة بدقة للفعالية والسلامة، لضمان نتائج عالية الأداء حتى لأكثر حواجز البشرة حساسية."
+        ? "ÙƒÙ„ ØªØ±ÙƒÙŠØ¨Ø© Ù…ÙØ®ØªØ¨Ø±Ø© Ø¨Ø¯Ù‚Ø© Ù„Ù„ÙØ¹Ø§Ù„ÙŠØ© ÙˆØ§Ù„Ø³Ù„Ø§Ù…Ø©ØŒ Ù„Ø¶Ù…Ø§Ù† Ù†ØªØ§Ø¦Ø¬ Ø¹Ø§Ù„ÙŠØ© Ø§Ù„Ø£Ø¯Ø§Ø¡ Ø­ØªÙ‰ Ù„Ø£ÙƒØ«Ø± Ø­ÙˆØ§Ø¬Ø² Ø§Ù„Ø¨Ø´Ø±Ø© Ø­Ø³Ø§Ø³ÙŠØ©."
         : "Every formula is rigorously tested for efficacy and safety, ensuring high-performance results even for the most sensitive skin barriers.",
     },
     {
       icon: Droplets,
-      title: isAr ? "فخامة فعّالة" : "Luxurious Efficacy",
+      title: isAr ? "ÙØ®Ø§Ù…Ø© ÙØ¹Ù‘Ø§Ù„Ø©" : "Luxurious Efficacy",
       description: isAr
-        ? "جسر بين العلم الطبي والفخامة الملموسة. استمتعي بلمسات مشرقة وروتين صباحي راقٍ."
+        ? "Ø¬Ø³Ø± Ø¨ÙŠÙ† Ø§Ù„Ø¹Ù„Ù… Ø§Ù„Ø·Ø¨ÙŠ ÙˆØ§Ù„ÙØ®Ø§Ù…Ø© Ø§Ù„Ù…Ù„Ù…ÙˆØ³Ø©. Ø§Ø³ØªÙ…ØªØ¹ÙŠ Ø¨Ù„Ù…Ø³Ø§Øª Ù…Ø´Ø±Ù‚Ø© ÙˆØ±ÙˆØªÙŠÙ† ØµØ¨Ø§Ø­ÙŠ Ø±Ø§Ù‚Ù."
         : "Bridging the gap between medical science and tactile luxury. Experience radiant finishes and elevated morning routines.",
     },
   ];

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -117,17 +117,17 @@ export default function ShopAllOrganized() {
             className="inline-flex items-center gap-2 font-sans text-sm text-maroon/70 hover:text-maroon tracking-wide"
           >
             <ArrowLeft className="w-4 h-4" />
-            {language === 'ar' ? 'العودة إلى المتجر' : 'Back to Shop'}
+            {language === 'ar' ? 'Ø§Ù„Ø¹ÙˆØ¯Ø© Ø¥Ù„Ù‰ Ø§Ù„Ù…ØªØ¬Ø±' : 'Back to Shop'}
           </Link>
         </div>
         <div className="text-center mb-12 md:mb-16 space-y-4">
           <h1 className="font-serif text-4xl md:text-5xl text-maroon">
-            {language === 'ar' ? 'المجموعة' : 'The Collection'}
+            {language === 'ar' ? 'Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø©' : 'The Collection'}
           </h1>
           <p className="font-sans text-maroon/70 tracking-wide uppercase text-sm">
             {language === 'ar'
-              ? 'جودة أصيلة • فخامة سريرية'
-              : 'Authentic Quality • Clinical Luxury'}
+              ? 'Ø¬ÙˆØ¯Ø© Ø£ØµÙŠÙ„Ø© â€¢ ÙØ®Ø§Ù…Ø© Ø³Ø±ÙŠØ±ÙŠØ©'
+              : 'Authentic Quality â€¢ Clinical Luxury'}
           </p>
         </div>
 
@@ -160,7 +160,7 @@ export default function ShopAllOrganized() {
           <div className="max-w-7xl mx-auto text-center py-20">
             <p className="font-sans text-maroon/70 tracking-wide">
               {language === 'ar'
-                ? 'لا توجد منتجات في هذه الفئة.'
+                ? 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª ÙÙŠ Ù‡Ø°Ù‡ Ø§Ù„ÙØ¦Ø©.'
                 : 'No products in this category.'}
             </p>
             <button
@@ -168,7 +168,7 @@ export default function ShopAllOrganized() {
               onClick={() => setActiveType('All')}
               className="mt-4 font-sans text-sm text-shiny-gold hover:underline"
             >
-              {language === 'ar' ? 'عرض الكل' : 'View all'}
+              {language === 'ar' ? 'Ø¹Ø±Ø¶ Ø§Ù„ÙƒÙ„' : 'View all'}
             </button>
           </div>
         ) : (
@@ -235,10 +235,10 @@ export default function ShopAllOrganized() {
               {loadingMore ? (
                 <span className="flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  {language === 'ar' ? 'جاري التحميل...' : 'Loading...'}
+                  {language === 'ar' ? 'Ø¬Ø§Ø±ÙŠ Ø§Ù„ØªØ­Ù…ÙŠÙ„...' : 'Loading...'}
                 </span>
               ) : (
-                language === 'ar' ? 'تحميل المزيد' : 'Load more'
+                language === 'ar' ? 'ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ù…Ø²ÙŠØ¯' : 'Load more'
               )}
             </button>
           </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Star, ThumbsUp, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
@@ -67,7 +67,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
     return (
       <div className="py-8 text-center">
         <p className="text-sm text-muted-foreground font-body">
-          {isArabic ? "كن أول من يقيّم هذا المنتج" : "Be the first to review this product"}
+          {isArabic ? "ÙƒÙ† Ø£ÙˆÙ„ Ù…Ù† ÙŠÙ‚ÙŠÙ‘Ù… Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ¬" : "Be the first to review this product"}
         </p>
       </div>
     );
@@ -83,7 +83,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
         </div>
         <p className="text-sm text-muted-foreground font-body">
           {isArabic
-            ? `بناءً على ${reviews.length} تقييم`
+            ? `Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ ${reviews.length} ØªÙ‚ÙŠÙŠÙ…`
             : `Based on ${reviews.length} review${reviews.length !== 1 ? "s" : ""}`}
         </p>
       </div>
@@ -95,7 +95,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
             <StarRating rating={review.rating} />
             {review.verified_purchase && (
               <Badge variant="outline" className="text-[10px] tracking-wider border-polished-gold/50 text-polished-gold">
-                {isArabic ? "شراء موثق" : "Verified Purchase"}
+                {isArabic ? "Ø´Ø±Ø§Ø¡ Ù…ÙˆØ«Ù‚" : "Verified Purchase"}
               </Badge>
             )}
           </div>
@@ -107,7 +107,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
             <p className="text-sm text-muted-foreground font-body leading-relaxed">{review.body}</p>
           )}
 
-          {/* Contextual Social Proof — skin_type + concern */}
+          {/* Contextual Social Proof â€” skin_type + concern */}
           {(review.skin_type || review.primary_concern || review.age_range) && (
             <div className="flex flex-wrap gap-2 pt-1">
               {review.skin_type && (
@@ -134,7 +134,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
             {review.helpful_count > 0 && (
               <span className="flex items-center gap-1">
                 <ThumbsUp className="w-3 h-3" />
-                {review.helpful_count} {isArabic ? "وجدوها مفيدة" : "found helpful"}
+                {review.helpful_count} {isArabic ? "ÙˆØ¬Ø¯ÙˆÙ‡Ø§ Ù…ÙÙŠØ¯Ø©" : "found helpful"}
               </span>
             )}
           </div>

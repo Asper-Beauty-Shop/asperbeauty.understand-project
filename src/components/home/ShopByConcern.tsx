@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import {
@@ -36,7 +36,7 @@ export default function ShopByConcern() {
             Shop by <span className="text-primary">Concern</span>
           </h2>
           <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto font-body">
-            Tell us what bothers you — we'll show you what works.
+            Tell us what bothers you â€” we'll show you what works.
           </p>
         </div>
 

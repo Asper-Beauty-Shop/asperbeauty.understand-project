@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Eye, ShoppingBag, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ProductQuickViewModal } from "./ProductQuickViewModal";
@@ -97,7 +97,7 @@ export const LuxuryProductCard = ({ product }: { product: ProductProps }) => {
     });
 
     toast.success(
-      language === "ar" ? "تمت الإضافة إلى الحقيبة" : "Added to bag",
+      language === "ar" ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Added to bag",
       {
         description: product.title,
         position: "top-center",
@@ -155,7 +155,7 @@ export const LuxuryProductCard = ({ product }: { product: ProductProps }) => {
               <button
                 onClick={handleQuickView}
                 className="w-10 h-10 rounded-full bg-cream/95 backdrop-blur-sm border border-gold/50 flex items-center justify-center hover:bg-gold hover:text-cream transition-all duration-300 shadow-lg hover:scale-110"
-                title={language === "ar" ? "عرض سريع" : "Quick View"}
+                title={language === "ar" ? "Ø¹Ø±Ø¶ Ø³Ø±ÙŠØ¹" : "Quick View"}
               >
                 <Eye className="w-4 h-4" />
               </button>
@@ -164,7 +164,7 @@ export const LuxuryProductCard = ({ product }: { product: ProductProps }) => {
               <button
                 onClick={handleAddToCart}
                 className="hidden md:flex w-10 h-10 rounded-full bg-burgundy/95 backdrop-blur-sm border border-burgundy flex items-center justify-center hover:bg-burgundy-light text-cream transition-all duration-300 shadow-lg hover:scale-110"
-                title={language === "ar" ? "أضف إلى الحقيبة" : "Add to Bag"}
+                title={language === "ar" ? "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Bag"}
               >
                 <ShoppingBag className="w-4 h-4" />
               </button>
@@ -221,7 +221,7 @@ export const LuxuryProductCard = ({ product }: { product: ProductProps }) => {
           className="hidden md:block absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-burgundy text-cream p-4 text-center cursor-pointer uppercase text-[10px] font-bold tracking-widest hover:bg-burgundy-light"
           onClick={handleAddToCart}
         >
-          {language === "ar" ? "أضف إلى الحقيبة" : "Add to Bag"}
+          {language === "ar" ? "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Bag"}
         </div>
       </Link>
 

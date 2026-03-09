@@ -1,29 +1,29 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const skinCareSpotlight = "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=600&q=80";
-const hairCareSpotlight = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80";
-const makeUpSpotlight = "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80";
+const skinCareSpotlight = "/assets/luxury-asset-10.png";
+const hairCareSpotlight = "/assets/luxury-asset-11.png";
+const makeUpSpotlight = "/assets/luxury-asset-12.png";
 
 const categories = [
   {
     id: "skin-care",
     nameEn: "Skin Care",
-    nameAr: "العناية بالبشرة",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©",
     image: skinCareSpotlight,
     href: "/collections/skin-care",
   },
   {
     id: "hair-care",
     nameEn: "Hair Care",
-    nameAr: "العناية بالشعر",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø´Ø¹Ø±",
     image: hairCareSpotlight,
     href: "/collections/hair-care",
   },
   {
     id: "make-up",
     nameEn: "Make Up",
-    nameAr: "المكياج",
+    nameAr: "Ø§Ù„Ù…ÙƒÙŠØ§Ø¬",
     image: makeUpSpotlight,
     href: "/collections/make-up",
   },
@@ -38,7 +38,7 @@ export const CategoryHighlights = () => {
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 className="font-display text-3xl md:text-4xl text-dark-charcoal mb-4">
-            {language === "ar" ? "تسوقي حسب الفئة" : "Shop By Category"}
+            {language === "ar" ? "ØªØ³ÙˆÙ‚ÙŠ Ø­Ø³Ø¨ Ø§Ù„ÙØ¦Ø©" : "Shop By Category"}
           </h2>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-shiny-gold to-transparent mx-auto" />
         </div>
@@ -71,7 +71,7 @@ export const CategoryHighlights = () => {
                     {language === "ar" ? category.nameAr : category.nameEn}
                   </h3>
                   <span className="inline-block px-6 py-2 border border-shiny-gold text-shiny-gold font-display text-sm tracking-wider opacity-0 transform translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                    {language === "ar" ? "تسوقي الآن" : "Shop Now"}
+                    {language === "ar" ? "ØªØ³ÙˆÙ‚ÙŠ Ø§Ù„Ø¢Ù†" : "Shop Now"}
                   </span>
                 </div>
               </div>

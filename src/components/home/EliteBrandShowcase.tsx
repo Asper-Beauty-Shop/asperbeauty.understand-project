@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -46,7 +46,7 @@ export default function EliteBrandShowcase() {
                   className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                   loading="lazy"
                 />
-                {/* Clinical Shimmer Beam — no dark overlays */}
+                {/* Clinical Shimmer Beam â€” no dark overlays */}
                 <div
                   className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{

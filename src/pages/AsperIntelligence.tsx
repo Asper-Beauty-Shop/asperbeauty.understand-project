@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import {
   ShieldCheck,
   Sparkles,
@@ -237,12 +237,12 @@ export default function AsperIntelligence() {
       const isNetwork = error?.message?.includes("Failed to fetch") || error?.message?.includes("NetworkError");
       
       if (isTimeout) {
-        return "⏳ Dr. Sami's clinic is currently experiencing high volume. Your consultation is important to us — please try again in a moment.";
+        return "â³ Dr. Sami's clinic is currently experiencing high volume. Your consultation is important to us â€” please try again in a moment.";
       }
       if (isNetwork) {
-        return "🔬 Our clinical systems are momentarily undergoing maintenance. Please check your connection and try again shortly.";
+        return "ðŸ”¬ Our clinical systems are momentarily undergoing maintenance. Please check your connection and try again shortly.";
       }
-      return "⚕️ We encountered an unexpected issue processing your consultation. Our team has been notified — please try again in a few moments.";
+      return "âš•ï¸ We encountered an unexpected issue processing your consultation. Our team has been notified â€” please try again in a few moments.";
     }
   };
 
@@ -321,7 +321,7 @@ export default function AsperIntelligence() {
                 Morning Spa Theme Active
               </span>
               <p className="text-gray-400 font-medium tracking-[0.2em] uppercase text-[9px]">
-                Pharmacist Curated • Jordan HQ
+                Pharmacist Curated â€¢ Jordan HQ
               </p>
             </div>
           </div>
@@ -660,7 +660,7 @@ export default function AsperIntelligence() {
               ASPER.AI
             </span>
             <span className="w-px h-4 bg-polished-gold/20" />
-            <span>Amman Headquarters • Strategic Launch 2026</span>
+            <span>Amman Headquarters â€¢ Strategic Launch 2026</span>
           </div>
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2">
@@ -670,7 +670,7 @@ export default function AsperIntelligence() {
               <ShoppingCart size={14} className="text-maroon" /> JOD Currency
               Verified
             </div>
-            <span>© 2025 Asper Beauty Shop</span>
+            <span>Â© 2025 Asper Beauty Shop</span>
           </div>
         </footer>
       </div>

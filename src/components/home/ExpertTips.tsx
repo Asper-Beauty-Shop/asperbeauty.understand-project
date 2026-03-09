@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+﻿import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Shield, Heart, Sparkles, Calendar } from "lucide-react";
 
@@ -10,7 +10,7 @@ const tips = [
     role: "Clinical Authority",
     title: "Why Your SPF Needs Reapplication",
     excerpt:
-      "Most patients apply SPF once in the morning and assume they're protected all day. UV damage is cumulative — reapply every 2 hours of sun exposure, especially in Amman's high-altitude climate.",
+      "Most patients apply SPF once in the morning and assume they're protected all day. UV damage is cumulative â€” reapply every 2 hours of sun exposure, especially in Amman's high-altitude climate.",
     tag: "Weekly Health Tip",
     date: "This Week",
   },
@@ -21,7 +21,7 @@ const tips = [
     role: "Beauty Concierge",
     title: "The 60-Second Evening Reset",
     excerpt:
-      "Double cleansing isn't about scrubbing harder — it's about layering intention. Oil-based first to dissolve makeup, then water-based to purify. Your skin will thank you by morning.",
+      "Double cleansing isn't about scrubbing harder â€” it's about layering intention. Oil-based first to dissolve makeup, then water-based to purify. Your skin will thank you by morning.",
     tag: "Skincare Routine",
     date: "This Week",
   },

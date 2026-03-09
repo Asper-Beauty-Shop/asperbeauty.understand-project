@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,9 +35,9 @@ function useTypingEffect(text: string, speed = 50, startDelay = 0, active = fals
 type Phase = "typing" | "interlock" | "swap" | "regimen";
 
 const regimenProducts = [
-  { step: "Step 1 · Cleanser", name: "CeraVe Hydrating Cleanser", safe: true },
-  { step: "Step 2 · Treatment", name: "Vichy LiftActiv Vitamin C", safe: true },
-  { step: "Step 3 · Protection", name: "La Roche-Posay SPF 50+", safe: true },
+  { step: "Step 1 Â· Cleanser", name: "CeraVe Hydrating Cleanser", safe: true },
+  { step: "Step 2 Â· Treatment", name: "Vichy LiftActiv Vitamin C", safe: true },
+  { step: "Step 3 Â· Protection", name: "La Roche-Posay SPF 50+", safe: true },
 ];
 
 export default function ConciergeShowcase() {
@@ -91,20 +91,20 @@ export default function ConciergeShowcase() {
             className="mb-4 border-primary/30 text-primary font-body text-xs tracking-[0.2em] px-4 py-1.5"
           >
             <Shield className="h-3 w-3 mr-2" />
-            SAFETY INTERLOCK · DUAL PERSONA
+            SAFETY INTERLOCK Â· DUAL PERSONA
           </Badge>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground">
             Intelligence That <span className="text-primary">Protects</span>
           </h2>
           <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto font-body">
             Our AI automatically detects contraindications and swaps unsafe
-            ingredients — keeping your glow safe.
+            ingredients â€” keeping your glow safe.
           </p>
         </div>
 
         {/* Split-screen Showcase */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
-          {/* LEFT — Chat simulation */}
+          {/* LEFT â€” Chat simulation */}
           <div className="rounded-lg border border-border bg-card shadow-lg overflow-hidden flex flex-col">
             {/* Chat header */}
             <div className="flex items-center gap-2 px-5 py-3 border-b border-border bg-muted/30">
@@ -164,12 +164,12 @@ export default function ConciergeShowcase() {
                     <div className="text-xs font-body">
                       <p className="font-semibold text-foreground">
                         {phase === "interlock"
-                          ? "⚠️ Safety Interlock Triggered"
-                          : "✅ Safety Check Passed"}
+                          ? "âš ï¸ Safety Interlock Triggered"
+                          : "âœ… Safety Check Passed"}
                       </p>
                       <p className="text-muted-foreground mt-0.5">
                         {phase === "interlock"
-                          ? "Retinol flagged — contraindicated during pregnancy."
+                          ? "Retinol flagged â€” contraindicated during pregnancy."
                           : "Regimen cleared. All ingredients pregnancy-safe."}
                       </p>
                     </div>
@@ -187,13 +187,13 @@ export default function ConciergeShowcase() {
                     className="flex gap-2.5 items-start"
                   >
                     <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="text-xs">🔬</span>
+                      <span className="text-xs">ðŸ”¬</span>
                     </div>
                     <div className="bg-muted rounded-2xl rounded-bl-md px-4 py-2.5 max-w-[85%]">
                       <p className="text-xs font-semibold text-primary font-body mb-1">Dr. Sami</p>
                       <p className="font-body text-sm text-foreground">
                         Safety Check: <span className="line-through text-muted-foreground">Retinol</span> removed.
-                        Replaced with Vitamin C — equally effective for radiance, fully pregnancy-safe.
+                        Replaced with Vitamin C â€” equally effective for radiance, fully pregnancy-safe.
                       </p>
                     </div>
                   </motion.div>
@@ -210,12 +210,12 @@ export default function ConciergeShowcase() {
                     className="flex gap-2.5 items-start"
                   >
                     <div className="w-8 h-8 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="text-xs">✨</span>
+                      <span className="text-xs">âœ¨</span>
                     </div>
                     <div className="bg-muted rounded-2xl rounded-bl-md px-4 py-2.5 max-w-[85%]">
                       <p className="text-xs font-semibold text-accent font-body mb-1">Ms. Zain</p>
                       <p className="font-body text-sm text-foreground">
-                        Radiance unlocked safely. ✨ Your glow regimen is ready!
+                        Radiance unlocked safely. âœ¨ Your glow regimen is ready!
                       </p>
                     </div>
                   </motion.div>
@@ -224,7 +224,7 @@ export default function ConciergeShowcase() {
             </div>
           </div>
 
-          {/* RIGHT — Product swap + Regimen result */}
+          {/* RIGHT â€” Product swap + Regimen result */}
           <div className="rounded-lg border border-border bg-card shadow-lg overflow-hidden flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-muted/30">
@@ -256,7 +256,7 @@ export default function ConciergeShowcase() {
                         Retinol Night Serum
                       </p>
                       <p className="font-body text-xs text-destructive">
-                        ⚠ Contraindicated — Pregnancy
+                        âš  Contraindicated â€” Pregnancy
                       </p>
                     </div>
                   </motion.div>
@@ -278,7 +278,7 @@ export default function ConciergeShowcase() {
                         Vichy LiftActiv Vitamin C
                       </p>
                       <p className="font-body text-xs text-green-700">
-                        ✓ Pregnancy-safe alternative
+                        âœ“ Pregnancy-safe alternative
                       </p>
                     </div>
                   </motion.div>

@@ -1,7 +1,7 @@
-import { describe, it, expect } from "vitest";
+﻿import { describe, it, expect } from "vitest";
 
 /**
- * Digital Tray Coverage Matrix — Contract Tests
+ * Digital Tray Coverage Matrix â€” Contract Tests
  * Validates that the 12-concern taxonomy and 3-step regimen structure
  * are correctly defined and internally consistent.
  */

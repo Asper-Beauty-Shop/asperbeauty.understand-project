@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 
 interface AsperWordmarkProps {
-  /** Override text color — defaults to burgundy */
+  /** Override text color â€” defaults to burgundy */
   className?: string;
   /** Size variant */
   size?: "sm" | "md" | "lg";
@@ -9,7 +9,7 @@ interface AsperWordmarkProps {
 
 /**
  * Unified "ASPER" wordmark with gold foil underline.
- * Playfair Display · Deep Maroon · 1px Shiny Gold accent line with Midas Touch hover.
+ * Playfair Display Â· Deep Maroon Â· 1px Shiny Gold accent line with Midas Touch hover.
  */
 export function AsperWordmark({ className, size = "md" }: AsperWordmarkProps) {
   const sizeClasses = {

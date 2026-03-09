@@ -1,12 +1,12 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "./AnimatedSection";
 import { CLINICAL_AUTHORITY_BRANDS, AESTHETIC_LUXURY_BRANDS } from "@/constants/premiumBrands";
 
 /**
  * Zone: Clinical Vogue Brand Footer
- * Monochrome, editorial-spaced brand names — no loud logos.
- * Opacity 60% → 100% on hover. All text remains charcoal or gold.
+ * Monochrome, editorial-spaced brand names â€” no loud logos.
+ * Opacity 60% â†’ 100% on hover. All text remains charcoal or gold.
  */
 
 const ALL_FOOTER_BRANDS = [
@@ -34,10 +34,10 @@ export const FeaturedBrands = () => {
         {/* Section Header */}
         <AnimatedSection className="text-center mb-16" animation="fade-up">
           <span className="font-body text-[10px] uppercase tracking-[0.3em] text-polished-gold mb-3 block">
-            {isArabic ? "شركاء العلامة" : "Our Brand Partners"}
+            {isArabic ? "Ø´Ø±ÙƒØ§Ø¡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø©" : "Our Brand Partners"}
           </span>
           <h2 className="font-heading text-2xl lg:text-3xl text-asper-ink font-bold mb-6">
-            {isArabic ? "علامات مختارة بعناية" : "Curated with Precision"}
+            {isArabic ? "Ø¹Ù„Ø§Ù…Ø§Øª Ù…Ø®ØªØ§Ø±Ø© Ø¨Ø¹Ù†Ø§ÙŠØ©" : "Curated with Precision"}
           </h2>
           <div className="flex items-center justify-center gap-3">
             <div className="w-16 h-px bg-gradient-to-r from-transparent to-polished-gold/50" />
@@ -46,7 +46,7 @@ export const FeaturedBrands = () => {
           </div>
         </AnimatedSection>
 
-        {/* Monochrome Brand Ticker — Extreme Spacing */}
+        {/* Monochrome Brand Ticker â€” Extreme Spacing */}
         <AnimatedSection animation="fade-up" delay={200}>
           <div className="flex flex-wrap items-center justify-center gap-x-16 lg:gap-x-24 gap-y-8">
             {ALL_FOOTER_BRANDS.map((brand) => (
@@ -58,7 +58,7 @@ export const FeaturedBrands = () => {
                 <span
                   className="font-heading text-lg lg:text-xl tracking-[0.08em] opacity-50 group-hover:opacity-100 transition-all duration-500 text-asper-ink group-hover:text-polished-gold"
                   style={{
-                    /* Monochrome filter effect via text color only — no logo images */
+                    /* Monochrome filter effect via text color only â€” no logo images */
                   }}
                 >
                   {brand.name}
@@ -74,7 +74,7 @@ export const FeaturedBrands = () => {
             to="/brands"
             className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] text-burgundy hover:text-polished-gold border-b border-burgundy/30 hover:border-polished-gold/60 pb-1 transition-all duration-500"
           >
-            {isArabic ? "عرض جميع العلامات" : "View All Brands"}
+            {isArabic ? "Ø¹Ø±Ø¶ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª" : "View All Brands"}
           </Link>
         </AnimatedSection>
       </div>

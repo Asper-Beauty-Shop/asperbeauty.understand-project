@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -123,7 +123,7 @@ export default function AdminEnrichment() {
         </div>
         <Button onClick={saveAll} disabled={!hasEdits || saveMutation.isPending} className="gap-2">
           <Save className="h-4 w-4" />
-          {saveMutation.isPending ? "Saving…" : `Save ${Object.keys(edits).length} changes`}
+          {saveMutation.isPending ? "Savingâ€¦" : `Save ${Object.keys(edits).length} changes`}
         </Button>
       </header>
 
@@ -225,7 +225,7 @@ export default function AdminEnrichment() {
                     <Input
                       value={(getValue(p, "pharmacist_note") as string) ?? ""}
                       onChange={(e) => handleField(p.id, "pharmacist_note", e.target.value || null)}
-                      placeholder="Why this product is curated…"
+                      placeholder="Why this product is curatedâ€¦"
                       className="h-8 text-xs"
                     />
                   </td>

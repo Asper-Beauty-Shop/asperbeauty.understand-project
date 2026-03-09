@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "@/components/AnimatedSection";
@@ -8,49 +8,49 @@ const PROTOCOLS = [
   {
     id: "acne",
     en: "The Acne Protocol",
-    ar: "بروتوكول حب الشباب",
-    ingredients: { en: "Salicylic Acid · Niacinamide · Zinc", ar: "حمض الساليسيليك · نياسيناميد · زنك" },
-    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80&auto=format&fit=crop",
+    ar: "Ø¨Ø±ÙˆØªÙˆÙƒÙˆÙ„ Ø­Ø¨ Ø§Ù„Ø´Ø¨Ø§Ø¨",
+    ingredients: { en: "Salicylic Acid Â· Niacinamide Â· Zinc", ar: "Ø­Ù…Ø¶ Ø§Ù„Ø³Ø§Ù„ÙŠØ³ÙŠÙ„ÙŠÙƒ Â· Ù†ÙŠØ§Ø³ÙŠÙ†Ø§Ù…ÙŠØ¯ Â· Ø²Ù†Ùƒ" },
+    image: "/assets/luxury-asset-1.png",
     href: "/concerns/acne",
   },
   {
     id: "repair",
     en: "Cellular Repair",
-    ar: "إصلاح خلوي",
-    ingredients: { en: "Retinol · Peptides · Ceramides", ar: "ريتينول · ببتيدات · سيراميدات" },
+    ar: "Ø¥ØµÙ„Ø§Ø­ Ø®Ù„ÙˆÙŠ",
+    ingredients: { en: "Retinol Â· Peptides Â· Ceramides", ar: "Ø±ÙŠØªÙŠÙ†ÙˆÙ„ Â· Ø¨Ø¨ØªÙŠØ¯Ø§Øª Â· Ø³ÙŠØ±Ø§Ù…ÙŠØ¯Ø§Øª" },
     image: "/editorial-showcase-1.jpg?w=600&q=80&auto=format&fit=crop",
     href: "/concerns/anti-aging",
   },
   {
     id: "barrier",
     en: "Barrier Defense",
-    ar: "حماية الحاجز",
-    ingredients: { en: "Ceramides · Squalane · Panthenol", ar: "سيراميدات · سكوالين · بانثينول" },
-    image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&q=80&auto=format&fit=crop",
+    ar: "Ø­Ù…Ø§ÙŠØ© Ø§Ù„Ø­Ø§Ø¬Ø²",
+    ingredients: { en: "Ceramides Â· Squalane Â· Panthenol", ar: "Ø³ÙŠØ±Ø§Ù…ÙŠØ¯Ø§Øª Â· Ø³ÙƒÙˆØ§Ù„ÙŠÙ† Â· Ø¨Ø§Ù†Ø«ÙŠÙ†ÙˆÙ„" },
+    image: "/assets/luxury-asset-2.png",
     href: "/concerns/sensitivity",
   },
   {
     id: "radiance",
     en: "Radiance Revival",
-    ar: "إحياء الإشراق",
-    ingredients: { en: "Vitamin C · AHA · Arbutin", ar: "فيتامين سي · أحماض الفا · أربوتين" },
-    image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=600&q=80&auto=format&fit=crop",
+    ar: "Ø¥Ø­ÙŠØ§Ø¡ Ø§Ù„Ø¥Ø´Ø±Ø§Ù‚",
+    ingredients: { en: "Vitamin C Â· AHA Â· Arbutin", ar: "ÙÙŠØªØ§Ù…ÙŠÙ† Ø³ÙŠ Â· Ø£Ø­Ù…Ø§Ø¶ Ø§Ù„ÙØ§ Â· Ø£Ø±Ø¨ÙˆØªÙŠÙ†" },
+    image: "/assets/luxury-asset-3.png",
     href: "/concerns/pigmentation",
   },
   {
     id: "sun",
     en: "Sun Shield",
-    ar: "الحماية من الشمس",
-    ingredients: { en: "SPF 50+ · Tinosorb · Vitamin E", ar: "SPF 50+ · تينوسورب · فيتامين إي" },
-    image: "https://images.unsplash.com/photo-1629532587596-f94dd6d9de4c?w=600&q=80&auto=format&fit=crop",
+    ar: "Ø§Ù„Ø­Ù…Ø§ÙŠØ© Ù…Ù† Ø§Ù„Ø´Ù…Ø³",
+    ingredients: { en: "SPF 50+ Â· Tinosorb Â· Vitamin E", ar: "SPF 50+ Â· ØªÙŠÙ†ÙˆØ³ÙˆØ±Ø¨ Â· ÙÙŠØªØ§Ù…ÙŠÙ† Ø¥ÙŠ" },
+    image: "/assets/luxury-asset-4.png",
     href: "/collections/suncare",
   },
   {
     id: "hydration",
     en: "Deep Hydration",
-    ar: "ترطيب عميق",
-    ingredients: { en: "Hyaluronic Acid · B5 · Aloe", ar: "هيالورونيك أسيد · B5 · ألوفيرا" },
-    image: "https://images.unsplash.com/photo-1615397323758-1f196ebbaeb5?w=600&q=80&auto=format&fit=crop",
+    ar: "ØªØ±Ø·ÙŠØ¨ Ø¹Ù…ÙŠÙ‚",
+    ingredients: { en: "Hyaluronic Acid Â· B5 Â· Aloe", ar: "Ù‡ÙŠØ§Ù„ÙˆØ±ÙˆÙ†ÙŠÙƒ Ø£Ø³ÙŠØ¯ Â· B5 Â· Ø£Ù„ÙˆÙÙŠØ±Ø§" },
+    image: "/assets/luxury-asset-5.png",
     href: "/concerns/dryness",
   },
 ];
@@ -67,10 +67,10 @@ export const ShopByProtocol = () => {
       <div className="luxury-container">
         <AnimatedSection className="text-center mb-14" animation="fade-up">
           <span className="font-body text-xs uppercase tracking-[0.3em] text-polished-gold mb-3 block">
-            {isArabic ? "تسوقي حسب البروتوكول" : "Shop by Protocol"}
+            {isArabic ? "ØªØ³ÙˆÙ‚ÙŠ Ø­Ø³Ø¨ Ø§Ù„Ø¨Ø±ÙˆØªÙˆÙƒÙˆÙ„" : "Shop by Protocol"}
           </span>
           <h2 className="font-heading text-3xl lg:text-4xl text-asper-ink font-bold">
-            {isArabic ? "بروتوكولات عنايتك" : "Your Skincare Protocols"}
+            {isArabic ? "Ø¨Ø±ÙˆØªÙˆÙƒÙˆÙ„Ø§Øª Ø¹Ù†Ø§ÙŠØªÙƒ" : "Your Skincare Protocols"}
           </h2>
           <div className="flex items-center justify-center gap-3 mt-5">
             <div className="w-12 h-px bg-gradient-to-r from-transparent to-polished-gold/60" />

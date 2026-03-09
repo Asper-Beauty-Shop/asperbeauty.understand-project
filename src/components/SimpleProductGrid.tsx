@@ -1,4 +1,4 @@
-import { LuxuryProductCard } from "./LuxuryProductCard";
+﻿import { LuxuryProductCard } from "./LuxuryProductCard";
 
 interface Product {
   id: string;

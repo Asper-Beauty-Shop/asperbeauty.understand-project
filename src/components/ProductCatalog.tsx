@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import {
   Award,
   Eye,
@@ -121,7 +121,7 @@ const ProductCard = ({
     });
 
     toast.success(
-      language === "ar" ? "تمت الإضافة إلى السلة" : "Added to cart",
+      language === "ar" ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©" : "Added to cart",
       {
         description: product.title,
         position: "top-center",
@@ -239,7 +239,7 @@ const ProductCard = ({
             className="w-full bg-burgundy hover:bg-burgundy-light text-white text-xs uppercase tracking-wide py-2.5 shadow-sm hover:shadow-md transition-all duration-200"
           >
             <ShoppingBag className="w-4 h-4 me-2" />
-            {language === "ar" ? "أضف للسلة" : "Add to Cart"}
+            {language === "ar" ? "Ø£Ø¶Ù Ù„Ù„Ø³Ù„Ø©" : "Add to Cart"}
           </Button>
         </div>
       </div>
@@ -252,23 +252,23 @@ const CATEGORY_FILTERS = [
   {
     value: "all",
     labelEn: "All Products",
-    labelAr: "جميع المنتجات",
+    labelAr: "Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
     icon: null,
   },
   {
     value: "Best Seller",
     labelEn: "Best Sellers",
-    labelAr: "الأكثر مبيعاً",
+    labelAr: "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹",
     icon: Star,
   },
   {
     value: "New Arrival",
     labelEn: "New Arrivals",
-    labelAr: "وصل حديثاً",
+    labelAr: "ÙˆØµÙ„ Ø­Ø¯ÙŠØ«Ø§Ù‹",
     icon: Sparkles,
   },
-  { value: "Trending", labelEn: "Trending", labelAr: "رائج", icon: TrendingUp },
-  { value: "Featured", labelEn: "Featured", labelAr: "مميز", icon: Award },
+  { value: "Trending", labelEn: "Trending", labelAr: "Ø±Ø§Ø¦Ø¬", icon: TrendingUp },
+  { value: "Featured", labelEn: "Featured", labelAr: "Ù…Ù…ÙŠØ²", icon: Award },
 ];
 
 // ProductCatalog Section Component
@@ -326,11 +326,11 @@ export const ProductCatalog = () => {
         {/* Section Header - Clean, minimal like BeautyBox */}
         <div className="text-center mb-10">
           <p className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-2 font-medium">
-            {language === "ar" ? "مجموعتنا" : "Our Collection"}
+            {language === "ar" ? "Ù…Ø¬Ù…ÙˆØ¹ØªÙ†Ø§" : "Our Collection"}
           </p>
           <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
             {language === "ar"
-              ? "منتجات الجمال الفاخرة"
+              ? "Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø¬Ù…Ø§Ù„ Ø§Ù„ÙØ§Ø®Ø±Ø©"
               : "Premium Beauty Products"}
           </h2>
           <div className="w-12 h-0.5 bg-burgundy mx-auto" />
@@ -375,7 +375,7 @@ export const ProductCatalog = () => {
           <div className="text-center py-20">
             <p className="text-gray-500">
               {language === "ar"
-                ? "حدث خطأ في تحميل المنتجات"
+                ? "Ø­Ø¯Ø« Ø®Ø·Ø£ ÙÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª"
                 : "Failed to load products"}
             </p>
           </div>
@@ -387,8 +387,8 @@ export const ProductCatalog = () => {
             <p className="text-gray-500">
               {language === "ar"
                 ? activeFilter === "all"
-                  ? "لا توجد منتجات متاحة"
-                  : "لا توجد منتجات في هذه الفئة"
+                  ? "Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª Ù…ØªØ§Ø­Ø©"
+                  : "Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª ÙÙŠ Ù‡Ø°Ù‡ Ø§Ù„ÙØ¦Ø©"
                 : activeFilter === "all"
                 ? "No products available"
                 : "No products in this category"}
@@ -419,7 +419,7 @@ export const ProductCatalog = () => {
             variant="outline"
             className="px-8 py-3 text-sm font-medium border-2 border-burgundy text-burgundy hover:bg-burgundy hover:text-white transition-colors duration-200"
           >
-            {language === "ar" ? "عرض جميع المنتجات" : "View All Products"}
+            {language === "ar" ? "Ø¹Ø±Ø¶ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª" : "View All Products"}
           </Button>
         </div>
       </div>

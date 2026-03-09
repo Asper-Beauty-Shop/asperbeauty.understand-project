@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -6,51 +6,51 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const collections = [
   {
     name: "Hair Care",
-    nameAr: "العناية بالشعر",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø´Ø¹Ø±",
     slug: "hair-care",
     description: "Luxurious treatments for every hair type",
-    descriptionAr: "علاجات فاخرة لجميع أنواع الشعر",
-    image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600",
+    descriptionAr: "Ø¹Ù„Ø§Ø¬Ø§Øª ÙØ§Ø®Ø±Ø© Ù„Ø¬Ù…ÙŠØ¹ Ø£Ù†ÙˆØ§Ø¹ Ø§Ù„Ø´Ø¹Ø±",
+    image: "/assets/luxury-asset-23.png",
   },
   {
     name: "Body Care",
-    nameAr: "العناية بالجسم",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¬Ø³Ù…",
     slug: "body-care",
     description: "Nourish and pamper your skin",
-    descriptionAr: "غذي ودللي بشرتك",
-    image: "https://images.unsplash.com/photo-1570194065650-d99fb4b38b15?w=600",
+    descriptionAr: "ØºØ°ÙŠ ÙˆØ¯Ù„Ù„ÙŠ Ø¨Ø´Ø±ØªÙƒ",
+    image: "/assets/luxury-asset-24.png",
   },
   {
     name: "Make Up",
-    nameAr: "المكياج",
+    nameAr: "Ø§Ù„Ù…ÙƒÙŠØ§Ø¬",
     slug: "make-up",
     description: "Enhance your natural beauty",
-    descriptionAr: "عززي جمالك الطبيعي",
-    image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600",
+    descriptionAr: "Ø¹Ø²Ø²ÙŠ Ø¬Ù…Ø§Ù„Ùƒ Ø§Ù„Ø·Ø¨ÙŠØ¹ÙŠ",
+    image: "/assets/luxury-asset-25.png",
   },
   {
     name: "Skincare",
-    nameAr: "العناية بالبشرة",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©",
     slug: "skincare",
     description: "Premium skincare solutions",
-    descriptionAr: "حلول متميزة للعناية بالبشرة",
-    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600",
+    descriptionAr: "Ø­Ù„ÙˆÙ„ Ù…ØªÙ…ÙŠØ²Ø© Ù„Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©",
+    image: "/assets/luxury-asset-26.png",
   },
   {
     name: "Fragrances",
-    nameAr: "العطور",
+    nameAr: "Ø§Ù„Ø¹Ø·ÙˆØ±",
     slug: "fragrances",
     description: "Captivating scents for every occasion",
-    descriptionAr: "روائح آسرة لكل مناسبة",
-    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600",
+    descriptionAr: "Ø±ÙˆØ§Ø¦Ø­ Ø¢Ø³Ø±Ø© Ù„ÙƒÙ„ Ù…Ù†Ø§Ø³Ø¨Ø©",
+    image: "/assets/luxury-asset-27.png",
   },
   {
     name: "Tools & Devices",
-    nameAr: "الأدوات والأجهزة",
+    nameAr: "Ø§Ù„Ø£Ø¯ÙˆØ§Øª ÙˆØ§Ù„Ø£Ø¬Ù‡Ø²Ø©",
     slug: "tools-devices",
     description: "Professional-grade beauty tools",
-    descriptionAr: "أدوات تجميل بجودة احترافية",
-    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600",
+    descriptionAr: "Ø£Ø¯ÙˆØ§Øª ØªØ¬Ù…ÙŠÙ„ Ø¨Ø¬ÙˆØ¯Ø© Ø§Ø­ØªØ±Ø§ÙÙŠØ©",
+    image: "/assets/luxury-asset-28.png",
   },
 ];
 
@@ -70,7 +70,7 @@ export default function Collections() {
               {isAr
                 ? (
                   <>
-                    مجموعاتنا <span className="text-gold">الفاخرة</span>
+                    Ù…Ø¬Ù…ÙˆØ¹Ø§ØªÙ†Ø§ <span className="text-gold">Ø§Ù„ÙØ§Ø®Ø±Ø©</span>
                   </>
                 )
                 : (
@@ -82,7 +82,7 @@ export default function Collections() {
             <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
             <p className="font-body text-cream/60 max-w-2xl mx-auto">
               {isAr
-                ? "اكتشفي مجموعتنا المختارة من منتجات التجميل الفاخرة، المختارة بعناية للعميل المميز."
+                ? "Ø§ÙƒØªØ´ÙÙŠ Ù…Ø¬Ù…ÙˆØ¹ØªÙ†Ø§ Ø§Ù„Ù…Ø®ØªØ§Ø±Ø© Ù…Ù† Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªØ¬Ù…ÙŠÙ„ Ø§Ù„ÙØ§Ø®Ø±Ø©ØŒ Ø§Ù„Ù…Ø®ØªØ§Ø±Ø© Ø¨Ø¹Ù†Ø§ÙŠØ© Ù„Ù„Ø¹Ù…ÙŠÙ„ Ø§Ù„Ù…Ù…ÙŠØ²."
                 : "Discover our curated selection of premium beauty products, carefully chosen for the discerning customer."}
             </p>
           </div>
@@ -111,7 +111,7 @@ export default function Collections() {
                   </p>
                   <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <span className="inline-block px-6 py-2 border border-gold text-gold font-display text-xs tracking-wider">
-                      {isAr ? "استكشف ←" : "EXPLORE →"}
+                      {isAr ? "Ø§Ø³ØªÙƒØ´Ù â†" : "EXPLORE â†’"}
                     </span>
                   </div>
                 </div>

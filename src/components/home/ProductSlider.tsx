@@ -1,4 +1,4 @@
-import { useRef } from "react";
+﻿import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -82,7 +82,7 @@ export const ProductSlider = ({
           </div>
         </AnimatedSection>
 
-        {/* Product Carousel — Floating Cards */}
+        {/* Product Carousel â€” Floating Cards */}
         <AnimatedSection animation="fade-up" delay={150}>
           <div
             ref={scrollRef}
@@ -100,12 +100,12 @@ export const ProductSlider = ({
                   to={`/product/${handle}`}
                   className="group flex-shrink-0 w-64 lg:w-72"
                 >
-                  {/* Floating Card — No borders, no background */}
+                  {/* Floating Card â€” No borders, no background */}
                   <div className="relative">
                     {/* Clinical Shimmer Beam */}
                     <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-polished-white/50 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
 
-                    {/* Image — floats directly on background */}
+                    {/* Image â€” floats directly on background */}
                     <div className="relative aspect-[5/6] overflow-hidden mb-5">
                       <img
                         src={imgSrc}
@@ -124,14 +124,14 @@ export const ProductSlider = ({
                         </span>
                       )}
 
-                      {/* Brand — Gold micro label */}
+                      {/* Brand â€” Gold micro label */}
                       {product.brand && (
                         <p className="text-[10px] uppercase tracking-[0.2em] text-polished-gold font-body font-semibold">
                           {product.brand}
                         </p>
                       )}
 
-                      {/* Product Name — Playfair */}
+                      {/* Product Name â€” Playfair */}
                       <h3 className="font-heading text-sm text-asper-ink line-clamp-2 leading-snug font-semibold">
                         {product.title}
                       </h3>
@@ -143,7 +143,7 @@ export const ProductSlider = ({
                           "group-hover:text-polished-gold transition-colors duration-300"
                         )}
                       >
-                        {isArabic ? "تسوق الآن" : "Add to Regimen"}
+                        {isArabic ? "ØªØ³ÙˆÙ‚ Ø§Ù„Ø¢Ù†" : "Add to Regimen"}
                         <ChevronRight className="w-3 h-3" />
                       </span>
                     </div>

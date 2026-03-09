@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AlertTriangle, ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -27,21 +27,21 @@ const statusConfig: Record<SafetyStatus, {
   safe: {
     icon: ShieldCheck,
     headerEn: "Concierge Tip",
-    headerAr: "نصيحة الكونسيرج",
+    headerAr: "Ù†ØµÙŠØ­Ø© Ø§Ù„ÙƒÙˆÙ†Ø³ÙŠØ±Ø¬",
   },
   caution: {
     icon: AlertTriangle,
     headerEn: "Clinical Advisory",
-    headerAr: "تنبيه سريري",
+    headerAr: "ØªÙ†Ø¨ÙŠÙ‡ Ø³Ø±ÙŠØ±ÙŠ",
   },
   conflict: {
     icon: AlertCircle,
     headerEn: "Ingredient Conflict",
-    headerAr: "تعارض المكونات",
+    headerAr: "ØªØ¹Ø§Ø±Ø¶ Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª",
   },
 };
 
-/* Inline SVG persona icons at 16×16 in polished gold */
+/* Inline SVG persona icons at 16Ã—16 in polished gold */
 const CaduceusIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="shrink-0">
     <path d="M12 2v20M8 6c0-1.5 1.8-3 4-3s4 1.5 4 3-1.8 3-4 3-4-1.5-4-3zM8 10c0-1.5 1.8-3 4-3s4 1.5 4 3-1.8 3-4 3-4-1.5-4-3z" stroke="hsl(var(--polished-gold))" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -66,8 +66,8 @@ export const ConciergeTipCard = ({
   const isArabic = language === "ar";
 
   const signatureText = persona === "dr_sami"
-    ? (isArabic ? "— د. سامي، دعم أسبر السريري" : "— Dr. Sami, Asper Clinical Support")
-    : (isArabic ? "— مس. زين، خبيرة الجمال" : "— Ms. Zain, Asper Beauty Concierge");
+    ? (isArabic ? "â€” Ø¯. Ø³Ø§Ù…ÙŠØŒ Ø¯Ø¹Ù… Ø£Ø³Ø¨Ø± Ø§Ù„Ø³Ø±ÙŠØ±ÙŠ" : "â€” Dr. Sami, Asper Clinical Support")
+    : (isArabic ? "â€” Ù…Ø³. Ø²ÙŠÙ†ØŒ Ø®Ø¨ÙŠØ±Ø© Ø§Ù„Ø¬Ù…Ø§Ù„" : "â€” Ms. Zain, Asper Beauty Concierge");
 
   const PersonaIcon = persona === "dr_sami" ? CaduceusIcon : LotusIcon;
 
@@ -94,7 +94,7 @@ export const ConciergeTipCard = ({
   const effectiveData: ConciergeTipData = data ?? {
     status: "safe",
     dr_sami_insight: isArabic
-      ? "ضعي هذا السيروم على بشرة رطبة مباشرة بعد التنظيف لتعزيز امتصاص حمض الهيالورونيك."
+      ? "Ø¶Ø¹ÙŠ Ù‡Ø°Ø§ Ø§Ù„Ø³ÙŠØ±ÙˆÙ… Ø¹Ù„Ù‰ Ø¨Ø´Ø±Ø© Ø±Ø·Ø¨Ø© Ù…Ø¨Ø§Ø´Ø±Ø© Ø¨Ø¹Ø¯ Ø§Ù„ØªÙ†Ø¸ÙŠÙ Ù„ØªØ¹Ø²ÙŠØ² Ø§Ù…ØªØµØ§Øµ Ø­Ù…Ø¶ Ø§Ù„Ù‡ÙŠØ§Ù„ÙˆØ±ÙˆÙ†ÙŠÙƒ."
       : "Apply this serum to damp skin immediately after cleansing to maximize hyaluronic acid absorption.",
     recommended_alternative_ingredient: null,
     ui_accent_color: "#C5A028",
@@ -109,7 +109,7 @@ export const ConciergeTipCard = ({
     <div
       className={cn(
         "relative bg-soft-ivory shadow-md p-6 lg:p-8 rounded-sm",
-        // Midas Touch: transparent border → gold on hover with lift
+        // Midas Touch: transparent border â†’ gold on hover with lift
         isSafe
           ? "border border-transparent hover:border-shiny-gold hover:-translate-y-1"
           : "border-2 border-burgundy",
@@ -146,13 +146,13 @@ export const ConciergeTipCard = ({
         <div className="mt-4 flex items-center gap-2 p-3 bg-polished-gold/5 border border-polished-gold/20 rounded-sm">
           <ShieldCheck className="h-4 w-4 text-polished-gold shrink-0" />
           <p className="font-body text-xs text-dark-charcoal">
-            {isArabic ? "البديل الآمن: " : "Safe alternative: "}
+            {isArabic ? "Ø§Ù„Ø¨Ø¯ÙŠÙ„ Ø§Ù„Ø¢Ù…Ù†: " : "Safe alternative: "}
             <span className="font-semibold text-polished-gold">
               {effectiveData.recommended_alternative_ingredient}
             </span>
-            {" — "}
+            {" â€” "}
             <Link to="/skin-concerns" className="underline text-burgundy hover:text-burgundy/80 transition-colors">
-              {isArabic ? "استكشفي الخيارات" : "Explore options"}
+              {isArabic ? "Ø§Ø³ØªÙƒØ´ÙÙŠ Ø§Ù„Ø®ÙŠØ§Ø±Ø§Øª" : "Explore options"}
             </Link>
           </p>
         </div>
@@ -173,7 +173,7 @@ export const ConciergeTipCard = ({
       {!isSafe && (
         <p className="mt-2 font-body text-[10px] text-muted-foreground italic">
           {isArabic
-            ? "أقدّم إرشادات عناية احترافية، وليس تشخيصًا طبيًا."
+            ? "Ø£Ù‚Ø¯Ù‘Ù… Ø¥Ø±Ø´Ø§Ø¯Ø§Øª Ø¹Ù†Ø§ÙŠØ© Ø§Ø­ØªØ±Ø§ÙÙŠØ©ØŒ ÙˆÙ„ÙŠØ³ ØªØ´Ø®ÙŠØµÙ‹Ø§ Ø·Ø¨ÙŠÙ‹Ø§."
             : "I provide professional skincare guidance, not medical diagnosis."}
         </p>
       )}

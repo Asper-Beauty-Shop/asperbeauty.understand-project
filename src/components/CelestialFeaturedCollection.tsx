@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+﻿import { useEffect, useState, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -34,24 +34,24 @@ interface TrayResponse {
 }
 
 const CONCERNS: { tag: SkinConcern; en: string; ar: string }[] = [
-  { tag: "Concern_Hydration", en: "Hydration", ar: "ترطيب" },
-  { tag: "Concern_Acne", en: "Acne", ar: "حب الشباب" },
-  { tag: "Concern_AntiAging", en: "Anti-Aging", ar: "مكافحة الشيخوخة" },
-  { tag: "Concern_Sensitivity", en: "Sensitivity", ar: "حساسية" },
-  { tag: "Concern_Pigmentation", en: "Pigmentation", ar: "تصبغات" },
-  { tag: "Concern_Brightening", en: "Brightening", ar: "إشراق" },
-  { tag: "Concern_Dryness", en: "Dryness", ar: "جفاف" },
-  { tag: "Concern_SunProtection", en: "Sun Protection", ar: "حماية من الشمس" },
-  { tag: "Concern_DarkCircles", en: "Dark Circles", ar: "هالات سوداء" },
-  { tag: "Concern_Redness", en: "Redness", ar: "احمرار" },
-  { tag: "Concern_Oiliness", en: "Oiliness", ar: "بشرة دهنية" },
-  { tag: "Concern_Aging", en: "Aging", ar: "شيخوخة" },
+  { tag: "Concern_Hydration", en: "Hydration", ar: "ØªØ±Ø·ÙŠØ¨" },
+  { tag: "Concern_Acne", en: "Acne", ar: "Ø­Ø¨ Ø§Ù„Ø´Ø¨Ø§Ø¨" },
+  { tag: "Concern_AntiAging", en: "Anti-Aging", ar: "Ù…ÙƒØ§ÙØ­Ø© Ø§Ù„Ø´ÙŠØ®ÙˆØ®Ø©" },
+  { tag: "Concern_Sensitivity", en: "Sensitivity", ar: "Ø­Ø³Ø§Ø³ÙŠØ©" },
+  { tag: "Concern_Pigmentation", en: "Pigmentation", ar: "ØªØµØ¨ØºØ§Øª" },
+  { tag: "Concern_Brightening", en: "Brightening", ar: "Ø¥Ø´Ø±Ø§Ù‚" },
+  { tag: "Concern_Dryness", en: "Dryness", ar: "Ø¬ÙØ§Ù" },
+  { tag: "Concern_SunProtection", en: "Sun Protection", ar: "Ø­Ù…Ø§ÙŠØ© Ù…Ù† Ø§Ù„Ø´Ù…Ø³" },
+  { tag: "Concern_DarkCircles", en: "Dark Circles", ar: "Ù‡Ø§Ù„Ø§Øª Ø³ÙˆØ¯Ø§Ø¡" },
+  { tag: "Concern_Redness", en: "Redness", ar: "Ø§Ø­Ù…Ø±Ø§Ø±" },
+  { tag: "Concern_Oiliness", en: "Oiliness", ar: "Ø¨Ø´Ø±Ø© Ø¯Ù‡Ù†ÙŠØ©" },
+  { tag: "Concern_Aging", en: "Aging", ar: "Ø´ÙŠØ®ÙˆØ®Ø©" },
 ];
 
 const STEP_META: Record<string, { en: string; ar: string; key: string }> = {
-  step_1: { en: "Step 1: Cleanser", ar: "الخطوة ١: المنظف", key: "step_1_cleanser" },
-  step_2: { en: "Step 2: Treatment", ar: "الخطوة ٢: المعالجة", key: "step_2_treatment" },
-  step_3: { en: "Step 3: Moisturizer / SPF", ar: "الخطوة ٣: المرطب / الحماية", key: "step_3_moisturizer" },
+  step_1: { en: "Step 1: Cleanser", ar: "Ø§Ù„Ø®Ø·ÙˆØ© Ù¡: Ø§Ù„Ù…Ù†Ø¸Ù", key: "step_1_cleanser" },
+  step_2: { en: "Step 2: Treatment", ar: "Ø§Ù„Ø®Ø·ÙˆØ© Ù¢: Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø©", key: "step_2_treatment" },
+  step_3: { en: "Step 3: Moisturizer / SPF", ar: "Ø§Ù„Ø®Ø·ÙˆØ© Ù£: Ø§Ù„Ù…Ø±Ø·Ø¨ / Ø§Ù„Ø­Ù…Ø§ÙŠØ©", key: "step_3_moisturizer" },
 };
 
 const CelestialFeaturedCollection = () => {
@@ -106,12 +106,12 @@ const CelestialFeaturedCollection = () => {
       }))
     );
     toast.success(
-      language === "ar" ? "تمت إضافة الروتين إلى السلة" : "Routine added to cart",
+      language === "ar" ? "ØªÙ…Øª Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ø±ÙˆØªÙŠÙ† Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©" : "Routine added to cart",
       {
         description:
           language === "ar"
-            ? `${trayProducts.length} منتج — افتح السلة للاطلاع`
-            : `${trayProducts.length} items — open cart to review`,
+            ? `${trayProducts.length} Ù…Ù†ØªØ¬ â€” Ø§ÙØªØ­ Ø§Ù„Ø³Ù„Ø© Ù„Ù„Ø§Ø·Ù„Ø§Ø¹`
+            : `${trayProducts.length} items â€” open cart to review`,
         position: "top-center",
       }
     );
@@ -127,10 +127,10 @@ const CelestialFeaturedCollection = () => {
         {/* Header */}
         <div className={`text-center mb-10 ${isRTL ? "rtl" : ""}`}>
           <p className="text-muted-foreground uppercase tracking-[0.3em] text-sm mb-4 font-body">
-            {isRTL ? "روتينك السريري في ٣ خطوات" : "Your Clinical Routine in 3 Steps"}
+            {isRTL ? "Ø±ÙˆØªÙŠÙ†Ùƒ Ø§Ù„Ø³Ø±ÙŠØ±ÙŠ ÙÙŠ Ù£ Ø®Ø·ÙˆØ§Øª" : "Your Clinical Routine in 3 Steps"}
           </p>
           <h2 className="font-display text-4xl md:text-5xl text-foreground">
-            {isRTL ? "الصينية الرقمية" : "The Digital Tray"}
+            {isRTL ? "Ø§Ù„ØµÙŠÙ†ÙŠØ© Ø§Ù„Ø±Ù‚Ù…ÙŠØ©" : "The Digital Tray"}
           </h2>
           <div className="mt-6 mx-auto w-24 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
         </div>
@@ -241,14 +241,14 @@ const CelestialFeaturedCollection = () => {
             >
               <ShoppingBag className="h-5 w-5" />
               {cartLoading
-                ? isRTL ? "جاري الإضافة..." : "Adding..."
+                ? isRTL ? "Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø¥Ø¶Ø§ÙØ©..." : "Adding..."
                 : isRTL
-                  ? `إضافة الروتين الكامل (${trayProducts.reduce((s, p) => s + (p.price ?? 0), 0).toFixed(2)} JOD)`
+                  ? `Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ø±ÙˆØªÙŠÙ† Ø§Ù„ÙƒØ§Ù…Ù„ (${trayProducts.reduce((s, p) => s + (p.price ?? 0), 0).toFixed(2)} JOD)`
                   : `Add Full Routine (${trayProducts.reduce((s, p) => s + (p.price ?? 0), 0).toFixed(2)} JOD)`}
             </button>
             <p className="text-[11px] text-muted-foreground mt-3 italic font-body">
               *{isRTL
-                ? "تركيبة سريرية من صيدلي آسبر الرقمي"
+                ? "ØªØ±ÙƒÙŠØ¨Ø© Ø³Ø±ÙŠØ±ÙŠØ© Ù…Ù† ØµÙŠØ¯Ù„ÙŠ Ø¢Ø³Ø¨Ø± Ø§Ù„Ø±Ù‚Ù…ÙŠ"
                 : "Clinical formulation by Asper Digital Pharmacist"}
             </p>
           </div>

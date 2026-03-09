@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Baby, Droplets, Flower2, Sparkle } from "lucide-react";
 import { AnimatedSection } from "./AnimatedSection";
@@ -7,28 +7,28 @@ const categories = [
   {
     id: "clinical-skincare",
     name: "Clinical Skincare",
-    nameAr: "العناية السريرية",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ø³Ø±ÙŠØ±ÙŠØ©",
     icon: Droplets,
     href: "/collections/skin-care",
   },
   {
     id: "niche-fragrance",
     name: "Niche Fragrance",
-    nameAr: "العطور الفاخرة",
+    nameAr: "Ø§Ù„Ø¹Ø·ÙˆØ± Ø§Ù„ÙØ§Ø®Ø±Ø©",
     icon: Flower2,
     href: "/collections/fragrances",
   },
   {
     id: "dermo-hair",
     name: "Dermo-Hair",
-    nameAr: "العناية بالشعر",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø´Ø¹Ø±",
     icon: Sparkle,
     href: "/collections/hair-care",
   },
   {
     id: "mother-child",
     name: "Mother & Child",
-    nameAr: "الأم والطفل",
+    nameAr: "Ø§Ù„Ø£Ù… ÙˆØ§Ù„Ø·ÙÙ„",
     icon: Baby,
     href: "/collections/body-care",
   },
@@ -44,7 +44,7 @@ export const CuratedCategories = () => {
         {/* Section Header */}
         <AnimatedSection className="text-center mb-12">
           <h2 className="font-display text-3xl lg:text-4xl text-foreground mb-2">
-            {isArabic ? "المجموعات الحصرية" : "Concierge Collections"}
+            {isArabic ? "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø§Øª Ø§Ù„Ø­ØµØ±ÙŠØ©" : "Concierge Collections"}
           </h2>
           <div className="w-16 h-px bg-gold mx-auto mt-4" />
         </AnimatedSection>

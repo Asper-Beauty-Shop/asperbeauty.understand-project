@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -63,37 +63,37 @@ const statusConfig: Record<
 > = {
   pending: {
     label: "Pending",
-    labelAr: "قيد الانتظار",
+    labelAr: "Ù‚ÙŠØ¯ Ø§Ù„Ø§Ù†ØªØ¸Ø§Ø±",
     color: "bg-yellow-500",
     icon: <Clock className="h-4 w-4" />,
   },
   confirmed: {
     label: "Confirmed",
-    labelAr: "مؤكد",
+    labelAr: "Ù…Ø¤ÙƒØ¯",
     color: "bg-blue-500",
     icon: <CheckCircle2 className="h-4 w-4" />,
   },
   processing: {
     label: "Processing",
-    labelAr: "قيد التجهيز",
+    labelAr: "Ù‚ÙŠØ¯ Ø§Ù„ØªØ¬Ù‡ÙŠØ²",
     color: "bg-purple-500",
     icon: <Package className="h-4 w-4" />,
   },
   out_for_delivery: {
     label: "Out for Delivery",
-    labelAr: "في الطريق",
+    labelAr: "ÙÙŠ Ø§Ù„Ø·Ø±ÙŠÙ‚",
     color: "bg-orange-500",
     icon: <Truck className="h-4 w-4" />,
   },
   delivered: {
     label: "Delivered",
-    labelAr: "تم التوصيل",
+    labelAr: "ØªÙ… Ø§Ù„ØªÙˆØµÙŠÙ„",
     color: "bg-green-500",
     icon: <CheckCircle2 className="h-4 w-4" />,
   },
   cancelled: {
     label: "Cancelled",
-    labelAr: "ملغي",
+    labelAr: "Ù…Ù„ØºÙŠ",
     color: "bg-red-500",
     icon: <Clock className="h-4 w-4" />,
   },
@@ -286,7 +286,7 @@ export default function DriverDashboard() {
     // Log phone access for audit
     logPhoneAccess(order.id, order.order_number, "initiate_whatsapp");
     const message = encodeURIComponent(
-      `مرحباً، أنا سائق التوصيل من Asper Beauty. طلبك رقم ${order.order_number} في الطريق إليك.`,
+      `Ù…Ø±Ø­Ø¨Ø§Ù‹ØŒ Ø£Ù†Ø§ Ø³Ø§Ø¦Ù‚ Ø§Ù„ØªÙˆØµÙŠÙ„ Ù…Ù† Asper Beauty. Ø·Ù„Ø¨Ùƒ Ø±Ù‚Ù… ${order.order_number} ÙÙŠ Ø§Ù„Ø·Ø±ÙŠÙ‚ Ø¥Ù„ÙŠÙƒ.`,
     );
     const formattedPhone = phone.replace(/\D/g, "");
     window.open(`https://wa.me/${formattedPhone}?text=${message}`, "_blank");
@@ -580,7 +580,7 @@ export default function DriverDashboard() {
                           key={idx}
                           className="flex justify-between text-sm py-1 border-b last:border-0"
                         >
-                          <span>{item.title} × {item.quantity}</span>
+                          <span>{item.title} Ã— {item.quantity}</span>
                           <span className="font-medium">
                             {(item.price * item.quantity).toFixed(2)} JOD
                           </span>

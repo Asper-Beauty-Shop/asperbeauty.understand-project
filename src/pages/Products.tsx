@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+﻿import { useState, useMemo } from "react";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { useProductEnrichmentBulk } from "@/hooks/useProductEnrichment";
 import { CategoryTabs } from "@/components/CategoryTabs";

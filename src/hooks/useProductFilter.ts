@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+﻿import { useCallback, useMemo } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {
   concernToShopifyTag,
@@ -7,15 +7,15 @@ import {
 } from "@/lib/concernMapping";
 import type { ShopifyProduct } from "@/lib/shopify";
 
-/** Brand slug (URL) → Shopify vendor name (e.g. vichy → Vichy) */
+/** Brand slug (URL) â†’ Shopify vendor name (e.g. vichy â†’ Vichy) */
 const BRAND_TO_VENDOR: Record<string, string> = {
   vichy: "Vichy",
   laroche: "La Roche-Posay",
   larocheposay: "La Roche-Posay",
   cerave: "CeraVe",
   maybelline: "Maybelline",
-  loreal: "L'Oréal Paris",
-  loreál: "L'Oréal Paris",
+  loreal: "L'OrÃ©al Paris",
+  loreÃ¡l: "L'OrÃ©al Paris",
   garnier: "Garnier",
 };
 
@@ -44,7 +44,7 @@ export interface UseProductFilterResult {
 }
 
 /**
- * useProductFilter — 3-Click Solution hook.
+ * useProductFilter â€” 3-Click Solution hook.
  * Reads selected Concern or Brand from the URL and provides:
  * - shopifyQuery for API (fetchProducts(first, shopifyQuery) or fetchProductsPaginated(first, after, shopifyQuery))
  * - Client-side filter by concern (keyword match) when tag-based API query isn't used

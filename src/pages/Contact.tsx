@@ -1,4 +1,4 @@
-import { Header } from "@/components/Header";
+﻿import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -73,7 +73,7 @@ export default function Contact() {
               {isAr
                 ? (
                   <>
-                    تواصل <span className="text-gold">معنا</span>
+                    ØªÙˆØ§ØµÙ„ <span className="text-gold">Ù…Ø¹Ù†Ø§</span>
                   </>
                 )
                 : (
@@ -85,12 +85,12 @@ export default function Contact() {
             <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
             <p className="font-body text-cream/60 max-w-2xl mx-auto">
               {isAr
-                ? "يسعدنا سماع رأيك. تواصلي معنا لأي استفسار حول منتجاتنا أو خدماتنا."
+                ? "ÙŠØ³Ø¹Ø¯Ù†Ø§ Ø³Ù…Ø§Ø¹ Ø±Ø£ÙŠÙƒ. ØªÙˆØ§ØµÙ„ÙŠ Ù…Ø¹Ù†Ø§ Ù„Ø£ÙŠ Ø§Ø³ØªÙØ³Ø§Ø± Ø­ÙˆÙ„ Ù…Ù†ØªØ¬Ø§ØªÙ†Ø§ Ø£Ùˆ Ø®Ø¯Ù…Ø§ØªÙ†Ø§."
                 : "We'd love to hear from you. Reach out with any questions about our products or services."}
             </p>
             <p className="font-body text-cream/50 text-sm max-w-2xl mx-auto mt-2">
               {isAr
-                ? "يمكنك أيضاً الدردشة معنا مباشرة عبر أيقونة الدردشة على الموقع."
+                ? "ÙŠÙ…ÙƒÙ†Ùƒ Ø£ÙŠØ¶Ø§Ù‹ Ø§Ù„Ø¯Ø±Ø¯Ø´Ø© Ù…Ø¹Ù†Ø§ Ù…Ø¨Ø§Ø´Ø±Ø© Ø¹Ø¨Ø± Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„Ø¯Ø±Ø¯Ø´Ø© Ø¹Ù„Ù‰ Ø§Ù„Ù…ÙˆÙ‚Ø¹."
                 : "You can also chat with us live using the chat widget on this site."}
             </p>
           </div>
@@ -99,7 +99,7 @@ export default function Contact() {
             {/* Contact Info */}
             <div className="space-y-8">
               <h2 className="font-display text-2xl text-cream">
-                {isAr ? "تواصلي معنا" : "Get in Touch"}
+                {isAr ? "ØªÙˆØ§ØµÙ„ÙŠ Ù…Ø¹Ù†Ø§" : "Get in Touch"}
               </h2>
 
               <div className="space-y-6">
@@ -109,7 +109,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-display text-sm text-cream mb-1">
-                      {isAr ? "البريد الإلكتروني" : "Email"}
+                      {isAr ? "Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ" : "Email"}
                     </h3>
                     <a
                       href="mailto:asperpharma@gmail.com"
@@ -126,10 +126,10 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-display text-sm text-cream mb-1">
-                      {isAr ? "الدردشة المباشرة" : "Live chat"}
+                      {isAr ? "Ø§Ù„Ø¯Ø±Ø¯Ø´Ø© Ø§Ù„Ù…Ø¨Ø§Ø´Ø±Ø©" : "Live chat"}
                     </h3>
                     <p className="font-body text-cream/60">
-                      {isAr ? "استخدم أيقونة الدردشة في أسفل الصفحة" : "Use the chat widget at the bottom of the page"}
+                      {isAr ? "Ø§Ø³ØªØ®Ø¯Ù… Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„Ø¯Ø±Ø¯Ø´Ø© ÙÙŠ Ø£Ø³ÙÙ„ Ø§Ù„ØµÙØ­Ø©" : "Use the chat widget at the bottom of the page"}
                     </p>
                   </div>
                 </div>
@@ -140,7 +140,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-display text-sm text-cream mb-1">
-                      {isAr ? "الهاتف" : "Phone"}
+                      {isAr ? "Ø§Ù„Ù‡Ø§ØªÙ" : "Phone"}
                     </h3>
                     <a
                       href="tel:+962790656666"
@@ -158,10 +158,10 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-display text-sm text-cream mb-1">
-                      {isAr ? "الموقع" : "Location"}
+                      {isAr ? "Ø§Ù„Ù…ÙˆÙ‚Ø¹" : "Location"}
                     </h3>
                     <p className="font-body text-cream/60">
-                      {isAr ? "عمان، الأردن" : "Amman, Jordan"}
+                      {isAr ? "Ø¹Ù…Ø§Ù†ØŒ Ø§Ù„Ø£Ø±Ø¯Ù†" : "Amman, Jordan"}
                     </p>
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default function Contact() {
                 {/* Social Media Links */}
                 <div className="pt-4">
                   <h3 className="font-display text-sm text-cream mb-4">
-                    {isAr ? "تابعينا" : "Follow Us"}
+                    {isAr ? "ØªØ§Ø¨Ø¹ÙŠÙ†Ø§" : "Follow Us"}
                   </h3>
                   <div className="flex items-center gap-3 flex-wrap">
                     <a
@@ -261,30 +261,30 @@ export default function Contact() {
             {/* Contact Form */}
             <div className="bg-secondary border border-gold/20 p-8">
               <h2 className="font-display text-2xl text-cream mb-6">
-                {isAr ? "أرسلي رسالة" : "Send a Message"}
+                {isAr ? "Ø£Ø±Ø³Ù„ÙŠ Ø±Ø³Ø§Ù„Ø©" : "Send a Message"}
               </h2>
 
               <form className="space-y-4">
                 <div>
                   <label className="block font-body text-sm text-cream/60 mb-2">
-                    {isAr ? "الاسم" : "Name"}
+                    {isAr ? "Ø§Ù„Ø§Ø³Ù…" : "Name"}
                   </label>
                   <input
                     type="text"
                     className="w-full px-4 py-3 bg-background border border-gold/30 font-body text-cream placeholder:text-cream/40 focus:outline-none focus:border-gold transition-colors"
-                    placeholder={isAr ? "اسمك" : "Your name"}
+                    placeholder={isAr ? "Ø§Ø³Ù…Ùƒ" : "Your name"}
                   />
                 </div>
 
                 <div>
                   <label className="block font-body text-sm text-cream/60 mb-2">
-                    {isAr ? "البريد الإلكتروني" : "Email"}
+                    {isAr ? "Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ" : "Email"}
                   </label>
                   <input
                     type="email"
                     className="w-full px-4 py-3 bg-background border border-gold/30 font-body text-cream placeholder:text-cream/40 focus:outline-none focus:border-gold transition-colors"
                     placeholder={isAr
-                      ? "بريدك@الإلكتروني.com"
+                      ? "Ø¨Ø±ÙŠØ¯Ùƒ@Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ.com"
                       : "your@email.com"}
                     dir="ltr"
                   />
@@ -292,13 +292,13 @@ export default function Contact() {
 
                 <div>
                   <label className="block font-body text-sm text-cream/60 mb-2">
-                    {isAr ? "الرسالة" : "Message"}
+                    {isAr ? "Ø§Ù„Ø±Ø³Ø§Ù„Ø©" : "Message"}
                   </label>
                   <textarea
                     rows={4}
                     className="w-full px-4 py-3 bg-background border border-gold/30 font-body text-cream placeholder:text-cream/40 focus:outline-none focus:border-gold transition-colors resize-none"
                     placeholder={isAr
-                      ? "كيف يمكننا مساعدتك؟"
+                      ? "ÙƒÙŠÙ ÙŠÙ…ÙƒÙ†Ù†Ø§ Ù…Ø³Ø§Ø¹Ø¯ØªÙƒØŸ"
                       : "How can we help you?"}
                   />
                 </div>
@@ -307,7 +307,7 @@ export default function Contact() {
                   type="submit"
                   className="w-full py-3 bg-gold text-background font-display text-sm tracking-wider hover:bg-gold-light transition-colors"
                 >
-                  {isAr ? "إرسال الرسالة" : "SEND MESSAGE"}
+                  {isAr ? "Ø¥Ø±Ø³Ø§Ù„ Ø§Ù„Ø±Ø³Ø§Ù„Ø©" : "SEND MESSAGE"}
                 </button>
               </form>
             </div>

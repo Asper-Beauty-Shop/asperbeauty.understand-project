@@ -1,4 +1,4 @@
-import { useLanguage } from "@/contexts/LanguageContext";
+﻿import { useLanguage } from "@/contexts/LanguageContext";
 
 export const FloatingConciergeWidget = () => {
   const { isRTL } = useLanguage();
@@ -23,7 +23,7 @@ export const FloatingConciergeWidget = () => {
         Consult Dr. Sami
       </span>
 
-      {/* Floating icon — no background box */}
+      {/* Floating icon â€” no background box */}
       <div className="relative w-14 h-14 md:w-16 md:h-16 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-110 group-hover:-translate-y-2">
         {/* Mortar & Pestle SVG */}
         <svg

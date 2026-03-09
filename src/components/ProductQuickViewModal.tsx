@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -122,9 +122,9 @@ export const ProductQuickViewModal = (
     });
 
     toast.success(
-      language === "ar" ? "تمت الإضافة إلى الحقيبة" : "Added to bag",
+      language === "ar" ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Added to bag",
       {
-        description: `${product.title} × ${quantity}`,
+        description: `${product.title} Ã— ${quantity}`,
         position: "top-center",
       },
     );
@@ -167,7 +167,7 @@ export const ProductQuickViewModal = (
               : (
                 <div className="w-full h-full flex items-center justify-center">
                   <span className="text-muted-foreground">
-                    {language === "ar" ? "لا توجد صورة" : "No image"}
+                    {language === "ar" ? "Ù„Ø§ ØªÙˆØ¬Ø¯ ØµÙˆØ±Ø©" : "No image"}
                   </span>
                 </div>
               )}
@@ -220,7 +220,7 @@ export const ProductQuickViewModal = (
             {/* Quantity */}
             <div className="mb-6">
               <label className="font-display text-sm text-foreground mb-2 block">
-                {language === "ar" ? "الكمية" : "Quantity"}
+                {language === "ar" ? "Ø§Ù„ÙƒÙ…ÙŠØ©" : "Quantity"}
               </label>
               <div className="flex items-center gap-3">
                 <button
@@ -244,7 +244,7 @@ export const ProductQuickViewModal = (
             {/* Luxury Divider */}
             <div className="flex items-center justify-center gap-3 my-4">
               <div className="w-12 h-px bg-gradient-to-r from-transparent via-gold/60 to-gold/40" />
-              <span className="text-gold text-xs">✦</span>
+              <span className="text-gold text-xs">âœ¦</span>
               <div className="w-12 h-px bg-gradient-to-l from-transparent via-gold/60 to-gold/40" />
             </div>
 
@@ -255,7 +255,7 @@ export const ProductQuickViewModal = (
                 onClick={handleAddToCart}
               >
                 <ShoppingBag className="w-4 h-4 me-2" />
-                {language === "ar" ? "أضف إلى الحقيبة" : "Add to Bag"}
+                {language === "ar" ? "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Bag"}
               </Button>
 
               <Link to={`/product/${product.id}`} onClick={onClose}>
@@ -265,7 +265,7 @@ export const ProductQuickViewModal = (
                 >
                   <Eye className="w-4 h-4 me-2" />
                   {language === "ar"
-                    ? "عرض التفاصيل الكاملة"
+                    ? "Ø¹Ø±Ø¶ Ø§Ù„ØªÙØ§ØµÙŠÙ„ Ø§Ù„ÙƒØ§Ù…Ù„Ø©"
                     : "View Full Details"}
                 </Button>
               </Link>
@@ -275,12 +275,12 @@ export const ProductQuickViewModal = (
             <div className="mt-6 pt-4 border-t border-gold/20">
               <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
-                  <span className="text-gold">✓</span>{" "}
-                  {language === "ar" ? "أصلي 100%" : "100% Authentic"}
+                  <span className="text-gold">âœ“</span>{" "}
+                  {language === "ar" ? "Ø£ØµÙ„ÙŠ 100%" : "100% Authentic"}
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="text-gold">✓</span>{" "}
-                  {language === "ar" ? "شحن سريع" : "Fast Shipping"}
+                  <span className="text-gold">âœ“</span>{" "}
+                  {language === "ar" ? "Ø´Ø­Ù† Ø³Ø±ÙŠØ¹" : "Fast Shipping"}
                 </span>
               </div>
             </div>

@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 
 /**
- * Gold scroll-progress bar — "The Midas Touch."
+ * Gold scroll-progress bar â€” "The Midas Touch."
  * Renders a thin gold line at the very top of the viewport
  * indicating how far the user has scrolled.
  */

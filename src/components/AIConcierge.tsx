@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+﻿import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -128,7 +128,7 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
-/* Inline SVG persona avatars — transparent, no white box */
+/* Inline SVG persona avatars â€” transparent, no white box */
 const DrSamiAvatar = ({ size = 28 }: { size?: number }) => (
   <div
     className="rounded-full border border-polished-gold bg-transparent p-1 flex items-center justify-center shrink-0"
@@ -177,10 +177,10 @@ const personaConfig = {
 };
 
 const quickPrompts = [
-  { label: "✨ Find My Routine", text: "I want a personalized skincare routine based on my concerns" },
-  { label: "🧪 Shop by Ingredient", text: "I'm looking for products with Vitamin C, Retinol, or Hyaluronic Acid" },
-  { label: "🌿 Natural Options", text: "What natural and organic skincare products do you recommend?" },
-  { label: "📸 Skin Analysis", text: "" }, // special: triggers image upload
+  { label: "âœ¨ Find My Routine", text: "I want a personalized skincare routine based on my concerns" },
+  { label: "ðŸ§ª Shop by Ingredient", text: "I'm looking for products with Vitamin C, Retinol, or Hyaluronic Acid" },
+  { label: "ðŸŒ¿ Natural Options", text: "What natural and organic skincare products do you recommend?" },
+  { label: "ðŸ“¸ Skin Analysis", text: "" }, // special: triggers image upload
 ];
 
 export default function AIConcierge() {
@@ -269,7 +269,7 @@ export default function AIConcierge() {
           setUserProfile({ skin_type: data.skin_type, skin_concern: data.skin_concern, tags: [] });
         }
       } catch {
-        // Not logged in or no profile — proceed without context
+        // Not logged in or no profile â€” proceed without context
       }
     })();
   }, [open, isAuthenticated]);
@@ -396,7 +396,7 @@ export default function AIConcierge() {
       const errMsg = e instanceof Error ? e.message : String(e);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: `⚠️ ${errMsg}`, persona: currentPersona },
+        { role: "assistant", content: `âš ï¸ ${errMsg}`, persona: currentPersona },
       ]);
       setIsLoading(false);
     }
@@ -405,7 +405,7 @@ export default function AIConcierge() {
   const persona = personaConfig[currentPersona as keyof typeof personaConfig] || personaConfig.ms_zain;
   const PersonaIcon = persona.icon;
 
-  /* ─── Swipe-to-dismiss for mobile ─── */
+  /* â”€â”€â”€ Swipe-to-dismiss for mobile â”€â”€â”€ */
   const touchStartRef = useRef({ x: 0, y: 0 });
   const handleSwipeStart = useCallback((e: React.TouchEvent) => {
     touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -478,7 +478,7 @@ export default function AIConcierge() {
                 <div className="text-center space-y-2">
                   <h3 className="font-heading text-lg font-semibold text-foreground">Welcome to Asper AI</h3>
                   <p className="text-sm text-muted-foreground font-body max-w-[260px]">
-                    Sign in to access personalized skincare advice from Dr. Sami & Ms. Zain ✨
+                    Sign in to access personalized skincare advice from Dr. Sami & Ms. Zain âœ¨
                   </p>
                 </div>
                 <a href="/auth">
@@ -510,7 +510,7 @@ export default function AIConcierge() {
                 <div className="text-center space-y-2">
                   <div className="flex justify-center mb-3">
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-xl">🌿</span>
+                      <span className="text-xl">ðŸŒ¿</span>
                     </div>
                   </div>
                   <p className="text-sm font-heading font-semibold text-foreground">
@@ -526,7 +526,7 @@ export default function AIConcierge() {
                     <button
                       key={qp.label}
                       onClick={() => {
-                        if (qp.label === "📸 Skin Analysis") {
+                        if (qp.label === "ðŸ“¸ Skin Analysis") {
                           triggerFileInput();
                         } else {
                           send(qp.text);
@@ -539,7 +539,7 @@ export default function AIConcierge() {
                   ))}
                 </div>
                 <p className="text-center text-[10px] text-accent font-body uppercase tracking-[0.15em]">
-                  Nature Meets Science ✦ Pharmacist Verified
+                  Nature Meets Science âœ¦ Pharmacist Verified
                 </p>
               </div>
             )}
@@ -634,7 +634,7 @@ export default function AIConcierge() {
             </div>
           )}
 
-          {/* Input — hidden when not authenticated */}
+          {/* Input â€” hidden when not authenticated */}
           {isAuthenticated && (
           <div className="border-t border-border/50 bg-card p-3">
             <form

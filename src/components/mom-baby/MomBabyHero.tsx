@@ -1,4 +1,4 @@
-import { useLanguage } from "@/contexts/LanguageContext";
+﻿import { useLanguage } from "@/contexts/LanguageContext";
 import { Baby, Heart, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import momBabyHero from "@/assets/mom-baby-hero.jpg";
@@ -8,9 +8,9 @@ export default function MomBabyHero() {
   const isAr = locale === "ar";
 
   const trustBadges = [
-    { icon: ShieldCheck, en: "Pregnancy Safe", ar: "آمن للحمل", desc: { en: "Clinically verified", ar: "تم التحقق سريرياً" } },
-    { icon: Heart, en: "Dermatologist Tested", ar: "مختبر من أطباء الجلد", desc: { en: "Gentle on skin", ar: "لطيف على البشرة" } },
-    { icon: Baby, en: "Pediatric Grade", ar: "درجة طبية للأطفال", desc: { en: "Safe from day one", ar: "آمن من اليوم الأول" } },
+    { icon: ShieldCheck, en: "Pregnancy Safe", ar: "Ø¢Ù…Ù† Ù„Ù„Ø­Ù…Ù„", desc: { en: "Clinically verified", ar: "ØªÙ… Ø§Ù„ØªØ­Ù‚Ù‚ Ø³Ø±ÙŠØ±ÙŠØ§Ù‹" } },
+    { icon: Heart, en: "Dermatologist Tested", ar: "Ù…Ø®ØªØ¨Ø± Ù…Ù† Ø£Ø·Ø¨Ø§Ø¡ Ø§Ù„Ø¬Ù„Ø¯", desc: { en: "Gentle on skin", ar: "Ù„Ø·ÙŠÙ Ø¹Ù„Ù‰ Ø§Ù„Ø¨Ø´Ø±Ø©" } },
+    { icon: Baby, en: "Pediatric Grade", ar: "Ø¯Ø±Ø¬Ø© Ø·Ø¨ÙŠØ© Ù„Ù„Ø£Ø·ÙØ§Ù„", desc: { en: "Safe from day one", ar: "Ø¢Ù…Ù† Ù…Ù† Ø§Ù„ÙŠÙˆÙ… Ø§Ù„Ø£ÙˆÙ„" } },
   ];
 
   return (
@@ -34,22 +34,22 @@ export default function MomBabyHero() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-5 py-2 text-xs font-body uppercase tracking-widest text-accent mb-6">
               <Baby className="w-4 h-4" />
-              {isAr ? "الأم والطفل" : "Mom & Baby"}
+              {isAr ? "Ø§Ù„Ø£Ù… ÙˆØ§Ù„Ø·ÙÙ„" : "Mom & Baby"}
             </span>
 
             <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] text-foreground mb-4 leading-tight">
-              {isAr ? "رحلة الأمومة بأمان" : "Safe. Gentle. Clinical."}
+              {isAr ? "Ø±Ø­Ù„Ø© Ø§Ù„Ø£Ù…ÙˆÙ…Ø© Ø¨Ø£Ù…Ø§Ù†" : "Safe. Gentle. Clinical."}
             </h1>
 
             <p className="font-heading text-xl md:text-2xl text-primary italic mb-5">
               {isAr
-                ? "من الحمل إلى السنوات الأولى"
+                ? "Ù…Ù† Ø§Ù„Ø­Ù…Ù„ Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù†ÙˆØ§Øª Ø§Ù„Ø£ÙˆÙ„Ù‰"
                 : "From Conception to First Steps"}
             </p>
 
             <p className="font-body text-muted-foreground max-w-xl text-base md:text-lg mb-8 leading-relaxed">
               {isAr
-                ? "منتجات موثوقة ومعتمدة طبياً، تم اختيارها بعناية من قبل صيادلتنا لكل مرحلة من مراحل الأمومة."
+                ? "Ù…Ù†ØªØ¬Ø§Øª Ù…ÙˆØ«ÙˆÙ‚Ø© ÙˆÙ…Ø¹ØªÙ…Ø¯Ø© Ø·Ø¨ÙŠØ§Ù‹ØŒ ØªÙ… Ø§Ø®ØªÙŠØ§Ø±Ù‡Ø§ Ø¨Ø¹Ù†Ø§ÙŠØ© Ù…Ù† Ù‚Ø¨Ù„ ØµÙŠØ§Ø¯Ù„ØªÙ†Ø§ Ù„ÙƒÙ„ Ù…Ø±Ø­Ù„Ø© Ù…Ù† Ù…Ø±Ø§Ø­Ù„ Ø§Ù„Ø£Ù…ÙˆÙ…Ø©."
                 : "Pharmacist-curated, clinically validated products for every stage of motherhood. Trusted by dermatologists. Loved by mothers."}
             </p>
 
@@ -57,7 +57,7 @@ export default function MomBabyHero() {
               onClick={() => document.getElementById("lifecycle-nav")?.scrollIntoView({ behavior: "smooth" })}
               className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 font-body text-sm font-semibold text-primary-foreground shadow-maroon-glow hover:bg-primary/90 transition-colors duration-300"
             >
-              {isAr ? "استكشفي المراحل" : "Explore Stages"}
+              {isAr ? "Ø§Ø³ØªÙƒØ´ÙÙŠ Ø§Ù„Ù…Ø±Ø§Ø­Ù„" : "Explore Stages"}
               <Baby className="w-4 h-4" />
             </button>
           </motion.div>
@@ -72,7 +72,7 @@ export default function MomBabyHero() {
             <div className="relative w-72 h-80 sm:w-80 sm:h-96 md:w-96 md:h-[28rem] rounded-[2rem] overflow-hidden shadow-maroon-glow ring-1 ring-accent/20">
               <img
                 src={momBabyHero}
-                alt={isAr ? "أم تحمل طفلها بحنان" : "Mother tenderly holding her baby"}
+                alt={isAr ? "Ø£Ù… ØªØ­Ù…Ù„ Ø·ÙÙ„Ù‡Ø§ Ø¨Ø­Ù†Ø§Ù†" : "Mother tenderly holding her baby"}
                 className="w-full h-full object-cover"
                 loading="eager"
               />

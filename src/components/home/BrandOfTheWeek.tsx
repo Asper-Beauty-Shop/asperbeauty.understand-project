@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
@@ -30,7 +30,7 @@ export const BrandOfTheWeek = () => {
             {/* Brand Story Content */}
             <div className={cn("order-2 lg:order-1", isArabic && "text-right")}>
               <span className="font-body text-xs uppercase tracking-[0.3em] text-polished-gold mb-4 block">
-                {isArabic ? "علامة الأسبوع" : "Brand of the Week"}
+                {isArabic ? "Ø¹Ù„Ø§Ù…Ø© Ø§Ù„Ø£Ø³Ø¨ÙˆØ¹" : "Brand of the Week"}
               </span>
               <h2 className={cn(
                 "font-heading text-3xl lg:text-4xl xl:text-5xl font-bold text-asper-ink mb-3 leading-tight",
@@ -40,7 +40,7 @@ export const BrandOfTheWeek = () => {
               </h2>
 
               <p className="font-body text-lg text-polished-gold/80 mb-6 italic">
-                {isArabic ? "— قوة المياه البركانية" : "— The Power of Volcanic Water"}
+                {isArabic ? "â€” Ù‚ÙˆØ© Ø§Ù„Ù…ÙŠØ§Ù‡ Ø§Ù„Ø¨Ø±ÙƒØ§Ù†ÙŠØ©" : "â€” The Power of Volcanic Water"}
               </p>
 
               <p className={cn(
@@ -48,16 +48,16 @@ export const BrandOfTheWeek = () => {
                 isArabic && "font-arabic mr-0 ml-auto"
               )}>
                 {isArabic
-                  ? "منذ 1931، تجمع Vichy بين خبرة أطباء الجلد وقوة المياه البركانية الفرنسية لتقديم حلول عناية بالبشرة فعالة وآمنة. كل منتج يمر باختبارات سريرية صارمة لضمان نتائج ملموسة."
+                  ? "Ù…Ù†Ø° 1931ØŒ ØªØ¬Ù…Ø¹ Vichy Ø¨ÙŠÙ† Ø®Ø¨Ø±Ø© Ø£Ø·Ø¨Ø§Ø¡ Ø§Ù„Ø¬Ù„Ø¯ ÙˆÙ‚ÙˆØ© Ø§Ù„Ù…ÙŠØ§Ù‡ Ø§Ù„Ø¨Ø±ÙƒØ§Ù†ÙŠØ© Ø§Ù„ÙØ±Ù†Ø³ÙŠØ© Ù„ØªÙ‚Ø¯ÙŠÙ… Ø­Ù„ÙˆÙ„ Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© ÙØ¹Ø§Ù„Ø© ÙˆØ¢Ù…Ù†Ø©. ÙƒÙ„ Ù…Ù†ØªØ¬ ÙŠÙ…Ø± Ø¨Ø§Ø®ØªØ¨Ø§Ø±Ø§Øª Ø³Ø±ÙŠØ±ÙŠØ© ØµØ§Ø±Ù…Ø© Ù„Ø¶Ù…Ø§Ù† Ù†ØªØ§Ø¦Ø¬ Ù…Ù„Ù…ÙˆØ³Ø©."
                   : "Since 1931, Vichy has combined dermatological expertise with the power of French volcanic water to deliver effective, safe skincare solutions. Every product undergoes rigorous clinical testing to ensure visible results."}
               </p>
 
               {/* Key pillars */}
               <div className="grid grid-cols-3 gap-4 mb-8">
                 {[
-                  { en: "Dermatologist\nTested", ar: "معتمد من\nأطباء الجلد" },
-                  { en: "Volcanic\nWater", ar: "مياه\nبركانية" },
-                  { en: "Sensitive\nSkin Safe", ar: "آمن للبشرة\nالحساسة" },
+                  { en: "Dermatologist\nTested", ar: "Ù…Ø¹ØªÙ…Ø¯ Ù…Ù†\nØ£Ø·Ø¨Ø§Ø¡ Ø§Ù„Ø¬Ù„Ø¯" },
+                  { en: "Volcanic\nWater", ar: "Ù…ÙŠØ§Ù‡\nØ¨Ø±ÙƒØ§Ù†ÙŠØ©" },
+                  { en: "Sensitive\nSkin Safe", ar: "Ø¢Ù…Ù† Ù„Ù„Ø¨Ø´Ø±Ø©\nØ§Ù„Ø­Ø³Ø§Ø³Ø©" },
                 ].map((pillar) => (
                   <div key={pillar.en} className="text-center p-3 border border-polished-gold/20 rounded-lg bg-polished-gold/5">
                     <span className="font-body text-xs uppercase tracking-wider text-asper-ink whitespace-pre-line leading-tight">
@@ -69,7 +69,7 @@ export const BrandOfTheWeek = () => {
 
               <Link to="/brands/vichy">
                 <Button size="lg" className="group bg-burgundy text-primary-foreground hover:bg-burgundy-light border border-transparent hover:border-polished-gold text-sm uppercase tracking-widest px-8 h-12 font-semibold transition-all duration-400">
-                  {isArabic ? "اكتشفي المجموعة" : "Explore Collection"}
+                  {isArabic ? "Ø§ÙƒØªØ´ÙÙŠ Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø©" : "Explore Collection"}
                   <ArrowRight className={cn(
                     "h-4 w-4 transition-transform duration-300 group-hover:translate-x-1",
                     dir === "rtl" ? "mr-2 rotate-180 group-hover:-translate-x-1" : "ml-2"

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2, Search, X } from "lucide-react";
 import { searchProducts, ShopifyProduct } from "@/lib/shopify";
@@ -105,7 +105,7 @@ export const SearchDropdown = ({
           <div className="flex items-center justify-center py-8">
             <Loader2 className="w-6 h-6 animate-spin text-shiny-gold" />
             <span className="ml-2 text-gray-500 font-body text-sm">
-              {language === "ar" ? "جاري البحث..." : "Searching..."}
+              {language === "ar" ? "Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø¨Ø­Ø«..." : "Searching..."}
             </span>
           </div>
         )
@@ -115,7 +115,7 @@ export const SearchDropdown = ({
             <div className="px-4 py-2 bg-gray-50 border-b border-gray-200">
               <span className="text-xs text-gray-500 font-body">
                 {language === "ar"
-                  ? `تم العثور على ${results.length} نتيجة`
+                  ? `ØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ ${results.length} Ù†ØªÙŠØ¬Ø©`
                   : `${results.length} results found`}
               </span>
             </div>
@@ -184,7 +184,7 @@ export const SearchDropdown = ({
               onClick={handleResultClick}
               className="block px-4 py-3 bg-gray-50 text-center text-sm font-display text-shiny-gold hover:text-dark-charcoal transition-colors border-t border-gray-200"
             >
-              {language === "ar" ? "عرض جميع النتائج" : "View All Results"}
+              {language === "ar" ? "Ø¹Ø±Ø¶ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù†ØªØ§Ø¦Ø¬" : "View All Results"}
             </Link>
           </div>
         )
@@ -192,11 +192,11 @@ export const SearchDropdown = ({
           <div className="py-8 text-center">
             <Search className="w-8 h-8 text-gray-300 mx-auto mb-2" />
             <p className="text-gray-500 font-body text-sm">
-              {language === "ar" ? "لا توجد نتائج" : "No results found"}
+              {language === "ar" ? "Ù„Ø§ ØªÙˆØ¬Ø¯ Ù†ØªØ§Ø¦Ø¬" : "No results found"}
             </p>
             <p className="text-gray-400 font-body text-xs mt-1">
               {language === "ar"
-                ? "جربي كلمات بحث مختلفة"
+                ? "Ø¬Ø±Ø¨ÙŠ ÙƒÙ„Ù…Ø§Øª Ø¨Ø­Ø« Ù…Ø®ØªÙ„ÙØ©"
                 : "Try different search terms"}
             </p>
           </div>

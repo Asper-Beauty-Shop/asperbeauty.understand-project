@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import {
@@ -207,7 +207,7 @@ export default function Intelligence() {
       const errMsg = err instanceof Error ? err.message : String(err);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: `⚠️ ${errMsg}`, persona: detectedPersona },
+        { role: "assistant", content: `âš ï¸ ${errMsg}`, persona: detectedPersona },
       ]);
       setIsLoading(false);
     }
@@ -566,7 +566,7 @@ export default function Intelligence() {
             <span className="font-heading text-sm font-bold italic text-primary">ASPER.AI</span>
             <span className="w-px h-4 bg-accent/20" />
             <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-body">
-              Amman HQ • 2026
+              Amman HQ â€¢ 2026
             </span>
           </div>
           <div className="flex items-center gap-6 text-[10px] text-muted-foreground uppercase tracking-wider font-body">

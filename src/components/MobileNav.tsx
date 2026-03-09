@@ -1,4 +1,4 @@
-import { Heart, Home, Search, ShoppingBag, User } from "lucide-react";
+﻿import { Heart, Home, Search, ShoppingBag, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { useWishlistStore } from "@/stores/wishlistStore";

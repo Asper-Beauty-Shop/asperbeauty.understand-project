@@ -1,12 +1,12 @@
-import { Stethoscope } from "lucide-react";
+﻿import { Stethoscope } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const STEP_LABELS: Record<string, { en: string; ar: string }> = {
-  step_1_cleanser: { en: "Step 1: Cleanser", ar: "الخطوة ١: المنظف" },
-  step_2_treatment: { en: "Step 2: Treatment", ar: "الخطوة ٢: المعالجة" },
+  step_1_cleanser: { en: "Step 1: Cleanser", ar: "Ø§Ù„Ø®Ø·ÙˆØ© Ù¡: Ø§Ù„Ù…Ù†Ø¸Ù" },
+  step_2_treatment: { en: "Step 2: Treatment", ar: "Ø§Ù„Ø®Ø·ÙˆØ© Ù¢: Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø©" },
   step_3_moisturizer: {
     en: "Step 3: Moisturizer / SPF",
-    ar: "الخطوة ٣: المرطب / الحماية",
+    ar: "Ø§Ù„Ø®Ø·ÙˆØ© Ù£: Ø§Ù„Ù…Ø±Ø·Ø¨ / Ø§Ù„Ø­Ù…Ø§ÙŠØ©",
   },
 };
 
@@ -36,11 +36,11 @@ export function ConsultPharmacistCard(
         {stepLabel}
       </p>
       <p className="font-body text-maroon font-semibold">
-        {language === "ar" ? "استشر الصيدلي" : "Consult Pharmacist"}
+        {language === "ar" ? "Ø§Ø³ØªØ´Ø± Ø§Ù„ØµÙŠØ¯Ù„ÙŠ" : "Consult Pharmacist"}
       </p>
       <p className="font-body text-gray-500 text-sm mt-2 max-w-[200px]">
         {language === "ar"
-          ? "سنختار لك المنتج الأنسب لهذه الخطوة."
+          ? "Ø³Ù†Ø®ØªØ§Ø± Ù„Ùƒ Ø§Ù„Ù…Ù†ØªØ¬ Ø§Ù„Ø£Ù†Ø³Ø¨ Ù„Ù‡Ø°Ù‡ Ø§Ù„Ø®Ø·ÙˆØ©."
           : "We'll pick the right product for this step."}
       </p>
     </div>

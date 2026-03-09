@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "@/components/AnimatedSection";
 
@@ -6,43 +6,43 @@ const CATEGORIES = [
   {
     id: "perfume",
 en: "Perfume",
-    ar: "عطور",
-    icon: "https://placehold.co/120x120/FAF7F2/800020?text=🌸",
+    ar: "Ø¹Ø·ÙˆØ±",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=ðŸŒ¸",
     href: "/collections/perfume",
   },
   {
     id: "skincare",
     en: "Skincare",
-    ar: "العناية بالبشرة",
-    icon: "https://placehold.co/120x120/FAF7F2/800020?text=✨",
+    ar: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=âœ¨",
     href: "/collections/skincare",
   },
   {
     id: "makeup",
     en: "Makeup",
-    ar: "مكياج",
-    icon: "https://placehold.co/120x120/FAF7F2/800020?text=💄",
+    ar: "Ù…ÙƒÙŠØ§Ø¬",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=ðŸ’„",
     href: "/collections/makeup",
   },
   {
     id: "hair",
     en: "Hair",
-    ar: "العناية بالشعر",
-    icon: "https://placehold.co/120x120/FAF7F2/800020?text=💇",
+    ar: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø´Ø¹Ø±",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=ðŸ’‡",
     href: "/collections/hair",
   },
   {
     id: "body",
     en: "Body",
-    ar: "العناية بالجسم",
-    icon: "https://placehold.co/120x120/FAF7F2/800020?text=🧴",
+    ar: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¬Ø³Ù…",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=ðŸ§´",
     href: "/collections/body",
   },
   {
     id: "suncare",
     en: "Sun Care",
-    ar: "حماية من الشمس",
-    icon: "https://placehold.co/120x120/FAF7F2/800020?text=☀️",
+    ar: "Ø­Ù…Ø§ÙŠØ© Ù…Ù† Ø§Ù„Ø´Ù…Ø³",
+    icon: "https://placehold.co/120x120/FAF7F2/800020?text=â˜€ï¸",
     href: "/collections/suncare",
   },
 ];
@@ -58,10 +58,10 @@ export const ShopByCategory = () => {
       <div className="luxury-container">
         <AnimatedSection className="text-center mb-12" animation="fade-up">
           <span className="font-body text-xs uppercase tracking-[0.3em] text-polished-gold mb-3 block">
-            {isArabic ? "تسوقي حسب الفئة" : "Browse by Category"}
+            {isArabic ? "ØªØ³ÙˆÙ‚ÙŠ Ø­Ø³Ø¨ Ø§Ù„ÙØ¦Ø©" : "Browse by Category"}
           </span>
           <h2 className="font-display text-2xl lg:text-3xl text-asper-ink">
-            {isArabic ? "اكتشفي مجموعاتنا" : "Shop by Category"}
+            {isArabic ? "Ø§ÙƒØªØ´ÙÙŠ Ù…Ø¬Ù…ÙˆØ¹Ø§ØªÙ†Ø§" : "Shop by Category"}
           </h2>
           <div className="flex items-center justify-center gap-3 mt-4">
             <div className="w-12 h-px bg-gradient-to-r from-transparent to-polished-gold/60" />

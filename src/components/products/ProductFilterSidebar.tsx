@@ -1,4 +1,4 @@
-import { CategoryFilter } from "@/components/CategoryFilter";
+﻿import { CategoryFilter } from "@/components/CategoryFilter";
 import { VendorFilter } from "@/components/VendorFilter";
 import { Separator } from "@/components/ui/separator";
 

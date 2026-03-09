@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Prescription Bridge: translates a skin concern into a curated 3-step regimen
  * from the Shopify Storefront API using concern tags (e.g. Concern_Acne) and
  * step tags (Step_1_Cleanser, Step_2_Treatment, Step_3_Protection).
@@ -144,7 +144,7 @@ export async function getProductsByConcern(
   }
 }
 
-/** Convert a regimen to a flat list for Digital Tray / cart (order: cleanser → treatment → protection). */
+/** Convert a regimen to a flat list for Digital Tray / cart (order: cleanser â†’ treatment â†’ protection). */
 export function regimenToTrayProducts(
   regimen: DigitalTrayRegimen | null,
 ): Array<

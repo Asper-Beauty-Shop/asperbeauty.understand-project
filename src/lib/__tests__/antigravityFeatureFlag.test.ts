@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+﻿import { describe, it, expect, vi, afterEach } from "vitest";
 
 /**
  * Unit tests for src/lib/antigravityFeatureFlag.ts
@@ -66,7 +66,7 @@ describe("runAntigravityDiagnostic()", () => {
     const { runAntigravityDiagnostic } = await import("../antigravityFeatureFlag");
     const result = await runAntigravityDiagnostic();
 
-    // PowerShell is unavailable → exec throws → catch block returns "error"
+    // PowerShell is unavailable â†’ exec throws â†’ catch block returns "error"
     expect(result.status).toBe("error");
     expect(result.details.length).toBeGreaterThan(0);
   });

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Asper Beauty Shop - Clinical DNA Verification ("DNA Guard")
  * Quality-control check that design tokens (Authentic Quality / Ivory & Gold) are active.
  * Runs in console; use in development and production to catch theme regressions.
@@ -66,12 +66,12 @@ export function verifyBrandDNA(): void {
 
   if (!ok) {
     console.error(
-      "⚠️ ASPER BRAND ALERT: Clinical DNA Mismatch. Check Tailwind config and index.css.",
+      "âš ï¸ ASPER BRAND ALERT: Clinical DNA Mismatch. Check Tailwind config and index.css.",
       { ivory, expectedIvory, maroon, expectedMaroon, gold, expectedGold },
     );
   } else {
     console.log(
-      "✅ Asper Beauty Shop: Brand DNA Verified. Ready for consultation.",
+      "âœ… Asper Beauty Shop: Brand DNA Verified. Ready for consultation.",
     );
   }
 }

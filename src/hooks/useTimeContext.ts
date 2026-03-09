@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+﻿import { useMemo } from "react";
 
 export type TimeOfDay = "morning" | "afternoon" | "evening";
 
@@ -12,9 +12,9 @@ interface TimeContext {
 
 /**
  * Returns context-aware data based on the user's local time.
- * Morning (5–11): Bright, protection-focused
- * Afternoon (12–18): Balanced, general
- * Evening (19–4): Moody, repair-focused
+ * Morning (5â€“11): Bright, protection-focused
+ * Afternoon (12â€“18): Balanced, general
+ * Evening (19â€“4): Moody, repair-focused
  */
 export function useTimeContext(): TimeContext {
   return useMemo(() => {
@@ -34,13 +34,13 @@ export function useTimeContext(): TimeContext {
       return {
         timeOfDay: "afternoon",
         greeting: "Good Afternoon. Refresh & Renew.",
-        tagline: "Midday glow — hydrate and protect.",
+        tagline: "Midday glow â€” hydrate and protect.",
         featuredQuery: "moisturizer OR hydration OR mist",
         moodClass: "hero-afternoon",
       };
     }
 
-    // 19:00 – 04:59
+    // 19:00 â€“ 04:59
     return {
       timeOfDay: "evening",
       greeting: "Good Evening. Time to repair.",

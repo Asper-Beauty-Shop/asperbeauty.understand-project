@@ -48,6 +48,7 @@ import {
   Wand2,
 } from "lucide-react";
 import { getProductImage } from "@/lib/productImageUtils";
+import { AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -818,3 +819,4 @@ const ManageProducts = () => {
 };
 
 export default ManageProducts;
+

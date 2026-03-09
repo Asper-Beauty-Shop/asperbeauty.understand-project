@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -37,9 +37,9 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
   const handleSignOut = async () => {
     const { error } = await signOut();
     if (error) {
-      toast.error(isAr ? "فشل تسجيل الخروج" : "Failed to sign out");
+      toast.error(isAr ? "ÙØ´Ù„ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬" : "Failed to sign out");
     } else {
-      toast.success(isAr ? "تم تسجيل الخروج" : "Signed out successfully");
+      toast.success(isAr ? "ØªÙ… ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬" : "Signed out successfully");
       navigate("/");
     }
   };
@@ -97,14 +97,14 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                   <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
                     <div>
                       <p className="text-[10px] uppercase tracking-widest text-white/60">
-                        {isAr ? "النقاط المتاحة" : "Available Rewards"}
+                        {isAr ? "Ø§Ù„Ù†Ù‚Ø§Ø· Ø§Ù„Ù…ØªØ§Ø­Ø©" : "Available Rewards"}
                       </p>
                       <p className="text-xl font-bold">
                         {loyaltyData.points} pts
                       </p>
                     </div>
                     <button className="px-4 py-1.5 bg-gold-400 text-luxury-black text-[10px] font-bold uppercase tracking-widest hover:bg-gold-300 transition-colors">
-                      {isAr ? "استبدال" : "Redeem"}
+                      {isAr ? "Ø§Ø³ØªØ¨Ø¯Ø§Ù„" : "Redeem"}
                     </button>
                   </div>
                 </div>
@@ -120,7 +120,7 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                     <div className="flex items-center justify-between w-full">
                       <span className="flex items-center gap-3">
                         <Package className="h-4 w-4 text-gold-500" />
-                        {isAr ? "طلباتك" : "Your Beauty Rituals (Orders)"}
+                        {isAr ? "Ø·Ù„Ø¨Ø§ØªÙƒ" : "Your Beauty Rituals (Orders)"}
                       </span>
                       <ChevronRight className="h-4 w-4 text-gray-300" />
                     </div>
@@ -133,7 +133,7 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                     <div className="flex items-center justify-between w-full">
                       <span className="flex items-center gap-3">
                         <Heart className="h-4 w-4 text-gold-500" />
-                        {isAr ? "قائمة الأمنيات" : "The Wishlist"}
+                        {isAr ? "Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø£Ù…Ù†ÙŠØ§Øª" : "The Wishlist"}
                       </span>
                       <ChevronRight className="h-4 w-4 text-gray-300" />
                     </div>
@@ -146,7 +146,7 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                     <div className="flex items-center justify-between w-full">
                       <span className="flex items-center gap-3">
                         <CreditCard className="h-4 w-4 text-gold-500" />
-                        {isAr ? "طرق الدفع" : "Saved Methods"}
+                        {isAr ? "Ø·Ø±Ù‚ Ø§Ù„Ø¯ÙØ¹" : "Saved Methods"}
                       </span>
                       <ChevronRight className="h-4 w-4 text-gray-300" />
                     </div>
@@ -161,7 +161,7 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                     onClick={() => navigate("/profile")}
                   >
                     <Settings className="h-4 w-4 mr-3 text-muted-foreground" />
-                    {isAr ? "ملفي الشخصي" : "My Profile — The Mirror"}
+                    {isAr ? "Ù…Ù„ÙÙŠ Ø§Ù„Ø´Ø®ØµÙŠ" : "My Profile â€” The Mirror"}
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
@@ -169,7 +169,7 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                     onClick={handleSignOut}
                   >
                     <LogOut className="h-4 w-4 mr-3" />
-                    {isAr ? "تسجيل الخروج" : "Sign Out"}
+                    {isAr ? "ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬" : "Sign Out"}
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </div>
@@ -178,13 +178,13 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
               <div className="bg-cream p-4 border-t border-border">
                 <p className="text-[11px] text-center text-muted-foreground">
                   {isAr
-                    ? "احصلي على 10% مكافآت على كل عملية شراء. "
+                    ? "Ø§Ø­ØµÙ„ÙŠ Ø¹Ù„Ù‰ 10% Ù…ÙƒØ§ÙØ¢Øª Ø¹Ù„Ù‰ ÙƒÙ„ Ø¹Ù…Ù„ÙŠØ© Ø´Ø±Ø§Ø¡. "
                     : "Earn 10% back on every purchase. "}
                   <Link
                     to="/rewards"
                     className="text-gold-500 font-bold hover:underline"
                   >
-                    {isAr ? "اعرفي المزيد" : "Learn More"}
+                    {isAr ? "Ø§Ø¹Ø±ÙÙŠ Ø§Ù„Ù…Ø²ÙŠØ¯" : "Learn More"}
                   </Link>
                 </p>
               </div>
@@ -198,11 +198,11 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                   <User className="h-8 w-8 text-muted-foreground" />
                 </div>
                 <h3 className="font-serif text-lg">
-                  {isAr ? "مرحباً بك" : "Welcome"}
+                  {isAr ? "Ù…Ø±Ø­Ø¨Ø§Ù‹ Ø¨Ùƒ" : "Welcome"}
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1">
                   {isAr
-                    ? "سجلي الدخول للوصول إلى حسابك"
+                    ? "Ø³Ø¬Ù„ÙŠ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ù„Ù„ÙˆØµÙˆÙ„ Ø¥Ù„Ù‰ Ø­Ø³Ø§Ø¨Ùƒ"
                     : "Sign in to access your account"}
                 </p>
               </div>
@@ -212,16 +212,16 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                 className="w-full py-3 bg-foreground text-background font-medium text-sm uppercase tracking-wide hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
               >
                 <LogIn className="h-4 w-4" />
-                {isAr ? "تسجيل الدخول" : "Sign In"}
+                {isAr ? "ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„" : "Sign In"}
               </button>
 
               <p className="text-xs text-center text-muted-foreground mt-4">
-                {isAr ? "ليس لديك حساب؟ " : "Don't have an account? "}
+                {isAr ? "Ù„ÙŠØ³ Ù„Ø¯ÙŠÙƒ Ø­Ø³Ø§Ø¨ØŸ " : "Don't have an account? "}
                 <Link
                   to="/auth?mode=signup"
                   className="text-gold-500 font-medium hover:underline"
                 >
-                  {isAr ? "أنشئي حساباً" : "Create one"}
+                  {isAr ? "Ø£Ù†Ø´Ø¦ÙŠ Ø­Ø³Ø§Ø¨Ø§Ù‹" : "Create one"}
                 </Link>
               </p>
             </div>

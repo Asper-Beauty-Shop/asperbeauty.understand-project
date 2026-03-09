@@ -1,4 +1,4 @@
-import React, {
+﻿import React, {
   createContext,
   ReactNode,
   useContext,
@@ -173,90 +173,90 @@ const translations: Record<Language, Translations> = {
   },
   ar: {
     // Navigation
-    home: "الرئيسية",
-    collections: "المجموعات",
-    shopByCategory: "تسوق حسب الفئة",
-    brands: "العلامات التجارية",
-    bestSellers: "الأكثر مبيعاً",
-    offers: "العروض",
-    contactUs: "اتصل بنا",
-    search: "بحث",
-    cart: "السلة",
+    home: "Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©",
+    collections: "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø§Øª",
+    shopByCategory: "ØªØ³ÙˆÙ‚ Ø­Ø³Ø¨ Ø§Ù„ÙØ¦Ø©",
+    brands: "Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©",
+    bestSellers: "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹",
+    offers: "Ø§Ù„Ø¹Ø±ÙˆØ¶",
+    contactUs: "Ø§ØªØµÙ„ Ø¨Ù†Ø§",
+    search: "Ø¨Ø­Ø«",
+    cart: "Ø§Ù„Ø³Ù„Ø©",
 
     // Collections
-    hairCare: "العناية بالشعر",
-    bodyCare: "العناية بالجسم",
-    makeUp: "المكياج",
-    skincare: "العناية بالبشرة",
-    fragrances: "العطور",
-    toolsDevices: "الأدوات والأجهزة",
+    hairCare: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø´Ø¹Ø±",
+    bodyCare: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¬Ø³Ù…",
+    makeUp: "Ø§Ù„Ù…ÙƒÙŠØ§Ø¬",
+    skincare: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©",
+    fragrances: "Ø§Ù„Ø¹Ø·ÙˆØ±",
+    toolsDevices: "Ø§Ù„Ø£Ø¯ÙˆØ§Øª ÙˆØ§Ù„Ø£Ø¬Ù‡Ø²Ø©",
 
     // Hero
-    heroTitle: "افتح صندوق الفخامة",
+    heroTitle: "Ø§ÙØªØ­ ØµÙ†Ø¯ÙˆÙ‚ Ø§Ù„ÙØ®Ø§Ù…Ø©",
     heroSubtitle:
-      "اكتشف مجموعتنا المختارة من صناديق التجميل الفاخرة، المصنوعة بأجود المكونات للأفراد المميزين.",
-    discoverCollections: "اكتشف المجموعات",
-    scroll: "مرر",
+      "Ø§ÙƒØªØ´Ù Ù…Ø¬Ù…ÙˆØ¹ØªÙ†Ø§ Ø§Ù„Ù…Ø®ØªØ§Ø±Ø© Ù…Ù† ØµÙ†Ø§Ø¯ÙŠÙ‚ Ø§Ù„ØªØ¬Ù…ÙŠÙ„ Ø§Ù„ÙØ§Ø®Ø±Ø©ØŒ Ø§Ù„Ù…ØµÙ†ÙˆØ¹Ø© Ø¨Ø£Ø¬ÙˆØ¯ Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ù„Ù„Ø£ÙØ±Ø§Ø¯ Ø§Ù„Ù…Ù…ÙŠØ²ÙŠÙ†.",
+    discoverCollections: "Ø§ÙƒØªØ´Ù Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø§Øª",
+    scroll: "Ù…Ø±Ø±",
 
     // Products
-    addToBag: "أضف إلى الحقيبة",
-    addToCart: "أضف إلى السلة",
-    addedToBag: "تمت الإضافة",
-    premiumProduct: "منتج تجميل فاخر",
-    noImage: "لا توجد صورة",
-    quantity: "الكمية",
-    selectSize: "اختر الحجم",
-    selectColor: "اختر اللون",
-    inStock: "متوفر",
-    outOfStock: "غير متوفر",
+    addToBag: "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©",
+    addToCart: "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©",
+    addedToBag: "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ©",
+    premiumProduct: "Ù…Ù†ØªØ¬ ØªØ¬Ù…ÙŠÙ„ ÙØ§Ø®Ø±",
+    noImage: "Ù„Ø§ ØªÙˆØ¬Ø¯ ØµÙˆØ±Ø©",
+    quantity: "Ø§Ù„ÙƒÙ…ÙŠØ©",
+    selectSize: "Ø§Ø®ØªØ± Ø§Ù„Ø­Ø¬Ù…",
+    selectColor: "Ø§Ø®ØªØ± Ø§Ù„Ù„ÙˆÙ†",
+    inStock: "Ù…ØªÙˆÙØ±",
+    outOfStock: "ØºÙŠØ± Ù…ØªÙˆÙØ±",
 
     // Cart
-    shoppingCart: "سلة التسوق",
-    cartEmpty: "سلتك فارغة",
-    itemsInCart: "منتجات في سلتك",
-    total: "المجموع",
-    checkout: "الدفع",
-    checkoutWithShopify: "الدفع عبر شوبيفاي",
-    creatingCheckout: "جاري إنشاء الطلب...",
-    remove: "إزالة",
+    shoppingCart: "Ø³Ù„Ø© Ø§Ù„ØªØ³ÙˆÙ‚",
+    cartEmpty: "Ø³Ù„ØªÙƒ ÙØ§Ø±ØºØ©",
+    itemsInCart: "Ù…Ù†ØªØ¬Ø§Øª ÙÙŠ Ø³Ù„ØªÙƒ",
+    total: "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹",
+    checkout: "Ø§Ù„Ø¯ÙØ¹",
+    checkoutWithShopify: "Ø§Ù„Ø¯ÙØ¹ Ø¹Ø¨Ø± Ø´ÙˆØ¨ÙŠÙØ§ÙŠ",
+    creatingCheckout: "Ø¬Ø§Ø±ÙŠ Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„Ø·Ù„Ø¨...",
+    remove: "Ø¥Ø²Ø§Ù„Ø©",
 
     // Footer
-    navigation: "التنقل",
-    customerCare: "خدمة العملاء",
-    legal: "قانوني",
-    stayConnected: "ابقَ على تواصل",
-    subscribeText: "اشترك لتلقي العروض الحصرية والتحديثات.",
-    yourEmail: "بريدك الإلكتروني",
-    subscribe: "اشترك",
-    privacyPolicy: "سياسة الخصوصية",
-    termsOfService: "شروط الخدمة",
-    cookiePolicy: "سياسة ملفات تعريف الارتباط",
-    accessibility: "إمكانية الوصول",
-    shippingInfo: "معلومات الشحن",
-    returnsExchanges: "الإرجاع والاستبدال",
-    orderTracking: "تتبع الطلب",
-    faq: "الأسئلة الشائعة",
-    newArrivals: "وصل حديثاً",
-    giftSets: "مجموعات الهدايا",
-    allRightsReserved: "جميع الحقوق محفوظة.",
-    beautyShop: "متجر التجميل",
+    navigation: "Ø§Ù„ØªÙ†Ù‚Ù„",
+    customerCare: "Ø®Ø¯Ù…Ø© Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡",
+    legal: "Ù‚Ø§Ù†ÙˆÙ†ÙŠ",
+    stayConnected: "Ø§Ø¨Ù‚ÙŽ Ø¹Ù„Ù‰ ØªÙˆØ§ØµÙ„",
+    subscribeText: "Ø§Ø´ØªØ±Ùƒ Ù„ØªÙ„Ù‚ÙŠ Ø§Ù„Ø¹Ø±ÙˆØ¶ Ø§Ù„Ø­ØµØ±ÙŠØ© ÙˆØ§Ù„ØªØ­Ø¯ÙŠØ«Ø§Øª.",
+    yourEmail: "Ø¨Ø±ÙŠØ¯Ùƒ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ",
+    subscribe: "Ø§Ø´ØªØ±Ùƒ",
+    privacyPolicy: "Ø³ÙŠØ§Ø³Ø© Ø§Ù„Ø®ØµÙˆØµÙŠØ©",
+    termsOfService: "Ø´Ø±ÙˆØ· Ø§Ù„Ø®Ø¯Ù…Ø©",
+    cookiePolicy: "Ø³ÙŠØ§Ø³Ø© Ù…Ù„ÙØ§Øª ØªØ¹Ø±ÙŠÙ Ø§Ù„Ø§Ø±ØªØ¨Ø§Ø·",
+    accessibility: "Ø¥Ù…ÙƒØ§Ù†ÙŠØ© Ø§Ù„ÙˆØµÙˆÙ„",
+    shippingInfo: "Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ø´Ø­Ù†",
+    returnsExchanges: "Ø§Ù„Ø¥Ø±Ø¬Ø§Ø¹ ÙˆØ§Ù„Ø§Ø³ØªØ¨Ø¯Ø§Ù„",
+    orderTracking: "ØªØªØ¨Ø¹ Ø§Ù„Ø·Ù„Ø¨",
+    faq: "Ø§Ù„Ø£Ø³Ø¦Ù„Ø© Ø§Ù„Ø´Ø§Ø¦Ø¹Ø©",
+    newArrivals: "ÙˆØµÙ„ Ø­Ø¯ÙŠØ«Ø§Ù‹",
+    giftSets: "Ù…Ø¬Ù…ÙˆØ¹Ø§Øª Ø§Ù„Ù‡Ø¯Ø§ÙŠØ§",
+    allRightsReserved: "Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø­Ù‚ÙˆÙ‚ Ù…Ø­ÙÙˆØ¸Ø©.",
+    beautyShop: "Ù…ØªØ¬Ø± Ø§Ù„ØªØ¬Ù…ÙŠÙ„",
 
     // Pages
-    exploreCollections: "استكشف المجموعات",
-    discoverBrands: "اكتشف العلامات التجارية",
-    topSellers: "الأكثر مبيعاً",
-    specialOffers: "عروض خاصة",
-    getInTouch: "تواصل معنا",
-    loadingProducts: "جاري تحميل المنتجات...",
-    noProductsFound: "لم يتم العثور على منتجات",
-    backToHome: "العودة للرئيسية",
-    productNotFound: "المنتج غير موجود",
+    exploreCollections: "Ø§Ø³ØªÙƒØ´Ù Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø§Øª",
+    discoverBrands: "Ø§ÙƒØªØ´Ù Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©",
+    topSellers: "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹",
+    specialOffers: "Ø¹Ø±ÙˆØ¶ Ø®Ø§ØµØ©",
+    getInTouch: "ØªÙˆØ§ØµÙ„ Ù…Ø¹Ù†Ø§",
+    loadingProducts: "Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª...",
+    noProductsFound: "Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ù…Ù†ØªØ¬Ø§Øª",
+    backToHome: "Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„Ø±Ø¦ÙŠØ³ÙŠØ©",
+    productNotFound: "Ø§Ù„Ù…Ù†ØªØ¬ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯",
   },
 };
 
 interface LanguageContextType {
   language: Language;
-  /** Alias for language — kept for backward compatibility */
+  /** Alias for language â€” kept for backward compatibility */
   locale: Language;
   setLanguage: (lang: Language) => void;
   t: Translations;
@@ -300,7 +300,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
     // Update meta descriptions dynamically
     const enDesc = "Discover premium skincare and beauty products at Asper Beauty Shop. Curated luxury essentials for your daily beauty ritual.";
-    const arDesc = "اكتشفي منتجات العناية بالبشرة والجمال الفاخرة في أسبر بيوتي شوب. مستحضرات فاخرة منتقاة بعناية لروتين جمالك اليومي.";
+    const arDesc = "Ø§ÙƒØªØ´ÙÙŠ Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© ÙˆØ§Ù„Ø¬Ù…Ø§Ù„ Ø§Ù„ÙØ§Ø®Ø±Ø© ÙÙŠ Ø£Ø³Ø¨Ø± Ø¨ÙŠÙˆØªÙŠ Ø´ÙˆØ¨. Ù…Ø³ØªØ­Ø¶Ø±Ø§Øª ÙØ§Ø®Ø±Ø© Ù…Ù†ØªÙ‚Ø§Ø© Ø¨Ø¹Ù†Ø§ÙŠØ© Ù„Ø±ÙˆØªÙŠÙ† Ø¬Ù…Ø§Ù„Ùƒ Ø§Ù„ÙŠÙˆÙ…ÙŠ.";
     const desc = isRTL ? arDesc : enDesc;
 
     const metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
@@ -314,7 +314,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
     // Update titles
     const enTitle = "Asper Beauty Shop | Luxury Skincare & Beauty Essentials";
-    const arTitle = "أسبر بيوتي شوب | مستحضرات العناية بالبشرة والجمال الفاخرة";
+    const arTitle = "Ø£Ø³Ø¨Ø± Ø¨ÙŠÙˆØªÙŠ Ø´ÙˆØ¨ | Ù…Ø³ØªØ­Ø¶Ø±Ø§Øª Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© ÙˆØ§Ù„Ø¬Ù…Ø§Ù„ Ø§Ù„ÙØ§Ø®Ø±Ø©";
     const title = isRTL ? arTitle : enTitle;
     document.title = title;
 

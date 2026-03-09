@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+﻿import { useCallback, useState } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -99,7 +99,7 @@ export const ProductSearchFilters = ({
       >
         <AccordionItem value="categories" className="border-b border-gray-100">
           <AccordionTrigger className="text-sm font-medium text-gray-900 hover:no-underline py-3">
-            {language === "ar" ? "الفئات" : "Categories"}
+            {language === "ar" ? "Ø§Ù„ÙØ¦Ø§Øª" : "Categories"}
           </AccordionTrigger>
           <AccordionContent className="pb-4">
             <div className="space-y-3">
@@ -145,7 +145,7 @@ export const ProductSearchFilters = ({
         {/* Brands */}
         <AccordionItem value="brands" className="border-b border-gray-100">
           <AccordionTrigger className="text-sm font-medium text-gray-900 hover:no-underline py-3">
-            {language === "ar" ? "العلامات التجارية" : "Brands"}
+            {language === "ar" ? "Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©" : "Brands"}
           </AccordionTrigger>
           <AccordionContent className="pb-4">
             <div className="grid grid-cols-2 gap-2">
@@ -170,7 +170,7 @@ export const ProductSearchFilters = ({
         {/* Skin Concerns */}
         <AccordionItem value="concerns" className="border-b border-gray-100">
           <AccordionTrigger className="text-sm font-medium text-gray-900 hover:no-underline py-3">
-            {language === "ar" ? "مشاكل البشرة" : "Skin Concerns"}
+            {language === "ar" ? "Ù…Ø´Ø§ÙƒÙ„ Ø§Ù„Ø¨Ø´Ø±Ø©" : "Skin Concerns"}
           </AccordionTrigger>
           <AccordionContent className="pb-4">
             <div className="flex flex-wrap gap-2">
@@ -194,7 +194,7 @@ export const ProductSearchFilters = ({
         {/* Price Range */}
         <AccordionItem value="price" className="border-b border-gray-100">
           <AccordionTrigger className="text-sm font-medium text-gray-900 hover:no-underline py-3">
-            {language === "ar" ? "نطاق السعر" : "Price Range"}
+            {language === "ar" ? "Ù†Ø·Ø§Ù‚ Ø§Ù„Ø³Ø¹Ø±" : "Price Range"}
           </AccordionTrigger>
           <AccordionContent className="pb-4">
             <div className="space-y-4 px-1">
@@ -239,7 +239,7 @@ export const ProductSearchFilters = ({
           className="border-red-300"
         />
         <span className="text-sm font-medium text-red-700">
-          {language === "ar" ? "العروض فقط" : "On Sale Only"}
+          {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶ ÙÙ‚Ø·" : "On Sale Only"}
         </span>
       </label>
     </div>
@@ -254,7 +254,7 @@ export const ProductSearchFilters = ({
           <Input
             type="text"
             placeholder={language === "ar"
-              ? "ابحث عن منتجات..."
+              ? "Ø§Ø¨Ø­Ø« Ø¹Ù† Ù…Ù†ØªØ¬Ø§Øª..."
               : "Search products..."}
             value={filters.searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
@@ -279,7 +279,7 @@ export const ProductSearchFilters = ({
               className="lg:hidden flex items-center gap-2 border-gray-200"
             >
               <SlidersHorizontal className="w-4 h-4" />
-              <span>{language === "ar" ? "تصفية" : "Filters"}</span>
+              <span>{language === "ar" ? "ØªØµÙÙŠØ©" : "Filters"}</span>
               {activeFilterCount > 0 && (
                 <Badge className="bg-burgundy text-white text-xs px-1.5 py-0.5 rounded-full">
                   {activeFilterCount}
@@ -293,7 +293,7 @@ export const ProductSearchFilters = ({
           >
             <SheetHeader className="p-4 border-b border-gray-100">
               <SheetTitle className="text-left">
-                {language === "ar" ? "تصفية المنتجات" : "Filter Products"}
+                {language === "ar" ? "ØªØµÙÙŠØ© Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª" : "Filter Products"}
               </SheetTitle>
             </SheetHeader>
             <div className="p-4">
@@ -305,7 +305,7 @@ export const ProductSearchFilters = ({
                 className="w-full bg-burgundy hover:bg-burgundy-light text-white"
               >
                 {language === "ar"
-                  ? `عرض ${productCount} منتج`
+                  ? `Ø¹Ø±Ø¶ ${productCount} Ù…Ù†ØªØ¬`
                   : `Show ${productCount} Products`}
               </Button>
             </div>
@@ -317,7 +317,7 @@ export const ProductSearchFilters = ({
       {activeFilterCount > 0 && (
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-xs text-gray-500">
-            {language === "ar" ? "الفلاتر النشطة:" : "Active filters:"}
+            {language === "ar" ? "Ø§Ù„ÙÙ„Ø§ØªØ± Ø§Ù„Ù†Ø´Ø·Ø©:" : "Active filters:"}
           </span>
 
           {filters.categories.map((catId) => {
@@ -366,7 +366,7 @@ export const ProductSearchFilters = ({
               className="bg-red-100 text-red-700 cursor-pointer gap-1"
               onClick={() => updateFilters({ onSaleOnly: false })}
             >
-              {language === "ar" ? "العروض" : "On Sale"}
+              {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶" : "On Sale"}
               <X className="w-3 h-3" />
             </Badge>
           )}
@@ -375,7 +375,7 @@ export const ProductSearchFilters = ({
             onClick={clearAllFilters}
             className="text-xs text-burgundy hover:underline ml-2"
           >
-            {language === "ar" ? "مسح الكل" : "Clear all"}
+            {language === "ar" ? "Ù…Ø³Ø­ Ø§Ù„ÙƒÙ„" : "Clear all"}
           </button>
         </div>
       )}

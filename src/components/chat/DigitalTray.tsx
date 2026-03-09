@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { type PrescriptionProduct, useCartStore } from "@/stores/cartStore";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
@@ -32,12 +32,12 @@ export const DigitalTray = ({ products, concern }: DigitalTrayProps) => {
     await addMultipleFromPrescription(products);
     toast.success(
       language === "ar"
-        ? "ØªÙ…Øª Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ø±ÙˆØªÙŠÙ† Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©"
+        ? "Ã˜ÂªÃ™â€¦Ã˜Âª Ã˜Â¥Ã˜Â¶Ã˜Â§Ã™Ã˜Â© Ã˜Â§Ã™â€žÃ˜Â±Ã™Ë†Ã˜ÂªÃ™Å Ã™â€  Ã˜Â¥Ã™â€žÃ™â€° Ã˜Â§Ã™â€žÃ˜Â³Ã™â€žÃ˜Â©"
         : "Routine added to cart",
       {
         description: language === "ar"
-          ? `${products.length} Ù…Ù†ØªØ¬ â€” Ø§ÙØªØ­ Ø§Ù„Ø³Ù„Ø© Ù„Ù„Ø§Ø·Ù„Ø§Ø¹`
-          : `${products.length} items â€” open cart to review`,
+          ? `${products.length} Ã™â€¦Ã™â€ Ã˜ÂªÃ˜Â¬ Ã¢â‚¬â€ Ã˜Â§Ã™Ã˜ÂªÃ˜Â­ Ã˜Â§Ã™â€žÃ˜Â³Ã™â€žÃ˜Â© Ã™â€žÃ™â€žÃ˜Â§Ã˜Â·Ã™â€žÃ˜Â§Ã˜Â¹`
+          : `${products.length} items Ã¢â‚¬â€ open cart to review`,
         position: "top-center",
       },
     );
@@ -59,7 +59,7 @@ export const DigitalTray = ({ products, concern }: DigitalTrayProps) => {
         className="font-display text-burgundy text-xl mb-4"
         dir={isRTL ? "rtl" : "ltr"}
       >
-        {language === "ar" ? "Ø±ÙˆØªÙŠÙ†Ùƒ Ø§Ù„Ù…ÙˆØµÙ‰ Ø¨Ù‡" : "Your Prescription"}
+        {language === "ar" ? "Ã˜Â±Ã™Ë†Ã˜ÂªÃ™Å Ã™â€ Ã™Æ’ Ã˜Â§Ã™â€žÃ™â€¦Ã™Ë†Ã˜ÂµÃ™â€° Ã˜Â¨Ã™â€¡" : "Your Prescription"}
       </h3>
       <div className="space-y-4">
         {products.map((p) => (
@@ -96,7 +96,7 @@ export const DigitalTray = ({ products, concern }: DigitalTrayProps) => {
         ))}
       </div>
       <p className="text-sm text-dark-charcoal/80 font-body mt-4">
-        {language === "ar" ? "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹ Ø§Ù„ØªÙ‚Ø±ÙŠØ¨ÙŠ:" : "Approx. total:"}{" "}
+        {language === "ar" ? "Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â¬Ã™â€¦Ã™Ë†Ã˜Â¹ Ã˜Â§Ã™â€žÃ˜ÂªÃ™â€šÃ˜Â±Ã™Å Ã˜Â¨Ã™Å :" : "Approx. total:"}{" "}
         <span className="font-display text-burgundy font-semibold">
           {totalJOD.toFixed(2)} JOD
         </span>
@@ -110,9 +110,9 @@ export const DigitalTray = ({ products, concern }: DigitalTrayProps) => {
           className="w-full bg-burgundy text-white py-3 font-body font-medium rounded-lg hover:bg-burgundy-light transition-all disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {isLoading
-            ? (language === "ar" ? "Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø¥Ø¶Ø§ÙØ©..." : "Adding...")
+            ? (language === "ar" ? "Ã˜Â¬Ã˜Â§Ã˜Â±Ã™Å  Ã˜Â§Ã™â€žÃ˜Â¥Ã˜Â¶Ã˜Â§Ã™Ã˜Â©..." : "Adding...")
             : (language === "ar"
-              ? "Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ø±ÙˆØªÙŠÙ† Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©"
+              ? "Ã˜Â¥Ã˜Â¶Ã˜Â§Ã™Ã˜Â© Ã˜Â§Ã™â€žÃ˜Â±Ã™Ë†Ã˜ÂªÃ™Å Ã™â€  Ã˜Â¥Ã™â€žÃ™â€° Ã˜Â§Ã™â€žÃ˜Â³Ã™â€žÃ˜Â©"
               : "Quick Add Routine to Cart")}
         </button>
 
@@ -127,7 +127,7 @@ export const DigitalTray = ({ products, concern }: DigitalTrayProps) => {
         dir={isRTL ? "rtl" : "ltr"}
       >
         *{language === "ar"
-          ? "ØªØ±ÙƒÙŠØ¨Ø© Ø³Ø±ÙŠØ±ÙŠØ© Ù…Ù† ØµÙŠØ¯Ù„ÙŠ Ø¢Ø³Ø¨Ø± Ø§Ù„Ø±Ù‚Ù…ÙŠ"
+          ? "Ã˜ÂªÃ˜Â±Ã™Æ’Ã™Å Ã˜Â¨Ã˜Â© Ã˜Â³Ã˜Â±Ã™Å Ã˜Â±Ã™Å Ã˜Â© Ã™â€¦Ã™â€  Ã˜ÂµÃ™Å Ã˜Â¯Ã™â€žÃ™Å  Ã˜Â¢Ã˜Â³Ã˜Â¨Ã˜Â± Ã˜Â§Ã™â€žÃ˜Â±Ã™â€šÃ™â€¦Ã™Å "
           : "Clinical formulation by Asper Digital Pharmacist"}
       </p>
     </motion.div>

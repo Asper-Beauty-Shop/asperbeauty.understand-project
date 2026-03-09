@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from "react";
+﻿import { ReactNode, useRef } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { cn } from "@/lib/utils";
 

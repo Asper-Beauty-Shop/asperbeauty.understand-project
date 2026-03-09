@@ -1,4 +1,4 @@
-import { Header } from "@/components/Header";
+﻿import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductGrid } from "@/components/ProductGrid";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -18,7 +18,7 @@ export default function BestSellers() {
               {isAr
                 ? (
                   <>
-                    الأكثر <span className="text-gold">مبيعاً</span>
+                    Ø§Ù„Ø£ÙƒØ«Ø± <span className="text-gold">Ù…Ø¨ÙŠØ¹Ø§Ù‹</span>
                   </>
                 )
                 : (
@@ -30,7 +30,7 @@ export default function BestSellers() {
             <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
             <p className="font-body text-cream/60 max-w-2xl mx-auto">
               {isAr
-                ? "اكتشفي منتجاتنا الأكثر شعبية، المختارة بعناية من عملائنا المميزين."
+                ? "Ø§ÙƒØªØ´ÙÙŠ Ù…Ù†ØªØ¬Ø§ØªÙ†Ø§ Ø§Ù„Ø£ÙƒØ«Ø± Ø´Ø¹Ø¨ÙŠØ©ØŒ Ø§Ù„Ù…Ø®ØªØ§Ø±Ø© Ø¨Ø¹Ù†Ø§ÙŠØ© Ù…Ù† Ø¹Ù…Ù„Ø§Ø¦Ù†Ø§ Ø§Ù„Ù…Ù…ÙŠØ²ÙŠÙ†."
                 : "Discover our most loved products, handpicked favorites from our discerning customers."}
             </p>
           </div>

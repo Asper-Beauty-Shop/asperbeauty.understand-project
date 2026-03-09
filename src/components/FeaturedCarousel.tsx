@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -61,7 +61,7 @@ export const FeaturedCarousel = () => {
     });
 
     toast.success(
-      language === "ar" ? "تمت الإضافة إلى السلة" : "Added to cart",
+      language === "ar" ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©" : "Added to cart",
       {
         position: "top-center",
       },
@@ -74,7 +74,7 @@ export const FeaturedCarousel = () => {
         <div className="luxury-container">
           <div className="text-center mb-10">
             <h2 className="font-display text-3xl md:text-4xl text-dark-charcoal mb-4">
-              {language === "ar" ? "الأكثر مبيعاً" : "Best Sellers"}
+              {language === "ar" ? "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹" : "Best Sellers"}
             </h2>
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-shiny-gold to-transparent mx-auto" />
           </div>
@@ -97,7 +97,7 @@ export const FeaturedCarousel = () => {
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 className="font-display text-3xl md:text-4xl text-dark-charcoal mb-4">
-            {language === "ar" ? "الأكثر مبيعاً" : "Best Sellers"}
+            {language === "ar" ? "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹" : "Best Sellers"}
           </h2>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-shiny-gold to-transparent mx-auto" />
         </div>
@@ -160,7 +160,7 @@ export const FeaturedCarousel = () => {
                         className="w-full bg-shiny-gold text-black hover:bg-shiny-gold/90 font-display tracking-wider"
                       >
                         <ShoppingBag className="w-4 h-4 mr-2" />
-                        {language === "ar" ? "أضف للسلة" : "Quick Add"}
+                        {language === "ar" ? "Ø£Ø¶Ù Ù„Ù„Ø³Ù„Ø©" : "Quick Add"}
                       </Button>
                     </div>
                   </div>
@@ -204,7 +204,7 @@ export const FeaturedCarousel = () => {
             to="/best-sellers"
             className="inline-flex items-center gap-2 font-display text-sm text-dark-charcoal hover:text-shiny-gold transition-colors tracking-wider"
           >
-            {language === "ar" ? "عرض جميع المنتجات" : "View All Products"}
+            {language === "ar" ? "Ø¹Ø±Ø¶ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª" : "View All Products"}
             <ChevronRight className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`} />
           </Link>
         </div>

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+﻿import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Lock, ChevronDown, CreditCard, Banknote, Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,17 +11,17 @@ import { cn } from "@/lib/utils";
 import { normalizePrice } from "@/lib/shopify";
 import { playSuccessSound } from "@/lib/sounds";
 
-/* ─── Jordanian Location Data ─── */
+/* â”€â”€â”€ Jordanian Location Data â”€â”€â”€ */
 const CITIES = [
-  { value: "amman", label: "Amman - عمّان" },
-  { value: "zarqa", label: "Zarqa - الزرقاء" },
-  { value: "irbid", label: "Irbid - إربد" },
-  { value: "aqaba", label: "Aqaba - العقبة" },
-  { value: "salt", label: "Salt - السلط" },
-  { value: "madaba", label: "Madaba - مادبا" },
-  { value: "jerash", label: "Jerash - جرش" },
-  { value: "mafraq", label: "Mafraq - المفرق" },
-  { value: "karak", label: "Karak - الكرك" },
+  { value: "amman", label: "Amman - Ø¹Ù…Ù‘Ø§Ù†" },
+  { value: "zarqa", label: "Zarqa - Ø§Ù„Ø²Ø±Ù‚Ø§Ø¡" },
+  { value: "irbid", label: "Irbid - Ø¥Ø±Ø¨Ø¯" },
+  { value: "aqaba", label: "Aqaba - Ø§Ù„Ø¹Ù‚Ø¨Ø©" },
+  { value: "salt", label: "Salt - Ø§Ù„Ø³Ù„Ø·" },
+  { value: "madaba", label: "Madaba - Ù…Ø§Ø¯Ø¨Ø§" },
+  { value: "jerash", label: "Jerash - Ø¬Ø±Ø´" },
+  { value: "mafraq", label: "Mafraq - Ø§Ù„Ù…ÙØ±Ù‚" },
+  { value: "karak", label: "Karak - Ø§Ù„ÙƒØ±Ùƒ" },
 ];
 
 const AMMAN_AREAS = [
@@ -75,7 +75,7 @@ export default function Checkout() {
         window.open(checkoutUrl, "_blank");
       }
     } else {
-      // COD flow — show confirmation
+      // COD flow â€” show confirmation
       setSubmitting(true);
       playSuccessSound();
       if ("vibrate" in navigator) navigator.vibrate([100, 50, 100]);
@@ -105,7 +105,7 @@ export default function Checkout() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* ─── Enclosed "Trust Tunnel" Header ─── */}
+      {/* â”€â”€â”€ Enclosed "Trust Tunnel" Header â”€â”€â”€ */}
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
           <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground font-body">
@@ -339,7 +339,7 @@ export default function Checkout() {
             ) : (
               <>
                 <Banknote className="h-4 w-4 mr-2" />
-                Place Order — COD ({(totalPrice + deliveryFee).toFixed(2)} {currency})
+                Place Order â€” COD ({(totalPrice + deliveryFee).toFixed(2)} {currency})
               </>
             )}
           </Button>

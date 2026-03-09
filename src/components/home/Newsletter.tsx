@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -105,7 +105,7 @@ export default function Newsletter() {
               hover:shadow-[0_4px_20px_rgba(201,169,98,0.4)]
               transition-all duration-300"
           >
-            {submitting ? "Subscribing…" : "Subscribe"}
+            {submitting ? "Subscribingâ€¦" : "Subscribe"}
           </Button>
         </form>
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+﻿import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   fetchProductsPaginated,
   PaginatedProductsResponse,
@@ -191,10 +191,10 @@ export const ProductGrid = ({
         {!showFilters && (
           <div className="text-center mb-16">
             <p className="luxury-subheading text-shiny-gold mb-4">
-              {language === "ar" ? "تسوقي مجموعتنا" : "Shop Our Collection"}
+              {language === "ar" ? "ØªØ³ÙˆÙ‚ÙŠ Ù…Ø¬Ù…ÙˆØ¹ØªÙ†Ø§" : "Shop Our Collection"}
             </p>
             <h2 className="font-display text-4xl md:text-5xl text-dark-charcoal mb-6">
-              {language === "ar" ? "المنتجات المميزة" : "Featured Products"}
+              {language === "ar" ? "Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ù…ÙŠØ²Ø©" : "Featured Products"}
             </h2>
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-shiny-gold to-transparent mx-auto" />
           </div>
@@ -252,12 +252,12 @@ export const ProductGrid = ({
                 <div className="mb-6 flex items-center justify-between">
                   <p className="font-body text-sm text-dark-charcoal">
                     {language === "ar"
-                      ? `عرض ${filteredProducts.length} من ${products.length} منتج`
+                      ? `Ø¹Ø±Ø¶ ${filteredProducts.length} Ù…Ù† ${products.length} Ù…Ù†ØªØ¬`
                       : `Showing ${filteredProducts.length} of ${products.length} products`}
                   </p>
                   {pageInfo?.hasNextPage && (
                     <p className="font-body text-xs text-muted-foreground">
-                      {language === "ar" ? "المزيد متاح" : "More available"}
+                      {language === "ar" ? "Ø§Ù„Ù…Ø²ÙŠØ¯ Ù…ØªØ§Ø­" : "More available"}
                     </p>
                   )}
                 </div>
@@ -285,7 +285,7 @@ export const ProductGrid = ({
                           <Loader2 className="w-6 h-6 animate-spin text-shiny-gold" />
                           <span className="font-body text-sm text-muted-foreground">
                             {language === "ar"
-                              ? "جاري تحميل المزيد..."
+                              ? "Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ù…Ø²ÙŠØ¯..."
                               : "Loading more..."}
                           </span>
                         </div>
@@ -299,7 +299,7 @@ export const ProductGrid = ({
                             className="border-shiny-gold text-shiny-gold hover:bg-shiny-gold hover:text-dark-charcoal transition-all duration-300 gap-2"
                           >
                             <ChevronDown className="w-4 h-4" />
-                            {language === "ar" ? "تحميل المزيد" : "Load More"}
+                            {language === "ar" ? "ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ù…Ø²ÙŠØ¯" : "Load More"}
                           </Button>
                         </div>
                       )}
@@ -308,7 +308,7 @@ export const ProductGrid = ({
                         products.length > PRODUCTS_PER_PAGE && (
                         <p className="text-center font-body text-sm text-muted-foreground py-8">
                           {language === "ar"
-                            ? "تم عرض جميع المنتجات"
+                            ? "ØªÙ… Ø¹Ø±Ø¶ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª"
                             : "All products loaded"}
                         </p>
                       )}
@@ -319,17 +319,17 @@ export const ProductGrid = ({
                   <div className="text-center py-20">
                     <div className="w-16 h-16 rounded-full bg-shiny-gold/10 flex items-center justify-center mx-auto mb-4">
                       <span className="font-display text-2xl text-shiny-gold">
-                        ∅
+                        âˆ…
                       </span>
                     </div>
                     <h3 className="font-display text-xl text-dark-charcoal mb-2">
                       {language === "ar"
-                        ? "لم يتم العثور على منتجات"
+                        ? "Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ù…Ù†ØªØ¬Ø§Øª"
                         : "No products found"}
                     </h3>
                     <p className="font-body text-sm text-muted-foreground">
                       {language === "ar"
-                        ? "جربي تعديل الفلاتر للعثور على ما تبحثين عنه"
+                        ? "Ø¬Ø±Ø¨ÙŠ ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„ÙÙ„Ø§ØªØ± Ù„Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ù…Ø§ ØªØ¨Ø­Ø«ÙŠÙ† Ø¹Ù†Ù‡"
                         : "Try adjusting your filters to find what you're looking for."}
                     </p>
                   </div>
@@ -343,14 +343,14 @@ export const ProductGrid = ({
           <div className="text-center py-20 px-6">
             <div className="max-w-md mx-auto">
               <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mx-auto mb-6 border border-shiny-gold/30">
-                <span className="font-display text-3xl text-shiny-gold">∅</span>
+                <span className="font-display text-3xl text-shiny-gold">âˆ…</span>
               </div>
               <h3 className="font-display text-2xl text-dark-charcoal mb-4">
-                {language === "ar" ? "لا توجد منتجات بعد" : "No Products Yet"}
+                {language === "ar" ? "Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª Ø¨Ø¹Ø¯" : "No Products Yet"}
               </h3>
               <p className="text-muted-foreground font-body text-sm leading-relaxed">
                 {language === "ar"
-                  ? "مجموعتنا قيد الإعداد. أخبرينا عن المنتجات التي ترغبين في رؤيتها في متجرك."
+                  ? "Ù…Ø¬Ù…ÙˆØ¹ØªÙ†Ø§ Ù‚ÙŠØ¯ Ø§Ù„Ø¥Ø¹Ø¯Ø§Ø¯. Ø£Ø®Ø¨Ø±ÙŠÙ†Ø§ Ø¹Ù† Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªÙŠ ØªØ±ØºØ¨ÙŠÙ† ÙÙŠ Ø±Ø¤ÙŠØªÙ‡Ø§ ÙÙŠ Ù…ØªØ¬Ø±Ùƒ."
                   : "Our collection is being curated. Tell us what products you'd like to see in your store by describing the product name and price in the chat."}
               </p>
             </div>

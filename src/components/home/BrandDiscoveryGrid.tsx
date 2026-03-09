@@ -1,4 +1,4 @@
-import { useLanguage } from "@/contexts/LanguageContext";
+﻿import { useLanguage } from "@/contexts/LanguageContext";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -9,8 +9,8 @@ const BiodermaLogo = () => (
 );
 
 const KerastaseLogo = () => (
-  <svg viewBox="0 0 140 36" className="h-8 w-auto" aria-label="Kérastase">
-    <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontFamily="'Playfair Display', serif" fontWeight="700" fontSize="17" letterSpacing="2" fill="currentColor">KÉRASTASE</text>
+  <svg viewBox="0 0 140 36" className="h-8 w-auto" aria-label="KÃ©rastase">
+    <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontFamily="'Playfair Display', serif" fontWeight="700" fontSize="17" letterSpacing="2" fill="currentColor">KÃ‰RASTASE</text>
   </svg>
 );
 
@@ -71,7 +71,7 @@ const AsperLogo = () => (
 
 const brands = [
   { name: "Bioderma", slug: "bioderma", Logo: BiodermaLogo },
-  { name: "Kérastase", slug: "kerastase", Logo: KerastaseLogo },
+  { name: "KÃ©rastase", slug: "kerastase", Logo: KerastaseLogo },
   { name: "Yves Saint Laurent", slug: "yves-saint-laurent", Logo: YSLLogo },
   { name: "Maybelline", slug: "maybelline", Logo: MaybellineLogo },
   { name: "Garnier", slug: "garnier", Logo: GarnierLogo },
@@ -91,21 +91,21 @@ export default function BrandDiscoveryGrid() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <Badge variant="secondary" className="mb-4 font-body text-xs tracking-wider">
-            {isAr ? "العلامات المميزة" : "TRUSTED BY THOUSANDS"}
+            {isAr ? "Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„Ù…Ù…ÙŠØ²Ø©" : "TRUSTED BY THOUSANDS"}
           </Badge>
           <h2 className={cn(
             "font-heading text-3xl sm:text-4xl font-bold text-primary",
             isAr && "font-arabic"
           )}>
-            {isAr ? "أكثر العلامات شراءً" : "Most Popular Brands"}
+            {isAr ? "Ø£ÙƒØ«Ø± Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø´Ø±Ø§Ø¡Ù‹" : "Most Popular Brands"}
           </h2>
           <p className={cn(
             "mt-3 text-muted-foreground text-base max-w-xl mx-auto",
             isAr ? "font-arabic" : "font-body"
           )}>
             {isAr
-              ? "أكثر من 5,000 منتج من أرقى العلامات العالمية — جميعها أصلية ومعتمدة."
-              : "Over 5,000 SKUs from the world's most prestigious brands — all verified authentic."}
+              ? "Ø£ÙƒØ«Ø± Ù…Ù† 5,000 Ù…Ù†ØªØ¬ Ù…Ù† Ø£Ø±Ù‚Ù‰ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„Ø¹Ø§Ù„Ù…ÙŠØ© â€” Ø¬Ù…ÙŠØ¹Ù‡Ø§ Ø£ØµÙ„ÙŠØ© ÙˆÙ…Ø¹ØªÙ…Ø¯Ø©."
+              : "Over 5,000 SKUs from the world's most prestigious brands â€” all verified authentic."}
           </p>
         </div>
 

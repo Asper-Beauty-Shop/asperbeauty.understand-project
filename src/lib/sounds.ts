@@ -1,5 +1,5 @@
-/**
- * Sonic Branding — Asper Beauty
+﻿/**
+ * Sonic Branding â€” Asper Beauty
  * Generates audio cues using the Web Audio API.
  * All sounds are subtle, short, and luxurious.
  */
@@ -11,7 +11,7 @@ function getCtx(): AudioContext {
   return audioCtx;
 }
 
-/** Soft "compact-click + shimmer" — Add to Cart */
+/** Soft "compact-click + shimmer" â€” Add to Cart */
 export function playAddToCartSound() {
   try {
     const ctx = getCtx();
@@ -47,11 +47,11 @@ export function playAddToCartSound() {
     shimmerOsc.start(now + 0.05);
     shimmerOsc.stop(now + 0.45);
   } catch {
-    // Silent fail — audio is non-critical
+    // Silent fail â€” audio is non-critical
   }
 }
 
-/** Two-tone crystal chime — Notification / Concierge */
+/** Two-tone crystal chime â€” Notification / Concierge */
 export function playNotificationSound() {
   try {
     const ctx = getCtx();
@@ -76,13 +76,13 @@ export function playNotificationSound() {
   }
 }
 
-/** Rising chord — Checkout success */
+/** Rising chord â€” Checkout success */
 export function playSuccessSound() {
   try {
     const ctx = getCtx();
     const now = ctx.currentTime;
 
-    // Rising triad: C5 → E5 → G5
+    // Rising triad: C5 â†’ E5 â†’ G5
     [523, 659, 784].forEach((freq, i) => {
       const offset = i * 0.12;
       const gain = ctx.createGain();

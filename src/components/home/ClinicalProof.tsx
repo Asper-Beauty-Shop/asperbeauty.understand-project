@@ -1,4 +1,4 @@
-import { ShieldCheck, Award, FlaskConical, Leaf } from "lucide-react";
+﻿import { ShieldCheck, Award, FlaskConical, Leaf } from "lucide-react";
 
 const badges = [
   { icon: ShieldCheck, label: "JFDA CERTIFIED" },

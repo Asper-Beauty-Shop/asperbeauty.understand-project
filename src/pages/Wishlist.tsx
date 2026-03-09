@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ export default function Wishlist() {
       selectedOptions: firstVariant.selectedOptions,
     });
 
-    toast.success(isAr ? "تمت الإضافة للحقيبة" : "Added to Bag", {
+    toast.success(isAr ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ù„Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Added to Bag", {
       description: product.node.title,
       position: "top-center",
     });
@@ -54,7 +54,7 @@ export default function Wishlist() {
       }
     });
 
-    toast.success(isAr ? "تمت إضافة جميع المنتجات" : "All items added to bag", {
+    toast.success(isAr ? "ØªÙ…Øª Ø¥Ø¶Ø§ÙØ© Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª" : "All items added to bag", {
       position: "top-center",
     });
 
@@ -77,7 +77,7 @@ export default function Wishlist() {
               {isAr
                 ? (
                   <>
-                    قائمة <span className="text-gold">الرغبات</span>
+                    Ù‚Ø§Ø¦Ù…Ø© <span className="text-gold">Ø§Ù„Ø±ØºØ¨Ø§Øª</span>
                   </>
                 )
                 : (
@@ -89,7 +89,7 @@ export default function Wishlist() {
             <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
             <p className="font-body text-cream/60 max-w-2xl mx-auto">
               {isAr
-                ? "منتجاتك المفضلة محفوظة هنا لشرائها لاحقاً."
+                ? "Ù…Ù†ØªØ¬Ø§ØªÙƒ Ø§Ù„Ù…ÙØ¶Ù„Ø© Ù…Ø­ÙÙˆØ¸Ø© Ù‡Ù†Ø§ Ù„Ø´Ø±Ø§Ø¦Ù‡Ø§ Ù„Ø§Ø­Ù‚Ø§Ù‹."
                 : "Your favorite products saved for later."}
             </p>
           </div>
@@ -102,16 +102,16 @@ export default function Wishlist() {
                   <Heart className="w-16 h-16 text-gold/30" />
                 </div>
                 <h2 className="font-display text-2xl text-cream mb-4">
-                  {isAr ? "قائمة الرغبات فارغة" : "Your wishlist is empty"}
+                  {isAr ? "Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø±ØºØ¨Ø§Øª ÙØ§Ø±ØºØ©" : "Your wishlist is empty"}
                 </h2>
                 <p className="font-body text-cream/60 mb-8 max-w-md mx-auto">
                   {isAr
-                    ? "ابدأي بإضافة منتجاتك المفضلة عن طريق النقر على أيقونة القلب في أي منتج."
+                    ? "Ø§Ø¨Ø¯Ø£ÙŠ Ø¨Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬Ø§ØªÙƒ Ø§Ù„Ù…ÙØ¶Ù„Ø© Ø¹Ù† Ø·Ø±ÙŠÙ‚ Ø§Ù„Ù†Ù‚Ø± Ø¹Ù„Ù‰ Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„Ù‚Ù„Ø¨ ÙÙŠ Ø£ÙŠ Ù…Ù†ØªØ¬."
                     : "Start adding your favorite products by clicking the heart icon on any product."}
                 </p>
                 <Link to="/collections">
                   <Button className="bg-gold text-background hover:bg-gold-light font-display tracking-wider">
-                    {isAr ? "تصفح المجموعات" : "Browse Collections"}
+                    {isAr ? "ØªØµÙØ­ Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø§Øª" : "Browse Collections"}
                     <ArrowRight className="w-4 h-4 ms-2" />
                   </Button>
                 </Link>
@@ -124,7 +124,7 @@ export default function Wishlist() {
                   <p className="font-body text-cream/80">
                     {isAr
                       ? `${items.length} ${
-                        items.length === 1 ? "منتج محفوظ" : "منتجات محفوظة"
+                        items.length === 1 ? "Ù…Ù†ØªØ¬ Ù…Ø­ÙÙˆØ¸" : "Ù…Ù†ØªØ¬Ø§Øª Ù…Ø­ÙÙˆØ¸Ø©"
                       }`
                       : `${items.length} item${
                         items.length !== 1 ? "s" : ""
@@ -138,7 +138,7 @@ export default function Wishlist() {
                       onClick={clearWishlist}
                     >
                       <Trash2 className="w-4 h-4 me-2" />
-                      {isAr ? "مسح الكل" : "Clear All"}
+                      {isAr ? "Ù…Ø³Ø­ Ø§Ù„ÙƒÙ„" : "Clear All"}
                     </Button>
                     <Button
                       size="sm"
@@ -146,7 +146,7 @@ export default function Wishlist() {
                       onClick={handleAddAllToCart}
                     >
                       <ShoppingBag className="w-4 h-4 me-2" />
-                      {isAr ? "إضافة الكل للحقيبة" : "Add All to Bag"}
+                      {isAr ? "Ø¥Ø¶Ø§ÙØ© Ø§Ù„ÙƒÙ„ Ù„Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add All to Bag"}
                     </Button>
                   </div>
                 </div>
@@ -212,7 +212,7 @@ export default function Wishlist() {
                             onClick={() => handleAddToCart(product)}
                           >
                             <ShoppingBag className="w-3.5 h-3.5 me-2" />
-                            {isAr ? "أضف للحقيبة" : "Add to Bag"}
+                            {isAr ? "Ø£Ø¶Ù Ù„Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Bag"}
                           </Button>
                         </div>
                       </div>
@@ -227,7 +227,7 @@ export default function Wishlist() {
                       variant="outline"
                       className="border-gold/30 text-cream hover:bg-gold/10 hover:border-gold font-display tracking-wider"
                     >
-                      {isAr ? "متابعة التسوق" : "Continue Shopping"}
+                      {isAr ? "Ù…ØªØ§Ø¨Ø¹Ø© Ø§Ù„ØªØ³ÙˆÙ‚" : "Continue Shopping"}
                       <ArrowRight className="w-4 h-4 ms-2" />
                     </Button>
                   </Link>

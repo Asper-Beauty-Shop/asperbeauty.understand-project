@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { toast } from "sonner";
@@ -14,11 +14,11 @@ export const NPSSurvey = () => {
     setSelectedScore(score);
     setHasSubmitted(true);
     toast.success(
-      isArabic ? "شكراً لتقييمك!" : "Thank you for your feedback!",
+      isArabic ? "Ø´ÙƒØ±Ø§Ù‹ Ù„ØªÙ‚ÙŠÙŠÙ…Ùƒ!" : "Thank you for your feedback!",
       {
         description:
           isArabic
-            ? "ملاحظاتك تساعدنا على التحسن"
+            ? "Ù…Ù„Ø§Ø­Ø¸Ø§ØªÙƒ ØªØ³Ø§Ø¹Ø¯Ù†Ø§ Ø¹Ù„Ù‰ Ø§Ù„ØªØ­Ø³Ù†"
             : "Your feedback helps us improve",
         position: "top-center",
       }
@@ -33,7 +33,7 @@ export const NPSSurvey = () => {
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
           <p className="font-display text-base lg:text-lg text-asper-ink text-center md:text-left flex-shrink-0">
             {isArabic
-              ? "ما مدى إعجابك بتشكيلتنا؟"
+              ? "Ù…Ø§ Ù…Ø¯Ù‰ Ø¥Ø¹Ø¬Ø§Ø¨Ùƒ Ø¨ØªØ´ÙƒÙŠÙ„ØªÙ†Ø§ØŸ"
               : "How much do you like our assortment?"}
           </p>
 
@@ -59,8 +59,8 @@ export const NPSSurvey = () => {
           </div>
 
           <div className="flex justify-between text-[10px] font-body text-muted-foreground uppercase tracking-wider md:hidden w-full max-w-xs">
-            <span>{isArabic ? "غير محتمل" : "Not likely"}</span>
-            <span>{isArabic ? "محتمل جداً" : "Very likely"}</span>
+            <span>{isArabic ? "ØºÙŠØ± Ù…Ø­ØªÙ…Ù„" : "Not likely"}</span>
+            <span>{isArabic ? "Ù…Ø­ØªÙ…Ù„ Ø¬Ø¯Ø§Ù‹" : "Very likely"}</span>
           </div>
         </div>
       </AnimatedSection>

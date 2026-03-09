@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+﻿import { useNavigate } from "react-router-dom";
 import { Stethoscope, Sparkles, ArrowRight, Shield, Flower2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
@@ -25,18 +25,18 @@ export default function DualPersonaTriage() {
           transition={{ duration: 0.6, ease: LUXURY_EASE }}
         >
           <span className="font-body text-xs uppercase tracking-[0.4em] text-polished-gold mb-4 block font-bold">
-            {isAr ? "استشارة ذكية" : "Digital Consultation"}
+            {isAr ? "Ø§Ø³ØªØ´Ø§Ø±Ø© Ø°ÙƒÙŠØ©" : "Digital Consultation"}
           </span>
           <h2 className={cn(
             "font-heading text-3xl md:text-6xl text-asper-ink mb-8 font-light tracking-tight",
             isAr && "font-arabic"
           )}>
-            {isAr ? "اختاري مسار جمالك" : "Select Your Path."}
+            {isAr ? "Ø§Ø®ØªØ§Ø±ÙŠ Ù…Ø³Ø§Ø± Ø¬Ù…Ø§Ù„Ùƒ" : "Select Your Path."}
           </h2>
           <div className="w-24 h-[2px] bg-polished-gold mx-auto" />
         </motion.div>
 
-        {/* The Dual-Persona Split ── Large Editorial Cards */}
+        {/* The Dual-Persona Split â”€â”€ Large Editorial Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
 
           {/* Card A: Dr. Sami (Clinical / Repair) */}
@@ -64,10 +64,10 @@ export default function DualPersonaTriage() {
                     <Stethoscope size={28} strokeWidth={1} className="text-polished-white group-hover:text-asper-ink transition-colors" />
                   </div>
                   <h3 className={cn("text-3xl lg:text-4xl text-polished-white mb-4 font-light tracking-tighter", isAr && "font-arabic")}>
-                    {isAr ? "المسار الطبي" : "The Clinical Path"}
+                    {isAr ? "Ø§Ù„Ù…Ø³Ø§Ø± Ø§Ù„Ø·Ø¨ÙŠ" : "The Clinical Path"}
                   </h3>
                   <p className={cn("text-polished-white/80 text-sm uppercase tracking-[0.2em] mb-8 font-semibold", isAr && "font-arabic")}>
-                    {isAr ? "علاجات متقدمة للبشرة" : "Advanced Dermo-Solutions"}
+                    {isAr ? "Ø¹Ù„Ø§Ø¬Ø§Øª Ù…ØªÙ‚Ø¯Ù…Ø© Ù„Ù„Ø¨Ø´Ø±Ø©" : "Advanced Dermo-Solutions"}
                   </p>
                   <div className="h-px w-full bg-polished-white/20 group-hover:bg-polished-gold transition-colors duration-500" />
                 </div>
@@ -100,10 +100,10 @@ export default function DualPersonaTriage() {
                     <Sparkles size={28} strokeWidth={1} className="text-polished-white group-hover:text-asper-ink transition-colors" />
                   </div>
                   <h3 className={cn("text-3xl lg:text-4xl text-polished-white mb-4 font-light tracking-tighter", isAr && "font-arabic")}>
-                    {isAr ? "مسار الأناقة" : "The Aesthetic Path"}
+                    {isAr ? "Ù…Ø³Ø§Ø± Ø§Ù„Ø£Ù†Ø§Ù‚Ø©" : "The Aesthetic Path"}
                   </h3>
                   <p className={cn("text-polished-white/80 text-sm uppercase tracking-[0.2em] mb-8 font-semibold", isAr && "font-arabic")}>
-                    {isAr ? "طقوس الجمال اليومية" : "Luxury Daily Rituals"}
+                    {isAr ? "Ø·Ù‚ÙˆØ³ Ø§Ù„Ø¬Ù…Ø§Ù„ Ø§Ù„ÙŠÙˆÙ…ÙŠØ©" : "Luxury Daily Rituals"}
                   </p>
                   <div className="h-px w-full bg-polished-white/20 group-hover:bg-polished-gold transition-colors duration-500" />
                 </div>

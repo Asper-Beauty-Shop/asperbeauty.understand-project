@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+﻿import { useState, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { ArrowLeft, FlaskConical, Atom, Zap, PenTool, Send, Loader2, RotateCcw, Gift, Megaphone } from "lucide-react";
@@ -111,7 +111,7 @@ function DeepDiveTab() {
       <div>
         <h3 className="font-heading text-xl font-semibold text-foreground mb-2">Molecular Deep-Dive</h3>
         <p className="text-sm text-muted-foreground font-body">
-          Enter any ingredient to get a dual-perspective analysis — pharmacology from Dr. Sami and beauty ritual from Ms. Zain.
+          Enter any ingredient to get a dual-perspective analysis â€” pharmacology from Dr. Sami and beauty ritual from Ms. Zain.
         </p>
       </div>
       <form onSubmit={(e) => { e.preventDefault(); if (ingredient.trim()) run("deep-dive", ingredient.trim()); }} className="flex gap-2">
@@ -121,7 +121,7 @@ function DeepDiveTab() {
         </Button>
         {result && <Button type="button" variant="ghost" size="icon" onClick={() => { reset(); setIngredient(""); }}><RotateCcw className="h-4 w-4" /></Button>}
       </form>
-      {error && <p className="text-sm text-destructive font-body">⚠️ {error}</p>}
+      {error && <p className="text-sm text-destructive font-body">âš ï¸ {error}</p>}
       {result && <ResultCard result={result} />}
     </div>
   );
@@ -151,7 +151,7 @@ function SynergyTab() {
           {result && <Button type="button" variant="ghost" onClick={() => { reset(); setIngredientA(""); setIngredientB(""); }}><RotateCcw className="h-4 w-4 mr-2" /> Reset</Button>}
         </div>
       </form>
-      {error && <p className="text-sm text-destructive font-body">⚠️ {error}</p>}
+      {error && <p className="text-sm text-destructive font-body">âš ï¸ {error}</p>}
       {result && <ResultCard result={result} />}
     </div>
   );
@@ -179,7 +179,7 @@ function CopywriterTab() {
           {result && <Button type="button" variant="ghost" onClick={() => { reset(); setProductName(""); setIngredients(""); }}><RotateCcw className="h-4 w-4 mr-2" /> Reset</Button>}
         </div>
       </form>
-      {error && <p className="text-sm text-destructive font-body">⚠️ {error}</p>}
+      {error && <p className="text-sm text-destructive font-body">âš ï¸ {error}</p>}
       {result && <ResultCard result={result} />}
     </div>
   );
@@ -211,7 +211,7 @@ function GiftRitualistTab() {
         })
         .join("\n");
     } catch {
-      catalogText = "(Could not load product catalog — use your best judgment for product suggestions)";
+      catalogText = "(Could not load product catalog â€” use your best judgment for product suggestions)";
     } finally {
       setCatalogLoading(false);
     }
@@ -224,13 +224,13 @@ function GiftRitualistTab() {
     <div className="space-y-6">
       <div>
         <h3 className="font-heading text-xl font-semibold text-foreground mb-2">
-          ✨ Bespoke Gift Ritualist
+          âœ¨ Bespoke Gift Ritualist
         </h3>
         <p className="text-sm text-muted-foreground font-body">
-          Describe who the gift is for and your budget — our AI will curate a luxury ritual bundle with a personalized greeting card.
+          Describe who the gift is for and your budget â€” our AI will curate a luxury ritual bundle with a personalized greeting card.
         </p>
         <div className="mt-2 flex gap-2">
-          <Badge variant="outline" className="text-[10px] border-accent text-accent">50+ JOD = FREE SHIPPING 🚚</Badge>
+          <Badge variant="outline" className="text-[10px] border-accent text-accent">50+ JOD = FREE SHIPPING ðŸšš</Badge>
           <Badge variant="outline" className="text-[10px] border-muted-foreground text-muted-foreground">&lt;50 JOD = 3 JOD Flat Fee</Badge>
         </div>
       </div>
@@ -261,7 +261,7 @@ function GiftRitualistTab() {
         <div className="flex gap-2">
           <Button type="submit" disabled={loading || catalogLoading || !persona.trim() || !budget.trim()}>
             {loading || catalogLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Gift className="h-4 w-4 mr-2" />}
-            {catalogLoading ? "Loading Products…" : "Create Ritual Bundle"}
+            {catalogLoading ? "Loading Productsâ€¦" : "Create Ritual Bundle"}
           </Button>
           {result && (
             <Button type="button" variant="ghost" onClick={() => { reset(); setPersona(""); setBudget(""); setOccasion(""); }}>
@@ -270,7 +270,7 @@ function GiftRitualistTab() {
           )}
         </div>
       </form>
-      {error && <p className="text-sm text-destructive font-body">⚠️ {error}</p>}
+      {error && <p className="text-sm text-destructive font-body">âš ï¸ {error}</p>}
       {result && <ResultCard result={result} />}
     </div>
   );
@@ -292,7 +292,7 @@ function CampaignArchitectTab() {
     <div className="space-y-6">
       <div>
         <h3 className="font-heading text-xl font-semibold text-foreground mb-2">
-          📣 Strategic Campaign Architect
+          ðŸ“£ Strategic Campaign Architect
         </h3>
         <p className="text-sm text-muted-foreground font-body">
           Enter a product name or seasonal event and get a full 3-channel marketing blast: Instagram, WhatsApp, and SMS.
@@ -323,7 +323,7 @@ function CampaignArchitectTab() {
           )}
         </div>
       </form>
-      {error && <p className="text-sm text-destructive font-body">⚠️ {error}</p>}
+      {error && <p className="text-sm text-destructive font-body">âš ï¸ {error}</p>}
       {result && <ResultCard result={result} />}
     </div>
   );
@@ -372,7 +372,7 @@ export default function LabTools() {
           </h1>
           <p className="text-muted-foreground font-body max-w-2xl mx-auto">
             Deep-research tools that leverage AI to analyze ingredients, curate gift rituals,
-            architect marketing campaigns, and generate brand copy — all through the lens of your dual-persona identity.
+            architect marketing campaigns, and generate brand copy â€” all through the lens of your dual-persona identity.
           </p>
         </section>
 
@@ -408,7 +408,7 @@ export default function LabTools() {
           </Card>
         )}
 
-        {/* Tool Tabs — only shown when authenticated */}
+        {/* Tool Tabs â€” only shown when authenticated */}
         {isAuthenticated && (
         <Tabs defaultValue="gift-ritualist">
           <TabsList className="grid w-full grid-cols-5">
@@ -458,7 +458,7 @@ export default function LabTools() {
         <div className="mx-auto max-w-7xl px-4 text-center">
           <div className="h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent mb-6" />
           <p className="text-xs text-muted-foreground font-body">
-            © {new Date().getFullYear()} Asper Beauty Shop · Lab Tools v2.0 · Powered by Gemini AI
+            Â© {new Date().getFullYear()} Asper Beauty Shop Â· Lab Tools v2.0 Â· Powered by Gemini AI
           </p>
         </div>
       </footer>

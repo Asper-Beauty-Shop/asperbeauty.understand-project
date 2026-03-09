@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -16,19 +16,19 @@ const laRochePosayLogo = "https://placehold.co/200x60/800020/C5A028?text=LA+ROCH
 const paulasChoiceLogo = "https://placehold.co/200x60/800020/C5A028?text=PAULA'S+CHOICE";
 const olaplexLogo = "https://placehold.co/200x60/800020/C5A028?text=OLAPLEX";
 const diorLogo = "https://placehold.co/200x60/800020/C5A028?text=DIOR";
-const esteeLauderLogo = "https://placehold.co/200x60/800020/C5A028?text=ESTÉE+LAUDER";
-const kerastaseLogo = "https://placehold.co/200x60/800020/C5A028?text=KÉRASTASE";
+const esteeLauderLogo = "https://placehold.co/200x60/800020/C5A028?text=ESTÃ‰E+LAUDER";
+const kerastaseLogo = "https://placehold.co/200x60/800020/C5A028?text=KÃ‰RASTASE";
 const cliniqueLogo = "https://placehold.co/200x60/800020/C5A028?text=CLINIQUE";
-const lancomeLogo = "https://placehold.co/200x60/800020/C5A028?text=LANCÔME";
+const lancomeLogo = "https://placehold.co/200x60/800020/C5A028?text=LANCÃ”ME";
 const yslLogo = "https://placehold.co/200x60/800020/C5A028?text=YSL";
 
 const BRANDS = [
   { name: "Dior", logo: diorLogo },
-  { name: "Estée Lauder", logo: esteeLauderLogo },
-  { name: "Lancôme", logo: lancomeLogo },
+  { name: "EstÃ©e Lauder", logo: esteeLauderLogo },
+  { name: "LancÃ´me", logo: lancomeLogo },
   { name: "YSL Beauty", logo: yslLogo },
   { name: "Clinique", logo: cliniqueLogo },
-  { name: "Kérastase", logo: kerastaseLogo },
+  { name: "KÃ©rastase", logo: kerastaseLogo },
   { name: "La Roche-Posay", logo: laRochePosayLogo },
   { name: "CeraVe", logo: ceraveLogo },
   { name: "The Ordinary", logo: theOrdinaryLogo },
@@ -64,7 +64,7 @@ export const BrandMarquee = () => {
             <div className="h-px w-12 md:w-20 bg-gradient-to-l from-transparent to-gold/60" />
           </div>
           <p className="font-serif text-xs md:text-sm uppercase tracking-[0.3em] text-muted-foreground">
-            {isAr ? "موزع معتمد للعلامات الفاخرة" : "Authorized Luxury Retailer"}
+            {isAr ? "Ù…ÙˆØ²Ø¹ Ù…Ø¹ØªÙ…Ø¯ Ù„Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ÙØ§Ø®Ø±Ø©" : "Authorized Luxury Retailer"}
           </p>
         </div>
 
@@ -168,7 +168,7 @@ export const BrandMarquee = () => {
               strokeWidth={1.5}
             />
             <span className="relative">
-              {isAr ? "استكشف جميع العلامات التجارية" : "View All Brands"}
+              {isAr ? "Ø§Ø³ØªÙƒØ´Ù Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©" : "View All Brands"}
             </span>
             <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
 
@@ -187,7 +187,7 @@ export const BrandMarquee = () => {
               strokeWidth={1.5}
             />
             <span className="text-gold text-[10px] md:text-xs font-medium tracking-[0.3em] uppercase">
-              {isAr ? "أصالة مضمونة" : "Authenticity Guaranteed"}
+              {isAr ? "Ø£ØµØ§Ù„Ø© Ù…Ø¶Ù…ÙˆÙ†Ø©" : "Authenticity Guaranteed"}
             </span>
             <Award
               className="w-5 h-5 md:w-6 md:h-6 text-gold drop-shadow-[0_1px_4px_rgba(212,175,55,0.3)]"

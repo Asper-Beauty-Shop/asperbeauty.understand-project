@@ -1,6 +1,6 @@
-/**
+﻿/**
  * Health check endpoint for monitoring (e.g. monitor-checklist).
- * Hit /health — response is 200 with body {"status":"ok"}.
+ * Hit /health â€” response is 200 with body {"status":"ok"}.
  */
 export default function Health() {
   return (

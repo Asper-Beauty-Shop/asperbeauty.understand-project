@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 
 type LogoStyle = "architectural" | "molecular";
 
@@ -51,7 +51,7 @@ export function LogoToggle() {
         {activeLogo === "architectural" && (
           <div className="animate-in fade-in duration-500 text-center">
             <div className="mx-auto mb-6 flex h-32 w-32 items-center justify-center border border-shiny-gold">
-              <span className="text-4xl text-shiny-gold" aria-hidden>🪷</span>
+              <span className="text-4xl text-shiny-gold" aria-hidden>ðŸª·</span>
             </div>
             <h3 className="font-serif text-2xl tracking-wider text-maroon">
               ASPER
@@ -69,7 +69,7 @@ export function LogoToggle() {
         {activeLogo === "molecular" && (
           <div className="animate-in fade-in duration-500 text-center">
             <div className="mx-auto mb-6 flex h-32 w-32 items-center justify-center rounded-full border-2 border-dashed border-maroon">
-              <span className="text-4xl text-maroon" aria-hidden>⬡</span>
+              <span className="text-4xl text-maroon" aria-hidden>â¬¡</span>
             </div>
             <h3 className="font-serif text-2xl tracking-wider text-maroon">
               ASPER <span className="font-sans text-lg text-shiny-gold">AI</span>

@@ -1,4 +1,4 @@
-import { ShopifyProductCard } from "@/components/ShopifyProductCard";
+﻿import { ShopifyProductCard } from "@/components/ShopifyProductCard";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductSkeletons";
 import { Package } from "lucide-react";
 import type { ShopifyProduct } from "@/lib/shopify";
@@ -54,7 +54,7 @@ export function ProductResultsGrid({
       </div>
       <div className="mt-8 flex justify-center">
         <p className="text-sm text-muted-foreground font-body">
-          Showing {products.length} products — refine with filters to find more
+          Showing {products.length} products â€” refine with filters to find more
         </p>
       </div>
     </>

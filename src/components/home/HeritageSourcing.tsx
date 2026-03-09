@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+﻿import { Badge } from "@/components/ui/badge";
 import { Droplets, Mountain, Sparkles, Gem } from "lucide-react";
 import shelfDisplay from "@/assets/asper-shelf-display.png";
 
@@ -14,7 +14,7 @@ const HeritageSourcing = () => {
     <section className="py-16 sm:py-20 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
-          {/* Left — Image with gold border */}
+          {/* Left â€” Image with gold border */}
           <div className="relative">
             <div className="rounded-lg overflow-hidden border-2 border-accent shadow-emerald-glow">
               <img
@@ -26,11 +26,11 @@ const HeritageSourcing = () => {
             </div>
             {/* Floating mineral badges */}
             <div className="absolute -bottom-4 -end-4 bg-card border border-accent/30 rounded-lg px-4 py-3 shadow-lg">
-              <span className="font-heading text-xs text-accent tracking-[0.15em] uppercase">Dead Sea · Jordan</span>
+              <span className="font-heading text-xs text-accent tracking-[0.15em] uppercase">Dead Sea Â· Jordan</span>
             </div>
           </div>
 
-          {/* Right — Text content */}
+          {/* Right â€” Text content */}
           <div className="flex flex-col justify-center">
             <Badge variant="outline" className="mb-4 w-fit border-accent text-accent font-body text-xs tracking-[0.2em] px-4 py-1.5">
               HERITAGE & SOURCING
@@ -39,7 +39,7 @@ const HeritageSourcing = () => {
               Authentic Origins, <span className="text-primary">Clinical Results</span>
             </h2>
             <p className="text-muted-foreground font-body leading-relaxed mb-8">
-              Our formulations are rooted in the ancient healing power of the Dead Sea — the lowest point on Earth, 
+              Our formulations are rooted in the ancient healing power of the Dead Sea â€” the lowest point on Earth, 
               rich in magnesium, calcium, and potassium. Every mineral compound is sustainably harvested from 
               Jordanian sources and cold-processed to preserve its bioactive integrity, then paired with 
               globally sourced clinical-grade actives for modern skincare that honors tradition.

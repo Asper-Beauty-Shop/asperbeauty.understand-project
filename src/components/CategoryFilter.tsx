@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { CATEGORIES, type CategoryInfo } from "@/lib/categoryMapping";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ interface CategoryGroup {
 // Build groups from CATEGORIES
 const CATEGORY_GROUPS: CategoryGroup[] = Object.values(CATEGORIES).map((cat) => ({
   label: cat.title,
-  icon: cat.slug === "skin-care" ? "🧴" : cat.slug === "hair-care" ? "💇" : cat.slug === "make-up" ? "💄" : cat.slug === "body-care" ? "🧼" : cat.slug === "fragrances" ? "🌸" : "🔧",
+  icon: cat.slug === "skin-care" ? "ðŸ§´" : cat.slug === "hair-care" ? "ðŸ’‡" : cat.slug === "make-up" ? "ðŸ’„" : cat.slug === "body-care" ? "ðŸ§¼" : cat.slug === "fragrances" ? "ðŸŒ¸" : "ðŸ”§",
   subcategories: [{ label: cat.title }],
 }));
 

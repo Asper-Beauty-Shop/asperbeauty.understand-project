@@ -1,4 +1,4 @@
-import { Header } from "@/components/Header";
+﻿import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductGrid } from "@/components/ProductGrid";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -18,7 +18,7 @@ export default function Offers() {
               {isAr
                 ? (
                   <>
-                    عروض <span className="text-gold">خاصة</span>
+                    Ø¹Ø±ÙˆØ¶ <span className="text-gold">Ø®Ø§ØµØ©</span>
                   </>
                 )
                 : (
@@ -30,7 +30,7 @@ export default function Offers() {
             <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6" />
             <p className="font-body text-cream/60 max-w-2xl mx-auto">
               {isAr
-                ? "عروض حصرية على منتجات التجميل الفاخرة. لفترة محدودة فقط."
+                ? "Ø¹Ø±ÙˆØ¶ Ø­ØµØ±ÙŠØ© Ø¹Ù„Ù‰ Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªØ¬Ù…ÙŠÙ„ Ø§Ù„ÙØ§Ø®Ø±Ø©. Ù„ÙØªØ±Ø© Ù…Ø­Ø¯ÙˆØ¯Ø© ÙÙ‚Ø·."
                 : "Exclusive deals on premium beauty products. Limited time only."}
             </p>
           </div>

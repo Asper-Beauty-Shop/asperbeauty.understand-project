@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,7 +64,7 @@ export function VendorFilter({ selected, onSelect }: VendorFilterProps) {
         ) : (
           <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
         )}
-        <span>🏷️</span>
+        <span>ðŸ·ï¸</span>
         <span className="flex-1 text-left">All Brands</span>
       </button>
 

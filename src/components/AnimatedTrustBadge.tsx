@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Award,
@@ -14,27 +14,27 @@ const trustBadges = [{
   id: "authentic",
   icon: ShieldCheck,
   label: "100% Authentic",
-  labelAr: "أصلي 100%",
+  labelAr: "Ø£ØµÙ„ÙŠ 100%",
 }, {
   id: "certified",
   icon: BadgeCheck,
   label: "JFDA Certified",
-  labelAr: "معتمد من JFDA",
+  labelAr: "Ù…Ø¹ØªÙ…Ø¯ Ù…Ù† JFDA",
 }, {
   id: "delivery",
   icon: Truck,
   label: "Same-Day Delivery",
-  labelAr: "توصيل في نفس اليوم",
+  labelAr: "ØªÙˆØµÙŠÙ„ ÙÙŠ Ù†ÙØ³ Ø§Ù„ÙŠÙˆÙ…",
 }, {
   id: "premium",
   icon: Crown,
   label: "Premium Selection",
-  labelAr: "اختيار فاخر",
+  labelAr: "Ø§Ø®ØªÙŠØ§Ø± ÙØ§Ø®Ø±",
 }, {
   id: "award",
   icon: Award,
   label: "Award Winning",
-  labelAr: "حائز على جوائز",
+  labelAr: "Ø­Ø§Ø¦Ø² Ø¹Ù„Ù‰ Ø¬ÙˆØ§Ø¦Ø²",
 }];
 export const AnimatedTrustBadge = () => {
   const {

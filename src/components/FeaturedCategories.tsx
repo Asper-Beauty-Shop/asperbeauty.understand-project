@@ -1,53 +1,53 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const skinCareImg = "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&q=80";
-const hairCareImg = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80";
-const bodyCareImg = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80";
-const makeUpImg = "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400&q=80";
-const fragrancesImg = "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&q=80";
-const toolsDevicesImg = "https://images.unsplash.com/photo-1559181567-c3190ca9be8a?w=400&q=80";
+const skinCareImg = "/assets/luxury-asset-13.png";
+const hairCareImg = "/assets/luxury-asset-14.png";
+const bodyCareImg = "/assets/luxury-asset-15.png";
+const makeUpImg = "/assets/luxury-asset-16.png";
+const fragrancesImg = "/assets/luxury-asset-17.png";
+const toolsDevicesImg = "/assets/luxury-asset-18.png";
 
 const categories = [
   {
     id: "skin-care",
     nameEn: "Skin Care",
-    nameAr: "العناية بالبشرة",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©",
     image: skinCareImg,
     href: "/collections/skin-care",
   },
   {
     id: "hair-care",
     nameEn: "Hair Care",
-    nameAr: "العناية بالشعر",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø´Ø¹Ø±",
     image: hairCareImg,
     href: "/collections/hair-care",
   },
   {
     id: "body-care",
     nameEn: "Body Care",
-    nameAr: "العناية بالجسم",
+    nameAr: "Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¬Ø³Ù…",
     image: bodyCareImg,
     href: "/collections/body-care",
   },
   {
     id: "make-up",
     nameEn: "Make Up",
-    nameAr: "المكياج",
+    nameAr: "Ø§Ù„Ù…ÙƒÙŠØ§Ø¬",
     image: makeUpImg,
     href: "/collections/make-up",
   },
   {
     id: "fragrances",
     nameEn: "Fragrances",
-    nameAr: "العطور",
+    nameAr: "Ø§Ù„Ø¹Ø·ÙˆØ±",
     image: fragrancesImg,
     href: "/collections/fragrances",
   },
   {
     id: "tools-devices",
     nameEn: "Tools & Devices",
-    nameAr: "الأدوات والأجهزة",
+    nameAr: "Ø§Ù„Ø£Ø¯ÙˆØ§Øª ÙˆØ§Ù„Ø£Ø¬Ù‡Ø²Ø©",
     image: toolsDevicesImg,
     href: "/collections/tools-devices",
   },
@@ -62,7 +62,7 @@ export const FeaturedCategories = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="font-display text-3xl md:text-4xl text-dark-charcoal mb-4">
-            {language === "ar" ? "تسوقي حسب الفئة" : "Shop by Category"}
+            {language === "ar" ? "ØªØ³ÙˆÙ‚ÙŠ Ø­Ø³Ø¨ Ø§Ù„ÙØ¦Ø©" : "Shop by Category"}
           </h2>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-shiny-gold to-transparent mx-auto" />
         </div>
@@ -101,7 +101,7 @@ export const FeaturedCategories = () => {
                   {language === "ar" ? category.nameAr : category.nameEn}
                 </h3>
                 <span className="inline-flex items-center gap-1 text-sm text-white/80 font-body mt-1 group-hover:text-shiny-gold transition-colors duration-300">
-                  {language === "ar" ? "تسوقي الآن" : "Shop Now"}
+                  {language === "ar" ? "ØªØ³ÙˆÙ‚ÙŠ Ø§Ù„Ø¢Ù†" : "Shop Now"}
                   <svg
                     className={`w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 ${
                       isRTL ? "rotate-180 group-hover:-translate-x-1" : ""

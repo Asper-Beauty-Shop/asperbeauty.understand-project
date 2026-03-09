@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Shield, Sparkles, Stethoscope, Flower2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -18,10 +18,10 @@ const SCIENCE_BRANDS = [
 const STYLE_BRANDS = [
   { name: "Maybelline", slug: "Maybelline", logo: "/brands/maybelline.png" },
   { name: "Rimmel", slug: "Rimmel", logo: "/brands/rimmel.png" },
-  { name: "L'Oréal", slug: "L'Oreal", logo: "/brands/loreal.png" },
+  { name: "L'OrÃ©al", slug: "L'Oreal", logo: "/brands/loreal.png" },
   { name: "Guerlain", slug: "Guerlain", logo: "/brands/guerlain.png" },
   { name: "Nuxe", slug: "Nuxe", logo: "/brands/nuxe.png" },
-  { name: "Kérastase", slug: "Kerastase", logo: "/brands/kerastase.png" },
+  { name: "KÃ©rastase", slug: "Kerastase", logo: "/brands/kerastase.png" },
 ];
 
 export function ScienceMeetsStyle() {
@@ -43,28 +43,28 @@ export function ScienceMeetsStyle() {
           transition={{ duration: 0.6, ease: LUXURY_EASE }}
         >
           <span className="font-body text-[11px] uppercase tracking-[0.4em] text-accent mb-4 block font-bold">
-            {isAr ? "استراتيجية الكتالوج" : "Catalogue Strategy"}
+            {isAr ? "Ø§Ø³ØªØ±Ø§ØªÙŠØ¬ÙŠØ© Ø§Ù„ÙƒØªØ§Ù„ÙˆØ¬" : "Catalogue Strategy"}
           </span>
           <h2 className={cn(
             "font-display text-3xl md:text-4xl lg:text-5xl text-primary leading-tight",
             isAr && "font-arabic"
           )}>
-            {isAr ? "العلم يلتقي الأناقة" : "Science Meets Style"}
+            {isAr ? "Ø§Ù„Ø¹Ù„Ù… ÙŠÙ„ØªÙ‚ÙŠ Ø§Ù„Ø£Ù†Ø§Ù‚Ø©" : "Science Meets Style"}
           </h2>
           <p className={cn(
             "font-body text-sm md:text-base text-muted-foreground mt-4 max-w-2xl mx-auto",
             isAr && "font-arabic"
           )}>
             {isAr
-              ? "من الوصفات الطبية إلى الجمال اليومي — كل ما تحتاجينه تحت سقف واحد"
-              : "From clinical prescriptions to everyday beauty — everything you need under one roof"}
+              ? "Ù…Ù† Ø§Ù„ÙˆØµÙØ§Øª Ø§Ù„Ø·Ø¨ÙŠØ© Ø¥Ù„Ù‰ Ø§Ù„Ø¬Ù…Ø§Ù„ Ø§Ù„ÙŠÙˆÙ…ÙŠ â€” ÙƒÙ„ Ù…Ø§ ØªØ­ØªØ§Ø¬ÙŠÙ†Ù‡ ØªØ­Øª Ø³Ù‚Ù ÙˆØ§Ø­Ø¯"
+              : "From clinical prescriptions to everyday beauty â€” everything you need under one roof"}
           </p>
           <div className="luxury-divider mt-6" />
         </motion.div>
 
         {/* Split Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-          {/* ── Side A: Science / Dr. Sami ── */}
+          {/* â”€â”€ Side A: Science / Dr. Sami â”€â”€ */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -83,10 +83,10 @@ export function ScienceMeetsStyle() {
                 </div>
                 <div>
                   <p className="font-body text-[10px] uppercase tracking-[0.3em] text-accent font-bold">
-                    {isAr ? "د. سامي" : "Dr. Sami"}
+                    {isAr ? "Ø¯. Ø³Ø§Ù…ÙŠ" : "Dr. Sami"}
                   </p>
                   <p className="font-body text-xs text-muted-foreground">
-                    {isAr ? "السلطة السريرية" : "Clinical Authority"}
+                    {isAr ? "Ø§Ù„Ø³Ù„Ø·Ø© Ø§Ù„Ø³Ø±ÙŠØ±ÙŠØ©" : "Clinical Authority"}
                   </p>
                 </div>
               </div>
@@ -96,13 +96,13 @@ export function ScienceMeetsStyle() {
                 "font-display text-xl md:text-2xl text-foreground mb-2",
                 isAr && "font-arabic"
               )}>
-                {isAr ? "مستحضرات الجلدية الطبية" : "Dermocosmetics"}
+                {isAr ? "Ù…Ø³ØªØ­Ø¶Ø±Ø§Øª Ø§Ù„Ø¬Ù„Ø¯ÙŠØ© Ø§Ù„Ø·Ø¨ÙŠØ©" : "Dermocosmetics"}
               </h3>
               <p className={cn(
                 "font-body text-sm italic text-muted-foreground mb-8",
                 isAr && "font-arabic"
               )}>
-                {isAr ? "الركيزة السريرية — وصفات الصيدلي" : "The Clinical Core — Pharmacist Prescriptions"}
+                {isAr ? "Ø§Ù„Ø±ÙƒÙŠØ²Ø© Ø§Ù„Ø³Ø±ÙŠØ±ÙŠØ© â€” ÙˆØµÙØ§Øª Ø§Ù„ØµÙŠØ¯Ù„ÙŠ" : "The Clinical Core â€” Pharmacist Prescriptions"}
               </p>
 
               {/* Brand mini-grid */}
@@ -137,12 +137,12 @@ export function ScienceMeetsStyle() {
                 className="mt-8 inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] text-primary hover:text-accent transition-colors duration-300"
               >
                 <Stethoscope className="w-3.5 h-3.5" />
-                {isAr ? "تصفح الوصفات الطبية" : "Browse Clinical Range"}
+                {isAr ? "ØªØµÙØ­ Ø§Ù„ÙˆØµÙØ§Øª Ø§Ù„Ø·Ø¨ÙŠØ©" : "Browse Clinical Range"}
               </Link>
             </div>
           </motion.div>
 
-          {/* ── Side B: Style / Ms. Zain ── */}
+          {/* â”€â”€ Side B: Style / Ms. Zain â”€â”€ */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -161,10 +161,10 @@ export function ScienceMeetsStyle() {
                 </div>
                 <div>
                   <p className="font-body text-[10px] uppercase tracking-[0.3em] text-accent font-bold">
-                    {isAr ? "مس زين" : "Ms. Zain"}
+                    {isAr ? "Ù…Ø³ Ø²ÙŠÙ†" : "Ms. Zain"}
                   </p>
                   <p className="font-body text-xs text-muted-foreground">
-                    {isAr ? "أيقونة الجمال" : "Beauty Curator"}
+                    {isAr ? "Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„Ø¬Ù…Ø§Ù„" : "Beauty Curator"}
                   </p>
                 </div>
               </div>
@@ -174,13 +174,13 @@ export function ScienceMeetsStyle() {
                 "font-display text-xl md:text-2xl text-foreground mb-2",
                 isAr && "font-arabic"
               )}>
-                {isAr ? "أساسيات الجمال اليومي" : "Everyday Essentials"}
+                {isAr ? "Ø£Ø³Ø§Ø³ÙŠØ§Øª Ø§Ù„Ø¬Ù…Ø§Ù„ Ø§Ù„ÙŠÙˆÙ…ÙŠ" : "Everyday Essentials"}
               </h3>
               <p className={cn(
                 "font-body text-sm italic text-muted-foreground mb-8",
                 isAr && "font-arabic"
               )}>
-                {isAr ? "محركات الإقبال — المكياج والعناية اليومية" : "The Traffic Drivers — Makeup & Daily Beauty"}
+                {isAr ? "Ù…Ø­Ø±ÙƒØ§Øª Ø§Ù„Ø¥Ù‚Ø¨Ø§Ù„ â€” Ø§Ù„Ù…ÙƒÙŠØ§Ø¬ ÙˆØ§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„ÙŠÙˆÙ…ÙŠØ©" : "The Traffic Drivers â€” Makeup & Daily Beauty"}
               </p>
 
               {/* Brand mini-grid */}
@@ -215,7 +215,7 @@ export function ScienceMeetsStyle() {
                 className="mt-8 inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] text-accent hover:text-primary transition-colors duration-300"
               >
                 <Flower2 className="w-3.5 h-3.5" />
-                {isAr ? "تصفح مجموعة الجمال" : "Browse Beauty Edit"}
+                {isAr ? "ØªØµÙØ­ Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø¬Ù…Ø§Ù„" : "Browse Beauty Edit"}
               </Link>
             </div>
           </motion.div>

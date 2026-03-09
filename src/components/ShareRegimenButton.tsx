@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Share2, Loader2, Download, Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
@@ -7,7 +7,7 @@ import { normalizePrice } from "@/lib/shopify";
 
 /**
  * Generates a shareable "My Clinical Routine" image from cart items.
- * Uses Canvas API to create an Instagram-story-format (1080×1920) image.
+ * Uses Canvas API to create an Instagram-story-format (1080Ã—1920) image.
  */
 export function ShareRegimenButton() {
   const [generating, setGenerating] = useState(false);
@@ -27,7 +27,7 @@ export function ShareRegimenButton() {
       canvas.height = 1920;
       const ctx = canvas.getContext("2d")!;
 
-      // Background — Soft Ivory
+      // Background â€” Soft Ivory
       ctx.fillStyle = "#F5F0E8";
       ctx.fillRect(0, 0, 1080, 1920);
 
@@ -138,7 +138,7 @@ export function ShareRegimenButton() {
       ctx.textAlign = "center";
       ctx.fillText("Dr. Sami", 0, -10);
       ctx.font = "16px 'Montserrat', sans-serif";
-      ctx.fillText("Approved ✓", 0, 15);
+      ctx.fillText("Approved âœ“", 0, 15);
       ctx.restore();
 
       // Footer
@@ -158,7 +158,7 @@ export function ShareRegimenButton() {
         if (navigator.share && navigator.canShare?.({ files: [new File([blob], "routine.png")] })) {
           try {
             await navigator.share({
-              title: "My Clinical Routine — Asper Beauty",
+              title: "My Clinical Routine â€” Asper Beauty",
               files: [new File([blob], "my-asper-routine.png", { type: "image/png" })],
             });
             toast.success("Your regimen has been shared!");
@@ -216,7 +216,7 @@ function downloadBlob(blob: Blob) {
   a.download = "my-asper-routine.png";
   a.click();
   URL.revokeObjectURL(url);
-  toast.success("Image downloaded! Share it on Instagram 📸");
+  toast.success("Image downloaded! Share it on Instagram ðŸ“¸");
 }
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {

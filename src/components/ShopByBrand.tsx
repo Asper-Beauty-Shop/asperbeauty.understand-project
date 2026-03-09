@@ -1,20 +1,20 @@
-import { useRef } from "react";
+﻿import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 
 const brands = [
-  { id: "vichy", name: "Vichy", nameAr: "فيشي" },
-  { id: "eucerin", name: "Eucerin", nameAr: "يوسيرين" },
-  { id: "bioten", name: "Bioten", nameAr: "بايوتين" },
-  { id: "cetaphil", name: "Cetaphil", nameAr: "سيتافيل" },
-  { id: "bepanthen", name: "Bepanthen", nameAr: "بيبانثين" },
-  { id: "svr", name: "SVR", nameAr: "إس في آر" },
-  { id: "bourjois", name: "Bourjois", nameAr: "بورجوا" },
-  { id: "isadora", name: "Isadora", nameAr: "إيزادورا" },
-  { id: "mavala", name: "Mavala", nameAr: "مافالا" },
-  { id: "essence", name: "Essence", nameAr: "إيسنس" },
+  { id: "vichy", name: "Vichy", nameAr: "ÙÙŠØ´ÙŠ" },
+  { id: "eucerin", name: "Eucerin", nameAr: "ÙŠÙˆØ³ÙŠØ±ÙŠÙ†" },
+  { id: "bioten", name: "Bioten", nameAr: "Ø¨Ø§ÙŠÙˆØªÙŠÙ†" },
+  { id: "cetaphil", name: "Cetaphil", nameAr: "Ø³ÙŠØªØ§ÙÙŠÙ„" },
+  { id: "bepanthen", name: "Bepanthen", nameAr: "Ø¨ÙŠØ¨Ø§Ù†Ø«ÙŠÙ†" },
+  { id: "svr", name: "SVR", nameAr: "Ø¥Ø³ ÙÙŠ Ø¢Ø±" },
+  { id: "bourjois", name: "Bourjois", nameAr: "Ø¨ÙˆØ±Ø¬ÙˆØ§" },
+  { id: "isadora", name: "Isadora", nameAr: "Ø¥ÙŠØ²Ø§Ø¯ÙˆØ±Ø§" },
+  { id: "mavala", name: "Mavala", nameAr: "Ù…Ø§ÙØ§Ù„Ø§" },
+  { id: "essence", name: "Essence", nameAr: "Ø¥ÙŠØ³Ù†Ø³" },
 ];
 
 export const ShopByBrand = () => {
@@ -39,7 +39,7 @@ export const ShopByBrand = () => {
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 className="font-display text-3xl md:text-4xl text-dark-charcoal mb-4">
-            {language === "ar" ? "تسوقي حسب العلامة التجارية" : "Shop By Brand"}
+            {language === "ar" ? "ØªØ³ÙˆÙ‚ÙŠ Ø­Ø³Ø¨ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©" : "Shop By Brand"}
           </h2>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-shiny-gold to-transparent mx-auto" />
         </div>
@@ -95,7 +95,7 @@ export const ShopByBrand = () => {
             className="inline-flex items-center gap-2 font-display text-sm text-dark-charcoal hover:text-shiny-gold transition-colors tracking-wider"
           >
             {language === "ar"
-              ? "عرض جميع العلامات التجارية"
+              ? "Ø¹Ø±Ø¶ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©"
               : "View All Brands"}
             <ChevronRight className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`} />
           </Link>

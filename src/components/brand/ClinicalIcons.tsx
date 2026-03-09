@@ -1,12 +1,12 @@
-/**
- * Asper Beauty Shop — Clinical Elegance Icon Library
+﻿/**
+ * Asper Beauty Shop â€” Clinical Elegance Icon Library
  *
  * Design DNA:
  * - Stroke: 1.2px, consistent weight
  * - Color: Inherits from parent (currentColor)
- * - Fill: None (transparent) — exception: EzabilaSparkle is solid
+ * - Fill: None (transparent) â€” exception: EzabilaSparkle is solid
  * - Corners: Slightly softened (strokeLinejoin="round")
- * - Canvas: 24×24 grid
+ * - Canvas: 24Ã—24 grid
  */
 
 import { cn } from "@/lib/utils";
@@ -28,9 +28,9 @@ const base = (size: number, className?: string) => ({
   className: cn("shrink-0", className),
 });
 
-/* ══════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SET 1: Primary Departments (Product Type)
-   ══════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 /** Serum dropper bottle with a suspended drop */
 export function IconSkincare({ className, size = 24 }: IconProps) {
@@ -114,9 +114,9 @@ export function IconSunProtection({ className, size = 24 }: IconProps) {
   );
 }
 
-/* ══════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SET 2: Shop by Concern (The Clinic)
-   ══════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 /** Face circle with three T-zone dots */
 export function IconAcne({ className, size = 24 }: IconProps) {
@@ -188,7 +188,7 @@ export function IconPigmentation({ className, size = 24 }: IconProps) {
   );
 }
 
-/** Simple redness icon — face circle with flushed cheeks */
+/** Simple redness icon â€” face circle with flushed cheeks */
 export function IconRedness({ className, size = 24 }: IconProps) {
   return (
     <svg {...base(size, className)}>
@@ -199,11 +199,11 @@ export function IconRedness({ className, size = 24 }: IconProps) {
   );
 }
 
-/* ══════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SET 3: Special Navigation & Utility
-   ══════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/** Solid gold three-pointed sparkle — the ONLY filled icon */
+/** Solid gold three-pointed sparkle â€” the ONLY filled icon */
 export function IconEzabila({ className, size = 24 }: IconProps) {
   return (
     <svg

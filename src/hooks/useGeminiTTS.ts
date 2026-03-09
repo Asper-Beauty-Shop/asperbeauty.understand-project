@@ -1,12 +1,12 @@
-import { useState, useCallback, useRef } from "react";
+﻿import { useState, useCallback, useRef } from "react";
 
-// ── Asper Beauty Shop — Gemini TTS Hook ──────────────────────────────────
+// â”€â”€ Asper Beauty Shop â€” Gemini TTS Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Calls the /functions/v1/gemini-tts Supabase Edge Function and returns
 // playback controls + waveform data for <AudioWaveformReplay />.
 //
-// Persona → Voice
-//   "dr-sami"  → Puck   (authoritative, clinical)
-//   "ms-zain"  → Aoede  (warm, lyrical)
+// Persona â†’ Voice
+//   "dr-sami"  â†’ Puck   (authoritative, clinical)
+//   "ms-zain"  â†’ Aoede  (warm, lyrical)
 
 export type TTSPersona = "dr-sami" | "ms-zain";
 
@@ -21,7 +21,7 @@ export interface UseGeminiTTSReturn {
   isLoading: boolean;
   /** true while audio is currently playing */
   isPlaying: boolean;
-  /** 0–1 playback progress */
+  /** 0â€“1 playback progress */
   progress: number;
   /** Duration of the current audio in seconds */
   duration: number;
@@ -45,7 +45,7 @@ export function useGeminiTTS(): UseGeminiTTSReturn {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressRafRef = useRef<number | null>(null);
 
-  // ── helpers ──────────────────────────────────────────────────────────────
+  // â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const stopProgressRaf = () => {
     if (progressRafRef.current !== null) {
       cancelAnimationFrame(progressRafRef.current);
@@ -92,7 +92,7 @@ export function useGeminiTTS(): UseGeminiTTSReturn {
     };
   };
 
-  // ── speak ─────────────────────────────────────────────────────────────────
+  // â”€â”€ speak â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const speak = useCallback(
     async (text: string, persona: TTSPersona = "dr-sami") => {
       if (!text.trim()) return;
@@ -145,7 +145,7 @@ export function useGeminiTTS(): UseGeminiTTSReturn {
     [audioUrl],
   );
 
-  // ── replay ────────────────────────────────────────────────────────────────
+  // â”€â”€ replay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const replay = useCallback(() => {
     const audio = audioRef.current;
     if (!audio || !audioUrl) return;
@@ -154,7 +154,7 @@ export function useGeminiTTS(): UseGeminiTTSReturn {
     audio.play().catch((e) => setError(String(e)));
   }, [audioUrl]);
 
-  // ── stop ──────────────────────────────────────────────────────────────────
+  // â”€â”€ stop â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const stop = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;

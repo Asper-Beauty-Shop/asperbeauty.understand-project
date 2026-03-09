@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
@@ -167,7 +167,7 @@ export const GlassGoldProductCard = (
               className="w-full bg-asper-gold text-asper-merlot py-4 uppercase tracking-widest text-xs font-bold flex items-center justify-center gap-2 hover:bg-asper-ivory transition-colors"
             >
               <ShoppingBag size={16} />
-              {language === "ar" ? "أضف للسلة" : "Add to Cart"}
+              {language === "ar" ? "Ø£Ø¶Ù Ù„Ù„Ø³Ù„Ø©" : "Add to Cart"}
             </button>
           </div>
         </div>

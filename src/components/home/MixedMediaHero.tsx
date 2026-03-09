@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -15,9 +15,9 @@ export default function MixedMediaHero() {
 
   return (
     <section className="relative w-full bg-background overflow-hidden">
-      {/* ── Desktop: 2×2 Split Grid ── */}
+      {/* â”€â”€ Desktop: 2Ã—2 Split Grid â”€â”€ */}
       <div className="hidden md:grid grid-cols-2 grid-rows-2 min-h-[90vh]">
-        {/* Cell 1 — Video (top-left) */}
+        {/* Cell 1 â€” Video (top-left) */}
         <div className="relative overflow-hidden">
           <video
             autoPlay
@@ -31,7 +31,7 @@ export default function MixedMediaHero() {
           </video>
         </div>
 
-        {/* Cell 2 — Copy + CTA (top-right) */}
+        {/* Cell 2 â€” Copy + CTA (top-right) */}
         <div className="flex flex-col justify-center px-12 lg:px-20 py-16 bg-background">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -39,7 +39,7 @@ export default function MixedMediaHero() {
             transition={{ duration: 0.8, ease: LUXURY_EASE }}
           >
             <span className="font-body text-[10px] uppercase tracking-[0.35em] text-accent mb-4 block">
-              {isAr ? "ذكي. أصيل. خالد." : "Intelligent · Authentic · Eternal"}
+              {isAr ? "Ø°ÙƒÙŠ. Ø£ØµÙŠÙ„. Ø®Ø§Ù„Ø¯." : "Intelligent Â· Authentic Â· Eternal"}
             </span>
 
             <h1
@@ -50,10 +50,10 @@ export default function MixedMediaHero() {
             >
               {isAr ? (
                 <>
-                  مُنتقاة من{" "}
-                  <span className="text-polished-gold">الصيادلة.</span>
+                  Ù…ÙÙ†ØªÙ‚Ø§Ø© Ù…Ù†{" "}
+                  <span className="text-polished-gold">Ø§Ù„ØµÙŠØ§Ø¯Ù„Ø©.</span>
                   <br />
-                  مدعومة بالذكاء.
+                  Ù…Ø¯Ø¹ÙˆÙ…Ø© Ø¨Ø§Ù„Ø°ÙƒØ§Ø¡.
                 </>
               ) : (
                 <>
@@ -73,8 +73,8 @@ export default function MixedMediaHero() {
               )}
             >
               {isAr
-                ? "حلول طبية موثوقة لإشراقة خالدة — من الصيدلي إليكِ مباشرة."
-                : "Trusted clinical solutions for ageless radiance — dispensed directly from the pharmacist's shelf to you."}
+                ? "Ø­Ù„ÙˆÙ„ Ø·Ø¨ÙŠØ© Ù…ÙˆØ«ÙˆÙ‚Ø© Ù„Ø¥Ø´Ø±Ø§Ù‚Ø© Ø®Ø§Ù„Ø¯Ø© â€” Ù…Ù† Ø§Ù„ØµÙŠØ¯Ù„ÙŠ Ø¥Ù„ÙŠÙƒÙ Ù…Ø¨Ø§Ø´Ø±Ø©."
+                : "Trusted clinical solutions for ageless radiance â€” dispensed directly from the pharmacist's shelf to you."}
             </p>
 
             <div className={cn("flex items-center gap-4", isAr && "flex-row-reverse")}>
@@ -86,7 +86,7 @@ export default function MixedMediaHero() {
                              rounded-none transition-all duration-[400ms] hover:scale-105
                              shadow-maroon-glow hover:shadow-maroon-deep"
                 >
-                  {isAr ? "تسوقي الآن" : "Shop Now"}
+                  {isAr ? "ØªØ³ÙˆÙ‚ÙŠ Ø§Ù„Ø¢Ù†" : "Shop Now"}
                   <ArrowRight
                     className={cn(
                       "h-4 w-4 transition-transform duration-300 group-hover:translate-x-1",
@@ -103,17 +103,17 @@ export default function MixedMediaHero() {
                            border-b border-burgundy/30 hover:border-burgundy pb-1
                            transition-all duration-[400ms]"
               >
-                {isAr ? "ابدئي الاستشارة" : "Begin Consultation"}
+                {isAr ? "Ø§Ø¨Ø¯Ø¦ÙŠ Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø©" : "Begin Consultation"}
               </Link>
             </div>
           </motion.div>
         </div>
 
-        {/* Cell 3 — Wide landscape image spanning both columns */}
+        {/* Cell 3 â€” Wide landscape image spanning both columns */}
         <div className="relative overflow-hidden col-span-2">
           <motion.img
             src={heroDiscovery}
-            alt="Discover your ideal serum — ISDIN, Vichy, La Mer"
+            alt="Discover your ideal serum â€” ISDIN, Vichy, La Mer"
             className="w-full h-full object-cover max-h-[45vh]"
             initial={{ scale: 1.05 }}
             animate={{ scale: 1 }}
@@ -122,7 +122,7 @@ export default function MixedMediaHero() {
         </div>
       </div>
 
-      {/* ── Mobile: Stacked Layout ── */}
+      {/* â”€â”€ Mobile: Stacked Layout â”€â”€ */}
       <div className="md:hidden">
         {/* Video */}
         <div className="relative w-full aspect-[4/3] overflow-hidden">
@@ -141,7 +141,7 @@ export default function MixedMediaHero() {
         {/* Copy */}
         <div className="px-6 py-10 bg-background">
           <span className="font-body text-[10px] uppercase tracking-[0.35em] text-accent mb-3 block">
-            {isAr ? "ذكي. أصيل. خالد." : "Intelligent · Authentic · Eternal"}
+            {isAr ? "Ø°ÙƒÙŠ. Ø£ØµÙŠÙ„. Ø®Ø§Ù„Ø¯." : "Intelligent Â· Authentic Â· Eternal"}
           </span>
 
           <h1
@@ -151,7 +151,7 @@ export default function MixedMediaHero() {
             )}
           >
             {isAr ? (
-              <>مُنتقاة من <span className="text-polished-gold">الصيادلة.</span></>
+              <>Ù…ÙÙ†ØªÙ‚Ø§Ø© Ù…Ù† <span className="text-polished-gold">Ø§Ù„ØµÙŠØ§Ø¯Ù„Ø©.</span></>
             ) : (
               <>
                 Curated by Pharmacists.
@@ -168,7 +168,7 @@ export default function MixedMediaHero() {
             )}
           >
             {isAr
-              ? "حلول طبية موثوقة لإشراقة خالدة."
+              ? "Ø­Ù„ÙˆÙ„ Ø·Ø¨ÙŠØ© Ù…ÙˆØ«ÙˆÙ‚Ø© Ù„Ø¥Ø´Ø±Ø§Ù‚Ø© Ø®Ø§Ù„Ø¯Ø©."
               : "Trusted clinical solutions for ageless radiance."}
           </p>
 
@@ -179,7 +179,7 @@ export default function MixedMediaHero() {
                          text-sm uppercase tracking-[0.2em] h-14 font-semibold
                          rounded-none transition-all duration-[400ms] hover:scale-105"
             >
-              {isAr ? "تسوقي الآن" : "Shop Now"}
+              {isAr ? "ØªØ³ÙˆÙ‚ÙŠ Ø§Ù„Ø¢Ù†" : "Shop Now"}
               <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
           </Link>

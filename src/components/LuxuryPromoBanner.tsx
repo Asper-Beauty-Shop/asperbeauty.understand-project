@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,20 +25,20 @@ export const LuxuryPromoBanner = ({
   // Default content based on variant
   const defaultContent = {
     primary: {
-      title: isAr ? "مجموعة الشتاء الفاخرة" : "Winter Luxury Collection",
+      title: isAr ? "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø´ØªØ§Ø¡ Ø§Ù„ÙØ§Ø®Ø±Ø©" : "Winter Luxury Collection",
       subtitle: isAr
-        ? "خصم 25% على جميع منتجات العناية بالبشرة المتميزة"
+        ? "Ø®ØµÙ… 25% Ø¹Ù„Ù‰ Ø¬Ù…ÙŠØ¹ Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ù…ØªÙ…ÙŠØ²Ø©"
         : "25% Off All Premium Skincare Essentials",
       image:
-        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
+        "/assets/luxury-asset-30.png",
     },
     secondary: {
-      title: isAr ? "وصل حديثاً - مجموعة الربيع" : "New Arrivals — Spring Edit",
+      title: isAr ? "ÙˆØµÙ„ Ø­Ø¯ÙŠØ«Ø§Ù‹ - Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø±Ø¨ÙŠØ¹" : "New Arrivals â€” Spring Edit",
       subtitle: isAr
-        ? "اكتشف أحدث المنتجات من أفضل العلامات التجارية"
+        ? "Ø§ÙƒØªØ´Ù Ø£Ø­Ø¯Ø« Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ù…Ù† Ø£ÙØ¶Ù„ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©"
         : "Discover the freshest picks from world-class brands",
       image:
-        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+        "/assets/luxury-asset-31.png",
     },
   };
 
@@ -59,7 +59,7 @@ export const LuxuryPromoBanner = ({
       >
         {/* Eyebrow */}
         <span className="mb-4 font-sans text-xs font-bold uppercase tracking-[0.3em] text-primary">
-          {isAr ? "عرض لفترة محدودة" : "Limited Time Only"}
+          {isAr ? "Ø¹Ø±Ø¶ Ù„ÙØªØ±Ø© Ù…Ø­Ø¯ÙˆØ¯Ø©" : "Limited Time Only"}
         </span>
 
         {/* Main Title */}
@@ -79,7 +79,7 @@ export const LuxuryPromoBanner = ({
           className="group mt-8 bg-primary px-8 py-6 font-sans text-sm font-medium uppercase tracking-widest text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:shadow-lg"
         >
           <Link to="/offers">
-            {isAr ? "اكتشف الآن" : "Discover Now"}
+            {isAr ? "Ø§ÙƒØªØ´Ù Ø§Ù„Ø¢Ù†" : "Discover Now"}
             <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </Button>

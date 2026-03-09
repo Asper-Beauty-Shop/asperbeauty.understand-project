@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 interface IncognitoStore {
@@ -7,7 +7,7 @@ interface IncognitoStore {
 }
 
 /**
- * Incognito Mode — blurs product images and anonymizes names
+ * Incognito Mode â€” blurs product images and anonymizes names
  * for sensitive browsing (hair loss, acne, fungal, etc).
  * Persists across sessions via localStorage.
  */

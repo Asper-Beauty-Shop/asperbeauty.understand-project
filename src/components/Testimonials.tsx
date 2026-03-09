@@ -1,4 +1,4 @@
-import { Quote, Star } from "lucide-react";
+﻿import { Quote, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "./AnimatedSection";
 import { LazyImage } from "./LazyImage";
@@ -7,44 +7,44 @@ const testimonials = [
   {
     id: 1,
     name: "Rania Al-Majali",
-    nameAr: "رانيا المجالي",
+    nameAr: "Ø±Ø§Ù†ÙŠØ§ Ø§Ù„Ù…Ø¬Ø§Ù„ÙŠ",
     location: "Amman, Jordan",
-    locationAr: "عمّان، الأردن",
+    locationAr: "Ø¹Ù…Ù‘Ø§Ù†ØŒ Ø§Ù„Ø£Ø±Ø¯Ù†",
     avatar:
-      "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face",
+      "/assets/luxury-asset-4.png",
     rating: 5,
     review:
       "Absolutely love the Vichy products I ordered. The packaging was luxurious and arrived quickly. Asper has become my go-to for all skincare needs!",
     reviewAr:
-      "منتجات رائعة وأصلية ١٠٠٪. طلبت من آسبر أكثر من مرة والتوصيل سريع جداً على عمّان. أنصح الكل فيهم!",
+      "Ù…Ù†ØªØ¬Ø§Øª Ø±Ø§Ø¦Ø¹Ø© ÙˆØ£ØµÙ„ÙŠØ© Ù¡Ù Ù Ùª. Ø·Ù„Ø¨Øª Ù…Ù† Ø¢Ø³Ø¨Ø± Ø£ÙƒØ«Ø± Ù…Ù† Ù…Ø±Ø© ÙˆØ§Ù„ØªÙˆØµÙŠÙ„ Ø³Ø±ÙŠØ¹ Ø¬Ø¯Ø§Ù‹ Ø¹Ù„Ù‰ Ø¹Ù…Ù‘Ø§Ù†. Ø£Ù†ØµØ­ Ø§Ù„ÙƒÙ„ ÙÙŠÙ‡Ù…!",
   },
   {
     id: 2,
     name: "Dana Al-Zoubi",
-    nameAr: "دانا الزعبي",
+    nameAr: "Ø¯Ø§Ù†Ø§ Ø§Ù„Ø²Ø¹Ø¨ÙŠ",
     location: "Irbid, Jordan",
-    locationAr: "إربد، الأردن",
+    locationAr: "Ø¥Ø±Ø¨Ø¯ØŒ Ø§Ù„Ø£Ø±Ø¯Ù†",
     avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+      "/assets/luxury-asset-5.png",
     rating: 5,
     review:
       "The customer service is exceptional. They helped me find the perfect anti-aging routine. My skin has never looked better!",
     reviewAr:
-      "خدمة العملاء ممتازة والردود سريعة. ساعدوني أختار المنتجات المناسبة لبشرتي. شكراً آسبر!",
+      "Ø®Ø¯Ù…Ø© Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡ Ù…Ù…ØªØ§Ø²Ø© ÙˆØ§Ù„Ø±Ø¯ÙˆØ¯ Ø³Ø±ÙŠØ¹Ø©. Ø³Ø§Ø¹Ø¯ÙˆÙ†ÙŠ Ø£Ø®ØªØ§Ø± Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ù†Ø§Ø³Ø¨Ø© Ù„Ø¨Ø´Ø±ØªÙŠ. Ø´ÙƒØ±Ø§Ù‹ Ø¢Ø³Ø¨Ø±!",
   },
   {
     id: 3,
     name: "Lina Haddad",
-    nameAr: "لينا حداد",
+    nameAr: "Ù„ÙŠÙ†Ø§ Ø­Ø¯Ø§Ø¯",
     location: "Aqaba, Jordan",
-    locationAr: "العقبة، الأردن",
+    locationAr: "Ø§Ù„Ø¹Ù‚Ø¨Ø©ØŒ Ø§Ù„Ø£Ø±Ø¯Ù†",
     avatar:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+      "/assets/luxury-asset-6.png",
     rating: 5,
     review:
       "Finally, a beauty store that understands luxury. The selection of fragrances is unmatched. Every purchase feels like a special occasion.",
     reviewAr:
-      "أخيراً لقيت متجر يوفر منتجات العناية الأصلية بالأردن. الأسعار منافسة والجودة عالية. ما رح أشتري من غيرهم!",
+      "Ø£Ø®ÙŠØ±Ø§Ù‹ Ù„Ù‚ÙŠØª Ù…ØªØ¬Ø± ÙŠÙˆÙØ± Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ø£ØµÙ„ÙŠØ© Ø¨Ø§Ù„Ø£Ø±Ø¯Ù†. Ø§Ù„Ø£Ø³Ø¹Ø§Ø± Ù…Ù†Ø§ÙØ³Ø© ÙˆØ§Ù„Ø¬ÙˆØ¯Ø© Ø¹Ø§Ù„ÙŠØ©. Ù…Ø§ Ø±Ø­ Ø£Ø´ØªØ±ÙŠ Ù…Ù† ØºÙŠØ±Ù‡Ù…!",
   },
 ];
 
@@ -84,10 +84,10 @@ export const Testimonials = () => {
             <Quote className="w-6 h-6 text-polished-gold" />
           </div>
           <p className="font-body text-xs uppercase tracking-[0.25em] text-rose-clay-dark mb-3">
-            {isArabic ? "ماذا يقول عملاؤنا" : "What Our Clients Say"}
+            {isArabic ? "Ù…Ø§Ø°Ø§ ÙŠÙ‚ÙˆÙ„ Ø¹Ù…Ù„Ø§Ø¤Ù†Ø§" : "What Our Clients Say"}
           </p>
           <h2 className="font-display text-3xl lg:text-4xl text-asper-ink mb-4">
-            {isArabic ? "شهادات العملاء" : "Testimonials"}
+            {isArabic ? "Ø´Ù‡Ø§Ø¯Ø§Øª Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡" : "Testimonials"}
           </h2>
           {/* Gold Divider */}
           <div className="flex items-center justify-center gap-3">
@@ -170,7 +170,7 @@ export const Testimonials = () => {
           <div className="flex items-center gap-3">
             <div className="w-16 h-px bg-gradient-to-r from-transparent to-polished-gold/60" />
             <span className="font-body text-sm italic text-rose-clay-dark">
-              {isArabic ? "الأناقة في كل تفصيل" : "Elegance in every detail"}
+              {isArabic ? "Ø§Ù„Ø£Ù†Ø§Ù‚Ø© ÙÙŠ ÙƒÙ„ ØªÙØµÙŠÙ„" : "Elegance in every detail"}
             </span>
             <div className="w-16 h-px bg-gradient-to-l from-transparent to-polished-gold/60" />
           </div>
