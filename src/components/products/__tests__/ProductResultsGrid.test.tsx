@@ -36,6 +36,7 @@ describe("ProductResultsGrid", () => {
     renderWithProviders(
       <ProductResultsGrid products={[]} isLoading={false} error={null} searchQuery="xyzabc" />
     );
+    expect(screen.getByTestId("empty-search-state")).toBeInTheDocument();
     expect(screen.getByText(/no matches for "xyzabc"/i)).toBeInTheDocument();
     expect(screen.getByText(/dr\. sami recommends/i)).toBeInTheDocument();
   });
@@ -44,7 +45,17 @@ describe("ProductResultsGrid", () => {
     renderWithProviders(
       <ProductResultsGrid products={[]} isLoading={false} error={null} />
     );
+    expect(screen.getByTestId("empty-search-state")).toBeInTheDocument();
     expect(screen.getByText(/no products found/i)).toBeInTheDocument();
+  });
+
+  it("renders Dr. Sami CTA button with correct test ID for analytics", () => {
+    renderWithProviders(
+      <ProductResultsGrid products={[]} isLoading={false} error={null} />
+    );
+    const drSamiCta = screen.getByTestId("dr-sami-cta");
+    expect(drSamiCta).toBeInTheDocument();
+    expect(drSamiCta).toHaveTextContent(/ask dr\. sami/i);
   });
 
   it("renders product cards when products are provided", () => {
