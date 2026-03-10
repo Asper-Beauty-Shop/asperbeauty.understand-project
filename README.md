@@ -49,5 +49,6 @@ Welcome to your production-ready **Medical Luxury** flagship. The engineering is
 - `npm run dev` — Launch local preview.
 - `npm run build` — Compile for production.
 - `npm run brain` — Check AI health.
+- `npm run sync:supabase` — Sync 9,000+ products from CSV to Supabase.
 
 **Congratulations! Your Medical Luxury empire is now live.**

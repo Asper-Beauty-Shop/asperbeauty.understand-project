@@ -976,3 +976,17 @@ body { background-color: hsl(240 100% 99%); color: #333333; }
 
 /* postcss rebuild trigger */
 
+
+/* --- High-Responsiveness Interactions --- */
+button:active, 
+a:active, 
+.cursor-pointer:active {
+  transform: scale(0.96);
+  transition: transform 0.1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Ensure smooth transition back */
+button, a, .cursor-pointer {
+  transition: transform 0.2s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.2s ease, opacity 0.2s ease;
+}
+

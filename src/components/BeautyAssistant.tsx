@@ -24,6 +24,17 @@ export const BeautyAssistant = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const handleOpen = (e: any) => {
+      setIsOpen(true);
+      if (e.detail?.persona === "ms_zain") {
+        // Optionally set persona-specific greeting here
+      }
+    };
+    window.addEventListener("open-beauty-assistant", handleOpen);
+    return () => window.removeEventListener("open-beauty-assistant", handleOpen);
+  }, []);
+
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
