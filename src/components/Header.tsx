@@ -130,12 +130,13 @@ export const Header = () => {
                 >
                   <Link
                     to="/brands"
+                    onClick={() => setActiveMegaMenu(null)}
                     className={cn(
                       "flex items-center gap-1 font-body text-sm font-medium transition-colors py-8",
                       textColor, textColorHover
                     )}
                   >
-                    {language === "ar" ? "Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª" : "Brands"}{" "}
+                    {language === "ar" ? "العلامات" : "Brands"}{" "}
                     <ChevronDown className="h-3 w-3" />
                   </Link>
                   {activeMegaMenu === "brands" && (
@@ -173,13 +174,14 @@ export const Header = () => {
                   onMouseLeave={() => setActiveMegaMenu(null)}
                 >
                   <Link
-                    to="/skin-concerns"
+                    to="/brands"
+                    onClick={() => setActiveMegaMenu(null)}
                     className={cn(
                       "flex items-center gap-1 font-body text-sm font-medium transition-colors py-8",
                       textColor, textColorHover
                     )}
                   >
-                    {language === "ar" ? "Ù…Ø´Ø§ÙƒÙ„ Ø§Ù„Ø¨Ø´Ø±Ø©" : "Skin Concerns"}{" "}
+                    {language === "ar" ? "العلامات" : "Brands"}{" "}
                     <ChevronDown className="h-3 w-3" />
                   </Link>
                   {activeMegaMenu === "concerns" && (
