@@ -22,6 +22,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Playwright artifacts
+playwright-report/
+test-results/
+
 # Editor directories and files
 .DS_Store
 *.pem
