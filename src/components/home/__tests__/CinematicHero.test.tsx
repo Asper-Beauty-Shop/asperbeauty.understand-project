@@ -1,7 +1,22 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import CinematicHero from "../CinematicHero";
+
+// Mock matchMedia for prefers-reduced-motion tests
+const mockMatchMedia = (matches: boolean) => {
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    value: vi.fn().mockImplementation((query: string) => ({
+      matches,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+};
 
 // Mock framer-motion to render plain elements
 vi.mock("framer-motion", () => ({
@@ -24,6 +39,10 @@ function renderHero() {
 }
 
 describe("CinematicHero", () => {
+  beforeEach(() => {
+    mockMatchMedia(false);
+  });
+
   it("renders the CTA button with min-h-[48px] for tap target compliance", () => {
     renderHero();
     const cta = screen.getByRole("button", { name: /discover the elixir/i });
@@ -78,5 +97,28 @@ describe("CinematicHero", () => {
     const section = document.querySelector("section");
     expect(section).not.toBeNull();
     expect(section!.className).toMatch(/min-h-\[600px\]/);
+  });
+
+  it("renders an explicit LCP poster image before the video", () => {
+    renderHero();
+    const img = document.querySelector("img[aria-hidden='true']");
+    expect(img).not.toBeNull();
+    expect(img!.getAttribute("src")).toBe("/images/hero-poster-cinematic.jpg");
+    expect(img!.getAttribute("fetchpriority")).toBe("high");
+  });
+
+  it("video uses correct mobile focal-point object position", () => {
+    renderHero();
+    const video = document.querySelector("video");
+    expect(video).not.toBeNull();
+    expect(video!.className).toMatch(/object-\[75%_50%\]/);
+  });
+
+  it("pauses video when prefers-reduced-motion is set", () => {
+    mockMatchMedia(true);
+    const pauseSpy = vi.spyOn(HTMLMediaElement.prototype, "pause");
+    renderHero();
+    expect(pauseSpy).toHaveBeenCalled();
+    pauseSpy.mockRestore();
   });
 });
