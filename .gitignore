@@ -1,6 +1,9 @@
 node_modules
 .env
 dist
+dist-ssr
+*.local
+
 .understand
 .cursor
 .claudefesii
@@ -13,3 +16,19 @@ Supabase_files
 *.tsv
 *.crt
 *.docx
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# AI / tooling (do not track)
+.claude/
+.claudefesii/
+.snapshots/
