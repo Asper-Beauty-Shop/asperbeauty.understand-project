@@ -46,3 +46,4 @@ export function ConsultPharmacistCard(
     </div>
   );
 }
+

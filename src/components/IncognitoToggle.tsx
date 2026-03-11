@@ -27,3 +27,4 @@ export function IncognitoToggle({ className }: { className?: string }) {
     </button>
   );
 }
+

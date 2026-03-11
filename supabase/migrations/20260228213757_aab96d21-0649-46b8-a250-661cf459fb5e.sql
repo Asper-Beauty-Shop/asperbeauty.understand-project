@@ -1,1 +1,0 @@
-DELETE FROM products WHERE brand IN ('Brand A', 'Brand B', 'Brand C', 'Brand D');

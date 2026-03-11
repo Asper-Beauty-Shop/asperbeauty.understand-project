@@ -137,3 +137,4 @@ export default function SocialIconsRow({ className, variant = "footer" }: Social
     </div>
   );
 }
+

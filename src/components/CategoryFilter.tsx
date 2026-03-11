@@ -119,3 +119,4 @@ export function CategoryFilter({ selected, onSelect, groups }: CategoryFilterPro
     </div>
   );
 }
+

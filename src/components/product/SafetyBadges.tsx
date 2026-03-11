@@ -115,3 +115,4 @@ export function SafetyBadges({ product, className }: { product: DbProduct; class
     </div>
   );
 }
+

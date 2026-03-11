@@ -26,6 +26,7 @@ export default {
         foreground: "hsl(var(--foreground))",
 
         // --- DESIGN_SYSTEM.md Clinical Luxury palette (HSL via CSS vars) ---
+        "asper-emerald": "#005C45",
         "asper-stone": {
           DEFAULT: "hsl(var(--asper-stone))",
           light: "hsl(var(--asper-stone-light))",
@@ -49,8 +50,8 @@ export default {
         },
         // Legacy compat tokens
         maroon: "hsl(var(--burgundy))",
-        "soft-ivory": "hsl(var(--asper-stone))",
-        "shiny-gold": "hsl(var(--polished-gold))",
+        "soft-ivory": "#F8F8FF",
+        "shiny-gold": "#C5A028",
         "dark-charcoal": "hsl(var(--asper-ink))",
         // Legacy pharmacy tokens (backward compat)
         asper: {
@@ -168,8 +169,8 @@ export default {
           to: { opacity: "1" },
         },
         shimmer: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
+          "0%": { transform: "translateX(-100%) skewX(-20deg)" },
+          "100%": { transform: "translateX(200%) skewX(-20deg)" },
         },
         "skeleton-breathe": {
           "0%, 100%": { opacity: "0.45" },
@@ -182,6 +183,10 @@ export default {
           "10%, 50%, 90%": { transform: "translateX(-4px)" },
           "30%, 70%": { transform: "translateX(4px)" },
         },
+        "marquee-float": {
+          "0%": { transform: "translate3d(0, 0, 0)" },
+          "100%": { transform: "translate3d(-50%, 0, 0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -190,12 +195,16 @@ export default {
         "spin-slow": "spin-slow 20s linear infinite",
         "fade-up": "fadeUp 0.8s ease-out forwards",
         "fade-in": "fadeIn 0.6s ease-out forwards",
-        shimmer: "shimmer 2s linear infinite",
+        shimmer: "shimmer 1.5s ease-in-out infinite",
         "skeleton-breathe": "skeleton-breathe 2s ease-in-out infinite",
         shake: "shake 0.5s ease-in-out",
+        "marquee-float": "marquee-float 35s linear infinite",
       },
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports -- tailwind plugin
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
+
+

@@ -264,3 +264,4 @@ export function IconContact({ className, size = 24 }: IconProps) {
     </svg>
   );
 }
+

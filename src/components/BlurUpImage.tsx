@@ -133,3 +133,4 @@ export const BlurUpImage = ({
 };
 
 export default BlurUpImage;
+

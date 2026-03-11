@@ -282,3 +282,15 @@ export const getSubcategoryLabel = (
 export const getSkinConcernById = (id: string): SkinConcern | undefined => {
   return SKIN_CONCERNS.find((concern) => concern.id === id);
 };
+
+
+/** Maps a global category ID to its primary concern tags for database filtering */
+export const mapCategoryToConcerns = (categoryId: string): string[] => {
+  const map: Record<string, string[]> = {
+    'skin-care': ['Concern_Acne', 'Concern_AntiAging', 'Concern_Hydration', 'Concern_Sensitivity', 'Concern_Pigmentation', 'Concern_Dryness', 'Concern_SunProtection'],
+    'makeup': ['Concern_Brightening', 'Concern_Oiliness'],
+    'body-care': ['Concern_Dryness', 'Concern_Sensitivity'],
+    'hair-care': ['Concern_HairLoss'],
+  };
+  return map[categoryId] || [];
+};

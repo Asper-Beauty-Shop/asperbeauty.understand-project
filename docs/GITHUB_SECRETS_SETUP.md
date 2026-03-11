@@ -1,19 +1,19 @@
-# GitHub Secrets Setup Guide
+﻿# GitHub Secrets Setup Guide
 
-This guide explains how to configure the required GitHub repository secrets for the Asper Beauty Shop project.
+This guide explains how to configure the optional GitHub repository secrets for the Asper Beauty Shop project.
 
 ## Overview
 
-The project uses GitHub Actions workflows that require certain secrets to be configured. These secrets enable:
+The project uses GitHub Actions workflows that support certain secrets to be configured. These secrets enable:
 - File change synchronization with Lovable
 - Issue and PR synchronization with Lovable
 - Optional Discord deployment notifications
 
-## Required Secrets
+## Optional Secrets
 
-### 1. LOVABLE_WEBHOOK_URL (Required)
+### 1. LOVABLE_WEBHOOK_URL (Optional)
 
-This secret is **required** for the Lovable integration workflows to function.
+This secret is **optional**. If not set, the Lovable integration workflows skip gracefully without causing build failures.
 
 **Purpose**: Enables automatic synchronization of file changes, issues, and pull requests with the Lovable platform.
 
@@ -32,7 +32,7 @@ This secret is **required** for the Lovable integration workflows to function.
 2. **Add the Secret to GitHub**
    - Go to your repository: https://github.com/asperpharma/understand-project
    - Click **Settings** (repository settings, not personal settings)
-   - In the left sidebar, click **Secrets and variables** → **Actions**
+   - In the left sidebar, click **Secrets and variables** â†’ **Actions**
    - Click **New repository secret**
    - Name: `LOVABLE_WEBHOOK_URL`
    - Value: Paste the webhook URL from Lovable
@@ -45,7 +45,7 @@ After setting the secret:
 2. Commit and push to any branch
 3. Check **Actions** tab in GitHub
 4. The "Sync File Changes to Lovable" workflow should run successfully
-5. If it fails with "LOVABLE_WEBHOOK_URL is not set", the secret wasn't configured correctly
+5. If you see "LOVABLE_WEBHOOK_URL is not set", verify the secret was added with the exact name `LOVABLE_WEBHOOK_URL`
 
 ### 2. DISCORD_WEBHOOK_URL (Optional)
 
@@ -60,7 +60,7 @@ This secret is **optional** and enables Discord notifications for deployments.
 
 1. **Create a Discord Webhook**
    - Open Discord and go to the server where you want notifications
-   - Go to **Server Settings** → **Integrations** → **Webhooks**
+   - Go to **Server Settings** â†’ **Integrations** â†’ **Webhooks**
    - Click **New Webhook**
    - Name it (e.g., "Asper Deploy Notifications")
    - Choose the channel for notifications
@@ -76,18 +76,20 @@ This secret is **optional** and enables Discord notifications for deployments.
 
 When configured, you'll receive Discord messages like:
 ```
-Deploy health: OK | Commit `a6d760d` | https://asperbeautyshop-com.lovable.app
+Deploy health: OK | Commit `a6d760d` | https://www.asperbeautyshop.com
 ```
 
 ## Workflow Behavior Without Secrets
 
 ### If LOVABLE_WEBHOOK_URL is NOT set:
-- The sync workflows will **fail** with a clear error message:
+- The sync workflows will **skip gracefully** with an informational message:
   ```
-  Error: LOVABLE_WEBHOOK_URL is not set
+  Warning: LOVABLE_WEBHOOK_URL is not set
   Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync.
+  Skipping Lovable sync (secret not configured).
   ```
-- This is expected behavior and protects against incomplete configurations
+- The workflow exits with success (`exit 0`) â€” no build failure occurs
+- This is intentional: Lovable sync is optional and CI should not break without it
 
 ### If DISCORD_WEBHOOK_URL is NOT set:
 - The deploy health check workflow will **still run** successfully
@@ -96,32 +98,34 @@ Deploy health: OK | Commit `a6d760d` | https://asperbeautyshop-com.lovable.app
 
 ## Troubleshooting
 
-### "LOVABLE_WEBHOOK_URL is not set" Error
+### "LOVABLE_WEBHOOK_URL is not set" Warning
 
-**Problem**: The workflow fails with this error message.
+**Scenario**: The workflow logs this warning but still succeeds (exits 0).
 
-**Solution**:
-1. Verify you added the secret in the correct location (Repository Settings → Secrets and variables → Actions)
+**What it means**: The `LOVABLE_WEBHOOK_URL` secret is not configured. Lovable sync is skipped for this run.
+
+**If you want to enable Lovable sync**:
+1. Verify you added the secret in the correct location (Repository Settings â†’ Secrets and variables â†’ Actions)
 2. Check the secret name is exactly `LOVABLE_WEBHOOK_URL` (case-sensitive)
 3. Verify the URL format starts with `https://`
 4. Re-run the workflow after adding the secret
 
-### "LOVABLE_WEBHOOK_URL does not appear to be a valid URL" Error
+### "LOVABLE_WEBHOOK_URL does not appear to be a valid URL" Warning
 
-**Problem**: The workflow validates the URL and rejects it.
+**Scenario**: The workflow logs this warning but still succeeds (exits 0). Lovable sync is skipped.
 
-**Solution**:
+**If you want to fix this**:
 1. Ensure the URL starts with `https://` or `http://`
 2. Check there are no extra spaces before or after the URL
 3. Verify you copied the complete URL from Lovable
 4. Contact Lovable support if you're unsure about the correct webhook URL
 
-### Workflow Still Failing
+### Webhook Call Fails After URL Is Configured
 
-**If workflows continue to fail after setting the secret**:
+**If the workflow runs but the `curl` call to Lovable fails**:
 
 1. **Check the Actions tab**: View the full error log
-2. **Verify secret visibility**: Secrets should show as "Updated X time ago" in Settings → Secrets
+2. **Verify secret visibility**: Secrets should show as "Updated X time ago" in Settings â†’ Secrets
 3. **Test with a simple push**: Make a trivial change and push to trigger the workflow
 4. **Check Lovable status**: Ensure Lovable's webhook endpoint is operational
 5. **Review workflow logs**: The masked URL should show as `https://api.lovable.ai/...`
@@ -143,8 +147,9 @@ Deploy health: OK | Commit `a6d760d` | https://asperbeautyshop-com.lovable.app
 ## Summary Checklist
 
 Before running workflows, ensure:
-- [ ] LOVABLE_WEBHOOK_URL is set in GitHub repository secrets
-- [ ] Secret value starts with https:// and is complete
+- [ ] (Optional) LOVABLE_WEBHOOK_URL is set in GitHub repository secrets to enable Lovable sync
+- [ ] If set, secret value starts with https:// and is complete
 - [ ] (Optional) DISCORD_WEBHOOK_URL is set for notifications
 - [ ] Test by pushing a small change and checking Actions tab
-- [ ] Workflow runs successfully without "secret not set" errors
+- [ ] Workflow runs successfully â€” with or without secrets configured
+

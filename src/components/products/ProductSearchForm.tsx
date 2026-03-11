@@ -29,3 +29,4 @@ export function ProductSearchForm({ onSearch }: ProductSearchFormProps) {
     </form>
   );
 }
+

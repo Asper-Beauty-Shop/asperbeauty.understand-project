@@ -36,3 +36,4 @@ export default function LazySection({ children, rootMargin = "200px", minHeight 
     </div>
   );
 }
+

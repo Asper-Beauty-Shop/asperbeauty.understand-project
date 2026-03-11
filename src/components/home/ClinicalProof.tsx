@@ -27,3 +27,4 @@ const ClinicalProof = () => {
 };
 
 export default ClinicalProof;
+

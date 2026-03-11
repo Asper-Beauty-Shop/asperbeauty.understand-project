@@ -204,3 +204,4 @@ export const SearchDropdown = ({
     </div>
   );
 };
+

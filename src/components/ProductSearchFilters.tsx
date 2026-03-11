@@ -389,3 +389,4 @@ export const ProductSearchFilters = ({
 };
 
 export default ProductSearchFilters;
+

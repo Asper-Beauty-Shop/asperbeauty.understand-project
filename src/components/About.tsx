@@ -1,3 +1,5 @@
+import aboutVisual from "@/assets/about-visual.avif";
+
 export const About = () => {
   return (
     <section id="about" className="py-24 bg-background">
@@ -16,25 +18,25 @@ export const About = () => {
                 backgroundClip: "text",
               }}
             >
-              Beauty in
-              <span className="italic block">Simplicity</span>
+              Where Science
+              <span className="italic block">Meets Soul</span>
             </h2>
             <div className="w-16 h-px bg-gradient-to-r from-gold to-gold-light mb-8" />
             <div className="space-y-6 text-charcoal font-body leading-relaxed">
               <p>
-                At Asper Beauty Shop, we believe true beauty emerges from the
-                harmony of premium ingredients, thoughtful formulations, and
-                mindful rituals.
+                We are not just selling cosmetics; we are dispensing beauty
+                through intelligence. Every product at Asper is curated by
+                pharmacists who understand the science behind healthy skin.
               </p>
               <p>
-                Each product in our collection is meticulously selected to
-                deliver exceptional results while honoring your skin's natural
-                balance. We partner exclusively with brands that share our
-                commitment to quality, sustainability, and efficacy.
+                Our clinical-grade approach blends dermatological precision with
+                AI-powered recommendations, ensuring each product in your
+                regimen is verified for efficacy, authenticity, and safety.
               </p>
               <p>
-                Experience the difference of luxury beauty, where every detail
-                matters and every product tells a story of excellence.
+                Intelligent. Authentic. Eternal. — This is the future of
+                dermo-retail, where pharmacist expertise meets cutting-edge
+                technology to deliver trusted solutions for ageless radiance.
               </p>
             </div>
 
@@ -97,27 +99,13 @@ export const About = () => {
           {/* Visual */}
           <div className="order-1 lg:order-2">
             <div className="relative">
-              <div className="aspect-[4/5] bg-taupe rounded overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-taupe to-taupe-dark">
-                  <div className="text-center p-8">
-                    <span
-                      className="font-display text-6xl"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, hsl(46 100% 45%), hsl(46 100% 65%))",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                        opacity: 0.5,
-                      }}
-                    >
-                      A
-                    </span>
-                    <p className="luxury-subheading text-charcoal-light mt-4">
-                      Premium Beauty
-                    </p>
-                  </div>
-                </div>
+              <div className="aspect-[4/5] rounded overflow-hidden">
+                <img
+                  src={aboutVisual}
+                  alt="Luxury beauty products curated by pharmacists"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
               </div>
               {/* Decorative element */}
               <div className="absolute -bottom-6 -left-6 w-32 h-32 border border-gold/30" />
@@ -128,3 +116,4 @@ export const About = () => {
     </section>
   );
 };
+

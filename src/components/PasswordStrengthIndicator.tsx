@@ -107,3 +107,4 @@ export function isStrongPassword(password: string): boolean {
     /[!@#$%^&*(),.?":{}|<>]/.test(password)
   );
 }
+

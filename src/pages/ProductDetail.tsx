@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
 import pdpIngredients from "@/assets/pdp-ingredients.jpg";
@@ -18,8 +18,12 @@ import {
   ShieldCheck,
   ShoppingBag,
   Sparkles,
+  Star,
+  Stethoscope,
 } from "lucide-react";
 import { ShareButtons } from "@/components/ShareButtons";
+import { StickyAddToCart } from "@/components/StickyAddToCart";
+import { ProductReviews } from "@/components/ProductReviews";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -56,6 +60,7 @@ const ProductDetail = () => {
   const [relatedProducts, setRelatedProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   const addItem = useCartStore((state) => state.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
@@ -113,14 +118,14 @@ const ProductDetail = () => {
       quantity,
       selectedOptions: [],
     });
-    toast.success(isArabic ? "تمت الإضافة إلى الحقيبة" : "Added to your ritual", { description: product.title, position: "top-center" });
+    toast.success(isArabic ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Added to your ritual", { description: product.title, position: "top-center" });
   };
 
   const handleWishlistToggle = () => {
     if (!product) return;
     toggleItem({ node: buildShopifyNode(product) });
     if (!isInWishlist(product.id)) {
-      toast.success(isArabic ? "تمت الإضافة إلى المفضلة" : "Added to wishlist", { description: product.title, position: "top-center" });
+      toast.success(isArabic ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ù…ÙØ¶Ù„Ø©" : "Added to wishlist", { description: product.title, position: "top-center" });
     }
   };
 
@@ -152,10 +157,10 @@ const ProductDetail = () => {
         <Header />
         <div className="flex flex-col items-center justify-center min-h-[60vh] pt-36">
           <h1 className="font-serif text-2xl text-foreground mb-4">
-            {isArabic ? "المنتج غير موجود" : "Product Not Found"}
+            {isArabic ? "Ø§Ù„Ù…Ù†ØªØ¬ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯" : "Product Not Found"}
           </h1>
           <Link to="/" className="text-primary hover:underline text-sm">
-            {isArabic ? "العودة للمتجر" : "Return to Shop"}
+            {isArabic ? "Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„Ù…ØªØ¬Ø±" : "Return to Shop"}
           </Link>
         </div>
         <Footer />
@@ -163,14 +168,14 @@ const ProductDetail = () => {
     );
   }
 
-  const brandName = product.brand || (isArabic ? "مجموعة حصرية" : "Exclusive Collection");
-  const galleryImages = product.image_url ? [product.image_url] : ["/placeholder.svg"];
+  const brandName = product.brand || (isArabic ? "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø­ØµØ±ÙŠØ©" : "Exclusive Collection");
+  const galleryImages = product.image_url ? [product.image_url] : ["/editorial-showcase-2.jpg"];
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <div className="grid lg:grid-cols-2 min-h-screen pt-20">
-        {/* LEFT: Hero Image Gallery — Above the Fold Priority */}
+        {/* LEFT: Hero Image Gallery â€” Above the Fold Priority */}
         <div className="bg-muted/30 lg:overflow-y-auto">
           <div className="space-y-1">
             {galleryImages.map((img, idx) => (
@@ -181,14 +186,14 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* RIGHT: Clean PDP — Price + Cart Above Fold, Clinical Data in Accordions */}
+        {/* RIGHT: Clean PDP â€” Price + Cart Above Fold, Clinical Data in Accordions */}
         <div className="lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto bg-background">
           <div className="p-8 lg:p-16 flex flex-col justify-center min-h-full">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-sm mb-6">
-              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "الرئيسية" : "Home"}</Link>
+              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Home"}</Link>
               <span className="text-muted-foreground">/</span>
-              <Link to="/shop" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "المتجر" : "Shop"}</Link>
+              <Link to="/shop" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ù…ØªØ¬Ø±" : "Shop"}</Link>
             </nav>
 
             {/* Above the Fold: Brand, Title, Price */}
@@ -200,7 +205,13 @@ const ProductDetail = () => {
 
             {/* Pharmacist Note (brief) */}
             {product.pharmacist_note && (
-              <p className="text-muted-foreground leading-relaxed mb-8 font-light">{product.pharmacist_note}</p>
+              <div className="mb-8 p-6 bg-[#F8F8FF] border-l-4 border-[#800020] rounded-r-xl shadow-sm">
+                <div className="flex items-center gap-2 mb-3 text-[#800020]">
+                  <Stethoscope className="w-5 h-5" />
+                  <span className="text-xs font-bold uppercase tracking-widest">{isArabic ? "Ù…Ù„Ø§Ø­Ø¸Ø© Ø§Ù„ØµÙŠØ¯Ù„Ø§Ù†ÙŠ" : "Pharmacist Clinical Note"}</span>
+                </div>
+                <p className="text-muted-foreground leading-relaxed font-light italic">"{product.pharmacist_note}"</p>
+              </div>
             )}
 
             {/* Clinical Badge */}
@@ -216,8 +227,8 @@ const ProductDetail = () => {
             {/* Gold Divider */}
             <div className="w-16 h-px bg-polished-gold mb-10" />
 
-            {/* Add to Cart — Primary CTA */}
-            <div className="space-y-6 mb-10">
+            {/* Add to Cart â€” Primary CTA */}
+            <div ref={ctaRef} className="space-y-6 mb-10">
               <div className="flex items-center justify-center gap-8 py-4 border border-polished-gold/30">
                 <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-burgundy transition-colors"><Minus className="w-4 h-4" /></button>
                 <span className="text-lg font-body font-medium w-8 text-center text-asper-ink">{quantity}</span>
@@ -227,7 +238,7 @@ const ProductDetail = () => {
               <div className="flex gap-4">
                 <Button onClick={handleAddToCart} variant="luxury" size="luxury-lg" className="flex-1">
                   <ShoppingBag className="w-5 h-5 me-3" />
-                  {isArabic ? "أضف إلى الحقيبة" : "Add to Ritual"} — {formatJODSimple(currentPrice * quantity)}
+                  {isArabic ? "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Ritual"} â€” {formatJODSimple(currentPrice * quantity)}
                 </Button>
                 <button onClick={handleWishlistToggle} className={`w-14 h-14 flex items-center justify-center border transition-all ${isWishlisted ? "bg-primary border-primary text-primary-foreground" : "border-border text-foreground hover:border-primary"}`}>
                   <Heart className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`} />
@@ -236,21 +247,21 @@ const ProductDetail = () => {
 
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <ShieldCheck className="w-4 h-4 text-primary" />
-                {isArabic ? "موزع معتمد • منتج أصلي 100%" : "Authorized Retailer • 100% Authentic"}
+                {isArabic ? "Ù…ÙˆØ²Ø¹ Ù…Ø¹ØªÙ…Ø¯ â€¢ Ù…Ù†ØªØ¬ Ø£ØµÙ„ÙŠ 100%" : "Authorized Retailer â€¢ 100% Authentic"}
               </div>
 
               <SafetyBadges product={product} className="justify-center" />
-              <ShareButtons url={window.location.href} title={`${isArabic ? "اكتشف" : "Check out"} ${product.title}`} />
+              <ShareButtons url={window.location.href} title={`${isArabic ? "Ø§ÙƒØªØ´Ù" : "Check out"} ${product.title}`} />
             </div>
 
-            {/* ─── Clean PDP Accordions: Clinical data below the fold ─── */}
+            {/* â”€â”€â”€ Clean PDP Accordions: Clinical data below the fold â”€â”€â”€ */}
             <Accordion type="multiple" className="w-full border-t border-polished-gold/30">
               {/* How to Use */}
               <AccordionItem value="how-to-use" className="border-border">
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
                   <span className="flex items-center gap-2">
                     <Droplets className="w-4 h-4 text-primary" />
-                    {isArabic ? "طريقة الاستخدام" : "How to Use"}
+                    {isArabic ? "Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…" : "How to Use"}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -262,19 +273,19 @@ const ProductDetail = () => {
                     <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
                     <div className="flex items-start gap-3">
                       <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">1</span>
-                      <p>{isArabic ? "نظفي البشرة جيداً وجففيها بلطف." : "Cleanse skin thoroughly and pat dry."}</p>
+                      <p>{isArabic ? "Ù†Ø¸ÙÙŠ Ø§Ù„Ø¨Ø´Ø±Ø© Ø¬ÙŠØ¯Ø§Ù‹ ÙˆØ¬ÙÙÙŠÙ‡Ø§ Ø¨Ù„Ø·Ù." : "Cleanse skin thoroughly and pat dry."}</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">2</span>
-                      <p>{isArabic ? "ضعي كمية مناسبة على الوجه والرقبة." : "Apply an appropriate amount to face and neck."}</p>
+                      <p>{isArabic ? "Ø¶Ø¹ÙŠ ÙƒÙ…ÙŠØ© Ù…Ù†Ø§Ø³Ø¨Ø© Ø¹Ù„Ù‰ Ø§Ù„ÙˆØ¬Ù‡ ÙˆØ§Ù„Ø±Ù‚Ø¨Ø©." : "Apply an appropriate amount to face and neck."}</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">3</span>
-                      <p>{isArabic ? "دلكي بلطف بحركات دائرية حتى يمتص بالكامل." : "Massage gently in circular motions until fully absorbed."}</p>
+                      <p>{isArabic ? "Ø¯Ù„ÙƒÙŠ Ø¨Ù„Ø·Ù Ø¨Ø­Ø±ÙƒØ§Øª Ø¯Ø§Ø¦Ø±ÙŠØ© Ø­ØªÙ‰ ÙŠÙ…ØªØµ Ø¨Ø§Ù„ÙƒØ§Ù…Ù„." : "Massage gently in circular motions until fully absorbed."}</p>
                     </div>
                     {product.regimen_step && (
                       <div className="mt-3 px-3 py-2 bg-accent/10 rounded text-xs">
-                        <span className="font-semibold text-foreground">{isArabic ? "خطوة الروتين:" : "Regimen Step:"}</span>{" "}
+                        <span className="font-semibold text-foreground">{isArabic ? "Ø®Ø·ÙˆØ© Ø§Ù„Ø±ÙˆØªÙŠÙ†:" : "Regimen Step:"}</span>{" "}
                         {product.regimen_step.replace(/_/g, " ")}
                       </div>
                     )}
@@ -288,7 +299,7 @@ const ProductDetail = () => {
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
                   <span className="flex items-center gap-2">
                     <Beaker className="w-4 h-4 text-primary" />
-                    {isArabic ? "المكونات (INCI)" : "Ingredients (INCI)"}
+                    {isArabic ? "Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª (INCI)" : "Ingredients (INCI)"}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -300,7 +311,7 @@ const ProductDetail = () => {
                     {product.key_ingredients && product.key_ingredients.length > 0 ? (
                       <>
                         <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-3">
-                          {isArabic ? "المكونات الفعالة الرئيسية" : "Key Active Ingredients"}
+                          {isArabic ? "Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ø§Ù„ÙØ¹Ø§Ù„Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Key Active Ingredients"}
                         </p>
                         <div className="flex flex-wrap gap-2 mb-4">
                           {product.key_ingredients.map((ing) => (
@@ -309,14 +320,14 @@ const ProductDetail = () => {
                         </div>
                         <p className="text-xs text-muted-foreground italic">
                           {isArabic
-                            ? "للحصول على قائمة INCI الكاملة، يرجى مراجعة عبوة المنتج."
+                            ? "Ù„Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ù‚Ø§Ø¦Ù…Ø© INCI Ø§Ù„ÙƒØ§Ù…Ù„Ø©ØŒ ÙŠØ±Ø¬Ù‰ Ù…Ø±Ø§Ø¬Ø¹Ø© Ø¹Ø¨ÙˆØ© Ø§Ù„Ù…Ù†ØªØ¬."
                             : "For the full INCI list, please refer to the product packaging."}
                         </p>
                       </>
                     ) : (
                       <p className="text-sm text-muted-foreground">
                         {isArabic
-                          ? "يرجى مراجعة عبوة المنتج لمعرفة القائمة الكاملة للمكونات."
+                          ? "ÙŠØ±Ø¬Ù‰ Ù…Ø±Ø§Ø¬Ø¹Ø© Ø¹Ø¨ÙˆØ© Ø§Ù„Ù…Ù†ØªØ¬ Ù„Ù…Ø¹Ø±ÙØ© Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„ÙƒØ§Ù…Ù„Ø© Ù„Ù„Ù…ÙƒÙˆÙ†Ø§Øª."
                           : "Please refer to the product packaging for the complete ingredient list."}
                       </p>
                     )}
@@ -329,7 +340,7 @@ const ProductDetail = () => {
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
                   <span className="flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-primary" />
-                    {isArabic ? "التحذيرات التنظيمية" : "Regulatory Warnings"}
+                    {isArabic ? "Ø§Ù„ØªØ­Ø°ÙŠØ±Ø§Øª Ø§Ù„ØªÙ†Ø¸ÙŠÙ…ÙŠØ©" : "Regulatory Warnings"}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -341,25 +352,38 @@ const ProductDetail = () => {
                     <div className="text-sm text-muted-foreground leading-relaxed space-y-4">
                     <div className="p-3 bg-destructive/5 border border-destructive/20 rounded-lg">
                       <p className="font-medium text-foreground text-xs uppercase tracking-wider mb-2">
-                        {isArabic ? "تحذيرات مهمة" : "Important Warnings"}
+                        {isArabic ? "ØªØ­Ø°ÙŠØ±Ø§Øª Ù…Ù‡Ù…Ø©" : "Important Warnings"}
                       </p>
                       <ul className="space-y-1.5 text-xs">
-                        <li>• {isArabic ? "للاستخدام الخارجي فقط. تجنبي ملامسة العينين." : "For external use only. Avoid contact with eyes."}</li>
-                        <li>• {isArabic ? "توقفي عن الاستخدام في حال حدوث تهيج." : "Discontinue use if irritation occurs."}</li>
-                        <li>• {isArabic ? "يُحفظ بعيداً عن متناول الأطفال." : "Keep out of reach of children."}</li>
-                        <li>• {isArabic ? "يُخزن في درجة حرارة أقل من 25 درجة مئوية." : "Store below 25°C. Protect from direct sunlight."}</li>
+                        <li>â€¢ {isArabic ? "Ù„Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„Ø®Ø§Ø±Ø¬ÙŠ ÙÙ‚Ø·. ØªØ¬Ù†Ø¨ÙŠ Ù…Ù„Ø§Ù…Ø³Ø© Ø§Ù„Ø¹ÙŠÙ†ÙŠÙ†." : "For external use only. Avoid contact with eyes."}</li>
+                        <li>â€¢ {isArabic ? "ØªÙˆÙ‚ÙÙŠ Ø¹Ù† Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… ÙÙŠ Ø­Ø§Ù„ Ø­Ø¯ÙˆØ« ØªÙ‡ÙŠØ¬." : "Discontinue use if irritation occurs."}</li>
+                        <li>â€¢ {isArabic ? "ÙŠÙØ­ÙØ¸ Ø¨Ø¹ÙŠØ¯Ø§Ù‹ Ø¹Ù† Ù…ØªÙ†Ø§ÙˆÙ„ Ø§Ù„Ø£Ø·ÙØ§Ù„." : "Keep out of reach of children."}</li>
+                        <li>â€¢ {isArabic ? "ÙŠÙØ®Ø²Ù† ÙÙŠ Ø¯Ø±Ø¬Ø© Ø­Ø±Ø§Ø±Ø© Ø£Ù‚Ù„ Ù…Ù† 25 Ø¯Ø±Ø¬Ø© Ù…Ø¦ÙˆÙŠØ©." : "Store below 25Â°C. Protect from direct sunlight."}</li>
                       </ul>
                     </div>
                     <div className="p-3 bg-muted/50 rounded-lg">
                       <p className="text-xs text-muted-foreground">
-                        <span className="font-semibold text-foreground">{isArabic ? "ملاحظة:" : "Note:"} </span>
+                        <span className="font-semibold text-foreground">{isArabic ? "Ù…Ù„Ø§Ø­Ø¸Ø©:" : "Note:"} </span>
                         {isArabic
-                          ? "قد يختلف تصميم العبوة عن الصورة المعروضة بسبب تحديثات الشركة المصنعة. المنتج والمكونات تبقى كما هي."
+                          ? "Ù‚Ø¯ ÙŠØ®ØªÙ„Ù ØªØµÙ…ÙŠÙ… Ø§Ù„Ø¹Ø¨ÙˆØ© Ø¹Ù† Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶Ø© Ø¨Ø³Ø¨Ø¨ ØªØ­Ø¯ÙŠØ«Ø§Øª Ø§Ù„Ø´Ø±ÙƒØ© Ø§Ù„Ù…ØµÙ†Ø¹Ø©. Ø§Ù„Ù…Ù†ØªØ¬ ÙˆØ§Ù„Ù…ÙƒÙˆÙ†Ø§Øª ØªØ¨Ù‚Ù‰ ÙƒÙ…Ø§ Ù‡ÙŠ."
                           : "Packaging design may vary from the image shown due to manufacturer updates. The product and ingredients remain the same."}
                       </p>
                     </div>
                     </div>
                   </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Reviews with Contextual Social Proof */}
+              <AccordionItem value="reviews" className="border-border">
+                <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
+                  <span className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-polished-gold" />
+                    {isArabic ? "Ø§Ù„ØªÙ‚ÙŠÙŠÙ…Ø§Øª" : "Reviews"}
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <ProductReviews productId={product.id} />
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
@@ -371,12 +395,12 @@ const ProductDetail = () => {
       {relatedProducts.length > 0 && (
         <section className="py-16 bg-muted/20">
           <div className="container mx-auto px-4 max-w-7xl">
-            <h2 className="font-serif text-2xl text-foreground mb-8">{isArabic ? "قد يعجبك أيضاً" : "You May Also Like"}</h2>
+            <h2 className="font-serif text-2xl text-foreground mb-8">{isArabic ? "Ù‚Ø¯ ÙŠØ¹Ø¬Ø¨Ùƒ Ø£ÙŠØ¶Ø§Ù‹" : "You May Also Like"}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {relatedProducts.map((rp) => (
                 <Link key={rp.id} to={`/product/${rp.handle}`} className="group">
                   <div className="aspect-square bg-asper-stone rounded-lg overflow-hidden mb-3 border border-transparent group-hover:border-polished-gold transition-colors duration-300">
-                    <img src={rp.image_url || "/placeholder.svg"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={rp.image_url || "/editorial-showcase-2.jpg"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <p className="text-xs text-asper-ink-muted uppercase tracking-widest font-body">{rp.brand}</p>
                   <p className="text-sm font-medium text-asper-ink line-clamp-2 font-body">{rp.title}</p>
@@ -389,8 +413,17 @@ const ProductDetail = () => {
       )}
 
       <Footer />
+
+      {/* Sticky Add-to-Cart Bar */}
+      <StickyAddToCart
+        productTitle={product.title}
+        price={currentPrice}
+        onAddToCart={handleAddToCart}
+        triggerRef={ctaRef as React.RefObject<HTMLElement>}
+      />
     </div>
   );
 };
 
 export default ProductDetail;
+

@@ -3,13 +3,8 @@
 # Lovable: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
 #
 # Sends issue/PR open, edit, reopen, close events to Lovable via webhook.
-# 
-# OPTIONAL SETUP:
-#   1. In GitHub repo → Settings → Secrets and variables → Actions
-#   2. Add secret: LOVABLE_WEBHOOK_URL = (webhook URL from Lovable)
-#   3. See docs/GITHUB_SECRETS_SETUP.md for detailed instructions
-#
-# If LOVABLE_WEBHOOK_URL is not configured, this workflow skips gracefully.
+# SETUP: In GitHub repo → Settings → Secrets and variables → Actions, add:
+#   LOVABLE_WEBHOOK_URL = (webhook URL from Lovable, if provided)
 #
 name: Sync Issues and PRs to Lovable
 
@@ -22,51 +17,25 @@ on:
 jobs:
   sync_to_lovable:
     runs-on: ubuntu-latest
+    if: secrets.LOVABLE_WEBHOOK_URL != ''
     steps:
       - name: Send event data to Lovable
+        continue-on-error: true
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
-          # Skip gracefully when LOVABLE_WEBHOOK_URL is not configured
-          if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "Warning: LOVABLE_WEBHOOK_URL is not set"
-            echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
-            echo "Skipping Lovable sync (secret not configured)."
-            exit 0
-          fi
-
-          # Validate URL format
-          if ! echo "$LOVABLE_WEBHOOK_URL" | grep -qE '^https?://'; then
-            echo "Warning: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
-            echo "Expected format: https://api.lovable.ai/... or similar"
-            echo "Skipping Lovable sync."
-            exit 0
-          fi
-
-          # Debug: Show masked URL (only show protocol and domain)
-          MASKED_URL=$(echo "$LOVABLE_WEBHOOK_URL" | sed -E 's|(https?://[^/]+).*|\1/...|')
-          echo "LOVABLE_WEBHOOK_URL=$MASKED_URL"
-
           echo "Sending event to Lovable..."
-          # Use GitHub event path JSON directly to avoid shell injection issues
           PAYLOAD=$(jq -n \
             --arg event_name "${{ github.event_name }}" \
             --arg action "${{ github.event.action }}" \
             --arg repo "${{ github.repository }}" \
             --arg sender "${{ github.actor }}" \
             --arg url "${{ github.event.issue.html_url || github.event.pull_request.html_url }}" \
-            --argjson event_data "$(cat "$GITHUB_EVENT_PATH")" \
-            '{
-              event_name: $event_name,
-              action: $action,
-              repo: $repo,
-              sender: $sender,
-              url: $url,
-              title: ($event_data.issue.title // $event_data.pull_request.title // ""),
-              body: ($event_data.issue.body // $event_data.pull_request.body // "")
-            }'
+            --arg title "${{ github.event.issue.title || github.event.pull_request.title }}" \
+            --arg body "${{ github.event.issue.body || github.event.pull_request.body }}" \
+            '{event_name: $event_name, action: $action, repo: $repo, sender: $sender, url: $url, title: $title, body: $body}'
           )
-          curl -s -X POST "$LOVABLE_WEBHOOK_URL" \
+          curl -s -f -X POST "$LOVABLE_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d "$PAYLOAD"
+            -d "$PAYLOAD" || echo "Webhook call failed (non-fatal)."
           echo "Done."

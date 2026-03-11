@@ -1,30 +1,30 @@
-# Pre-Launch Checklist
+﻿# Pre-Launch Checklist
 
 > **Important:** Replace all placeholders in this documentation with your actual values:
-> - `REPLACE_WITH_PROJECT_ID` → Your Lovable project ID
-> - `YOUR_PROJECT` / `YOUR_SUPABASE_PROJECT` / `YOUR_PROJECT_REF` → Your Supabase project reference ID
-> - `YOUR_JWT_TOKEN` / `YOUR_SUPABASE_JWT_TOKEN` → Your JWT token from `supabase auth token`
-> - `YOUR_HEALTH_CHECKS_SECRET` → Your configured health checks secret (min 32 characters)
-> - `YOUR_SHOPIFY_ACCESS_TOKEN` → Your Shopify Admin API access token
-> - `your-store.myshopify.com` → Your Shopify store domain
-> - `YOUR_ANON_KEY` → Your Supabase anon key
+> - `REPLACE_WITH_PROJECT_ID` â†’ Your Lovable project ID
+> - `YOUR_PROJECT` / `YOUR_SUPABASE_PROJECT` / `YOUR_PROJECT_REF` â†’ Your Supabase project reference ID
+> - `YOUR_JWT_TOKEN` / `YOUR_SUPABASE_JWT_TOKEN` â†’ Your JWT token from `supabase auth token`
+> - `YOUR_HEALTH_CHECKS_SECRET` â†’ Your configured health checks secret (min 32 characters)
+> - `YOUR_SHOPIFY_ACCESS_TOKEN` â†’ Your Shopify Admin API access token
+> - `your-store.myshopify.com` â†’ Your Shopify store domain
+> - `YOUR_ANON_KEY` â†’ Your Supabase anon key
 
 This checklist ensures all systems are configured and tested before launching the Asper Beauty Shop to production.
 
 ## Checklist Overview
 
-- [ ] §1. Development Environment Setup
-- [ ] §2. Database Configuration
-- [ ] §3. Third-Party Integrations
-- [ ] §4. Edge Functions Deployment
-- [ ] §5. Verify Secrets Configuration ⭐
-- [ ] §6. Health Checks and Monitoring
-- [ ] §7. Security and Performance
-- [ ] §8. Documentation and Handoff
+- [ ] Â§1. Development Environment Setup
+- [ ] Â§2. Database Configuration
+- [ ] Â§3. Third-Party Integrations
+- [ ] Â§4. Edge Functions Deployment
+- [ ] Â§5. Verify Secrets Configuration â­
+- [ ] Â§6. Health Checks and Monitoring
+- [ ] Â§7. Security and Performance
+- [ ] Â§8. Documentation and Handoff
 
 ---
 
-## §1. Development Environment Setup
+## Â§1. Development Environment Setup
 
 ### Local Development
 
@@ -43,7 +43,7 @@ This checklist ensures all systems are configured and tested before launching th
 
 ---
 
-## §2. Database Configuration
+## Â§2. Database Configuration
 
 ### Supabase Setup
 
@@ -75,7 +75,7 @@ curl https://YOUR_PROJECT.supabase.co/rest/v1/products?select=count \
 
 ---
 
-## §3. Third-Party Integrations
+## Â§3. Third-Party Integrations
 
 ### Shopify Integration
 
@@ -107,7 +107,7 @@ curl -X GET "https://your-store.myshopify.com/admin/api/2025-01/products.json" \
 
 ---
 
-## §4. Edge Functions Deployment
+## Â§4. Edge Functions Deployment
 
 ### Supabase CLI Setup
 
@@ -139,13 +139,13 @@ supabase functions list
 
 ---
 
-## §5. Verify Secrets Configuration ⭐
+## Â§5. Verify Secrets Configuration â­
 
 This section is critical for a successful deployment. All secrets must be configured correctly.
 
 ### Required Secrets
 
-Configure these secrets in Supabase Dashboard → Edge Functions → [Function Name] → Secrets:
+Configure these secrets in Supabase Dashboard â†’ Edge Functions â†’ [Function Name] â†’ Secrets:
 
 #### For `bulk-product-upload` Function
 
@@ -159,9 +159,9 @@ Configure these secrets in Supabase Dashboard → Edge Functions → [Function N
 
 #### General Secrets (Auto-configured by Supabase)
 
-- [ ] `SUPABASE_URL` - Auto-configured ✅
-- [ ] `SUPABASE_ANON_KEY` - Auto-configured ✅
-- [ ] `SUPABASE_SERVICE_ROLE_KEY` - Auto-configured ✅
+- [ ] `SUPABASE_URL` - Auto-configured âœ…
+- [ ] `SUPABASE_ANON_KEY` - Auto-configured âœ…
+- [ ] `SUPABASE_SERVICE_ROLE_KEY` - Auto-configured âœ…
 
 ### Setting Secrets via CLI
 
@@ -276,14 +276,14 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/health-checks-ingest 
 
 ---
 
-## §6. Health Checks and Monitoring
+## Â§6. Health Checks and Monitoring
 
 ### GitHub Actions Secrets
 
-Configure these secrets in GitHub repository **Settings → Secrets and variables → Actions**:
+Configure these secrets in GitHub repository **Settings â†’ Secrets and variables â†’ Actions**:
 
 - [ ] `LOVABLE_WEBHOOK_URL` - Webhook URL for syncing file/issue/PR events to Lovable *(optional; workflows skip gracefully if absent)*
-  - **How to get it:** Open https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6 → **Settings → Integrations** (or **Settings → GitHub**) → copy the webhook URL
+  - **How to get it:** Open https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6 â†’ **Settings â†’ Integrations** (or **Settings â†’ GitHub**) â†’ copy the webhook URL
   - If not visible in the Lovable UI, contact Lovable support with project ID `657fb572-13a5-4a3e-bac9-184d39fdf7e6`
 - [ ] `DISCORD_WEBHOOK_URL` - Discord webhook for deployment notifications *(optional)*
 
@@ -313,7 +313,7 @@ Run all health checks from [NEXT_STEPS.md](../NEXT_STEPS.md):
 
 ---
 
-## §7. Security and Performance
+## Â§7. Security and Performance
 
 ### Security Checklist
 
@@ -337,7 +337,7 @@ Run all health checks from [NEXT_STEPS.md](../NEXT_STEPS.md):
 
 ---
 
-## §8. Documentation and Handoff
+## Â§8. Documentation and Handoff
 
 ### Documentation Complete
 
@@ -401,7 +401,7 @@ Understanding responses from health checks and API endpoints is critical for tro
   "message": "Shopify secrets configured"
 }
 ```
-**Interpretation:** ✅ Shopify integration ready, can proceed with deployment.
+**Interpretation:** âœ… Shopify integration ready, can proceed with deployment.
 
 **Failure (503 Service Unavailable):**
 ```json
@@ -412,7 +412,7 @@ Understanding responses from health checks and API endpoints is critical for tro
   "hint": "SHOPIFY_STORE_DOMAIN must be myshopify domain only (no https://)"
 }
 ```
-**Interpretation:** ⚠️ Configuration incomplete, follow §5 to set missing secrets.
+**Interpretation:** âš ï¸ Configuration incomplete, follow Â§5 to set missing secrets.
 
 #### Health Checks Ingest (`POST /health-checks-ingest`)
 
@@ -425,7 +425,7 @@ Understanding responses from health checks and API endpoints is critical for tro
   }
 }
 ```
-**Interpretation:** ✅ Health check logged successfully in database.
+**Interpretation:** âœ… Health check logged successfully in database.
 
 **Authentication Failure (401 Unauthorized):**
 ```json
@@ -433,7 +433,7 @@ Understanding responses from health checks and API endpoints is critical for tro
   "error": "Unauthorized"
 }
 ```
-**Interpretation:** ⚠️ Missing or incorrect `x-health-checks-secret` header, verify secret.
+**Interpretation:** âš ï¸ Missing or incorrect `x-health-checks-secret` header, verify secret.
 
 **Bad Request (400):**
 ```json
@@ -441,39 +441,39 @@ Understanding responses from health checks and API endpoints is critical for tro
   "error": "health_check.branch and health_check.job_name required"
 }
 ```
-**Interpretation:** ⚠️ Malformed request, check payload structure.
+**Interpretation:** âš ï¸ Malformed request, check payload structure.
 
 ### Troubleshooting Decision Tree
 
 ```
 Health Check Fails
-│
-├─ 200 OK but "status": "degraded"
-│  └─ Check which integration failed (supabase/shopify)
-│     └─ Test integration separately
-│
-├─ 503 Service Unavailable
-│  └─ Missing configuration
-│     └─ Go to §5 and configure secrets
-│     └─ Redeploy function
-│     └─ Test again
-│
-├─ 401 Unauthorized
-│  └─ Authentication issue
-│     └─ Verify JWT token or secret header
-│     └─ Check secret configuration
-│
-├─ 500 Internal Server Error
-│  └─ Application error
-│     └─ Check Supabase function logs
-│     └─ Review code for bugs
-│     └─ Check database connectivity
-│
-└─ Timeout or Network Error
-   └─ Infrastructure issue
-      └─ Check deployment status
-      └─ Verify DNS/routing
-      └─ Contact support if needed
+â”‚
+â”œâ”€ 200 OK but "status": "degraded"
+â”‚  â””â”€ Check which integration failed (supabase/shopify)
+â”‚     â””â”€ Test integration separately
+â”‚
+â”œâ”€ 503 Service Unavailable
+â”‚  â””â”€ Missing configuration
+â”‚     â””â”€ Go to Â§5 and configure secrets
+â”‚     â””â”€ Redeploy function
+â”‚     â””â”€ Test again
+â”‚
+â”œâ”€ 401 Unauthorized
+â”‚  â””â”€ Authentication issue
+â”‚     â””â”€ Verify JWT token or secret header
+â”‚     â””â”€ Check secret configuration
+â”‚
+â”œâ”€ 500 Internal Server Error
+â”‚  â””â”€ Application error
+â”‚     â””â”€ Check Supabase function logs
+â”‚     â””â”€ Review code for bugs
+â”‚     â””â”€ Check database connectivity
+â”‚
+â””â”€ Timeout or Network Error
+   â””â”€ Infrastructure issue
+      â””â”€ Check deployment status
+      â””â”€ Verify DNS/routing
+      â””â”€ Contact support if needed
 ```
 
 ---
@@ -484,7 +484,7 @@ Before marking this checklist complete and launching to production:
 
 ### Critical Path Items
 
-- [ ] All secrets configured correctly (§5) ⭐
+- [ ] All secrets configured correctly (Â§5) â­
 - [ ] Health checks return 200 OK (not 503)
 - [ ] Database accessible and populated
 - [ ] Shopify integration tested end-to-end
@@ -499,12 +499,12 @@ Before marking this checklist complete and launching to production:
 # Run this script on launch day
 #!/bin/bash
 
-echo "🚀 Pre-Launch Final Verification"
+echo "ðŸš€ Pre-Launch Final Verification"
 echo "================================="
 
 # 1. Health checks
 echo "1. Running health checks..."
-curl -f https://asperbeautyshop-com.lovable.app/health || exit 1
+curl -f https://www.asperbeautyshop.com/health || exit 1
 
 # 2. Bulk upload health
 echo "2. Checking bulk upload (should be 200, not 503)..."
@@ -514,8 +514,8 @@ curl -f https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload || exi
 echo "3. Testing database connectivity..."
 node scripts/health-check.js || exit 1
 
-echo "✅ All pre-launch checks passed!"
-echo "🎉 Ready to launch!"
+echo "âœ… All pre-launch checks passed!"
+echo "ðŸŽ‰ Ready to launch!"
 ```
 
 ---
@@ -556,3 +556,4 @@ For questions or issues:
 **Checklist completed on:** _____________  
 **Completed by:** _____________  
 **Production launch date:** _____________
+

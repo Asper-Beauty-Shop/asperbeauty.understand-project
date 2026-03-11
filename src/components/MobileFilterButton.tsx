@@ -55,3 +55,4 @@ export default function MobileFilterButton({ activeFilterCount = 0, onClick }: M
     </div>
   );
 }
+

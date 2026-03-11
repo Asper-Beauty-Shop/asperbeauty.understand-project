@@ -84,3 +84,4 @@ export const LuxuryHero = () => {
   );
 };
 export default LuxuryHero;
+

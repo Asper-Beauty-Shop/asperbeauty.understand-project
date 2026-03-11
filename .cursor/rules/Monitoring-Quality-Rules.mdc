@@ -1,9 +1,0 @@
----
-alwaysApply: true
----
-
-KPI-Driven: Track conversion rate, refund rate, customer satisfaction, and AI accuracy.
-
-Error Handling: Fail-safe mechanisms must escalate any AI uncertainty above defined thresholds to human review.
-
-Continuous Improvement: Monthly system review and optimization must be mandatory.

@@ -100,7 +100,7 @@ export const DealOfTheDay = () => {
                 >
                   <div className="relative aspect-square overflow-hidden bg-muted/30">
                     <img
-                      src={product.image_url || "/placeholder.svg"}
+                      src={product.image_url || "/editorial-showcase-2.jpg"}
                       alt={product.title}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -142,3 +142,4 @@ export const DealOfTheDay = () => {
 };
 
 export default DealOfTheDay;
+

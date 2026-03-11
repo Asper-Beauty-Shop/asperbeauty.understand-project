@@ -286,3 +286,4 @@ export const QuickViewButton = ({ onClick }: { onClick: () => void }) => {
     </button>
   );
 };
+

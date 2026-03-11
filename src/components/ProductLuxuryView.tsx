@@ -211,6 +211,30 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
               </div>
             </div>
 
+            {/* Concierge Tip Card */}
+            <div className="relative bg-asper-stone-light border border-accent shadow-md p-6 rounded-sm mt-2">
+              {/* Decorative gold pin */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="8" r="7" stroke="#C5A028" strokeWidth="1.5" fill="#F8F8FF" />
+                  <circle cx="12" cy="8" r="3" fill="#C5A028" />
+                  <line x1="12" y1="15" x2="12" y2="24" stroke="#C5A028" strokeWidth="1.5" />
+                </svg>
+              </div>
+              <p className="font-display text-sm text-primary mb-2 mt-1 text-center tracking-wide">
+                {isAr ? "نصيحة الكونسيرج" : "Concierge Tip"}
+              </p>
+              <p className="font-body text-xs text-muted-foreground leading-relaxed text-center italic">
+                {product.category?.toLowerCase().includes("acne") || product.title?.toLowerCase().includes("cleanser")
+                  ? (isAr
+                    ? "\"د. سامي ينصح: ضعيه على بشرة رطبة لتعزيز امتصاص حمض الهيالورونيك.\""
+                    : "\"Dr. Sami recommends: Apply to damp skin to lock in hyaluronic acid for maximum hydration.\"")
+                  : (isAr
+                    ? "\"مس زين تنصح: امزجيه مع قطرة سيروم للحصول على إشراقة زجاجية.\""
+                    : "\"Ms. Zain suggests: Mix with a drop of serum for a glass-skin finish.\"")}
+              </p>
+            </div>
+
             {/* E. The "Accordion" Details */}
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="ritual" className="border-border">
@@ -270,3 +294,4 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
     </div>
   );
 };
+

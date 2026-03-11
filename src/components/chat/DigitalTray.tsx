@@ -3,6 +3,7 @@ import { type PrescriptionProduct, useCartStore } from "@/stores/cartStore";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import { logPrescriptionAddToCart } from "@/lib/conciergeAnalytics";
+import { RoutineSaver } from "./RoutineSaver";
 
 export interface DigitalTrayProduct extends PrescriptionProduct {
   id: string;
@@ -15,9 +16,10 @@ export interface DigitalTrayProduct extends PrescriptionProduct {
 
 interface DigitalTrayProps {
   products: DigitalTrayProduct[];
+  concern?: string;
 }
 
-export const DigitalTray = ({ products }: DigitalTrayProps) => {
+export const DigitalTray = ({ products, concern }: DigitalTrayProps) => {
   const { language } = useLanguage();
   const addMultipleFromPrescription = useCartStore(
     (s) => s.addMultipleFromPrescription,
@@ -30,12 +32,12 @@ export const DigitalTray = ({ products }: DigitalTrayProps) => {
     await addMultipleFromPrescription(products);
     toast.success(
       language === "ar"
-        ? "تمت إضافة الروتين إلى السلة"
+        ? "ØªÙ…Øª Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ø±ÙˆØªÙŠÙ† Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©"
         : "Routine added to cart",
       {
         description: language === "ar"
-          ? `${products.length} منتج — افتح السلة للاطلاع`
-          : `${products.length} items — open cart to review`,
+          ? `${products.length} Ù…Ù†ØªØ¬ â€” Ø§ÙØªØ­ Ø§Ù„Ø³Ù„Ø© Ù„Ù„Ø§Ø·Ù„Ø§Ø¹`
+          : `${products.length} items â€” open cart to review`,
         position: "top-center",
       },
     );
@@ -57,7 +59,7 @@ export const DigitalTray = ({ products }: DigitalTrayProps) => {
         className="font-display text-burgundy text-xl mb-4"
         dir={isRTL ? "rtl" : "ltr"}
       >
-        {language === "ar" ? "روتينك الموصى به" : "Your Prescription"}
+        {language === "ar" ? "Ø±ÙˆØªÙŠÙ†Ùƒ Ø§Ù„Ù…ÙˆØµÙ‰ Ø¨Ù‡" : "Your Prescription"}
       </h3>
       <div className="space-y-4">
         {products.map((p) => (
@@ -94,31 +96,41 @@ export const DigitalTray = ({ products }: DigitalTrayProps) => {
         ))}
       </div>
       <p className="text-sm text-dark-charcoal/80 font-body mt-4">
-        {language === "ar" ? "المجموع التقريبي:" : "Approx. total:"}{" "}
+        {language === "ar" ? "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹ Ø§Ù„ØªÙ‚Ø±ÙŠØ¨ÙŠ:" : "Approx. total:"}{" "}
         <span className="font-display text-burgundy font-semibold">
           {totalJOD.toFixed(2)} JOD
         </span>
       </p>
-      <button
-        type="button"
-        onClick={handleQuickAddRoutine}
-        disabled={isLoading}
-        className="w-full mt-6 bg-burgundy text-white py-3 font-body font-medium rounded-lg hover:bg-burgundy-light transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-      >
-        {isLoading
-          ? (language === "ar" ? "جاري الإضافة..." : "Adding...")
-          : (language === "ar"
-            ? "إضافة الروتين إلى السلة"
-            : "Quick Add Routine to Cart")}
-      </button>
+      
+      <div className="flex flex-col gap-2 mt-6">
+        <button
+          type="button"
+          onClick={handleQuickAddRoutine}
+          disabled={isLoading}
+          className="w-full bg-burgundy text-white py-3 font-body font-medium rounded-lg hover:bg-burgundy-light transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {isLoading
+            ? (language === "ar" ? "Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø¥Ø¶Ø§ÙØ©..." : "Adding...")
+            : (language === "ar"
+              ? "Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ø±ÙˆØªÙŠÙ† Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©"
+              : "Quick Add Routine to Cart")}
+        </button>
+
+        <RoutineSaver 
+          products={products.map(p => ({ id: p.id, title: p.title, price: p.price }))}
+          concern={concern}
+        />
+      </div>
+
       <p
         className="text-center text-[10px] text-gray-400 mt-2 italic font-body"
         dir={isRTL ? "rtl" : "ltr"}
       >
         *{language === "ar"
-          ? "تركيبة سريرية من صيدلي آسبر الرقمي"
+          ? "ØªØ±ÙƒÙŠØ¨Ø© Ø³Ø±ÙŠØ±ÙŠØ© Ù…Ù† ØµÙŠØ¯Ù„ÙŠ Ø¢Ø³Ø¨Ø± Ø§Ù„Ø±Ù‚Ù…ÙŠ"
           : "Clinical formulation by Asper Digital Pharmacist"}
       </p>
     </motion.div>
   );
 };
+

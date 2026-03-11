@@ -2,7 +2,8 @@ import { useState } from "react";
 import { ShieldCheck, Award, CheckCircle, Stethoscope } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
-import asperLogo from "@/assets/asper-logo.png";
+import { AsperWordmark } from "@/components/ui/AsperWordmark";
+
 
 // Brand-accurate social media icon components
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -89,7 +90,7 @@ export const Footer = () => {
           {/* Column 1 - Brand Identity */}
           <div>
             <Link to="/" className="inline-block mb-6">
-              <img src={asperLogo} alt="Asper Beauty Shop" className="h-16 rounded" />
+              <AsperWordmark size="lg" className="text-polished-white" />
             </Link>
             <p className="font-body text-asper-stone-light mb-6">
               {isArabic ? "إعادة تعريف الجمال في الأردن." : "Redefining Beauty in Jordan."}
@@ -109,7 +110,7 @@ export const Footer = () => {
               <a href="https://wa.me/962790656666" target="_blank" rel="noopener noreferrer" className={socialIconClass} aria-label="WhatsApp">
                 <WhatsAppIcon className="w-4 h-4" />
               </a>
-              <a href="https://twitter.com/asperbeautyshop" target="_blank" rel="noopener noreferrer" className={socialIconClass} aria-label="X (Twitter)">
+              <a href="https://x.com/asperbeautyshop" target="_blank" rel="noopener noreferrer" className={socialIconClass} aria-label="X (Twitter)">
                 <XIcon className="w-4 h-4" />
               </a>
               <a href="https://www.youtube.com/@asperbeautyshop" target="_blank" rel="noopener noreferrer" className={socialIconClass} aria-label="YouTube">
@@ -139,11 +140,11 @@ export const Footer = () => {
                   onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant"))}
                   className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400 text-left"
                 >
-                  {isArabic ? "استشارة رقمية • اسأل الصيدلي" : "Digital Consult • Ask the Pharmacist"}
+                  {isArabic ? "استشارة رقمية • Dr.Bot" : "Digital Consult • Dr.Bot"}
                 </button>
               </li>
-              {conciergLinks.map((item) => (
-                <li key={item.href}>
+              {conciergLinks.map((item, index) => (
+                <li key={`${item.href}-${index}`}>
                   <Link to={item.href} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
                     {item.name}
                   </Link>
@@ -158,8 +159,8 @@ export const Footer = () => {
               {isArabic ? "عن آسبر" : "About Asper"}
             </h3>
             <ul className="space-y-3 mb-8">
-              {aboutLinks.map((item) => (
-                <li key={item.href}>
+              {aboutLinks.map((item, index) => (
+                <li key={`about-${item.href}-${index}`}>
                   <Link to={item.href} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
                     {item.name}
                   </Link>
@@ -183,11 +184,16 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Column 4 - VIP Club */}
+          {/* Column 4 - Morning Spa Club */}
           <div>
-            <h3 className="font-display text-lg text-polished-white mb-6">
-              {isArabic ? "اكتشف الحصريات" : "Unlock Exclusives"}
+            <h3 className="font-display text-lg text-polished-white mb-2">
+              {isArabic ? "انضم إلى سبا الصباح" : "Join the Morning Spa"}
             </h3>
+            <p className="font-body text-xs text-asper-stone-light/70 mb-4 leading-relaxed">
+              {isArabic
+                ? "نصائح حصرية من الدكتور سامي والآنسة زين، مع روتينات مخصصة تصل إلى بريدك."
+                : "Exclusive insights from Dr. Sami & Ms. Zain — tailored regimens, clinical tips, and early access delivered to your inbox."}
+            </p>
             <form onSubmit={handleSubmit} className="space-y-3">
               <input
                 type="email"
@@ -200,9 +206,12 @@ export const Footer = () => {
                 type="submit"
                 className="w-full px-6 py-3 bg-polished-gold text-burgundy font-display text-sm tracking-wider hover:bg-polished-gold/80 transition-colors duration-400 rounded"
               >
-                {isArabic ? "اشترك" : "Subscribe"}
+                {isArabic ? "انضم الآن" : "Enter the Morning Spa"}
               </button>
             </form>
+            <p className="font-body text-[10px] text-asper-stone-light/40 mt-2">
+              {isArabic ? "🔬 رؤى الصيدلي · ✨ نصائح التجميل · مجاناً" : "🔬 Pharmacist Insights · ✨ Beauty Wisdom · Always Free"}
+            </p>
           </div>
         </div>
       </div>
@@ -297,6 +306,56 @@ export const Footer = () => {
               </span>
             </div>
           </div>
+
+          {/* Circular Authenticity Seal — Inline SVG (Caduceus) */}
+          <div className="flex justify-center my-8">
+            <div className="w-20 h-20 rounded-full border-2 border-polished-gold/60 p-1.5 shadow-[0_0_20px_rgba(197,160,40,0.15)] hover:scale-105 transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] cursor-default">
+              <svg
+                viewBox="0 0 200 200"
+                className="w-full h-full"
+                aria-label="Asper Certified — Authentic Quality — Pharmacist Curated"
+                role="img"
+              >
+                {/* Outer rings */}
+                <circle cx="100" cy="100" r="96" fill="none" stroke="#C5A028" strokeWidth="2" />
+                <circle cx="100" cy="100" r="88" fill="none" stroke="#C5A028" strokeWidth="0.6" opacity="0.4" />
+
+                {/* Caduceus — medical staff with wings */}
+                <g transform="translate(100,90)" fill="none" stroke="#C5A028" strokeWidth="2" strokeLinecap="round">
+                  {/* Central staff */}
+                  <line x1="0" y1="-38" x2="0" y2="22" />
+                  {/* Staff top ornament */}
+                  <circle cx="0" cy="-42" r="4" fill="#C5A028" />
+                  {/* Left wing */}
+                  <path d="M-4,-32 Q-18,-40 -22,-28 Q-20,-22 -8,-26" fill="#C5A028" fillOpacity="0.15" stroke="#C5A028" strokeWidth="1.5" />
+                  <path d="M-8,-26 Q-22,-18 -20,-12" stroke="#C5A028" strokeWidth="1" opacity="0.6" />
+                  {/* Right wing */}
+                  <path d="M4,-32 Q18,-40 22,-28 Q20,-22 8,-26" fill="#C5A028" fillOpacity="0.15" stroke="#C5A028" strokeWidth="1.5" />
+                  <path d="M8,-26 Q22,-18 20,-12" stroke="#C5A028" strokeWidth="1" opacity="0.6" />
+                  {/* Left serpent */}
+                  <path d="M0,-24 Q-12,-18 -10,-10 Q-8,-2 0,0 Q8,2 10,10 Q12,18 0,22" stroke="#C5A028" strokeWidth="1.8" fill="none" />
+                  {/* Right serpent */}
+                  <path d="M0,-24 Q12,-18 10,-10 Q8,-2 0,0 Q-8,2 -10,10 Q-12,18 0,22" stroke="#C5A028" strokeWidth="1.8" fill="none" />
+                </g>
+
+                {/* Circular text */}
+                <defs>
+                  <path id="sealTopArc" d="M 25,100 a 75,75 0 0,1 150,0" fill="none" />
+                  <path id="sealBottomArc" d="M 175,100 a 75,75 0 0,1 -150,0" fill="none" />
+                </defs>
+                <text fill="#C5A028" fontSize="9.5" fontFamily="'Montserrat', sans-serif" letterSpacing="2.5" fontWeight="600">
+                  <textPath href="#sealTopArc" startOffset="50%" textAnchor="middle">ASPER CERTIFIED</textPath>
+                </text>
+                <text fill="#C5A028" fontSize="7.5" fontFamily="'Montserrat', sans-serif" letterSpacing="2" fontWeight="500">
+                  <textPath href="#sealBottomArc" startOffset="50%" textAnchor="middle">AUTHENTIC QUALITY • PHARMACIST CURATED</textPath>
+                </text>
+
+                {/* Decorative separator dots */}
+                <circle cx="25" cy="100" r="2" fill="#C5A028" />
+                <circle cx="175" cy="100" r="2" fill="#C5A028" />
+              </svg>
+            </div>
+          </div>
           <p className="text-center text-[10px] text-asper-stone-light/40 font-body max-w-2xl mx-auto mb-4">
             {isArabic
               ? "قد يختلف تصميم العبوة عن الصورة المعروضة بسبب تحديثات الشركة المصنعة. المنتج والمكونات تبقى كما هي."
@@ -369,3 +428,6 @@ export const Footer = () => {
     </footer>
   );
 };
+
+
+

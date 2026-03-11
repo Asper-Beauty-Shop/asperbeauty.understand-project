@@ -49,3 +49,4 @@ export const PromotionBar = () => {
 };
 
 export default PromotionBar;
+

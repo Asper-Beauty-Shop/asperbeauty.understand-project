@@ -201,3 +201,4 @@ export const LuxurySearch = (
 };
 
 export default LuxurySearch;
+

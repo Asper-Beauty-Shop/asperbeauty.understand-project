@@ -3,13 +3,8 @@
 # Lovable: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6
 #
 # On every push, sends lists of added/modified/removed files to Lovable via webhook.
-# 
-# OPTIONAL SETUP:
-#   1. In GitHub repo → Settings → Secrets and variables → Actions
-#   2. Add secret: LOVABLE_WEBHOOK_URL = (webhook URL from Lovable for file sync)
-#   3. See docs/GITHUB_SECRETS_SETUP.md for detailed instructions
-#
-# If LOVABLE_WEBHOOK_URL is not configured, this workflow skips gracefully.
+# SETUP: In GitHub repo → Settings → Secrets and variables → Actions, add:
+#   LOVABLE_WEBHOOK_URL = (webhook URL from Lovable for file sync)
 #
 name: Sync File Changes to Lovable
 
@@ -21,41 +16,17 @@ on:
 jobs:
   sync_files_to_lovable:
     runs-on: ubuntu-latest
+    if: secrets.LOVABLE_WEBHOOK_URL != ''
     steps:
       - name: Filter commit file changes and send to Lovable
+        continue-on-error: true
         env:
           LOVABLE_WEBHOOK_URL: ${{ secrets.LOVABLE_WEBHOOK_URL }}
         run: |
-          # Skip gracefully when LOVABLE_WEBHOOK_URL is not configured
-          if [ -z "$LOVABLE_WEBHOOK_URL" ]; then
-            echo "Warning: LOVABLE_WEBHOOK_URL is not set"
-            echo "Please set the LOVABLE_WEBHOOK_URL secret in the repository settings to enable sync."
-            echo "Skipping Lovable sync (secret not configured)."
-            exit 0
-          fi
-
-          # Validate URL format
-          if ! echo "$LOVABLE_WEBHOOK_URL" | grep -qE '^https?://'; then
-            echo "Warning: LOVABLE_WEBHOOK_URL does not appear to be a valid URL"
-            echo "Expected format: https://api.lovable.ai/... or similar"
-            echo "Skipping Lovable sync."
-            exit 0
-          fi
-
-          # Debug: Show masked URL (only show protocol and domain)
-          MASKED_URL=$(echo "$LOVABLE_WEBHOOK_URL" | sed -E 's|(https?://[^/]+).*|\1/...|')
-          echo "LOVABLE_WEBHOOK_URL=$MASKED_URL"
-
           echo "Gathering lists of changed files..."
-          # Debug: Show event structure (safely showing only keys, not sensitive data)
-          echo "Event payload keys:"
-          jq -r 'keys | @json' "$GITHUB_EVENT_PATH" || echo "Failed to parse event payload"
-          
-          # Safely extract file changes, handling cases where commits field may be missing
-          # The jq -s 'if length == 0 then [] else . end' ensures we always get valid JSON array
-          ADDED=$(jq -r '(.commits // []) | .[] | .added[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s 'if length == 0 then [] else . end')
-          MODIFIED=$(jq -r '(.commits // []) | .[] | .modified[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s 'if length == 0 then [] else . end')
-          REMOVED=$(jq -r '(.commits // []) | .[] | .removed[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s 'if length == 0 then [] else . end')
+          ADDED=$(jq -r '.commits[].added[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
+          MODIFIED=$(jq -r '.commits[].modified[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
+          REMOVED=$(jq -r '.commits[].removed[]?' "$GITHUB_EVENT_PATH" | sort | uniq | jq -R . | jq -s .)
           PAYLOAD=$(jq -n \
             --arg repo "${{ github.repository }}" \
             --arg commit "${{ github.sha }}" \
@@ -66,6 +37,6 @@ jobs:
             --argjson removed "$REMOVED" \
             '{repo: $repo, commit: $commit, sender: $sender, compare_url: $url, added: $added, modified: $modified, removed: $removed}')
           echo "Sending file changes to Lovable..."
-          curl -X POST "$LOVABLE_WEBHOOK_URL" \
+          curl -s -f -X POST "$LOVABLE_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d "$PAYLOAD"
+            -d "$PAYLOAD" || echo "Webhook call failed (non-fatal)."

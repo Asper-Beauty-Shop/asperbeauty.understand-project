@@ -200,3 +200,4 @@ export const BrandMarquee = () => {
     </section>
   );
 };
+

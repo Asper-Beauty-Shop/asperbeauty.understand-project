@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import alchemistHero from "@/assets/alchemist-touch-hero.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { cn } from "@/lib/utils";
@@ -10,106 +11,81 @@ export const EditorialSpotlight = () => {
   const isArabic = language === "ar";
 
   return (
-    <section className="py-16 lg:py-24 bg-card relative overflow-hidden">
+    <section className="py-20 lg:py-28 bg-asper-stone-light relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
 
       <div className="luxury-container">
         <AnimatedSection animation="fade-up">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Lifestyle Image */}
-            <div className="relative rounded-2xl overflow-hidden aspect-[4/5] lg:aspect-[3/4]">
-              <img
-                src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=800&q=80&auto=format&fit=crop"
-                alt="Hydration trio skincare products in luxury setting"
-                className="h-full w-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute top-6 left-6">
-                <span className="bg-burgundy text-polished-white text-xs uppercase tracking-[0.2em] font-body font-semibold px-4 py-2 rounded-full">
-                  {isArabic ? "مطلوب!" : "WANTED!"}
-                </span>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-24 items-center">
+            {/* Image ── Left side, Editorial Showcase 1 */}
+            <div className="lg:col-span-3 relative group">
+              <div className="relative overflow-hidden aspect-[4/5] lg:aspect-[3/4] shadow-2xl border-2 border-transparent group-hover:border-polished-gold/60 transition-all duration-700" style={{ transitionTimingFunction: 'cubic-bezier(0.19, 1, 0.22, 1)' }}>
+                <img
+                  src={alchemistHero}
+                  alt="The Alchemist's Touch — Gold serum on marble"
+                  className="h-full w-full object-cover brightness-[1.02] transition-transform duration-700 group-hover:scale-[1.03]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.19, 1, 0.22, 1)' }}
+                  loading="lazy"
+                />
+                {/* Clinical Shimmer Beam */}
+                <div
+                  className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    background: 'linear-gradient(105deg, transparent 40%, rgba(197, 160, 40, 0.12) 45%, rgba(255, 255, 255, 0.18) 50%, rgba(197, 160, 40, 0.12) 55%, transparent 60%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmerBeam 1.5s ease-in-out infinite',
+                  }}
+                />
+                {/* Inner Gold Border Frame */}
+                <div className="absolute inset-4 border border-polished-gold/30 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                {/* Subtle tint overlay */}
+                <div className="absolute inset-0 bg-asper-ink/5 group-hover:bg-transparent transition-colors duration-700" />
               </div>
+              {/* Gold Frame Decorative Element */}
+              <div className="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-polished-gold/40 z-0" />
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-polished-gold/40 z-0" />
             </div>
 
-            {/* Descriptive Content */}
-            <div className={cn(isArabic && "text-right")}>
-              <span className="font-body text-xs uppercase tracking-[0.3em] text-polished-gold mb-4 block">
-                {isArabic ? "منتجات مميزة" : "Hero Products"}
+            {/* Content ── Right side */}
+            <div className={cn("lg:col-span-2", isArabic && "text-right")}>
+              <span className="font-body text-xs uppercase tracking-[0.4em] text-polished-gold mb-6 block">
+                {isArabic ? "إصدار محدود" : "The Editorial Edit"}
               </span>
-              <h2
-                className={cn(
-                  "font-heading text-3xl lg:text-4xl xl:text-5xl font-bold text-asper-ink mb-6 leading-tight",
-                  isArabic && "font-arabic"
-                )}
-              >
-                {isArabic
-                  ? "ثلاثي الترطيب المثالي"
-                  : "The Ultimate Hydration Trio"}
+              <h2 className={cn(
+                "font-heading text-3xl lg:text-5xl font-light text-asper-ink mb-8 leading-[1.1]",
+                isArabic && "font-arabic"
+              )}>
+                {isArabic 
+                  ? "فن العناية بالبشرة: لقاء العلم بالجمال" 
+                  : "The Science of Radiance, Reimagined."}
               </h2>
 
-              <p
-                className={cn(
-                  "font-body text-base text-muted-foreground leading-relaxed mb-8 max-w-lg",
-                  isArabic && "font-arabic mr-0 ml-auto"
-                )}
-              >
+              <p className={cn(
+                "font-body text-lg text-muted-foreground leading-relaxed mb-10",
+                isArabic && "font-arabic mr-0 ml-auto"
+              )}>
                 {isArabic
-                  ? "تركيبة علمية مدروسة تمنح بشرتك ترطيباً عميقاً يدوم 72 ساعة. من التنظيف إلى الحماية — كل خطوة مصممة لإشراقة طبيعية."
-                  : "A clinically formulated trio delivering 72-hour deep hydration. From cleansing to protection — every step is designed for a natural, healthy glow."}
+                  ? "نحن نؤمن أن الجمال يبدأ من الفهم العميق لاحتياجات بشرتك. برعاية خبرائنا، نقدم لكِ خلاصة الأبحاث الطبية في قوالب من الفخامة العصرية."
+                  : "We believe beauty begins with a profound understanding of your skin's unique needs. Curated by experts, Asper bridges the gap between medical precision and modern ritual."}
               </p>
-
-              {/* Product mini-list */}
-              <div className="space-y-4 mb-8">
-                {[
-                  {
-                    step: isArabic ? "الخطوة ١" : "Step 1",
-                    name: isArabic ? "جل منظف مرطب" : "Hydrating Cleansing Gel",
-                  },
-                  {
-                    step: isArabic ? "الخطوة ٢" : "Step 2",
-                    name: isArabic ? "سيروم الهيالورونيك" : "Hyaluronic Acid Serum",
-                  },
-                  {
-                    step: isArabic ? "الخطوة ٣" : "Step 3",
-                    name: isArabic ? "كريم ترطيب عميق" : "Rich Moisture Barrier Cream",
-                  },
-                ].map((item) => (
-                  <div
-                    key={item.step}
-                    className="flex items-center gap-4 border-b border-border pb-3"
-                  >
-                    <span className="text-xs uppercase tracking-wider text-polished-gold font-body font-semibold w-16 flex-shrink-0">
-                      {item.step}
-                    </span>
-                    <span className="font-body text-sm text-asper-ink">
-                      {item.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
 
               <Link to="/skin-concerns">
                 <Button
+                  variant="outline"
                   size="lg"
-                  className="group bg-burgundy text-primary-foreground hover:bg-burgundy-light border border-transparent hover:border-polished-gold text-sm uppercase tracking-widest px-8 h-12 font-semibold transition-all duration-400"
+                  className="group border-polished-gold text-asper-ink hover:bg-polished-gold hover:text-polished-white text-xs uppercase tracking-[0.3em] px-12 h-14 rounded-none transition-all duration-500"
                 >
-                  {isArabic ? "اكتشفي الآن" : "Discover Now"}
-                  <ArrowRight
-                    className={cn(
-                      "h-4 w-4 transition-transform duration-300 group-hover:translate-x-1",
-                      dir === "rtl"
-                        ? "mr-2 rotate-180 group-hover:-translate-x-1"
-                        : "ml-2"
-                    )}
-                  />
+                  {isArabic ? "اكتشفي المزيد" : "Explore More"}
+                  <ArrowRight className={cn(
+                    "h-4 w-4 transition-transform duration-300 group-hover:translate-x-2",
+                    dir === "rtl" && "mr-2 rotate-180 group-hover:-translate-x-2"
+                  )} />
                 </Button>
               </Link>
             </div>
           </div>
         </AnimatedSection>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
     </section>
   );
 };

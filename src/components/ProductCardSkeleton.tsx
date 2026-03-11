@@ -113,3 +113,4 @@ export const ImageSkeleton = ({ className }: { className?: string }) => {
     </div>
   );
 };
+

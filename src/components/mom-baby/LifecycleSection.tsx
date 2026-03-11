@@ -210,3 +210,4 @@ export default function LifecycleSection({ activePhase, activeConcern }: Props) 
     </section>
   );
 }
+

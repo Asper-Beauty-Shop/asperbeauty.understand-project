@@ -25,7 +25,7 @@
 | Purpose | URL |
 |---|---|
 | **Production Website** | `https://www.asperbeautyshop.com` |
-| **Staging (Lovable)** | `https://asperbeautyshop-com.lovable.app` |
+| **Staging (Lovable)** | `https://www.asperbeautyshop.com` |
 | **Health Check** | `https://www.asperbeautyshop.com/health` |
 
 ---
@@ -159,7 +159,7 @@ https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant
 | `VITE_SHOPIFY_STOREFRONT_TOKEN` | *(Storefront API token — get from Shopify)* |
 | `VITE_SHOPIFY_API_VERSION` | `2025-07` |
 | `VITE_SITE_URL` | `https://www.asperbeautyshop.com/` |
-| `VITE_LOVABLE_URL` | `asperbeautyshop-com.lovable.app` |
+| `VITE_LOVABLE_URL` | `www.asperbeautyshop.com` |
 
 ### Sync Scripts (Local / CI only)
 
@@ -194,7 +194,7 @@ https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant
 |---|---|
 | Site URL | `https://www.asperbeautyshop.com/` |
 | Redirect URLs | `https://www.asperbeautyshop.com/**` |
-| Redirect URLs (staging) | `https://asperbeautyshop-com.lovable.app/**` |
+| Redirect URLs (staging) | `https://www.asperbeautyshop.com/**` |
 
 ### Auth Roles
 
@@ -260,3 +260,20 @@ These domains are allowed in the CSP header (`index.html`):
 ---
 
 *This document is the complete integration map. Hand it to any tool, developer, or AI assistant to achieve full project connectivity.*
+
+
+
+## 10. Connection Health Audit (March 2026)
+- [x] Website (Production): LIVE
+- [x] Dr. Bot (AI Brain): ACTIVE
+- [x] WhatsApp/ManyChat: CONNECTED
+- [x] Instagram/Facebook: CONNECTED
+- [x] Shopify Catalog: SYNCED (4,311 Items)
+- [x] GoDaddy Domain: SECURED
+- [x] Real-Image Lab: ONLINE
+
+## 16. Google Cloud / Gemini Project Info
+*   **Project Name:** Asper Beauty Shop
+*   **Project Number:** 147143724210
+*   **Project ID:** gen-lang-client-0019655668
+

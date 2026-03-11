@@ -3,14 +3,37 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
-import Hero from "@/components/home/HeroSlider";
+import CinematicHero from "@/components/home/CinematicHero";
+import { ScienceMeetsEleganceSplit } from "@/components/home/ScienceMeetsEleganceSplit";
+import ThreeClickOnboarding from "@/components/home/ThreeClickOnboarding";
+import DualPersonaTriage from "@/components/home/DualPersonaTriage";
 import { USPBar } from "@/components/home/USPBar";
 import { ProductSlider } from "@/components/home/ProductSlider";
+import { ShopByProtocol } from "@/components/home/ShopByProtocol";
 import { Footer } from "@/components/Footer";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
+import { isHomepageBrand } from "@/constants/premiumBrands";
+import ceraveCleanserImg from "@/assets/products/cerave-foaming-cleanser.png";
+import vichyAmpoulesImg from "@/assets/products/vichy-liftactiv-ampoules.png";
+import biodermaSensibioImg from "@/assets/products/bioderma-sensibio-h2o.png";
+import lrpTolerianeMoisturizerImg from "@/assets/products/lrp-toleriane-ultra.png";
+import biodermaSensibioArImg from "@/assets/products/bioderma-sensibio-ar.png";
+import lrpTolerianewashImg from "@/assets/products/lrp-toleriane-wash.png";
+import vichyCapitalSoleilImg from "@/assets/products/vichy-capital-soleil.png";
+import vichyNormadermImg from "@/assets/products/vichy-normaderm.png";
+import ceraveMoisturizingCreamImg from "@/assets/products/cerave-moisturizing-cream.png";
+import olaplexNo7Img from "@/assets/products/olaplex-no7-bonding-oil.png";
+import neocellCollagenImg from "@/assets/products/neocell-collagen-c.png";
+import eucerinSunImg from "@/assets/products/eucerin-sun-hydro-spf50.png";
+import aminasCalendulaImg from "@/assets/products/aminas-calendula-cream.png";
 
-// Lazy load below-the-fold components for better initial load performance
+// Lazy load below-the-fold components
+const MorningSpaRitualBanner = lazy(() =>
+  import("@/components/home/MorningSpaRitualBanner").then((m) => ({
+    default: m.MorningSpaRitualBanner,
+  }))
+);
 const EditorialSpotlight = lazy(() =>
   import("@/components/home/EditorialSpotlight").then((m) => ({
     default: m.EditorialSpotlight,
@@ -19,11 +42,6 @@ const EditorialSpotlight = lazy(() =>
 const BrandOfTheWeek = lazy(() =>
   import("@/components/home/BrandOfTheWeek").then((m) => ({
     default: m.BrandOfTheWeek,
-  }))
-);
-const ShopByCategory = lazy(() =>
-  import("@/components/home/ShopByCategory").then((m) => ({
-    default: m.ShopByCategory,
   }))
 );
 const CelestialFeaturedCollection = lazy(() =>
@@ -48,9 +66,41 @@ const TrustBanner = lazy(() =>
 const ScrollToTop = lazy(() =>
   import("@/components/ScrollToTop").then((m) => ({ default: m.ScrollToTop }))
 );
+const DermoBrands = lazy(() =>
+  import("@/components/home/DermoBrands").then((m) => ({ default: m.DermoBrands }))
+);
+const EliteBrandShowcase = lazy(() =>
+  import("@/components/home/EliteBrandShowcase")
+);
+const ScienceMeetsStyle = lazy(() =>
+  import("@/components/home/ScienceMeetsStyle").then((m) => ({
+    default: m.ScienceMeetsStyle,
+  }))
+);
+const DualPersonaBestsellers = lazy(() =>
+  import("@/components/home/DualPersonaBestsellers").then((m) => ({
+    default: m.DualPersonaBestsellers,
+  }))
+);
+const GuidedDiscovery = lazy(() =>
+  import("@/components/home/GuidedDiscovery").then((m) => ({
+    default: m.GuidedDiscovery,
+  }))
+);
+const ClinicalTruthBanner = lazy(() =>
+  import("@/components/home/ClinicalTruthBanner")
+);
+const ContextualSocialProof = lazy(() =>
+  import("@/components/home/ContextualSocialProof")
+);
 const FloatingSocials = lazy(() =>
   import("@/components/FloatingSocials").then((m) => ({
     default: m.FloatingSocials,
+  }))
+);
+const AsperExperience = lazy(() =>
+  import("@/components/home/AsperExperience").then((m) => ({
+    default: m.AsperExperience,
   }))
 );
 
@@ -70,83 +120,83 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
 
 // Sample product data for sliders
 const NEW_ARRIVALS = [
-  { id: "1", handle: "cosmic-dealer-lip-oil", title: "Crystal Lip Oil — Rose Quartz", brand: "Cosmic Dealer", image: "https://placehold.co/400x533/FAF7F2/800020?text=Crystal+Lip+Oil", tag: "Just In" },
-  { id: "2", handle: "moussse-cloud-cream", title: "Cloud Cream Moisturizer", brand: "Moussse", image: "https://placehold.co/400x533/FAF7F2/800020?text=Cloud+Cream", tag: "Clean Product" },
-  { id: "3", handle: "mirror-water-botanical-mist", title: "Botanical Facial Mist", brand: "Mirror Water", image: "https://placehold.co/400x533/FAF7F2/800020?text=Botanical+Mist", tag: "Just In" },
-  { id: "4", handle: "phlur-missing-person", title: "Missing Person Eau de Parfum", brand: "Phlur", image: "https://placehold.co/400x533/FAF7F2/800020?text=Missing+Person" },
-  { id: "5", handle: "summer-fridays-jet-lag", title: "Jet Lag Mask — Hydrating", brand: "Summer Fridays", image: "https://placehold.co/400x533/FAF7F2/800020?text=Jet+Lag+Mask", tag: "Clean Product" },
-  { id: "6", handle: "kosas-revealer-concealer", title: "Revealer Skin-Improving Concealer", brand: "Kosas", image: "https://placehold.co/400x533/FAF7F2/800020?text=Revealer" },
+  { id: "1", handle: "cerave-moisturizing-cream", title: "Moisturizing Cream", brand: "CeraVe", image: ceraveMoisturizingCreamImg, tag: "Dermat-Tested" },
+  { id: "2", handle: "olaplex-no7-bonding-oil", title: "No.7 Bonding Oil", brand: "Olaplex", image: olaplexNo7Img, tag: "Just In" },
+  { id: "3", handle: "neocell-super-collagen-c", title: "Super Collagen + C", brand: "NeoCell", image: neocellCollagenImg, tag: "Wellness" },
+  { id: "4", handle: "eucerin-sun-hydro-protect-spf50", title: "Sun Hydro Protect Ultra-Light Fluid SPF50+", brand: "Eucerin", image: eucerinSunImg, tag: "Clinical" },
+  { id: "5", handle: "vichy-capital-soleil-uv-age", title: "Capital Soleil UV-Age Daily SPF 50+", brand: "Vichy", image: vichyCapitalSoleilImg },
+  { id: "6", handle: "bioderma-sensibio-h2o", title: "Sensibio H2O Micellar Water", brand: "Bioderma", image: biodermaSensibioImg, tag: "Bestseller" },
 ];
 
 const BESTSELLERS = [
-  { id: "7", handle: "augustinus-bader-rich-cream", title: "The Rich Cream", brand: "Augustinus Bader", image: "https://placehold.co/400x533/FAF7F2/800020?text=The+Rich+Cream", tag: "Bestseller" },
-  { id: "8", handle: "westman-atelier-contour", title: "Face Trace Contour Stick", brand: "Westman Atelier", image: "https://placehold.co/400x533/FAF7F2/800020?text=Contour+Stick", tag: "Bestseller" },
-  { id: "9", handle: "drunk-elephant-protini", title: "Protini Polypeptide Cream", brand: "Drunk Elephant", image: "https://placehold.co/400x533/FAF7F2/800020?text=Protini" },
-  { id: "10", handle: "tatcha-dewy-skin-cream", title: "The Dewy Skin Cream", brand: "Tatcha", image: "https://placehold.co/400x533/FAF7F2/800020?text=Dewy+Skin", tag: "Bestseller" },
-  { id: "11", handle: "merit-flush-balm", title: "Flush Balm Cheek Color", brand: "Merit", image: "https://placehold.co/400x533/FAF7F2/800020?text=Flush+Balm" },
-  { id: "12", handle: "ilia-super-serum", title: "Super Serum Skin Tint SPF 40", brand: "ILIA", image: "https://placehold.co/400x533/FAF7F2/800020?text=Super+Serum", tag: "Bestseller" },
+  { id: "7", handle: "cerave-foaming-facial-cleanser", title: "Foaming Facial Cleanser", brand: "CeraVe", image: ceraveCleanserImg, tag: "Bestseller" },
+  { id: "8", handle: "vichy-liftactiv-peptide-c-ampoules", title: "LiftActiv Peptide-C Ampoules", brand: "Vichy", image: vichyAmpoulesImg, tag: "Bestseller" },
+  { id: "9", handle: "bioderma-sensibio-h2o", title: "Sensibio H2O Micellar Water", brand: "Bioderma", image: biodermaSensibioImg },
+  { id: "10", handle: "lrp-toleriane-ultra-moisturizer", title: "Toleriane Ultra Soothing Repair Moisturizer", brand: "La Roche-Posay", image: lrpTolerianeMoisturizerImg, tag: "Bestseller" },
+  { id: "11", handle: "bioderma-sensibio-ar-cream", title: "Sensibio AR Anti-Redness Cream SPF 30", brand: "Bioderma", image: biodermaSensibioArImg },
+  { id: "12", handle: "lrp-toleriane-hydrating-wash", title: "Toleriane Hydrating Gentle Face Wash", brand: "La Roche-Posay", image: lrpTolerianewashImg, tag: "Bestseller" },
+  { id: "13", handle: "vichy-capital-soleil-uv-age", title: "Capital Soleil UV-Age Daily SPF 50+", brand: "Vichy", image: vichyCapitalSoleilImg },
+  { id: "14", handle: "vichy-normaderm-phytosolution", title: "Normaderm Phytosolution Double-Correction Care", brand: "Vichy", image: vichyNormadermImg, tag: "Bestseller" },
+  { id: "15", handle: "aminas-calendula-face-body-cream", title: "Calendula Face & Body Cream", brand: "Amina's Natural Skincare", image: aminasCalendulaImg, tag: "Jordanian Heritage" },
 ];
 
 const Index = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch new arrivals
   const { data: newArrivals = [] } = useQuery({
-    queryKey: ["new-arrivals"],
+    queryKey: ["new-arrivals-premium"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(8);
-
+        .limit(30);
       if (error) throw error;
-      return (data || []).map((p) => ({
-        id: p.id,
-        title: p.title,
-        brand: p.brand,
-        price: p.price ?? 0,
-        image_url: p.image_url || "/placeholder.svg",
-        category: p.primary_concern,
-        tags: [] as string[],
-        is_new: true,
-      }));
+      return (data || [])
+        .filter((p) => isHomepageBrand(p.brand))
+        .slice(0, 8)
+        .map((p) => ({
+          id: p.id,
+          title: p.title,
+          brand: p.brand,
+          price: p.price ?? 0,
+          image_url: p.image_url || "/editorial-showcase-2.jpg",
+          category: p.primary_concern,
+          tags: [] as string[],
+          is_new: true,
+        }));
     },
   });
 
-  // Fetch bestsellers
   const { data: bestsellers = [] } = useQuery({
-    queryKey: ["bestsellers"],
+    queryKey: ["bestsellers-premium"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
         .order("created_at", { ascending: true })
-        .limit(8);
-
+        .limit(30);
       if (error) throw error;
-      return (data || []).map((p) => ({
-        id: p.id,
-        title: p.title,
-        brand: p.brand,
-        price: p.price ?? 0,
-        image_url: p.image_url || "/placeholder.svg",
-        category: p.primary_concern,
-        is_on_sale: false,
-      }));
+      return (data || [])
+        .filter((p) => isHomepageBrand(p.brand))
+        .slice(0, 8)
+        .map((p) => ({
+          id: p.id,
+          title: p.title,
+          brand: p.brand,
+          price: p.price ?? 0,
+          image_url: p.image_url || "/editorial-showcase-2.jpg",
+          category: p.primary_concern,
+          is_on_sale: false,
+        }));
     },
   });
 
   useEffect(() => {
     const handleLoad = () => setIsLoading(false);
-
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1200);
-
+    const timer = setTimeout(() => setIsLoading(false), 1200);
     window.addEventListener("load", handleLoad);
-
     return () => {
       clearTimeout(timer);
       window.removeEventListener("load", handleLoad);
@@ -161,69 +211,113 @@ const Index = () => {
     <div className="min-h-screen bg-background animate-fade-in">
       <Header />
       <main>
-        {/* 1. Hero Banner — Wonder Women Edit / Female Founders */}
-        <Hero />
+        {/* ═══ ZONE 1: Cinematic Full-Screen Video Hero ═══ */}
+        <CinematicHero />
 
-        {/* 2. USP Bar — Trust Signals */}
-        <USPBar />
+        {/* ═══ ZONE 2: Science Meets Elegance 50/50 Split ═══ */}
+        <ScienceMeetsEleganceSplit />
 
-        {/* 3. Product Slider — Just Landed / What's New */}
-        <ProductSlider
-          title={{ en: "Just Landed! What's New", ar: "وصل حديثاً! الجديد لدينا" }}
-          subtitle={{ en: "New Arrivals", ar: "وصل حديثاً" }}
-          products={NEW_ARRIVALS}
-        />
+        <ThreeClickOnboarding />
 
-        {/* 4. Product Slider — Bestsellers */}
+        {/* ═══ DermoBrands Bar ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-16" />}>
+          <DermoBrands />
+        </Suspense>
+
+        {/* ═══ Morning Spa Ritual Banner ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <MorningSpaRitualBanner />
+        </Suspense>
+
+        {/* ═══ Science Meets Style Brand Logos ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <ScienceMeetsStyle />
+        </Suspense>
+
+        {/* ═══ Dual-Persona Triage (AI Gatekeeper) ═══ */}
+        <DualPersonaTriage />
+
+        {/* ═══ Shop by Protocol (Editorial Navigation) ═══ */}
+        <ShopByProtocol />
+
+        {/* ═══ Dual-Persona Tabbed Bestsellers ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <DualPersonaBestsellers />
+        </Suspense>
+
+        {/* ═══ AI-Guided Discovery (Ms. Zain's Shade Guide) ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <GuidedDiscovery />
+        </Suspense>
+
+        {/* ═══ Product Sliders (Bestsellers + New Arrivals) ═══ */}
         <ProductSlider
           title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
           subtitle={{ en: "Most Loved", ar: "الأكثر حباً" }}
-          products={BESTSELLERS}
+          products={bestsellers.length > 0 ? bestsellers : BESTSELLERS}
+        />
+        <ProductSlider
+          title={{ en: "Just Landed! What's New", ar: "وصل حديثاً! الجديد لدينا" }}
+          subtitle={{ en: "New Arrivals", ar: "وصل حديثاً" }}
+          products={newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS}
         />
 
-        {/* 5. Editorial Spotlight — WANTED! Hero Products */}
+        {/* ═══ EliteBrandShowcase (Authority) ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <EliteBrandShowcase />
+        </Suspense>
+
+        {/* ═══ Clinical Dispatch (Editorial) ═══ */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <EditorialSpotlight />
         </Suspense>
 
-        {/* 6. Brand of the Week */}
+        {/* ═══ Clinical Truth + Social Proof ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-48" />}>
+          <ClinicalTruthBanner />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <ContextualSocialProof />
+        </Suspense>
+
+        {/* ═══ Conversion Close ═══ */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <BrandOfTheWeek />
         </Suspense>
-
-        {/* 7. Shop by Category Grid */}
-        <Suspense fallback={<SectionSkeleton height="h-48" />}>
-          <ShopByCategory />
-        </Suspense>
-
-        {/* 8. Digital Tray — Clinical Routine */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
           <CelestialFeaturedCollection />
         </Suspense>
 
-        {/* 9. Featured Brands Carousel */}
+        {/* USP Bar */}
+        <USPBar />
+
+        {/* Featured Brands */}
         <Suspense fallback={<SectionSkeleton height="h-32" />}>
           <FeaturedBrands />
         </Suspense>
 
-        {/* 10. Newsletter — 15% Off for Beauty Insiders */}
+        {/* Newsletter */}
         <Suspense fallback={<SectionSkeleton height="h-48" />}>
           <Newsletter />
         </Suspense>
 
-        {/* 11. NPS Survey */}
+        {/* NPS Survey */}
         <Suspense fallback={<SectionSkeleton height="h-20" />}>
           <NPSSurvey />
         </Suspense>
 
-        {/* 12. Trust Banner */}
+        {/* ═══ The Asper Experience — Old video carousel relocated here ═══ */}
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <AsperExperience />
+        </Suspense>
+
+        {/* Trust Banner */}
         <Suspense fallback={<SectionSkeleton height="h-24" />}>
           <TrustBanner />
         </Suspense>
       </main>
       <Footer />
 
-      {/* Lazy-loaded floating components (BeautyAssistant is global in App) */}
       <Suspense fallback={null}>
         <ScrollToTop />
       </Suspense>

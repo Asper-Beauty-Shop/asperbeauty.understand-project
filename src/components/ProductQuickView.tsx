@@ -305,3 +305,4 @@ export const ProductQuickView = (
 };
 
 export default ProductQuickView;
+

@@ -298,6 +298,7 @@ export const ProductCatalog = () => {
         const { data, error } = await supabase
           .from("products")
           .select("*")
+          .neq("availability_status", "Pending_Purge")
           .order("created_at", { ascending: false })
           .limit(12);
 
@@ -435,3 +436,4 @@ export const ProductCatalog = () => {
 };
 
 export default ProductCatalog;
+

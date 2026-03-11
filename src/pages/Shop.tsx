@@ -20,11 +20,12 @@ import { Footer } from "@/components/Footer";
 import { ProductQuickView } from "@/components/ProductQuickView";
 import { ProductSearchFilters, type FilterState } from "@/components/ProductSearchFilters";
 import { cn } from "@/lib/utils";
+import { mapCategoryToConcerns } from "@/lib/categoryHierarchy";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Product = Tables<"products">;
 
-/** Luxury pricing display — currency small & top-aligned, integer large in maroon, decimals small */
+/** Luxury pricing display */
 const LuxuryPrice = ({ amount, currency = "JOD" }: { amount: number | null; currency?: string }) => {
   const val = (amount ?? 0).toFixed(2);
   const [integer, decimal] = val.split(".");
@@ -37,7 +38,7 @@ const LuxuryPrice = ({ amount, currency = "JOD" }: { amount: number | null; curr
   );
 };
 
-// ─── Product Card with Gold Stitch ─────────────────────────────
+// ——— Product Card with Gold Stitch ———————————————
 const ShopProductCard = ({
   product,
   onQuickView,
@@ -49,7 +50,7 @@ const ShopProductCard = ({
 }) => {
   const { locale } = useLanguage();
   const addItem = useCartStore((s) => s.addItem);
-  const imageUrl = product.image_url || "/placeholder.svg";
+  const imageUrl = product.image_url || "/editorial-showcase-2.jpg";
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -74,7 +75,7 @@ const ShopProductCard = ({
       quantity: 1,
       selectedOptions: [],
     });
-    toast.success(locale === "ar" ? "تمت الإضافة" : "Excellent choice", {
+    toast.success(locale === "ar" ? "\u062A\u0645\u062A \u0627\u0644\u0625\u0636\u0627\u0641\u0629" : "Excellent choice", {
       description: product.title,
       position: "top-center",
     });
@@ -105,7 +106,7 @@ const ShopProductCard = ({
             <LuxuryPrice amount={product.price} />
             <Button onClick={handleAddToCart} size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs btn-ripple">
               <ShoppingBag className="w-3.5 h-3.5 me-1" />
-              {locale === "ar" ? "إضافة" : "Add"}
+              {locale === "ar" ? "\u0625\u0636\u0627\u0641\u0629" : "Add"}
             </Button>
           </div>
         </div>
@@ -128,7 +129,7 @@ const ShopProductCard = ({
 
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-background flex items-center justify-center p-4">
-        {imageUrl && imageUrl !== "/placeholder.svg" ? (
+        {imageUrl && imageUrl !== "/editorial-showcase-2.jpg" ? (
           <img
             src={imageUrl}
             alt={product.title}
@@ -189,26 +190,80 @@ const ShopProductCard = ({
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xs uppercase tracking-wide btn-ripple"
         >
           <ShoppingBag className="w-3.5 h-3.5 me-1.5" />
-          {locale === "ar" ? "أضف للسلة" : "Add to Cart"}
+          {locale === "ar" ? "\u0623\u0636\u0641 \u0644\u0644\u0633\u0644\u0629" : "Add to Cart"}
         </Button>
       </div>
     </article>
   );
 };
 
-// ─── Concern Ambition Pills ───────────────────────────────────
+// ——— Asper Category Sidebar ———————————————————
+const ASPER_CATEGORIES = [
+  "All Curation",
+  "Clinical Serums & Actives",
+  "Daily Hydration & Barrier",
+  "Cleansers & Toners",
+  "Sun Protection (SPF)",
+  "Evening Radiance & Glamour",
+  "Targeted Treatments",
+  "Hair Care",
+  "Fragrance",
+  "Body Care",
+] as const;
+
+const CategorySidebar = ({
+  activeCategory,
+  onSelect,
+  categoryCounts,
+}: {
+  activeCategory: string;
+  onSelect: (cat: string) => void;
+  categoryCounts: Record<string, number>;
+}) => (
+  <div className="sticky top-24 space-y-1">
+    <h3 className="font-heading text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-4">
+      Filter by Regimen
+    </h3>
+    {ASPER_CATEGORIES.map((cat) => {
+      const isActive = activeCategory === cat;
+      const count = cat === "All Curation" ? undefined : categoryCounts[cat];
+      return (
+        <button
+          key={cat}
+          onClick={() => onSelect(cat)}
+          className={cn(
+            "w-full text-left px-3 py-2 text-sm font-body transition-all duration-300 border-l-2 flex items-center justify-between",
+            isActive
+              ? "border-accent text-foreground font-semibold pl-4"
+              : "border-transparent text-muted-foreground hover:text-foreground hover:border-accent/40 hover:pl-4"
+          )}
+          style={{ transitionTimingFunction: "cubic-bezier(0.19, 1, 0.22, 1)" }}
+        >
+          <span>{cat}</span>
+          {count !== undefined && (
+            <span className={cn("text-[10px] tabular-nums", isActive ? "text-accent" : "text-muted-foreground/60")}>
+              {count}
+            </span>
+          )}
+        </button>
+      );
+    })}
+  </div>
+);
+
+// ——— Concern Ambition Pills ———————————————————
 const AMBITION_PILLS = [
-  { id: "Concern_Acne", icon: "💊", labelEn: "Acne Care", labelAr: "علاج حب الشباب" },
-  { id: "Concern_AntiAging", icon: "⏰", labelEn: "Anti-Aging", labelAr: "مكافحة الشيخوخة" },
-  { id: "Concern_Hydration", icon: "💧", labelEn: "Hydration", labelAr: "ترطيب" },
-  { id: "Concern_Sensitivity", icon: "🌿", labelEn: "Sensitive Skin", labelAr: "بشرة حساسة" },
-  { id: "Concern_Pigmentation", icon: "🌟", labelEn: "Dark Spots", labelAr: "البقع الداكنة" },
-  { id: "Concern_SunProtection", icon: "☀️", labelEn: "Sun Protection", labelAr: "حماية من الشمس" },
-  { id: "Concern_Brightening", icon: "✨", labelEn: "Brightening", labelAr: "إشراقة" },
-  { id: "Concern_Dryness", icon: "🛡️", labelEn: "Dryness", labelAr: "جفاف" },
+  { id: "Concern_Acne", icon: "\u{1F48A}", labelEn: "Acne Care", labelAr: "\u0639\u0644\u0627\u062C \u062D\u0628 \u0627\u0644\u0634\u0628\u0627\u0628" },
+  { id: "Concern_AntiAging", icon: "\u23F0", labelEn: "Anti-Aging", labelAr: "\u0645\u0643\u0627\u0641\u062D\u0629 \u0627\u0644\u0634\u064A\u062E\u0648\u062E\u0629" },
+  { id: "Concern_Hydration", icon: "\u{1F4A7}", labelEn: "Hydration", labelAr: "\u062A\u0631\u0637\u064A\u0628" },
+  { id: "Concern_Sensitivity", icon: "\u{1F33F}", labelEn: "Sensitive Skin", labelAr: "\u0628\u0634\u0631\u0629 \u062D\u0633\u0627\u0633\u0629" },
+  { id: "Concern_Pigmentation", icon: "\u{1F31F}", labelEn: "Dark Spots", labelAr: "\u0627\u0644\u0628\u0642\u0639 \u0627\u0644\u062F\u0627\u0643\u0646\u0629" },
+  { id: "Concern_SunProtection", icon: "\u2600\uFE0F", labelEn: "Sun Protection", labelAr: "\u062D\u0645\u0627\u064A\u0629 \u0645\u0646 \u0627\u0644\u0634\u0645\u0633" },
+  { id: "Concern_Brightening", icon: "\u2728", labelEn: "Brightening", labelAr: "\u0625\u0634\u0631\u0627\u0642\u0629" },
+  { id: "Concern_Dryness", icon: "\u{1F6E1}\uFE0F", labelEn: "Dryness", labelAr: "\u062C\u0641\u0627\u0641" },
 ];
 
-// ─── Shop Page ────────────────────────────────────────────────
+// ——— Shop Page ————————————————————————————————
 export default function Shop() {
   const { locale } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
@@ -216,8 +271,20 @@ export default function Shop() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const concernParam = searchParams.get("concern") ?? "";
+
+  // Active asper_category from URL or sidebar
+  const categoryParam = searchParams.get("category") ?? "All Curation";
+  const setActiveCategory = (cat: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (cat === "All Curation") {
+      next.delete("category");
+    } else {
+      next.set("category", cat);
+    }
+    setSearchParams(next, { replace: true });
+  };
 
   const [filters, setFilters] = useState<FilterState>({
     searchQuery: "",
@@ -236,6 +303,7 @@ export default function Shop() {
         const { data, error } = await supabase
           .from("products")
           .select("*")
+          .neq("availability_status", "Pending_Purge")
           .order("created_at", { ascending: false });
         if (error) throw error;
         setProducts(data || []);
@@ -248,20 +316,95 @@ export default function Shop() {
     fetchProducts();
   }, []);
 
+  // Compute category counts for sidebar badges
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of products) {
+      const cat = (p as any).asper_category;
+      if (cat) counts[cat] = (counts[cat] || 0) + 1;
+    }
+    return counts;
+  }, [products]);
+
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
+      // Filter by asper_category sidebar
+      if (categoryParam && categoryParam !== "All Curation" && (product as any).asper_category !== categoryParam) return false;
+
       if (filters.searchQuery) {
         const q = filters.searchQuery.toLowerCase();
         const matches = product.title.toLowerCase().includes(q) || product.brand?.toLowerCase().includes(q) || product.pharmacist_note?.toLowerCase().includes(q);
         if (!matches) return false;
       }
       if (filters.brands.length > 0 && (!product.brand || !filters.brands.includes(product.brand))) return false;
-      if (filters.skinConcerns.length > 0 && !filters.skinConcerns.includes(product.primary_concern)) return false;
+      
+      // Unify Categories and Concerns
+      const activeConcerns = [...filters.skinConcerns];
+      filters.categories.forEach(catId => {
+        activeConcerns.push(...mapCategoryToConcerns(catId));
+      });
+
+      if (activeConcerns.length > 0 && (!product.primary_concern || !activeConcerns.includes(product.primary_concern))) return false;
       const price = product.price ?? 0;
       if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
       return true;
     });
-  }, [products, filters]);
+  }, [products, filters, categoryParam]);
+
+  // Empty state for search with Dr. Sami recommendation
+  const renderEmptyState = () => (
+    <div className="text-center py-20 bg-card rounded-xl border border-border">
+      <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+      {filters.searchQuery ? (
+        <>
+          <p className="text-muted-foreground mb-2 font-body">
+            {locale === "ar"
+              ? `\u0644\u0645 \u0646\u062C\u062F \u0646\u062A\u0627\u0626\u062C \u0644\u0640 "${filters.searchQuery}"`
+              : `We couldn't find matches for "${filters.searchQuery}"`}
+          </p>
+          <p className="text-sm text-muted-foreground/70 font-body mb-4">
+            {locale === "ar"
+              ? "\u064A\u0648\u0635\u064A \u062F. \u0633\u0627\u0645\u064A \u0628\u0627\u0633\u062A\u0643\u0634\u0627\u0641 \u0627\u0644\u0633\u064A\u0631\u0648\u0645\u0627\u062A \u0627\u0644\u0633\u0631\u064A\u0631\u064A\u0629"
+              : "Dr. Sami recommends exploring our Clinical Serums & Actives."}
+          </p>
+          <div className="flex gap-2 justify-center">
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-accent text-accent hover:bg-accent/10"
+              onClick={() => { setActiveCategory("Clinical Serums & Actives"); setFilters(f => ({ ...f, searchQuery: "" })); }}
+            >
+              Clinical Serums
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-border text-muted-foreground hover:bg-muted"
+              onClick={() => setFilters({ searchQuery: "", categories: [], subcategories: [], brands: [], skinConcerns: [], priceRange: [0, 200], onSaleOnly: false })}
+            >
+              {locale === "ar" ? "\u0645\u0633\u062D \u0627\u0644\u0641\u0644\u0627\u062A\u0631" : "Clear Filters"}
+            </Button>
+          </div>
+        </>
+      ) : (
+        <>
+          <p className="text-muted-foreground mb-4 font-body">
+            {locale === "ar" ? "\u0644\u0627 \u062A\u0648\u062C\u062F \u0645\u0646\u062A\u062C\u0627\u062A \u0645\u0637\u0627\u0628\u0642\u0629 \u0644\u0644\u0641\u0644\u0627\u062A\u0631" : "No products match your filters"}
+          </p>
+          <Button
+            variant="outline"
+            className="border-accent text-accent hover:bg-accent/10"
+            onClick={() => {
+              setActiveCategory("All Curation");
+              setFilters({ searchQuery: "", categories: [], subcategories: [], brands: [], skinConcerns: [], priceRange: [0, 200], onSaleOnly: false });
+            }}
+          >
+            {locale === "ar" ? "\u0645\u0633\u062D \u0627\u0644\u0641\u0644\u0627\u062A\u0631" : "Clear Filters"}
+          </Button>
+        </>
+      )}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -274,10 +417,10 @@ export default function Shop() {
               CURATED CATALOG
             </Badge>
             <h1 className="font-heading text-3xl md:text-5xl font-bold mb-3">
-              {locale === "ar" ? "تسوق جميع المنتجات" : "Shop All Products"}
+              {locale === "ar" ? "\u062A\u0633\u0648\u0642 \u062C\u0645\u064A\u0639 \u0627\u0644\u0645\u0646\u062A\u062C\u0627\u062A" : "Shop All Products"}
             </h1>
             <p className="text-primary-foreground/70 text-sm md:text-base font-body max-w-lg mx-auto">
-              {locale === "ar" ? "اكتشف أفضل منتجات العناية بالبشرة والجمال" : "Pharmacist-curated skincare and beauty, guaranteed authentic."}
+              {locale === "ar" ? "\u0627\u0643\u062A\u0634\u0641 \u0623\u0641\u0636\u0644 \u0645\u0646\u062A\u062C\u0627\u062A \u0627\u0644\u0639\u0646\u0627\u064A\u0629 \u0628\u0627\u0644\u0628\u0634\u0631\u0629 \u0648\u0627\u0644\u062C\u0645\u0627\u0644" : "Pharmacist-curated skincare and beauty, guaranteed authentic."}
             </p>
           </div>
         </div>
@@ -288,7 +431,7 @@ export default function Shop() {
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-4 h-4 text-accent" />
               <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground font-body">
-                {locale === "ar" ? "تسوّقي حسب هدفك" : "Shop by Concern"}
+                {locale === "ar" ? "\u062A\u0633\u0648\u0651\u0642\u064A \u062D\u0633\u0628 \u0647\u062F\u0641\u0643" : "Shop by Concern"}
               </span>
             </div>
             <div className="flex gap-2.5 overflow-x-auto pb-1 scrollbar-hide">
@@ -318,14 +461,62 @@ export default function Shop() {
         </div>
 
         <div className="container mx-auto px-4 max-w-7xl py-8">
-          <div className="lg:flex lg:gap-8">
-            <aside className="hidden lg:block w-72 flex-shrink-0">
-              <ProductSearchFilters filters={filters} onFiltersChange={setFilters} productCount={filteredProducts.length} />
+          <div className="lg:flex lg:gap-10">
+            {/* Category Sidebar (desktop) */}
+            <aside className="hidden lg:block w-56 flex-shrink-0">
+              <CategorySidebar
+                activeCategory={categoryParam}
+                onSelect={setActiveCategory}
+                categoryCounts={categoryCounts}
+              />
             </aside>
-            <div className="flex-1">
+
+            {/* Main content area */}
+            <div className="flex-1 min-w-0">
+              {/* Mobile category pills — sticky, scroll-snap, 44px touch targets */}
+              <div className="lg:hidden sticky top-16 z-30 bg-background -mx-4 px-4 py-3 border-b border-border/50">
+                <div
+                  className="flex gap-3 overflow-x-auto pb-1"
+                  style={{
+                    scrollSnapType: "x mandatory",
+                    overscrollBehaviorX: "contain",
+                    msOverflowStyle: "none",
+                    scrollbarWidth: "none",
+                  }}
+                >
+                  {ASPER_CATEGORIES.map((cat) => {
+                    const isActive = categoryParam === cat;
+                    const count = cat === "All Curation" ? undefined : categoryCounts[cat];
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => setActiveCategory(cat)}
+                        className={cn(
+                          "flex-shrink-0 min-h-[44px] px-5 rounded-full border text-sm font-body font-medium transition-all duration-300 flex items-center gap-1.5",
+                          isActive
+                            ? "bg-card text-primary border-accent shadow-sm"
+                            : "bg-transparent text-muted-foreground border-border/40"
+                        )}
+                        style={{
+                          scrollSnapAlign: "start",
+                          transitionTimingFunction: "cubic-bezier(0.19, 1, 0.22, 1)",
+                        }}
+                      >
+                        <span className="whitespace-nowrap">{cat}</span>
+                        {count !== undefined && (
+                          <span className={cn("text-[10px] tabular-nums", isActive ? "text-accent" : "text-muted-foreground/50")}>
+                            {count}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <div className="flex items-center justify-between mb-6">
                 <p className="text-sm text-muted-foreground font-body">
-                  {locale === "ar" ? `${filteredProducts.length} منتج` : `${filteredProducts.length} products`}
+                  {locale === "ar" ? `${filteredProducts.length} \u0645\u0646\u062A\u062C` : `${filteredProducts.length} products`}
                 </p>
                 <div className="flex items-center gap-1 bg-card rounded-lg border border-border p-1">
                   <button
@@ -355,27 +546,25 @@ export default function Shop() {
                 </div>
               )}
 
-              {!isLoading && filteredProducts.length === 0 && (
-                <div className="text-center py-20 bg-card rounded-xl border border-border">
-                  <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-                  <p className="text-muted-foreground mb-4 font-body">
-                    {locale === "ar" ? "لا توجد منتجات مطابقة للفلاتر" : "No products match your filters"}
-                  </p>
-                  <Button variant="outline" className="border-accent text-accent hover:bg-accent/10" onClick={() => setFilters({ searchQuery: "", categories: [], subcategories: [], brands: [], skinConcerns: [], priceRange: [0, 200], onSaleOnly: false })}>
-                    {locale === "ar" ? "مسح الفلاتر" : "Clear Filters"}
-                  </Button>
-                </div>
-              )}
+              {!isLoading && filteredProducts.length === 0 && renderEmptyState()}
 
               {!isLoading && filteredProducts.length > 0 && (
-                <div className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" : "space-y-4"}>
-                  {filteredProducts.map((product) => (
-                    <ShopProductCard
+                <div
+                  key={categoryParam}
+                  className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" : "space-y-4"}
+                >
+                  {filteredProducts.map((product, index) => (
+                    <div
                       key={product.id}
-                      product={product}
-                      onQuickView={(p) => { setSelectedProduct(p); setIsQuickViewOpen(true); }}
-                      viewMode={viewMode}
-                    />
+                      className="staggered-reveal-card"
+                      style={{ animationDelay: `${index * 0.06}s` }}
+                    >
+                      <ShopProductCard
+                        product={product}
+                        onQuickView={(p) => { setSelectedProduct(p); setIsQuickViewOpen(true); }}
+                        viewMode={viewMode}
+                      />
+                    </div>
                   ))}
                 </div>
               )}

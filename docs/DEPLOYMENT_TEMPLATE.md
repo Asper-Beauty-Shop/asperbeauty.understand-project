@@ -1,4 +1,4 @@
-# Deployment Template & Guide
+﻿# Deployment Template & Guide
 
 ## Purpose
 
@@ -87,7 +87,7 @@ git push origin main
    - Monitor at: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
 2. **GitHub Actions**
-   - Go to repository → Actions tab
+   - Go to repository â†’ Actions tab
    - Watch "Deploy health check" workflow
    - Verify all steps complete successfully
 
@@ -97,7 +97,7 @@ git push origin main
 
 The `deploy-health-check.yml` workflow automatically:
 1. Waits 120 seconds for deployment
-2. Pings `https://asperbeautyshop-com.lovable.app/health`
+2. Pings `https://www.asperbeautyshop.com/health`
 3. Verifies 200 response
 4. Sends Discord notification (if configured)
 
@@ -188,7 +188,7 @@ These secrets are optional. Workflows will skip gracefully if not configured:
 
 **How to get the webhook URL:**
 1. Open your Lovable project at the URL above
-2. Go to **Settings → Integrations** (or **Settings → GitHub**) and look for the webhook URL
+2. Go to **Settings â†’ Integrations** (or **Settings â†’ GitHub**) and look for the webhook URL
 3. Copy the URL and add it as a GitHub Actions secret named `LOVABLE_WEBHOOK_URL`
 4. If you cannot find the webhook URL in the Lovable UI, contact Lovable support with your project ID (`REPLACE_WITH_PROJECT_ID`)
 
@@ -344,12 +344,12 @@ LOVABLE_API_KEY=your_lovable_api_key
 HEALTH_CHECKS_SECRET=your_random_secret_string
 
 # Site Configuration
-SITE_URL=https://asperbeautyshop-com.lovable.app
+SITE_URL=https://www.asperbeautyshop.com
 ```
 
 ### Supabase Edge Function Secrets
 
-Set these secrets in Supabase Dashboard → Edge Functions → [Function Name] → Secrets:
+Set these secrets in Supabase Dashboard â†’ Edge Functions â†’ [Function Name] â†’ Secrets:
 
 ```bash
 # For bulk-product-upload function
@@ -406,11 +406,11 @@ supabase secrets list
 
 ### 1. Frontend Health Check
 
-**Endpoint:** `GET https://asperbeautyshop-com.lovable.app/health`
+**Endpoint:** `GET https://www.asperbeautyshop.com/health`
 
 **cURL Example:**
 ```bash
-curl -v https://asperbeautyshop-com.lovable.app/health
+curl -v https://www.asperbeautyshop.com/health
 ```
 
 **Expected Response (200 OK):**
@@ -630,35 +630,35 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload \
 #!/bin/bash
 # Asper Beauty Shop Deployment Script
 
-echo "🚀 Starting deployment process..."
+echo "ðŸš€ Starting deployment process..."
 
 # 1. Check health endpoints
-echo "📍 Step 1: Health Check"
-curl -f https://asperbeautyshop-com.lovable.app/health || { echo "❌ Frontend health check failed"; exit 1; }
-curl -f https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload || echo "⚠️  Bulk upload health check returned non-200 (may need secrets)"
+echo "ðŸ“ Step 1: Health Check"
+curl -f https://www.asperbeautyshop.com/health || { echo "âŒ Frontend health check failed"; exit 1; }
+curl -f https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload || echo "âš ï¸  Bulk upload health check returned non-200 (may need secrets)"
 
 # 2. Run automated health checks
-echo "📍 Step 2: Running automated health checks"
-SITE_URL=https://asperbeautyshop-com.lovable.app node scripts/health-check.js
+echo "ðŸ“ Step 2: Running automated health checks"
+SITE_URL=https://www.asperbeautyshop.com node scripts/health-check.js
 
 # 3. Verify Supabase functions
-echo "📍 Step 3: Verifying Supabase functions"
+echo "ðŸ“ Step 3: Verifying Supabase functions"
 supabase functions list
 
 # 4. Check deployment
-echo "📍 Step 4: Deployment successful"
-echo "✅ All checks passed!"
-echo "🌐 Site URL: https://asperbeautyshop-com.lovable.app"
+echo "ðŸ“ Step 4: Deployment successful"
+echo "âœ… All checks passed!"
+echo "ðŸŒ Site URL: https://www.asperbeautyshop.com"
 ```
 
 ### Manual Verification Steps
 
 ```bash
 # 1. Check frontend
-open https://asperbeautyshop-com.lovable.app
+open https://www.asperbeautyshop.com
 
 # 2. Check health endpoint
-curl https://asperbeautyshop-com.lovable.app/health | jq
+curl https://www.asperbeautyshop.com/health | jq
 
 # 3. Check bulk upload health
 curl https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload | jq
@@ -681,7 +681,7 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload \
 **Problem:** `GET /bulk-product-upload` returns 503
 
 **Solution:**
-1. Go to Supabase Dashboard → Edge Functions → bulk-product-upload
+1. Go to Supabase Dashboard â†’ Edge Functions â†’ bulk-product-upload
 2. Click "Secrets" tab
 3. Add missing secrets:
    - `SHOPIFY_STORE_DOMAIN`
@@ -715,10 +715,10 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload \
 
 | Status Code | Meaning | Action Required |
 |------------|---------|-----------------|
-| 200 | OK - Service is healthy | ✅ No action needed |
-| 503 | Service Unavailable - Missing configuration | ⚠️ Configure secrets |
-| 401 | Unauthorized - Invalid or missing auth | ⚠️ Check authorization |
-| 500 | Internal Server Error | 🔴 Check logs and debug |
+| 200 | OK - Service is healthy | âœ… No action needed |
+| 503 | Service Unavailable - Missing configuration | âš ï¸ Configure secrets |
+| 401 | Unauthorized - Invalid or missing auth | âš ï¸ Check authorization |
+| 500 | Internal Server Error | ðŸ”´ Check logs and debug |
 
 ### Bulk Product Upload Response
 
@@ -732,7 +732,7 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload \
 - `missing` array lists missing secrets
 - `error` field in response body
 
-See [PRE_LAUNCH_CHECKLIST.md §5](PRE_LAUNCH_CHECKLIST.md#5-verify-secrets-configuration) for detailed secrets configuration steps.
+See [PRE_LAUNCH_CHECKLIST.md Â§5](PRE_LAUNCH_CHECKLIST.md#5-verify-secrets-configuration) for detailed secrets configuration steps.
 
 ---
 
@@ -748,10 +748,11 @@ See [PRE_LAUNCH_CHECKLIST.md §5](PRE_LAUNCH_CHECKLIST.md#5-verify-secrets-confi
 
 When using this template, replace the following placeholders:
 
-- `YOUR_PROJECT` → Your Supabase project reference ID
-- `YOUR_SUPABASE_JWT_TOKEN` → Your actual JWT token from `supabase auth token`
-- `YOUR_HEALTH_CHECKS_SECRET` → Your configured health checks secret (min 32 chars)
-- `YOUR_PROJECT.supabase.co` → Your actual Supabase project URL
-- `your-store.myshopify.com` → Your Shopify store domain
-- `shpat_xxxxxxxxxxxxx` → Your Shopify Admin API access token
-- `REPLACE_WITH_PROJECT_ID` → Your Lovable project ID
+- `YOUR_PROJECT` â†’ Your Supabase project reference ID
+- `YOUR_SUPABASE_JWT_TOKEN` â†’ Your actual JWT token from `supabase auth token`
+- `YOUR_HEALTH_CHECKS_SECRET` â†’ Your configured health checks secret (min 32 chars)
+- `YOUR_PROJECT.supabase.co` â†’ Your actual Supabase project URL
+- `your-store.myshopify.com` â†’ Your Shopify store domain
+- `shpat_xxxxxxxxxxxxx` â†’ Your Shopify Admin API access token
+- `REPLACE_WITH_PROJECT_ID` â†’ Your Lovable project ID
+

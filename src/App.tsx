@@ -14,6 +14,7 @@ import Collections from "./pages/Collections";
 import CollectionDetail from "./pages/CollectionDetail";
 import Brands from "./pages/Brands";
 import BrandVichy from "./pages/BrandVichy";
+import BrandDetail from "./pages/BrandDetail";
 import BestSellers from "./pages/BestSellers";
 import Offers from "./pages/Offers";
 import Contact from "./pages/Contact";
@@ -23,6 +24,7 @@ import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 import Philosophy from "./pages/Philosophy";
 import BulkUpload from "./pages/BulkUpload";
 import AdminOrders from "./pages/AdminOrders";
@@ -33,17 +35,20 @@ import ShopAllOrganized from "./components/ShopAllOrganized";
 import DriverDashboard from "./pages/DriverDashboard";
 import AdminAuditLogs from "./pages/AdminAuditLogs";
 import AsperIntelligence from "./pages/AsperIntelligence";
+import PurgeReview from "./pages/PurgeReview";
 import BrandIntelligenceDashboard from "./pages/BrandIntelligenceDashboard";
 import Health from "./pages/Health";
+import RegimenPortal from "./pages/RegimenPortal";
 import { RequireAdmin } from "./components/RequireAdmin";
+import { RouteAnnouncer } from "./components/RouteAnnouncer";
 
 const BeautyAssistant = lazy(() =>
   import("@/components/BeautyAssistant").then((m) => ({ default: m.BeautyAssistant })),
 );
-
-const ChatBot = lazy(() =>
-  import("@/components/ChatBot").then((m) => ({ default: m.ChatBot })),
+const FloatingConciergeWidget = lazy(() =>
+  import("@/components/FloatingConciergeWidget").then((m) => ({ default: m.FloatingConciergeWidget })),
 );
+
 
 const queryClient = new QueryClient();
 
@@ -71,11 +76,10 @@ const App = () => {
             <Toaster />
             <Sonner position="top-center" />
             <BrowserRouter>
+              <RouteAnnouncer />
               <Suspense fallback={null}>
                 <BeautyAssistant />
-              </Suspense>
-              <Suspense fallback={null}>
-                <ChatBot />
+                <FloatingConciergeWidget />
               </Suspense>
               <Routes>
                 <Route path="/" element={<Index />} />
@@ -91,6 +95,7 @@ const App = () => {
                 />
                 <Route path="/brands" element={<Brands />} />
                 <Route path="/brands/vichy" element={<BrandVichy />} />
+                <Route path="/brands/:slug" element={<BrandDetail />} />
                 <Route path="/best-sellers" element={<BestSellers />} />
                 <Route path="/offers" element={<Offers />} />
                 <Route path="/contact" element={<Contact />} />
@@ -102,9 +107,11 @@ const App = () => {
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/account" element={<Account />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/philosophy" element={<Philosophy />} />
                 <Route path="/intelligence" element={<AsperIntelligence />} />
                 <Route path="/health" element={<Health />} />
+                <Route path="/portal/regimen/:id" element={<RegimenPortal />} />
                 <Route path="/admin/bulk-upload" element={<BulkUpload />} />
                 <Route path="/admin/orders" element={<AdminOrders />} />
                 <Route path="/admin/products" element={<ManageProducts />} />
@@ -115,6 +122,7 @@ const App = () => {
                 <Route path="/consultation" element={<Navigate to="/skin-concerns" replace />} />
                 <Route path="/driver" element={<DriverDashboard />} />
                 <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
+                <Route path="/admin/purge-review" element={<PurgeReview />} />
                 <Route
                   path="/brand-intelligence"
                   element={

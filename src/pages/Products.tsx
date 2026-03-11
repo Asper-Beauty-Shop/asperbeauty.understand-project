@@ -130,6 +130,7 @@ const Products = () => {
                 isLoading={isLoading}
                 error={error}
                 enrichmentMap={enrichmentMap}
+                searchQuery={activeQuery}
               />
             </div>
           </div>

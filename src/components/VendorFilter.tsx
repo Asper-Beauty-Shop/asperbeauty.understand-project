@@ -117,3 +117,4 @@ export function buildVendorQuery(vendors: string[]): string | undefined {
   if (vendors.length === 0) return undefined;
   return vendors.map((v) => `vendor:${v}`).join(" OR ");
 }
+

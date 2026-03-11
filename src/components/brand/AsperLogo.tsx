@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import asperLogo from "@/assets/asper-lotus-logo.png";
+import asperLogo from "@/assets/asper-logo-minimal-gold.png";
 
 interface AsperLogoProps {
   variant?: "seal" | "bloom";
@@ -23,3 +23,4 @@ export default function AsperLogo({ size = 160, className, animated }: AsperLogo
     />
   );
 }
+

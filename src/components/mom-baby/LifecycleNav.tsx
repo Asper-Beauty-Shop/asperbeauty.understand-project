@@ -101,3 +101,4 @@ export default function LifecycleNav({ activePhase, onPhaseChange }: Props) {
     </section>
   );
 }
+

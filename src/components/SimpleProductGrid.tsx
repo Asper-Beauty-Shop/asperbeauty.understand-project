@@ -34,3 +34,4 @@ export const SimpleProductGrid = ({ products }: SimpleProductGridProps) => {
 };
 
 export default SimpleProductGrid;
+

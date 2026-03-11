@@ -82,3 +82,4 @@ export const CategoryHighlights = () => {
     </section>
   );
 };
+

@@ -174,3 +174,4 @@ export const categoryList = [
   { key: "beauty", label: "Beauty", labelAr: "الجمال", Icon: IconCatBeauty, href: "/products?category=beauty" },
   { key: "wellness", label: "Wellness", labelAr: "العافية", Icon: IconCatWellness, href: "/products?category=wellness" },
 ] as const;
+

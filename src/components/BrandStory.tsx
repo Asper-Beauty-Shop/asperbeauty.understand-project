@@ -1,6 +1,6 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Shield, Sparkles } from "lucide-react";
-import asperLogo from "@/assets/asper-lotus-logo.png";
+import asperLogo from "@/assets/asper-logo-badge.png";
 
 const content = {
   en: {
@@ -169,3 +169,4 @@ const BrandStory = () => {
 };
 
 export default BrandStory;
+

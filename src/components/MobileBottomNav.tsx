@@ -95,3 +95,4 @@ export default function MobileBottomNav({ onOpenConcierge, onOpenCart }: Props) 
     </nav>
   );
 }
+

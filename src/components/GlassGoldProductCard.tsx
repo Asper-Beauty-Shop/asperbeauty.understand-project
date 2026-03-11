@@ -203,3 +203,4 @@ export const GlassGoldProductCard = (
 };
 
 export default GlassGoldProductCard;
+

@@ -206,7 +206,7 @@ export const CODCheckoutForm = (
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Order Summary */}
-      <div className="bg-cream/50 rounded-lg p-4 space-y-3">
+      <div className="bg-[#F8F8FF]/50 rounded-lg p-4 space-y-3">
         <h3 className="font-display text-sm font-medium text-foreground">
           {isArabic ? "ملخص الطلب" : "Order Summary"}
         </h3>
@@ -225,7 +225,7 @@ export const CODCheckoutForm = (
           ))}
         </div>
 
-        <div className="border-t border-gold/20 pt-2 space-y-1">
+        <div className="border-t border-[#C5A028]/20 pt-2 space-y-1">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">
               {isArabic ? "المجموع الفرعي" : "Subtotal"}
@@ -244,7 +244,7 @@ export const CODCheckoutForm = (
           </div>
           <div className="flex justify-between font-display text-base font-bold pt-1">
             <span>{isArabic ? "الإجمالي" : "Total"}</span>
-            <span className="text-burgundy">{total.toFixed(2)} JOD</span>
+            <span className="text-[#800020]">{total.toFixed(2)} JOD</span>
           </div>
         </div>
       </div>
@@ -256,7 +256,7 @@ export const CODCheckoutForm = (
             htmlFor="customerName"
             className="flex items-center gap-2 text-sm"
           >
-            <User className="w-4 h-4 text-gold" />
+            <User className="w-4 h-4 text-[#C5A028]" />
             {isArabic ? "الاسم الكامل" : "Full Name"} *
           </Label>
           <Input
@@ -264,7 +264,7 @@ export const CODCheckoutForm = (
             value={formData.customerName}
             onChange={(e) => handleInputChange("customerName", e.target.value)}
             placeholder={isArabic ? "أدخل اسمك الكامل" : "Enter your full name"}
-            className="border-gold/30 focus:border-gold"
+            className="border-[#C5A028]/30 focus:border-[#C5A028]"
             required
           />
         </div>
@@ -274,7 +274,7 @@ export const CODCheckoutForm = (
             htmlFor="customerPhone"
             className="flex items-center gap-2 text-sm"
           >
-            <Phone className="w-4 h-4 text-gold" />
+            <Phone className="w-4 h-4 text-[#C5A028]" />
             {isArabic ? "رقم الهاتف" : "Phone Number"} *
           </Label>
           <Input
@@ -283,7 +283,7 @@ export const CODCheckoutForm = (
             value={formData.customerPhone}
             onChange={(e) => handleInputChange("customerPhone", e.target.value)}
             placeholder={isArabic ? "07XXXXXXXX" : "07XXXXXXXX"}
-            className="border-gold/30 focus:border-gold"
+            className="border-[#C5A028]/30 focus:border-[#C5A028]"
             required
           />
         </div>
@@ -293,7 +293,7 @@ export const CODCheckoutForm = (
             htmlFor="customerEmail"
             className="flex items-center gap-2 text-sm"
           >
-            <Mail className="w-4 h-4 text-gold" />
+            <Mail className="w-4 h-4 text-[#C5A028]" />
             {isArabic ? "البريد الإلكتروني" : "Email"}{" "}
             ({isArabic ? "اختياري" : "optional"})
           </Label>
@@ -303,20 +303,20 @@ export const CODCheckoutForm = (
             value={formData.customerEmail}
             onChange={(e) => handleInputChange("customerEmail", e.target.value)}
             placeholder={isArabic ? "example@email.com" : "example@email.com"}
-            className="border-gold/30 focus:border-gold"
+            className="border-[#C5A028]/30 focus:border-[#C5A028]"
           />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="city" className="flex items-center gap-2 text-sm">
-            <MapPin className="w-4 h-4 text-gold" />
+            <MapPin className="w-4 h-4 text-[#C5A028]" />
             {isArabic ? "المدينة" : "City"} *
           </Label>
           <Select
             value={formData.city}
             onValueChange={(value) => handleInputChange("city", value)}
           >
-            <SelectTrigger className="border-gold/30 focus:border-gold">
+            <SelectTrigger className="border-[#C5A028]/30 focus:border-[#C5A028]">
               <SelectValue
                 placeholder={isArabic ? "اختر المدينة" : "Select city"}
               />
@@ -336,7 +336,7 @@ export const CODCheckoutForm = (
             htmlFor="deliveryAddress"
             className="flex items-center gap-2 text-sm"
           >
-            <MapPin className="w-4 h-4 text-gold" />
+            <MapPin className="w-4 h-4 text-[#C5A028]" />
             {isArabic ? "عنوان التوصيل" : "Delivery Address"} *
           </Label>
           <Textarea
@@ -347,14 +347,14 @@ export const CODCheckoutForm = (
             placeholder={isArabic
               ? "أدخل عنوان التوصيل بالتفصيل"
               : "Enter detailed delivery address"}
-            className="border-gold/30 focus:border-gold min-h-[80px]"
+            className="border-[#C5A028]/30 focus:border-[#C5A028] min-h-[80px]"
             required
           />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="notes" className="flex items-center gap-2 text-sm">
-            <FileText className="w-4 h-4 text-gold" />
+            <FileText className="w-4 h-4 text-[#C5A028]" />
             {isArabic ? "ملاحظات" : "Notes"}{" "}
             ({isArabic ? "اختياري" : "optional"})
           </Label>
@@ -365,7 +365,7 @@ export const CODCheckoutForm = (
             placeholder={isArabic
               ? "أي ملاحظات إضافية للتوصيل"
               : "Any additional delivery notes"}
-            className="border-gold/30 focus:border-gold min-h-[60px]"
+            className="border-[#C5A028]/30 focus:border-[#C5A028] min-h-[60px]"
           />
         </div>
       </div>
@@ -373,10 +373,10 @@ export const CODCheckoutForm = (
       {/* CAPTCHA Verification */}
       <div className="space-y-2">
         <Label className="flex items-center gap-2 text-sm">
-          <ShieldCheck className="w-4 h-4 text-gold" />
+          <ShieldCheck className="w-4 h-4 text-[#C5A028]" />
           {isArabic ? "التحقق الأمني" : "Security Verification"} *
         </Label>
-        <div className="flex justify-center bg-cream/30 rounded-lg p-3">
+        <div className="flex justify-center bg-[#F8F8FF]/30 rounded-lg p-3">
           <HCaptcha
             ref={captchaRef}
             sitekey={HCAPTCHA_SITE_KEY}
@@ -394,7 +394,7 @@ export const CODCheckoutForm = (
       </div>
 
       {/* COD Notice */}
-      <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 text-center">
+      <div className="bg-[#C5A028]/10 border border-[#C5A028]/30 rounded-lg p-3 text-center">
         <p className="text-sm text-foreground font-medium">
           💵 {isArabic ? "الدفع عند الاستلام" : "Cash on Delivery"}
         </p>
@@ -411,7 +411,7 @@ export const CODCheckoutForm = (
           type="button"
           variant="outline"
           onClick={onCancel}
-          className="flex-1 border-gold/30"
+          className="flex-1 border-[#C5A028]/30"
           disabled={isSubmitting}
         >
           {isArabic ? "إلغاء" : "Cancel"}
@@ -419,7 +419,7 @@ export const CODCheckoutForm = (
         <Button
           type="submit"
           disabled={isSubmitting || items.length === 0 || !captchaToken}
-          className="flex-1 bg-burgundy hover:bg-burgundy-light text-white"
+          className="flex-1 bg-[#800020] hover:bg-[#800020]-light text-white"
         >
           {isSubmitting
             ? (
@@ -459,11 +459,11 @@ export const OrderSuccess = (
         </p>
       </div>
 
-      <div className="bg-cream/50 rounded-lg p-4">
+      <div className="bg-[#F8F8FF]/50 rounded-lg p-4">
         <p className="text-sm text-muted-foreground">
           {isArabic ? "رقم الطلب" : "Order Number"}
         </p>
-        <p className="font-display text-lg font-bold text-burgundy">
+        <p className="font-display text-lg font-bold text-[#800020]">
           {orderNumber}
         </p>
       </div>
@@ -476,10 +476,12 @@ export const OrderSuccess = (
 
       <Button
         onClick={onClose}
-        className="w-full bg-burgundy hover:bg-burgundy-light text-white"
+        className="w-full bg-[#800020] hover:bg-[#800020]-light text-white"
       >
         {isArabic ? "متابعة التسوق" : "Continue Shopping"}
       </Button>
     </div>
   );
 };
+
+

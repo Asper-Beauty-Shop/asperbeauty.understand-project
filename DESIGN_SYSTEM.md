@@ -1,260 +1,100 @@
-# Asper Beauty Shop — Design System
+# Asper Beauty Shop — Visual Values & Design System
 
-> **"Morning Spa" / Medical Luxury**  
-> Warm, clinical elegance meets feminine wellness. No cold whites, no stark blacks—only soothing ivory, rose clay, deep burgundy, and polished gold accents.
-
----
-
-## Brand Identity
-
-**Asper Beauty Shop** is the online home of an Egyptian pharmaceutical beauty brand. Our design conveys:
-
-- **Clinical trust** — Medical authority, dermatologist-approved formulations  
-- **Feminine warmth** — Soft pinks, terracotta, and nurturing tones  
-- **Understated luxury** — Muted elegance, never flashy or loud  
-- **Approachability** — Friendly, confident, and welcoming
+**Use this document for every UI component and marketing asset.**  
+**When coding with Cursor/Claude, apply these rules to achieve consistent, on-brand results.**
 
 ---
 
-## Color Palette
+## 1. Four Pillars of Design
 
-All colors below are defined in `tailwind.config.ts` and available via Tailwind utility classes (e.g., `bg-asper-stone`, `text-burgundy`, `border-polished-gold`).
+Every visual and UX decision must align with at least one of these pillars.
 
-### Primary Canvas — Asper Stone (Warm Ivory / Light Gray)
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `asper-stone` (DEFAULT) | `#F2EFEB` | Main background, cards, sections |
-| `asper-stone-light` | `#F8F6F3` | Lightest variant, subtle backgrounds |
-| `asper-stone-dark` | `#E8E4DE` | Darker variant for contrast within ivory areas |
-
-**Never use pure white (`#FFF`)** — always prefer `asper-stone` or `polished-white` for a warmer feel.
-
-### Feminine Softness — Rose Clay (Muted Pink / Terracotta)
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `rose-clay` (DEFAULT) | `#C4A494` | Subtle highlights, warm accents, secondary backgrounds |
-| `rose-clay-light` | `#D4B8A8` | Very soft pink, hover states, delicate elements |
-| `rose-clay-dark` | `#A88B7A` | Deeper terracotta, text on light backgrounds |
-
-Use for:
-- Section backgrounds (alternate with asper-stone)
-- Soft hover states
-- Callout boxes or featured content
-- Feminine wellness messaging
-
-### Primary Actions & Authority — Burgundy
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `burgundy` (DEFAULT) | `#6B2D3A` | Primary buttons, CTAs, navigation background |
-| `burgundy-light` | `#8B3D4A` | Hover states on burgundy elements |
-| `burgundy-dark` | `#4F222C` | Active states, deep emphasis |
-
-Use for:
-- Primary CTA buttons ("Add to Cart", "Shop Now")
-- Navigation bars and headers
-- Emphasis on clinical authority
-- Links and active states
-
-### Accent — Polished Gold
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `polished-gold` | `#C9A962` | Borders, icons, "Midas Touch" accents |
-
-Use **sparingly** to add sophistication:
-- Icon highlights
-- Border accents on hover
-- Badges or labels ("Best Seller", "New")
-- Decorative elements (never as a primary action color)
-
-### Text — Asper Ink (Soft Black / Charcoal)
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `asper-ink` | `#2C2825` | Primary body text, headings |
-| `asper-ink-muted` | `#5C5652` | Secondary text, captions, placeholders |
-
-**Never use pure black (`#000`)** — always prefer `asper-ink` for softer readability.
-
-### Utility
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `polished-white` | `#FAF9F7` | Off-white for cards on colored backgrounds |
+| Pillar | Meaning | Implementation |
+|--------|---------|----------------|
+| **Resilience** | Beauty = strength and barrier protection, not superficial prettiness. | Stable layout, authoritative clinical copy, structural clarity. No frivolous decoration. |
+| **Transparency** | "No hidden harshness." | Clear ingredient lists, visible pricing, uncluttered nav. No dark UX, no obscured shipping or terms. |
+| **Refinement** | "The process of smoothing." | Move the user from fragmentation/overwhelm into a cohesive flow. Smooth transitions, optimized rendering, elegant micro-interactions. |
+| **Empathy** | Acknowledge the user’s struggle. | Accessible support, empathetic AI (Dr. Sami, Ms. Zain), supportive language for sensitive skin (acne, rosacea). No judgment. |
 
 ---
 
-## Typography
+## 2. Clinical Luxury Color Palette
 
-### Font Families
+Implement via **Tailwind CSS** (or equivalent). **Avoid pure white and pure black** for canvas and primary text—they cause eye strain on long reading (e.g. ingredient lists).
 
-Defined in `tailwind.config.ts`:
+| Role | Name | Use |
+|------|------|-----|
+| **Primary canvas** | **Asper Stone** | Warm light gray / soft ivory. Sterile but welcoming (high-end dermatology feel). Lets thousands of SKU packaging colors sit without clashing. |
+| **Feminine softness** | **Rose Clay** | Muted pink or terracotta. Softens clinical rigidity. Use for secondary backgrounds, highlights, or subtle CTAs. |
+| **Primary actions & authority** | **Deep Burgundy / Maroon** | Headers, main nav, critical conversion buttons. Conveys authority, seriousness, brand heritage. |
+| **Seal of authenticity** | **Polished Gold** (or Polished White) | Use sparingly: 1px borders, subtle hover ("Midas Touch"), select SVG icons. Highlights value without overwhelming. |
 
-- **Headings:** `font-heading` → Playfair Display (serif, elegant)
-- **Body:** `font-body` → Montserrat (sans-serif, clean, readable)
-- **Arabic support:** `font-arabic` → Tajawal (for bilingual content)
+**Rules:**
+- Backgrounds: Asper Stone (or compatible neutral). No `#FFFFFF` or `#000000` as main canvas.
+- Primary text: Dark gray/charcoal, not pure black.
+- CTAs and key nav: Deep Burgundy/Maroon.
+- Accents: Polished Gold/White in small doses only.
 
-### Usage Guidelines
+### Tailwind tokens (paste into `tailwind.config.js` in understand-project)
 
-| Element | Font | Weight | Size (Desktop) | Size (Mobile) | Color |
-|---------|------|--------|----------------|---------------|-------|
-| Hero Title | Playfair Display | 700 (bold) | 3.5rem | 2.25rem | `asper-ink` |
-| Section Headings | Playfair Display | 600 (semibold) | 2.5rem | 1.875rem | `asper-ink` |
-| Product Titles | Montserrat | 600 | 1.5rem | 1.25rem | `asper-ink` |
-| Body Text | Montserrat | 400 | 1rem | 0.875rem | `asper-ink` |
-| Small Print | Montserrat | 400 | 0.875rem | 0.75rem | `asper-ink-muted` |
-| Buttons | Montserrat | 600 (semibold) | 1rem | 0.875rem | White on burgundy |
-
----
-
-## Components
-
-### Buttons
-
-**Primary (Burgundy)**
-- Background: `bg-burgundy`
-- Text: `text-white`
-- Hover: `hover:bg-burgundy-light`
-- Border radius: `rounded-md` (8px)
-- Padding: `px-6 py-3`
-- Font: `font-body font-semibold`
-
-**Secondary (Outlined)**
-- Border: `border-2 border-burgundy`
-- Text: `text-burgundy`
-- Background: `bg-transparent`
-- Hover: `hover:bg-burgundy hover:text-white`
-
-**Accent (Gold — use sparingly)**
-- Border: `border-2 border-polished-gold`
-- Text: `text-asper-ink`
-- Background: `bg-transparent`
-- Hover: `hover:bg-polished-gold hover:text-white`
-
-### Cards
-
-- Background: `bg-asper-stone` or `bg-polished-white`
-- Border: `border border-rose-clay-light` (optional)
-- Border radius: `rounded-lg` (12px)
-- Shadow: `shadow-sm` or `shadow-maroon-glow`
-- Padding: `p-6` (desktop), `p-4` (mobile)
-
-### Navigation
-
-- Background: `bg-burgundy`
-- Text: `text-white`
-- Active link: `text-polished-gold`
-- Hover: `hover:text-polished-gold`
-
-### Product Cards
-
-- Background: `bg-polished-white`
-- Image: rounded corners `rounded-t-lg`
-- Title: `text-asper-ink font-body font-semibold`
-- Price: `text-burgundy font-semibold text-lg`
-- CTA button: Primary burgundy button
-
-### Inputs
-
-- Background: `bg-white` or `bg-polished-white`
-- Border: `border border-rose-clay`
-- Focus: `focus:ring-2 focus:ring-polished-gold focus:border-polished-gold`
-- Text: `text-asper-ink`
-- Placeholder: `placeholder:text-asper-ink-muted`
-
----
-
-## Spacing & Layout
-
-Use Tailwind's spacing scale with these conventions:
-
-- **Section padding:** `py-16` (desktop), `py-12` (mobile)
-- **Container max-width:** `max-w-7xl`
-- **Grid gaps:** `gap-6` (desktop), `gap-4` (mobile)
-- **Component spacing:** Use consistent `space-y-4` or `space-y-6` for vertical rhythm
-
----
-
-## Shadows
-
-Custom shadows defined in `tailwind.config.ts`:
-
-- **Subtle elevation:** `shadow-sm`
-- **Maroon glow (cards, buttons on hover):** `shadow-maroon-glow`
-- **Deep emphasis (modals, dropdowns):** `shadow-maroon-deep`
-
-Additional gold-tinted shadow utilities are available via CSS classes in `src/index.css`:
-`shadow-gold-sm`, `shadow-gold-md`, `shadow-gold-lg`, `shadow-gold-glow`.
-
----
-
-## Animations
-
-All animations use the luxury easing: `cubic-bezier(0.4, 0, 0.2, 1)` (available as `.ease-luxury` CSS class).
-
-Available utility classes:
-- `animate-fade-in` — Fade in (opacity only, 0.6s)
-- `animate-fade-in-up` — Fade in with upward movement (0.8s)
-- `animate-fade-up` — Fade in with pronounced upward movement (0.8s)
-- `animate-shake` — Shake animation for errors or emphasis (0.5s)
-- `animate-skeleton-breathe` — Breathing animation for loading skeletons
-
----
-
-## Accessibility
-
-- **Contrast:** All text colors meet WCAG AA standards against their backgrounds
-- **Focus states:** All interactive elements have visible focus rings (`focus:ring-2 focus:ring-polished-gold`)
-- **Touch targets:** Minimum 44×44px for mobile
-- **Semantic HTML:** Use proper heading hierarchy (`h1` → `h6`), landmarks (`<nav>`, `<main>`, `<footer>`)
-
----
-
-## Implementation Checklist
-
-When building new components or pages:
-
-- [ ] Use only the approved color palette (no pure white/black)
-- [ ] Apply `font-heading` to titles and `font-body` to body text
-- [ ] Use `rounded-md` or `rounded-lg` for border radius
-- [ ] Add shadows with `shadow-maroon-glow` for cards
-- [ ] Ensure all interactive elements have hover and focus states
-- [ ] Test on mobile (responsive spacing and typography)
-- [ ] Verify contrast ratios for accessibility
-
----
-
-## Quick Reference
-
-```html
-<!-- Example: Primary CTA Button -->
-<button class="bg-burgundy text-white px-6 py-3 rounded-md font-body font-semibold hover:bg-burgundy-light transition-colors">
-  Add to Cart
-</button>
-
-<!-- Example: Product Card -->
-<div class="bg-polished-white rounded-lg shadow-maroon-glow overflow-hidden">
-  <img src="..." alt="..." class="w-full h-48 object-cover rounded-t-lg">
-  <div class="p-4 space-y-2">
-    <h3 class="text-asper-ink font-body font-semibold text-lg">Product Name</h3>
-    <p class="text-asper-ink-muted text-sm">Short description...</p>
-    <p class="text-burgundy font-semibold text-lg">€25.99</p>
-  </div>
-</div>
-
-<!-- Example: Section with Warm Background -->
-<section class="bg-rose-clay-light py-16">
-  <div class="container max-w-7xl mx-auto px-4">
-    <h2 class="font-heading text-4xl text-asper-ink mb-8">Discover Your Ritual</h2>
-    <!-- Content -->
-  </div>
-</section>
+```js
+// Asper Beauty Shop — Clinical Luxury palette
+colors: {
+  // Primary canvas — warm light gray / soft ivory
+  'asper-stone': {
+    DEFAULT: '#F2EFEB',
+    light: '#F8F6F3',
+    dark: '#E8E4DE',
+  },
+  // Muted pink / terracotta — feminine softness
+  'rose-clay': {
+    DEFAULT: '#C4A494',
+    light: '#D4B8A8',
+    dark: '#A88B7A',
+  },
+  // Primary actions, nav, authority
+  'burgundy': {
+    DEFAULT: '#6B2D3A',
+    light: '#8B3D4A',
+    dark: '#4F222C',
+  },
+  // Accent only — borders, hover, icons
+  'polished-gold': '#C9A962',
+  'polished-white': '#FAF9F7',
+  // Primary text (no pure black)
+  'asper-ink': '#2C2825',
+  'asper-ink-muted': '#5C5652',
+}
 ```
 
+Use in classes: `bg-asper-stone`, `text-burgundy`, `border-polished-gold`, `text-asper-ink`, `hover:bg-rose-clay-light`, etc.
+
 ---
 
-**Last updated:** February 2026  
-**Contact:** Design Team — [Lovable Project](https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6)
+## 3. Typographic Architecture
+
+- **Readability first** for clinical and ingredient copy.
+- **Hierarchy** clear: headings vs body vs captions.
+- **No high-contrast strain**: avoid pure black on pure white for long text.
+
+---
+
+## 4. How to Use This With Claude / Cursor
+
+When you ask Cursor or Claude to:
+- Add or change a page, component, or style
+- Implement a new feature or fix UI
+
+**Reference this file:** "Follow DESIGN_SYSTEM.md" or "Use the four pillars and Clinical Luxury palette from DESIGN_SYSTEM.md."
+
+The AI should:
+1. Prefer **Asper Stone** for main backgrounds; **Rose Clay** for soft emphasis.
+2. Use **Deep Burgundy/Maroon** for primary buttons and nav.
+3. Use **Polished Gold** only for subtle borders, hovers, or icon accents.
+4. Avoid pure black/white for canvas and primary text.
+5. Keep copy **authoritative but empathetic**; support **transparency** (clear pricing, ingredients, nav).
+6. Add **smooth transitions** and **refined micro-interactions** where appropriate.
+
+---
+
+*Main project: [MAIN_PROJECT.md](MAIN_PROJECT.md). Live site: https://asperbeautyshop-com.lovable.app/*

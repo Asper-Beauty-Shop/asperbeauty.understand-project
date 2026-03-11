@@ -599,7 +599,13 @@ export async function createStorefrontCheckout(
   return formatCheckoutUrl(cart.checkoutUrl);
 }
 
-/** Normalize a Shopify price string to a number */
+/**
+ * Normalize a Shopify price string to a number.
+ * 
+ * Prices from the Storefront API are returned as-is from Shopify.
+ * The sync-shopify-catalog edge function handles brand-aware normalization
+ * when writing to Supabase. This function simply parses the raw value.
+ */
 export function normalizePrice(amount: string | number): number {
   if (typeof amount === "number") return amount;
   const parsed = parseFloat(amount);

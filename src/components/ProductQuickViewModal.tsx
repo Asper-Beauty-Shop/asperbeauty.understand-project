@@ -311,3 +311,4 @@ export const ProductQuickViewButton = (
 };
 
 export default ProductQuickViewModal;
+

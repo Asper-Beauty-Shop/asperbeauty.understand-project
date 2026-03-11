@@ -1,24 +1,21 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
 node_modules
+.env
 dist
 dist-ssr
 *.local
 
-# Environment variables (never commit secrets)
-.env
-.env.local
-.env.*.local
-
-# Sync error logs
-data/sync-errors.json
+.understand
+.cursor
+.claudefesii
+Orgnized Products
+Supabase_files
+*.csv
+*.sql
+*.ipynb
+*.xlsx
+*.tsv
+*.crt
+*.docx
 
 # Editor directories and files
 .vscode/*
@@ -30,3 +27,8 @@ data/sync-errors.json
 *.njsproj
 *.sln
 *.sw?
+
+# AI / tooling (do not track)
+.claude/
+.claudefesii/
+.snapshots/

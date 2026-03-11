@@ -261,3 +261,4 @@ const CelestialFeaturedCollection = () => {
 };
 
 export default CelestialFeaturedCollection;
+

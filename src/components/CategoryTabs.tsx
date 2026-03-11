@@ -47,3 +47,4 @@ export function CategoryTabs({ activeTab, onTabChange }: CategoryTabsProps) {
     </div>
   );
 }
+

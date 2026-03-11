@@ -17,11 +17,11 @@ const colorSwatches = [
 ];
 
 const typographyScale = [
-  { label: "Display", font: "Playfair Display", weight: "700", size: "3.5rem", sample: "The Sanctuary of Science" },
-  { label: "Heading 1", font: "Playfair Display", weight: "600", size: "2.25rem", sample: "Nature Contained by Science" },
-  { label: "Heading 2", font: "Playfair Display", weight: "600", size: "1.875rem", sample: "Pharmacist-Curated Beauty" },
-  { label: "Subtitle", font: "Montserrat", weight: "500", size: "1.125rem", sample: "Clinical luxury for every skin story" },
-  { label: "Body", font: "Montserrat", weight: "400", size: "1rem", sample: "We blend potent organic botanicals with clinical precision to deliver verifiable radiance." },
+  { label: "Display", font: "Playfair Display", weight: "700", size: "3.5rem", sample: "Curated by Pharmacists. Powered by Intelligence." },
+  { label: "Heading 1", font: "Playfair Display", weight: "600", size: "2.25rem", sample: "Where Science Meets Soul" },
+  { label: "Heading 2", font: "Playfair Display", weight: "600", size: "1.875rem", sample: "Intelligent. Authentic. Eternal." },
+  { label: "Subtitle", font: "Montserrat", weight: "500", size: "1.125rem", sample: "Curated by Pharmacists. Built for Trust. Designed for Elegance." },
+  { label: "Body", font: "Montserrat", weight: "400", size: "1rem", sample: "We are not just selling cosmetics; we are dispensing beauty through intelligence." },
   { label: "Caption", font: "Montserrat", weight: "300", size: "0.75rem", sample: "PHARMACIST VERIFIED • BATCH TESTED" },
 ];
 

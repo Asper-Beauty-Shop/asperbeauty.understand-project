@@ -13,7 +13,7 @@ export const InstagramFeed = () => {
     {
       id: 1,
       image:
-        "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop",
+        "/editorial-showcase-1.jpg?w=400&h=400&fit=crop",
       likes: 342,
     },
     {
@@ -167,3 +167,4 @@ export const InstagramFeed = () => {
     </section>
   );
 };
+

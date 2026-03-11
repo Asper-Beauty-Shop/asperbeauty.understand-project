@@ -128,11 +128,37 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
+/* Inline SVG persona avatars — transparent, no white box */
+const DrSamiAvatar = ({ size = 28 }: { size?: number }) => (
+  <div
+    className="rounded-full border border-polished-gold bg-transparent p-1 flex items-center justify-center shrink-0"
+    style={{ width: size, height: size }}
+  >
+    <svg width={size * 0.55} height={size * 0.55} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 2v20M8 6c0-1.5 1.8-3 4-3s4 1.5 4 3-1.8 3-4 3-4-1.5-4-3zM8 10c0-1.5 1.8-3 4-3s4 1.5 4 3-1.8 3-4 3-4-1.5-4-3z" stroke="hsl(var(--polished-gold))" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M9 22h6" stroke="hsl(var(--polished-gold))" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  </div>
+);
+
+const MsZainAvatar = ({ size = 28 }: { size?: number }) => (
+  <div
+    className="rounded-full border border-polished-gold bg-transparent p-1 flex items-center justify-center shrink-0"
+    style={{ width: size, height: size }}
+  >
+    <svg width={size * 0.55} height={size * 0.55} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 22c-2-4-6-8-6-12a6 6 0 0112 0c0 4-4 8-6 12z" stroke="hsl(var(--polished-gold))" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12 22c-4-2-8-4-9-8 2 0 5 1 9 8zM12 22c4-2 8-4 9-8-2 0-5 1-9 8z" stroke="hsl(var(--polished-gold))" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  </div>
+);
+
 const personaConfig = {
   dr_sami: {
     name: "Dr. Sami",
     subtitle: "Clinical Authority",
     icon: Shield,
+    avatar: DrSamiAvatar,
     color: "text-primary",
     bgColor: "bg-primary/10",
     shape: "clip-hexagon",
@@ -142,6 +168,7 @@ const personaConfig = {
     name: "Ms. Zain",
     subtitle: "Beauty Concierge",
     icon: Heart,
+    avatar: MsZainAvatar,
     color: "text-gold",
     bgColor: "bg-gold/10",
     shape: "rounded-full",
@@ -429,9 +456,7 @@ export default function AIConcierge() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border/50 bg-primary px-4 py-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/20">
-                <PersonaIcon className="h-4 w-4 text-primary-foreground" />
-              </div>
+              <persona.avatar size={36} />
               <div>
                 <p className="font-heading text-sm font-semibold text-primary-foreground">{persona.name}</p>
                 <p className="text-xs text-primary-foreground/70">{persona.subtitle}</p>
@@ -529,11 +554,7 @@ export default function AIConcierge() {
               return (
                 <div key={i} className={cn("mb-3 flex gap-2", isUser && "flex-row-reverse")}>
                   {!isUser && mp && (
-                    <Avatar className="h-7 w-7 shrink-0">
-                      <AvatarFallback className={cn("text-[10px]", mp.bgColor, mp.color)}>
-                        {mp.name.split(" ").map((w) => w[0]).join("")}
-                      </AvatarFallback>
-                    </Avatar>
+                    <mp.avatar size={28} />
                   )}
                   <div
                     className={cn(
@@ -577,11 +598,10 @@ export default function AIConcierge() {
 
             {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="mb-3 flex gap-2">
-                <Avatar className="h-7 w-7 shrink-0">
-                  <AvatarFallback className={cn("text-[10px]", persona.bgColor, persona.color)}>
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  </AvatarFallback>
-                </Avatar>
+                <div className="relative">
+                  <persona.avatar size={28} />
+                  <Loader2 className="absolute inset-0 m-auto h-3 w-3 animate-spin text-polished-gold" />
+                </div>
                 <div className="rounded-xl rounded-bl-sm bg-background border border-accent/30 px-3 py-2">
                   <div className="flex gap-1.5">
                     <span className="h-2 w-2 animate-bounce rounded-full bg-accent [animation-delay:0ms]" />
@@ -658,3 +678,4 @@ export default function AIConcierge() {
     </>
   );
 }
+

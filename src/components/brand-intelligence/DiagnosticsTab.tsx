@@ -60,3 +60,4 @@ export function DiagnosticsTab() {
     </div>
   );
 }
+

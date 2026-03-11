@@ -25,3 +25,4 @@ export default function ScrollProgress() {
 
   return <div className="scroll-progress" style={{ width: `${width}%` }} />;
 }
+

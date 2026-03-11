@@ -6,7 +6,6 @@
 const LOG_CONCIERGE_EVENTS_URL =
   `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/log-concierge-events`;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-const CONCIERGE_SECRET = import.meta.env.VITE_CONCIERGE_EVENTS_SECRET ?? "";
 
 function postEvent(payload: Record<string, unknown>): void {
   const headers: Record<string, string> = {
@@ -14,9 +13,6 @@ function postEvent(payload: Record<string, unknown>): void {
     "apikey": ANON_KEY,
     "Authorization": `Bearer ${ANON_KEY}`,
   };
-  if (CONCIERGE_SECRET) {
-    headers["x-concierge-events-secret"] = CONCIERGE_SECRET;
-  }
   fetch(LOG_CONCIERGE_EVENTS_URL, {
     method: "POST",
     headers,

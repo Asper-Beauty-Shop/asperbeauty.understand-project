@@ -3,10 +3,15 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "./AnimatedSection";
 import { LazyImage } from "./LazyImage";
 
-const anthelios = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80";
-const olaplex = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80";
-const eucerin = "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&q=80";
-const diorSauvage = "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&q=80";
+import antheliosImg from "@/assets/products/lrp-anthelios-uvmune.png";
+import olaplexImg from "@/assets/products/olaplex-no3-perfector.png";
+import eucerinImg from "@/assets/products/eucerin-anti-pigment-serum.png";
+import diorSauvageImg from "@/assets/products/dior-sauvage-elixir.png";
+
+const anthelios = antheliosImg;
+const olaplex = olaplexImg;
+const eucerin = eucerinImg;
+const diorSauvage = diorSauvageImg;
 
 const products = [
   {
@@ -120,3 +125,4 @@ export const AmmanEdit = () => {
     </section>
   );
 };
+

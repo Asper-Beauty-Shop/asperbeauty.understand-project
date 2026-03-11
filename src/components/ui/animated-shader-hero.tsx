@@ -625,3 +625,4 @@ const AnimatedShaderHero: React.FC<HeroProps> = ({
 };
 
 export default AnimatedShaderHero;
+

@@ -198,7 +198,7 @@ export default function DriverDashboard() {
 
       const { error } = await supabase
         .from("cod_orders")
-        .update(updateData as never)
+        .update(updateData)
         .eq("id", orderId);
 
       if (error) throw error;

@@ -79,3 +79,4 @@ export const ChatProductCard: React.FC<ChatProductCardProps> = ({ product, onAdd
 };
 
 export default ChatProductCard;
+
