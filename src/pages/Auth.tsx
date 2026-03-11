@@ -53,16 +53,7 @@ const passwordSchema = z.string().min(
   8,
   "Password must be at least 8 characters",
 ).max(72, "Password too long");
-const nameSchema = z.string().trim().max(100, "Name too long")
-  .refine(
-    (val) => val === "" || val.length >= 2,
-    "Name must be at least 2 characters",
-  )
-  .refine(
-    (val) => val === "" || /^[a-zA-Z\u0600-\u06FF\s'-]+$/.test(val),
-    "Name can only contain letters, spaces, hyphens, and apostrophes",
-  )
-  .optional();
+const nameSchema = z.string().trim().max(100, "Name too long").optional();
 
 // Strong password schema for signup
 const strongPasswordSchema = z.string()
@@ -84,11 +75,7 @@ const loginSchema = z.object({
 const signupSchema = z.object({
   email: emailSchema,
   password: strongPasswordSchema,
-  confirmPassword: z.string(),
   fullName: nameSchema,
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
 });
 
 // Helper function to format lockout time
@@ -125,12 +112,10 @@ export default function Auth() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmailSent, setResetEmailSent] = useState(false);
 
@@ -197,78 +182,12 @@ export default function Auth() {
     captchaRef.current?.resetCaptcha();
   };
 
-  const handleEmailBlur = () => {
-    setEmail((prev) => prev.trim());
-    setTouched((prev) => ({ ...prev, email: true }));
-    try {
-      emailSchema.parse(email.trim());
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next.email;
-        return next;
-      });
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        setErrors((prev) => ({ ...prev, email: err.errors[0].message }));
-      }
-    }
-  };
-
-  const handlePasswordBlur = (isSignup: boolean) => {
-    setTouched((prev) => ({ ...prev, password: true }));
-    const schema = isSignup ? strongPasswordSchema : passwordSchema;
-    try {
-      schema.parse(password);
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next.password;
-        return next;
-      });
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        setErrors((prev) => ({ ...prev, password: err.errors[0].message }));
-      }
-    }
-  };
-
-  const handleConfirmPasswordBlur = () => {
-    setTouched((prev) => ({ ...prev, confirmPassword: true }));
-    if (confirmPassword && confirmPassword !== password) {
-      setErrors((prev) => ({
-        ...prev,
-        confirmPassword: "Passwords do not match",
-      }));
-    } else {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next.confirmPassword;
-        return next;
-      });
-    }
-  };
-
-  const handleNameBlur = () => {
-    setTouched((prev) => ({ ...prev, fullName: true }));
-    try {
-      nameSchema.parse(fullName);
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next.fullName;
-        return next;
-      });
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        setErrors((prev) => ({ ...prev, fullName: err.errors[0].message }));
-      }
-    }
-  };
-
   const validateForm = (isLogin: boolean) => {
     try {
       if (isLogin) {
         loginSchema.parse({ email, password });
       } else {
-        signupSchema.parse({ email, password, confirmPassword, fullName });
+        signupSchema.parse({ email, password, fullName });
       }
       setErrors({});
       return true;
@@ -672,15 +591,12 @@ export default function Auth() {
                         placeholder="your@email.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        onBlur={handleEmailBlur}
                         className="pl-10"
                         disabled={!loginRateLimiter.canAttempt}
-                        aria-invalid={touched.email && !!errors.email}
-                        aria-describedby={errors.email ? "login-email-error" : undefined}
                       />
                     </div>
                     {errors.email && (
-                      <p id="login-email-error" className="text-sm text-destructive" role="alert">{errors.email}</p>
+                      <p className="text-sm text-destructive">{errors.email}</p>
                     )}
                   </div>
                   <div className="space-y-2">
@@ -693,11 +609,8 @@ export default function Auth() {
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        onBlur={() => handlePasswordBlur(false)}
                         className="pl-10 pr-10"
                         disabled={!loginRateLimiter.canAttempt}
-                        aria-invalid={touched.password && !!errors.password}
-                        aria-describedby={errors.password ? "login-password-error" : undefined}
                       />
                       <button
                         type="button"
@@ -711,7 +624,7 @@ export default function Auth() {
                       </button>
                     </div>
                     {errors.password && (
-                      <p id="login-password-error" className="text-sm text-destructive" role="alert">
+                      <p className="text-sm text-destructive">
                         {errors.password}
                       </p>
                     )}
@@ -785,15 +698,12 @@ export default function Auth() {
                         placeholder="Your Name"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        onBlur={handleNameBlur}
                         className="pl-10"
                         disabled={!signupRateLimiter.canAttempt}
-                        aria-invalid={touched.fullName && !!errors.fullName}
-                        aria-describedby={errors.fullName ? "signup-name-error" : undefined}
                       />
                     </div>
                     {errors.fullName && (
-                      <p id="signup-name-error" className="text-sm text-destructive" role="alert">
+                      <p className="text-sm text-destructive">
                         {errors.fullName}
                       </p>
                     )}
@@ -808,15 +718,12 @@ export default function Auth() {
                         placeholder="your@email.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        onBlur={handleEmailBlur}
                         className="pl-10"
                         disabled={!signupRateLimiter.canAttempt}
-                        aria-invalid={touched.email && !!errors.email}
-                        aria-describedby={errors.email ? "signup-email-error" : undefined}
                       />
                     </div>
                     {errors.email && (
-                      <p id="signup-email-error" className="text-sm text-destructive" role="alert">{errors.email}</p>
+                      <p className="text-sm text-destructive">{errors.email}</p>
                     )}
                   </div>
                   <div className="space-y-2">
@@ -829,11 +736,8 @@ export default function Auth() {
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        onBlur={() => handlePasswordBlur(true)}
                         className="pl-10 pr-10"
                         disabled={!signupRateLimiter.canAttempt}
-                        aria-invalid={touched.password && !!errors.password}
-                        aria-describedby={errors.password ? "signup-password-error" : undefined}
                       />
                       <button
                         type="button"
@@ -848,31 +752,8 @@ export default function Auth() {
                     </div>
                     <PasswordStrengthIndicator password={password} />
                     {errors.password && (
-                      <p id="signup-password-error" className="text-sm text-destructive" role="alert">
+                      <p className="text-sm text-destructive">
                         {errors.password}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-confirm-password">Confirm Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="signup-confirm-password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        onBlur={handleConfirmPasswordBlur}
-                        className="pl-10"
-                        disabled={!signupRateLimiter.canAttempt}
-                        aria-invalid={touched.confirmPassword && !!errors.confirmPassword}
-                        aria-describedby={errors.confirmPassword ? "signup-confirm-password-error" : undefined}
-                      />
-                    </div>
-                    {errors.confirmPassword && (
-                      <p id="signup-confirm-password-error" className="text-sm text-destructive" role="alert">
-                        {errors.confirmPassword}
                       </p>
                     )}
                   </div>

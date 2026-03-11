@@ -1,19 +1,7 @@
-<<<<<<< HEAD
-Main site: https://www.asperbeautyshop.com/ Repo: asperpharma/understand-project Lovable: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings Supabase project ID (correct): qqceibvalkoytafynwoc — use this for all Brain, Auth, and Edge Functions.
-=======
-<<<<<<< HEAD
-Main site: https://www.asperbeautyshop.com/ Repo: asperpharma/understand-project Lovable: https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings Supabase project ID (correct): qqceibvalkoytafynwoc — use this for all Brain, Auth, and Edge Functions.
->>>>>>> fix/pr32-ci
-=======
 # Apply All Updates, Brain & Everything to Main Website
-Use this checklist to run all updates and apply the brain, social media, Google Merchant Center, and every page to the main Asper Beauty Shop website.
 
-
->>>>>>> fix/pr32-ci
 **Main site:** https://asperbeautyshop-com.lovable.app/  
 **Repo:** asperpharma/understand-project  
-Use this checklist to run all updates and apply the brain, social media, Google Merchant Center, and every page to the main Asper Beauty Shop website.
-
 **Lovable:** https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings  
 **Supabase project ID (correct):** `qqceibvalkoytafynwoc` — use this for all Brain, Auth, and Edge Functions.
 

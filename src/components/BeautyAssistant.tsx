@@ -29,12 +29,11 @@ export const BeautyAssistant = () => {
     }
   }, [messages]);
 
-  const handleSend = async (messageOverride?: string) => {
-    const text = (messageOverride ?? inputValue).trim();
-    if (!text) return;
-    const userMsg = { role: "user", content: text };
+  const handleSend = async () => {
+    if (!inputValue.trim()) return;
+    const userMsg = { role: "user", content: inputValue };
     setMessages(prev => [...prev, userMsg]);
-    if (!messageOverride) setInput("");
+    setInput("");
     setIsLoading(true);
 
     try {
@@ -145,7 +144,26 @@ export const BeautyAssistant = () => {
                     {['Routine for acne-prone skin', 'Best anti-aging serum', 'Daily hydration for sensitive skin'].map((suggestion, idx) => (
                       <button 
                         key={idx}
-                        onClick={() => handleSend(suggestion)}
+                        onClick={() => {
+                          setInput(suggestion);
+                          // We wait a tick to ensure state is updated before sending
+                          setTimeout(() => {
+                             const userMsg = { role: "user", content: suggestion };
+                             setMessages(prev => [...prev, userMsg]);
+                             setInput("");
+                             setIsLoading(true);
+                             supabase.functions.invoke('beauty-assistant', { body: { messages: [userMsg], language } })
+                               .then(({data, error}) => {
+                                  if(error) throw error;
+                                  setMessages(prev => [...prev, { role: "assistant", content: data.reply, trayProducts: data.products }]);
+                               })
+                               .catch(err => {
+                                  console.error(err);
+                                  toast.error(ASPER_PROTOCOL.errorShort[language === 'ar' ? 'ar' : 'en']);
+                               })
+                               .finally(() => setIsLoading(false));
+                          }, 50);
+                        }}
                         className="text-left px-4 py-3 text-sm bg-white border border-polished-gold/20 rounded-xl text-asper-ink/80 hover:bg-polished-gold/5 hover:border-polished-gold/40 hover:text-asper-ink transition-all shadow-sm active:scale-95"
                       >
                         {isAr && idx === 0 ? "روتين للبشرة المعرضة لحب الشباب" : 

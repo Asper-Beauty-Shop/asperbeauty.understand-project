@@ -32,5 +32,3 @@ Supabase_files
 .claude/
 .claudefesii/
 .snapshots/
-# Local MCP config (env-specific URL); use .mcp.json.example as template
-.mcp.json

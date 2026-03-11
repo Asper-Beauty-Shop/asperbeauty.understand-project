@@ -37,22 +37,6 @@ Do **not** commit `.env`; it is in `.gitignore`.
 
 ---
 
-## 3b. Optional: MCP (cc-workflow-studio)
-
-If you use the **cc-workflow-studio** MCP server (e.g. Toolkit or workflow tooling), the config is **local-only** and must not be committed—it contains a machine-specific URL.
-
-- **Cursor IDE** reads project-level MCP config from **`.cursor/mcp.json`** (the `.cursor/` directory is in `.gitignore`).
-- **Other tools** (e.g. Claude Code) may read **`.mcp.json`** at the repo root; that file is also in `.gitignore`.
-
-**Setup:** Copy the example and set your local URL:
-
-- From repo root: `cp .mcp.json.example .mcp.json` (or for Cursor only: copy to `.cursor/mcp.json`).
-- Edit the `url` to your running server (e.g. `http://127.0.0.1:59438/mcp`). Port and host are specific to your environment.
-
-See [development.md](../development.md) for other local tooling notes.
-
----
-
 ## 4. Cursor User settings (applyToAllProfiles)
 
 So key settings apply across profiles, add this to **User** `settings.json` (File → Preferences → Settings → **Open Settings JSON**):
@@ -102,7 +86,6 @@ Use a feature branch and PR when branch protection applies; see [PUSH-BLOCKER.md
 | Install Cursor     | cursor.com, then optional ExecutionPolicy (see [development.md](../development.md))                                                              |
 | Clone & open       | `git clone` → `npm i` → Open Folder in Cursor                                                                                                 |
 | Env                | [BRAIN-CONFIG.md](../BRAIN-CONFIG.md) → `.env` at repo root                                                                                   |
-| MCP (optional)     | `.mcp.json.example` → copy to `.cursor/mcp.json` or `.mcp.json`; set local URL (do not commit)                                                 |
 | User settings      | applyToAllProfiles in settings.json; if broken → [CURSOR-SETTINGS-FIX.md](../../CURSOR-SETTINGS-FIX.md)                                       |
 | Verify             | `npm run sync` then `npm run health`                                                                                                          |
 | Deploy to main     | [APPLY_AND_RUN.md](../APPLY_AND_RUN.md) and [APPLY_TO_MAIN_SITE.md](../../APPLY_TO_MAIN_SITE.md)                                                 |

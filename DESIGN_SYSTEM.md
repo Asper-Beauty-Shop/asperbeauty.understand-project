@@ -1,6 +1,6 @@
 # Asper Beauty Shop — Visual Values & Design System
 
-**Use this document for every UI component and marketing asset.**
+**Use this document for every UI component and marketing asset.**  
 **When coding with Cursor/Claude, apply these rules to achieve consistent, on-brand results.**
 
 ---

@@ -36,14 +36,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\antigravity-diagnos
 
 If you **don't use Antigravity**, disable or uninstall the *"Toolkit for Antigravity"* extension in Cursor to stop connection attempts and quota messages.
 
----
-
-## MCP (cc-workflow-studio)
-
-MCP config is **local-only**: the URL is machine- and port-specific and must not be committed. Cursor reads project MCP config from **`.cursor/mcp.json`**; other tools may use **`.mcp.json`** at repo root. Both paths are in `.gitignore`. Setup: see [Install Cursor → Optional: MCP](installation-guides/install-cursor.md#3b-optional-mcp-cc-workflow-studio) and use `.mcp.json.example` as a template.
-
----
-
 ### Optional: feature flag (frontend)
 
 Per Operational-Workflow-Rules, wrap Antigravity panel / connection / diagnostic UI in a feature flag. Control via env: `VITE_FEATURE_ANTIGRAVITY=true|false` (see `env.main-site.example` and APPLY_TO_MAIN_SITE.md).
