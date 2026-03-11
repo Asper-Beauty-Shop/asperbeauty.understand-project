@@ -5,7 +5,8 @@
       "Bash(gh pr list:*)",
       "Bash(gh auth:*)",
       "Bash(gh pr create:*)",
-      "Bash(gh pr view:*)"
+      "Bash(gh pr view:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

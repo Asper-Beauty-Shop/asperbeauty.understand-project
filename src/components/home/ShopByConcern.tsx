@@ -40,7 +40,7 @@ export default function ShopByConcern() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
           {concerns.map((c, i) => (
             <motion.div
               key={c.label}
@@ -51,15 +51,15 @@ export default function ShopByConcern() {
             >
               <Link
                 to={`/products?q=${encodeURIComponent(c.query)}`}
-                className="group flex flex-col items-center gap-3 p-6 rounded-lg border border-border bg-card hover:border-accent/50 hover:shadow-lg transition-all duration-300"
+                className="group flex flex-col items-center gap-3 p-4 sm:p-6 h-full rounded-xl border border-border bg-card hover:border-accent/50 hover:shadow-[0_8px_30px_rgba(212,175,55,0.15)] transition-all duration-300 active:scale-95"
               >
-                <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center group-hover:bg-accent/10 transition-colors">
+                <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center group-hover:bg-accent/10 transition-colors shadow-inner">
                   <c.Icon
                     size={26}
                     className="text-primary group-hover:text-accent transition-colors duration-300"
                   />
                 </div>
-                <span className="font-body text-sm font-medium text-foreground text-center">
+                <span className="font-body text-xs sm:text-sm font-medium text-foreground text-center tracking-wide">
                   {c.label}
                 </span>
               </Link>

@@ -1,5 +1,5 @@
 /**
- * Beauty Assistant — Asper Beauty Shop AI Concierge (Dr. Sami / Ms. Zain).
+ * Beauty Assistant ΓÇö Asper Beauty Shop AI Concierge (Dr. Sami / Ms. Zain).
  *
  * Webhook routes (?route=gorgias | ?route=manychat):
  * - HMAC: GORGIAS_WEBHOOK_SECRET (x-gorgias-signature), MANYCHAT_WEBHOOK_SECRET (x-hub-signature-256).
@@ -10,9 +10,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // Strict CORS: only allow listed origins (no wildcard for web)
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 const WEBHOOK_HEADERS =
   "content-type, x-webhook-route, x-gorgias-signature, x-hub-signature-256";
 const SITE_HEADERS =
@@ -42,9 +42,9 @@ function getCorsHeaders(req: Request, options?: { webhookRoute?: boolean }): Rec
   };
 }
 
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // Rate limit: 30 requests per 60 seconds per IP per webhook route
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 30;
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
@@ -83,9 +83,9 @@ function checkRateLimit(ip: string, route: string): { ok: boolean; retryAfter?: 
   return { ok: true };
 }
 
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // HMAC verification for Gorgias and ManyChat webhooks
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 async function hmacSha256Hex(secret: string, body: string): Promise<string> {
   const key = await crypto.subtle.importKey(
     "raw",
@@ -286,9 +286,9 @@ async function fetchProductContext(
   return { productContext, matchedProducts };
 }
 
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // System Prompt Builder
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 function buildSystemPrompt(
   productContext: string,
   shopRoutinePath: string | null,
@@ -296,28 +296,28 @@ function buildSystemPrompt(
 ): string {
   const contextLine =
     uiContext?.current_concern || uiContext?.skin_type
-      ? `\n**User context from UI:** ${[uiContext.current_concern, uiContext.skin_type].filter(Boolean).join(" · ")}. Use this to tailor your first reply without asking again.\n`
+      ? `\n**User context from UI:** ${[uiContext.current_concern, uiContext.skin_type].filter(Boolean).join(" ┬╖ ")}. Use this to tailor your first reply without asking again.\n`
       : "";
-  return `You are the **Asper Dual-Voice Concierge** for Asper Beauty Shop in Jordan — operating as either **Dr. Sami** (Voice of Science) or **Ms. Zain** (Voice of Luxury) depending on the user's intent. Both voices share the same Medical Luxury identity: pharmacist-curated, authentic, precise, never pushy. Recommend ONLY from the product inventory listed below when available; name title, brand, and price.
+  return `You are the **Asper Dual-Voice Concierge** for Asper Beauty Shop in Jordan ΓÇö operating as either **Dr. Sami** (Voice of Science) or **Ms. Zain** (Voice of Luxury) depending on the user's intent. Both voices share the same Medical Luxury identity: pharmacist-curated, authentic, precise, never pushy. Recommend ONLY from the product inventory listed below when available; name title, brand, and price.
 ${contextLine}
 
-**DR. SAMI — The Voice of Science** (clinical/safety queries)
+**DR. SAMI ΓÇö The Voice of Science** (clinical/safety queries)
 - Trigger: acne, rosacea, eczema, hyperpigmentation, pregnancy, ingredient, barrier, retinol, SPF, allergy, supplement, dosage, safety, pharmacist
 - Tone: Authoritative, precise, empathetic. Intro: "As your clinical pharmacist..."
 - Mandatory guardrail: "I provide wellness guidance, not medical diagnosis."
 
-**MS. ZAIN — The Voice of Luxury** (aesthetic/lifestyle queries)
+**MS. ZAIN ΓÇö The Voice of Luxury** (aesthetic/lifestyle queries)
 - Trigger: glow, radiance, makeup, gift, bridal, routine, fragrance, luxury, dewy, pamper
 - Tone: Editorial, warm, enthusiastic. Intro: "Welcome to your personal beauty ritual..."
 
-**Rules:** Default Dr. Sami if unclear. Switch seamlessly — never announce. Both share continuous memory.
+**Rules:** Default Dr. Sami if unclear. Switch seamlessly ΓÇö never announce. Both share continuous memory.
 
-**3-Click Solution (first reply):** (1) Confirm concern in one sentence. (2) Recommend ONE authoritative regimen: Step 1 Cleanser → Step 2 Treatment → Step 3 Protection. (3) Close with "Shall I add this tray to your cart?"
+**3-Click Solution (first reply):** (1) Confirm concern in one sentence. (2) Recommend ONE authoritative regimen: Step 1 Cleanser ΓåÆ Step 2 Treatment ΓåÆ Step 3 Protection. (3) Close with "Shall I add this tray to your cart?"
 ${shopRoutinePath ? `\n**Regimen Link:** [See My Regimen](${shopRoutinePath})` : ""}
 
-**Sales Intelligence:** If user hesitates, pivot to trust: "Every bottle carries our Seal of Authenticity — pharmacist-vetted, JFDA certified."
+**Sales Intelligence:** If user hesitates, pivot to trust: "Every bottle carries our Seal of Authenticity ΓÇö pharmacist-vetted, JFDA certified."
 
-**Knowledge:** All products 100% authentic. Brands: Bioderma, Kérastase, YSL, Maybelline, Garnier, Beesline, Bio Balance, Seventeen, Petal Fresh.
+**Knowledge:** All products 100% authentic. Brands: Bioderma, K├⌐rastase, YSL, Maybelline, Garnier, Beesline, Bio Balance, Seventeen, Petal Fresh.
 **Language:** Respond in the same language as the user (English or Arabic only).
 **Shipping:** Amman 3 JOD; Governorates 5 JOD; FREE over 50 JOD.
 
@@ -325,9 +325,9 @@ ${shopRoutinePath ? `\n**Regimen Link:** [See My Regimen](${shopRoutinePath})` :
 ${productContext}`;
 }
 
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // Main Handler
-// ──────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: getCorsHeaders(req) });
@@ -350,7 +350,7 @@ serve(async (req) => {
   const route = getWebhookRoute(req);
   const corsWebhook = (r: Request) => getCorsHeaders(r, { webhookRoute: true });
 
-  // ——— Webhook Path (Gorgias / ManyChat) — HMAC + rate limit + strict CORS ———
+  // ΓÇöΓÇöΓÇö Webhook Path (Gorgias / ManyChat) ΓÇö HMAC + rate limit + strict CORS ΓÇöΓÇöΓÇö
   if (route === "gorgias" || route === "manychat") {
     try {
       // 1. Rate limit (before any heavy work)
@@ -483,9 +483,9 @@ serve(async (req) => {
               ],
               actions: [],
               quick_replies: [
-                { type: "node", caption: "🧴 Acne Help", target: "acne" },
-                { type: "node", caption: "✨ Glow Routine", target: "glow" },
-                { type: "node", caption: "👤 Talk to Human", target: "human" },
+                { type: "node", caption: "≡ƒº┤ Acne Help", target: "acne" },
+                { type: "node", caption: "Γ£¿ Glow Routine", target: "glow" },
+                { type: "node", caption: "≡ƒæñ Talk to Human", target: "human" },
               ],
             },
             reply: replyText || "Sorry, I couldn't process that. Please try again.",
@@ -507,7 +507,7 @@ serve(async (req) => {
     }
   }
 
-  // ——— Website Chat (requires Supabase Auth, streams SSE) ———
+  // ΓÇöΓÇöΓÇö Website Chat (requires Supabase Auth, streams SSE) ΓÇöΓÇöΓÇö
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
@@ -541,22 +541,18 @@ serve(async (req) => {
     const context = body.context && typeof body.context === "object" ? body.context as Record<string, unknown> : {};
     const contextConcern = typeof context.current_concern === "string" ? context.current_concern : undefined;
 
-    // Same key resolution as webhook: allow GEMINI_API_KEY or LOVABLE_API_KEY
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const geminiKey = Deno.env.get("GEMINI_API_KEY");
-    const apiKey = geminiKey ?? LOVABLE_API_KEY;
-    if (!apiKey) {
-      throw new Error("LOVABLE_API_KEY or GEMINI_API_KEY must be configured");
+    if (!LOVABLE_API_KEY) {
+      throw new Error("LOVABLE_API_KEY is not configured");
     }
-    const useLovableGateway = !!LOVABLE_API_KEY && !geminiKey;
 
-    // Log campaign source and session for attribution/tracing (await to avoid race / silent failure)
+    // Log campaign source and session for attribution/tracing
     if (campaignSource || sessionId) {
       const adminClient = createClient(
         Deno.env.get("SUPABASE_URL")!,
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
       );
-      const { error: telemetryError } = await adminClient.from("telemetry_events").insert({
+      adminClient.from("telemetry_events").insert({
         user_id: userId,
         event: "ai_concierge_request",
         source: "beauty_assistant",
@@ -565,8 +561,9 @@ serve(async (req) => {
           campaign_source: campaignSource ?? null,
           has_context_concern: !!contextConcern,
         },
+      }).then(({ error }) => {
+        if (error) console.error("Telemetry insert error:", error.message);
       });
-      if (telemetryError) console.error("Telemetry insert error:", telemetryError.message);
     }
 
     // Extract last user message for product matching
@@ -580,14 +577,14 @@ serve(async (req) => {
     // Prefer context.current_concern from UI (e.g. "Dark Circles" tab) then fall back to message-based detection
     const concernFromContext = concernLabelToSlug(contextConcern);
     const concernFromMessage = detectConcernSlug(lastText);
-    const detectedConcernSlug = concernFromContext ?? concernFromMessage;
+    const detectedConcernSlug = concernFromMessage ?? concernFromContext;
     const shopRoutinePath = detectedConcernSlug ? `/products?concern=${detectedConcernSlug}` : null;
 
     // Fetch product context
     const { productContext, matchedProducts } = await fetchProductContext(supabaseClient, lastText, detectedConcernSlug);
 
     // Detect persona from user message
-    const drSamiTriggers = /acne|rosacea|eczema|hyperpigment|pregnan|حامل|حمل|ingredient|مكونات|barrier|retinol|spf|sunscreen|allergy|حساسية|salicylic|medical|طبي|clinical|pharmacist|صيدلاني|supplement|dosage|safety/i;
+    const drSamiTriggers = /acne|rosacea|eczema|hyperpigment|pregnan|╪¡╪º┘à┘ä|╪¡┘à┘ä|ingredient|┘à┘â┘ê┘å╪º╪¬|barrier|retinol|spf|sunscreen|allergy|╪¡╪│╪º╪│┘è╪⌐|salicylic|medical|╪╖╪¿┘è|clinical|pharmacist|╪╡┘è╪»┘ä╪º┘å┘è|supplement|dosage|safety/i;
     const persona = drSamiTriggers.test(lastText) ? "dr_sami" : "ms_zain";
 
     const uiContext =
@@ -596,6 +593,30 @@ serve(async (req) => {
         : undefined;
     const systemPrompt = buildSystemPrompt(productContext, shopRoutinePath, uiContext);
 
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "google/gemini-3-flash-preview",
+        messages: [{ role: "system", content: systemPrompt }, ...messages],
+        stream: true,
+      }),
+    });
+
+    if (!response.ok) {
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again." }), {
+          status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+      const errorText = await response.text();
+      console.error("AI gateway error:", response.status, errorText);
+      return new Response(JSON.stringify({ error: "Failed to get response" }), {
+        status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+      });
+    }
+
+    // Stream response with persona header and product data events
     const encoder = new TextEncoder();
     const recommendEvent = shopRoutinePath
       ? `data: ${JSON.stringify({ type: "recommend", detected_concern: detectedConcernSlug, shop_routine_path: shopRoutinePath })}\n\n`
@@ -604,84 +625,19 @@ serve(async (req) => {
       ? `data: ${JSON.stringify({ type: "products", products: matchedProducts.map(p => ({ id: p.id, title: p.title, brand: p.brand, price: p.price, handle: p.handle, image_url: p.image_url })) })}\n\n`
       : "";
 
-    let combinedStream: ReadableStream<Uint8Array>;
-
-    if (useLovableGateway) {
-      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
-          messages: [{ role: "system", content: systemPrompt }, ...messages],
-          stream: true,
-        }),
-      });
-
-      if (!response.ok) {
-        if (response.status === 429) {
-          return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again." }), {
-            status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-          });
+    const combinedStream = new ReadableStream({
+      async start(controller) {
+        if (recommendEvent) controller.enqueue(encoder.encode(recommendEvent));
+        if (productDataEvent) controller.enqueue(encoder.encode(productDataEvent));
+        const reader = response.body!.getReader();
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          controller.enqueue(value);
         }
-        const errorText = await response.text();
-        console.error("AI gateway error:", response.status, errorText);
-        return new Response(JSON.stringify({ error: "Failed to get response" }), {
-          status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
-
-      combinedStream = new ReadableStream({
-        async start(controller) {
-          if (recommendEvent) controller.enqueue(encoder.encode(recommendEvent));
-          if (productDataEvent) controller.enqueue(encoder.encode(productDataEvent));
-          const reader = response.body!.getReader();
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            controller.enqueue(value);
-          }
-          controller.close();
-        },
-      });
-    } else {
-      // Gemini direct (same key resolution as webhook)
-      const model = Deno.env.get("GEMINI_MODEL") ?? "gemini-2.0-flash";
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: systemPrompt }] },
-            contents: [{ role: "user", parts: [{ text: lastText || "" }] }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
-          }),
-        }
-      );
-      if (!res.ok) {
-        if (res.status === 429) {
-          return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again." }), {
-            status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-          });
-        }
-        const errorText = await res.text();
-        console.error("Gemini error:", res.status, errorText);
-        return new Response(JSON.stringify({ error: "Failed to get response" }), {
-          status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
-      const data = await res.json();
-      const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-
-      combinedStream = new ReadableStream({
-        async start(controller) {
-          if (recommendEvent) controller.enqueue(encoder.encode(recommendEvent));
-          if (productDataEvent) controller.enqueue(encoder.encode(productDataEvent));
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ choices: [{ delta: { content: replyText } }] })}\n\n`));
-          controller.close();
-        },
-      });
-    }
+        controller.close();
+      },
+    });
 
     return new Response(combinedStream, {
       headers: {
@@ -717,7 +673,7 @@ function extractKeywords(text: string): string[] {
     "brightening", "anti-aging", "eye cream", "mask", "exfoliate", "rosacea", "pregnancy",
   ];
   const brandKeywords = [
-    "bioderma", "kerastase", "kérastase", "ysl", "maybelline", "garnier",
+    "bioderma", "kerastase", "k├⌐rastase", "ysl", "maybelline", "garnier",
     "beesline", "bio balance", "seventeen", "petal fresh",
   ];
 
