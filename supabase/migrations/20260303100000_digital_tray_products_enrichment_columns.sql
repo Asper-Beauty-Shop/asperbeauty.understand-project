@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS public.enrichment_pipeline_runs (
   products_skipped INTEGER DEFAULT 0,
   products_failed INTEGER DEFAULT 0,
   errors JSONB DEFAULT '[]',
-  status TEXT CHECK (status IN ('running', 'completed', 'failed', 'partial')),
+  status TEXT NOT NULL DEFAULT 'running' CHECK (status IN ('running', 'completed', 'failed', 'partial')),
   enrichment_version TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
