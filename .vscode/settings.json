@@ -1,0 +1,31 @@
+{
+    "workbench.editor.autoLockGroups": {
+        "default": true,
+        "workbench.editor.browserEditor": true,
+        "vscode.audioPreview": true,
+        "vscode.videoPreview": true,
+        "workbench.editor.allpullrequests.input": true,
+        "workbench.editor.cursorfileblame": true,
+        "workbench.input.externalTerminal": true,
+        "jsProfileVisualizer.heapprofile.table": true,
+        "cc-wf-studio.workflowPreview": true,
+        "robotframework-repl": true,
+        "workbench.editorinputs.searchEditorInput": true,
+        "jupyter-notebook": true,
+        "workbench.editor.reviewpr.input": true,
+        "repl": true,
+        "workbench.editor.markdownPlan": true,
+        "workbench.editor.cursorblame": true,
+        "imagePreview.previewEditor": true,
+        "gitlens.rebase": true,
+        "envBrowser.envEditor": true,
+        "workbench.editor.reviewchanges.input": true,
+        "workbench.editors.gettingStartedInput": true
+    },
+    "workbench.editor.centeredLayoutFixedWidth": true,
+    "workbench.editor.closeOnFileDelete": false,
+    "workbench.experimental.cloudChanges.autoStore": "onShutdown",
+    "files.autoSave": "afterDelay",
+    "notebook.multiCursor.enabled": true,
+    "workbench.editor.closeEmptyGroups": false
+}

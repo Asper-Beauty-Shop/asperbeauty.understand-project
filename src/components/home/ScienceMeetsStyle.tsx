@@ -119,7 +119,7 @@ export function ScienceMeetsStyle() {
               >
                 <Link
                   to={`/shop?brand=${encodeURIComponent(brand.slug)}`}
-                  className="group/logo block cursor-pointer"
+                  className="group/logo block cursor-pointer p-4"
                   aria-label={brand.name}
                   title={brand.name}
                 >
@@ -128,7 +128,7 @@ export function ScienceMeetsStyle() {
                     alt={`${brand.name} logo`}
                     className={cn(
                       pos.size,
-                      "h-auto object-contain",
+                      "h-20 md:h-28 object-contain",
                       "opacity-40 grayscale",
                       "group-hover/logo:opacity-100 group-hover/logo:grayscale-0",
                       "will-change-transform transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
