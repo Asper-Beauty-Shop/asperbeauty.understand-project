@@ -15,8 +15,8 @@ ALTER TABLE public.digital_tray_products
 
 -- Pipeline run audit log
 CREATE TABLE IF NOT EXISTS public.enrichment_pipeline_runs (
-  run_id UUID PRIMARY KEY,
-  started_at TIMESTAMPTZ NOT NULL,
+  run_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   completed_at TIMESTAMPTZ,
   products_scanned INTEGER DEFAULT 0,
   products_enriched INTEGER DEFAULT 0,
