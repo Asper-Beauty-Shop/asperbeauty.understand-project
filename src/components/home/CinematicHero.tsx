@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -8,18 +9,45 @@ const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 export default function CinematicHero() {
   const { locale } = useLanguage();
   const isAr = locale === "ar";
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Pause video when the user has requested reduced motion
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const applyMotionPreference = () => {
+      if (!videoRef.current) return;
+      if (mq.matches) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play()?.catch(() => {});
+      }
+    };
+    applyMotionPreference();
+    mq.addEventListener("change", applyMotionPreference);
+    return () => mq.removeEventListener("change", applyMotionPreference);
+  }, []);
 
   return (
     <section className="relative w-full min-h-[600px] overflow-hidden bg-dark-charcoal" style={{ height: '100dvh' }}>
+      {/* Explicit LCP poster for fast initial paint before video loads */}
+      <img
+        src="/images/hero-poster-cinematic.jpg"
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover object-[75%_50%] md:object-center"
+        fetchPriority="high"
+      />
+
       {/* Full-bleed video background */}
       <video
+        ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
         disablePictureInPicture
         poster="/images/hero-poster-cinematic.jpg"
-        className="absolute inset-0 w-full h-full object-cover object-center md:object-[center_center] object-[75%_50%] z-0"
+        className="absolute inset-0 w-full h-full object-cover object-[75%_50%] md:object-center z-0"
       >
         <source src="/videos/cinematic-hero.mp4" type="video/mp4" />
       </video>
