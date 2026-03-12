@@ -21,8 +21,8 @@ describe("ProductResultsGrid", () => {
     const { container } = renderWithProviders(
       <ProductResultsGrid products={undefined} isLoading={true} error={null} />
     );
-    // Skeleton renders breathing animations
-    expect(container.querySelector(".animate-skeleton-breathe")).toBeTruthy();
+    // Skeleton renders pulse animations
+    expect(container.querySelector(".animate-pulse")).toBeTruthy();
   });
 
   it("shows error message when error is provided", () => {

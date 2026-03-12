@@ -327,9 +327,7 @@ export default function Shop() {
   }, [products]);
 
   const filteredProducts = useMemo(() => {
-    const eliteBrands = ["Chanel", "Dior", "La Mer", "Augustinus Bader", "Vichy", "La Roche-Posay"];
-    
-    const filtered = products.filter((product) => {
+    return products.filter((product) => {
       // Filter by asper_category sidebar
       if (categoryParam && categoryParam !== "All Curation" && (product as any).asper_category !== categoryParam) return false;
 
@@ -350,16 +348,6 @@ export default function Shop() {
       const price = product.price ?? 0;
       if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
       return true;
-    });
-
-    // Apply Elite Brand Sorting
-    return [...filtered].sort((a, b) => {
-      const aIsElite = a.brand ? eliteBrands.includes(a.brand) : false;
-      const bIsElite = b.brand ? eliteBrands.includes(b.brand) : false;
-      
-      if (aIsElite && !bIsElite) return -1;
-      if (!aIsElite && bIsElite) return 1;
-      return 0;
     });
   }, [products, filters, categoryParam]);
 
