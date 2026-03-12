@@ -1,15 +1,15 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Lock, ChevronDown, CreditCard, Banknote, Loader2, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCartStore } from "@/stores/cartStore";
-import AsperLogo from "@/components/brand/AsperLogo";
-import { cn } from "@/lib/utils";
-import { normalizePrice } from "@/lib/shopify";
-import { playSuccessSound } from "@/lib/sounds";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { useCartStore } from "../stores/cartStore";
+import AsperLogo from "../components/brand/AsperLogo";
+import { cn } from "../lib/utils";
+import { normalizePrice } from "../lib/shopify";
+import { playSuccessSound } from "../lib/sounds";
 
 /* ─── Jordanian Location Data ─── */
 const CITIES = [
@@ -35,7 +35,7 @@ type PaymentMethod = "cod" | "card";
 export default function Checkout() {
   const navigate = useNavigate();
   const { items, getCheckoutUrl } = useCartStore();
-  const totalPrice = items.reduce((sum, item) => sum + normalizePrice(item.price.amount) * item.quantity, 0);
+  const totalPrice = items.reduce((sum: number, item: any) => sum + normalizePrice(item.price.amount) * item.quantity, 0);
   const deliveryFee = totalPrice >= 50 ? 0 : 3;
   const currency = items[0]?.price.currencyCode || "JOD";
 
@@ -129,7 +129,7 @@ export default function Checkout() {
         <section className="space-y-4">
           <h2 className="font-heading text-lg text-foreground">Order Summary</h2>
           <div className="space-y-3">
-            {items.map((item) => (
+            {items.map((item: any) => (
               <div key={item.variantId} className="flex items-center gap-3 rounded-lg border border-border/50 bg-card p-3">
                 <div className="h-12 w-12 rounded-md bg-secondary overflow-hidden shrink-0 flex items-center justify-center">
                   {item.product.node.images?.edges?.[0]?.node && (
@@ -178,7 +178,7 @@ export default function Checkout() {
               <Input
                 id="fullName"
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)}
                 placeholder="Enter your full name"
                 className={cn(
                   "h-12 rounded-xl font-body",
@@ -201,7 +201,7 @@ export default function Checkout() {
                   id="phone"
                   type="tel"
                   value={phone}
-                  onChange={(e) => formatPhone(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => formatPhone(e.target.value)}
                   placeholder="7X XXX XXXX"
                   maxLength={10}
                   className={cn(
@@ -259,7 +259,7 @@ export default function Checkout() {
               <Input
                 id="address"
                 value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddress(e.target.value)}
                 placeholder="Building name, street, floor"
                 className={cn(
                   "h-12 rounded-xl font-body",
