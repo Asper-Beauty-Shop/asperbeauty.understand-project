@@ -147,7 +147,7 @@ export const BeautyAssistant = () => {
               {messages.length === 0 && (
                 <div className="text-center py-6">
                   <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-polished-gold/20 to-transparent flex items-center justify-center border border-polished-gold/30 shadow-[0_4px_20px_-5px_rgba(212,175,55,0.3)]">
-                    <img src={personaTheme.icon} className="w-16 h-16 object-contain" alt="Icon" />
+                    <img src="/dr-bot-character.png" className="w-16 h-16 object-contain" alt="Dr. Sami Icon" />
                   </div>
                   <h4 className="text-asper-ink font-heading text-xl font-bold mb-2">
                     {activePersona === "dr_sami" 
@@ -155,27 +155,40 @@ export const BeautyAssistant = () => {
                       : (isAr ? "روتين الجمال" : "Beauty Rituals")}
                   </h4>
                   <p className="text-asper-ink/70 text-sm max-w-xs mx-auto leading-relaxed mb-6">
-                    {activePersona === "dr_sami"
-                      ? (isAr ? "أنا هنا لمساعدتك في اختيار الروتين الطبي الأمثل لبشرتك." : "I am here to guide you through medical-grade skincare protocols.")
-                      : (isAr ? "أهلاً بكِ. دعينا نكتشف أفضل منتجات المكياج والعناية اليومية." : "Welcome. Let's find your perfect daily style and glow essentials.")}
+                    {isAr 
+                      ? "أهلاً بكِ في عيادتنا الرقمية. صفي لي حالة بشرتكِ أو اختاري مما يلي:"
+                      : "Welcome to our digital clinic. Tell me about your skin concerns or select an option below:"}
                   </p>
                   
                   <div className="flex flex-col gap-2 px-4">
-                    {(activePersona === "dr_sami" 
-                      ? ['Routine for acne-prone skin', 'Best anti-aging protocol', 'Barrier repair for sensitive skin']
-                      : ['Natural everyday makeup', 'Long-lasting lipstick shades', 'Morning spa routine steps']
-                    ).map((suggestion, idx) => (
+                    {['Routine for acne-prone skin', 'Best anti-aging serum', 'Daily hydration for sensitive skin'].map((suggestion, idx) => (
                       <button 
                         key={idx}
-                        onClick={() => handleSend(suggestion)}
+                        onClick={() => {
+                          setInput(suggestion);
+                          // We wait a tick to ensure state is updated before sending
+                          setTimeout(() => {
+                             const userMsg = { role: "user", content: suggestion };
+                             setMessages(prev => [...prev, userMsg]);
+                             setInput("");
+                             setIsLoading(true);
+                             supabase.functions.invoke('beauty-assistant', { body: { messages: [userMsg], language } })
+                               .then(({data, error}) => {
+                                  if(error) throw error;
+                                  setMessages(prev => [...prev, { role: "assistant", content: data.reply, trayProducts: data.products }]);
+                               })
+                               .catch(err => {
+                                  console.error(err);
+                                  toast.error(ASPER_PROTOCOL.errorShort[language === 'ar' ? 'ar' : 'en']);
+                               })
+                               .finally(() => setIsLoading(false));
+                          }, 50);
+                        }}
                         className="text-left px-4 py-3 text-sm bg-white border border-polished-gold/20 rounded-xl text-asper-ink/80 hover:bg-polished-gold/5 hover:border-polished-gold/40 hover:text-asper-ink transition-all shadow-sm active:scale-95"
                       >
-                        {isAr && activePersona === "dr_sami" && idx === 0 ? "روتين للبشرة المعرضة لحب الشباب" : 
-                         isAr && activePersona === "dr_sami" && idx === 1 ? "أفضل بروتوكول لمقاومة التجاعيد" : 
-                         isAr && activePersona === "dr_sami" && idx === 2 ? "إصلاح حاجز البشرة الحساسة" : 
-                         isAr && activePersona === "ms_zain" && idx === 0 ? "مكياج يومي طبيعي" : 
-                         isAr && activePersona === "ms_zain" && idx === 1 ? "ألوان أحمر شفاه تدوم طويلاً" : 
-                         isAr && activePersona === "ms_zain" && idx === 2 ? "خطوات روتين السبا الصباحي" : suggestion}
+                        {isAr && idx === 0 ? "روتين للبشرة المعرضة لحب الشباب" : 
+                         isAr && idx === 1 ? "أفضل سيروم مقاوم للتجاعيد" : 
+                         isAr && idx === 2 ? "ترطيب يومي للبشرة الحساسة" : suggestion}
                       </button>
                     ))}
                   </div>
