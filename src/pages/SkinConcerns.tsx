@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ProductCard } from "@/components/ProductCard";
+import LuxuryProductCard from "@/components/LuxuryProductCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
 import {

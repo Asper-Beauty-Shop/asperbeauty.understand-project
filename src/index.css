@@ -157,6 +157,15 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: hsla(345, 100%, 25%, 0.2); /* Deep Maroon with opacity */
+    color: hsl(var(--burgundy));
+  }
+
   body {
     @apply bg-soft-ivory text-dark-charcoal font-body antialiased;
   }
@@ -972,6 +981,26 @@ body { background-color: hsl(240 100% 99%); color: #333333; }
 @keyframes marquee-rtl {
   0% { transform: translate3d(-50%, 0, 0); }
   100% { transform: translate3d(0, 0, 0); }
+}
+
+/* ─── Clinical Reveal Staggered Animations ─── */
+@keyframes clinicalReveal {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-clinical-reveal {
+  animation: clinicalReveal 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 0; /* Forces elements to stay hidden until their delay triggers */
+}
+
+/* ─── Scrollbar Management ─── */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* postcss rebuild trigger */

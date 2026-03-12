@@ -80,15 +80,23 @@ export function ScienceMeetsStyle() {
           <div className="luxury-divider mt-6" />
         </motion.div>
 
-        {/* Chaotic Floating Brand Cloud */}
-        <div className="relative w-full" style={{ height: "clamp(420px, 55vw, 650px)" }}>
+        {/* Responsive Brand Cloud: Grid on mobile, Scattered on desktop */}
+        <div 
+          className="grid grid-cols-3 gap-x-4 gap-y-10 md:block md:relative w-full h-auto md:h-[clamp(420px,55vw,650px)]"
+        >
           {ALL_BRANDS.map((brand, i) => {
             const pos = SCATTER_POSITIONS[i % SCATTER_POSITIONS.length];
+            const isDesktop = typeof window !== 'undefined' && window.innerWidth > 768;
+            
             return (
               <motion.div
                 key={brand.slug}
-                className="absolute"
-                style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%)" }}
+                className="relative md:absolute flex justify-center items-center"
+                style={isDesktop ? { 
+                  left: pos.x, 
+                  top: pos.y, 
+                  transform: "translate(-50%, -50%)" 
+                } : {}}
                 initial={{ opacity: 0, scale: 0.6 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, margin: "-60px" }}
@@ -127,12 +135,10 @@ export function ScienceMeetsStyle() {
                     src={brand.logo}
                     alt={`${brand.name} logo`}
                     className={cn(
-                      pos.size,
-                      "h-auto object-contain",
-                      "opacity-40 grayscale",
-                      "group-hover/logo:opacity-100 group-hover/logo:grayscale-0",
-                      "will-change-transform transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
-                      "drop-shadow-md group-hover/logo:drop-shadow-2xl"
+                      "max-w-[70px] sm:max-w-[90px] md:max-w-[120px] w-full h-auto object-contain",
+                      "opacity-40 grayscale drop-shadow-sm",
+                      "group-hover/logo:opacity-100 group-hover/logo:grayscale-0 group-hover/logo:drop-shadow-2xl",
+                      "will-change-transform transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
                     )}
                     whileHover={{ scale: 1.6, y: -20 }}
                     whileTap={{ scale: 1.8 }}

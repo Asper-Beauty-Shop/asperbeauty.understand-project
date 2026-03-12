@@ -1,5 +1,6 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
 import pdpIngredients from "@/assets/pdp-ingredients.jpg";
 import pdpRegulatory from "@/assets/pdp-regulatory.jpg";
@@ -157,10 +158,10 @@ const ProductDetail = () => {
         <Header />
         <div className="flex flex-col items-center justify-center min-h-[60vh] pt-36">
           <h1 className="font-serif text-2xl text-foreground mb-4">
-            {isArabic ? "Ø§Ù„Ù…Ù†ØªØ¬ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯" : "Product Not Found"}
+            {isArabic ? "المنتج غير موجود" : "Product Not Found"}
           </h1>
           <Link to="/" className="text-primary hover:underline text-sm">
-            {isArabic ? "Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„Ù…ØªØ¬Ø±" : "Return to Shop"}
+            {isArabic ? "العودة للمتجر" : "Return to Shop"}
           </Link>
         </div>
         <Footer />
@@ -168,11 +169,19 @@ const ProductDetail = () => {
     );
   }
 
-  const brandName = product.brand || (isArabic ? "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø­ØµØ±ÙŠØ©" : "Exclusive Collection");
+  const brandName = product.brand || (isArabic ? "مجموعة حصرية" : "Exclusive Collection");
   const galleryImages = product.image_url ? [product.image_url] : ["/editorial-showcase-2.jpg"];
+  const seoDescription = product.pharmacist_note || `Buy ${product.title} by ${brandName} at Asper Beauty Shop. Authorized retailer in Jordan for clinical skincare and dermocosmetics.`;
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{product.title} | {brandName} | Asper Beauty Shop</title>
+        <meta name="description" content={seoDescription} />
+        <meta property="og:title" content={`${product.title} - ${brandName}`} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:image" content={product.image_url || "/hero-banner.jpg"} />
+      </Helmet>
       <Header />
       <div className="grid lg:grid-cols-2 min-h-screen pt-20">
         {/* LEFT: Hero Image Gallery â€” Above the Fold Priority */}
@@ -393,18 +402,44 @@ const ProductDetail = () => {
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="py-16 bg-muted/20">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <h2 className="font-serif text-2xl text-foreground mb-8">{isArabic ? "Ù‚Ø¯ ÙŠØ¹Ø¬Ø¨Ùƒ Ø£ÙŠØ¶Ø§Ù‹" : "You May Also Like"}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <section className="py-20 bg-muted/20 border-t border-border/40" data-testid="related-products-section">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <header className="mb-12">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-burgundy font-bold block mb-2">
+                {isArabic ? "المزيد من البروتوكول" : "Extend Your Protocol"}
+              </span>
+              <h2 className="font-display text-3xl text-foreground tracking-tight">
+                {isArabic ? "قد يعجبك أيضاً" : "Complementary Clinical Pairs"}
+              </h2>
+            </header>
+
+            {/* 1. CSS Grid Implementation (Strict Mandate) */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
               {relatedProducts.map((rp) => (
-                <Link key={rp.id} to={`/product/${rp.handle}`} className="group">
-                  <div className="aspect-square bg-asper-stone rounded-lg overflow-hidden mb-3 border border-transparent group-hover:border-polished-gold transition-colors duration-300">
-                    <img src={rp.image_url || "/editorial-showcase-2.jpg"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <Link 
+                  key={rp.id} 
+                  to={`/product/${rp.handle}`} 
+                  className="group block p-6 bg-white border border-border/40 transition-all duration-500 hover:shadow-[0_15px_40px_-10px_rgba(128,0,32,0.1)] hover:border-polished-gold/30"
+                  data-testid={`related-product-${rp.id}`}
+                >
+                  <div className="aspect-[4/5] bg-asper-stone overflow-hidden mb-6 relative">
+                    <img 
+                      src={rp.image_url || "/editorial-showcase-2.jpg"} 
+                      alt={rp.title} 
+                      className="w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-110" 
+                    />
+                    <div className="absolute inset-0 bg-burgundy/0 group-hover:bg-burgundy/5 transition-colors duration-500" />
                   </div>
-                  <p className="text-xs text-asper-ink-muted uppercase tracking-widest font-body">{rp.brand}</p>
-                  <p className="text-sm font-medium text-asper-ink line-clamp-2 font-body">{rp.title}</p>
-                  <SplitPrice amount={rp.price ?? 0} className="mt-1" />
+                  
+                  <div className="space-y-2">
+                    <p className="text-[9px] text-polished-gold uppercase tracking-[0.2em] font-bold truncate">
+                      {rp.brand}
+                    </p>
+                    <p className="font-display text-sm font-semibold text-asper-ink line-clamp-2 min-h-[2.5rem] leading-tight">
+                      {rp.title}
+                    </p>
+                    <SplitPrice amount={rp.price ?? 0} className="mt-2 block" />
+                  </div>
                 </Link>
               ))}
             </div>

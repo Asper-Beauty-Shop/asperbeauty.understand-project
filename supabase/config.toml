@@ -1,4 +1,4 @@
-project_id = "qqceibvalkoytafynwoc"
+project_id = "vhgwvfedgfmcixhdyttt"
 
 [functions.sync-shopify-catalog]
 verify_jwt = false
@@ -7,4 +7,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.asper-intelligence]
+verify_jwt = false
+
+[functions.beauty-assistant]
 verify_jwt = false

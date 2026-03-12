@@ -47,7 +47,7 @@ import {
   Upload,
   Wand2,
 } from "lucide-react";
-import { getProductImage } from "@/lib/productImageUtils";
+import { AdminProductCategorization } from "@/components/AdminProductCategorization";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -92,7 +92,7 @@ const ManageProducts = () => {
     title: "",
     price: "",
     handle: "",
-    primary_concern: "Concern_Hydration",
+    selected_concerns: ["Hydration"] as string[],
     regimen_step: "Step_1_Cleanser",
     image_url: "",
   });
@@ -464,6 +464,24 @@ const ManageProducts = () => {
 
             <div className="flex items-center gap-3">
               <Button
+                variant="outline"
+                onClick={() => navigate("/admin/quarantine")}
+                className="bg-white border-red-200 text-red-700 hover:bg-red-50"
+              >
+                <AlertCircle className="w-4 h-4 mr-2" />
+                Quarantine
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={() => navigate("/admin/taxonomy")}
+                className="bg-white border-[#D4AF37] text-[#800020] hover:bg-[#F8F8FF]"
+              >
+                <FolderTree className="w-4 h-4 mr-2" />
+                Taxonomy Manager
+              </Button>
+
+              <Button
                 onClick={handleGenerateAIImages}
                 disabled={isGeneratingAI || isEnriching}
                 variant="outline"
@@ -544,44 +562,25 @@ const ManageProducts = () => {
                           required
                         />
                       </div>
-
                       <div>
-                        <Label htmlFor="primary_concern">Concern</Label>
-                        <Select
-                          value={formData.primary_concern}
-                          onValueChange={(value) =>
+                        <Label htmlFor="handle">Handle (URL slug)</Label>
+                        <Input
+                          id="handle"
+                          value={formData.handle}
+                          onChange={(e) =>
                             setFormData((prev) => ({
                               ...prev,
-                              primary_concern: value,
+                              handle: e.target.value,
                             }))}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {["Concern_Acne","Concern_Hydration","Concern_Aging","Concern_Sensitivity","Concern_Pigmentation","Concern_Redness","Concern_Oiliness"].map((cat) => (
-                              <SelectItem key={cat} value={cat}>
-                                {cat.replace("Concern_", "")}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                          placeholder="product-handle"
+                        />
                       </div>
                     </div>
 
-                    <div>
-                      <Label htmlFor="handle">Handle (URL slug)</Label>
-                      <Input
-                        id="handle"
-                        value={formData.handle}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            handle: e.target.value,
-                          }))}
-                        placeholder="product-handle"
-                      />
-                    </div>
+                    <AdminProductCategorization 
+                      selectedConcerns={formData.selected_concerns}
+                      onChange={(concerns) => setFormData(prev => ({ ...prev, selected_concerns: concerns }))}
+                    />
 
                     <div>
                       <Label>Product Image</Label>

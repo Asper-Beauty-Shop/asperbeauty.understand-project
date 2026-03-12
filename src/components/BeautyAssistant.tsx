@@ -19,9 +19,22 @@ export const BeautyAssistant = () => {
   const [messages, setMessages] = useState<Record<string, any>[]>([]);
   const [inputValue, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [persona, setPersona] = useState<"dr_sami" | "ms_zain">("dr_sami");
   const { language, locale } = useLanguage();
   const isAr = locale === "ar";
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Listen for external persona switch events
+  useEffect(() => {
+    const handlePersonaChange = (e: any) => {
+      if (e.detail?.persona) {
+        setPersona(e.detail.persona);
+        if (!isOpen) setIsOpen(true);
+      }
+    };
+    window.addEventListener("open-beauty-assistant", handlePersonaChange);
+    return () => window.removeEventListener("open-beauty-assistant", handlePersonaChange);
+  }, [isOpen]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -39,7 +52,7 @@ export const BeautyAssistant = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke('beauty-assistant', {
-        body: { messages: [...messages, userMsg], language }
+        body: { messages: [...messages, userMsg], language, persona }
       });
       if (error) throw error;
       setMessages(prev => [...prev, { role: "assistant", content: data.reply, trayProducts: data.products }]);
@@ -64,23 +77,22 @@ export const BeautyAssistant = () => {
             onClick={() => setIsOpen(true)}
           >
             <div className="flex items-center gap-3 bg-background/90 backdrop-blur-xl border border-polished-gold/25 rounded-full pl-2 pr-5 py-2 shadow-[0_8px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:shadow-[0_12px_50px_-8px_rgba(197,160,40,0.3)] group-hover:border-polished-gold/50 group-hover:scale-105">
-              {/* Realistic avatar */}
               <div className="relative shrink-0">
                 <div className="w-11 h-11 rounded-full overflow-hidden border border-polished-gold/40">
                   <img 
-                    src="/dr-sami-head.png" 
-                    alt="Dr. Sami" 
-                    className="w-full h-full object-cover object-top"
+                    src={persona === "ms_zain" ? "/ms-zain-avatar.png" : "/dr-sami-head.png"} 
+                    alt={persona === "ms_zain" ? "Ms. Zain" : "Dr. Sami"} 
+                    className="w-full h-full object-cover object-top transition-all duration-500"
                   />
                 </div>
-                {/* Online dot */}
                 <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-background" />
               </div>
 
-              {/* Elegant text */}
               <div className="flex flex-col">
                 <span className="font-display text-sm font-semibold tracking-wide text-foreground leading-tight">
-                  {isAr ? "د. سامي" : "Dr. Sami"}
+                  {isAr 
+                    ? (persona === "ms_zain" ? "مس زين" : "د. سامي") 
+                    : (persona === "ms_zain" ? "Ms. Zain" : "Dr. Sami")}
                 </span>
                 <span className="text-[10px] uppercase tracking-[0.15em] text-polished-gold/80 font-body">
                   {isAr ? "استشارة مباشرة" : "Beauty Consultant"}
@@ -98,47 +110,61 @@ export const BeautyAssistant = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.95 }}
             transition={{ duration: 0.4, ease: LUXURY_EASE }}
-            className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-[101] w-full sm:w-[420px] h-[100dvh] sm:h-[650px] bg-asper-stone-light sm:rounded-2xl border border-polished-gold/20 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden"
+            className="fixed bottom-4 right-4 md:bottom-8 md:right-8 w-[calc(100%-2rem)] md:w-[400px] h-[600px] max-h-[80vh] bg-white/70 backdrop-blur-md border border-white/50 rounded-2xl shadow-[0_8px_32px_rgba(128,0,32,0.08)] flex flex-col overflow-hidden z-[101]"
           >
-            {/* Header */}
-            <div className="bg-asper-ink p-5 flex items-center justify-between border-b border-polished-gold/20 shrink-0 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-polished-gold/10 to-transparent -skew-x-12 translate-x-[-100%] animate-[shimmer_3s_infinite]"></div>
-              <div className="flex items-center gap-4 relative z-10">
-                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-polished-gold/60 shadow-lg bg-white">
-                  <img src="/dr-bot-character.png" className="w-full h-full object-cover object-top" alt="Dr. Sami" />
-                </div>
-                <div>
-                  <h3 className="text-polished-white text-sm uppercase tracking-[0.15em] font-bold">
-                    {isAr ? "الدكتور سامي" : "Dr. Sami"}
-                  </h3>
-                  <span className="text-polished-gold/80 text-[10px] uppercase tracking-widest flex items-center gap-1.5 mt-0.5">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    {isAr ? "متصل الآن" : "Online & Ready"}
-                  </span>
-                </div>
+            {/* Header Area: Dynamic Color for Authority/Luxury */}
+            <div 
+              className={cn(
+                "px-6 py-4 flex items-center justify-between shadow-sm shrink-0 relative overflow-hidden transition-colors duration-700",
+                persona === "ms_zain" ? "bg-[#D4AF37]" : "bg-[#800020]"
+              )}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 translate-x-[-100%] animate-[shimmer_3s_infinite]"></div>
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.6)]"></div>
+                <h3 className="text-[#F8F8FF] font-semibold tracking-wide text-sm uppercase">
+                  {isAr 
+                    ? (persona === "ms_zain" ? "مس زين — خبيرة الجمال" : "د. سامي — استشارة طبية") 
+                    : (persona === "ms_zain" ? "Ms. Zain — Beauty Advisor" : "Dr. Sami — Clinical Consultation")}
+                </h3>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-polished-gold/60 hover:text-polished-white transition-colors relative z-10 p-2 rounded-full hover:bg-white/10">
-                <X className="h-5 w-5" />
-              </button>
+              
+              {/* Persona Toggle */}
+              <div className="flex items-center gap-2 relative z-10 mr-2">
+                <button 
+                  onClick={() => setPersona(persona === "dr_sami" ? "ms_zain" : "dr_sami")}
+                  className="bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors"
+                  title="Switch Persona"
+                >
+                  {persona === "dr_sami" ? <Sparkles className="h-3.5 w-3.5 text-white" /> : <Stethoscope className="h-3.5 w-3.5 text-white" />}
+                </button>
+                <button 
+                  onClick={() => setIsOpen(false)} 
+                  className="text-white/70 hover:text-white transition-colors p-1.5 rounded-full hover:bg-white/10"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
 
-            {/* Chat Area */}
-            <ScrollArea ref={scrollRef} className="flex-1 p-5 space-y-5 bg-white/50 backdrop-blur-md">
+            {/* Chat Area: Transparent Glass */}
+            <ScrollArea ref={scrollRef} className="flex-1 p-5 space-y-5 bg-transparent">
               {messages.length === 0 && (
                 <div className="text-center py-6">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-polished-gold/20 to-transparent flex items-center justify-center border border-polished-gold/30 shadow-[0_4px_20px_-5px_rgba(212,175,55,0.3)]">
-                    <img src="/dr-bot-character.png" className="w-16 h-16 object-contain" alt="Dr. Sami Icon" />
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-polished-gold/20 to-transparent flex items-center justify-center border border-polished-gold/30 shadow-[0_4px_20px_-5px_rgba(212,175,55,0.3)] overflow-hidden">
+                    <img 
+                      src={persona === "ms_zain" ? "/ms-zain-avatar.png" : "/dr-bot-character.png"} 
+                      className="w-16 h-16 object-contain" 
+                      alt="Persona Icon" 
+                    />
                   </div>
                   <h4 className="text-asper-ink font-heading text-xl font-bold mb-2">
                     {isAr ? "استشارة مجانية" : "Private Consultation"}
                   </h4>
-                  <p className="text-asper-ink/70 text-sm max-w-xs mx-auto leading-relaxed mb-6">
+                  <p className="text-asper-ink/70 text-sm max-w-xs mx-auto leading-relaxed mb-6 italic font-body">
                     {isAr 
-                      ? "أهلاً بكِ في عيادتنا الرقمية. صفي لي حالة بشرتكِ أو اختاري مما يلي:"
-                      : "Welcome to our digital clinic. Tell me about your skin concerns or select an option below:"}
+                      ? (persona === "ms_zain" ? "أهلاً بكِ. دعينا نكتشف سر إشراقكِ اليوم." : "أهلاً بكِ في عيادتنا الرقمية. صفي لي حالة بشرتكِ بدقة.")
+                      : (persona === "ms_zain" ? "Welcome. Let's find your signature glow today." : "Welcome to our digital clinic. Please describe your skin concerns.")}
                   </p>
                   
                   <div className="flex flex-col gap-2 px-4">
@@ -146,7 +172,7 @@ export const BeautyAssistant = () => {
                       <button 
                         key={idx}
                         onClick={() => handleSend(suggestion)}
-                        className="text-left px-4 py-3 text-sm bg-white border border-polished-gold/20 rounded-xl text-asper-ink/80 hover:bg-polished-gold/5 hover:border-polished-gold/40 hover:text-asper-ink transition-all shadow-sm active:scale-95"
+                        className="text-left px-4 py-3 text-sm bg-white border border-polished-gold/20 rounded-xl text-asper-ink/80 hover:bg-polished-gold/5 hover:border-polished-gold/40 hover:text-asper-ink transition-all shadow-sm active:scale-95 font-medium"
                       >
                         {isAr && idx === 0 ? "روتين للبشرة المعرضة لحب الشباب" : 
                          isAr && idx === 1 ? "أفضل سيروم مقاوم للتجاعيد" : 
@@ -162,43 +188,70 @@ export const BeautyAssistant = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   key={i} 
-                  className={cn("flex w-full", m.role === 'user' ? "justify-end" : "justify-start")}
+                  className={cn("flex w-full mb-4", m.role === 'user' ? "justify-end" : "justify-start")}
                 >
                   <div className={cn(
-                    "max-w-[85%] p-4 text-[15px] leading-relaxed relative",
+                    "max-w-[85%] p-4 text-[14px] leading-relaxed relative",
                     m.role === 'user' 
                       ? "bg-asper-ink text-polished-white font-medium rounded-2xl rounded-br-sm shadow-md" 
                       : "bg-white border border-polished-gold/20 text-asper-ink shadow-sm rounded-2xl rounded-bl-sm"
                   )}>
                     {m.content}
-                    {m.trayProducts && <div className="mt-4"><DigitalTray products={m.trayProducts} /></div>}
+                    {m.trayProducts && (
+                      <div className="mt-4">
+                        <DigitalTray products={m.trayProducts} persona={persona} />
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-white border border-polished-gold/20 p-4 rounded-2xl rounded-bl-sm flex items-center gap-2 shadow-sm">
-                    <Loader2 className="h-4 w-4 animate-spin text-polished-gold" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-widest">{isAr ? "يحلل البيانات..." : "Analyzing..."}</span>
+                  <div className="bg-white border border-polished-gold/20 p-4 rounded-2xl rounded-bl-sm flex items-center gap-3 shadow-sm min-w-[200px]">
+                    <div className="flex gap-1">
+                      <motion.span 
+                        animate={{ opacity: [0.3, 1, 0.3] }} 
+                        transition={{ duration: 1.5, repeat: Infinity, delay: 0 }}
+                        className={cn("w-1.5 h-1.5 rounded-full", persona === "ms_zain" ? "bg-[#D4AF37]" : "bg-[#800020]")}
+                      />
+                      <motion.span 
+                        animate={{ opacity: [0.3, 1, 0.3] }} 
+                        transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+                        className={cn("w-1.5 h-1.5 rounded-full", persona === "ms_zain" ? "bg-[#D4AF37]" : "bg-[#800020]")}
+                      />
+                      <motion.span 
+                        animate={{ opacity: [0.3, 1, 0.3] }} 
+                        transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
+                        className={cn("w-1.5 h-1.5 rounded-full", persona === "ms_zain" ? "bg-[#D4AF37]" : "bg-[#800020]")}
+                      />
+                    </div>
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+                      {isAr 
+                        ? (persona === "ms_zain" ? "مس زين تنسق لكِ الأفضل..." : "د. سامي يحلل البيانات الطبية...") 
+                        : (persona === "ms_zain" ? "Ms. Zain is curating your luxury edit..." : "Dr. Sami is analyzing clinical data...")}
+                    </span>
                   </div>
                 </div>
               )}
             </ScrollArea>
 
             {/* Input Area */}
-            <div className="p-4 bg-white border-t border-polished-gold/10 shrink-0">
+            <div className="p-4 bg-white/60 border-t border-white/50 backdrop-blur-lg shrink-0">
               <div className="flex gap-3 relative">
                 <Input 
                   value={inputValue}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                   placeholder={isAr ? "اكتبي رسالتك هنا..." : "Type your message..."}
-                  className="rounded-full border-polished-gold/30 focus:border-polished-gold focus:ring-1 focus:ring-polished-gold/50 transition-all h-12 pr-14 pl-5 shadow-inner bg-asper-stone-light/30"
+                  className="rounded-full border-gray-200 focus:border-polished-gold focus:ring-1 focus:ring-polished-gold/50 transition-all h-12 pr-14 pl-5 shadow-inner bg-white/80"
                 />
                 <Button 
-                  onClick={handleSend} 
+                  onClick={() => handleSend()} 
                   disabled={isLoading || !inputValue.trim()}
-                  className="absolute right-1 top-1 bottom-1 h-10 w-10 rounded-full bg-polished-gold hover:bg-asper-ink text-white transition-all shadow-md flex items-center justify-center p-0"
+                  className={cn(
+                    "absolute right-1 top-1 bottom-1 h-10 w-10 rounded-full text-white transition-all shadow-md flex items-center justify-center p-0 hover:scale-105",
+                    persona === "ms_zain" ? "bg-[#D4AF37] hover:bg-[#B48F17]" : "bg-[#800020] hover:bg-[#600018]"
+                  )}
                 >
                   <Send className="h-4 w-4 ml-1" />
                 </Button>
@@ -210,5 +263,3 @@ export const BeautyAssistant = () => {
     </>
   );
 };
-
-

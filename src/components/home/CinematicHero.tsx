@@ -1,31 +1,42 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
+import { useRef } from "react";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
 export default function CinematicHero() {
   const { locale } = useLanguage();
   const isAr = locale === "ar";
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Move the video down at half the speed of the scroll
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
 
   return (
-    <section className="relative w-full min-h-[600px] overflow-hidden bg-dark-charcoal" style={{ height: '100dvh' }}>
-      {/* Full-bleed video background */}
-      <video
+    <section ref={containerRef} className="relative w-full min-h-[600px] overflow-hidden bg-dark-charcoal" style={{ height: '100dvh' }}>
+      {/* Full-bleed video background with Parallax */}
+      <motion.video
+        style={{ y }}
         autoPlay
         loop
         muted
         playsInline
         disablePictureInPicture
         poster="/images/hero-poster-cinematic.jpg"
-        className="absolute inset-0 w-full h-full object-cover object-center md:object-[center_center] object-[75%_50%] z-0"
+        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center md:object-[center_center] object-[75%_50%] z-0"
       >
         <source src="/videos/cinematic-hero.mp4" type="video/mp4" />
-      </video>
+      </motion.video>
 
       {/* Subtle overlay for legibility */}
       <div
+
         className="absolute inset-0 z-[1]"
         style={{
           background:

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Sheet,
   SheetContent,
@@ -16,6 +16,7 @@ import {
   Trash2,
   Truck,
   X,
+  PlusCircle,
 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
@@ -23,12 +24,14 @@ import { ASPER_PROTOCOL } from "@/lib/asperProtocol";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translateTitle } from "@/lib/productUtils";
 import { CODCheckoutForm, OrderSuccess } from "./CODCheckoutForm";
+import { supabase } from "@/integrations/supabase/client";
 
 const FREE_SHIPPING_THRESHOLD = 50; // JOD
 
 export const CartDrawer = () => {
   const [checkoutMode, setCheckoutMode] = useState<"cart" | "cod" | "success">("cart");
   const [orderNumber, setOrderNumber] = useState<string>("");
+  const [upsellProduct, setUpsellProduct] = useState<any>(null);
 
   const {
     items,
@@ -40,6 +43,7 @@ export const CartDrawer = () => {
     getTotalPrice,
     getCheckoutUrl,
     syncCart,
+    addItem
   } = useCartStore();
 
   const totalPrice = getTotalPrice();
@@ -49,6 +53,82 @@ export const CartDrawer = () => {
   const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalPrice);
   const shippingProgress = Math.min(100, (totalPrice / FREE_SHIPPING_THRESHOLD) * 100);
   const hasFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
+
+  // Determine if cart is clinical or aesthetic for persona touch
+  const isClinical = items.some((item) => {
+    const vendor = item.product.node.vendor?.toLowerCase() || "";
+    return ["la roche-posay", "vichy", "eucerin", "bioderma", "cerave", "sesderma"].some(b => vendor.includes(b.toLowerCase()));
+  });
+
+  // Fetch upsell dynamically
+  useEffect(() => {
+    if (!isOpen || items.length === 0) return;
+    
+    const fetchUpsell = async () => {
+      try {
+        // Get the title of the first item to find its concern in DB (since we don't have concern in the cart item directly)
+        const firstItemTitle = items[0]?.product.node.title;
+        if (!firstItemTitle) return;
+
+        const { data: dbItem } = await supabase
+          .from("products")
+          .select("primary_concern")
+          .ilike("title", `%${firstItemTitle}%`)
+          .maybeSingle();
+
+        if (dbItem?.primary_concern) {
+          const { data: recommendations } = await supabase
+            .from("products")
+            .select("*")
+            .eq("primary_concern", dbItem.primary_concern)
+            .neq("title", firstItemTitle)
+            .limit(1);
+
+          if (recommendations && recommendations.length > 0) {
+            setUpsellProduct(recommendations[0]);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch upsell", err);
+      }
+    };
+    fetchUpsell();
+  }, [isOpen, items]);
+
+  const handleAddUpsell = () => {
+    if (!upsellProduct) return;
+    
+    // Mock Shopify product format
+    const cartProduct = {
+      node: {
+        id: upsellProduct.id,
+        title: upsellProduct.title,
+        handle: upsellProduct.id,
+        description: upsellProduct.description || "",
+        vendor: upsellProduct.brand || "",
+        productType: upsellProduct.category || "",
+        images: {
+          edges: upsellProduct.image_url ? [{ node: { url: upsellProduct.image_url, altText: upsellProduct.title } }] : [],
+        },
+        priceRange: {
+          minVariantPrice: { amount: upsellProduct.price.toString(), currencyCode: "JOD" },
+          maxVariantPrice: { amount: upsellProduct.price.toString(), currencyCode: "JOD" },
+        },
+      }
+    };
+
+    addItem({
+      product: cartProduct as any,
+      variantId: `${upsellProduct.id}-default`,
+      variantTitle: "Default",
+      price: { amount: upsellProduct.price.toString(), currencyCode: "JOD" },
+      quantity: 1,
+      selectedOptions: [],
+    });
+    
+    toast.success("Added to Regimen");
+    setUpsellProduct(null); // hide after adding
+  };
 
   const handleCheckout = () => {
     const checkoutUrl = getCheckoutUrl();
@@ -274,19 +354,40 @@ export const CartDrawer = () => {
                           </div>
 
                           <div className="flex-1">
-                            <p className="font-body text-xs text-muted-foreground leading-relaxed">
-                              {isArabic
-                                ? `لتعزيز فعالية ${items[0]?.product.node.title?.slice(0, 30) || "منتجك"}، ننصح بإضافة مكمّل فعّال.`
-                                : `To maximize the efficacy of your ${items[0]?.product.node.title?.slice(0, 30) || "product"}, we prescribe adding a complementary active.`}
-                            </p>
-                            <button
-                              className="mt-3 font-body text-[11px] font-semibold uppercase tracking-[0.15em] transition-colors duration-300"
-                              style={{ color: "hsl(var(--burgundy))" }}
-                              onMouseEnter={(e) => e.currentTarget.style.color = "hsl(var(--polished-gold))"}
-                              onMouseLeave={(e) => e.currentTarget.style.color = "hsl(var(--burgundy))"}
-                            >
-                              {isArabic ? "+ أضف إلى الروتين" : "+ Add to Regimen"}
-                            </button>
+                            {upsellProduct ? (
+                              <>
+                                <p className="font-body text-xs text-muted-foreground leading-relaxed mb-2">
+                                  {isArabic
+                                    ? `لتعزيز فعالية ${items[0]?.product.node.title?.slice(0, 30)}، ننصح بإضافة ${upsellProduct.title}.`
+                                    : `To maximize efficacy, we prescribe adding ${upsellProduct.title}.`}
+                                </p>
+                                <div className="flex items-center gap-3">
+                                  {upsellProduct.image_url && (
+                                    <img src={upsellProduct.image_url} alt="" className="w-10 h-10 object-contain rounded border border-border/50 bg-background" />
+                                  )}
+                                  <div className="flex-1">
+                                    <p className="text-[10px] font-bold text-foreground line-clamp-1">{upsellProduct.title}</p>
+                                    <p className="text-[10px] text-muted-foreground">{upsellProduct.price} JOD</p>
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={handleAddUpsell}
+                                  className="mt-3 font-body text-[11px] font-semibold uppercase tracking-[0.15em] transition-colors duration-300 flex items-center gap-1"
+                                  style={{ color: "hsl(var(--burgundy))" }}
+                                  onMouseEnter={(e) => e.currentTarget.style.color = "hsl(var(--polished-gold))"}
+                                  onMouseLeave={(e) => e.currentTarget.style.color = "hsl(var(--burgundy))"}
+                                >
+                                  <PlusCircle className="w-3 h-3" />
+                                  {isArabic ? "أضف إلى الروتين" : "Add to Regimen"}
+                                </button>
+                              </>
+                            ) : (
+                              <p className="font-body text-xs text-muted-foreground leading-relaxed">
+                                {isArabic
+                                  ? `لتعزيز فعالية ${items[0]?.product.node.title?.slice(0, 30) || "منتجك"}، ننصح بإضافة مكمّل فعّال.`
+                                  : `To maximize the efficacy of your ${items[0]?.product.node.title?.slice(0, 30) || "product"}, we prescribe adding a complementary active.`}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>

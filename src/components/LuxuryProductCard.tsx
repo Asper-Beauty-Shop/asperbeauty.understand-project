@@ -121,20 +121,16 @@ export const LuxuryProductCard = ({ product }: { product: ProductProps }) => {
     <>
       <Link
         to={`/product/${product.id}`}
-        className="group relative bg-background border border-border flex flex-col h-full overflow-hidden"
+        className="group relative bg-white rounded-xl overflow-hidden cursor-pointer shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow duration-500 hover:shadow-[0_10px_40px_rgba(128,0,32,0.08)] flex flex-col h-full"
       >
-        {/* 1. Image Area - Aspect Ratio is key for consistency */}
-        <div className="relative aspect-[4/5] overflow-hidden bg-muted/30">
-          {product.is_new && (
-            <span className="absolute top-2 left-2 z-10 bg-gold text-[8px] md:text-[10px] text-foreground px-2 py-0.5 font-bold uppercase tracking-widest">
-              New
-            </span>
-          )}
+        {/* THE GOLD STITCH MICRO-INTERACTION */}
+        <div className="absolute top-0 left-0 h-[2px] w-full bg-[#D4AF37] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left z-[11]"></div>
 
-          {/* Sale badge */}
-          {product.is_on_sale && product.discount_percent && (
-            <span className="absolute top-2 right-2 z-10 bg-red-600 text-cream text-[8px] md:text-[10px] px-2 py-0.5 font-bold uppercase tracking-widest rounded">
-              -{product.discount_percent}%
+        {/* 1. Image Area */}
+        <div className="relative aspect-[4/5] overflow-hidden bg-[#F8F8FF] p-6 flex items-center justify-center">
+          {product.is_new && (
+            <span className="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-sm border border-gray-100 px-3 py-1 rounded-full text-[8px] md:text-[10px] font-bold text-[#800020] tracking-wider uppercase shadow-sm">
+              New
             </span>
           )}
 
@@ -142,86 +138,54 @@ export const LuxuryProductCard = ({ product }: { product: ProductProps }) => {
           <BlurUpImage
             src={product.image_url}
             alt={product.title}
-            className="h-full w-full object-contain mix-blend-multiply transition-transform duration-700 group-hover:scale-105"
+            className="max-h-full object-contain transform group-hover:scale-105 transition-transform duration-700 ease-in-out drop-shadow-sm mix-blend-multiply"
             containerClassName="h-full w-full"
             blurAmount={15}
             transitionDuration={400}
           />
 
-          {/* Hover Actions - Quick View & Add to Cart */}
+          {/* Hover Actions - Quick View */}
           <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/5 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-            <div className="flex gap-2">
-              {/* Quick View Button */}
-              <button
-                onClick={handleQuickView}
-                className="w-10 h-10 rounded-full bg-cream/95 backdrop-blur-sm border border-gold/50 flex items-center justify-center hover:bg-gold hover:text-cream transition-all duration-300 shadow-lg hover:scale-110"
-                title={language === "ar" ? "عرض سريع" : "Quick View"}
-              >
-                <Eye className="w-4 h-4" />
-              </button>
-
-              {/* Add to Cart Button - Desktop */}
-              <button
-                onClick={handleAddToCart}
-                className="hidden md:flex w-10 h-10 rounded-full bg-burgundy/95 backdrop-blur-sm border border-burgundy flex items-center justify-center hover:bg-burgundy-light text-cream transition-all duration-300 shadow-lg hover:scale-110"
-                title={language === "ar" ? "أضف إلى الحقيبة" : "Add to Bag"}
-              >
-                <ShoppingBag className="w-4 h-4" />
-              </button>
-            </div>
+            <button
+              onClick={handleQuickView}
+              className="w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm border border-[#D4AF37]/50 flex items-center justify-center hover:bg-[#D4AF37] hover:text-white transition-all duration-300 shadow-lg hover:scale-110"
+              title={language === "ar" ? "عرض سريع" : "Quick View"}
+            >
+              <Eye className="w-4 h-4" />
+            </button>
           </div>
-
-          {/* Mobile Quick-Add: Only shows on mobile */}
-          <button
-            className="absolute bottom-2 right-2 md:hidden bg-foreground text-background p-2 rounded-full shadow-lg"
-            onClick={handleAddToCart}
-          >
-            <ShoppingBag className="h-4 w-4" />
-          </button>
         </div>
 
-        {/* 2. Content Area - Optimized Typography */}
-        <div className="p-3 md:p-6 flex flex-col flex-1 text-center md:text-left">
-          <p className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-gold mb-1">
+        {/* 2. Content Area */}
+        <div className="p-4 md:p-6 flex flex-col flex-1 text-center items-center">
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
             {product.brand || product.category}
-          </p>
+          </span>
 
-          <h3 className="font-serif text-sm md:text-lg text-foreground line-clamp-2 leading-tight mb-2 flex-1">
+          <h3 className="font-serif text-sm md:text-lg text-gray-900 line-clamp-2 leading-tight mb-2 flex-1 group-hover:text-[#800020] transition-colors duration-300">
             {product.title}
           </h3>
 
-          <div className="mt-auto flex flex-col md:flex-row md:items-center justify-between gap-1">
-            <div className="flex items-center gap-2">
+          <div className="mt-auto mb-6">
+            <div className="flex items-center gap-2 justify-center font-sans">
               {product.is_on_sale && product.original_price && (
-                <span className="font-sans text-xs text-muted-foreground line-through">
+                <span className="text-xs text-muted-foreground line-through">
                   {formatJOD(product.original_price)}
                 </span>
               )}
-              <span
-                className={`font-sans font-bold text-xs md:text-base ${
-                  product.is_on_sale ? "text-red-600" : "text-foreground"
-                }`}
-              >
+              <span className={`font-bold text-sm md:text-base ${product.is_on_sale ? "text-red-600" : "text-gray-600"}`}>
                 {formatJOD(price)}
               </span>
             </div>
-
-            {/* Rating - Hidden on very small screens to save space */}
-            <div className="hidden sm:flex items-center gap-1 text-gold">
-              <Star className="h-2 w-2 md:h-3 md:w-3 fill-current" />
-              <span className="text-[9px] md:text-xs text-muted-foreground">
-                4.9
-              </span>
-            </div>
           </div>
-        </div>
 
-        {/* Desktop Only: Add to Cart on Hover */}
-        <div
-          className="hidden md:block absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-burgundy text-cream p-4 text-center cursor-pointer uppercase text-[10px] font-bold tracking-widest hover:bg-burgundy-light"
-          onClick={handleAddToCart}
-        >
-          {language === "ar" ? "أضف إلى الحقيبة" : "Add to Bag"}
+          {/* The Action Button: Deep Maroon for conversion */}
+          <button 
+            onClick={handleAddToCart}
+            className="w-full py-2.5 md:py-3 px-4 bg-white text-[#800020] border border-[#800020] font-semibold rounded-lg group-hover:bg-[#800020] group-hover:text-white transition-all duration-300 uppercase text-[10px] md:text-xs tracking-widest"
+          >
+            {language === "ar" ? "إضافة سريعة" : "Quick Add"}
+          </button>
         </div>
       </Link>
 

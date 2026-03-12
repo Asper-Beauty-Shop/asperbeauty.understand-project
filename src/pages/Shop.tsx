@@ -154,19 +154,19 @@ const ShopProductCard = ({
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col flex-grow space-y-2">
+      <div className="p-6 flex flex-col flex-grow space-y-3">
         {product.brand && (
-          <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent">{product.brand}</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-polished-gold mb-1">{product.brand}</p>
         )}
-        <h3 className="font-heading text-sm font-semibold text-foreground leading-tight line-clamp-2 group-hover:text-primary transition-colors flex-grow">
+        <h3 className="font-heading text-sm font-semibold text-asper-ink leading-tight line-clamp-2 group-hover:text-primary transition-colors flex-grow min-h-[2.5rem]">
           {product.title}
         </h3>
 
         {/* Key Ingredients */}
         {product.key_ingredients && product.key_ingredients.length > 0 && (
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1.5">
             {product.key_ingredients.slice(0, 2).map((ing) => (
-              <span key={ing} className="px-2 py-0.5 rounded-full bg-secondary border border-border/50 text-[10px] text-muted-foreground font-medium">
+              <span key={ing} className="px-2.5 py-1 rounded-full bg-asper-stone border border-border/40 text-[9px] text-muted-foreground font-bold uppercase tracking-tight">
                 {ing}
               </span>
             ))}
@@ -174,24 +174,26 @@ const ShopProductCard = ({
         )}
 
         {/* Price + Type */}
-        <div className="flex items-center justify-between pt-1">
+        <div className="flex items-center justify-between pt-2">
           <LuxuryPrice amount={product.price} />
           {product.primary_concern && (
-            <Badge variant="secondary" className="text-[10px]">
+            <Badge variant="secondary" className="text-[9px] font-bold uppercase tracking-widest bg-asper-stone text-asper-ink border-none">
               {product.primary_concern.replace("Concern_", "")}
             </Badge>
           )}
         </div>
 
         {/* Add to Cart */}
-        <Button
-          onClick={handleAddToCart}
-          size="sm"
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xs uppercase tracking-wide btn-ripple"
-        >
-          <ShoppingBag className="w-3.5 h-3.5 me-1.5" />
-          {locale === "ar" ? "\u0623\u0636\u0641 \u0644\u0644\u0633\u0644\u0629" : "Add to Cart"}
-        </Button>
+        <div className="pt-2">
+          <Button
+            onClick={handleAddToCart}
+            size="sm"
+            className="w-full bg-burgundy hover:bg-asper-ink text-white text-[10px] font-bold uppercase tracking-[0.15em] shadow-lg active:scale-95 transition-all duration-300 h-10"
+          >
+            <ShoppingBag className="w-3.5 h-3.5 me-2" />
+            {locale === "ar" ? "\u0623\u0636\u0641 \u0644\u0644\u0633\u0644\u0629" : "Add to Cart"}
+          </Button>
+        </div>
       </div>
     </article>
   );
@@ -268,6 +270,11 @@ export default function Shop() {
   const { locale } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
+  const PAGE_SIZE = 24;
+
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -284,6 +291,10 @@ export default function Shop() {
       next.set("category", cat);
     }
     setSearchParams(next, { replace: true });
+    // Reset pagination when category changes
+    setPage(0);
+    setProducts([]);
+    setHasMore(true);
   };
 
   const [filters, setFilters] = useState<FilterState>({
@@ -296,25 +307,64 @@ export default function Shop() {
     onSaleOnly: false,
   });
 
+  // Reset pagination on filter change
+  useEffect(() => {
+    setPage(0);
+    setProducts([]);
+    setHasMore(true);
+  }, [filters]);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setIsLoading(true);
-        const { data, error } = await supabase
+        if (page === 0) setIsLoading(true);
+        else setIsLoadingMore(true);
+
+        let query = supabase
           .from("products")
-          .select("*")
+          .select("*", { count: "exact" })
           .neq("availability_status", "Pending_Purge")
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: false })
+          .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+
+        // Apply Server-Side Filtering for Category
+        if (categoryParam && categoryParam !== "All Curation") {
+          query = query.eq("asper_category", categoryParam);
+        }
+
+        const { data, count, error } = await query;
+        
         if (error) throw error;
-        setProducts(data || []);
+        
+        const newProducts = data || [];
+        setProducts(prev => (page === 0 ? newProducts : [...prev, ...newProducts]));
+        setHasMore(count ? (page + 1) * PAGE_SIZE < count : newProducts.length === PAGE_SIZE);
       } catch (err) {
         console.error("Error fetching products:", err);
       } finally {
         setIsLoading(false);
+        setIsLoadingMore(false);
       }
     };
     fetchProducts();
-  }, []);
+  }, [page, categoryParam, filters.skinConcerns, filters.brands]); // Simplified dependencies for server-side pagination
+
+  // Intersection Observer for Infinite Scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoading && !isLoadingMore) {
+          setPage(prev => prev + 1);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const target = document.querySelector("#infinite-scroll-trigger");
+    if (target) observer.observe(target);
+
+    return () => observer.disconnect();
+  }, [hasMore, isLoading, isLoadingMore]);
 
   // Compute category counts for sidebar badges
   const categoryCounts = useMemo(() => {
@@ -551,7 +601,7 @@ export default function Shop() {
               {!isLoading && filteredProducts.length > 0 && (
                 <div
                   key={categoryParam}
-                  className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" : "space-y-4"}
+                  className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10" : "space-y-6"}
                 >
                   {filteredProducts.map((product, index) => (
                     <div
@@ -568,6 +618,26 @@ export default function Shop() {
                   ))}
                 </div>
               )}
+
+              {/* Infinite Scroll Trigger & Loading State */}
+              <div id="infinite-scroll-trigger" className="w-full py-12 flex justify-center">
+                {isLoadingMore && (
+                  <div className="flex flex-col items-center gap-3">
+                    <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">
+                      {locale === "ar" ? "جاري تحميل المزيد..." : "Loading more clinical products..."}
+                    </span>
+                  </div>
+                )}
+                {!hasMore && products.length > 0 && (
+                  <div className="flex flex-col items-center gap-2 text-muted-foreground/40">
+                    <Package className="w-5 h-5" />
+                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold">
+                      {locale === "ar" ? "نهاية الكتالوج" : "End of curated catalog"}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

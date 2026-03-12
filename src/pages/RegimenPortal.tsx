@@ -65,8 +65,14 @@ function StepCard({
         ? "Apply 2 drops to slightly damp skin to lock in moisture."
         : "Apply generously as last step, reapply every 2 hours in sun.");
 
+  // Staggered delay calculation
+  const delay = `${(index + 1) * 300}ms`;
+
   return (
-    <div className="relative pl-6">
+    <div 
+      className="relative pl-6 animate-clinical-reveal" 
+      style={{ animationDelay: delay }}
+    >
       {/* Timeline dot */}
       <div className="absolute w-2 h-2 bg-background border-2 border-polished-gold rounded-full -left-[4px] top-1" />
 
@@ -75,12 +81,14 @@ function StepCard({
       </span>
 
       {step.product.image_url && (
-        <img
-          src={step.product.image_url}
-          alt={step.product.title}
-          className="w-full h-32 object-contain mt-3 rounded bg-card"
-          loading="lazy"
-        />
+        <div className="overflow-hidden rounded bg-card mt-3 shadow-inner">
+          <img
+            src={step.product.image_url}
+            alt={step.product.title}
+            className="w-full h-32 object-contain hover:scale-110 transition-transform duration-700"
+            loading="lazy"
+          />
+        </div>
       )}
 
       <h3 className="font-heading text-base text-foreground mt-2 leading-tight">

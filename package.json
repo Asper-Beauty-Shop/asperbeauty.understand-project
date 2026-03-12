@@ -21,12 +21,13 @@
     "brain": "node scripts/brain-check.js",
     "sync": "tsx scripts/sync-shopify-catalog.ts",
     "sync:supabase": "tsx scripts/reorganize-catalog.js",
+    "sync:enriched": "tsx scripts/sync-asar-enriched.js",
     "sync:dry": "tsx scripts/sync-shopify-catalog.ts --dry-run",
     "sync:publish": "tsx scripts/sync-shopify-catalog.ts --publish",
-    "health": "node scripts/health-check.js",
     "test:brain": "node scripts/test-brain.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@hcaptcha/react-hcaptcha": "^2.0.2",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.11",
@@ -72,6 +73,7 @@
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
+    "react-helmet-async": "^3.0.0",
     "react-hook-form": "^7.61.1",
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "^2.1.9",

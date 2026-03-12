@@ -1,6 +1,20 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Lock, ChevronDown, CreditCard, Banknote, Loader2, ArrowLeft } from "lucide-react";
+import { Lock, ChevronDown, CreditCard, Banknote, Loader2, ArrowLeft, ShieldCheck, Truck, Clock } from "lucide-react";
+// ... (rest of imports)
+
+/** Luxury pricing display for checkout */
+const CheckoutLuxuryPrice = ({ amount, currency = "JOD", className = "" }: { amount: number; currency?: string; className?: string }) => {
+  const val = amount.toFixed(2);
+  const [integer, decimal] = val.split(".");
+  return (
+    <span className={cn("font-body", className)}>
+      <span className="text-[10px] align-top font-medium mr-0.5">{currency}</span>
+      <span className="text-sm font-semibold">{integer}</span>
+      <span className="text-[10px] align-top font-medium">.{decimal}</span>
+    </span>
+  );
+};
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,8 +46,12 @@ const AMMAN_AREAS = [
 
 type PaymentMethod = "cod" | "card";
 
+import { Header } from "@/components/Header";
+import { CheckoutTimeline } from "@/components/CheckoutTimeline";
+
 export default function Checkout() {
   const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(2);
   const { items, getCheckoutUrl } = useCartStore();
   const totalPrice = items.reduce((sum, item) => sum + normalizePrice(item.price.amount) * item.quantity, 0);
   const deliveryFee = totalPrice >= 50 ? 0 : 3;
@@ -124,6 +142,8 @@ export default function Checkout() {
         <div className="h-[2px] bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
       </header>
 
+      <CheckoutTimeline currentStep={currentStep} />
+
       <main className="mx-auto max-w-3xl px-4 py-8 space-y-8">
         {/* Order Summary */}
         <section className="space-y-4">
@@ -140,30 +160,46 @@ export default function Checkout() {
                   <p className="text-sm font-body font-medium text-foreground truncate">{item.product.node.title}</p>
                   <p className="text-xs text-muted-foreground font-body">Qty: {item.quantity}</p>
                 </div>
-                <p className="text-sm font-body font-semibold text-foreground shrink-0">
-                  {(normalizePrice(item.price.amount) * item.quantity).toFixed(2)} {currency}
-                </p>
+                <CheckoutLuxuryPrice amount={normalizePrice(item.price.amount) * item.quantity} currency={currency} />
               </div>
             ))}
           </div>
           <div className="space-y-1.5 pt-2 border-t border-border/50">
             <div className="flex justify-between text-sm font-body text-muted-foreground">
               <span>Subtotal</span>
-              <span>{totalPrice.toFixed(2)} {currency}</span>
+              <CheckoutLuxuryPrice amount={totalPrice} currency={currency} />
             </div>
             <div className="flex justify-between text-sm font-body text-muted-foreground">
               <span>Delivery {deliveryFee === 0 && <span className="text-accent text-xs">(Free!)</span>}</span>
-              <span>{deliveryFee.toFixed(2)} {currency}</span>
+              <CheckoutLuxuryPrice amount={deliveryFee} currency={currency} />
             </div>
             <div className="flex justify-between text-base font-heading font-bold text-foreground pt-1">
               <span>Total</span>
-              <span>{(totalPrice + deliveryFee).toFixed(2)} {currency}</span>
+              <CheckoutLuxuryPrice amount={totalPrice + deliveryFee} currency={currency} className="text-base" />
             </div>
             {totalPrice < 50 && (
               <p className="text-xs text-accent font-body italic">
                 Add {(50 - totalPrice).toFixed(2)} {currency} more for free delivery!
               </p>
             )}
+          </div>
+
+          {/* Trust Banner */}
+          <div className="mt-6 bg-[#F8F8FF] border border-[#800020]/10 rounded-xl p-4 flex justify-around items-center">
+            <div className="flex flex-col items-center text-center gap-1">
+              <ShieldCheck className="w-5 h-5 text-[#800020]" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-700">Authentic</span>
+            </div>
+            <div className="w-px h-8 bg-gray-200"></div>
+            <div className="flex flex-col items-center text-center gap-1">
+              <Truck className="w-5 h-5 text-[#800020]" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-700">Fast Delivery</span>
+            </div>
+            <div className="w-px h-8 bg-gray-200"></div>
+            <div className="flex flex-col items-center text-center gap-1">
+              <Clock className="w-5 h-5 text-[#800020]" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-700">24/7 Support</span>
+            </div>
           </div>
         </section>
 

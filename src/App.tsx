@@ -30,6 +30,8 @@ import BulkUpload from "./pages/BulkUpload";
 import AdminOrders from "./pages/AdminOrders";
 import TrackOrder from "./pages/TrackOrder";
 import ManageProducts from "./pages/ManageProducts";
+import AdminTaxonomy from "./pages/AdminTaxonomy";
+import QuarantineReview from "./pages/QuarantineReview";
 import Shop from "./pages/Shop";
 import ShopAllOrganized from "./components/ShopAllOrganized";
 import DriverDashboard from "./pages/DriverDashboard";
@@ -115,6 +117,8 @@ const App = () => {
                 <Route path="/admin/bulk-upload" element={<BulkUpload />} />
                 <Route path="/admin/orders" element={<AdminOrders />} />
                 <Route path="/admin/products" element={<ManageProducts />} />
+                <Route path="/admin/taxonomy" element={<AdminTaxonomy />} />
+                <Route path="/admin/quarantine" element={<QuarantineReview />} />
                 <Route path="/track-order" element={<TrackOrder />} />
                 <Route path="/tracking" element={<Navigate to="/track-order" replace />} />
                 <Route path="/shipping" element={<Navigate to="/contact" replace />} />

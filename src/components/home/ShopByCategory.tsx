@@ -71,25 +71,32 @@ export const ShopByCategory = () => {
         </AnimatedSection>
 
         <AnimatedSection animation="fade-up" delay={150}>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-6 lg:gap-8">
+          {/* 1. CSS Grid Implementation (Strict Mandate) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 lg:gap-10">
             {CATEGORIES.map((category) => (
               <Link
                 key={category.id}
                 to={category.href}
-                className="group flex flex-col items-center gap-3"
+                className="group relative flex flex-col items-center gap-4 p-6 bg-white border border-border/40 transition-all duration-500 hover:shadow-[0_15px_40px_-10px_rgba(128,0,32,0.1)] hover:border-polished-gold/30 rounded-sm"
+                data-testid={`category-card-${category.id}`}
               >
-                {/* Circle icon */}
-                <div className="relative w-20 h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden border-2 border-polished-gold/20 group-hover:border-polished-gold/60 transition-all duration-400 group-hover:shadow-[0_4px_20px_hsl(var(--polished-gold)/0.2)] group-hover:scale-105">
+                {/* Circle icon with negative space */}
+                <div className="relative w-24 h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden border-2 border-polished-gold/10 group-hover:border-polished-gold/40 transition-all duration-700 group-hover:scale-110 p-1 bg-asper-stone shadow-inner">
                   <img
                     src={category.icon}
                     alt={isArabic ? category.ar : category.en}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover rounded-full"
                     loading="lazy"
                   />
                 </div>
-                <span className="font-body text-xs lg:text-sm text-asper-ink group-hover:text-polished-gold transition-colors duration-300 text-center">
+                <span className="font-display text-sm font-bold uppercase tracking-[0.2em] text-asper-ink group-hover:text-burgundy transition-colors duration-300 text-center">
                   {isArabic ? category.ar : category.en}
                 </span>
+                
+                {/* Discover accent */}
+                <div className="mt-auto opacity-0 group-hover:opacity-100 transition-opacity duration-500 pt-2">
+                   <div className="h-0.5 w-8 bg-burgundy rounded-full mx-auto" />
+                </div>
               </Link>
             ))}
           </div>

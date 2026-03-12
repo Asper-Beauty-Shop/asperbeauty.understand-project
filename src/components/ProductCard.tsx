@@ -95,14 +95,18 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         className="group block"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        data-testid={`product-link-${node.handle}`}
       >
-        <div className="relative bg-asper-stone overflow-hidden transition-all duration-300 border border-border/60 hover:border-polished-gold/40 p-5">
+        <div 
+          className="relative bg-asper-stone overflow-hidden transition-all duration-500 border border-border/60 hover:border-polished-gold/40 p-6 shadow-sm hover:shadow-[0_20px_50px_-15px_rgba(128,0,32,0.1)]"
+          data-testid={`product-card-${node.id}`}
+        >
           {/* Clinical Shimmer Beam */}
-          <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/50 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
+          <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/60 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-1000 ease-in-out" />
 
           {dnaTag && (
-            <div className="absolute top-4 left-4 z-10">
-              <span className="text-[10px] font-body font-semibold px-2.5 py-1 tracking-wider uppercase bg-burgundy text-polished-white">
+            <div className="absolute top-6 left-6 z-10">
+              <span className="text-[10px] font-body font-bold px-3 py-1.5 tracking-wider uppercase bg-burgundy text-polished-white shadow-sm">
                 {dnaTag.label}
               </span>
             </div>
@@ -112,70 +116,75 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             aria-label={isWishlistedItem
               ? (language === "ar" ? "إزالة من المفضلة" : "Remove from wishlist")
               : (language === "ar" ? "إضافة إلى المفضلة" : "Add to wishlist")}
-            className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-polished-white/80 backdrop-blur-sm transition-all hover:bg-polished-white shadow-sm"
+            className="absolute top-6 right-6 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-polished-white/90 backdrop-blur-md transition-all hover:bg-polished-white shadow-md active:scale-90"
+            data-testid="wishlist-toggle"
           >
-            <Heart className={`w-4 h-4 transition-colors ${isWishlistedItem ? "fill-burgundy text-burgundy" : "text-muted-foreground hover:text-burgundy"}`} />
+            <Heart className={`w-4.5 h-4.5 transition-colors ${isWishlistedItem ? "fill-burgundy text-burgundy" : "text-muted-foreground hover:text-burgundy"}`} />
           </button>
           {isVerified && (
-            <div className="absolute top-4 right-14 z-10">
-              <Badge className="bg-asper-stone text-polished-gold border border-polished-gold/40 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5">
+            <div className="absolute top-6 right-16 z-10">
+              <Badge className="bg-asper-stone/80 backdrop-blur-sm text-polished-gold border border-polished-gold/40 text-[9px] font-bold uppercase tracking-widest px-2 py-1 shadow-sm">
                 Verified
               </Badge>
             </div>
           )}
 
           {/* Image — taller aspect for elegance */}
-          <div className="aspect-[5/6] overflow-hidden bg-polished-white mb-4">
+          <div className="aspect-[5/6] overflow-hidden bg-polished-white mb-6 relative">
             {firstImage ? (
               <OptimizedImage
                 src={displayImage?.url || firstImage.url}
                 alt={displayImage?.altText || firstImage.altText || node.title || ""}
-                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-secondary">
-                <Sparkles className="w-8 h-8 text-muted-foreground/30" />
+                <Sparkles className="w-10 h-10 text-muted-foreground/20" />
               </div>
             )}
+            {/* Subtle overlay on image */}
+            <div className="absolute inset-0 bg-burgundy/0 group-hover:bg-burgundy/5 transition-colors duration-500" />
           </div>
 
           {/* Typography Hierarchy — Inline · Separator */}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {node.vendor && (
-              <p className="text-[10px] uppercase tracking-[0.15em] text-polished-gold font-body font-semibold truncate">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-polished-gold font-body font-bold truncate">
                 {node.vendor}
               </p>
             )}
-            <h3 className="font-display text-[15px] leading-relaxed text-asper-ink font-semibold line-clamp-2">
+            <h3 className="font-display text-base leading-relaxed text-asper-ink font-semibold line-clamp-2 min-h-[3.5rem]">
               {displayTitle}
-              <span className="text-polished-gold mx-1 font-bold">&middot;</span>
-              <span className="font-body text-[13px] font-normal italic text-muted-foreground">
+              <span className="text-polished-gold mx-1.5 font-bold">&middot;</span>
+              <span className="font-body text-[13px] font-normal italic text-muted-foreground tracking-tight">
                 {keyBenefit}
               </span>
             </h3>
 
-            <div className="flex items-center gap-2 pt-2">
-              <span className="text-sm font-body font-bold text-burgundy">
+            <div className="flex items-center gap-3 pt-2">
+              <span className="text-lg font-body font-bold text-burgundy tracking-tight">
                 {formatJOD(parseFloat(price || "0"))}
               </span>
               {hasDiscount && (
-                <span className="text-xs line-through text-muted-foreground">
+                <span className="text-sm line-through text-muted-foreground opacity-60">
                   {formatJOD(parseFloat(comparePrice))}
                 </span>
               )}
             </div>
 
             {/* Conversion CTA — appears on hover */}
-            <div className={`pt-3 transition-all duration-300 ${isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}>
+            <div className={`pt-4 transition-all duration-500 ${isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
               <button
                 onClick={handleAddToCart}
-                className="w-full py-2.5 text-xs font-body font-semibold uppercase tracking-wider text-polished-white bg-burgundy transition-all hover:opacity-90 active:scale-[0.98]"
+                className="w-full py-3 text-[11px] font-body font-bold uppercase tracking-[0.15em] text-polished-white bg-burgundy transition-all hover:bg-asper-ink shadow-lg active:scale-95"
+                data-testid="add-to-cart-button"
               >
                 {language === "ar" ? "إضافة إلى النظام" : "Add to Regimen"}
               </button>
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsQuickViewOpen(true); }}
-                className="w-full text-center text-[11px] mt-2 font-body font-medium text-muted-foreground transition-colors hover:text-burgundy"
+                className="w-full text-center text-[10px] mt-3 font-body font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-burgundy"
+                data-testid="quick-view-button"
               >
                 {language === "ar" ? "عرض المكونات" : "View Ingredients"}
               </button>

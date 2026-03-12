@@ -223,15 +223,19 @@ function formatProduct(p: any): string {
   const parts = [`**${p.title}**`];
   if (p.brand) parts[0] += ` (${p.brand})`;
   if (p.price) parts.push(`${p.price} JOD`);
+  
+  // Include hierarchy if available (Clinical Data Architecture)
+  const dept = p.categories?.departments?.name;
+  const cat = p.categories?.name;
+  if (dept && cat) parts.push(`${dept} > ${cat}`);
+  
   if (p.regimen_step) parts.push(p.regimen_step.replace(/^Step_\d+_?/, "").replace(/([A-Z])/g, " $1").trim());
-  if (p.primary_concern) parts.push(p.primary_concern.replace("Concern_", ""));
   if (p.key_ingredients?.length) parts.push(`Ingredients: ${p.key_ingredients.slice(0, 3).join(", ")}`);
   if (p.clinical_badge) parts.push(`[${p.clinical_badge}]`);
-  if (p.pharmacist_note) parts.push(`Note: ${p.pharmacist_note}`);
   return `- ${parts.join(" | ")}`;
 }
 
-/** Fetch products matching a concern or keywords from the products table */
+/** Fetch products matching a concern or keywords using the new many-to-many taxonomy */
 async function fetchProductContext(
   supabaseClient: any,
   userMessage: string,
@@ -240,26 +244,41 @@ async function fetchProductContext(
   let matchedProducts: any[] = [];
   let productContext = "";
 
-  // Try concern-based lookup first
+  // Try clinical concern-based lookup first (Strict Relational Query)
   if (detectedSlug) {
-    const enums = concernSlugToEnum(detectedSlug);
-    if (enums.length > 0) {
-      const { data } = await supabaseClient
+    const targetConcern = slugToConcernName(detectedSlug);
+    if (targetConcern) {
+      // The Strict Relational Query: traverse products -> product_concerns -> concerns
+      const { data, error } = await supabaseClient
         .from("products")
-        .select("id, title, brand, price, primary_concern, regimen_step, key_ingredients, clinical_badge, pharmacist_note, image_url, handle, tags, is_hero, gold_stitch_tier, inventory_total")
-        .in("primary_concern", enums)
+        .select(`
+          id, title, brand, price, image_url, handle, 
+          regimen_step, key_ingredients, clinical_badge, pharmacist_note,
+          categories (
+            name,
+            departments (
+              name
+            )
+          ),
+          product_concerns!inner (
+            concerns!inner (
+              name
+            )
+          )
+        `)
+        .eq("product_concerns.concerns.name", targetConcern)
         .gt("inventory_total", 0)
         .order("is_hero", { ascending: false })
-        .order("inventory_total", { ascending: false })
-        .limit(12);
-      if (data?.length) {
+        .limit(6);
+
+      if (!error && data?.length) {
         matchedProducts = data;
-        productContext = `\n\n**Relevant Products (${detectedSlug}):**\n${data.map(formatProduct).join("\n")}`;
+        productContext = `\n\n**Prescribed Regimen (${targetConcern}):**\n${data.map(formatProduct).join("\n")}`;
       }
     }
   }
 
-  // Fallback: keyword search on title/brand/tags
+  // Fallback: keyword search on title/brand/tags if no concern match
   if (matchedProducts.length === 0) {
     const keywords = extractKeywords(userMessage);
     if (keywords.length > 0) {
@@ -268,8 +287,25 @@ async function fetchProductContext(
       ).join(",");
       const { data } = await supabaseClient
         .from("products")
-        .select("id, title, brand, price, primary_concern, regimen_step, key_ingredients, clinical_badge, pharmacist_note, image_url, handle, tags, is_hero, gold_stitch_tier, inventory_total")
+        .select(`
+          id, title, brand, price, image_url, handle, 
+          regimen_step, key_ingredients, clinical_badge, pharmacist_note,
+          categories (
+            name,
+            departments (
+              name
+            )
+          )
+        `)
         .or(orClauses)
+        .gt("inventory_total", 0)
+        .limit(12);
+      if (data?.length) {
+        matchedProducts = data;
+        productContext = `\n\n**Relevant Products:**\n${data.map(formatProduct).join("\n")}`;
+      }
+    }
+  }
         .gt("inventory_total", 0)
         .limit(12);
       if (data?.length) {
@@ -284,6 +320,21 @@ async function fetchProductContext(
   }
 
   return { productContext, matchedProducts };
+}
+
+/** Map detected slugs to the exact names seeded in the concerns table */
+function slugToConcernName(slug: string): string | null {
+  const map: Record<string, string> = {
+    "acne": "Acne Control",
+    "anti-aging": "Anti-Aging",
+    "hydration": "Hydration",
+    "sensitivity": "Redness",
+    "dark-spots": "Pigmentation",
+    "sun-protection": "Sun Protection",
+    "barrier": "Barrier Repair",
+    "redness": "Redness",
+  };
+  return map[slug] || null;
 }
 
 // ──────────────────────────────────────────────────────────────

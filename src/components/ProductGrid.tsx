@@ -217,11 +217,7 @@ export const ProductGrid = ({
             )}
             <div className="flex-1">
               <div
-                className={`grid gap-8 lg:gap-10 ${
-                  showFilters
-                    ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                }`}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10"
               >
                 {Array.from({ length: showFilters ? 6 : 8 }).map((_, i) => (
                   <ProductCardSkeleton key={i} />
@@ -233,7 +229,7 @@ export const ProductGrid = ({
 
         {/* Content with Optional Filters */}
         {!loading && products.length > 0 && (
-          <div className={showFilters ? "flex flex-col lg:flex-row gap-8" : ""}>
+          <div className={showFilters ? "flex flex-col lg:flex-row gap-8 lg:gap-12" : ""}>
             {/* Filters Sidebar */}
             {showFilters && (
               <ProductFilters
@@ -249,16 +245,19 @@ export const ProductGrid = ({
             <div className="flex-1">
               {/* Results count */}
               {showFilters && (
-                <div className="mb-6 flex items-center justify-between">
-                  <p className="font-body text-sm text-dark-charcoal">
+                <div className="mb-8 flex items-center justify-between border-b border-polished-gold/10 pb-4">
+                  <p className="font-body text-sm text-dark-charcoal font-medium">
                     {language === "ar"
                       ? `عرض ${filteredProducts.length} من ${products.length} منتج`
                       : `Showing ${filteredProducts.length} of ${products.length} products`}
                   </p>
                   {pageInfo?.hasNextPage && (
-                    <p className="font-body text-xs text-muted-foreground">
-                      {language === "ar" ? "المزيد متاح" : "More available"}
-                    </p>
+                    <div className="flex items-center gap-2 text-polished-gold animate-pulse">
+                      <div className="w-1.5 h-1.5 rounded-full bg-polished-gold" />
+                      <p className="font-body text-[10px] uppercase tracking-widest font-bold">
+                        {language === "ar" ? "المزيد متاح" : "More available"}
+                      </p>
+                    </div>
                   )}
                 </div>
               )}
@@ -267,11 +266,7 @@ export const ProductGrid = ({
                 ? (
                   <>
                     <div
-                      className={`grid gap-8 lg:gap-10 ${
-                        showFilters
-                          ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                          : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                      }`}
+                      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10"
                     >
                       {filteredProducts.map((product) => (
                         <ProductCard key={product.node.id} product={product} />
