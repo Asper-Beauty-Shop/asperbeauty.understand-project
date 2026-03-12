@@ -630,11 +630,26 @@ serve(async (req) => {
         if (recommendEvent) controller.enqueue(encoder.encode(recommendEvent));
         if (productDataEvent) controller.enqueue(encoder.encode(productDataEvent));
         const reader = response.body!.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        function processLine(line: string): void {
+          if (!line.startsWith("data: ")) return;
+          controller.enqueue(encoder.encode(line + "\n\n"));
+        }
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          controller.enqueue(value);
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
+          for (const line of lines) {
+            processLine(line);
+          }
         }
+
+        if (buffer.trim()) processLine(buffer.trim());
         controller.close();
       },
     });
