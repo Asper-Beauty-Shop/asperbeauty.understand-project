@@ -1,5 +1,7 @@
 # 💎 Asper Beauty Shop — Grand Opening Guide (March 2026)
 
+[![Supabase Preview](https://github.com/asperpharma/understand-project/actions/workflows/supabase-preview.yml/badge.svg)](https://github.com/asperpharma/understand-project/actions/workflows/supabase-preview.yml)
+
 Welcome to your production-ready **Medical Luxury** flagship. The engineering is complete, the prices are corrected, and the AI Brain is active.
 
 ---
