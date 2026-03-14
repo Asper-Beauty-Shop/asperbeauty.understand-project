@@ -152,19 +152,19 @@ export default function DriverDashboard() {
 
     try {
       const { data, error } = await supabase
-        .from("cod_orders" as never)
+        .from("cod_orders")
         .select("*")
         .eq("driver_id", user.id)
         .order("assigned_at", { ascending: false });
 
       if (error) throw error;
 
-      const typedOrders: DriverOrder[] = (data || []).map((order) => ({
+      const typedOrders: DriverOrder[] = ((data || []).map((order) => ({
         ...order,
         items: Array.isArray(order.items)
           ? (order.items as unknown as OrderItem[])
           : JSON.parse(order.items as string) as OrderItem[],
-      }));
+      })) as unknown as DriverOrder[]);
 
       setOrders(typedOrders);
 

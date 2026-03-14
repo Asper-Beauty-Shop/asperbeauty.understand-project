@@ -8,9 +8,20 @@ import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { trackQuizFunnel } from "@/lib/quizFunnelAnalytics";
 import { ShoppingBag } from "lucide-react";
-import type { Database } from "@/integrations/supabase/types";
 
-type SkinConcern = Database["public"]["Enums"]["skin_concern"];
+type SkinConcern =
+  | "Concern_Hydration"
+  | "Concern_Acne"
+  | "Concern_AntiAging"
+  | "Concern_Sensitivity"
+  | "Concern_Pigmentation"
+  | "Concern_Brightening"
+  | "Concern_Dryness"
+  | "Concern_SunProtection"
+  | "Concern_DarkCircles"
+  | "Concern_Redness"
+  | "Concern_Oiliness"
+  | "Concern_Aging";
 
 interface TrayProduct {
   id: string;

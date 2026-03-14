@@ -178,7 +178,7 @@ export default function RegimenPortal() {
           });
 
           setPortalData({
-            protocolName: plan.title,
+            protocolName: plan.title ?? "",
             protocolId: id.slice(0, 8).toUpperCase(),
             prescribedBy: "Dr. Sami",
             steps: regimenSteps,
@@ -244,10 +244,10 @@ export default function RegimenPortal() {
         addItem({
           id: s.product.id,
           title: s.product.title,
-          price: s.product.price,
+          price: s.product.price ?? 0,
           image: s.product.image_url || "/editorial-showcase-2.jpg",
           quantity: 1,
-        });
+        } as unknown as Parameters<typeof addItem>[0]);
       }
     });
   };

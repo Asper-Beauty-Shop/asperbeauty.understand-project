@@ -81,7 +81,7 @@ const ProductDetail = () => {
           const { data: related } = await supabase
             .from("products")
             .select("*")
-            .eq("primary_concern", data.primary_concern)
+            .eq("primary_concern", data.primary_concern ?? "")
             .neq("id", data.id)
             .limit(4);
           setRelatedProducts(related || []);
@@ -99,7 +99,7 @@ const ProductDetail = () => {
     id: p.id,
     title: p.title,
     description: p.pharmacist_note || "",
-    handle: p.handle,
+    handle: p.handle ?? "",
     vendor: p.brand || "",
     productType: p.primary_concern || "",
     priceRange: { minVariantPrice: { amount: String(p.price ?? 0), currencyCode: "JOD" } },

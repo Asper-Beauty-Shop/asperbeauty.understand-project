@@ -24,22 +24,13 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { formatJOD, getProductImage } from "@/lib/productImageUtils";
 import { useCartStore } from "@/stores/cartStore";
 
-interface Product {
-  id: string;
-  title: string;
-  price: number | null;
+import type { Tables } from "@/integrations/supabase/types";
+
+type Product = Tables<"products"> & {
   description?: string | null;
   category?: string;
-  image_url: string | null;
-  brand?: string | null;
-  volume_ml?: string | null;
-  is_on_sale?: boolean | null;
-  original_price?: number | null;
-  discount_percent?: number | null;
-  created_at?: string;
-  updated_at?: string;
   [key: string]: unknown;
-}
+};
 
 interface ProductQuickViewProps {
   product: Product | null;
@@ -59,7 +50,7 @@ export const ProductQuickView = (
 
   const imageUrl = getProductImage(
     product.image_url,
-    product.category,
+    product.category ?? "",
     product.title,
   );
   const price = product.price ?? 0;
@@ -110,7 +101,7 @@ export const ProductQuickView = (
 
     for (let i = 0; i < quantity; i++) {
       addItem({
-        product: cartProduct as import("@/lib/shopify").ShopifyProduct,
+        product: cartProduct as unknown as import("@/lib/shopify").ShopifyProduct,
         variantId: product.id,
         variantTitle: "Default",
         price: { amount: price.toString(), currencyCode: "JOD" },
