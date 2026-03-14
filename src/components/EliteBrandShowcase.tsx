@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import type { Tables } from '@/integrations/supabase/types';
 
-interface Brand {
-  id: string;
-  name: string;
-  hero_image_url: string;
-  slug: string;
-  is_elite: boolean;
-}
+type Brand = Tables<'brands'>;
 
 export default function EliteBrandShowcase() {
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -47,7 +42,7 @@ export default function EliteBrandShowcase() {
             <Link to={`/brands/${brand.slug}`} key={brand.id} className="group block cursor-pointer">
               <div className="relative overflow-hidden w-full aspect-[4/5] bg-white shadow-sm transition-all duration-700 ease-in-out group-hover:shadow-xl group-hover:ring-1 group-hover:ring-[#D4AF37] group-hover:ring-offset-4 group-hover:ring-offset-[#FFFBF2]">
                 <img
-                  src={brand.hero_image_url}
+                  src={brand.hero_image_url ?? undefined}
                   alt={`${brand.name} showcase`}
                   className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                   loading="lazy"

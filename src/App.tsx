@@ -40,7 +40,6 @@ import BrandIntelligenceDashboard from "./pages/BrandIntelligenceDashboard";
 import Health from "./pages/Health";
 import RegimenPortal from "./pages/RegimenPortal";
 import { RequireAdmin } from "./components/RequireAdmin";
-import { RouteAnnouncer } from "./components/RouteAnnouncer";
 
 const BeautyAssistant = lazy(() =>
   import("@/components/BeautyAssistant").then((m) => ({ default: m.BeautyAssistant })),
@@ -76,7 +75,6 @@ const App = () => {
             <Toaster />
             <Sonner position="top-center" />
             <BrowserRouter>
-              <RouteAnnouncer />
               <Suspense fallback={null}>
                 <BeautyAssistant />
                 <FloatingConciergeWidget />

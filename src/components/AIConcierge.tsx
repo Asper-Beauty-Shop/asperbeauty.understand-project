@@ -266,7 +266,7 @@ export default function AIConcierge() {
           .eq("user_id", user.id)
           .maybeSingle();
         if (data) {
-          setUserProfile({ skin_type: data.skin_type, skin_concern: data.skin_concern, tags: [] });
+          setUserProfile({ skin_type: data.skin_type, skin_concern: data.skin_concern ?? "", tags: [] });
         }
       } catch {
         // Not logged in or no profile — proceed without context

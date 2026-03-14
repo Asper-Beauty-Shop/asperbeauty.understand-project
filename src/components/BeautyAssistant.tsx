@@ -127,51 +127,18 @@ export const BeautyAssistant = () => {
             {/* Chat Area */}
             <ScrollArea ref={scrollRef} className="flex-1 p-5 space-y-5 bg-white/50 backdrop-blur-md">
               {messages.length === 0 && (
-                <div className="text-center py-6">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-polished-gold/20 to-transparent flex items-center justify-center border border-polished-gold/30 shadow-[0_4px_20px_-5px_rgba(212,175,55,0.3)]">
+                <div className="text-center py-10">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-polished-gold/20 to-transparent flex items-center justify-center border border-polished-gold/30">
                     <img src="/dr-bot-character.png" className="w-16 h-16 object-contain" alt="Dr. Sami Icon" />
                   </div>
                   <h4 className="text-asper-ink font-heading text-xl font-bold mb-2">
                     {isAr ? "استشارة مجانية" : "Private Consultation"}
                   </h4>
-                  <p className="text-asper-ink/70 text-sm max-w-xs mx-auto leading-relaxed mb-6">
+                  <p className="text-asper-ink/70 text-sm max-w-xs mx-auto leading-relaxed">
                     {isAr 
-                      ? "أهلاً بكِ في عيادتنا الرقمية. صفي لي حالة بشرتكِ أو اختاري مما يلي:"
-                      : "Welcome to our digital clinic. Tell me about your skin concerns or select an option below:"}
+                      ? "أهلاً بكِ في عيادتنا الرقمية. صفي لي حالة بشرتكِ أو ما تبحثين عنه."
+                      : "Welcome to our digital clinic. Tell me about your skin concerns or what you're looking for."}
                   </p>
-                  
-                  <div className="flex flex-col gap-2 px-4">
-                    {['Routine for acne-prone skin', 'Best anti-aging serum', 'Daily hydration for sensitive skin'].map((suggestion, idx) => (
-                      <button 
-                        key={idx}
-                        onClick={() => {
-                          setInput(suggestion);
-                          // We wait a tick to ensure state is updated before sending
-                          setTimeout(() => {
-                             const userMsg = { role: "user", content: suggestion };
-                             setMessages(prev => [...prev, userMsg]);
-                             setInput("");
-                             setIsLoading(true);
-                             supabase.functions.invoke('beauty-assistant', { body: { messages: [userMsg], language } })
-                               .then(({data, error}) => {
-                                  if(error) throw error;
-                                  setMessages(prev => [...prev, { role: "assistant", content: data.reply, trayProducts: data.products }]);
-                               })
-                               .catch(err => {
-                                  console.error(err);
-                                  toast.error(ASPER_PROTOCOL.errorShort[language === 'ar' ? 'ar' : 'en']);
-                               })
-                               .finally(() => setIsLoading(false));
-                          }, 50);
-                        }}
-                        className="text-left px-4 py-3 text-sm bg-white border border-polished-gold/20 rounded-xl text-asper-ink/80 hover:bg-polished-gold/5 hover:border-polished-gold/40 hover:text-asper-ink transition-all shadow-sm active:scale-95"
-                      >
-                        {isAr && idx === 0 ? "روتين للبشرة المعرضة لحب الشباب" : 
-                         isAr && idx === 1 ? "أفضل سيروم مقاوم للتجاعيد" : 
-                         isAr && idx === 2 ? "ترطيب يومي للبشرة الحساسة" : suggestion}
-                      </button>
-                    ))}
-                  </div>
                 </div>
               )}
               

@@ -21,7 +21,7 @@ describe("ProductResultsGrid", () => {
     const { container } = renderWithProviders(
       <ProductResultsGrid products={undefined} isLoading={true} error={null} />
     );
-    // Skeleton renders breathing animations
+    // Skeleton renders spa-breathing animations (custom animate-skeleton-breathe class)
     expect(container.querySelector(".animate-skeleton-breathe")).toBeTruthy();
   });
 

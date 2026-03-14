@@ -1,9 +1,9 @@
-import { ShopifyProductCard } from "@/components/ShopifyProductCard";
-import { ProductGridSkeleton } from "@/components/skeletons/ProductSkeletons";
+import { ShopifyProductCard } from "../ShopifyProductCard";
+import { ProductGridSkeleton } from "../skeletons/ProductSkeletons";
 import { Stethoscope, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import type { ShopifyProduct } from "@/lib/shopify";
-import type { ProductEnrichment } from "@/hooks/useProductEnrichment";
+import type { ShopifyProduct } from "../../lib/shopify";
+import type { ProductEnrichment } from "../../hooks/useProductEnrichment";
 
 interface ProductResultsGridProps {
   products: ShopifyProduct[] | undefined;

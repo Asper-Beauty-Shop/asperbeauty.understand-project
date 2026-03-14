@@ -69,11 +69,11 @@ export const BrandMarquee = () => {
         </div>
 
         {/* Luxury Brand Grid - Show first 8 on large screens */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-4 md:gap-6 place-items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-4 md:gap-6">
           {BRANDS.slice(0, 6).map((brand, index) => (
             <div
               key={brand.name}
-              className="group relative flex items-center justify-center w-full h-24 sm:h-32 p-4 sm:p-6
+              className="group relative flex items-center justify-center p-6 md:p-8 
                          bg-white/80 backdrop-blur-sm rounded-xl
                          border border-cream-dark/50 
                          shadow-[0_4px_24px_-4px_rgba(0,0,0,0.05)]
@@ -122,7 +122,7 @@ export const BrandMarquee = () => {
               <img
                 src={brand.logo}
                 alt={`${brand.name} Logo`}
-                className="relative w-full h-full max-w-[120px] object-contain 
+                className="relative h-8 md:h-10 w-auto max-w-full object-contain 
                            filter grayscale opacity-70
                            group-hover:grayscale-0 group-hover:opacity-100
                            transition-all duration-500 ease-out

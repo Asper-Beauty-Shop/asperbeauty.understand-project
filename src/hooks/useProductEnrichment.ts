@@ -60,13 +60,13 @@ export function useProductEnrichmentBulk(handles: string[]) {
       }
       const map = new Map<string, ProductEnrichment>();
       for (const row of data || []) {
-        map.set(row.handle, {
+        map.set(row.handle ?? "", {
           clinical_badge: row.clinical_badge,
-          ai_persona_lead: row.ai_persona_lead,
+          ai_persona_lead: row.ai_persona_lead as "dr_sami" | "ms_zain" | null,
           key_ingredients: row.key_ingredients,
           texture_profile: row.texture_profile,
           hex_swatch: row.hex_swatch,
-          gold_stitch_tier: row.gold_stitch_tier,
+          gold_stitch_tier: row.gold_stitch_tier ?? false,
           product_highlights: row.product_highlights,
           condition: row.condition,
           availability_status: row.availability_status,

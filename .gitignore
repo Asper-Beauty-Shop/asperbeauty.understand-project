@@ -1,45 +1,27 @@
 # Dependencies
 node_modules/
-.pnp
-.pnp.js
 
-# Build outputs
+# Build output
 dist/
-build/
-.next/
-out/
 
-# Local env files
+# Environment variables
 .env
-dist
-dist-ssr
-*.local
+.env.local
+.env.*.local
 
-.understand
-.cursor
-.claudefesii
-Orgnized Products
-Supabase_files
-*.csv
-*.sql
-*.ipynb
-*.xlsx
-*.tsv
-*.crt
-*.docx
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# OS files
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
 
-# AI / tooling (do not track)
-.claude/
-.claudefesii/
-.snapshots/
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
