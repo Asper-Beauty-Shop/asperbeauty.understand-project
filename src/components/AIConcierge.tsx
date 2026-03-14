@@ -266,7 +266,7 @@ export default function AIConcierge() {
           .eq("user_id", user.id)
           .maybeSingle();
         if (data) {
-          setUserProfile({ skin_type: data.skin_type, skin_concern: data.skin_concern, tags: [] });
+          setUserProfile({ skin_type: data.skin_type, skin_concern: data.skin_concern ?? "", tags: [] });
         }
       } catch {
         // Not logged in or no profile — proceed without context
@@ -394,19 +394,9 @@ export default function AIConcierge() {
       });
     } catch (e: unknown) {
       const errMsg = e instanceof Error ? e.message : String(e);
-      let displayError = `⚠️ ${errMsg}`;
-      
-      // Luxury fallback for high demand or connection issues
-      if (errMsg.toLowerCase().includes("high demand") || 
-          errMsg.toLowerCase().includes("rate limit") || 
-          errMsg.toLowerCase().includes("too many requests") ||
-          errMsg.toLowerCase().includes("connection failed")) {
-        displayError = "### 🌿 Our Concierge is currently assisting many guests.\n\nTo maintain our standards of clinical excellence, we are limiting new requests temporarily. \n\n**Please leave your details or try again in a few moments.** We appreciate your patience.";
-      }
-
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: displayError, persona: currentPersona },
+        { role: "assistant", content: `⚠️ ${errMsg}`, persona: currentPersona },
       ]);
       setIsLoading(false);
     }

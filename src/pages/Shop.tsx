@@ -60,7 +60,7 @@ const ShopProductCard = ({
           id: product.id,
           title: product.title,
           description: product.pharmacist_note || "",
-          handle: product.handle,
+          handle: product.handle ?? "",
           vendor: product.brand || "",
           productType: product.primary_concern || "",
           priceRange: { minVariantPrice: { amount: String(product.price ?? 0), currencyCode: "JOD" } },
@@ -327,9 +327,7 @@ export default function Shop() {
   }, [products]);
 
   const filteredProducts = useMemo(() => {
-    const eliteBrands = ["Chanel", "Dior", "La Mer", "Augustinus Bader", "Vichy", "La Roche-Posay"];
-    
-    const filtered = products.filter((product) => {
+    return products.filter((product) => {
       // Filter by asper_category sidebar
       if (categoryParam && categoryParam !== "All Curation" && (product as any).asper_category !== categoryParam) return false;
 
@@ -350,16 +348,6 @@ export default function Shop() {
       const price = product.price ?? 0;
       if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
       return true;
-    });
-
-    // Apply Elite Brand Sorting
-    return [...filtered].sort((a, b) => {
-      const aIsElite = a.brand ? eliteBrands.includes(a.brand) : false;
-      const bIsElite = b.brand ? eliteBrands.includes(b.brand) : false;
-      
-      if (aIsElite && !bIsElite) return -1;
-      if (!aIsElite && bIsElite) return 1;
-      return 0;
     });
   }, [products, filters, categoryParam]);
 
@@ -586,7 +574,7 @@ export default function Shop() {
       </main>
       <Footer />
       <ProductQuickView
-        product={selectedProduct ? { id: selectedProduct.id, title: selectedProduct.title, price: selectedProduct.price ?? 0, description: selectedProduct.pharmacist_note, category: selectedProduct.primary_concern?.replace("Concern_","") ?? "General", image_url: selectedProduct.image_url, brand: selectedProduct.brand, volume_ml: null, is_on_sale: null, original_price: null, discount_percent: null, created_at: selectedProduct.created_at, updated_at: selectedProduct.updated_at } : null}
+        product={selectedProduct ? { ...selectedProduct, category: selectedProduct.primary_concern?.replace("Concern_","") ?? "General", description: selectedProduct.pharmacist_note } : null}
         isOpen={isQuickViewOpen}
         onClose={() => { setIsQuickViewOpen(false); setTimeout(() => setSelectedProduct(null), 300); }}
       />

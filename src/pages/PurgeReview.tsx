@@ -14,7 +14,7 @@ interface PurgedProduct {
   title: string;
   brand: string | null;
   price: number | null;
-  handle: string;
+  handle: string | null;
   asper_category: string | null;
 }
 

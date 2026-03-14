@@ -137,12 +137,12 @@ export const ProductGrid = ({
   const { availableCategories, availableBrands, maxPrice } = useMemo(() => {
     const categories = [
       ...new Set(
-        categoryFilteredProducts.map((p) => p.node.productType).filter(Boolean),
+        categoryFilteredProducts.map((p) => p.node.productType).filter((x): x is string => !!x),
       ),
     ];
     const brands = [
       ...new Set(
-        categoryFilteredProducts.map((p) => p.node.vendor).filter(Boolean),
+        categoryFilteredProducts.map((p) => p.node.vendor).filter((x): x is string => !!x),
       ),
     ];
     const max = categoryFilteredProducts.length > 0
@@ -167,12 +167,12 @@ export const ProductGrid = ({
 
       if (
         filters.categories.length > 0 &&
-        !filters.categories.includes(node.productType)
+        !filters.categories.includes(node.productType ?? "")
       ) {
         return false;
       }
 
-      if (filters.brands.length > 0 && !filters.brands.includes(node.vendor)) {
+      if (filters.brands.length > 0 && !filters.brands.includes(node.vendor ?? "")) {
         return false;
       }
 

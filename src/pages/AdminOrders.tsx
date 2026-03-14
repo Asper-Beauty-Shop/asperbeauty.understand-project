@@ -173,7 +173,7 @@ export default function AdminOrders() {
     setIsLoading(true);
     try {
       const { data, error } = await supabase
-        .from("cod_orders" as never)
+        .from("cod_orders")
         .select("*")
         .order("created_at", { ascending: false });
 
@@ -185,7 +185,7 @@ export default function AdminOrders() {
         items: typeof order.items === "string"
           ? JSON.parse(order.items)
           : order.items,
-      })) as CODOrder[];
+      })) as unknown as CODOrder[];
 
       setOrders(parsedOrders);
     } catch (error) {

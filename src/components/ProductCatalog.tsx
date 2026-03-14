@@ -19,30 +19,13 @@ import { formatJOD, getProductImage } from "@/lib/productImageUtils";
 import { ProductQuickView } from "./ProductQuickView";
 import { useCartStore } from "@/stores/cartStore";
 
+import type { Tables } from "@/integrations/supabase/types";
+
 // Product type from Supabase with new columns
-interface Product {
-  id: string;
-  title: string;
-  price: number | null;
-  handle: string;
-  primary_concern: string;
-  image_url: string | null;
-  brand: string | null;
-  clinical_badge: string | null;
-  pharmacist_note: string | null;
-  gold_stitch_tier: boolean;
-  is_hero: boolean;
-  tags: string[] | null;
-  created_at: string;
-  updated_at: string;
+type Product = Tables<"products"> & {
   category?: string;
   description?: string | null;
-  volume_ml?: string | null;
-  is_on_sale?: boolean | null;
-  original_price?: number | null;
-  discount_percent?: number | null;
-  [key: string]: unknown;
-}
+};
 
 // Professional ProductCard Component - BeautyBox/iHerb Style
 const ProductCard = ({
@@ -59,7 +42,7 @@ const ProductCard = ({
   const setCartOpen = useCartStore((state) => state.setOpen);
   const imageUrl = getProductImage(
     product.image_url,
-    product.category,
+    product.category ?? "",
     product.title,
   );
 
@@ -112,7 +95,7 @@ const ProductCard = ({
     };
 
     addItem({
-      product: cartProduct as import("@/lib/shopify").ShopifyProduct,
+      product: cartProduct as unknown as import("@/lib/shopify").ShopifyProduct,
       variantId: product.id,
       variantTitle: "Default",
       price: { amount: price.toString(), currencyCode: "JOD" },

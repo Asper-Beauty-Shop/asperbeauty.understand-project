@@ -7,29 +7,15 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+import type { Tables } from '@/integrations/supabase/types';
+
 const PAGE_SIZE = 48;
 
-interface Product {
-  id: string;
-  title: string;
-  price: number | null;
-  handle: string;
-  primary_concern: string;
-  image_url: string | null;
-  brand: string | null;
-  tags: string[] | null;
-  created_at: string;
-  updated_at: string;
-  // Compat aliases
+type Product = Tables<"products"> & {
   category?: string;
   subcategory?: string | null;
-  description?: string | null;
-  volume_ml?: string | null;
-  is_on_sale?: boolean | null;
-  original_price?: number | null;
-  discount_percent?: number | null;
   skin_concerns?: string[] | null;
-}
+};
 
 function groupByCollection(items: Product[]): Record<string, Product[]> {
   return items.reduce((acc, product) => {
@@ -102,7 +88,7 @@ export default function ShopAllOrganized() {
   );
 
   const uniqueTypes = useMemo(() => {
-    const types = new Set(products.map((p) => p.category).filter(Boolean));
+    const types = new Set(products.map((p) => p.category).filter((c): c is string => c != null));
     return ['All', ...Array.from(types).sort()];
   }, [products]);
 
@@ -186,7 +172,7 @@ export default function ShopAllOrganized() {
                   {items.map((product) => {
                     const imageUrl = getProductImage(
                       product.image_url,
-                      product.category,
+                      product.category ?? "",
                       product.title,
                     );
                     return (
