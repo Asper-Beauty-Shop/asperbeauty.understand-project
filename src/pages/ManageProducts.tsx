@@ -51,20 +51,9 @@ import { getProductImage } from "@/lib/productImageUtils";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-interface Product {
-  id: string;
-  title: string;
-  price: number | null;
-  handle: string;
-  primary_concern: string;
-  regimen_step: string;
-  image_url: string | null;
-  brand: string | null;
-  pharmacist_note: string | null;
-  created_at: string;
-  updated_at: string;
+type Product = Tables<"products"> & {
   [key: string]: unknown;
-}
+};
 
 const categories = ["Best Seller", "New Arrival", "Trending", "Featured"];
 

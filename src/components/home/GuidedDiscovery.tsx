@@ -69,7 +69,7 @@ const ZAIN_INSIGHTS: Record<string, { en: string; ar: string }> = {
 export function GuidedDiscovery() {
   const { locale } = useLanguage();
   const isAr = locale === "ar";
-  const [activeConcern, setActiveConcern] = useState(AMBITIONS[0].key);
+  const [activeConcern, setActiveConcern] = useState<typeof AMBITIONS[number]["key"]>(AMBITIONS[0].key);
 
   const { data: matchedProducts = [] } = useQuery({
     queryKey: ["guided-discovery", activeConcern],

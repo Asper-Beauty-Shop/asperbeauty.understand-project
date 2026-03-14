@@ -27,7 +27,7 @@ export function useProducts(concern: string | null) {
       if (concern) {
         query = query.eq(
           "primary_concern",
-          concern as Tables<"products">["primary_concern"]
+          concern
         );
       }
 
