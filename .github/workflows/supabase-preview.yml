@@ -29,7 +29,7 @@ jobs:
             exit 0
           fi
           supabase --experimental branches create \
-            --project-ref qqceibvalkoytafynwoc \
+            --project-ref vhgwvfedgfmcixhdyttt \
             --name "${{ github.head_ref }}" || \
             echo "Branch creation failed or branch already exists, continuing..."
         env:
@@ -56,12 +56,12 @@ jobs:
           fi
           BRANCH_NAME="${{ github.head_ref }}"
           BRANCH_ID=$(supabase --experimental branches list \
-            --project-ref qqceibvalkoytafynwoc \
+            --project-ref vhgwvfedgfmcixhdyttt \
             --output json 2>/dev/null | \
             jq -r --arg name "$BRANCH_NAME" '.[] | select(.name == $name) | .id' 2>/dev/null || true)
           if [ -n "$BRANCH_ID" ]; then
             supabase --experimental branches delete "$BRANCH_ID" \
-              --project-ref qqceibvalkoytafynwoc || true
+              --project-ref vhgwvfedgfmcixhdyttt || true
           else
             echo "No Supabase branch found for git branch: $BRANCH_NAME"
           fi

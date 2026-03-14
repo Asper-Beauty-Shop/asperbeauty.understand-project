@@ -7,9 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+.pnp
+.pnp.js
+
+# Build output
 dist
 dist-ssr
+build
 *.local
 
 # Editor directories and files
@@ -27,3 +33,21 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Lock files (keep only package-lock.json)
+bun.lockb
+deno.lock
+
+# Large binaries
+*.exe
+*.msi
+*.dmg
+*.pkg
+
+# Data files
+data/
+Organized Products/
+*.csv
+
+# Temp files
+9f2d2ba202abd4430d957e90097d1781d94888c8
