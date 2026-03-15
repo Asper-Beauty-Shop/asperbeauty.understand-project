@@ -245,7 +245,7 @@ export default function RegimenPortal() {
             id: s.product.id,
             title: s.product.title,
             price: { amount: String(s.product.price), currencyCode: "JOD" },
-            image: s.product.image_url || "/editorial-showcase-2.webp",
+            image: s.product.image_url || "/editorial-showcase-2.jpg",
             quantity: 1,
           } as any);
       }

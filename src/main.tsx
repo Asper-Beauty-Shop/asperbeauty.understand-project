@@ -13,7 +13,7 @@ createRoot(document.getElementById("root")!).render(
 if (typeof window !== "undefined") {
   const loadBg = () => {
     const img = new Image();
-    img.src = "/luxury-beauty-background.webp";
+    img.src = "/luxury-beauty-background.jpg";
     img.onload = () => document.body.classList.add("bg-loaded");
   };
   if ("requestIdleCallback" in window) {

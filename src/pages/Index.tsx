@@ -123,7 +123,7 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
 );
 
 // Placeholder fallback image for when DB is empty (no eager imports)
-const PLACEHOLDER_IMG = "/editorial-showcase-2.webp";
+const PLACEHOLDER_IMG = "/editorial-showcase-2.jpg";
 
 // Sample product data for sliders — using placeholder; DB data takes priority
 const NEW_ARRIVALS = [
@@ -168,7 +168,7 @@ const Index = () => {
           title: p.title,
           brand: p.brand,
           price: p.price ?? 0,
-          image_url: p.image_url || "/editorial-showcase-2.webp",
+          image_url: p.image_url || "/editorial-showcase-2.jpg",
           category: p.primary_concern,
           tags: [] as string[],
           is_new: true,
@@ -193,7 +193,7 @@ const Index = () => {
           title: p.title,
           brand: p.brand,
           price: p.price ?? 0,
-          image_url: p.image_url || "/editorial-showcase-2.webp",
+          image_url: p.image_url || "/editorial-showcase-2.jpg",
           category: p.primary_concern,
           is_on_sale: false,
         }));

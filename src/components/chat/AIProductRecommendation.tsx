@@ -59,7 +59,7 @@ export function AIProductRecommendation({
       <div className="p-3 flex gap-3 items-center hover:bg-secondary/50 transition-colors duration-300">
         <div className="w-16 h-20 bg-secondary shrink-0 border border-border flex items-center justify-center overflow-hidden">
           <img
-            src={product.imageUrl || "/editorial-showcase-2.webp"}
+            src={product.imageUrl || "/editorial-showcase-2.jpg"}
             alt={product.name}
             className="w-full h-full object-contain mix-blend-multiply"
             loading="lazy"

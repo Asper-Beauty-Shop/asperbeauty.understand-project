@@ -90,7 +90,7 @@ export const ProductSlider = ({
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {products.map((product) => {
-              const imgSrc = product.image || product.image_url || "/editorial-showcase-2.webp";
+              const imgSrc = product.image || product.image_url || "/editorial-showcase-2.jpg";
               const handle = product.handle || product.id;
               const clinicalTag = product.clinical_badge || product.tag;
 

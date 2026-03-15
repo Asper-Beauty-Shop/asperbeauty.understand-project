@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 
 const BRAND_SLIDES = [
   { id: 1, image: "/brands/vichy.png" },
-  { id: 2, image: "/editorial-showcase-1.webp" },
-  { id: 3, image: "/editorial-showcase-2.webp" },
+  { id: 2, image: "/editorial-showcase-1.jpg" },
+  { id: 3, image: "/editorial-showcase-2.jpg" },
 ];
 
 export const BrandOfTheWeek = () => {
