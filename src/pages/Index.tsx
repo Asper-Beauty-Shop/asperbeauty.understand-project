@@ -202,7 +202,7 @@ const Index = () => {
 
   useEffect(() => {
     const handleLoad = () => setIsLoading(false);
-    const timer = setTimeout(() => setIsLoading(false), 1200);
+    const timer = setTimeout(() => setIsLoading(false), 300);
     window.addEventListener("load", handleLoad);
     return () => {
       clearTimeout(timer);

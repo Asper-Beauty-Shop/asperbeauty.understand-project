@@ -109,7 +109,7 @@ const App = () => {
                 <Route path="/account" element={<Account />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/philosophy" element={<Philosophy />} />
-                <Route path="/intelligence" element={<AsperIntelligence />} />
+                <Route path="/intelligence" element={<Suspense fallback={null}><AsperIntelligence /></Suspense>} />
                 <Route path="/health" element={<Health />} />
                 <Route path="/portal/regimen/:id" element={<RegimenPortal />} />
                 <Route path="/admin/bulk-upload" element={<Suspense fallback={null}><BulkUpload /></Suspense>} />
