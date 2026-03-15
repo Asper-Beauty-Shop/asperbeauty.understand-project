@@ -118,6 +118,7 @@ export const CartDrawer = () => {
             <button
               onClick={() => handleOpenChange(false)}
               className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Close cart"
             >
               <X className="w-5 h-5" />
             </button>
