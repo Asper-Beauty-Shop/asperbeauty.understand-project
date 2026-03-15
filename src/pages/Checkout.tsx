@@ -69,11 +69,9 @@ export default function Checkout() {
     }
 
     if (paymentMethod === "card") {
-      // Redirect to Shopify checkout for card payments
-      const checkoutUrl = getCheckoutUrl();
-      if (checkoutUrl) {
-        window.open(checkoutUrl, "_blank");
-      }
+      // Card payments not yet supported without external checkout
+      toast.error("Card payment is not available. Please use Cash on Delivery.");
+      return;
     } else {
       // COD flow — show confirmation
       setSubmitting(true);
