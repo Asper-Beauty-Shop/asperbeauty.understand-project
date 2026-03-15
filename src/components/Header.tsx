@@ -132,6 +132,7 @@ export const Header = () => {
                 >
                   <Link
                     to="/brands"
+                    onFocus={() => prefetchRoute("/brands")}
                     className={cn(
                       "flex items-center gap-1 font-body text-sm font-medium transition-colors py-8",
                       textColor, textColorHover
