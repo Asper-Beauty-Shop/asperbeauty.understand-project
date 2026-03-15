@@ -47,13 +47,24 @@ export function SupabaseProductCard({
     e.preventDefault();
     if (isOutOfStock || !product.handle) return;
     addItem({
-      id: product.id,
+      product: {
+        node: {
+          id: product.id,
+          title: product.title ?? product.brand,
+          handle: product.handle ?? "",
+          vendor: product.brand,
+          productType: product.asper_category ?? "",
+          images: { edges: product.image_url ? [{ node: { url: product.image_url, altText: product.title ?? product.brand } }] : [] },
+          priceRange: { minVariantPrice: { amount: String(product.price), currencyCode: "JOD" } },
+          variants: { edges: [] },
+          description: "",
+        },
+      },
       variantId: product.id,
-      title: product.title ?? product.brand,
-      price: product.price,
-      image: product.image_url ?? "",
-      handle: product.handle,
+      variantTitle: product.title ?? product.brand,
+      price: { amount: String(product.price), currencyCode: "JOD" },
       quantity: 1,
+      selectedOptions: [],
     });
     setCartOpen(true);
   };
