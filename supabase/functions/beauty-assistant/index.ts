@@ -8,35 +8,34 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const CONCERN_MAPPING: Record<string, string[]> = {
-  "acne":           ["Concern_Acne", "Concern_Oiliness"],
-  "anti-aging":     ["Concern_Aging", "Concern_AntiAging", "Concern_Wrinkles"],
-  "hydration":      ["Concern_Hydration", "Concern_Dryness"],
-  "sensitivity":    ["Concern_Sensitivity", "Concern_Redness", "Concern_RosaceaSafe"],
-  "dark-spots":     ["Concern_Pigmentation", "Concern_Brightening", "Concern_DarkSpots"],
+  acne: ["Concern_Acne", "Concern_Oiliness"],
+  "anti-aging": ["Concern_Aging", "Concern_AntiAging", "Concern_Wrinkles"],
+  hydration: ["Concern_Hydration", "Concern_Dryness"],
+  sensitivity: ["Concern_Sensitivity", "Concern_Redness", "Concern_RosaceaSafe"],
+  "dark-spots": ["Concern_Pigmentation", "Concern_Brightening", "Concern_DarkSpots"],
   "sun-protection": ["Concern_SunProtection"],
-  "hair-loss":      ["Concern_HairLoss"],
+  "hair-loss": ["Concern_HairLoss"],
   "pregnancy-safe": ["Concern_PregnancySafe"],
 };
 
 const SAFETY_KEYWORDS: Record<string, string[]> = {
-  pregnancy:   ["pregnant", "pregnancy", "breastfeed", "nursing"],
+  pregnancy: ["pregnant", "pregnancy", "breastfeed", "nursing"],
   sensitivity: ["sensitive", "allergic", "allergy", "rosacea", "eczema"],
-  pediatric:   ["child", "baby", "infant", "toddler"],
+  pediatric: ["child", "baby", "infant", "toddler"],
 };
 
-const ALLOWED_ORIGINS = new Set([
-  "https://www.asperbeautyshop.com",
-  "https://asperbeautyshop.com",
-  Deno.env.get("ALLOWED_ORIGIN") ?? "",
-].filter(Boolean));
+const ALLOWED_ORIGINS = new Set(
+  ["https://www.asperbeautyshop.com", "https://asperbeautyshop.com", Deno.env.get("ALLOWED_ORIGIN") ?? ""].filter(
+    Boolean,
+  ),
+);
 
 function getCorsHeaders(req: Request): Record<string, string> {
   const origin = req.headers.get("Origin") ?? "";
   const allowOrigin = ALLOWED_ORIGINS.has(origin) ? origin : "https://www.asperbeautyshop.com";
   return {
     "Access-Control-Allow-Origin": allowOrigin,
-    "Access-Control-Allow-Headers":
-      "authorization, x-client-info, apikey, content-type, x-webhook-route",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-webhook-route",
     "Access-Control-Expose-Headers": "X-Persona, X-Safety-Flags",
   };
 }
@@ -48,7 +47,9 @@ function getWebhookRoute(req: Request): "gorgias" | "manychat" | null {
     if (q === "gorgias" || q === "manychat") return q;
     const header = req.headers.get("x-webhook-route")?.toLowerCase();
     if (header === "gorgias" || header === "manychat") return header;
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return null;
 }
 
@@ -79,12 +80,13 @@ function detectConcernSlug(text: string): string | null {
 function detectSafetyFlags(text: string): string[] {
   const lower = text.toLowerCase();
   return Object.entries(SAFETY_KEYWORDS)
-    .filter(([, kw]) => kw.some(k => lower.includes(k)))
+    .filter(([, kw]) => kw.some((k) => lower.includes(k)))
     .map(([flag]) => flag);
 }
 
 function detectPersona(text: string): "dr_sami" | "ms_zain" {
-  const clinical = /\b(ingredient|clinical|study|retinol|acid|spf|diagnos|medical|treat|concern|allerg|sensitiv|pregnan|pharmacist)\b/i;
+  const clinical =
+    /\b(ingredient|clinical|study|retinol|acid|spf|diagnos|medical|treat|concern|allerg|sensitiv|pregnan|pharmacist)\b/i;
   return clinical.test(text) ? "dr_sami" : "ms_zain";
 }
 
@@ -98,7 +100,12 @@ function formatProduct(p: Record<string, unknown>): string {
 async function fetchProductContext(supabase: any, slug: string | null) {
   if (slug) {
     const enums = CONCERN_MAPPING[slug] || [];
-    const { data } = await supabase.from("products").select("*").in("primary_concern", enums).gt("inventory_total", 0).limit(6);
+    const { data } = await supabase
+      .from("products")
+      .select("*")
+      .in("primary_concern", enums)
+      .gt("inventory_total", 0)
+      .limit(6);
     if (data?.length) return { context: data.map(formatProduct).join("\n"), products: data };
   }
   const { data } = await supabase.from("products").select("*").gt("inventory_total", 0).limit(6);
@@ -106,10 +113,16 @@ async function fetchProductContext(supabase: any, slug: string | null) {
   return { context: products.map(formatProduct).join("\n"), products };
 }
 
-function buildSystemPrompt(productContext: string, persona: "dr_sami" | "ms_zain", safetyFlags: string[], shopRoutinePath: string | null): string {
-  const personaVoice = persona === "dr_sami"
-    ? `You are **DR. SAMI** — The Voice of Science. Start with: "As your clinical pharmacist..." Use precise, evidence-based language.`
-    : `You are **MS. ZAIN** — The Voice of Luxury. Start with: "Welcome to your personal beauty ritual..." Use warm, aspirational language.`;
+function buildSystemPrompt(
+  productContext: string,
+  persona: "dr_sami" | "ms_zain",
+  safetyFlags: string[],
+  shopRoutinePath: string | null,
+): string {
+  const personaVoice =
+    persona === "dr_sami"
+      ? `You are **DR. SAMI** — The Voice of Science. Start with: "As your clinical pharmacist..." Use precise, evidence-based language.`
+      : `You are **MS. ZAIN** — The Voice of Luxury. Start with: "Welcome to your personal beauty ritual..." Use warm, aspirational language.`;
 
   const safetyNote = safetyFlags.length
     ? `\n## SAFETY INTERLOCK\nUser flags: ${safetyFlags.join(", ")}. Prioritize safety. Avoid contraindicated ingredients. Always recommend consulting a doctor.`
@@ -166,33 +179,44 @@ serve(async (req) => {
     } else {
       messages = body.messages ?? [];
       const lastMsg = messages[messages.length - 1];
-      userMessage = typeof lastMsg?.content === "string" ? lastMsg.content
-        : Array.isArray(lastMsg?.content) ? (lastMsg.content as Array<{ type: string; text?: string }>)
-            .filter(p => p.type === "text").map(p => p.text).join(" ")
-        : "";
+      userMessage =
+        typeof lastMsg?.content === "string"
+          ? lastMsg.content
+          : Array.isArray(lastMsg?.content)
+            ? (lastMsg.content as Array<{ type: string; text?: string }>)
+                .filter((p) => p.type === "text")
+                .map((p) => p.text)
+                .join(" ")
+            : "";
     }
 
     const slug = detectConcernSlug(userMessage);
     const persona = body.forcePersona ?? detectPersona(userMessage);
     const safetyFlags = detectSafetyFlags(userMessage);
     const { context, products } = await fetchProductContext(supabase, slug);
-    const systemPrompt = buildSystemPrompt(context, persona as "dr_sami" | "ms_zain", safetyFlags, slug ? `/products?concern=${slug}` : null);
+    const systemPrompt = buildSystemPrompt(
+      context,
+      persona as "dr_sami" | "ms_zain",
+      safetyFlags,
+      slug ? `/products?concern=${slug}` : null,
+    );
 
     const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!lovableApiKey) {
       return new Response(JSON.stringify({ error: "LOVABLE_API_KEY not configured" }), {
-        status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        status: 500,
+        headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
     // Convert messages to Gemini content format
-    const geminiContents = messages.map(m => {
+    const geminiContents = messages.map((m) => {
       const role = m.role === "assistant" ? "model" : "user";
       if (typeof m.content === "string") {
         return { role, parts: [{ text: m.content }] };
       }
       // Multimodal content (image + text)
-      const parts = (m.content as Array<{ type: string; text?: string; image_url?: { url: string } }>).map(p => {
+      const parts = (m.content as Array<{ type: string; text?: string; image_url?: { url: string } }>).map((p) => {
         if (p.type === "text") return { text: p.text ?? "" };
         if (p.type === "image_url" && p.image_url?.url) {
           const [header, data] = p.image_url.url.split(",");
@@ -216,7 +240,10 @@ serve(async (req) => {
           model: "google/gemini-2.5-flash",
           messages: [
             { role: "system", content: systemPrompt },
-            ...geminiContents.map(c => ({ role: c.role === "model" ? "assistant" : c.role, content: c.parts.map((p: Record<string, unknown>) => (p as { text?: string }).text ?? "").join("") })),
+            ...geminiContents.map((c) => ({
+              role: c.role === "model" ? "assistant" : c.role,
+              content: c.parts.map((p: Record<string, unknown>) => (p as { text?: string }).text ?? "").join(""),
+            })),
           ],
         }),
       });
@@ -224,20 +251,30 @@ serve(async (req) => {
       const replyText = data.choices?.[0]?.message?.content ?? "Processing your request...";
 
       if (route === "manychat") {
-        return new Response(JSON.stringify({
-          version: "v2",
-          content: {
-            messages: [{ type: "text", text: replyText }],
-            quick_replies: [
-              { type: "node", caption: "🧴 Acne Help", target: "acne" },
-              { type: "node", caption: "✨ Glow Routine", target: "glow" },
-              { type: "node", caption: "👤 Human Support", target: "human" },
-            ],
-          },
-        }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
+        return new Response(
+          JSON.stringify({
+            version: "v2",
+            content: {
+              messages: [{ type: "text", text: replyText }],
+              quick_replies: [
+                { type: "node", caption: "🧴 Acne Help", target: "acne" },
+                { type: "node", caption: "✨ Glow Routine", target: "glow" },
+                { type: "node", caption: "👤 Human Support", target: "human" },
+              ],
+            },
+          }),
+          { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } },
+        );
       }
-      return new Response(JSON.stringify({ reply: replyText, products: products.slice(0, 3).map((p: Record<string, unknown>) => ({ id: p.id, title: p.title, handle: p.handle })) }),
-        { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
+      return new Response(
+        JSON.stringify({
+          reply: replyText,
+          products: products
+            .slice(0, 3)
+            .map((p: Record<string, unknown>) => ({ id: p.id, title: p.title, handle: p.handle })),
+        }),
+        { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } },
+      );
     }
 
     // ── SSE Streaming path ─────────────────────────────────────────────────
@@ -251,7 +288,10 @@ serve(async (req) => {
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: systemPrompt },
-          ...geminiContents.map(c => ({ role: c.role === "model" ? "assistant" : c.role, content: c.parts.map((p: Record<string, unknown>) => (p as { text?: string }).text ?? "").join("") })),
+          ...geminiContents.map((c) => ({
+            role: c.role === "model" ? "assistant" : c.role,
+            content: c.parts.map((p: Record<string, unknown>) => (p as { text?: string }).text ?? "").join(""),
+          })),
         ],
         stream: true,
       }),
@@ -260,17 +300,20 @@ serve(async (req) => {
     if (!gatewayRes.ok) {
       if (gatewayRes.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again later." }), {
-          status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+          status: 429,
+          headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
         });
       }
       if (gatewayRes.status === 402) {
         return new Response(JSON.stringify({ error: "AI credits exhausted. Please add funds." }), {
-          status: 402, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+          status: 402,
+          headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
         });
       }
       const err = await gatewayRes.text().catch(() => "");
       return new Response(JSON.stringify({ error: `AI gateway error: ${gatewayRes.status}` }), {
-        status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        status: 500,
+        headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
@@ -284,11 +327,11 @@ serve(async (req) => {
         "X-Safety-Flags": safetyFlags.length ? safetyFlags.join(",") : "none",
       },
     });
-
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : "Unknown error";
     return new Response(JSON.stringify({ error: message }), {
-      status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+      status: 500,
+      headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
     });
   }
 });
