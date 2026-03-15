@@ -182,7 +182,7 @@ export default function RegimenPortal() {
             protocolId: id.slice(0, 8).toUpperCase(),
             prescribedBy: "Dr. Sami",
             steps: regimenSteps,
-            clinicalNote: plan.description || undefined,
+            clinicalNote: (plan as any).description || undefined,
           });
         } else {
           // Fallback: use get_tray_by_concern with a default

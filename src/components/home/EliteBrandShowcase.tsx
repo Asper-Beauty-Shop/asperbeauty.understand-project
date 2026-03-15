@@ -41,7 +41,7 @@ export default function EliteBrandShowcase() {
             <Link to={`/brands/${brand.slug || brand.id}`} key={brand.id} className="group block cursor-pointer">
               <div className="relative overflow-hidden w-full aspect-[4/5] bg-white shadow-sm transition-all duration-700 ease-in-out group-hover:shadow-xl group-hover:ring-1 group-hover:ring-polished-gold group-hover:ring-offset-4 group-hover:ring-offset-asper-stone-light">
                 <img
-                  src={brand.hero_image_url || brand.imageUrl}
+                  src={String(brand.hero_image_url || brand.imageUrl || "")}
                   alt={`${brand.name} showcase`}
                   className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                   loading="lazy"
