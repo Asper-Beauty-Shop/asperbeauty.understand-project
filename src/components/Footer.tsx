@@ -266,6 +266,8 @@ export const Footer = () => {
                   <Link
                     key={cat.en}
                     to={cat.href}
+                    onMouseEnter={() => prefetchRoute(cat.href)}
+                    onFocus={() => prefetchRoute(cat.href)}
                     className="font-body text-xs text-asper-stone-light/50 hover:text-polished-gold transition-colors duration-300"
                   >
                     {cat.en}
