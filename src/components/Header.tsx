@@ -196,6 +196,7 @@ export const Header = () => {
                         <Link
                           key={concern.name}
                           to={concern.href}
+                          onMouseEnter={() => prefetchRoute(concern.href)}
                           className="flex items-center gap-3 p-2 rounded-md hover:bg-asper-stone group/item transition-colors"
                         >
                           <span className="text-lg">{concern.icon}</span>
