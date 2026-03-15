@@ -135,10 +135,34 @@ export const BeautyAssistant = () => {
                     {isAr ? "استشارة مجانية" : "Private Consultation"}
                   </h4>
                   <p className="text-asper-ink/70 text-sm max-w-xs mx-auto leading-relaxed">
-                    {isAr 
+                    {isAr
                       ? "أهلاً بكِ في عيادتنا الرقمية. صفي لي حالة بشرتكِ أو ما تبحثين عنه."
                       : "Welcome to our digital clinic. Tell me about your skin concerns or what you're looking for."}
                   </p>
+
+                  {/* Quick reply suggestion pills */}
+                  <div className="flex flex-wrap justify-center gap-2 mt-6">
+                    {(isAr ? [
+                      "أنصحني بسيروم فيتامين C",
+                      "روتين لبشرة جافة",
+                      "حل مشكلة الحبوب",
+                      "واقي شمس للبشرة الحساسة",
+                    ] : [
+                      "Recommend a Vitamin C Serum",
+                      "Routine for dry skin",
+                      "Acne solution",
+                      "SPF for sensitive skin",
+                    ]).map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        onClick={() => setInput(suggestion)}
+                        className="text-[11px] font-body border border-polished-gold/40 text-asper-ink/70 px-3 py-1.5 rounded-full hover:border-polished-gold hover:text-asper-ink hover:bg-polished-gold/5 transition-all duration-200"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
               
