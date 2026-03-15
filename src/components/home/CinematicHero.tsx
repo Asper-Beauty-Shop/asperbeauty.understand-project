@@ -23,15 +23,6 @@ export default function CinematicHero() {
       >
         <source src="/videos/cinematic-hero.mp4" type="video/mp4" />
       </video>
-      {/* Eager poster fallback for fast LCP */}
-      <img
-        src="/images/hero-poster-cinematic.jpg"
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-center z-0"
-        fetchPriority="high"
-        loading="eager"
-      />
 
       {/* Subtle overlay for legibility */}
       <div
