@@ -244,7 +244,7 @@ export default function RegimenPortal() {
         addItem({
           id: s.product.id,
           title: s.product.title,
-          price: s.product.price,
+          price: { amount: String(s.product.price), currencyCode: "USD" },
           image: s.product.image_url || "/editorial-showcase-2.jpg",
           quantity: 1,
         });

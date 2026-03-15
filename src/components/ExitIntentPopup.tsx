@@ -59,7 +59,7 @@ export function ExitIntentPopup() {
     if (!email.trim() || submitting) return;
     setSubmitting(true);
     try {
-      await supabase.from("newsletter_subscribers").upsert({ email: email.trim().toLowerCase() });
+      await supabase.from("suppressed_emails" as any).upsert({ email: email.trim().toLowerCase() } as any);
       setDone(true);
       toast.success(isAr ? "تم الاشتراك! تحقق من بريدك." : "Subscribed! Check your inbox for your guide.");
       setTimeout(dismiss, 3000);
