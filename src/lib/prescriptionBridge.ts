@@ -128,7 +128,7 @@ export async function getProductsByConcern(
       };
     }
 
-    const allProducts = data.data.products.edges.map(
+    const allProducts = products.edges.map(
       (e: { node: RegimenProduct }) => e.node,
     ) as RegimenProduct[];
 

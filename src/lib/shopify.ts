@@ -41,7 +41,7 @@ export interface ShopifyProduct {
             amount: string;
             currencyCode: string;
           };
-          compareAtPrice: {
+          compareAtPrice?: {
             amount: string;
             currencyCode: string;
           } | null;
