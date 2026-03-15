@@ -27,6 +27,14 @@
   </url>
 
   <url>
+    <loc>https://www.asperbeautyshop.com/mom-baby</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.asperbeautyshop.com/mom-baby"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.asperbeautyshop.com/mom-baby"/>
+  </url>
+
+  <url>
     <loc>https://www.asperbeautyshop.com/brands</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
