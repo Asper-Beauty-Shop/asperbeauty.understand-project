@@ -170,9 +170,9 @@ serve(async (req) => {
     const { context, products } = await fetchProductContext(supabase, slug);
     const systemPrompt = buildSystemPrompt(context, persona as "dr_sami" | "ms_zain", safetyFlags, slug ? `/products?concern=${slug}` : null);
 
-    const apiKey = Deno.env.get("GEMINI_API_KEY");
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "GEMINI_API_KEY not configured" }), {
+    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
+    if (!lovableApiKey) {
+      return new Response(JSON.stringify({ error: "LOVABLE_API_KEY not configured" }), {
         status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
