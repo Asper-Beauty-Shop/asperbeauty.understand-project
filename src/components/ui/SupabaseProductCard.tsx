@@ -57,6 +57,7 @@ export function SupabaseProductCard({
           images: { edges: product.image_url ? [{ node: { url: product.image_url, altText: product.title ?? product.brand } }] : [] },
           priceRange: { minVariantPrice: { amount: String(product.price), currencyCode: "JOD" } },
           variants: { edges: [] },
+          options: [],
           description: "",
         },
       },
