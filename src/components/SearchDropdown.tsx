@@ -25,7 +25,7 @@ export const SearchDropdown = ({
   const [isLoading, setIsLoading] = useState(false);
   const { language, isRTL } = useLanguage();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const debounceRef = useRef<NodeJS.Timeout>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Debounced search
   useEffect(() => {

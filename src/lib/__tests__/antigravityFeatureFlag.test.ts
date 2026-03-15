@@ -51,7 +51,7 @@ describe("runAntigravityDiagnostic()", () => {
 
     // Restore window
     if (hadWindow) {
-      (globalThis as GlobalWithWindow).window = { process: originalWindowProcess };
+      (globalThis as GlobalWithWindow).window = { process: originalWindowProcess } as any;
     } else {
       delete (globalThis as GlobalWithWindow).window;
     }

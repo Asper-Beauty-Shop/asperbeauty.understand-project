@@ -9,7 +9,9 @@ import { Sparkles, ArrowRight } from "lucide-react";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
-const AMBITIONS = [
+type ConcernKey = "Concern_Acne" | "Concern_Hydration" | "Concern_Aging" | "Concern_Sensitivity" | "Concern_Pigmentation" | "Concern_Brightening" | "Concern_SunProtection" | "Concern_Redness" | "Concern_DarkCircles" | "Concern_Oiliness";
+
+const AMBITIONS: readonly { key: ConcernKey; en: string; ar: string; emoji: string }[] = [
   { key: "Concern_Acne", en: "Clear Skin", ar: "بشرة صافية", emoji: "✨" },
   { key: "Concern_Hydration", en: "Deep Hydration", ar: "ترطيب عميق", emoji: "💧" },
   { key: "Concern_Aging", en: "Anti-Aging", ar: "مكافحة الشيخوخة", emoji: "🌟" },
@@ -20,7 +22,7 @@ const AMBITIONS = [
   { key: "Concern_Redness", en: "Reduce Redness", ar: "تقليل الاحمرار", emoji: "🩹" },
   { key: "Concern_DarkCircles", en: "Bright Eyes", ar: "عيون مشرقة", emoji: "👁️" },
   { key: "Concern_Oiliness", en: "Oil Control", ar: "التحكم بالدهون", emoji: "🧴" },
-] as const;
+];
 
 /* Ms. Zain's personalized recommendation copy per concern */
 const ZAIN_INSIGHTS: Record<string, { en: string; ar: string }> = {

@@ -23,7 +23,7 @@ export default function EliteBrandShowcase() {
     const fetchEliteBrands = async () => {
       const { data, error } = await supabase
         .from('brands')
-        .select('*')
+        .select('id, name, hero_image_url, slug, is_elite')
         .eq('is_elite', true)
         .limit(3);
 

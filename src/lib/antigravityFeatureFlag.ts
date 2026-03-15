@@ -55,9 +55,9 @@ export async function runAntigravityDiagnostic(): Promise<{
   try {
     // Dynamic imports so this module remains safe to bundle in browser contexts
     // even though the runtime branch above will never reach here in a browser.
-    const { exec } = await import("child_process");
-    const util = await import("util");
-    const path = await import("path");
+    const { exec } = await import(/* @vite-ignore */ "child_process") as any;
+    const util = await import(/* @vite-ignore */ "util") as any;
+    const path = await import(/* @vite-ignore */ "path") as any;
     const execAsync = util.promisify(exec);
 
     const scriptPath = path.join("scripts", "antigravity-diagnostic.ps1");
