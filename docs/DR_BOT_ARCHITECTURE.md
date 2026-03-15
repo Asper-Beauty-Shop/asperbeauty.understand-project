@@ -4,7 +4,7 @@ applyTo: ["*"]
 description: "Defines the technical, conversational, and data structures for Dr. Bot, the e-commerce AI agent."
 ---
 
-# Dr. Bot â€” AI Agent Structure for Asper Beauty Shop
+# Dr. Bot — AI Agent Structure for Asper Beauty Shop
 
 ## 1. Core Technical Architecture
 
