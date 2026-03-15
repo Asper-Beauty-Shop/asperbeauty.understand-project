@@ -32,6 +32,8 @@ export interface ProductCardData {
   rating?: number | null;
   reviewsCount?: number | null;
   isBestseller?: boolean;
+  /** Pharmacist-verified product — shows gold "Pharmacist Vetted" badge */
+  isVetted?: boolean;
 }
 
 interface ProductCardProps {
@@ -110,21 +112,35 @@ export function ProductCard({
         aria-label={isAr ? `عرض ${product.name}` : `View ${product.name}`}
       >
         {product.image ? (
-          <img
-            src={product.image}
-            alt={product.name}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-          />
+          <div className="absolute inset-0 flex items-center justify-center mix-blend-multiply">
+            <img
+              src={product.image}
+              alt={product.name}
+              loading="lazy"
+              decoding="async"
+              className="w-4/5 h-4/5 object-contain transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-background">
             <FlaskConical className="h-10 w-10 text-muted-foreground/20" />
           </div>
         )}
 
+        {/* Pharmacist Vetted badge */}
+        {product.isVetted && (
+          <div className="absolute top-3 start-3 z-10 flex items-center gap-1 bg-polished-gold/10 border border-polished-gold/30 px-2 py-0.5 rounded-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-polished-gold" aria-hidden>
+              <path fillRule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+            </svg>
+            <span className="font-body text-[9px] uppercase tracking-wider text-foreground font-medium">
+              {isAr ? "فحص صيدلاني" : "Pharmacist Vetted"}
+            </span>
+          </div>
+        )}
+
         {/* Bestseller badge */}
-        {product.isBestseller && (
+        {product.isBestseller && !product.isVetted && (
           <div className="absolute top-3 start-3 bg-primary text-primary-foreground px-2.5 py-1 rounded-full text-[10px] font-body tracking-wider uppercase">
             {isAr ? "الأكثر مبيعاً" : "Best Seller"}
           </div>

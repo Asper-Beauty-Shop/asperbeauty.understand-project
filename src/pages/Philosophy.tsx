@@ -15,27 +15,21 @@ interface TimelineItem {
 const useParallax = (speed: number = 0.1) => {
   const ref = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState(0);
-  const rafId = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (rafId.current) return;
-      rafId.current = requestAnimationFrame(() => {
-        rafId.current = 0;
-        if (ref.current) {
-          const rect = ref.current.getBoundingClientRect();
-          const elementCenter = rect.top + rect.height / 2;
-          setOffset((elementCenter - window.innerHeight / 2) * speed);
-        }
-      });
+      if (ref.current) {
+        const rect = ref.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const elementCenter = rect.top + rect.height / 2;
+        const distanceFromCenter = elementCenter - windowHeight / 2;
+        setOffset(distanceFromCenter * speed);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (rafId.current) cancelAnimationFrame(rafId.current);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [speed]);
 
   return { ref, offset };
@@ -289,24 +283,18 @@ const Philosophy = () => {
   const { language } = useLanguage();
   const isArabic = language === "ar";
   const [scrollProgress, setScrollProgress] = useState(0);
-  const scrollRafId = useRef(0);
 
   // Track scroll progress for decorative elements
   useEffect(() => {
     const handleScroll = () => {
-      if (scrollRafId.current) return;
-      scrollRafId.current = requestAnimationFrame(() => {
-        scrollRafId.current = 0;
-        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-        setScrollProgress(window.scrollY / scrollHeight);
-      });
+      const scrollHeight = document.documentElement.scrollHeight -
+        window.innerHeight;
+      const progress = window.scrollY / scrollHeight;
+      setScrollProgress(progress);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (scrollRafId.current) cancelAnimationFrame(scrollRafId.current);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const content = {

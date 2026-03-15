@@ -11,7 +11,6 @@ import { USPBar } from "@/components/home/USPBar";
 import { ProductSlider } from "@/components/home/ProductSlider";
 import { ShopByProtocol } from "@/components/home/ShopByProtocol";
 import { Footer } from "@/components/Footer";
-import { DermocosmecticsQuiz } from "@/components/DermocosmecticsQuiz";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isHomepageBrand } from "@/constants/premiumBrands";
@@ -316,23 +315,6 @@ const Index = () => {
         <Suspense fallback={<SectionSkeleton height="h-24" />}>
           <TrustBanner />
         </Suspense>
-
-        {/* Dermocosmetics Quiz — inline, no lazy needed */}
-        <section className="py-16 bg-muted/30">
-          <div className="mx-auto max-w-5xl px-4">
-            <div className="mb-8 text-center">
-              <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">
-                Find Your Dermocosmetics Match
-              </h2>
-              <p className="text-muted-foreground text-sm">
-                Take our 3-question quiz for pharmacist-backed clinical skincare recommendations
-              </p>
-            </div>
-            <div className="max-w-2xl mx-auto">
-              <DermocosmecticsQuiz compact />
-            </div>
-          </div>
-        </section>
       </main>
       <Footer />
 

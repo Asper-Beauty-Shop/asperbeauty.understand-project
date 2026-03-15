@@ -243,8 +243,8 @@ const ManageProducts = () => {
       const productData = {
         name: formData.title.trim(),
         title: formData.title.trim(),
-        brand: "Asper Beauty",
-        category: "General",
+        brand: "Unknown",
+        category: "Uncategorized",
         description: formData.title.trim(),
         price: parseFloat(formData.price),
         handle: formData.handle.trim() || formData.title.trim().toLowerCase().replace(/\s+/g, "-"),

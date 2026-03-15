@@ -110,7 +110,7 @@ export default function RegimenPortal() {
   const [isDecrypting, setIsDecrypting] = useState(true);
   const [portalData, setPortalData] = useState<PortalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  // cart integration handled via useCartStore.getState() in handleFulfill
+  const addItem = useCartStore((s) => s.addItem);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsDecrypting(false), 1500);
@@ -239,17 +239,17 @@ export default function RegimenPortal() {
     ) || 0;
 
   const handleFulfill = () => {
-    const { addMultipleFromPrescription } = useCartStore.getState();
-    const products = (portalData?.steps ?? [])
-      .filter((s) => s.product)
-      .map((s) => ({
-        id: s.product!.id,
-        title: s.product!.title,
-        price: s.product!.price,
-        image_url: s.product!.image_url,
-        brand: s.product!.brand,
-      }));
-    if (products.length) addMultipleFromPrescription(products);
+    portalData?.steps.forEach((s) => {
+      if (s.product) {
+          addItem({
+            id: s.product.id,
+            title: s.product.title,
+            price: { amount: String(s.product.price), currencyCode: "JOD" },
+            image: s.product.image_url || "/editorial-showcase-2.jpg",
+            quantity: 1,
+          } as any);
+      }
+    });
   };
 
   return (

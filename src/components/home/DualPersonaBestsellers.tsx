@@ -26,7 +26,7 @@ const LUXURY_TABS = [
 ] as const;
 
 /* ── Tab→asper_category mapping ── */
-const TAB_FILTERS: Record<string, { concerns?: string[]; asper_categories?: string[] }> = {
+const TAB_FILTERS: Record<string, { concerns?: readonly string[]; asper_categories?: readonly string[] }> = {
   skincare: { asper_categories: ["Clinical Serums & Actives", "Daily Hydration & Barrier", "Targeted Treatments"] },
   supplements: { asper_categories: ["Requires_Manual_Review"] }, // supplements need manual tagging
   "sun-protection": { asper_categories: ["Sun Protection (SPF)"] },
@@ -145,7 +145,7 @@ export function DualPersonaBestsellers() {
       if (filter?.asper_categories?.length) {
         query = query.in("asper_category", filter.asper_categories);
       } else if (filter?.concerns?.length) {
-        query = query.in("primary_concern", filter.concerns as unknown as string[]);
+        query = query.in("primary_concern", filter.concerns);
       }
 
       // Use persona lead when available

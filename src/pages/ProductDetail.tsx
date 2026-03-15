@@ -24,8 +24,6 @@ import {
 import { ShareButtons } from "@/components/ShareButtons";
 import { StickyAddToCart } from "@/components/StickyAddToCart";
 import { ProductReviews } from "@/components/ProductReviews";
-import { Breadcrumb } from "@/components/Breadcrumb";
-import { ClinicalBadge, DermBadge } from "@/components/TrustBadges";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -191,17 +189,12 @@ const ProductDetail = () => {
         {/* RIGHT: Clean PDP â€” Price + Cart Above Fold, Clinical Data in Accordions */}
         <div className="lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto bg-background">
           <div className="p-8 lg:p-16 flex flex-col justify-center min-h-full">
-            {/* Breadcrumb — schema.org BreadcrumbList */}
-            <Breadcrumb
-              className="mb-6"
-              items={[
-                { label: isArabic ? "المتجر" : "Shop", href: "/shop" },
-                ...(brandName && brandName !== "Exclusive Collection"
-                  ? [{ label: brandName, href: `/brands/${brandName.toLowerCase().replace(/\s+/g, "-")}` }]
-                  : []),
-                { label: product.title },
-              ]}
-            />
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-sm mb-6">
+              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Home"}</Link>
+              <span className="text-muted-foreground">/</span>
+              <Link to="/shop" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ù…ØªØ¬Ø±" : "Shop"}</Link>
+            </nav>
 
             {/* Above the Fold: Brand, Title, Price */}
             <div className="mb-8">
@@ -237,9 +230,9 @@ const ProductDetail = () => {
             {/* Add to Cart â€” Primary CTA */}
             <div ref={ctaRef} className="space-y-6 mb-10">
               <div className="flex items-center justify-center gap-8 py-4 border border-polished-gold/30">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-burgundy transition-colors"><Minus className="w-4 h-4" /></button>
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-burgundy transition-colors" aria-label="Decrease quantity"><Minus className="w-4 h-4" /></button>
                 <span className="text-lg font-body font-medium w-8 text-center text-asper-ink">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-burgundy transition-colors"><Plus className="w-4 h-4" /></button>
+                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-burgundy transition-colors" aria-label="Increase quantity"><Plus className="w-4 h-4" /></button>
               </div>
 
               <div className="flex gap-4">
@@ -402,31 +395,16 @@ const ProductDetail = () => {
       {relatedProducts.length > 0 && (
         <section className="py-16 bg-muted/20">
           <div className="container mx-auto px-4 max-w-7xl">
-            <h2 className="font-serif text-2xl text-foreground mb-2">
-              {isArabic ? "قد يعجبك أيضاً" : "You May Also Like"}
-            </h2>
-            <p className="text-sm text-muted-foreground mb-8">
-              {isArabic ? "منتجات موصى بها من صيدلانيينا" : "Pharmacist-recommended for your routine"}
-            </p>
+            <h2 className="font-serif text-2xl text-foreground mb-8">{isArabic ? "Ù‚Ø¯ ÙŠØ¹Ø¬Ø¨Ùƒ Ø£ÙŠØ¶Ø§Ù‹" : "You May Also Like"}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {relatedProducts.map((rp) => (
-                <Link key={rp.id} to={`/product/${rp.handle}`} className="group flex flex-col gap-2">
-                  <div className="relative aspect-square bg-asper-stone rounded-lg overflow-hidden border border-transparent group-hover:border-polished-gold transition-colors duration-300">
+                <Link key={rp.id} to={`/product/${rp.handle}`} className="group">
+                  <div className="aspect-square bg-asper-stone rounded-lg overflow-hidden mb-3 border border-transparent group-hover:border-polished-gold transition-colors duration-300">
                     <img src={rp.image_url || "/editorial-showcase-2.jpg"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    {rp.clinical_badge && (
-                      <div className="absolute top-2 left-2">
-                        <ClinicalBadge label={rp.clinical_badge} />
-                      </div>
-                    )}
                   </div>
-                  <div>
-                    <p className="text-xs text-asper-ink-muted uppercase tracking-widest font-body">{rp.brand}</p>
-                    <p className="text-sm font-medium text-asper-ink line-clamp-2 font-body">{rp.title}</p>
-                    <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                      <SplitPrice amount={rp.price ?? 0} />
-                      {rp.gold_stitch_tier && <DermBadge label="Derm ✓" />}
-                    </div>
-                  </div>
+                  <p className="text-xs text-asper-ink-muted uppercase tracking-widest font-body">{rp.brand}</p>
+                  <p className="text-sm font-medium text-asper-ink line-clamp-2 font-body">{rp.title}</p>
+                  <SplitPrice amount={rp.price ?? 0} className="mt-1" />
                 </Link>
               ))}
             </div>

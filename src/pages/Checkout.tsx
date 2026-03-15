@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { Lock, ChevronDown, CreditCard, Banknote, Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,7 +35,7 @@ type PaymentMethod = "cod" | "card";
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const { items, getCheckoutUrl } = useCartStore();
+  const { items } = useCartStore();
   const totalPrice = items.reduce((sum, item) => sum + normalizePrice(item.price.amount) * item.quantity, 0);
   const deliveryFee = totalPrice >= 50 ? 0 : 3;
   const currency = items[0]?.price.currencyCode || "JOD";
@@ -69,11 +70,9 @@ export default function Checkout() {
     }
 
     if (paymentMethod === "card") {
-      // Redirect to Shopify checkout for card payments
-      const checkoutUrl = getCheckoutUrl();
-      if (checkoutUrl) {
-        window.open(checkoutUrl, "_blank");
-      }
+      // Card payments not yet supported without external checkout
+      toast.error("Card payment is not available. Please use Cash on Delivery.");
+      return;
     } else {
       // COD flow — show confirmation
       setSubmitting(true);
@@ -133,7 +132,7 @@ export default function Checkout() {
               <div key={item.variantId} className="flex items-center gap-3 rounded-lg border border-border/50 bg-card p-3">
                 <div className="h-12 w-12 rounded-md bg-secondary overflow-hidden shrink-0 flex items-center justify-center">
                   {item.product.node.images?.edges?.[0]?.node && (
-                    <img src={item.product.node.images.edges[0].node.url} alt="" className="h-full w-full object-contain p-0.5" />
+                    <img src={item.product.node.images.edges[0].node.url} alt={item.product.node.title || "Product"} className="h-full w-full object-contain p-0.5" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">

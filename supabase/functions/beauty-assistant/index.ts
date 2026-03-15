@@ -24,12 +24,19 @@ const SAFETY_KEYWORDS: Record<string, string[]> = {
   pediatric:   ["child", "baby", "infant", "toddler"],
 };
 
+const ALLOWED_ORIGINS = new Set([
+  "https://www.asperbeautyshop.com",
+  "https://asperbeautyshop.com",
+  Deno.env.get("ALLOWED_ORIGIN") ?? "",
+].filter(Boolean));
+
 function getCorsHeaders(req: Request): Record<string, string> {
-  const allowOrigin = Deno.env.get("ALLOWED_ORIGIN") ?? req.headers.get("Origin") ?? "*";
+  const origin = req.headers.get("Origin") ?? "";
+  const allowOrigin = ALLOWED_ORIGINS.has(origin) ? origin : "https://www.asperbeautyshop.com";
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers":
-      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version, x-webhook-route",
+      "authorization, x-client-info, apikey, content-type, x-webhook-route",
     "Access-Control-Expose-Headers": "X-Persona, X-Safety-Flags",
   };
 }

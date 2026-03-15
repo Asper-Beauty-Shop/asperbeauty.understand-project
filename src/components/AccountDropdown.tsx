@@ -58,7 +58,7 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-1 text-foreground hover:text-primary transition-colors focus:outline-none">
+        <button className="flex items-center gap-1 text-foreground hover:text-primary transition-colors focus:outline-none" aria-label="Account menu">
           <div
             className={cn(
               "w-8 h-8 rounded-full flex items-center justify-center transition-colors",

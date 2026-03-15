@@ -38,8 +38,6 @@ export const CartDrawer = () => {
     removeItem,
     setOpen,
     getTotalPrice,
-    getCheckoutUrl,
-    syncCart,
   } = useCartStore();
 
   const totalPrice = getTotalPrice();
@@ -51,17 +49,11 @@ export const CartDrawer = () => {
   const hasFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
 
   const handleCheckout = () => {
-    const checkoutUrl = getCheckoutUrl();
-    if (checkoutUrl) {
-      window.open(checkoutUrl, "_blank");
-      setOpen(false);
-    } else {
-      toast.error(isArabic ? ASPER_PROTOCOL.checkoutUnavailable.ar : ASPER_PROTOCOL.checkoutUnavailable.en);
-    }
+    // Navigate to COD checkout
+    setCheckoutMode("cod");
   };
 
   const handleDrawerOpen = (open: boolean) => {
-    if (open) syncCart();
     handleOpenChange(open);
   };
 
@@ -111,6 +103,7 @@ export const CartDrawer = () => {
               <button
                 onClick={handleBackToCart}
                 className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors mr-2"
+                aria-label="Back to cart"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
@@ -125,6 +118,7 @@ export const CartDrawer = () => {
             <button
               onClick={() => handleOpenChange(false)}
               className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Close cart"
             >
               <X className="w-5 h-5" />
             </button>
@@ -218,6 +212,7 @@ export const CartDrawer = () => {
                             <button
                               onClick={() => removeItem(item.variantId)}
                               className="text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+                              aria-label="Remove item"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>
@@ -225,6 +220,7 @@ export const CartDrawer = () => {
                               <button
                                 onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
                                 className="w-7 h-7 flex items-center justify-center hover:bg-muted transition-colors"
+                                aria-label="Decrease quantity"
                               >
                                 <Minus className="h-3 w-3" />
                               </button>
@@ -232,6 +228,7 @@ export const CartDrawer = () => {
                               <button
                                 onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
                                 className="w-7 h-7 flex items-center justify-center hover:bg-muted transition-colors"
+                                aria-label="Increase quantity"
                               >
                                 <Plus className="h-3 w-3" />
                               </button>
@@ -327,7 +324,7 @@ export const CartDrawer = () => {
                       {/* Secondary: Card */}
                       <button
                         onClick={handleCheckout}
-                        disabled={items.length === 0 || isLoading || !getCheckoutUrl()}
+                        disabled={items.length === 0 || isLoading}
                         className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         style={{
                           border: "2px solid hsl(var(--burgundy))",

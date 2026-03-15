@@ -1,65 +1,10 @@
 /**
  * Prescription Bridge: translates a skin concern into a curated 3-step regimen
- * from the Shopify Storefront API using concern tags (e.g. Concern_Acne) and
+ * from the products database using concern tags (e.g. Concern_Acne) and
  * step tags (Step_1_Cleanser, Step_2_Treatment, Step_3_Protection).
- *
- * Use for the "Digital Tray" so the AI/pharmacist flow recommends a complete
- * routine with real-time inventory. Aligns with Matrixify/import tags.
  */
-import { storefrontApiRequest } from "@/lib/shopify";
-import {
-  concernToShopifyTag,
-  normalizeConcernSlug,
-} from "@/lib/concernMapping";
-
-const REGIMEN_QUERY = `
-  query getRegimen($query: String!) {
-    products(first: 20, query: $query) {
-      edges {
-        node {
-          id
-          title
-          handle
-          description
-          vendor
-          productType
-          tags
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          images(first: 1) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
-          }
-          variants(first: 1) {
-            edges {
-              node {
-                id
-                title
-                price {
-                  amount
-                  currencyCode
-                }
-                compareAtPrice {
-                  amount
-                  currencyCode
-                }
-                availableForSale
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+import { supabase } from "@/integrations/supabase/client";
+import { normalizeConcernSlug } from "@/lib/concernMapping";
 
 const STEP_1_TAG = "Step_1_Cleanser";
 const STEP_2_TAG = "Step_2_Treatment";
@@ -92,46 +37,62 @@ export type DigitalTrayRegimen = {
   cleanser: RegimenProduct | null;
   treatment: RegimenProduct | null;
   protection: RegimenProduct | null;
-  /** All products matching the concern tag (for fallback or display) */
   allProducts: RegimenProduct[];
 };
 
+function dbRowToRegimenProduct(row: any): RegimenProduct {
+  return {
+    id: row.id,
+    title: row.title || row.name,
+    handle: row.handle || row.id,
+    description: row.description || "",
+    vendor: row.brand,
+    productType: row.category,
+    tags: row.tags || [],
+    priceRange: {
+      minVariantPrice: { amount: String(row.price), currencyCode: "JOD" },
+    },
+    images: {
+      edges: row.image_url
+        ? [{ node: { url: row.image_url, altText: row.title || row.name } }]
+        : [],
+    },
+    variants: {
+      edges: [{
+        node: {
+          id: `${row.id}-default`,
+          title: "Default",
+          price: { amount: String(row.price), currencyCode: "JOD" },
+          compareAtPrice: null,
+          availableForSale: row.in_stock !== false,
+        },
+      }],
+    },
+  };
+}
+
 /**
- * Get a 3-step regimen (Digital Tray) from Shopify by concern.
- * Uses your Matrixify/import tags: Concern_* for the collection, Step_* for the role.
- *
- * @param concern - Concern slug (e.g. "acne", "hydration") or Shopify tag (e.g. "Concern_Acne")
- * @returns { cleanser, treatment, protection, allProducts } or null on error
+ * Get a 3-step regimen (Digital Tray) by concern.
  */
 export async function getProductsByConcern(
   concern: string,
 ): Promise<DigitalTrayRegimen | null> {
   const slug = normalizeConcernSlug(concern) ?? concern.toLowerCase().trim();
-  const concernTag = concernToShopifyTag(slug);
-  // Shopify products query expects e.g. "tag:Concern_Acne" (concernToShopifyTag returns that)
-  const query = concernTag ??
-    (concern.startsWith("Concern_")
-      ? `tag:${concern}`
-      : `tag:Concern_${concern.replace(/-/g, "")}`);
+  const concernTag = `Concern_${slug.charAt(0).toUpperCase()}${slug.slice(1).replace(/-(\w)/g, (_, c) => c.toUpperCase())}`;
 
-  const variables = { query };
   try {
-    const data = await storefrontApiRequest(REGIMEN_QUERY, variables) as Record<string, Record<string, unknown>>;
-    const productsData = data?.data as Record<string, unknown> | undefined;
-    const products = productsData?.products as { edges?: Array<{ node: RegimenProduct }> } | undefined;
-    if (!products?.edges) {
-      return {
-        cleanser: null,
-        treatment: null,
-        protection: null,
-        allProducts: [],
-      };
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .contains("tags", [concernTag])
+      .neq("availability_status", "Pending_Purge")
+      .limit(20);
+
+    if (error || !data) {
+      return { cleanser: null, treatment: null, protection: null, allProducts: [] };
     }
 
-    const allProducts = products.edges.map(
-      (e: { node: RegimenProduct }) => e.node,
-    ) as RegimenProduct[];
-
+    const allProducts = data.map(dbRowToRegimenProduct);
     const tags = (node: RegimenProduct) => node.tags ?? [];
 
     return {
@@ -146,19 +107,17 @@ export async function getProductsByConcern(
   }
 }
 
-/** Convert a regimen to a flat list for Digital Tray / cart (order: cleanser → treatment → protection). */
+/** Convert a regimen to a flat list for Digital Tray / cart. */
 export function regimenToTrayProducts(
   regimen: DigitalTrayRegimen | null,
-): Array<
-  {
-    id: string;
-    title: string;
-    price: number;
-    image_url: string | null;
-    brand?: string;
-    category?: string;
-  }
-> {
+): Array<{
+  id: string;
+  title: string;
+  price: number;
+  image_url: string | null;
+  brand?: string;
+  category?: string;
+}> {
   if (!regimen) return [];
   const out: Array<{
     id: string;

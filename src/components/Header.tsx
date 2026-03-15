@@ -1,6 +1,7 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import asperLogoHorizontal from "@/assets/asper-logo-horizontal.png";
 import { AsperWordmark } from "@/components/ui/AsperWordmark";
+import { CategoryNavBar } from "@/components/CategoryNavBar";
 import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown,
@@ -220,25 +221,7 @@ export const Header = () => {
                     textColor, textColorHover
                   )}
                 >
-                  {language === "ar" ? "الأكثر مبيعاً" : "Best Sellers"}
-                </Link>
-                <Link
-                  to="/dermocosmetics"
-                  className={cn(
-                    "font-body text-sm font-medium transition-colors",
-                    textColor, textColorHover
-                  )}
-                >
-                  {language === "ar" ? "التجميل الطبي" : "Dermocosmetics"}
-                </Link>
-                <Link
-                  to="/mom-baby"
-                  className={cn(
-                    "font-body text-sm font-medium transition-colors",
-                    textColor, textColorHover
-                  )}
-                >
-                  {language === "ar" ? "الأم والطفل" : "Mom & Baby"}
+                  {language === "ar" ? "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹" : "Best Sellers"}
                 </Link>
                 <Link
                   to="/offers"
@@ -247,7 +230,7 @@ export const Header = () => {
                     textColor, textColorHover
                   )}
                 >
-                  {language === "ar" ? "العروض" : "Offers"}
+                  {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶" : "Offers"}
                 </Link>
               </nav>
             </div>
@@ -503,20 +486,6 @@ export const Header = () => {
               </div>
               <div className="pt-4 border-t border-rose-clay-light/30 flex flex-wrap gap-4">
                 <Link
-                  to="/dermocosmetics"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-body text-burgundy font-medium"
-                >
-                  {language === "ar" ? "التجميل الطبي" : "Dermocosmetics"}
-                </Link>
-                <Link
-                  to="/mom-baby"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-body text-burgundy font-medium"
-                >
-                  {language === "ar" ? "الأم والطفل" : "Mom & Baby"}
-                </Link>
-                <Link
                   to="/best-sellers"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="font-body text-burgundy font-medium"
@@ -547,6 +516,9 @@ export const Header = () => {
           </div>
         </div>
       )}
+
+      {/* Category icon strip — visible on all screen sizes */}
+      <CategoryNavBar />
 
       <CartDrawer />
       <WishlistDrawer />

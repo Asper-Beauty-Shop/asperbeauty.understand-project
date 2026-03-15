@@ -13,7 +13,7 @@ export function useAdminRole() {
         .from("user_roles")
         .select("role")
         .eq("user_id", user.id)
-        .in("role", ["admin", "moderator"]);
+        .in("role", ["admin"] as const);
       if (error) {
         console.warn("Role check failed:", error.message);
         return false;
