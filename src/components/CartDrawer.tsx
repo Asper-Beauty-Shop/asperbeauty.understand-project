@@ -38,8 +38,6 @@ export const CartDrawer = () => {
     removeItem,
     setOpen,
     getTotalPrice,
-    getCheckoutUrl,
-    syncCart,
   } = useCartStore();
 
   const totalPrice = getTotalPrice();
@@ -51,17 +49,11 @@ export const CartDrawer = () => {
   const hasFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
 
   const handleCheckout = () => {
-    const checkoutUrl = getCheckoutUrl();
-    if (checkoutUrl) {
-      window.open(checkoutUrl, "_blank");
-      setOpen(false);
-    } else {
-      toast.error(isArabic ? ASPER_PROTOCOL.checkoutUnavailable.ar : ASPER_PROTOCOL.checkoutUnavailable.en);
-    }
+    // Navigate to COD checkout
+    setCheckoutMode("cod");
   };
 
   const handleDrawerOpen = (open: boolean) => {
-    if (open) syncCart();
     handleOpenChange(open);
   };
 
@@ -327,7 +319,7 @@ export const CartDrawer = () => {
                       {/* Secondary: Card */}
                       <button
                         onClick={handleCheckout}
-                        disabled={items.length === 0 || isLoading || !getCheckoutUrl()}
+                        disabled={items.length === 0 || isLoading}
                         className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         style={{
                           border: "2px solid hsl(var(--burgundy))",
