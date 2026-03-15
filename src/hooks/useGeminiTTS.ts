@@ -142,6 +142,7 @@ export function useGeminiTTS(): UseGeminiTTSReturn {
         setIsLoading(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [audioUrl],
   );
 
