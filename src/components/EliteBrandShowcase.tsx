@@ -5,9 +5,14 @@ import { supabase } from '@/integrations/supabase/client';
 interface Brand {
   id: string;
   name: string;
-  hero_image_url: string;
+  hero_image_url: string | null;
   slug: string;
   is_elite: boolean;
+  created_at?: string | null;
+  description?: string | null;
+  image_url?: string | null;
+  logo_image_path?: string | null;
+  updated_at?: string;
 }
 
 export default function EliteBrandShowcase() {
@@ -18,7 +23,7 @@ export default function EliteBrandShowcase() {
     const fetchEliteBrands = async () => {
       const { data, error } = await supabase
         .from('brands')
-        .select('*')
+        .select('id, name, hero_image_url, slug, is_elite')
         .eq('is_elite', true)
         .limit(3);
 

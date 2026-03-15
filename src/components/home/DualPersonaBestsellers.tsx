@@ -145,7 +145,7 @@ export function DualPersonaBestsellers() {
       if (filter?.asper_categories?.length) {
         query = query.in("asper_category", filter.asper_categories);
       } else if (filter?.concerns?.length) {
-        query = query.in("primary_concern", filter.concerns);
+        query = query.in("primary_concern", filter.concerns as unknown as string[]);
       }
 
       // Use persona lead when available

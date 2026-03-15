@@ -232,15 +232,6 @@ export const Header = () => {
                   {language === "ar" ? "التجميل الطبي" : "Dermocosmetics"}
                 </Link>
                 <Link
-                  to="/mom-baby"
-                  className={cn(
-                    "font-body text-sm font-medium transition-colors",
-                    textColor, textColorHover
-                  )}
-                >
-                  {language === "ar" ? "الأم والطفل" : "Mom & Baby"}
-                </Link>
-                <Link
                   to="/offers"
                   className={cn(
                     "font-body text-sm font-medium transition-colors",
@@ -508,13 +499,6 @@ export const Header = () => {
                   className="font-body text-burgundy font-medium"
                 >
                   {language === "ar" ? "التجميل الطبي" : "Dermocosmetics"}
-                </Link>
-                <Link
-                  to="/mom-baby"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-body text-burgundy font-medium"
-                >
-                  {language === "ar" ? "الأم والطفل" : "Mom & Baby"}
                 </Link>
                 <Link
                   to="/best-sellers"

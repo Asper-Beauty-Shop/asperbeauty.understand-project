@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export interface ProductEnrichment {
   clinical_badge: string | null;
-  ai_persona_lead: "dr_sami" | "ms_zain" | null;
+  ai_persona_lead: string | null;
   key_ingredients: string[] | null;
   texture_profile: string | null;
   hex_swatch: string | null;

@@ -36,14 +36,12 @@ const Health                  = lazy(() => import("./pages/Health"));
 const RegimenPortal           = lazy(() => import("./pages/RegimenPortal"));
 const TrackOrder              = lazy(() => import("./pages/TrackOrder"));
 const Dermocosmetics          = lazy(() => import("./pages/Dermocosmetics"));
-const MomBaby                 = lazy(() => import("./pages/MomBaby"));
 const ShopAllOrganized        = lazy(() => import("./components/ShopAllOrganized"));
 
 // ── Admin pages (laziest — only load when admin navigates there) ────────────
 const BulkUpload              = lazy(() => import("./pages/BulkUpload"));
 const AdminOrders             = lazy(() => import("./pages/AdminOrders"));
 const ManageProducts          = lazy(() => import("./pages/ManageProducts"));
-const AdminEnrichment         = lazy(() => import("./pages/AdminEnrichment"));
 const DriverDashboard         = lazy(() => import("./pages/DriverDashboard"));
 const AdminAuditLogs          = lazy(() => import("./pages/AdminAuditLogs"));
 const PurgeReview             = lazy(() => import("./pages/PurgeReview"));
@@ -117,7 +115,6 @@ const App = () => {
                   <Route path="/portal/regimen/:id"  element={<RegimenPortal />} />
                   <Route path="/track-order"         element={<TrackOrder />} />
                   <Route path="/dermocosmetics"      element={<Dermocosmetics />} />
-                  <Route path="/mom-baby"            element={<MomBaby />} />
                   <Route path="/tracking"            element={<Navigate to="/track-order" replace />} />
                   <Route path="/shipping"            element={<Navigate to="/contact" replace />} />
                   <Route path="/returns"             element={<Navigate to="/contact" replace />} />
@@ -126,7 +123,6 @@ const App = () => {
                   <Route path="/admin/bulk-upload"   element={<BulkUpload />} />
                   <Route path="/admin/orders"        element={<AdminOrders />} />
                   <Route path="/admin/products"      element={<ManageProducts />} />
-                  <Route path="/admin/enrichment"    element={<AdminEnrichment />} />
                   <Route path="/admin/audit-logs"    element={<AdminAuditLogs />} />
                   <Route path="/admin/purge-review"  element={<PurgeReview />} />
                   <Route
