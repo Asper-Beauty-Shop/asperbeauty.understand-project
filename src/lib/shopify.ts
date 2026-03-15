@@ -17,6 +17,7 @@ export interface ShopifyProduct {
     vendor: string;
     productType: string;
     tags?: string[];
+    createdAt?: string;
     images: {
       edges: Array<{
         node: {
