@@ -3,7 +3,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 serve(async (req) => {
@@ -79,12 +80,14 @@ serve(async (req) => {
     if (!aiResponse.ok) {
       if (aiResponse.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again later." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (aiResponse.status === 402) {
         return new Response(JSON.stringify({ error: "Payment required, please add credits." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 402,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       const errorText = await aiResponse.text();
@@ -94,7 +97,7 @@ serve(async (req) => {
 
     const aiData = await aiResponse.json();
     const toolCall = aiData.choices?.[0]?.message?.tool_calls?.[0];
-    
+
     let matchedIds: string[] = [];
     if (toolCall?.function?.arguments) {
       const args = JSON.parse(toolCall.function.arguments);
@@ -102,9 +105,7 @@ serve(async (req) => {
     }
 
     // Return matched products in order
-    const matchedProducts = matchedIds
-      .map((id: string) => products?.find((p: any) => p.id === id))
-      .filter(Boolean);
+    const matchedProducts = matchedIds.map((id: string) => products?.find((p: any) => p.id === id)).filter(Boolean);
 
     return new Response(JSON.stringify({ products: matchedProducts }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
