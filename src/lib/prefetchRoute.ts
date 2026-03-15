@@ -14,14 +14,11 @@ const routeImports: Record<string, () => Promise<unknown>> = {
   "/offers": () => import("@/pages/Offers"),
   "/skin-concerns": () => import("@/pages/SkinConcerns"),
   "/collections": () => import("@/pages/Collections"),
-  "/concerns": () => import("@/pages/SkinConcerns"),
   "/contact": () => import("@/pages/Contact"),
   "/wishlist": () => import("@/pages/Wishlist"),
   "/philosophy": () => import("@/pages/Philosophy"),
   "/track-order": () => import("@/pages/TrackOrder"),
-  "/mom-baby": () => import("@/pages/Shop"),
   "/auth": () => import("@/pages/Auth"),
-  "/product": () => import("@/pages/ProductDetail"),
 };
 
 const prefetched = new Set<string>();

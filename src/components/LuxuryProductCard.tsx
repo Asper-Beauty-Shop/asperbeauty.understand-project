@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Eye, ShoppingBag, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import { prefetchRoute } from "@/lib/prefetchRoute";
 import { ProductQuickViewModal } from "./ProductQuickViewModal";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
@@ -122,7 +121,6 @@ export const LuxuryProductCard = ({ product }: { product: ProductProps }) => {
     <>
       <Link
         to={`/product/${product.id}`}
-        onMouseEnter={() => prefetchRoute(`/product/${product.id}`)}
         className="group relative bg-background border border-border flex flex-col h-full overflow-hidden"
       >
         {/* 1. Image Area - Aspect Ratio is key for consistency */}

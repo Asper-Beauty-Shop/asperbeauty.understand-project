@@ -3,7 +3,6 @@ import { ShieldCheck, Award, CheckCircle, Stethoscope } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
 import { AsperWordmark } from "@/components/ui/AsperWordmark";
-import { prefetchRoute } from "@/lib/prefetchRoute";
 
 
 // Brand-accurate social media icon components
@@ -146,7 +145,7 @@ export const Footer = () => {
               </li>
               {conciergLinks.map((item, index) => (
                 <li key={`${item.href}-${index}`}>
-                  <Link to={item.href} onMouseEnter={() => prefetchRoute(item.href)} onFocus={() => prefetchRoute(item.href)} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
+                  <Link to={item.href} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
                     {item.name}
                   </Link>
                 </li>
@@ -162,7 +161,7 @@ export const Footer = () => {
             <ul className="space-y-3 mb-8">
               {aboutLinks.map((item, index) => (
                 <li key={`about-${item.href}-${index}`}>
-                  <Link to={item.href} onMouseEnter={() => prefetchRoute(item.href)} onFocus={() => prefetchRoute(item.href)} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
+                  <Link to={item.href} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
                     {item.name}
                   </Link>
                 </li>
@@ -235,8 +234,6 @@ export const Footer = () => {
                   <Link
                     key={brand}
                     to={`/brands/${brand.toLowerCase().replace(/['\s]/g, "-")}`}
-                    onMouseEnter={() => prefetchRoute("/brands")}
-                    onFocus={() => prefetchRoute("/brands")}
                     className="font-body text-xs text-asper-stone-light/50 hover:text-polished-gold transition-colors duration-300"
                   >
                     {brand}
@@ -266,8 +263,6 @@ export const Footer = () => {
                   <Link
                     key={cat.en}
                     to={cat.href}
-                    onMouseEnter={() => prefetchRoute(cat.href)}
-                    onFocus={() => prefetchRoute(cat.href)}
                     className="font-body text-xs text-asper-stone-light/50 hover:text-polished-gold transition-colors duration-300"
                   >
                     {cat.en}
@@ -391,8 +386,6 @@ export const Footer = () => {
                   <Link
                     key={brand}
                     to={`/brands?brand=${encodeURIComponent(brand)}`}
-                    onMouseEnter={() => prefetchRoute("/brands")}
-                    onFocus={() => prefetchRoute("/brands")}
                     className="text-xs text-asper-stone-light/60 hover:text-polished-gold transition-colors duration-300 font-body"
                   >
                     {brand}
@@ -422,8 +415,6 @@ export const Footer = () => {
                   <Link
                     key={category.link}
                     to={category.link}
-                    onMouseEnter={() => prefetchRoute(category.link)}
-                    onFocus={() => prefetchRoute(category.link)}
                     className="text-xs text-asper-stone-light/60 hover:text-polished-gold transition-colors duration-300 font-body"
                   >
                     {isArabic ? category.nameAr : category.name}
