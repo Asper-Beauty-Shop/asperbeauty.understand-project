@@ -138,6 +138,7 @@ export const ProductQuickView = (
         <button
           onClick={onClose}
           className="absolute right-3 top-3 z-50 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+          aria-label="Close quick view"
         >
           <X className="w-4 h-4 text-gray-600" />
         </button>
