@@ -50,7 +50,7 @@ const ShopProductCard = ({
 }) => {
   const { locale } = useLanguage();
   const addItem = useCartStore((s) => s.addItem);
-  const imageUrl = product.image_url || "/editorial-showcase-2.jpg";
+  const imageUrl = product.image_url || "/editorial-showcase-2.webp";
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -129,7 +129,7 @@ const ShopProductCard = ({
 
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-background flex items-center justify-center p-4">
-        {imageUrl && imageUrl !== "/editorial-showcase-2.jpg" ? (
+        {imageUrl && imageUrl !== "/editorial-showcase-2.webp" ? (
           <img
             src={imageUrl}
             alt={product.title}
