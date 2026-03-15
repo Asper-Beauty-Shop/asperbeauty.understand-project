@@ -11,6 +11,7 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { categoryList } from "@/components/brand/CategoryIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { prefetchRoute } from "@/lib/prefetchRoute";
 
 export function CategoryNavBar({ className }: { className?: string }) {
   const { language } = useLanguage();
