@@ -8,7 +8,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 serve(async (req) => {
@@ -18,7 +19,8 @@ serve(async (req) => {
     const { query } = await req.json();
     if (!query || typeof query !== "string") {
       return new Response(JSON.stringify({ error: "Query is required" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -61,7 +63,7 @@ Return ONLY the JSON array, no other text.`;
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: { temperature: 0.1, maxOutputTokens: 256 },
         }),
-      }
+      },
     );
 
     if (!res.ok) {
@@ -75,7 +77,9 @@ Return ONLY the JSON array, no other text.`;
     try {
       const jsonMatch = rawText.match(/\[[\s\S]*\]/);
       if (jsonMatch) matchedIds = JSON.parse(jsonMatch[0]);
-    } catch { matchedIds = []; }
+    } catch {
+      matchedIds = [];
+    }
 
     const matchedProducts = matchedIds
       .map((id: string) => (products ?? []).find((p: Record<string, unknown>) => p.id === id))
@@ -84,10 +88,10 @@ Return ONLY the JSON array, no other text.`;
     return new Response(JSON.stringify({ products: matchedProducts }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-
   } catch (e) {
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
