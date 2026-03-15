@@ -12,3 +12,16 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Admin routes — no indexing
+Disallow: /admin/
+Disallow: /driver
+Disallow: /portal/
+Disallow: /brand-intelligence
+Disallow: /auth
+Disallow: /account
+Disallow: /profile
+Disallow: /wishlist
+Disallow: /health
+
+Sitemap: https://www.asperbeautyshop.com/sitemap.xml

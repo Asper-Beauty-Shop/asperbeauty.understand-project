@@ -22,7 +22,7 @@ type Msg = {
   imagePreview?: string; // local preview URL for display
 };
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://qqceibvalkoytafynwoc.supabase.co";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://vhgwvfedgfmcixhdyttt.supabase.co";
 const CHAT_URL = `${SUPABASE_URL}/functions/v1/beauty-assistant`;
 
 function getTextContent(content: string | MessageContent[]): string {
