@@ -49,13 +49,8 @@ export const CartDrawer = () => {
   const hasFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
 
   const handleCheckout = () => {
-    const checkoutUrl = getCheckoutUrl();
-    if (checkoutUrl) {
-      window.open(checkoutUrl, "_blank");
-      setOpen(false);
-    } else {
-      toast.error(isArabic ? ASPER_PROTOCOL.checkoutUnavailable.ar : ASPER_PROTOCOL.checkoutUnavailable.en);
-    }
+    // Navigate to COD checkout
+    setCheckoutMode("cod");
   };
 
   const handleDrawerOpen = (open: boolean) => {
