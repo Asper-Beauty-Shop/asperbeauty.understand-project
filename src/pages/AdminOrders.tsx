@@ -211,7 +211,7 @@ export default function AdminOrders() {
             table: "cod_orders",
           },
           (payload) => {
-            console.log("Order change received:", payload);
+            if (import.meta.env.DEV) console.log("Order change received:", payload);
             if (payload.eventType === "INSERT") {
               const newOrder = {
                 ...payload.new,

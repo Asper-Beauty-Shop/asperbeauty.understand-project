@@ -182,7 +182,7 @@ export default function BulkUpload() {
           throw new Error("No headers found in the Excel file");
         }
 
-        console.log("Found headers:", headers);
+        if (import.meta.env.DEV) console.log("Found headers:", headers);
 
         // Find matching columns
         const skuColIdx = headers.findIndex((h) =>
@@ -210,12 +210,7 @@ export default function BulkUpload() {
           )
         );
 
-        console.log("Mapped columns:", {
-          skuColIdx,
-          nameColIdx,
-          costColIdx,
-          priceColIdx,
-        });
+        if (import.meta.env.DEV) console.log("Mapped columns:", { skuColIdx, nameColIdx, costColIdx, priceColIdx });
 
         if (nameColIdx === -1) {
           throw new Error(
@@ -303,7 +298,7 @@ export default function BulkUpload() {
         throw new Error("No headers found in the Excel file");
       }
 
-      console.log("Found headers:", headers);
+      if (import.meta.env.DEV) console.log("Found headers:", headers);
 
       const skuColIdx = headers.findIndex((h) =>
         COLUMN_MAPPINGS.sku.some((m) =>
