@@ -177,18 +177,6 @@ const personaConfig = {
   },
 };
 
-// Intent-to-prompt mapping for marketing deep links (?intent=acne&source=ig)
-const INTENT_PROMPTS: Record<string, string> = {
-  acne: "I'm struggling with acne and oiliness. What's the best clinical routine?",
-  glow: "I want radiant, glowing skin. What do you recommend?",
-  "anti-aging": "I'm looking for an anti-aging routine with proven actives.",
-  hydration: "My skin is very dry. I need a deep hydration regimen.",
-  bridal: "I'm getting married soon! Help me with a bridal skincare bootcamp.",
-  pregnancy: "I'm pregnant and need a safe skincare routine.",
-  pigmentation: "I have uneven skin tone and dark spots. What treatments work best?",
-  sensitivity: "My skin is very sensitive and reactive. I need a gentle routine.",
-};
-
 const quickPrompts = [
   { label: "✨ Find My Routine", text: "I want a personalized skincare routine based on my concerns" },
   { label: "🧪 Shop by Ingredient", text: "I'm looking for products with Vitamin C, Retinol, or Hyaluronic Acid" },
@@ -215,6 +203,18 @@ export default function AIConcierge() {
   const deepLinkHandled = useRef(false);
   const pendingDeepLinkPrompt = useRef<string | null>(null);
   const deepLinkSource = useRef<string | null>(null);
+
+  // Intent-to-prompt mapping for marketing deep links
+  const INTENT_PROMPTS: Record<string, string> = {
+    acne: "I'm struggling with acne and oiliness. What's the best clinical routine?",
+    glow: "I want radiant, glowing skin. What do you recommend?",
+    "anti-aging": "I'm looking for an anti-aging routine with proven actives.",
+    hydration: "My skin is very dry. I need a deep hydration regimen.",
+    bridal: "I'm getting married soon! Help me with a bridal skincare bootcamp.",
+    pregnancy: "I'm pregnant and need a safe skincare routine.",
+    pigmentation: "I have uneven skin tone and dark spots. What treatments work best?",
+    sensitivity: "My skin is very sensitive and reactive. I need a gentle routine.",
+  };
 
   // Seed local messages from the store when persona changes (history isolation)
   useEffect(() => {
@@ -265,21 +265,7 @@ export default function AIConcierge() {
       // Small delay to ensure panel is rendered
       setTimeout(() => send(prompt), 300);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
-
-  // Listen for open-beauty-assistant custom event dispatched by Header, Footer, FloatingConciergeWidget, etc.
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent<{ persona?: string }>).detail;
-      if (detail?.persona === "dr_sami" || detail?.persona === "ms_zain") {
-        setCurrentPersona(detail.persona);
-      }
-      setOpen(true);
-    };
-    window.addEventListener("open-beauty-assistant", handler);
-    return () => window.removeEventListener("open-beauty-assistant", handler);
-  }, []);
 
   // Check auth state
   useEffect(() => {

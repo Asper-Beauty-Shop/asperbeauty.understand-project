@@ -45,7 +45,7 @@ interface TabItem {
   ar: string;
 }
 
-function ProductRow({ products, isArabic }: { products: Record<string, unknown>[]; isArabic: boolean }) {
+function ProductRow({ products, isArabic }: { products: any[]; isArabic: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const scroll = (dir: "left" | "right") => {
     scrollRef.current?.scrollBy({ left: dir === "left" ? -320 : 320, behavior: "smooth" });

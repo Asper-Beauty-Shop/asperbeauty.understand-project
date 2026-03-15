@@ -54,7 +54,7 @@ export function AsperExperience() {
     if (touchStartX.current === null) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) {
-      if (diff > 0) { goNext(); } else { goPrev(); }
+      diff > 0 ? goNext() : goPrev();
     }
     touchStartX.current = null;
   };

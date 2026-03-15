@@ -182,7 +182,7 @@ export default function RegimenPortal() {
             protocolId: id.slice(0, 8).toUpperCase(),
             prescribedBy: "Dr. Sami",
             steps: regimenSteps,
-            clinicalNote: (plan as Record<string, unknown>).description as string | undefined,
+            clinicalNote: (plan as any).description || undefined,
           });
         } else {
           // Fallback: use get_tray_by_concern with a default
