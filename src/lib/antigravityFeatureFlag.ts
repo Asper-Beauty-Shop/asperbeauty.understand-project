@@ -55,8 +55,11 @@ export async function runAntigravityDiagnostic(): Promise<{
   try {
     // Dynamic imports so this module remains safe to bundle in browser contexts
     // even though the runtime branch above will never reach here in a browser.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cp: any = await (Function('return import("child_process")')());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const util: any = await (Function('return import("util")')());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const path: any = await (Function('return import("path")')());
     const execAsync = util.promisify(cp.exec);
 

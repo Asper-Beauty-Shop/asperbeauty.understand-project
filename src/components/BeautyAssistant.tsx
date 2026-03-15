@@ -21,7 +21,7 @@ export const BeautyAssistant = () => {
   const persistedHistory = sessions.ms_zain;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Record<string, any>[]>(() =>
+  const [messages, setMessages] = useState<{ role: string; content: string; trayProducts?: unknown[] }[]>(() =>
     persistedHistory.map((m) => ({ role: m.role, content: m.content }))
   );
   const [inputValue, setInput] = useState("");
@@ -35,6 +35,13 @@ export const BeautyAssistant = () => {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // Listen for open-beauty-assistant events dispatched by Header, Footer, FloatingConciergeWidget, etc.
+  useEffect(() => {
+    const handler = () => setIsOpen(true);
+    window.addEventListener("open-beauty-assistant", handler);
+    return () => window.removeEventListener("open-beauty-assistant", handler);
+  }, []);
 
   const handleSend = async () => {
     if (!inputValue.trim()) return;

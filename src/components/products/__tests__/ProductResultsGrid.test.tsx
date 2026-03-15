@@ -21,8 +21,8 @@ describe("ProductResultsGrid", () => {
     const { container } = renderWithProviders(
       <ProductResultsGrid products={undefined} isLoading={true} error={null} />
     );
-    // Skeleton renders pulse animations
-    expect(container.querySelector(".animate-pulse")).toBeTruthy();
+    // Skeleton renders breathing animations
+    expect(container.querySelector(".animate-skeleton-breathe")).toBeTruthy();
   });
 
   it("shows error message when error is provided", () => {
@@ -94,6 +94,7 @@ describe("ProductResultsGrid", () => {
     };
 
     renderWithProviders(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       <ProductResultsGrid products={[mockProduct as any]} isLoading={false} error={null} />
     );
     expect(screen.getByText("Test Serum")).toBeInTheDocument();
