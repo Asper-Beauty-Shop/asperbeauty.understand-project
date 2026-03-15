@@ -235,6 +235,8 @@ export const Footer = () => {
                   <Link
                     key={brand}
                     to={`/brands/${brand.toLowerCase().replace(/['\s]/g, "-")}`}
+                    onMouseEnter={() => prefetchRoute("/brands")}
+                    onFocus={() => prefetchRoute("/brands")}
                     className="font-body text-xs text-asper-stone-light/50 hover:text-polished-gold transition-colors duration-300"
                   >
                     {brand}
