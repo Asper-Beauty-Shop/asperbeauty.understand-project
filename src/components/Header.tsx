@@ -171,7 +171,7 @@ export const Header = () => {
                 {/* Concerns Mega Menu */}
                 <div
                   className="group relative h-full flex items-center"
-                  onMouseEnter={() => setActiveMegaMenu("concerns")}
+                  onMouseEnter={() => { setActiveMegaMenu("concerns"); prefetchRoute("/skin-concerns"); }}
                   onMouseLeave={() => setActiveMegaMenu(null)}
                 >
                   <Link
