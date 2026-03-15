@@ -56,6 +56,15 @@ export interface ShopifyProduct {
   };
 }
 
+import { toast } from "sonner";
+
+const SHOPIFY_STOREFRONT_URL = `https://${import.meta.env.VITE_SHOPIFY_STORE_DOMAIN || "placeholder.myshopify.com"}/api/2024-01/graphql.json`;
+const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || "";
+
+function sanitizeSearchTerm(term: string): string {
+  return term.replace(/[^\w\s\-']/g, "").trim();
+}
+
 export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}) {
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
     method: "POST",

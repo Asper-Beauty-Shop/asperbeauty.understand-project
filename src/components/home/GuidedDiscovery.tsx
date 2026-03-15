@@ -22,6 +22,8 @@ const AMBITIONS = [
   { key: "Concern_Oiliness", en: "Oil Control", ar: "التحكم بالدهون", emoji: "🧴" },
 ] as const;
 
+type AmbitionKey = (typeof AMBITIONS)[number]["key"];
+
 /* Ms. Zain's personalized recommendation copy per concern */
 const ZAIN_INSIGHTS: Record<string, { en: string; ar: string }> = {
   Concern_Acne: {

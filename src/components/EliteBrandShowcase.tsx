@@ -5,9 +5,10 @@ import { supabase } from '@/integrations/supabase/client';
 interface Brand {
   id: string;
   name: string;
-  hero_image_url: string;
   slug: string;
-  is_elite: boolean;
+  hero_image_url?: string | null;
+  is_elite?: boolean;
+  [key: string]: unknown;
 }
 
 export default function EliteBrandShowcase() {

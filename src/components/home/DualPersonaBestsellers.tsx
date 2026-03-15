@@ -26,7 +26,7 @@ const LUXURY_TABS = [
 ] as const;
 
 /* ── Tab→asper_category mapping ── */
-const TAB_FILTERS: Record<string, { concerns?: string[]; asper_categories?: string[] }> = {
+const TAB_FILTERS: Record<string, { concerns?: readonly string[]; asper_categories?: readonly string[] }> = {
   skincare: { asper_categories: ["Clinical Serums & Actives", "Daily Hydration & Barrier", "Targeted Treatments"] },
   supplements: { asper_categories: ["Requires_Manual_Review"] }, // supplements need manual tagging
   "sun-protection": { asper_categories: ["Sun Protection (SPF)"] },
