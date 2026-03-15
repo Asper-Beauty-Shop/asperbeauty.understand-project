@@ -38,8 +38,6 @@ export const CartDrawer = () => {
     removeItem,
     setOpen,
     getTotalPrice,
-    getCheckoutUrl,
-    syncCart,
   } = useCartStore();
 
   const totalPrice = getTotalPrice();
