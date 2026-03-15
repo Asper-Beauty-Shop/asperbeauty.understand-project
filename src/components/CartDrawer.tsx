@@ -103,6 +103,7 @@ export const CartDrawer = () => {
               <button
                 onClick={handleBackToCart}
                 className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors mr-2"
+                aria-label="Back to cart"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
