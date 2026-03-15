@@ -55,6 +55,8 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
           title: product.title,
           handle: product.id,
           description: product.description || "",
+          vendor: product.brand || "",
+          productType: product.category || "",
           priceRange: {
             minVariantPrice: {
               amount: product.price.toString(),
