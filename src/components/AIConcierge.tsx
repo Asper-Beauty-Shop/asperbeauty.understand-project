@@ -15,7 +15,7 @@ type MessageContent =
   | { type: "text"; text: string }
   | { type: "image_url"; image_url: { url: string } };
 
-type Msg = {
+type ChatMessage = {
   role: "user" | "assistant";
   content: string | MessageContent[];
   persona?: string;
@@ -28,9 +28,9 @@ const CHAT_URL = `${SUPABASE_URL}/functions/v1/beauty-assistant`;
 function getTextContent(content: string | MessageContent[]): string {
   if (typeof content === "string") return content;
   return content
-    .filter((p): p is { type: "text"; text: string } => (p as { type: string }).type === "text")
-    .filter((p): p is { type: "text"; text: string } => typeof p === "object" && p !== null && "type" in p && p.type === "text")
-    .map((p) => p.text)
+    .filter((contentPart): contentPart is { type: "text"; text: string } => (contentPart as { type: string }).type === "text")
+    .filter((contentPart): contentPart is { type: "text"; text: string } => typeof contentPart === "object" && contentPart !== null && "type" in contentPart && contentPart.type === "text")
+    .map((contentPart) => contentPart.text)
     .join(" ");
 }
 
@@ -44,25 +44,25 @@ async function streamChat({
   onDone,
   onSafetyFlags,
 }: {
-  messages: Msg[];
+  messages: ChatMessage[];
   forcePersona?: string;
   userProfile?: { skin_type: string | null; skin_concern: string; tags: string[] } | null;
   campaignSource?: string | null;
-  onPersona: (p: string) => void;
+  onPersona: (persona: string) => void;
   onDelta: (text: string) => void;
   onDone: () => void;
   onSafetyFlags?: (flags: string[]) => void;
 }) {
-  const payload = messages.map((m) => ({
-    role: m.role,
-    content: m.content,
+  const payload = messages.map((chatMessage) => ({
+    role: chatMessage.role,
+    content: chatMessage.content,
   }));
 
   const { data: { session } } = await supabase.auth.getSession();
   const token = session?.access_token;
   if (!token) throw new Error("Please sign in to use the AI concierge.");
 
-  const resp = await fetch(CHAT_URL, {
+  const chatResponse = await fetch(CHAT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -71,37 +71,37 @@ async function streamChat({
     body: JSON.stringify({ messages: payload, forcePersona, userProfile, ...(campaignSource ? { source: campaignSource } : {}) }),
   });
 
-  if (!resp.ok) {
-    const err = await resp.json().catch(() => ({ error: "Connection failed" }));
-    throw new Error(err.error || `Error ${resp.status}`);
+  if (!chatResponse.ok) {
+    const errorResponse = await chatResponse.json().catch(() => ({ error: "Connection failed" }));
+    throw new Error(errorResponse.error || `Error ${chatResponse.status}`);
   }
 
-  const persona = resp.headers.get("X-Persona");
+  const persona = chatResponse.headers.get("X-Persona");
   if (persona) onPersona(persona);
 
-  const safetyFlags = resp.headers.get("X-Safety-Flags");
+  const safetyFlags = chatResponse.headers.get("X-Safety-Flags");
   if (safetyFlags && safetyFlags !== "none" && onSafetyFlags) {
     onSafetyFlags(safetyFlags.split(","));
   }
 
-  if (!resp.body) throw new Error("No response body");
+  if (!chatResponse.body) throw new Error("No response body");
 
-  const reader = resp.body.getReader();
+  const reader = chatResponse.body.getReader();
   const decoder = new TextDecoder();
-  let buffer = "";
+  let streamBuffer = "";
 
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
-    buffer += decoder.decode(value, { stream: true });
+    streamBuffer += decoder.decode(value, { stream: true });
 
-    let idx: number;
-    while ((idx = buffer.indexOf("\n")) !== -1) {
-      let line = buffer.slice(0, idx);
-      buffer = buffer.slice(idx + 1);
-      if (line.endsWith("\r")) line = line.slice(0, -1);
-      if (!line.startsWith("data: ")) continue;
-      const json = line.slice(6).trim();
+    let newlineIndex: number;
+    while ((newlineIndex = streamBuffer.indexOf("\n")) !== -1) {
+      let sseDataLine = streamBuffer.slice(0, newlineIndex);
+      streamBuffer = streamBuffer.slice(newlineIndex + 1);
+      if (sseDataLine.endsWith("\r")) sseDataLine = sseDataLine.slice(0, -1);
+      if (!sseDataLine.startsWith("data: ")) continue;
+      const json = sseDataLine.slice(6).trim();
       if (json === "[DONE]") {
         onDone();
         return;
@@ -111,7 +111,7 @@ async function streamChat({
         const content = parsed.choices?.[0]?.delta?.content;
         if (content) onDelta(content);
       } catch {
-        buffer = line + "\n" + buffer;
+        streamBuffer = sseDataLine + "\n" + streamBuffer;
         break;
       }
     }
@@ -185,7 +185,7 @@ const quickPrompts = [
 
 export default function AIConcierge() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentPersona, setCurrentPersona] = useState<string>("ms_zain");
@@ -358,7 +358,7 @@ export default function AIConcierge() {
       userContent = text.trim();
     }
 
-    const userMsg: Msg = { role: "user", content: userContent, imagePreview };
+    const userMsg: ChatMessage = { role: "user", content: userContent, imagePreview };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setIsLoading(true);
@@ -371,8 +371,8 @@ export default function AIConcierge() {
       setMessages((prev) => {
         const last = prev[prev.length - 1];
         if (last?.role === "assistant") {
-          return prev.map((m, i) =>
-            i === prev.length - 1 ? { ...m, content: assistantSoFar, persona: detectedPersona } : m
+          return prev.map((chatMessage, messageIndex) =>
+            messageIndex === prev.length - 1 ? { ...chatMessage, content: assistantSoFar, persona: detectedPersona } : chatMessage
           );
         }
         return [...prev, { role: "assistant", content: assistantSoFar, persona: detectedPersona }];
@@ -384,9 +384,9 @@ export default function AIConcierge() {
         messages: [...messages, userMsg],
         userProfile,
         campaignSource: deepLinkSource.current,
-        onPersona: (p) => {
-          detectedPersona = p;
-          setCurrentPersona(p);
+        onPersona: (detectedPersonaId) => {
+          detectedPersona = detectedPersonaId;
+          setCurrentPersona(detectedPersonaId);
         },
         onDelta: upsert,
         onDone: () => { setIsLoading(false); playNotificationSound(); },
