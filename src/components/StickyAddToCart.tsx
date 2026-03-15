@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -14,20 +14,27 @@ export const StickyAddToCart = ({ productTitle, price, onAddToCart, triggerRef }
   const [visible, setVisible] = useState(false);
   const { locale } = useLanguage();
   const isArabic = locale === "ar";
+  const rafId = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show after scrolling 500px or past the trigger element
-      if (triggerRef?.current) {
-        const rect = triggerRef.current.getBoundingClientRect();
-        setVisible(rect.bottom < 0);
-      } else {
-        setVisible(window.scrollY > 500);
-      }
+      if (rafId.current) return;
+      rafId.current = requestAnimationFrame(() => {
+        rafId.current = 0;
+        // Batch DOM read inside RAF — prevents forced reflow
+        if (triggerRef?.current) {
+          setVisible(triggerRef.current.getBoundingClientRect().bottom < 0);
+        } else {
+          setVisible(window.scrollY > 500);
+        }
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
   }, [triggerRef]);
 
   if (!visible) return null;
