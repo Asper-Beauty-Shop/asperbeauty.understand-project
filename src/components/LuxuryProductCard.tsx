@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Eye, ShoppingBag, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import { prefetchRoute } from "@/lib/prefetchRoute";
 import { ProductQuickViewModal } from "./ProductQuickViewModal";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
