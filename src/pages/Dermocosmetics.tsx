@@ -79,24 +79,29 @@ export default function Dermocosmetics() {
           </div>
           <h1 className="font-heading text-4xl sm:text-5xl font-bold text-foreground mb-4 leading-tight">
             {isAr
-              ? "التجميل الطبي والعناية السريرية بالبشرة"
-              : "Dermocosmetics & Clinical Skincare"}
+              ? "أفضل منتجات التجميل الطبي والعناية السريرية بالبشرة في الأردن"
+              : "Premium Dermocosmetics & Clinical Skincare — Jordan's #1 Pharmacy"}
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 font-body">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-3 font-body">
             {isAr
-              ? "اكتشف كيف تجمع منتجات التجميل الطبي الراقية بين العلم والعناية بالبشرة لنتائج فعّالة وآمنة."
-              : "Discover how premium dermocosmetics combine science and skincare for effective, pharmacist-verified results. Trusted by dermatologists across Jordan."}
+              ? "اكتشف كيف تجمع منتجات التجميل الطبي الراقية بين العلم والعناية بالبشرة لنتائج فعّالة وآمنة — موصى بها من الصيادلة."
+              : "Shop 4,000+ dermocosmetic products — clinically formulated, pharmacist-verified, and recommended by dermatologists across Jordan. Same-day delivery in Amman."}
+          </p>
+          <p className="text-sm text-muted-foreground/70 mb-8">
+            {isAr
+              ? "Eucerin · La Roche-Posay · CeraVe · Bioderma · Vichy وأكثر"
+              : "Eucerin · La Roche-Posay · CeraVe · Bioderma · Vichy & more"}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button asChild size="lg">
               <Link to="/shop?category=dermocosmetics">
-                {isAr ? "تسوق الآن" : "Shop Dermocosmetics"}
+                {isAr ? "تسوق منتجات التجميل الطبي" : "Shop Premium Dermocosmetics"}
                 <ChevronRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">
               <Link to="/skin-concerns">
-                {isAr ? "اكتشف روتينك" : "Find Your Routine"}
+                {isAr ? "اكتشف روتين العناية السريرية" : "Explore Clinical Skincare"}
               </Link>
             </Button>
           </div>
@@ -104,13 +109,23 @@ export default function Dermocosmetics() {
       </section>
 
       {/* ── What is Dermocosmetics ─────────────────────────────────────── */}
-      <section className="py-16 bg-background">
+      <section className="py-16 bg-background" aria-label="About dermocosmetics">
         <div className="mx-auto max-w-5xl px-4">
+          <div className="mb-10 text-center">
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">
+              {isAr ? "ما هو التجميل الطبي؟" : "What Makes Clinical Skincare Different?"}
+            </h2>
+            <p className="text-muted-foreground text-sm max-w-2xl mx-auto">
+              {isAr
+                ? "منتجات التجميل الطبي تختلف عن مستحضرات التجميل العادية — فهي مُصاغة بتركيزات فعّالة مثبتة علميًا"
+                : "Dermocosmetics bridge the gap between cosmetics and pharmaceuticals — formulated for measurable skin results"}
+            </p>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 icon: FlaskConical,
-                title: isAr ? "مُصاغ سريريًا" : "Clinically Formulated",
+                title: isAr ? "مُصاغ سريريًا" : "Clinically Formulated Dermocosmetics",
                 body: isAr
                   ? "مُصمَّم بتركيزات فعّالة مثبتة علميًا، بعيدًا عن المواد المزيّنة غير الضرورية."
                   : "Formulated with clinically proven active concentrations — no unnecessary fillers.",
@@ -147,10 +162,10 @@ export default function Dermocosmetics() {
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-10 text-center">
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">
-              {isAr ? "فئات المنتجات" : "Product Categories"}
+              {isAr ? "تسوق منتجات التجميل الطبي بالفئة" : "Shop Dermocosmetics by Category"}
             </h2>
             <p className="text-muted-foreground text-sm">
-              {isAr ? "كل ما تحتاجه لروتين عناية متكامل" : "Everything you need for a complete clinical skincare regimen"}
+              {isAr ? "كل ما تحتاجه لروتين عناية سريرية متكامل" : "Clinical skincare products for every step of your premium skincare routine"}
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -174,12 +189,13 @@ export default function Dermocosmetics() {
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-10 text-center">
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">
-              {isAr ? "العلامات التجارية الموثوقة" : "Trusted Clinical Brands"}
+              {isAr ? "أفضل علامات التجميل الطبي العالمية" : "Premium Dermocosmetic Brands"}
             </h2>
             <p className="text-muted-foreground text-sm">
-              {isAr ? "شركاؤنا من أبرز العلامات الطبية عالميًا" : "Our curated selection of the world's most respected dermocosmetic brands"}
+              {isAr ? "شركاؤنا من أبرز العلامات الطبية الجلدية عالميًا — موصى بها من صيادلة Asper" : "The world's most trusted clinical skincare brands — curated and stocked by Asper's pharmacists"}
             </p>
           </div>
+          {/* H3s for each brand rendered inline in cards below */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {BRANDS.map(({ name, slug, tagline, concern }) => (
               <Link
@@ -188,7 +204,7 @@ export default function Dermocosmetics() {
                 className="group rounded-xl border border-border/60 bg-card p-5 transition-all hover:shadow-lg hover:border-primary/30 hover:-translate-y-0.5 flex flex-col gap-2"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-heading font-bold text-foreground text-lg">{name}</span>
+                  <h3 className="font-heading font-bold text-foreground text-lg">{name}</h3>
                   <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
                 </div>
                 <p className="text-xs text-muted-foreground italic">{tagline}</p>
@@ -209,10 +225,10 @@ export default function Dermocosmetics() {
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-8 text-center">
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">
-              {isAr ? "اكتشف روتين التجميل الطبي المثالي لك" : "Find Your Perfect Dermocosmetics Routine"}
+              {isAr ? "اكتشف روتين التجميل الطبي المثالي لبشرتك" : "Find Your Dermocosmetics Match — Personalized Clinical Skincare"}
             </h2>
             <p className="text-muted-foreground text-sm">
-              {isAr ? "٣ أسئلة فقط — توصيات شخصية من صيدلانيّنا" : "3 quick questions — personalized clinical skincare in seconds"}
+              {isAr ? "٣ أسئلة فقط — توصيات سريرية شخصية من صيدلانيّنا" : "Answer 3 questions — get pharmacist-curated premium skincare recommendations instantly"}
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -256,12 +272,12 @@ export default function Dermocosmetics() {
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-10 text-center">
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">
-              {isAr ? "الأدلة والمصادر" : "Guides & Resources"}
+              {isAr ? "دليل اختيار منتجات التجميل الطبي" : "Dermocosmetics Education & Clinical Skincare Guides"}
             </h2>
             <p className="text-muted-foreground text-sm">
               {isAr
-                ? "دليلك العلمي لاختيار منتجات التجميل الطبي"
-                : "Expert knowledge to help you choose, layer, and get results from clinical skincare"}
+                ? "دليلك العلمي الشامل لاختيار منتجات التجميل الطبي الصحيحة"
+                : "Expert-written guides to help you choose the right dermocosmetics, understand clinical ingredients, and build effective premium skincare routines"}
             </p>
           </div>
           <div className="grid sm:grid-cols-3 gap-5">
@@ -289,8 +305,8 @@ export default function Dermocosmetics() {
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold mb-4">
             {isAr
-              ? "احصل على استشارة مجانية من صيدلانيك"
-              : "Get a Free Pharmacist Consultation"}
+              ? "احصل على استشارة صيدلانية مجانية لاختيار منتجاتك"
+              : "Shop Best Sellers — Free Pharmacist Consultation for Dermocosmetics"}
           </h2>
           <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
             {isAr
