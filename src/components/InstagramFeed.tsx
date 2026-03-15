@@ -13,7 +13,7 @@ export const InstagramFeed = () => {
     {
       id: 1,
       image:
-        "/editorial-showcase-1.jpg?w=400&h=400&fit=crop",
+        "/editorial-showcase-1.webp",
       likes: 342,
     },
     {
