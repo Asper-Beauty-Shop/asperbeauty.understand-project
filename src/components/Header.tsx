@@ -494,6 +494,13 @@ export const Header = () => {
               </div>
               <div className="pt-4 border-t border-rose-clay-light/30 flex flex-wrap gap-4">
                 <Link
+                  to="/dermocosmetics"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="font-body text-burgundy font-medium"
+                >
+                  {language === "ar" ? "التجميل الطبي" : "Dermocosmetics"}
+                </Link>
+                <Link
                   to="/best-sellers"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="font-body text-burgundy font-medium"
