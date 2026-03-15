@@ -16,6 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { prefetchRoute } from "@/lib/prefetchRoute";
 import { useCartStore } from "@/stores/cartStore";
 import { useWishlistStore } from "@/stores/wishlistStore";
 import { CartDrawer } from "./CartDrawer";
@@ -126,7 +127,7 @@ export const Header = () => {
                 {/* Brands Mega Menu */}
                 <div
                   className="group relative h-full flex items-center"
-                  onMouseEnter={() => setActiveMegaMenu("brands")}
+                  onMouseEnter={() => { setActiveMegaMenu("brands"); prefetchRoute("/brands"); }}
                   onMouseLeave={() => setActiveMegaMenu(null)}
                 >
                   <Link
@@ -145,6 +146,7 @@ export const Header = () => {
                         <Link
                           key={brand.name}
                           to={brand.href}
+                          onMouseEnter={() => prefetchRoute(brand.href)}
                           className="flex items-center justify-between p-3 rounded-md hover:bg-asper-stone group/item transition-colors"
                         >
                           <span className="font-display font-medium text-burgundy group-hover/item:text-polished-gold">
@@ -170,7 +172,7 @@ export const Header = () => {
                 {/* Concerns Mega Menu */}
                 <div
                   className="group relative h-full flex items-center"
-                  onMouseEnter={() => setActiveMegaMenu("concerns")}
+                  onMouseEnter={() => { setActiveMegaMenu("concerns"); prefetchRoute("/skin-concerns"); }}
                   onMouseLeave={() => setActiveMegaMenu(null)}
                 >
                   <Link
@@ -194,6 +196,7 @@ export const Header = () => {
                         <Link
                           key={concern.name}
                           to={concern.href}
+                          onMouseEnter={() => prefetchRoute(concern.href)}
                           className="flex items-center gap-3 p-2 rounded-md hover:bg-asper-stone group/item transition-colors"
                         >
                           <span className="text-lg">{concern.icon}</span>
@@ -216,6 +219,7 @@ export const Header = () => {
 
                 <Link
                   to="/best-sellers"
+                  onMouseEnter={() => prefetchRoute("/best-sellers")}
                   className={cn(
                     "font-body text-sm font-medium transition-colors",
                     textColor, textColorHover
@@ -225,6 +229,7 @@ export const Header = () => {
                 </Link>
                 <Link
                   to="/offers"
+                  onMouseEnter={() => prefetchRoute("/offers")}
                   className={cn(
                     "font-body text-sm font-medium transition-colors",
                     textColor, textColorHover
