@@ -17,8 +17,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "https://www.asperbeautyshop.com",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
@@ -48,7 +47,10 @@ serve(async (req: Request) => {
     auth: { persistSession: false },
   });
 
-  const { data: { user }, error: authErr } = await supabaseUser.auth.getUser();
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabaseUser.auth.getUser();
   if (authErr || !user) {
     return json({ error: "Unauthorized" }, 401);
   }
@@ -78,24 +80,17 @@ serve(async (req: Request) => {
 
   // ── Task dispatcher ───────────────────────────────────────────────────────
   switch (task) {
-
     // -- Health snapshot ------------------------------------------------------
     case "health": {
       const checks: Record<string, string> = {};
 
-      const { count: productCount } = await supabaseAdmin
-        .from("products")
-        .select("*", { count: "exact", head: true });
+      const { count: productCount } = await supabaseAdmin.from("products").select("*", { count: "exact", head: true });
       checks.products = productCount != null ? `${productCount} rows` : "error";
 
-      const { count: brandCount } = await supabaseAdmin
-        .from("brands")
-        .select("*", { count: "exact", head: true });
+      const { count: brandCount } = await supabaseAdmin.from("brands").select("*", { count: "exact", head: true });
       checks.brands = brandCount != null ? `${brandCount} rows` : "error";
 
-      const { count: orderCount } = await supabaseAdmin
-        .from("cod_orders")
-        .select("*", { count: "exact", head: true });
+      const { count: orderCount } = await supabaseAdmin.from("cod_orders").select("*", { count: "exact", head: true });
       checks.cod_orders = orderCount != null ? `${orderCount} rows` : "error";
 
       return json({
@@ -110,17 +105,22 @@ serve(async (req: Request) => {
     // -- Stats ----------------------------------------------------------------
     case "stats": {
       const tables = [
-        "products", "brands", "cod_orders", "concierge_profiles",
-        "consultations", "product_reviews", "regimen_plans",
-        "customer_leads", "telemetry_events", "user_roles",
+        "products",
+        "brands",
+        "cod_orders",
+        "concierge_profiles",
+        "consultations",
+        "product_reviews",
+        "regimen_plans",
+        "customer_leads",
+        "telemetry_events",
+        "user_roles",
       ];
 
       const counts: Record<string, number | string> = {};
       await Promise.all(
         tables.map(async (t) => {
-          const { count, error } = await supabaseAdmin
-            .from(t)
-            .select("*", { count: "exact", head: true });
+          const { count, error } = await supabaseAdmin.from(t).select("*", { count: "exact", head: true });
           counts[t] = error ? "error" : (count ?? 0);
         }),
       );
@@ -150,9 +150,12 @@ serve(async (req: Request) => {
 
     // -- Unknown task ---------------------------------------------------------
     default:
-      return json({
-        error: `Unknown task: "${task}"`,
-        available: ["health", "stats", "clear-rate-limits", "sync-tray"],
-      }, 400);
+      return json(
+        {
+          error: `Unknown task: "${task}"`,
+          available: ["health", "stats", "clear-rate-limits", "sync-tray"],
+        },
+        400,
+      );
   }
 });
