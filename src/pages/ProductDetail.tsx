@@ -191,12 +191,17 @@ const ProductDetail = () => {
         {/* RIGHT: Clean PDP â€” Price + Cart Above Fold, Clinical Data in Accordions */}
         <div className="lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto bg-background">
           <div className="p-8 lg:p-16 flex flex-col justify-center min-h-full">
-            {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-sm mb-6">
-              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Home"}</Link>
-              <span className="text-muted-foreground">/</span>
-              <Link to="/shop" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ù…ØªØ¬Ø±" : "Shop"}</Link>
-            </nav>
+            {/* Breadcrumb — schema.org BreadcrumbList */}
+            <Breadcrumb
+              className="mb-6"
+              items={[
+                { label: isArabic ? "المتجر" : "Shop", href: "/shop" },
+                ...(brandName && brandName !== "Exclusive Collection"
+                  ? [{ label: brandName, href: `/brands/${brandName.toLowerCase().replace(/\s+/g, "-")}` }]
+                  : []),
+                { label: product.title },
+              ]}
+            />
 
             {/* Above the Fold: Brand, Title, Price */}
             <div className="mb-8">
