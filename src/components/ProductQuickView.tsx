@@ -262,6 +262,7 @@ export const ProductQuickView = (
                 <button
                   onClick={() => setQuantity(quantity + 1)}
                   className="w-10 h-10 border border-gray-200 rounded flex items-center justify-center hover:bg-gray-50 transition-colors"
+                  aria-label="Increase quantity"
                 >
                   <Plus className="w-4 h-4 text-gray-600" />
                 </button>
