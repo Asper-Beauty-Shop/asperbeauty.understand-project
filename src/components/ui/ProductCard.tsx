@@ -10,6 +10,7 @@
  */
 
 import { Link } from "react-router-dom";
+import { prefetchRoute } from "@/lib/prefetchRoute";
 import { ShoppingBag, Heart, FlaskConical } from "lucide-react";
 import { formatJOD } from "@/lib/productImageUtils";
 import { cn } from "@/lib/utils";
