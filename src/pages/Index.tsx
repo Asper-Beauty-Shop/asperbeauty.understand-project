@@ -123,7 +123,7 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
 );
 
 // Placeholder fallback image for when DB is empty (no eager imports)
-const PLACEHOLDER_IMG = "/editorial-showcase-2.jpg";
+const PLACEHOLDER_IMG = "/editorial-showcase-2.webp";
 
 // Sample product data for sliders — using placeholder; DB data takes priority
 const NEW_ARRIVALS = [
