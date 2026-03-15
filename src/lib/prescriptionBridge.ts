@@ -116,8 +116,10 @@ export async function getProductsByConcern(
 
   const variables = { query };
   try {
-    const data = await storefrontApiRequest(REGIMEN_QUERY, variables);
-    if (!data?.data?.products?.edges) {
+    const data = await storefrontApiRequest(REGIMEN_QUERY, variables) as Record<string, Record<string, unknown>>;
+    const productsData = data?.data as Record<string, unknown> | undefined;
+    const products = productsData?.products as { edges?: Array<{ node: RegimenProduct }> } | undefined;
+    if (!products?.edges) {
       return {
         cleanser: null,
         treatment: null,
