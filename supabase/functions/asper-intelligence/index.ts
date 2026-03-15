@@ -7,7 +7,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const TEXT_MODEL = "gemini-2.5-flash-preview-09-2025";
+const TEXT_MODEL = "google/gemini-2.5-flash";
 const TTS_MODEL = "gemini-2.5-flash-preview-tts";
 
 serve(async (req) => {
@@ -38,10 +38,11 @@ serve(async (req) => {
       });
     }
 
-    const apiKey = Deno.env.get("GEMINI_API_KEY");
-    if (!apiKey) {
+    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
+    const geminiApiKey = Deno.env.get("GEMINI_API_KEY");
+    if (!lovableApiKey && !geminiApiKey) {
       return new Response(
-        JSON.stringify({ error: "GEMINI_API_KEY not configured" }),
+        JSON.stringify({ error: "AI API key not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -49,45 +50,44 @@ serve(async (req) => {
     const { action, prompt, image, persona, text, catalog } = await req.json();
 
     if (action === "chat") {
-      // Build system instruction
       const isClinical = persona === "clinical";
       const inventory = (catalog || [])
         .map((p: { title: string; price: string }) => `${p.title} (${p.price} JOD)`)
         .join(", ");
 
-      const systemInstruction = `
-        You are the Asper AI Protocol. Inventory: ${inventory}.
+      const systemContent = `You are the Asper AI Protocol. Inventory: ${inventory}.
         ${
           isClinical
             ? "Role: Dr. Sami (Pharmacist). Tone: Clinical, safety-first, authoritative. Jordan market context. Sign: '- Dr. Sami, Asper Clinical Support'."
             : "Role: Ms. Zain (Beauty Concierge). Tone: Radiant, high-end, friendly. Focus on rituals. Sign: '- Ms. Zain, Asper Beauty Concierge'."
         }
-        Limit to 3 concise sentences. Priority: Catalog recommendations.
-      `;
+        Limit to 3 concise sentences. Priority: Catalog recommendations.`;
 
-      const parts: Array<{ text?: string; inlineData?: { mimeType: string; data: string } }> = [
-        { text: `Context: ${systemInstruction}\n\nUser Query: ${prompt}` },
+      const userContent: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
+        { type: "text", text: prompt },
       ];
-
       if (image) {
-        const base64 = image.includes(",") ? image.split(",")[1] : image;
-        if (base64) {
-          parts.push({ inlineData: { mimeType: "image/png", data: base64 } });
-        }
+        userContent.push({ type: "image_url", image_url: { url: image } });
       }
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts }] }),
-        }
-      );
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${lovableApiKey}`,
+        },
+        body: JSON.stringify({
+          model: TEXT_MODEL,
+          messages: [
+            { role: "system", content: systemContent },
+            { role: "user", content: userContent },
+          ],
+        }),
+      });
 
       const data = await response.json();
       const reply =
-        data.candidates?.[0]?.content?.parts?.[0]?.text ??
+        data.choices?.[0]?.message?.content ??
         "Intelligence protocol reset required. Please standby.";
 
       return new Response(
@@ -97,11 +97,16 @@ serve(async (req) => {
     }
 
     if (action === "tts") {
+      if (!geminiApiKey) {
+        return new Response(JSON.stringify({ error: "GEMINI_API_KEY not configured" }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       const isClinical = persona === "clinical";
       const voiceName = isClinical ? "Puck" : "Aoede";
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${TTS_MODEL}:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/${TTS_MODEL}:generateContent?key=${geminiApiKey}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
