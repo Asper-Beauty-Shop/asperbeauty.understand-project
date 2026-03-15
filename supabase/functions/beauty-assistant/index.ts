@@ -198,20 +198,22 @@ serve(async (req) => {
 
     // Non-streaming path for webhooks
     if (route) {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            system_instruction: { parts: [{ text: systemPrompt }] },
-            contents: geminiContents,
-            generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
-          }),
-        }
-      );
+      const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${lovableApiKey}`,
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [
+            { role: "system", content: systemPrompt },
+            ...geminiContents.map(c => ({ role: c.role === "model" ? "assistant" : c.role, content: c.parts.map((p: Record<string, unknown>) => (p as { text?: string }).text ?? "").join("") })),
+          ],
+        }),
+      });
       const data = await res.json();
-      const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Processing your request...";
+      const replyText = data.choices?.[0]?.message?.content ?? "Processing your request...";
 
       if (route === "manychat") {
         return new Response(JSON.stringify({
