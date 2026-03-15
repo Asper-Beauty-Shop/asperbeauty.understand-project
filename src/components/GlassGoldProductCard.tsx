@@ -33,9 +33,7 @@ export const GlassGoldProductCard = (
 
   // Check for badges based on tags
   const tags = node.tags ?? [];
-  const isBestseller = Array.isArray(tags)
-    ? tags.some((tag: string) => tag.toLowerCase().includes("bestseller"))
-    : typeof tags === "string" && tags.toLowerCase().includes("bestseller");
+  const isBestseller = tags.some((tag) => tag.toLowerCase().includes("bestseller"));
 
   // Check if product is new (created within last 30 days)
   const createdAt = node.createdAt ?? null;
