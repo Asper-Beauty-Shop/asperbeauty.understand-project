@@ -391,6 +391,8 @@ export const Footer = () => {
                   <Link
                     key={brand}
                     to={`/brands?brand=${encodeURIComponent(brand)}`}
+                    onMouseEnter={() => prefetchRoute("/brands")}
+                    onFocus={() => prefetchRoute("/brands")}
                     className="text-xs text-asper-stone-light/60 hover:text-polished-gold transition-colors duration-300 font-body"
                   >
                     {brand}
