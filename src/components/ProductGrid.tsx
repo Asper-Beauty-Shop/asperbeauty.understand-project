@@ -1,228 +1,184 @@
+/**
+ * ProductGrid — Supabase-backed paginated product grid.
+ *
+ * Replaces the Shopify fetchProductsPaginated approach with direct
+ * Supabase queries. Offset pagination: 24 per page, "Load More" button
+ * + IntersectionObserver infinite scroll.
+ *
+ * Keeps existing ProductFilters sidebar, EN/AR strings, and skeleton states.
+ */
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  fetchProductsPaginated,
-  PaginatedProductsResponse,
-  ShopifyProduct,
-} from "@/lib/shopify";
-import { ProductCard } from "./ProductCard";
+import { supabase } from "@/integrations/supabase/client";
+import { SupabaseProductCard } from "./ui/SupabaseProductCard";
 import { FilterState, ProductFilters } from "./ProductFilters";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
 import { ChevronDown, Loader2 } from "lucide-react";
-import { categorizeProduct } from "@/lib/categoryMapping";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { CatalogProduct } from "@/types/product";
+import { CATALOG_SELECT } from "@/types/product";
+
+// ── Constants ──────────────────────────────────────────────────────────────────
+
+const PAGE_SIZE = 24;
+
+// ── Props ──────────────────────────────────────────────────────────────────────
 
 interface ProductGridProps {
   showFilters?: boolean;
+  /** Filter by asper_category value (e.g. "Concealer") */
   categorySlug?: string;
   initialPageSize?: number;
 }
 
-const PRODUCTS_PER_PAGE = 24;
+// ── Component ──────────────────────────────────────────────────────────────────
 
 export const ProductGrid = ({
   showFilters = false,
   categorySlug,
-  initialPageSize = PRODUCTS_PER_PAGE,
+  initialPageSize = PAGE_SIZE,
 }: ProductGridProps) => {
-  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const { language } = useLanguage();
+  const isAr = language === "ar";
+
+  const [products, setProducts] = useState<CatalogProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [pageInfo, setPageInfo] = useState<
-    PaginatedProductsResponse["pageInfo"] | null
-  >(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [offset, setOffset] = useState(0);
   const [filters, setFilters] = useState<FilterState>({
     categories: [],
     brands: [],
     priceRange: [0, 5000],
   });
-  const { language } = useLanguage();
+
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // Initial load
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const result = await fetchProductsPaginated(initialPageSize);
-        setProducts(result.products);
-        setPageInfo(result.pageInfo);
+  // ── Fetch page ───────────────────────────────────────────────────────────────
 
-        // Set max price based on products
-        if (result.products.length > 0) {
-          const maxProductPrice = Math.max(
-            ...result.products.map((p) =>
-              parseFloat(p.node.priceRange.minVariantPrice.amount)
-            ),
-          );
+  const fetchPage = useCallback(
+    async (pageOffset: number, append: boolean) => {
+      if (append) setLoadingMore(true);
+      else setLoading(true);
+
+      let query = supabase
+        .from("products")
+        .select(CATALOG_SELECT)
+        .neq("availability_status", "Pending_Purge")
+        .order("is_bestseller", { ascending: false })
+        .order("bestseller_rank", { ascending: true, nullsFirst: false })
+        .range(pageOffset, pageOffset + (append ? PAGE_SIZE : initialPageSize) - 1);
+
+      if (categorySlug) query = query.eq("asper_category", categorySlug);
+
+      const { data, error } = await query;
+
+      if (!error && data) {
+        const rows = data as CatalogProduct[];
+        setProducts((prev) => append ? [...prev, ...rows] : rows);
+        setHasMore(rows.length === (append ? PAGE_SIZE : initialPageSize));
+
+        if (!append && rows.length > 0) {
+          const max = Math.max(...rows.map((p) => p.price));
           setFilters((prev) => ({
             ...prev,
-            priceRange: [0, Math.ceil(maxProductPrice * 1.1)], // Add 10% buffer
+            priceRange: [0, Math.ceil(max * 1.1)],
           }));
         }
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
       }
-    };
 
-    loadProducts();
-  }, [initialPageSize]);
+      if (append) setLoadingMore(false);
+      else setLoading(false);
+    },
+    [categorySlug, initialPageSize],
+  );
 
-  // Load more products
-  const loadMoreProducts = useCallback(async () => {
-    if (!pageInfo?.hasNextPage || loadingMore) return;
-
-    try {
-      setLoadingMore(true);
-      const result = await fetchProductsPaginated(
-        PRODUCTS_PER_PAGE,
-        pageInfo.endCursor,
-      );
-      setProducts((prev) => [...prev, ...result.products]);
-      setPageInfo(result.pageInfo);
-    } catch (error) {
-      console.error("Failed to load more products:", error);
-    } finally {
-      setLoadingMore(false);
-    }
-  }, [pageInfo, loadingMore]);
-
-  // Intersection observer for infinite scroll
+  // Initial load
   useEffect(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
+    setOffset(0);
+    setProducts([]);
+    fetchPage(0, false);
+  }, [fetchPage]);
 
+  // Load more
+  const loadMoreProducts = useCallback(async () => {
+    if (!hasMore || loadingMore) return;
+    const nextOffset = offset + initialPageSize;
+    setOffset(nextOffset);
+    await fetchPage(nextOffset, true);
+  }, [hasMore, loadingMore, offset, initialPageSize, fetchPage]);
+
+  // Intersection observer
+  useEffect(() => {
+    observerRef.current?.disconnect();
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        if (
-          entries[0].isIntersecting && pageInfo?.hasNextPage && !loadingMore
-        ) {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
           loadMoreProducts();
         }
       },
       { threshold: 0.1, rootMargin: "100px" },
     );
+    if (loadMoreRef.current) observerRef.current.observe(loadMoreRef.current);
+    return () => observerRef.current?.disconnect();
+  }, [loadMoreProducts, hasMore, loadingMore]);
 
-    if (loadMoreRef.current) {
-      observerRef.current.observe(loadMoreRef.current);
-    }
+  // ── Client-side filters ────────────────────────────────────────────────────
 
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [loadMoreProducts, pageInfo?.hasNextPage, loadingMore]);
-
-  // Filter by category slug if provided
-  const categoryFilteredProducts = useMemo(() => {
-    if (!categorySlug) return products;
-
-    return products.filter((product) => {
-      const { node } = product;
-      const productCategory = categorizeProduct(
-        node.title,
-        node.productType,
-        node.vendor,
-      );
-      return productCategory === categorySlug;
-    });
-  }, [products, categorySlug]);
-
-  // Extract unique categories and brands
   const { availableCategories, availableBrands, maxPrice } = useMemo(() => {
-    const categories = [
-      ...new Set(
-        categoryFilteredProducts.map((p) => p.node.productType).filter(Boolean),
-      ),
-    ];
-    const brands = [
-      ...new Set(
-        categoryFilteredProducts.map((p) => p.node.vendor).filter(Boolean),
-      ),
-    ];
-    const max = categoryFilteredProducts.length > 0
-      ? Math.ceil(
-        Math.max(...categoryFilteredProducts.map((p) =>
-          parseFloat(p.node.priceRange.minVariantPrice.amount)
-        )),
-      )
-      : 5000;
-    return {
-      availableCategories: categories,
-      availableBrands: brands,
-      maxPrice: max,
-    };
-  }, [categoryFilteredProducts]);
+    const categories = [...new Set(products.map((p) => p.asper_category).filter(Boolean))] as string[];
+    const brands     = [...new Set(products.map((p) => p.brand).filter(Boolean))];
+    const max        = products.length > 0 ? Math.ceil(Math.max(...products.map((p) => p.price))) : 5000;
+    return { availableCategories: categories, availableBrands: brands, maxPrice: max };
+  }, [products]);
 
-  // Apply user filters
   const filteredProducts = useMemo(() => {
-    return categoryFilteredProducts.filter((product) => {
-      const { node } = product;
-      const price = parseFloat(node.priceRange.minVariantPrice.amount);
-
-      if (
-        filters.categories.length > 0 &&
-        !filters.categories.includes(node.productType)
-      ) {
-        return false;
-      }
-
-      if (filters.brands.length > 0 && !filters.brands.includes(node.vendor)) {
-        return false;
-      }
-
-      if (price < filters.priceRange[0] || price > filters.priceRange[1]) {
-        return false;
-      }
-
+    return products.filter((p) => {
+      if (filters.categories.length > 0 && !filters.categories.includes(p.asper_category ?? "")) return false;
+      if (filters.brands.length > 0 && !filters.brands.includes(p.brand)) return false;
+      if (p.price < filters.priceRange[0] || p.price > filters.priceRange[1]) return false;
       return true;
     });
-  }, [categoryFilteredProducts, filters]);
+  }, [products, filters]);
+
+  // ── Grid cols class ────────────────────────────────────────────────────────
+
+  const gridCols = showFilters
+    ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
+    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+
+  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <section id="products" className="py-24 bg-soft-ivory">
-      <div className="luxury-container">
-        {/* Section Header */}
+    <section id="products" className="py-24 bg-background">
+      <div className="container mx-auto max-w-7xl px-4">
+
+        {/* Section header (no-filter mode) */}
         {!showFilters && (
           <div className="text-center mb-16">
-            <p className="luxury-subheading text-shiny-gold mb-4">
-              {language === "ar" ? "تسوقي مجموعتنا" : "Shop Our Collection"}
+            <p className="text-sm font-body uppercase tracking-widest text-polished-gold mb-4">
+              {isAr ? "تسوقي مجموعتنا" : "Shop Our Collection"}
             </p>
-            <h2 className="font-display text-4xl md:text-5xl text-dark-charcoal mb-6">
-              {language === "ar" ? "المنتجات المميزة" : "Featured Products"}
+            <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-6">
+              {isAr ? "المنتجات المميزة" : "Featured Products"}
             </h2>
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-shiny-gold to-transparent mx-auto" />
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-polished-gold to-transparent mx-auto" />
           </div>
         )}
 
-        {/* Loading State with Skeleton Grid */}
+        {/* Loading skeletons */}
         {loading && (
           <div className={showFilters ? "flex flex-col lg:flex-row gap-8" : ""}>
             {showFilters && (
-              <div className="w-full lg:w-64 flex-shrink-0">
-                <div className="animate-pulse space-y-4">
-                  <div className="h-8 bg-taupe/20 rounded w-24" />
-                  <div className="space-y-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="h-6 bg-taupe/10 rounded" />
-                    ))}
-                  </div>
-                </div>
+              <div className="w-full lg:w-64 shrink-0 animate-pulse space-y-4">
+                <div className="h-8 bg-muted rounded w-24" />
+                {[1, 2, 3, 4].map((i) => <div key={i} className="h-6 bg-muted/60 rounded" />)}
               </div>
             )}
             <div className="flex-1">
-              <div
-                className={`grid gap-8 lg:gap-10 ${
-                  showFilters
-                    ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                }`}
-              >
+              <div className={`grid gap-6 lg:gap-8 ${gridCols}`}>
                 {Array.from({ length: showFilters ? 6 : 8 }).map((_, i) => (
                   <ProductCardSkeleton key={i} />
                 ))}
@@ -231,10 +187,9 @@ export const ProductGrid = ({
           </div>
         )}
 
-        {/* Content with Optional Filters */}
+        {/* Products + optional filters */}
         {!loading && products.length > 0 && (
           <div className={showFilters ? "flex flex-col lg:flex-row gap-8" : ""}>
-            {/* Filters Sidebar */}
             {showFilters && (
               <ProductFilters
                 availableCategories={availableCategories}
@@ -245,113 +200,95 @@ export const ProductGrid = ({
               />
             )}
 
-            {/* Products Grid */}
             <div className="flex-1">
               {/* Results count */}
               {showFilters && (
                 <div className="mb-6 flex items-center justify-between">
-                  <p className="font-body text-sm text-dark-charcoal">
-                    {language === "ar"
+                  <p className="font-body text-sm text-foreground">
+                    {isAr
                       ? `عرض ${filteredProducts.length} من ${products.length} منتج`
                       : `Showing ${filteredProducts.length} of ${products.length} products`}
                   </p>
-                  {pageInfo?.hasNextPage && (
+                  {hasMore && (
                     <p className="font-body text-xs text-muted-foreground">
-                      {language === "ar" ? "المزيد متاح" : "More available"}
+                      {isAr ? "المزيد متاح" : "More available"}
                     </p>
                   )}
                 </div>
               )}
 
-              {filteredProducts.length > 0
-                ? (
-                  <>
-                    <div
-                      className={`grid gap-8 lg:gap-10 ${
-                        showFilters
-                          ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                          : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                      }`}
-                    >
-                      {filteredProducts.map((product) => (
-                        <ProductCard key={product.node.id} product={product} />
-                      ))}
-                    </div>
-
-                    {/* Load More / Infinite Scroll Trigger */}
-                    <div ref={loadMoreRef} className="mt-12">
-                      {loadingMore && (
-                        <div className="flex items-center justify-center py-8 gap-3">
-                          <Loader2 className="w-6 h-6 animate-spin text-shiny-gold" />
-                          <span className="font-body text-sm text-muted-foreground">
-                            {language === "ar"
-                              ? "جاري تحميل المزيد..."
-                              : "Loading more..."}
-                          </span>
-                        </div>
-                      )}
-
-                      {pageInfo?.hasNextPage && !loadingMore && (
-                        <div className="flex justify-center">
-                          <Button
-                            variant="outline"
-                            onClick={loadMoreProducts}
-                            className="border-shiny-gold text-shiny-gold hover:bg-shiny-gold hover:text-dark-charcoal transition-all duration-300 gap-2"
-                          >
-                            <ChevronDown className="w-4 h-4" />
-                            {language === "ar" ? "تحميل المزيد" : "Load More"}
-                          </Button>
-                        </div>
-                      )}
-
-                      {!pageInfo?.hasNextPage &&
-                        products.length > PRODUCTS_PER_PAGE && (
-                        <p className="text-center font-body text-sm text-muted-foreground py-8">
-                          {language === "ar"
-                            ? "تم عرض جميع المنتجات"
-                            : "All products loaded"}
-                        </p>
-                      )}
-                    </div>
-                  </>
-                )
-                : (
-                  <div className="text-center py-20">
-                    <div className="w-16 h-16 rounded-full bg-shiny-gold/10 flex items-center justify-center mx-auto mb-4">
-                      <span className="font-display text-2xl text-shiny-gold">
-                        ∅
-                      </span>
-                    </div>
-                    <h3 className="font-display text-xl text-dark-charcoal mb-2">
-                      {language === "ar"
-                        ? "لم يتم العثور على منتجات"
-                        : "No products found"}
-                    </h3>
-                    <p className="font-body text-sm text-muted-foreground">
-                      {language === "ar"
-                        ? "جربي تعديل الفلاتر للعثور على ما تبحثين عنه"
-                        : "Try adjusting your filters to find what you're looking for."}
-                    </p>
+              {filteredProducts.length > 0 ? (
+                <>
+                  <div className={`grid gap-6 lg:gap-8 ${gridCols}`}>
+                    {filteredProducts.map((product) => (
+                      <SupabaseProductCard key={product.id} product={product} />
+                    ))}
                   </div>
-                )}
+
+                  {/* Load More / infinite scroll sentinel */}
+                  <div ref={loadMoreRef} className="mt-12">
+                    {loadingMore && (
+                      <div className="flex items-center justify-center py-8 gap-3">
+                        <Loader2 className="w-6 h-6 animate-spin text-polished-gold" />
+                        <span className="font-body text-sm text-muted-foreground">
+                          {isAr ? "جاري تحميل المزيد..." : "Loading more..."}
+                        </span>
+                      </div>
+                    )}
+
+                    {hasMore && !loadingMore && (
+                      <div className="flex justify-center">
+                        <Button
+                          variant="outline"
+                          onClick={loadMoreProducts}
+                          className="border-polished-gold text-polished-gold hover:bg-polished-gold hover:text-white transition-all duration-300 gap-2"
+                        >
+                          <ChevronDown className="w-4 h-4" />
+                          {isAr ? "تحميل المزيد" : "Load More"}
+                        </Button>
+                      </div>
+                    )}
+
+                    {!hasMore && products.length > initialPageSize && (
+                      <p className="text-center font-body text-sm text-muted-foreground py-8">
+                        {isAr ? "تم عرض جميع المنتجات" : "All products loaded"}
+                      </p>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="text-center py-20">
+                  <div className="w-16 h-16 rounded-full bg-polished-gold/10 flex items-center justify-center mx-auto mb-4">
+                    <span className="font-heading text-2xl text-polished-gold">∅</span>
+                  </div>
+                  <h3 className="font-heading text-xl text-foreground mb-2">
+                    {isAr ? "لم يتم العثور على منتجات" : "No products found"}
+                  </h3>
+                  <p className="font-body text-sm text-muted-foreground">
+                    {isAr
+                      ? "جربي تعديل الفلاتر للعثور على ما تبحثين عنه"
+                      : "Try adjusting your filters to find what you're looking for."}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         )}
 
-        {/* Empty State */}
+        {/* Empty state */}
         {!loading && products.length === 0 && (
           <div className="text-center py-20 px-6">
             <div className="max-w-md mx-auto">
-              <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mx-auto mb-6 border border-shiny-gold/30">
-                <span className="font-display text-3xl text-shiny-gold">∅</span>
+              <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mx-auto mb-6 border border-polished-gold/30">
+                <span className="font-heading text-3xl text-polished-gold">∅</span>
               </div>
-              <h3 className="font-display text-2xl text-dark-charcoal mb-4">
-                {language === "ar" ? "لا توجد منتجات بعد" : "No Products Yet"}
+              <h3 className="font-heading text-2xl text-foreground mb-4">
+                {isAr ? "لا توجد منتجات بعد" : "No Products Yet"}
               </h3>
               <p className="text-muted-foreground font-body text-sm leading-relaxed">
-                {language === "ar"
+                {isAr
                   ? "مجموعتنا قيد الإعداد. أخبرينا عن المنتجات التي ترغبين في رؤيتها في متجرك."
-                  : "Our collection is being curated. Tell us what products you'd like to see in your store by describing the product name and price in the chat."}
+                  : "Our collection is being curated. Tell us what products you'd like to see in your store."}
               </p>
             </div>
           </div>
@@ -360,4 +297,3 @@ export const ProductGrid = ({
     </section>
   );
 };
-
