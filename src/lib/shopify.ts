@@ -174,7 +174,7 @@ export async function fetchProducts(
     .from("products")
     .select("id, name, title, handle, description, brand, category, price, image_url, tags, in_stock, created_at, availability_status")
     .neq("availability_status", "Pending_Purge")
-    .order("bestseller_rank", { ascending: true, nullsLast: true })
+    .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .limit(first);
 
   if (searchQuery) {
