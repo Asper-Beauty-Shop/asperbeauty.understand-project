@@ -422,6 +422,8 @@ export const Footer = () => {
                   <Link
                     key={category.link}
                     to={category.link}
+                    onMouseEnter={() => prefetchRoute(category.link)}
+                    onFocus={() => prefetchRoute(category.link)}
                     className="text-xs text-asper-stone-light/60 hover:text-polished-gold transition-colors duration-300 font-body"
                   >
                     {isArabic ? category.nameAr : category.name}
