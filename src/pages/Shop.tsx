@@ -337,7 +337,7 @@ export default function Shop() {
         const matches = product.title.toLowerCase().includes(q) || product.brand?.toLowerCase().includes(q) || product.pharmacist_note?.toLowerCase().includes(q);
         if (!matches) return false;
       }
-      if (filters.brands.length > 0 && (!product.brand || !filters.brands.includes(product.brand))) return false;
+      if (filters.brands.length > 0 && (!product.brand || !filters.brands.some(b => product.brand!.toLowerCase().replace(/[\s-]+/g, "") === b.toLowerCase().replace(/[\s-]+/g, "")))) return false;
       
       // Unify Categories and Concerns
       const activeConcerns = [...filters.skinConcerns];
