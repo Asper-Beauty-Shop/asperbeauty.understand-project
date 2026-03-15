@@ -212,6 +212,7 @@ export const CartDrawer = () => {
                             <button
                               onClick={() => removeItem(item.variantId)}
                               className="text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+                              aria-label="Remove item"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>
