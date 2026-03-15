@@ -66,29 +66,33 @@ serve(async (req) => {
         Limit to 3 concise sentences. Priority: Catalog recommendations.
       `;
 
-      const parts: Array<{ text?: string; inlineData?: { mimeType: string; data: string } }> = [
-        { text: `Context: ${systemInstruction}\n\nUser Query: ${prompt}` },
-      ];
+      const userContent = image
+        ? `${prompt}\n[User attached an image for analysis]`
+        : prompt;
 
-      if (image) {
-        const base64 = image.includes(",") ? image.split(",")[1] : image;
-        if (base64) {
-          parts.push({ inlineData: { mimeType: "image/png", data: base64 } });
-        }
+      const response = await fetch(GATEWAY_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${lovableApiKey}`,
+        },
+        body: JSON.stringify({
+          model: DEFAULT_MODEL,
+          messages: [
+            { role: "system", content: systemInstruction },
+            { role: "user", content: userContent },
+          ],
+        }),
+      });
+
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again later." }), {
+          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts }] }),
-        },
-      );
-
       const data = await response.json();
-      const reply =
-        data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Intelligence protocol reset required. Please standby.";
+      const reply = data.choices?.[0]?.message?.content ?? "Intelligence protocol reset required. Please standby.";
 
       return new Response(JSON.stringify({ reply }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
