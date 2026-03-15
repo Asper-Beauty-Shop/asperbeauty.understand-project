@@ -1,4 +1,3 @@
-import { usePageMeta } from "@/hooks/usePageMeta";
 ﻿import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
