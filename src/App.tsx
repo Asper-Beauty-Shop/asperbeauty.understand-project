@@ -120,14 +120,14 @@ const App = () => {
                 <Route path="/shipping" element={<Navigate to="/contact" replace />} />
                 <Route path="/returns" element={<Navigate to="/contact" replace />} />
                 <Route path="/consultation" element={<Navigate to="/skin-concerns" replace />} />
-                <Route path="/driver" element={<DriverDashboard />} />
-                <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
-                <Route path="/admin/purge-review" element={<PurgeReview />} />
+                <Route path="/driver" element={<Suspense fallback={null}><DriverDashboard /></Suspense>} />
+                <Route path="/admin/audit-logs" element={<Suspense fallback={null}><AdminAuditLogs /></Suspense>} />
+                <Route path="/admin/purge-review" element={<Suspense fallback={null}><PurgeReview /></Suspense>} />
                 <Route
                   path="/brand-intelligence"
                   element={
                     <RequireAdmin>
-                      <BrandIntelligenceDashboard />
+                      <Suspense fallback={null}><BrandIntelligenceDashboard /></Suspense>
                     </RequireAdmin>
                   }
                 />
