@@ -25,12 +25,13 @@ serve(async (req) => {
       });
     }
     const token = authHeader.replace("Bearer ", "");
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
-    );
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
     if (authError || !user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
@@ -40,10 +41,10 @@ serve(async (req) => {
 
     const apiKey = Deno.env.get("GEMINI_API_KEY");
     if (!apiKey) {
-      return new Response(
-        JSON.stringify({ error: "GEMINI_API_KEY not configured" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return new Response(JSON.stringify({ error: "GEMINI_API_KEY not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const { action, prompt, image, persona, text, catalog } = await req.json();
@@ -82,18 +83,16 @@ serve(async (req) => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ contents: [{ parts }] }),
-        }
+        },
       );
 
       const data = await response.json();
       const reply =
-        data.candidates?.[0]?.content?.parts?.[0]?.text ??
-        "Intelligence protocol reset required. Please standby.";
+        data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Intelligence protocol reset required. Please standby.";
 
-      return new Response(
-        JSON.stringify({ reply }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return new Response(JSON.stringify({ reply }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     if (action === "tts") {
@@ -116,17 +115,16 @@ serve(async (req) => {
               },
             },
           }),
-        }
+        },
       );
 
       const data = await response.json();
       const part = data.candidates?.[0]?.content?.parts?.[0];
 
       if (!part?.inlineData) {
-        return new Response(
-          JSON.stringify({ error: "No audio generated" }),
-          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        return new Response(JSON.stringify({ error: "No audio generated" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
 
       return new Response(
@@ -134,19 +132,19 @@ serve(async (req) => {
           audioData: part.inlineData.data,
           mimeType: part.inlineData.mimeType,
         }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
-    return new Response(
-      JSON.stringify({ error: "Unknown action" }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ error: "Unknown action" }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (e) {
     console.error("asper-intelligence error:", e);
-    return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 });
