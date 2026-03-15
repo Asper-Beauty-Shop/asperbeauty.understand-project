@@ -178,6 +178,7 @@ export const Header = () => {
                 >
                   <Link
                     to="/skin-concerns"
+                    onFocus={() => prefetchRoute("/skin-concerns")}
                     className={cn(
                       "flex items-center gap-1 font-body text-sm font-medium transition-colors py-8",
                       textColor, textColorHover
