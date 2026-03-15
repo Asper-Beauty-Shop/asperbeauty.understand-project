@@ -233,22 +233,35 @@ serve(async (req) => {
     }
 
     // ── SSE Streaming path ─────────────────────────────────────────────────
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemPrompt }] },
-          contents: geminiContents,
-          generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
-        }),
-      }
-    );
+    const gatewayRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${lovableApiKey}`,
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          { role: "system", content: systemPrompt },
+          ...geminiContents.map(c => ({ role: c.role === "model" ? "assistant" : c.role, content: c.parts.map((p: Record<string, unknown>) => (p as { text?: string }).text ?? "").join("") })),
+        ],
+        stream: true,
+      }),
+    });
 
-    if (!geminiRes.ok) {
-      const err = await geminiRes.json().catch(() => ({}));
-      return new Response(JSON.stringify({ error: err.error?.message ?? `Gemini error ${geminiRes.status}` }), {
+    if (!gatewayRes.ok) {
+      if (gatewayRes.status === 429) {
+        return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again later." }), {
+          status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+      if (gatewayRes.status === 402) {
+        return new Response(JSON.stringify({ error: "AI credits exhausted. Please add funds." }), {
+          status: 402, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+      const err = await gatewayRes.text().catch(() => "");
+      return new Response(JSON.stringify({ error: `AI gateway error: ${gatewayRes.status}` }), {
         status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
