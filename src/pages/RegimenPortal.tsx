@@ -110,7 +110,7 @@ export default function RegimenPortal() {
   const [isDecrypting, setIsDecrypting] = useState(true);
   const [portalData, setPortalData] = useState<PortalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const addItem = useCartStore((s) => s.addItem);
+  // cart integration handled via useCartStore.getState() in handleFulfill
 
   useEffect(() => {
     const timer = setTimeout(() => setIsDecrypting(false), 1500);
