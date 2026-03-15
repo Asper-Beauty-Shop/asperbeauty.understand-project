@@ -50,12 +50,5 @@ data/
 Organized Products/
 *.csv
 
-# Playwright
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-tests/e2e/.auth/
-
 # Temp files
 9f2d2ba202abd4430d957e90097d1781d94888c8
