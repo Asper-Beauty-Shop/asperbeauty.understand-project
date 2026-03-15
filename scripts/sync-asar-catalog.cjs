@@ -198,7 +198,10 @@ async function run() {
     products.push({
       handle,
       title,
+      name:                title,           // required non-nullable
       brand:               vendor,
+      category:            type || 'Uncategorized', // required non-nullable
+      description:         '',              // required non-nullable, enriched later
       price,
       compare_at_price:    compareAt,
       image_url:           imageSrc,
