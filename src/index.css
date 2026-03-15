@@ -732,7 +732,7 @@ body::before {
   transition: opacity 1s ease-in;
 }
 body.bg-loaded::before {
-  background-image: url("/luxury-beauty-background.jpg");
+  background-image: url("/luxury-beauty-background.webp");
   opacity: 0.06;
 }
 
@@ -740,7 +740,7 @@ body.bg-loaded::before {
 .hero-portrait-background {
   position: absolute;
   inset: -20%;
-  background-image: url("/luxury-beauty-background.jpg");
+  background-image: url("/luxury-beauty-background.webp");
   background-size: cover;
   background-position: center right;
   background-repeat: no-repeat;
