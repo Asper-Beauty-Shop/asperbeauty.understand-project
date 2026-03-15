@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   CheckCircle,
