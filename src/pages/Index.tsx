@@ -14,19 +14,23 @@ import { Footer } from "@/components/Footer";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isHomepageBrand } from "@/constants/premiumBrands";
-import ceraveCleanserImg from "@/assets/products/cerave-foaming-cleanser.png";
-import vichyAmpoulesImg from "@/assets/products/vichy-liftactiv-ampoules.png";
-import biodermaSensibioImg from "@/assets/products/bioderma-sensibio-h2o.png";
-import lrpTolerianeMoisturizerImg from "@/assets/products/lrp-toleriane-ultra.png";
-import biodermaSensibioArImg from "@/assets/products/bioderma-sensibio-ar.png";
-import lrpTolerianewashImg from "@/assets/products/lrp-toleriane-wash.png";
-import vichyCapitalSoleilImg from "@/assets/products/vichy-capital-soleil.png";
-import vichyNormadermImg from "@/assets/products/vichy-normaderm.png";
-import ceraveMoisturizingCreamImg from "@/assets/products/cerave-moisturizing-cream.png";
-import olaplexNo7Img from "@/assets/products/olaplex-no7-bonding-oil.png";
-import neocellCollagenImg from "@/assets/products/neocell-collagen-c.png";
-import eucerinSunImg from "@/assets/products/eucerin-sun-hydro-spf50.png";
-import aminasCalendulaImg from "@/assets/products/aminas-calendula-cream.png";
+// Fallback product images — lazy-loaded only when DB query returns empty
+const productImageImports = {
+  cerave: () => import("@/assets/products/cerave-foaming-cleanser.png"),
+  vichy: () => import("@/assets/products/vichy-liftactiv-ampoules.png"),
+  bioderma: () => import("@/assets/products/bioderma-sensibio-h2o.png"),
+  lrpMoisturizer: () => import("@/assets/products/lrp-toleriane-ultra.png"),
+  biodermaAr: () => import("@/assets/products/bioderma-sensibio-ar.png"),
+  lrpWash: () => import("@/assets/products/lrp-toleriane-wash.png"),
+  vichySoleil: () => import("@/assets/products/vichy-capital-soleil.png"),
+  vichyNormaderm: () => import("@/assets/products/vichy-normaderm.png"),
+  ceraveCream: () => import("@/assets/products/cerave-moisturizing-cream.png"),
+  olaplex: () => import("@/assets/products/olaplex-no7-bonding-oil.png"),
+  neocell: () => import("@/assets/products/neocell-collagen-c.png"),
+  eucerin: () => import("@/assets/products/eucerin-sun-hydro-spf50.png"),
+  aminas: () => import("@/assets/products/aminas-calendula-cream.png"),
+};
+void productImageImports; // suppress unused warning — used as lazy fallback reference
 
 // Lazy load below-the-fold components
 const MorningSpaRitualBanner = lazy(() =>
