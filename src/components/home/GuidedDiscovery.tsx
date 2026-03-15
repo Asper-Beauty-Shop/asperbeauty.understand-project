@@ -22,6 +22,8 @@ const AMBITIONS = [
   { key: "Concern_Oiliness", en: "Oil Control", ar: "التحكم بالدهون", emoji: "🧴" },
 ] as const;
 
+type AmbitionKey = (typeof AMBITIONS)[number]["key"];
+
 /* Ms. Zain's personalized recommendation copy per concern */
 const ZAIN_INSIGHTS: Record<string, { en: string; ar: string }> = {
   Concern_Acne: {
@@ -69,7 +71,7 @@ const ZAIN_INSIGHTS: Record<string, { en: string; ar: string }> = {
 export function GuidedDiscovery() {
   const { locale } = useLanguage();
   const isAr = locale === "ar";
-  const [activeConcern, setActiveConcern] = useState(AMBITIONS[0].key);
+  const [activeConcern, setActiveConcern] = useState<AmbitionKey>(AMBITIONS[0].key);
 
   const { data: matchedProducts = [] } = useQuery({
     queryKey: ["guided-discovery", activeConcern],

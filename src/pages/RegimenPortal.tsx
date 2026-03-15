@@ -182,7 +182,7 @@ export default function RegimenPortal() {
             protocolId: id.slice(0, 8).toUpperCase(),
             prescribedBy: "Dr. Sami",
             steps: regimenSteps,
-            clinicalNote: plan.description || undefined,
+            clinicalNote: (plan as any).description || undefined,
           });
         } else {
           // Fallback: use get_tray_by_concern with a default
@@ -241,13 +241,13 @@ export default function RegimenPortal() {
   const handleFulfill = () => {
     portalData?.steps.forEach((s) => {
       if (s.product) {
-        addItem({
-          id: s.product.id,
-          title: s.product.title,
-          price: s.product.price,
-          image: s.product.image_url || "/editorial-showcase-2.jpg",
-          quantity: 1,
-        });
+          addItem({
+            id: s.product.id,
+            title: s.product.title,
+            price: { amount: String(s.product.price), currencyCode: "JOD" },
+            image: s.product.image_url || "/editorial-showcase-2.jpg",
+            quantity: 1,
+          } as any);
       }
     });
   };

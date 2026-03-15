@@ -241,7 +241,11 @@ const ManageProducts = () => {
       setIsSubmitting(true);
 
       const productData = {
+        name: formData.title.trim(),
         title: formData.title.trim(),
+        brand: "Unknown",
+        category: "Uncategorized",
+        description: formData.title.trim(),
         price: parseFloat(formData.price),
         handle: formData.handle.trim() || formData.title.trim().toLowerCase().replace(/\s+/g, "-"),
         primary_concern: formData.primary_concern as Tables<"products">["primary_concern"],

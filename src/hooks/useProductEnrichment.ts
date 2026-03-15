@@ -62,7 +62,7 @@ export function useProductEnrichmentBulk(handles: string[]) {
       for (const row of data || []) {
         map.set(row.handle, {
           clinical_badge: row.clinical_badge,
-          ai_persona_lead: row.ai_persona_lead,
+          ai_persona_lead: row.ai_persona_lead as "dr_sami" | "ms_zain" | null,
           key_ingredients: row.key_ingredients,
           texture_profile: row.texture_profile,
           hex_swatch: row.hex_swatch,
