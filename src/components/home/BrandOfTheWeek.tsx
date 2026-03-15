@@ -96,13 +96,14 @@ export const BrandOfTheWeek = () => {
 
                 {/* Slide controls */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4">
-                  <button onClick={prevSlide} className="w-8 h-8 rounded-full bg-asper-ink/40 backdrop-blur-sm border border-polished-white/20 flex items-center justify-center text-polished-white hover:text-polished-gold transition-colors">
+                  <button aria-label="Previous slide" onClick={prevSlide} className="w-8 h-8 rounded-full bg-asper-ink/40 backdrop-blur-sm border border-polished-white/20 flex items-center justify-center text-polished-white hover:text-polished-gold transition-colors">
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <div className="flex gap-2">
                     {BRAND_SLIDES.map((_, index) => (
                       <button
                         key={index}
+                        aria-label={`Go to slide ${index + 1}`}
                         onClick={() => setActiveSlide(index)}
                         className={cn(
                           "w-2 h-2 rounded-full transition-all duration-300",
@@ -111,7 +112,7 @@ export const BrandOfTheWeek = () => {
                       />
                     ))}
                   </div>
-                  <button onClick={nextSlide} className="w-8 h-8 rounded-full bg-asper-ink/40 backdrop-blur-sm border border-polished-white/20 flex items-center justify-center text-polished-white hover:text-polished-gold transition-colors">
+                  <button aria-label="Next slide" onClick={nextSlide} className="w-8 h-8 rounded-full bg-asper-ink/40 backdrop-blur-sm border border-polished-white/20 flex items-center justify-center text-polished-white hover:text-polished-gold transition-colors">
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
