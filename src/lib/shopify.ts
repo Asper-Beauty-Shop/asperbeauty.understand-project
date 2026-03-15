@@ -203,7 +203,7 @@ export async function fetchProductsPaginated(
     .from("products")
     .select("id, name, title, handle, description, brand, category, price, image_url, tags, in_stock, created_at, availability_status", { count: "exact" })
     .neq("availability_status", "Pending_Purge")
-    .order("bestseller_rank", { ascending: true, nullsLast: true })
+    .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .range(offset, offset + first - 1);
 
   if (error) {
