@@ -103,6 +103,7 @@ export const CartDrawer = () => {
               <button
                 onClick={handleBackToCart}
                 className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors mr-2"
+                aria-label="Back to cart"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
@@ -117,6 +118,7 @@ export const CartDrawer = () => {
             <button
               onClick={() => handleOpenChange(false)}
               className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Close cart"
             >
               <X className="w-5 h-5" />
             </button>
@@ -210,6 +212,7 @@ export const CartDrawer = () => {
                             <button
                               onClick={() => removeItem(item.variantId)}
                               className="text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+                              aria-label="Remove item"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>
@@ -217,6 +220,7 @@ export const CartDrawer = () => {
                               <button
                                 onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
                                 className="w-7 h-7 flex items-center justify-center hover:bg-muted transition-colors"
+                                aria-label="Decrease quantity"
                               >
                                 <Minus className="h-3 w-3" />
                               </button>
@@ -224,6 +228,7 @@ export const CartDrawer = () => {
                               <button
                                 onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
                                 className="w-7 h-7 flex items-center justify-center hover:bg-muted transition-colors"
+                                aria-label="Increase quantity"
                               >
                                 <Plus className="h-3 w-3" />
                               </button>
