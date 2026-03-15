@@ -7,6 +7,7 @@ import { FlaskConical, Leaf, Shield, Star, ChevronRight, Sparkles, Heart, Eye, S
 import { Button } from "@/components/ui/button";
 import { ExpertTipWidget } from "@/components/ExpertTipWidget";
 import { ClinicalBadge, DermBadge } from "@/components/TrustBadges";
+import { DermocosmecticsQuiz } from "@/components/DermocosmecticsQuiz";
 
 const BRANDS = [
   { name: "Eucerin", slug: "eucerin", tagline: "Dermatologically tested since 1900", concern: "Sensitive & Dry Skin" },
@@ -198,6 +199,23 @@ export default function Dermocosmetics() {
                 </span>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Skin Quiz ─────────────────────────────────────────────────── */}
+      <section className="py-16 bg-background">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="mb-8 text-center">
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">
+              {isAr ? "اكتشف روتين التجميل الطبي المثالي لك" : "Find Your Perfect Dermocosmetics Routine"}
+            </h2>
+            <p className="text-muted-foreground text-sm">
+              {isAr ? "٣ أسئلة فقط — توصيات شخصية من صيدلانيّنا" : "3 quick questions — personalized clinical skincare in seconds"}
+            </p>
+          </div>
+          <div className="max-w-2xl mx-auto">
+            <DermocosmecticsQuiz />
           </div>
         </div>
       </section>
