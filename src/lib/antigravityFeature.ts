@@ -49,9 +49,12 @@ export async function runAntigravityDiagnostic(): Promise<{
 
   try {
     // Dynamic imports to avoid bundling Node built-ins into the browser bundle.
-    const { exec } = await import("child_process");
-    const nodePath = await import("path");
-    const util = await import("util");
+    // @ts-ignore -- Node-only dynamic imports, guarded by window check above
+    const { exec } = await import(/* @vite-ignore */ "child_process");
+    // @ts-ignore
+    const nodePath = await import(/* @vite-ignore */ "path");
+    // @ts-ignore
+    const util = await import(/* @vite-ignore */ "util");
     const execAsync = util.promisify(exec);
 
     // Use path.join so this works correctly on any platform (PowerShell also
