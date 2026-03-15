@@ -88,7 +88,7 @@ function ProductRow({ products, isArabic }: { products: any[]; isArabic: boolean
 
               <div className="relative aspect-[4/5] overflow-hidden mb-4 bg-card">
                 <img
-                  src={p.image_url || "/editorial-showcase-2.webp"}
+                  src={p.image_url || "/editorial-showcase-2.jpg"}
                   alt={p.title}
                   className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
                   loading="lazy"

@@ -201,7 +201,7 @@ export function GuidedDiscovery() {
                       {/* Shimmer */}
                       <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700" />
                       <img
-                        src={p.image_url || "/editorial-showcase-2.webp"}
+                        src={p.image_url || "/editorial-showcase-2.jpg"}
                         alt={p.title}
                         className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
                         loading="lazy"

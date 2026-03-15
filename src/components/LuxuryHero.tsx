@@ -17,7 +17,7 @@ export const LuxuryHero = () => {
         <div
           className="absolute inset-0 bg-cover bg-center animate-slow-zoom"
           style={{
-            backgroundImage: `url('/luxury-beauty-background.webp')`,
+            backgroundImage: `url('/luxury-beauty-background.jpg')`,
           }}
         />
         {/* Gradient Overlay for Text Readability */}
