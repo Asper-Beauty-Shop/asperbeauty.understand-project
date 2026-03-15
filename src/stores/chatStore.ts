@@ -25,9 +25,9 @@ import { persist, createJSONStorage } from "zustand/middleware";
  * Exact literal union of valid persona IDs.
  * Any component trying to route to a non-existent persona gets a TS build error.
  */
-export type PersonaId = "dr_sami" | "ms_zain";
+export type PersonaId = "dr_sami" | "ms_zain" | "dr_rose";
 
-export const PERSONAS: PersonaId[] = ["dr_sami", "ms_zain"];
+export const PERSONAS: PersonaId[] = ["dr_sami", "ms_zain", "dr_rose"];
 
 // ── Message Types ─────────────────────────────────────────────────────────────
 
@@ -80,6 +80,7 @@ interface ChatState {
 const emptySessions: Record<PersonaId, PersistedMessage[]> = {
   dr_sami: [],
   ms_zain: [],
+  dr_rose: [],
 };
 
 // ── Store ─────────────────────────────────────────────────────────────────────

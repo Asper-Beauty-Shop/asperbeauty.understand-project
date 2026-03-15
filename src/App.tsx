@@ -37,6 +37,7 @@ const RegimenPortal           = lazy(() => import("./pages/RegimenPortal"));
 const TrackOrder              = lazy(() => import("./pages/TrackOrder"));
 const Dermocosmetics          = lazy(() => import("./pages/Dermocosmetics"));
 const MomBaby                 = lazy(() => import("./pages/MomBaby"));
+const HairCare                = lazy(() => import("./pages/HairCare"));
 const ShopAllOrganized        = lazy(() => import("./components/ShopAllOrganized"));
 
 // ── Admin pages (laziest — only load when admin navigates there) ────────────
@@ -118,6 +119,7 @@ const App = () => {
                   <Route path="/track-order"         element={<TrackOrder />} />
                   <Route path="/dermocosmetics"      element={<Dermocosmetics />} />
                   <Route path="/mom-baby"            element={<MomBaby />} />
+                  <Route path="/hair-care"           element={<HairCare />} />
                   <Route path="/tracking"            element={<Navigate to="/track-order" replace />} />
                   <Route path="/shipping"            element={<Navigate to="/contact" replace />} />
                   <Route path="/returns"             element={<Navigate to="/contact" replace />} />

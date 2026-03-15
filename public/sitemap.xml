@@ -35,6 +35,22 @@
   </url>
 
   <url>
+    <loc>https://www.asperbeautyshop.com/hair-care</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.asperbeautyshop.com/hair-care"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.asperbeautyshop.com/hair-care"/>
+  </url>
+
+  <url>
+    <loc>https://www.asperbeautyshop.com/intelligence</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.asperbeautyshop.com/intelligence"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.asperbeautyshop.com/intelligence"/>
+  </url>
+
+  <url>
     <loc>https://www.asperbeautyshop.com/brands</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
