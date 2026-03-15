@@ -24,6 +24,8 @@ import {
 import { ShareButtons } from "@/components/ShareButtons";
 import { StickyAddToCart } from "@/components/StickyAddToCart";
 import { ProductReviews } from "@/components/ProductReviews";
+import { Breadcrumb } from "@/components/Breadcrumb";
+import { ClinicalBadge, DermBadge } from "@/components/TrustBadges";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -395,16 +397,31 @@ const ProductDetail = () => {
       {relatedProducts.length > 0 && (
         <section className="py-16 bg-muted/20">
           <div className="container mx-auto px-4 max-w-7xl">
-            <h2 className="font-serif text-2xl text-foreground mb-8">{isArabic ? "Ù‚Ø¯ ÙŠØ¹Ø¬Ø¨Ùƒ Ø£ÙŠØ¶Ø§Ù‹" : "You May Also Like"}</h2>
+            <h2 className="font-serif text-2xl text-foreground mb-2">
+              {isArabic ? "قد يعجبك أيضاً" : "You May Also Like"}
+            </h2>
+            <p className="text-sm text-muted-foreground mb-8">
+              {isArabic ? "منتجات موصى بها من صيدلانيينا" : "Pharmacist-recommended for your routine"}
+            </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {relatedProducts.map((rp) => (
-                <Link key={rp.id} to={`/product/${rp.handle}`} className="group">
-                  <div className="aspect-square bg-asper-stone rounded-lg overflow-hidden mb-3 border border-transparent group-hover:border-polished-gold transition-colors duration-300">
+                <Link key={rp.id} to={`/product/${rp.handle}`} className="group flex flex-col gap-2">
+                  <div className="relative aspect-square bg-asper-stone rounded-lg overflow-hidden border border-transparent group-hover:border-polished-gold transition-colors duration-300">
                     <img src={rp.image_url || "/editorial-showcase-2.jpg"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    {rp.clinical_badge && (
+                      <div className="absolute top-2 left-2">
+                        <ClinicalBadge label={rp.clinical_badge} />
+                      </div>
+                    )}
                   </div>
-                  <p className="text-xs text-asper-ink-muted uppercase tracking-widest font-body">{rp.brand}</p>
-                  <p className="text-sm font-medium text-asper-ink line-clamp-2 font-body">{rp.title}</p>
-                  <SplitPrice amount={rp.price ?? 0} className="mt-1" />
+                  <div>
+                    <p className="text-xs text-asper-ink-muted uppercase tracking-widest font-body">{rp.brand}</p>
+                    <p className="text-sm font-medium text-asper-ink line-clamp-2 font-body">{rp.title}</p>
+                    <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                      <SplitPrice amount={rp.price ?? 0} />
+                      {rp.gold_stitch_tier && <DermBadge label="Derm ✓" />}
+                    </div>
+                  </div>
                 </Link>
               ))}
             </div>
