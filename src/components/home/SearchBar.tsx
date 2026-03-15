@@ -237,7 +237,7 @@ export default function SearchBar() {
                     >
                       <div className="w-10 h-10 rounded-md bg-secondary overflow-hidden shrink-0 flex items-center justify-center">
                         {img ? (
-                          <img src={img} alt="" className="h-full w-full object-contain p-0.5" />
+                          <img src={img} alt={p.node.title || "Product"} className="h-full w-full object-contain p-0.5" />
                         ) : (
                           <Package className="h-4 w-4 text-muted-foreground" />
                         )}

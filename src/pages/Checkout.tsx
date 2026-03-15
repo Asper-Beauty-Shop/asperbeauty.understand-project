@@ -132,7 +132,7 @@ export default function Checkout() {
               <div key={item.variantId} className="flex items-center gap-3 rounded-lg border border-border/50 bg-card p-3">
                 <div className="h-12 w-12 rounded-md bg-secondary overflow-hidden shrink-0 flex items-center justify-center">
                   {item.product.node.images?.edges?.[0]?.node && (
-                    <img src={item.product.node.images.edges[0].node.url} alt="" className="h-full w-full object-contain p-0.5" />
+                    <img src={item.product.node.images.edges[0].node.url} alt={item.product.node.title || "Product"} className="h-full w-full object-contain p-0.5" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
