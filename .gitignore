@@ -36,6 +36,7 @@ build
 
 # Lock files (keep only package-lock.json)
 bun.lockb
+bun.lock
 deno.lock
 
 # Large binaries
