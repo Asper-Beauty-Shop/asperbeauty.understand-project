@@ -177,7 +177,7 @@ const BrandDetail = () => {
               <Link key={p.id} to={`/product/${p.handle}`} className="group">
                 <div className="aspect-[4/5] bg-card rounded-none overflow-hidden mb-3 border border-border/30 group-hover:border-polished-gold/50 transition-all duration-300 relative">
                   <img
-                    src={p.image_url || "/editorial-showcase-2.jpg"}
+                    src={p.image_url || "/editorial-showcase-2.webp"}
                     alt={`${p.title} by ${brand.name}`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
