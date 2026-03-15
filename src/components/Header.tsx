@@ -234,6 +234,7 @@ export const Header = () => {
                   to="/offers"
                   onMouseEnter={() => prefetchRoute("/offers")}
                   onFocus={() => prefetchRoute("/offers")}
+                  className={cn(
                     "font-body text-sm font-medium transition-colors",
                     textColor, textColorHover
                   )}
