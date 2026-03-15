@@ -87,6 +87,7 @@ function formatProduct(p: Record<string, unknown>): string {
 }
 
 // deno-lint-ignore no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function fetchProductContext(supabase: any, slug: string | null) {
   if (slug) {
     const enums = CONCERN_MAPPING[slug] || [];
