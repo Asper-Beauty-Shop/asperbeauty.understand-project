@@ -112,9 +112,9 @@ const App = () => {
                 <Route path="/intelligence" element={<AsperIntelligence />} />
                 <Route path="/health" element={<Health />} />
                 <Route path="/portal/regimen/:id" element={<RegimenPortal />} />
-                <Route path="/admin/bulk-upload" element={<BulkUpload />} />
-                <Route path="/admin/orders" element={<AdminOrders />} />
-                <Route path="/admin/products" element={<ManageProducts />} />
+                <Route path="/admin/bulk-upload" element={<Suspense fallback={null}><BulkUpload /></Suspense>} />
+                <Route path="/admin/orders" element={<Suspense fallback={null}><AdminOrders /></Suspense>} />
+                <Route path="/admin/products" element={<Suspense fallback={null}><ManageProducts /></Suspense>} />
                 <Route path="/track-order" element={<TrackOrder />} />
                 <Route path="/tracking" element={<Navigate to="/track-order" replace />} />
                 <Route path="/shipping" element={<Navigate to="/contact" replace />} />
