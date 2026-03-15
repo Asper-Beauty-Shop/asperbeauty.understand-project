@@ -1,6 +1,10 @@
 /**
- * Shopify Storefront API client for Asper Beauty Shop.
+ * Commerce layer for Asper Beauty Shop.
+ * Product data is served from Supabase (standalone commerce).
+ * Cart mutations still use Shopify Storefront API where available.
  */
+
+import { supabase } from "@/integrations/supabase/client";
 
 const SHOPIFY_DOMAIN = import.meta.env.VITE_SHOPIFY_DOMAIN ?? "asper-beauty-shop.myshopify.com";
 const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN ?? "";
