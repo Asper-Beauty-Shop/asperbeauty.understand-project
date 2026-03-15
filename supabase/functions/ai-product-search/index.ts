@@ -29,7 +29,7 @@ serve(async (req) => {
 
     const { data: products, error: dbError } = await supabase
       .from("products")
-      .select("id, title, description, asper_category, price, brand, tags, images, inventory_total")
+      .select("id, title, description, asper_category, price, brand, tags, image_url, inventory_total")
       .gt("inventory_total", 0)
       .limit(100);
 
