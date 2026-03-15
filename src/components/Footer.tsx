@@ -3,6 +3,7 @@ import { ShieldCheck, Award, CheckCircle, Stethoscope } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
 import { AsperWordmark } from "@/components/ui/AsperWordmark";
+import { prefetchRoute } from "@/lib/prefetchRoute";
 
 
 // Brand-accurate social media icon components
