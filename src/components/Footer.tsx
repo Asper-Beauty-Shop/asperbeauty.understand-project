@@ -146,7 +146,7 @@ export const Footer = () => {
               </li>
               {conciergLinks.map((item, index) => (
                 <li key={`${item.href}-${index}`}>
-                  <Link to={item.href} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
+                  <Link to={item.href} onMouseEnter={() => prefetchRoute(item.href)} onFocus={() => prefetchRoute(item.href)} className="font-body text-sm text-asper-stone-light hover:text-polished-gold transition-colors duration-400">
                     {item.name}
                   </Link>
                 </li>
