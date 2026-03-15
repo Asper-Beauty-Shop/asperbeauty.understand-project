@@ -1,6 +1,6 @@
 /**
  * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
- * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). 
+ * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury).
  * Upgraded to "Super Smart" Architecture (March 2026).
  */
 declare const Deno: { env: { get(key: string): string | undefined } };
@@ -11,15 +11,24 @@ const CONCERN_MAPPING: Record<string, string[]> = {
   "acne": ["Concern_Acne", "Concern_Oiliness"],
   "anti-aging": ["Concern_Aging", "Concern_AntiAging", "Concern_Wrinkles"],
   "hydration": ["Concern_Hydration", "Concern_Dryness"],
-  "sensitivity": ["Concern_Sensitivity", "Concern_Redness", "Concern_RosaceaSafe"],
-  "dark-spots": ["Concern_Pigmentation", "Concern_Brightening", "Concern_DarkSpots"],
+  "sensitivity": [
+    "Concern_Sensitivity",
+    "Concern_Redness",
+    "Concern_RosaceaSafe",
+  ],
+  "dark-spots": [
+    "Concern_Pigmentation",
+    "Concern_Brightening",
+    "Concern_DarkSpots",
+  ],
   "sun-protection": ["Concern_SunProtection"],
   "hair-loss": ["Concern_HairLoss"],
   "pregnancy-safe": ["Concern_PregnancySafe"],
 };
 
 function getCorsHeaders(req: Request): Record<string, string> {
-  const allowOrigin: string = Deno.env.get("ALLOWED_ORIGIN") ?? req.headers.get("Origin") ?? "*";
+  const allowOrigin: string = Deno.env.get("ALLOWED_ORIGIN") ??
+    req.headers.get("Origin") ?? "*";
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers":
@@ -38,14 +47,19 @@ function getWebhookRoute(req: Request): "gorgias" | "manychat" | null {
   return null;
 }
 
-function extractFromGorgias(body: Record<string, unknown>): { message: string } {
+function extractFromGorgias(
+  body: Record<string, unknown>,
+): { message: string } {
   const messages = Array.isArray(body.messages) ? body.messages : [];
-  const last = messages.filter((m: unknown) => m && typeof m === "object").pop() as Record<string, unknown> | undefined;
+  const last = messages.filter((m: unknown) => m && typeof m === "object")
+    .pop() as Record<string, unknown> | undefined;
   const text = typeof last?.body_text === "string" ? last.body_text : "";
   return { message: text || "(No message)" };
 }
 
-function extractFromManyChat(body: Record<string, unknown>): { message: string } {
+function extractFromManyChat(
+  body: Record<string, unknown>,
+): { message: string } {
   const data = body.data as Record<string, unknown> | undefined;
   const msg = (data?.text as string) || (body.message as string) || "";
   return { message: msg };
@@ -54,37 +68,60 @@ function extractFromManyChat(body: Record<string, unknown>): { message: string }
 function detectConcernSlug(text: string): string | null {
   const lower = text.toLowerCase();
   if (/\b(acne|pimple|blemish|breakout|pore)\b/.test(lower)) return "acne";
-  if (/\b(aging|wrinkle|fine line|retinol|collagen|firm)\b/.test(lower)) return "anti-aging";
+  if (/\b(aging|wrinkle|fine line|retinol|collagen|firm)\b/.test(lower)) {
+    return "anti-aging";
+  }
   if (/\b(dry|tight|dehydrat|moistur)\b/.test(lower)) return "hydration";
-  if (/\b(sensitive|red|irritat|calm|sooth)\b/.test(lower)) return "sensitivity";
+  if (/\b(sensitive|red|irritat|calm|sooth)\b/.test(lower)) {
+    return "sensitivity";
+  }
   if (/\b(spot|pigment|bright|vit c|glow)\b/.test(lower)) return "dark-spots";
   if (/\b(sun|spf|burn|uv)\b/.test(lower)) return "sun-protection";
   if (/\b(hair|loss|thin|scalp)\b/.test(lower)) return "hair-loss";
-  if (/\b(pregnant|pregnancy|baby|breastfeed)\b/.test(lower)) return "pregnancy-safe";
+  if (/\b(pregnant|pregnancy|baby|breastfeed)\b/.test(lower)) {
+    return "pregnancy-safe";
+  }
   return null;
 }
 
 function formatProduct(p: Record<string, unknown>): string {
-  const step = typeof p.regimen_step === "string" ? p.regimen_step.replace("Step_", "") : "";
-  return `- **${p.title}** (${p.brand}) | ${p.price} JOD | Step: ${step} | Note: ${p.pharmacist_note || "Pharmacist-curated"}`;
+  const step = typeof p.regimen_step === "string"
+    ? p.regimen_step.replace("Step_", "")
+    : "";
+  return `- **${p.title}** (${p.brand}) | ${p.price} JOD | Step: ${step} | Note: ${
+    p.pharmacist_note || "Pharmacist-curated"
+  }`;
 }
 
 // deno-lint-ignore no-explicit-any
-async function fetchProductContext(supabase: any, userMessage: string, slug: string | null) {
+async function fetchProductContext(
+  supabase: any,
+  userMessage: string,
+  slug: string | null,
+) {
   let matched: Record<string, unknown>[] = [];
   if (slug) {
     const enums = CONCERN_MAPPING[slug] || [];
-    const { data } = await supabase.from("products").select("*").in("primary_concern", enums).gt("inventory_total", 0).limit(6);
+    const { data } = await supabase.from("products").select("*").in(
+      "primary_concern",
+      enums,
+    ).gt("inventory_total", 0).limit(6);
     matched = data || [];
   }
   if (matched.length === 0) {
-    const { data } = await supabase.from("products").select("*").gt("inventory_total", 0).limit(6);
+    const { data } = await supabase.from("products").select("*").gt(
+      "inventory_total",
+      0,
+    ).limit(6);
     matched = data || [];
   }
   return { context: matched.map(formatProduct).join("\n"), products: matched };
 }
 
-function buildSystemPrompt(productContext: string, shopRoutinePath: string | null): string {
+function buildSystemPrompt(
+  productContext: string,
+  shopRoutinePath: string | null,
+): string {
   return `
 # DR. BOT — THE ASPER DUAL-VOICE CONCIERGE
 You are the high-intelligence AI for Asper Beauty Shop (asperbeautyshop.com) in Jordan. 
@@ -125,18 +162,31 @@ You are a high-performance Sales Consultant. Your goal is to maximize Basket Val
 ## CURRENT INVENTORY CONTEXT
 ${productContext}
 
-${shopRoutinePath ? `Direct link to regimen: [View on Site](${shopRoutinePath})` : ""}
+${
+    shopRoutinePath
+      ? `Direct link to regimen: [View on Site](${shopRoutinePath})`
+      : ""
+  }
 `;
 }
 
 serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: getCorsHeaders(req) });
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: getCorsHeaders(req) });
+  }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  if (req.method === "GET") return new Response(JSON.stringify({ status: "active", version: "5.0-super-smart" }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
+  if (req.method === "GET") {
+    return new Response(
+      JSON.stringify({ status: "active", version: "5.0-super-smart" }),
+      {
+        headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+      },
+    );
+  }
 
   try {
     const route = getWebhookRoute(req);
@@ -145,7 +195,9 @@ serve(async (req) => {
 
     if (route) {
       const body = await req.json();
-      userMessage = route === "gorgias" ? extractFromGorgias(body).message : extractFromManyChat(body).message;
+      userMessage = route === "gorgias"
+        ? extractFromGorgias(body).message
+        : extractFromManyChat(body).message;
       messages = [{ role: "user", content: userMessage }];
     } else {
       const body = await req.json();
@@ -154,67 +206,126 @@ serve(async (req) => {
     }
 
     const slug = detectConcernSlug(userMessage);
-    const { context, products } = await fetchProductContext(supabase, userMessage, slug);
-    const systemPrompt = buildSystemPrompt(context, slug ? `/products?concern=${slug}` : null);
+    const { context, products } = await fetchProductContext(
+      supabase,
+      userMessage,
+      slug,
+    );
+    const systemPrompt = buildSystemPrompt(
+      context,
+      slug ? `/products?concern=${slug}` : null,
+    );
 
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: "LOVABLE_API_KEY not configured" }), {
-        status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ error: "LOVABLE_API_KEY not configured" }),
+        {
+          status: 500,
+          headers: {
+            ...getCorsHeaders(req),
+            "Content-Type": "application/json",
+          },
+        },
+      );
     }
 
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
+    const res = await fetch(
+      "https://ai.gateway.lovable.dev/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [
+            { role: "system", content: systemPrompt },
+            ...messages.map((m) => ({
+              role: m.role === "assistant" ? "assistant" : "user",
+              content: m.content,
+            })),
+          ],
+          temperature: 0.7,
+          max_tokens: 1024,
+        }),
       },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...messages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content })),
-        ],
-        temperature: 0.7,
-        max_tokens: 1024,
-      }),
-    });
+    );
 
     if (res.status === 429) {
-      return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again shortly." }), {
-        status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({
+          error: "Rate limit exceeded, please try again shortly.",
+        }),
+        {
+          status: 429,
+          headers: {
+            ...getCorsHeaders(req),
+            "Content-Type": "application/json",
+          },
+        },
+      );
     }
     if (res.status === 402) {
-      return new Response(JSON.stringify({ error: "AI credits exhausted. Please top up your Lovable workspace." }), {
-        status: 402, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({
+          error: "AI credits exhausted. Please top up your Lovable workspace.",
+        }),
+        {
+          status: 402,
+          headers: {
+            ...getCorsHeaders(req),
+            "Content-Type": "application/json",
+          },
+        },
+      );
     }
 
     const data = await res.json();
-    const replyText = data.choices?.[0]?.message?.content || "I apologize, I am processing your request. Please wait a moment.";
+    const replyText = data.choices?.[0]?.message?.content ||
+      "I apologize, I am processing your request. Please wait a moment.";
 
     if (route === "manychat") {
-      return new Response(JSON.stringify({
-        version: "v2",
-        content: {
-          messages: [{ type: "text", text: replyText }],
-          quick_replies: [
-            { type: "node", caption: "🧴 Acne Help", target: "acne" },
-            { type: "node", caption: "✨ Glow Routine", target: "glow" },
-            { type: "node", caption: "👤 Human Support", target: "human" }
-          ]
-        }
-      }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
+      return new Response(
+        JSON.stringify({
+          version: "v2",
+          content: {
+            messages: [{ type: "text", text: replyText }],
+            quick_replies: [
+              { type: "node", caption: "🧴 Acne Help", target: "acne" },
+              { type: "node", caption: "✨ Glow Routine", target: "glow" },
+              { type: "node", caption: "👤 Human Support", target: "human" },
+            ],
+          },
+        }),
+        {
+          headers: {
+            ...getCorsHeaders(req),
+            "Content-Type": "application/json",
+          },
+        },
+      );
     }
 
-    return new Response(JSON.stringify({ reply: replyText, products: products.map((p: Record<string, unknown>) => ({ id: p.id, title: p.title, handle: p.handle })) }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
-
+    return new Response(
+      JSON.stringify({
+        reply: replyText,
+        products: products.map((p: Record<string, unknown>) => ({
+          id: p.id,
+          title: p.title,
+          handle: p.handle,
+        })),
+      }),
+      {
+        headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+      },
+    );
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : "Unknown error";
-    return new Response(JSON.stringify({ error: message }), { status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ error: message }), {
+      status: 500,
+      headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+    });
   }
 });
-
-
