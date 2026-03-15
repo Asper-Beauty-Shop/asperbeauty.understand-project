@@ -710,7 +710,7 @@
   animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Luxury Beauty Background - Decorative overlay loaded via JS for perf (see main.tsx) */
+/* Luxury Beauty Background - Full Page Subtle Overlay with Parallax */
 body::before {
   content: "";
   position: fixed;
@@ -718,22 +718,18 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
+  background-image: url("/luxury-beauty-background.jpg");
   background-size: 120% auto;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  opacity: 0;
+  opacity: 0.06;
   pointer-events: none;
   z-index: -1;
   filter: sepia(0.3) saturate(0.7) brightness(1.1);
   mix-blend-mode: multiply;
   transform: translateZ(0);
   will-change: transform;
-  transition: opacity 1s ease-in;
-}
-body.bg-loaded::before {
-  background-image: url("/luxury-beauty-background.jpg");
-  opacity: 0.06;
 }
 
 /* Hero Portrait Background - More Visible in Hero with Parallax */
@@ -980,12 +976,3 @@ body { background-color: hsl(240 100% 99%); color: #333333; }
 
 /* postcss rebuild trigger */
 
-
-/* scrollbar-hide utility for CategoryNavBar horizontal scroll */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}

@@ -1,7 +1,6 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import asperLogoHorizontal from "@/assets/asper-logo-horizontal.png";
 import { AsperWordmark } from "@/components/ui/AsperWordmark";
-import { CategoryNavBar } from "@/components/CategoryNavBar";
 import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown,
@@ -516,9 +515,6 @@ export const Header = () => {
           </div>
         </div>
       )}
-
-      {/* Category icon strip — visible on all screen sizes */}
-      <CategoryNavBar />
 
       <CartDrawer />
       <WishlistDrawer />

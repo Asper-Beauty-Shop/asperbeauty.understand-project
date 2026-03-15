@@ -188,7 +188,6 @@ export default function Wishlist() {
                               removeItem(product.node.id);
                             }}
                             className="absolute top-3 right-3 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-gold/30 flex items-center justify-center text-cream hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-400 transition-all duration-300"
-                            aria-label="Remove from wishlist"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
