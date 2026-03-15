@@ -1,25 +1,3 @@
-import { toast } from "sonner";
-
-// Use your own store: set VITE_SHOPIFY_STORE_DOMAIN and VITE_SHOPIFY_STOREFRONT_TOKEN in .env and production env
-const SHOPIFY_API_VERSION = import.meta.env.VITE_SHOPIFY_API_VERSION ??
-  "2025-07";
-const SHOPIFY_STORE_PERMANENT_DOMAIN =
-  import.meta.env.VITE_SHOPIFY_STORE_DOMAIN ??
-    import.meta.env.VITE_SHOPIFY_STORE ??
-    "lovable-project-milns.myshopify.com";
-const SHOPIFY_STOREFRONT_URL =
-  `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-// Note: Shopify Storefront tokens are designed for client-side use with read-only access to public data
-const SHOPIFY_STOREFRONT_TOKEN =
-  import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN ??
-    "9daedc472c5910e742ec88bdaad108e2";
-
-// Sanitize search input to prevent GraphQL injection
-function sanitizeSearchTerm(term: string): string {
-  // Remove special characters that could break GraphQL queries
-  return term.replace(/[^a-zA-Z0-9\s\-\u0600-\u06FF]/g, "").slice(0, 100);
-}
-
 export interface ShopifyProduct {
   node: {
     id: string;
@@ -78,10 +56,7 @@ export interface ShopifyProduct {
   };
 }
 
-export async function storefrontApiRequest(
-  query: string,
-  variables: Record<string, unknown> = {},
-) {
+export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}) {
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
     method: "POST",
     headers: {
@@ -108,11 +83,7 @@ export async function storefrontApiRequest(
   const data = await response.json();
 
   if (data.errors) {
-    throw new Error(
-      `Error calling Shopify: ${
-        data.errors.map((e: { message: string }) => e.message).join(", ")
-      }`,
-    );
+    throw new Error(`Error calling Shopify: ${data.errors.map((e: { message: string }) => e.message).join(", ")}`);
   }
 
   return data;
@@ -337,10 +308,7 @@ export async function fetchProductsPaginated(
 }
 
 // Simple fetch for backwards compatibility
-export async function fetchProducts(
-  first: number = 24,
-  query?: string,
-): Promise<ShopifyProduct[]> {
+export async function fetchProducts(first: number = 24, query?: string): Promise<ShopifyProduct[]> {
   const data = await storefrontApiRequest(STOREFRONT_PRODUCTS_QUERY, {
     first,
     query,
@@ -349,10 +317,7 @@ export async function fetchProducts(
   return data.data.products.edges;
 }
 
-export async function searchProducts(
-  searchTerm: string,
-  first: number = 10,
-): Promise<ShopifyProduct[]> {
+export async function searchProducts(searchTerm: string, first: number = 10): Promise<ShopifyProduct[]> {
   if (!searchTerm.trim()) return [];
   const sanitized = sanitizeSearchTerm(searchTerm);
   if (!sanitized) return [];
@@ -440,9 +405,8 @@ interface UserError {
 }
 
 function isCartNotFoundError(userErrors: UserError[]): boolean {
-  return userErrors.some((e) =>
-    e.message.toLowerCase().includes("cart not found") ||
-    e.message.toLowerCase().includes("does not exist")
+  return userErrors.some(
+    (e) => e.message.toLowerCase().includes("cart not found") || e.message.toLowerCase().includes("does not exist"),
   );
 }
 
@@ -502,9 +466,9 @@ export async function addLineToShopifyCart(
   }
 
   const lines = data?.data?.cartLinesAdd?.cart?.lines?.edges || [];
-  const newLine = lines.find((
-    l: { node: { id: string; merchandise: { id: string } } },
-  ) => l.node.merchandise.id === item.variantId);
+  const newLine = lines.find(
+    (l: { node: { id: string; merchandise: { id: string } } }) => l.node.merchandise.id === item.variantId,
+  );
   return { success: true, lineId: newLine?.node?.id };
 }
 
@@ -549,9 +513,7 @@ export async function removeLineFromShopifyCart(
   return { success: true };
 }
 
-export async function fetchShopifyCart(
-  cartId: string,
-): Promise<{ exists: boolean; totalQuantity: number }> {
+export async function fetchShopifyCart(cartId: string): Promise<{ exists: boolean; totalQuantity: number }> {
   try {
     const data = await storefrontApiRequest(CART_QUERY, { id: cartId });
     if (!data) return { exists: false, totalQuantity: 0 };
@@ -564,9 +526,7 @@ export async function fetchShopifyCart(
 }
 
 // Legacy function for backwards compatibility
-export async function createStorefrontCheckout(
-  items: Array<{ variantId: string; quantity: number }>,
-): Promise<string> {
+export async function createStorefrontCheckout(items: Array<{ variantId: string; quantity: number }>): Promise<string> {
   const lines = items.map((item) => ({
     quantity: item.quantity,
     merchandiseId: item.variantId,
@@ -582,11 +542,9 @@ export async function createStorefrontCheckout(
 
   if (cartData.data.cartCreate.userErrors.length > 0) {
     throw new Error(
-      `Cart creation failed: ${
-        cartData.data.cartCreate.userErrors.map((e: { message: string }) =>
-          e.message
-        ).join(", ")
-      }`,
+      `Cart creation failed: ${cartData.data.cartCreate.userErrors
+        .map((e: { message: string }) => e.message)
+        .join(", ")}`,
     );
   }
 
@@ -601,7 +559,7 @@ export async function createStorefrontCheckout(
 
 /**
  * Normalize a Shopify price string to a number.
- * 
+ *
  * Prices from the Storefront API are returned as-is from Shopify.
  * The sync-shopify-catalog edge function handles brand-aware normalization
  * when writing to Supabase. This function simply parses the raw value.
