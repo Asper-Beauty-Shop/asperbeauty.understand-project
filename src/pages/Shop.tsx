@@ -320,7 +320,7 @@ export default function Shop() {
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of products) {
-      const cat = (p as any).asper_category;
+      const cat = p.asper_category;
       if (cat) counts[cat] = (counts[cat] || 0) + 1;
     }
     return counts;
@@ -329,7 +329,7 @@ export default function Shop() {
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       // Filter by asper_category sidebar
-      if (categoryParam && categoryParam !== "All Curation" && (product as any).asper_category !== categoryParam) return false;
+      if (categoryParam && categoryParam !== "All Curation" && product.asper_category !== categoryParam) return false;
 
       if (filters.searchQuery) {
         const q = filters.searchQuery.toLowerCase();
