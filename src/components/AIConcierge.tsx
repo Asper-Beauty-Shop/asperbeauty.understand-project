@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 import { playNotificationSound } from "@/lib/sounds";
+import { useChatStore, newMessageId, type PersonaId } from "@/stores/chatStore";
 
 type MessageContent =
   | string
@@ -184,11 +185,14 @@ const quickPrompts = [
 ];
 
 export default function AIConcierge() {
+  // ── Persistent chat store (isolated per persona) ──────────────────────────
+  const { sessions, addMessage, finalizeLastAssistantMessage, setActivePersona } = useChatStore();
+
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPersona, setCurrentPersona] = useState<string>("ms_zain");
+  const [currentPersona, setCurrentPersona] = useState<PersonaId>("ms_zain");
   const [speakingIdx, setSpeakingIdx] = useState<number | null>(null);
   const [pendingImage, setPendingImage] = useState<{ file: File; preview: string } | null>(null);
   const [safetyFlags, setSafetyFlags] = useState<string[]>([]);
@@ -211,6 +215,27 @@ export default function AIConcierge() {
     pigmentation: "I have uneven skin tone and dark spots. What treatments work best?",
     sensitivity: "My skin is very sensitive and reactive. I need a gentle routine.",
   };
+
+  // Seed local messages from the store when persona changes (history isolation)
+  useEffect(() => {
+    const persisted = sessions[currentPersona];
+    if (persisted.length > 0 && messages.length === 0) {
+      // Hydrate local Msg[] from PersistedMessage[] (text-only messages)
+      setMessages(
+        persisted.map((m) => ({
+          role: m.role,
+          content: m.content,
+          persona: m.persona,
+        }))
+      );
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPersona]);
+
+  // Sync active persona to store so other components can observe it
+  useEffect(() => {
+    setActivePersona(currentPersona);
+  }, [currentPersona, setActivePersona]);
 
   // Deep link support: ?intent=acne&source=ig auto-opens with tailored prompt & auto-send
   useEffect(() => {
@@ -363,6 +388,19 @@ export default function AIConcierge() {
     setInput("");
     setIsLoading(true);
 
+    // Persist the user message (text only — images are excluded from store)
+    const userText = typeof userContent === "string"
+      ? userContent
+      : userContent.find((p): p is { type: "text"; text: string } => p.type === "text")?.text ?? "";
+    if (userText) {
+      addMessage(currentPersona, {
+        id: newMessageId(),
+        role: "user",
+        content: userText,
+        timestamp: Date.now(),
+      });
+    }
+
     let assistantSoFar = "";
     let detectedPersona = currentPersona;
 
@@ -379,17 +417,34 @@ export default function AIConcierge() {
       });
     };
 
+    // Placeholder assistant message for streaming finalization
+    const assistantMsgId = newMessageId();
+
     try {
       await streamChat({
         messages: [...messages, userMsg],
         userProfile,
         campaignSource: deepLinkSource.current,
         onPersona: (p) => {
-          detectedPersona = p;
-          setCurrentPersona(p);
+          detectedPersona = p as PersonaId;
+          setCurrentPersona(p as PersonaId);
         },
         onDelta: upsert,
-        onDone: () => { setIsLoading(false); playNotificationSound(); },
+        onDone: () => {
+          setIsLoading(false);
+          playNotificationSound();
+          // Persist the completed assistant response (text only, trimmed)
+          const finalContent = assistantSoFar.trim();
+          if (finalContent) {
+            addMessage(detectedPersona as PersonaId, {
+              id: assistantMsgId,
+              role: "assistant",
+              content: finalContent,
+              timestamp: Date.now(),
+              persona: detectedPersona as PersonaId,
+            });
+          }
+        },
         onSafetyFlags: (flags) => setSafetyFlags(flags),
       });
     } catch (e: unknown) {

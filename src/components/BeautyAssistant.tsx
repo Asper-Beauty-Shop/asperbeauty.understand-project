@@ -11,12 +11,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { ASPER_PROTOCOL } from "@/lib/asperProtocol";
 import { DigitalTray } from "./chat/DigitalTray";
 import { cn } from "@/lib/utils";
+import { useChatStore, newMessageId } from "@/stores/chatStore";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
 export const BeautyAssistant = () => {
+  // BeautyAssistant is the Ms. Zain widget — all messages stored under ms_zain
+  const { sessions, addMessage } = useChatStore();
+  const persistedHistory = sessions.ms_zain;
+
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Record<string, any>[]>([]);
+  const [messages, setMessages] = useState<Record<string, any>[]>(() =>
+    persistedHistory.map((m) => ({ role: m.role, content: m.content }))
+  );
   const [inputValue, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { language, locale } = useLanguage();
@@ -33,6 +40,7 @@ export const BeautyAssistant = () => {
     if (!inputValue.trim()) return;
     const userMsg = { role: "user", content: inputValue };
     setMessages(prev => [...prev, userMsg]);
+    addMessage("ms_zain", { id: newMessageId(), role: "user", content: inputValue, timestamp: Date.now() });
     setInput("");
     setIsLoading(true);
 
@@ -41,7 +49,11 @@ export const BeautyAssistant = () => {
         body: { messages: [...messages, userMsg], language }
       });
       if (error) throw error;
-      setMessages(prev => [...prev, { role: "assistant", content: data.reply, trayProducts: data.products }]);
+      const replyText: string = data.reply ?? "";
+      setMessages(prev => [...prev, { role: "assistant", content: replyText, trayProducts: data.products }]);
+      if (replyText) {
+        addMessage("ms_zain", { id: newMessageId(), role: "assistant", content: replyText, timestamp: Date.now(), persona: "ms_zain" });
+      }
     } catch (err) {
       console.error(err);
       toast.error(ASPER_PROTOCOL.errorShort[language === 'ar' ? 'ar' : 'en']);
