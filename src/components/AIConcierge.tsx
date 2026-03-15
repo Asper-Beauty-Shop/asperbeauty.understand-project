@@ -391,7 +391,7 @@ export default function AIConcierge() {
     // Persist the user message (text only — images are excluded from store)
     const userText = typeof userContent === "string"
       ? userContent
-      : userContent.find((p): p is { type: "text"; text: string } => p.type === "text")?.text ?? "";
+      : userContent.find((p): p is { type: "text"; text: string } => typeof p === "object" && p !== null && "type" in p && p.type === "text")?.text ?? "";
     if (userText) {
       addMessage(currentPersona, {
         id: newMessageId(),
