@@ -157,7 +157,7 @@ export const CODCheckoutForm = (
 
       // Call secure edge function with CAPTCHA token
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-cod-order`,
+        `${import.meta.env.VITE_SUPABASE_URL || "https://vhgwvfedgfmcixhdyttt.supabase.co"}/functions/v1/create-cod-order`,
         {
           method: "POST",
           headers: {

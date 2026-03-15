@@ -4,7 +4,7 @@
  */
 
 const LOG_CONCIERGE_EVENTS_URL =
-  `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/log-concierge-events`;
+  `${import.meta.env.VITE_SUPABASE_URL || "https://vhgwvfedgfmcixhdyttt.supabase.co"}/functions/v1/log-concierge-events`;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 function postEvent(payload: Record<string, unknown>): void {
