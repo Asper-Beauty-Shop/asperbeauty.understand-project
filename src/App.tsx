@@ -26,19 +26,21 @@ import Auth from "./pages/Auth";
 import Account from "./pages/Account";
 import Profile from "./pages/Profile";
 import Philosophy from "./pages/Philosophy";
-import BulkUpload from "./pages/BulkUpload";
-import AdminOrders from "./pages/AdminOrders";
-import TrackOrder from "./pages/TrackOrder";
-import ManageProducts from "./pages/ManageProducts";
 import Shop from "./pages/Shop";
 import ShopAllOrganized from "./components/ShopAllOrganized";
-import DriverDashboard from "./pages/DriverDashboard";
-import AdminAuditLogs from "./pages/AdminAuditLogs";
-import AsperIntelligence from "./pages/AsperIntelligence";
-import PurgeReview from "./pages/PurgeReview";
-import BrandIntelligenceDashboard from "./pages/BrandIntelligenceDashboard";
+import TrackOrder from "./pages/TrackOrder";
 import Health from "./pages/Health";
 import RegimenPortal from "./pages/RegimenPortal";
+
+// Lazy-load admin & heavy pages to keep initial bundle small
+const BulkUpload = lazy(() => import("./pages/BulkUpload"));
+const AdminOrders = lazy(() => import("./pages/AdminOrders"));
+const ManageProducts = lazy(() => import("./pages/ManageProducts"));
+const DriverDashboard = lazy(() => import("./pages/DriverDashboard"));
+const AdminAuditLogs = lazy(() => import("./pages/AdminAuditLogs"));
+const AsperIntelligence = lazy(() => import("./pages/AsperIntelligence"));
+const PurgeReview = lazy(() => import("./pages/PurgeReview"));
+const BrandIntelligenceDashboard = lazy(() => import("./pages/BrandIntelligenceDashboard"));
 import { RequireAdmin } from "./components/RequireAdmin";
 
 const BeautyAssistant = lazy(() =>
