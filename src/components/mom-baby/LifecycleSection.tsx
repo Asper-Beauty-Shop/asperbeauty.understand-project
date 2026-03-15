@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Heart, Sparkles, Baby, ShoppingBag, ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { normalizePrice, type ShopifyProduct } from "@/lib/shopify";
-import { supabase } from "@/integrations/supabase/client";
+import { fetchProducts, normalizePrice, type ShopifyProduct } from "@/lib/shopify";
 import { Link } from "react-router-dom";
 
 interface PhaseConfig {
@@ -14,9 +13,9 @@ interface PhaseConfig {
   ar: string;
   icon: typeof Heart;
   color: string;
-  /** Search keywords to find products in Supabase */
-  searchTerms: string[];
-  categories: { en: string; ar: string; searchQuery: string }[];
+  /** Shopify search query to fetch products for this phase */
+  shopifyQuery: string;
+  categories: { en: string; ar: string; shopifyQuery: string }[];
 }
 
 const phasesConfig: PhaseConfig[] = [
@@ -26,12 +25,12 @@ const phasesConfig: PhaseConfig[] = [
     ar: "قبل الولادة",
     icon: Heart,
     color: "text-rose-clay",
-    searchTerms: ["stretch mark", "prenatal", "pregnancy", "supplements"],
+    shopifyQuery: "product_type:Stretch Mark OR product_type:Supplements OR tag:pregnancy OR tag:prenatal OR (tag:baby AND tag:skincare)",
     categories: [
-      { en: "Stretch Mark Prevention", ar: "الوقاية من التمدد", searchQuery: "stretch mark" },
-      { en: "Pregnancy-Safe Skincare", ar: "عناية آمنة للحمل", searchQuery: "pregnancy skincare" },
-      { en: "Hair & Scalp Care", ar: "العناية بالشعر", searchQuery: "hair scalp" },
-      { en: "Supplements & Fertility", ar: "المكملات والخصوبة", searchQuery: "supplements prenatal" },
+      { en: "Stretch Mark Prevention", ar: "الوقاية من التمدد", shopifyQuery: "product_type:Stretch Mark" },
+      { en: "Pregnancy-Safe Skincare", ar: "عناية آمنة للحمل", shopifyQuery: "tag:pregnancy AND tag:skincare" },
+      { en: "Hair & Scalp Care", ar: "العناية بالشعر", shopifyQuery: "tag:pregnancy AND product_type:Shampoo" },
+      { en: "Supplements & Fertility", ar: "المكملات والخصوبة", shopifyQuery: "product_type:Supplements OR tag:prenatal" },
     ],
   },
   {
@@ -40,12 +39,12 @@ const phasesConfig: PhaseConfig[] = [
     ar: "بعد الولادة",
     icon: Sparkles,
     color: "text-accent",
-    searchTerms: ["breast pump", "breastfeeding", "nursing", "postpartum"],
+    shopifyQuery: "product_type:Breast Pump OR tag:breastfeeding OR tag:nursing OR product_type:Nursing",
     categories: [
-      { en: "Breast Pumps & Accessories", ar: "مضخات الثدي والإكسسوارات", searchQuery: "breast pump" },
-      { en: "Nursing Accessories", ar: "ملحقات الرضاعة", searchQuery: "nursing" },
-      { en: "Nipple Care", ar: "العناية بالحلمات", searchQuery: "nipple care" },
-      { en: "Body Recovery", ar: "استعادة الجسم", searchQuery: "postpartum recovery" },
+      { en: "Breast Pumps & Accessories", ar: "مضخات الثدي والإكسسوارات", shopifyQuery: "product_type:Breast Pump" },
+      { en: "Nursing Accessories", ar: "ملحقات الرضاعة", shopifyQuery: "tag:nursing" },
+      { en: "Nipple Care", ar: "العناية بالحلمات", shopifyQuery: "tag:nipple" },
+      { en: "Body Recovery", ar: "استعادة الجسم", shopifyQuery: "tag:postpartum" },
     ],
   },
   {
@@ -54,12 +53,12 @@ const phasesConfig: PhaseConfig[] = [
     ar: "السنوات الأولى",
     icon: Baby,
     color: "text-primary",
-    searchTerms: ["baby", "infant", "toddler"],
+    shopifyQuery: "product_type:Baby Powder OR product_type:Baby Oil OR product_type:Baby Shampoo OR product_type:Baby Cream OR product_type:Baby Lotion OR product_type:Baby Wash OR product_type:Baby Towel OR product_type:Baby Clothes",
     categories: [
-      { en: "Bath & Hygiene", ar: "الاستحمام والنظافة", searchQuery: "baby bath wash" },
-      { en: "Skin Care", ar: "العناية بالبشرة", searchQuery: "baby cream lotion" },
-      { en: "Diaper Changing", ar: "تغيير الحفاض", searchQuery: "baby diaper powder" },
-      { en: "Clothing", ar: "الملابس", searchQuery: "baby clothes" },
+      { en: "Bath & Hygiene", ar: "الاستحمام والنظافة", shopifyQuery: "product_type:Baby Shampoo OR product_type:Baby Wash OR product_type:Baby Towel" },
+      { en: "Skin Care", ar: "العناية بالبشرة", shopifyQuery: "product_type:Baby Cream OR product_type:Baby Lotion OR product_type:Baby Oil" },
+      { en: "Diaper Changing", ar: "تغيير الحفاض", shopifyQuery: "product_type:Baby Powder" },
+      { en: "Clothing", ar: "الملابس", shopifyQuery: "product_type:Baby Clothes" },
     ],
   },
   {
@@ -68,62 +67,20 @@ const phasesConfig: PhaseConfig[] = [
     ar: "أساسيات الأمومة",
     icon: ShoppingBag,
     color: "text-burgundy",
-    searchTerms: ["baby carrier", "stroller", "gift set", "maternity"],
+    shopifyQuery: "product_type:Baby Carrier OR product_type:Baby Stroller OR product_type:Baby Gift Set OR product_type:Baby Bag OR tag:maternity",
     categories: [
-      { en: "Carriers & Strollers", ar: "الحاملات والعربات", searchQuery: "carrier stroller" },
-      { en: "Gift Sets & Bundles", ar: "أطقم الهدايا", searchQuery: "gift set bundle" },
-      { en: "Bags & Travel", ar: "حقائب السفر", searchQuery: "baby bag travel" },
-      { en: "Thermometers & Monitors", ar: "موازين الحرارة والمراقبة", searchQuery: "thermometer monitor" },
+      { en: "Carriers & Strollers", ar: "الحاملات والعربات", shopifyQuery: "product_type:Baby Carrier OR product_type:Baby Stroller" },
+      { en: "Gift Sets & Bundles", ar: "أطقم الهدايا", shopifyQuery: "product_type:Baby Gift Set" },
+      { en: "Bags & Travel", ar: "حقائب السفر", shopifyQuery: "product_type:Baby Bag" },
+      { en: "Thermometers & Monitors", ar: "موازين الحرارة والمراقبة", shopifyQuery: "tag:thermometer OR tag:monitor" },
     ],
   },
 ];
 
-function supabaseToShopify(row: Record<string, unknown>): ShopifyProduct {
-  const title = (row.title as string) || (row.name as string) || "";
-  return {
-    node: {
-      id: row.id as string,
-      title,
-      handle: (row.handle as string) || (row.id as string),
-      description: (row.description as string) || "",
-      vendor: (row.brand as string) || "",
-      productType: (row.category as string) || "",
-      images: {
-        edges: row.image_url
-          ? [{ node: { url: row.image_url as string, altText: title } }]
-          : [],
-      },
-      priceRange: {
-        minVariantPrice: { amount: String(row.price), currencyCode: "JOD" },
-      },
-      variants: {
-        edges: [{
-          node: {
-            id: `${row.id}-default`,
-            title: "Default",
-            price: { amount: String(row.price), currencyCode: "JOD" },
-            availableForSale: true,
-            selectedOptions: [],
-          },
-        }],
-      },
-      options: [],
-    },
-  };
-}
-
 function usePhaseProducts(phase: PhaseConfig, enabled: boolean) {
   return useQuery({
     queryKey: ["mom-baby-phase", phase.id],
-    queryFn: async () => {
-      const orFilter = phase.searchTerms.map(t => `name.ilike.%${t}%`).join(",");
-      const { data } = await supabase
-        .from("products")
-        .select("id, name, title, handle, description, brand, category, price, image_url")
-        .or(orFilter)
-        .limit(6);
-      return (data || []).map(supabaseToShopify);
-    },
+    queryFn: () => fetchProducts(6, phase.shopifyQuery),
     enabled,
     staleTime: 5 * 60 * 1000,
   });
@@ -153,7 +110,7 @@ function PhaseSection({ phase, isAr }: { phase: PhaseConfig; isAr: boolean }) {
         {phase.categories.map((cat) => (
           <Link
             key={cat.en}
-            to={`/products?q=${encodeURIComponent(cat.searchQuery)}`}
+            to={`/products?q=${encodeURIComponent(cat.shopifyQuery)}`}
             className="group rounded-xl border border-border bg-card p-4 text-start hover:border-accent/50 hover:shadow-warm transition-all duration-300"
           >
             <span className="block text-sm font-body font-medium text-foreground group-hover:text-primary transition-colors">

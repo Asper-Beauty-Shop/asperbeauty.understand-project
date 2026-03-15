@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/select";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   CheckCircle,
@@ -141,9 +140,6 @@ export const CODCheckoutForm = (
     setIsSubmitting(true);
 
     try {
-      // Get current session for user_id binding
-      const { data: { session } } = await supabase.auth.getSession();
-
       // Prepare order items with sanitized data
       const orderItems = items.map((item) => ({
         productId: String(item.product.node.id).slice(0, 100),
@@ -159,20 +155,15 @@ export const CODCheckoutForm = (
         imageUrl: item.product.node.images?.edges?.[0]?.node?.url || null,
       }));
 
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-        "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      };
-      if (session?.access_token) {
-        headers["Authorization"] = `Bearer ${session.access_token}`;
-      }
-
       // Call secure edge function with CAPTCHA token
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-cod-order`,
         {
           method: "POST",
-          headers,
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
           body: JSON.stringify({
             customerName: formData.customerName.trim(),
             customerPhone: formData.customerPhone.trim(),

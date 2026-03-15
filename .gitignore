@@ -36,7 +36,6 @@ build
 
 # Lock files (keep only package-lock.json)
 bun.lockb
-bun.lock
 deno.lock
 
 # Large binaries
@@ -52,14 +51,3 @@ Organized Products/
 
 # Temp files
 9f2d2ba202abd4430d957e90097d1781d94888c8
-
-# Sensitive credentials & certificates — never commit these
-*.crt
-*.pem
-*.p12
-*.pfx
-*credentials*.docx
-*credentials*.txt
-*credentials*.json
-Orgnized\ Products/
-"Orgnized Products/"

@@ -229,7 +229,7 @@ function mapProduct(text: string, productType: string): MappingResult & { is_cli
 
 // ── Shopify Storefront API fetch ─────────────────────────────────────
 
-const SHOPIFY_DOMAIN = Deno.env.get("SHOPIFY_DOMAIN") ?? "asper-beauty-shop.myshopify.com";
+const SHOPIFY_DOMAIN = "lovable-project-milns.myshopify.com";
 const SHOPIFY_API_VERSION = "2025-07";
 
 const PRODUCTS_QUERY = `

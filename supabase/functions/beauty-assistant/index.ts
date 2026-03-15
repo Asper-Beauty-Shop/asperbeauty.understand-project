@@ -1,36 +1,29 @@
 /**
- * Beauty Assistant — Supabase Edge Function
- * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury).
- * Powered by Google Gemini 2.0 Flash with SSE streaming.
+ * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
+ * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). 
+ * Upgraded to "Super Smart" Architecture (March 2026).
  */
 declare const Deno: { env: { get(key: string): string | undefined } };
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const CONCERN_MAPPING: Record<string, string[]> = {
-  "acne":           ["Concern_Acne", "Concern_Oiliness"],
-  "anti-aging":     ["Concern_Aging", "Concern_AntiAging", "Concern_Wrinkles"],
-  "hydration":      ["Concern_Hydration", "Concern_Dryness"],
-  "sensitivity":    ["Concern_Sensitivity", "Concern_Redness", "Concern_RosaceaSafe"],
-  "dark-spots":     ["Concern_Pigmentation", "Concern_Brightening", "Concern_DarkSpots"],
+  "acne": ["Concern_Acne", "Concern_Oiliness"],
+  "anti-aging": ["Concern_Aging", "Concern_AntiAging", "Concern_Wrinkles"],
+  "hydration": ["Concern_Hydration", "Concern_Dryness"],
+  "sensitivity": ["Concern_Sensitivity", "Concern_Redness", "Concern_RosaceaSafe"],
+  "dark-spots": ["Concern_Pigmentation", "Concern_Brightening", "Concern_DarkSpots"],
   "sun-protection": ["Concern_SunProtection"],
-  "hair-loss":      ["Concern_HairLoss"],
+  "hair-loss": ["Concern_HairLoss"],
   "pregnancy-safe": ["Concern_PregnancySafe"],
 };
 
-const SAFETY_KEYWORDS: Record<string, string[]> = {
-  pregnancy:   ["pregnant", "pregnancy", "breastfeed", "nursing"],
-  sensitivity: ["sensitive", "allergic", "allergy", "rosacea", "eczema"],
-  pediatric:   ["child", "baby", "infant", "toddler"],
-};
-
 function getCorsHeaders(req: Request): Record<string, string> {
-  const allowOrigin = Deno.env.get("ALLOWED_ORIGIN") ?? req.headers.get("Origin") ?? "*";
+  const allowOrigin: string = Deno.env.get("ALLOWED_ORIGIN") ?? req.headers.get("Origin") ?? "*";
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers":
       "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version, x-webhook-route",
-    "Access-Control-Expose-Headers": "X-Persona, X-Safety-Flags",
   };
 }
 
@@ -45,40 +38,30 @@ function getWebhookRoute(req: Request): "gorgias" | "manychat" | null {
   return null;
 }
 
-function extractFromGorgias(body: Record<string, unknown>): string {
+function extractFromGorgias(body: Record<string, unknown>): { message: string } {
   const messages = Array.isArray(body.messages) ? body.messages : [];
   const last = messages.filter((m: unknown) => m && typeof m === "object").pop() as Record<string, unknown> | undefined;
-  return typeof last?.body_text === "string" ? last.body_text : "(No message)";
+  const text = typeof last?.body_text === "string" ? last.body_text : "";
+  return { message: text || "(No message)" };
 }
 
-function extractFromManyChat(body: Record<string, unknown>): string {
+function extractFromManyChat(body: Record<string, unknown>): { message: string } {
   const data = body.data as Record<string, unknown> | undefined;
-  return (data?.text as string) || (body.message as string) || "";
+  const msg = (data?.text as string) || (body.message as string) || "";
+  return { message: msg };
 }
 
 function detectConcernSlug(text: string): string | null {
   const lower = text.toLowerCase();
   if (/\b(acne|pimple|blemish|breakout|pore)\b/.test(lower)) return "acne";
-  if (/\b(aging|wrinkle|fine.?line|retinol|collagen|firm)\b/.test(lower)) return "anti-aging";
+  if (/\b(aging|wrinkle|fine line|retinol|collagen|firm)\b/.test(lower)) return "anti-aging";
   if (/\b(dry|tight|dehydrat|moistur)\b/.test(lower)) return "hydration";
   if (/\b(sensitive|red|irritat|calm|sooth)\b/.test(lower)) return "sensitivity";
-  if (/\b(spot|pigment|bright|vit.?c|glow)\b/.test(lower)) return "dark-spots";
+  if (/\b(spot|pigment|bright|vit c|glow)\b/.test(lower)) return "dark-spots";
   if (/\b(sun|spf|burn|uv)\b/.test(lower)) return "sun-protection";
   if (/\b(hair|loss|thin|scalp)\b/.test(lower)) return "hair-loss";
   if (/\b(pregnant|pregnancy|baby|breastfeed)\b/.test(lower)) return "pregnancy-safe";
   return null;
-}
-
-function detectSafetyFlags(text: string): string[] {
-  const lower = text.toLowerCase();
-  return Object.entries(SAFETY_KEYWORDS)
-    .filter(([, kw]) => kw.some(k => lower.includes(k)))
-    .map(([flag]) => flag);
-}
-
-function detectPersona(text: string): "dr_sami" | "ms_zain" {
-  const clinical = /\b(ingredient|clinical|study|retinol|acid|spf|diagnos|medical|treat|concern|allerg|sensitiv|pregnan|pharmacist)\b/i;
-  return clinical.test(text) ? "dr_sami" : "ms_zain";
 }
 
 function formatProduct(p: Record<string, unknown>): string {
@@ -87,200 +70,151 @@ function formatProduct(p: Record<string, unknown>): string {
 }
 
 // deno-lint-ignore no-explicit-any
-async function fetchProductContext(supabase: any, slug: string | null) {
+async function fetchProductContext(supabase: any, userMessage: string, slug: string | null) {
+  let matched: Record<string, unknown>[] = [];
   if (slug) {
     const enums = CONCERN_MAPPING[slug] || [];
     const { data } = await supabase.from("products").select("*").in("primary_concern", enums).gt("inventory_total", 0).limit(6);
-    if (data?.length) return { context: data.map(formatProduct).join("\n"), products: data };
+    matched = data || [];
   }
-  const { data } = await supabase.from("products").select("*").gt("inventory_total", 0).limit(6);
-  const products = data || [];
-  return { context: products.map(formatProduct).join("\n"), products };
+  if (matched.length === 0) {
+    const { data } = await supabase.from("products").select("*").gt("inventory_total", 0).limit(6);
+    matched = data || [];
+  }
+  return { context: matched.map(formatProduct).join("\n"), products: matched };
 }
 
-function buildSystemPrompt(productContext: string, persona: "dr_sami" | "ms_zain", safetyFlags: string[], shopRoutinePath: string | null): string {
-  const personaVoice = persona === "dr_sami"
-    ? `You are **DR. SAMI** — The Voice of Science. Start with: "As your clinical pharmacist..." Use precise, evidence-based language.`
-    : `You are **MS. ZAIN** — The Voice of Luxury. Start with: "Welcome to your personal beauty ritual..." Use warm, aspirational language.`;
+function buildSystemPrompt(productContext: string, shopRoutinePath: string | null): string {
+  return `
+# DR. BOT — THE ASPER DUAL-VOICE CONCIERGE
+You are the high-intelligence AI for Asper Beauty Shop (asperbeautyshop.com) in Jordan. 
+You operate in **Controlled AI Mode** as a Digital Dermatologist Assistant.
 
-  const safetyNote = safetyFlags.length
-    ? `\n## SAFETY INTERLOCK\nUser flags: ${safetyFlags.join(", ")}. Prioritize safety. Avoid contraindicated ingredients. Always recommend consulting a doctor.`
-    : "";
+## YOUR DUAL-PERSONA
+1. **DR. SAMI (The Voice of Science)**: Used for clinical, safety, and ingredient queries. Intro: "As your clinical pharmacist..."
+2. **MS. ZAIN (The Voice of Luxury)**: Used for aesthetic, lifestyle, and ritual queries. Intro: "Welcome to your personal beauty ritual..."
 
-  return `# DR. BOT — ASPER DUAL-VOICE CONCIERGE
-You are the AI concierge for Asper Beauty Shop (asperbeautyshop.com), Jordan's premier dermocosmetics pharmacy.
+## LANGUAGE & MIRRORING
+1. **STRICT MIRRORING**: Always respond in the EXACT language the customer uses. If they speak Arabic, respond in premium Arabic (Tajawal font style). If English, use elegant English.
+2. **BILINGUAL SALES**: Use persuasive marketing terminology native to the chosen language.
 
-## YOUR PERSONA
-${personaVoice}
+## SALES & MARKETING INTELLIGENCE
+You are a high-performance Sales Consultant. Your goal is to maximize Basket Value (AOV) and Conversion.
+1. **THE UPSELL**: Never recommend just one product. Recommend a 3-step Regimen (Cleanser + Treatment + Protection).
+2. **THE CLOSER**: Always end with a call-to-action (CTA). Example: "Would you like me to add this personalized tray to your bag?"
+3. **MARKETING HOOKS**: Mention "Same-day Concierge Delivery in Amman" and "Free Shipping on orders over 50 JOD."
+4. **SCARCITY & TRUST**: Use terms like "Top-rated by our clinical team" and "Highly requested in our Amman boutique."
 
-## LANGUAGE MIRRORING
-Always respond in the EXACT language the customer uses. Premium Arabic for Arabic speakers, elegant English for English speakers.
+## CORE MISSION
+- Increase conversion by providing expert, trustworthy guidance.
+- Guide treatment decisions without diagnosing.
+- **MANDATORY GUARDRAIL**: "I provide professional skincare guidance, not medical diagnosis."
 
-## SALES INTELLIGENCE
-- Recommend a 3-step Clinical Regimen (Cleanser → Treatment → Protection).
-- Always close with a CTA: "Shall I add this tray to your bag?"
-- Mention: "Same-day Concierge Delivery in Amman" and "Free Shipping over 50 JOD."
-- Shipping: Amman 3 JOD | Governorates 5 JOD | FREE > 50 JOD.
+## OPERATION RULES
+1. **ASK BEFORE RECOMMENDING**: Always ask for skin type, allergies, and pregnancy status before suggesting products.
+2. **LIMIT SUGGESTIONS**: Recommend a maximum of 3 products (The Clinical 3-Step Regimen).
+3. **BILINGUAL**: Detect user language (English/Arabic) and maintain it. Use Tajawal/RTL for Arabic.
+4. **NO HALLUCINATIONS**: Only recommend products from the inventory context below.
+5. **SHIPPING**: Amman 3 JOD, Governorates 5 JOD, FREE > 50 JOD. Same-day concierge delivery in Amman.
 
-## CORE RULES
-- Ask for skin type, allergies, and pregnancy status before recommending.
-- Only recommend products from the inventory context below.
-- Max 3 product recommendations per response.
-- Include: "I provide professional skincare guidance, not medical diagnosis."
-- Respond in markdown format.
-${safetyNote}
+## RESPONSE STRUCTURE (3-CLICK SOLUTION)
+1. Confirm the concern with empathy.
+2. Recommend ONE regimen: Step 1 (Cleanser) → Step 2 (Treatment) → Step 3 (Protection).
+3. Close with: "Shall I add this clinical tray to your regimen?"
 
-## CURRENT INVENTORY
+## CURRENT INVENTORY CONTEXT
 ${productContext}
-${shopRoutinePath ? `\nRoutine link: [View Regimen](${shopRoutinePath})` : ""}`;
+
+${shopRoutinePath ? `Direct link to regimen: [View on Site](${shopRoutinePath})` : ""}
+`;
 }
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: getCorsHeaders(req) });
 
-  const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-  if (req.method === "GET") {
-    return new Response(JSON.stringify({ status: "active", version: "6.0-gemini-native" }), {
-      headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-    });
-  }
+  if (req.method === "GET") return new Response(JSON.stringify({ status: "active", version: "5.0-super-smart" }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
 
   try {
     const route = getWebhookRoute(req);
-    const body = await req.json();
-    let messages: Array<{ role: string; content: unknown }> = [];
     let userMessage = "";
+    let messages: Array<{ role: string; content: string }> = [];
 
     if (route) {
-      userMessage = route === "gorgias" ? extractFromGorgias(body) : extractFromManyChat(body);
+      const body = await req.json();
+      userMessage = route === "gorgias" ? extractFromGorgias(body).message : extractFromManyChat(body).message;
       messages = [{ role: "user", content: userMessage }];
     } else {
-      messages = body.messages ?? [];
-      const lastMsg = messages[messages.length - 1];
-      userMessage = typeof lastMsg?.content === "string" ? lastMsg.content
-        : Array.isArray(lastMsg?.content) ? (lastMsg.content as Array<{ type: string; text?: string }>)
-            .filter(p => p.type === "text").map(p => p.text).join(" ")
-        : "";
+      const body = await req.json();
+      messages = body.messages;
+      userMessage = messages[messages.length - 1].content;
     }
 
     const slug = detectConcernSlug(userMessage);
-    const persona = body.forcePersona ?? detectPersona(userMessage);
-    const safetyFlags = detectSafetyFlags(userMessage);
-    const { context, products } = await fetchProductContext(supabase, slug);
-    const systemPrompt = buildSystemPrompt(context, persona as "dr_sami" | "ms_zain", safetyFlags, slug ? `/products?concern=${slug}` : null);
+    const { context, products } = await fetchProductContext(supabase, userMessage, slug);
+    const systemPrompt = buildSystemPrompt(context, slug ? `/products?concern=${slug}` : null);
 
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!lovableApiKey) {
+    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+    if (!apiKey) {
       return new Response(JSON.stringify({ error: "LOVABLE_API_KEY not configured" }), {
         status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
-    // Convert messages to Gemini content format
-    const geminiContents = messages.map(m => {
-      const role = m.role === "assistant" ? "model" : "user";
-      if (typeof m.content === "string") {
-        return { role, parts: [{ text: m.content }] };
-      }
-      // Multimodal content (image + text)
-      const parts = (m.content as Array<{ type: string; text?: string; image_url?: { url: string } }>).map(p => {
-        if (p.type === "text") return { text: p.text ?? "" };
-        if (p.type === "image_url" && p.image_url?.url) {
-          const [header, data] = p.image_url.url.split(",");
-          const mimeType = header.match(/data:([^;]+)/)?.[1] ?? "image/jpeg";
-          return { inlineData: { mimeType, data } };
-        }
-        return { text: "" };
-      });
-      return { role, parts };
-    });
-
-    // Non-streaming path for webhooks
-    if (route) {
-      const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${lovableApiKey}`,
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
-          messages: [
-            { role: "system", content: systemPrompt },
-            ...geminiContents.map(c => ({ role: c.role === "model" ? "assistant" : c.role, content: c.parts.map((p: Record<string, unknown>) => (p as { text?: string }).text ?? "").join("") })),
-          ],
-        }),
-      });
-      const data = await res.json();
-      const replyText = data.choices?.[0]?.message?.content ?? "Processing your request...";
-
-      if (route === "manychat") {
-        return new Response(JSON.stringify({
-          version: "v2",
-          content: {
-            messages: [{ type: "text", text: replyText }],
-            quick_replies: [
-              { type: "node", caption: "🧴 Acne Help", target: "acne" },
-              { type: "node", caption: "✨ Glow Routine", target: "glow" },
-              { type: "node", caption: "👤 Human Support", target: "human" },
-            ],
-          },
-        }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
-      }
-      return new Response(JSON.stringify({ reply: replyText, products: products.slice(0, 3).map((p: Record<string, unknown>) => ({ id: p.id, title: p.title, handle: p.handle })) }),
-        { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
-    }
-
-    // ── SSE Streaming path ─────────────────────────────────────────────────
-    const gatewayRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
-        Authorization: `Bearer ${lovableApiKey}`,
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: systemPrompt },
-          ...geminiContents.map(c => ({ role: c.role === "model" ? "assistant" : c.role, content: c.parts.map((p: Record<string, unknown>) => (p as { text?: string }).text ?? "").join("") })),
+          ...messages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content })),
         ],
-        stream: true,
+        temperature: 0.7,
+        max_tokens: 1024,
       }),
     });
 
-    if (!gatewayRes.ok) {
-      if (gatewayRes.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again later." }), {
-          status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
-      if (gatewayRes.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Please add funds." }), {
-          status: 402, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
-      const err = await gatewayRes.text().catch(() => "");
-      return new Response(JSON.stringify({ error: `AI gateway error: ${gatewayRes.status}` }), {
-        status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+    if (res.status === 429) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again shortly." }), {
+        status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+      });
+    }
+    if (res.status === 402) {
+      return new Response(JSON.stringify({ error: "AI credits exhausted. Please top up your Lovable workspace." }), {
+        status: 402, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       });
     }
 
-    // Gateway already emits OpenAI-compatible SSE — pass through directly
-    return new Response(gatewayRes.body, {
-      headers: {
-        ...getCorsHeaders(req),
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        "X-Persona": persona,
-        "X-Safety-Flags": safetyFlags.length ? safetyFlags.join(",") : "none",
-      },
-    });
+    const data = await res.json();
+    const replyText = data.choices?.[0]?.message?.content || "I apologize, I am processing your request. Please wait a moment.";
+
+    if (route === "manychat") {
+      return new Response(JSON.stringify({
+        version: "v2",
+        content: {
+          messages: [{ type: "text", text: replyText }],
+          quick_replies: [
+            { type: "node", caption: "🧴 Acne Help", target: "acne" },
+            { type: "node", caption: "✨ Glow Routine", target: "glow" },
+            { type: "node", caption: "👤 Human Support", target: "human" }
+          ]
+        }
+      }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
+    }
+
+    return new Response(JSON.stringify({ reply: replyText, products: products.map((p: Record<string, unknown>) => ({ id: p.id, title: p.title, handle: p.handle })) }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
 
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : "Unknown error";
-    return new Response(JSON.stringify({ error: message }), {
-      status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-    });
+    return new Response(JSON.stringify({ error: message }), { status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
   }
 });
+
+

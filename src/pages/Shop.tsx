@@ -273,7 +273,6 @@ export default function Shop() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchParams, setSearchParams] = useSearchParams();
   const concernParam = searchParams.get("concern") ?? "";
-  const brandParam = searchParams.get("brand") ?? "";
 
   // Active asper_category from URL or sidebar
   const categoryParam = searchParams.get("category") ?? "All Curation";
@@ -291,7 +290,7 @@ export default function Shop() {
     searchQuery: "",
     categories: [],
     subcategories: [],
-    brands: brandParam ? [brandParam] : [],
+    brands: [],
     skinConcerns: concernParam ? [concernParam] : [],
     priceRange: [0, 200],
     onSaleOnly: false,
@@ -321,7 +320,7 @@ export default function Shop() {
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of products) {
-      const cat = p.asper_category;
+      const cat = (p as any).asper_category;
       if (cat) counts[cat] = (counts[cat] || 0) + 1;
     }
     return counts;
@@ -330,14 +329,14 @@ export default function Shop() {
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       // Filter by asper_category sidebar
-      if (categoryParam && categoryParam !== "All Curation" && product.asper_category !== categoryParam) return false;
+      if (categoryParam && categoryParam !== "All Curation" && (product as any).asper_category !== categoryParam) return false;
 
       if (filters.searchQuery) {
         const q = filters.searchQuery.toLowerCase();
         const matches = product.title.toLowerCase().includes(q) || product.brand?.toLowerCase().includes(q) || product.pharmacist_note?.toLowerCase().includes(q);
         if (!matches) return false;
       }
-      if (filters.brands.length > 0 && (!product.brand || !filters.brands.some(b => product.brand!.toLowerCase().replace(/[\s-]+/g, "") === b.toLowerCase().replace(/[\s-]+/g, "")))) return false;
+      if (filters.brands.length > 0 && (!product.brand || !filters.brands.includes(product.brand))) return false;
       
       // Unify Categories and Concerns
       const activeConcerns = [...filters.skinConcerns];

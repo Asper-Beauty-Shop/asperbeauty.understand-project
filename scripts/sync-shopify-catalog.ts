@@ -54,7 +54,7 @@ loadEnv();
 // ---------------------------------------------------------------------------
 
 const SHOPIFY_STORE_DOMAIN =
-  process.env.SHOPIFY_STORE_DOMAIN || "asper-beauty-shop.myshopify.com";
+  process.env.SHOPIFY_STORE_DOMAIN || "lovable-project-milns.myshopify.com";
 const SHOPIFY_ADMIN_ACCESS_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN || "";
 const API_VERSION = "2024-01";
 const ADMIN_URL = `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${API_VERSION}/graphql.json`;

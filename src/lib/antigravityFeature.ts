@@ -49,11 +49,10 @@ export async function runAntigravityDiagnostic(): Promise<{
 
   try {
     // Dynamic imports to avoid bundling Node built-ins into the browser bundle.
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const cp: any = await (Function('return import("child_process")')());
-    const nodePath: any = await (Function('return import("path")')());
-    const util: any = await (Function('return import("util")')());
-    const execAsync = util.promisify(cp.exec);
+    const { exec } = await import("child_process");
+    const nodePath = await import("path");
+    const util = await import("util");
+    const execAsync = util.promisify(exec);
 
     // Use path.join so this works correctly on any platform (PowerShell also
     // accepts forward-slash separators on Windows).
