@@ -1,6 +1,10 @@
 /**
- * Shopify Storefront API client for Asper Beauty Shop.
+ * Commerce layer for Asper Beauty Shop.
+ * Product data is served from Supabase (standalone commerce).
+ * Cart mutations still use Shopify Storefront API where available.
  */
+
+import { supabase } from "@/integrations/supabase/client";
 
 const SHOPIFY_DOMAIN = import.meta.env.VITE_SHOPIFY_DOMAIN ?? "asper-beauty-shop.myshopify.com";
 const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN ?? "";
@@ -100,122 +104,122 @@ export function normalizePrice(amount: string | number): number {
   return parseFloat(amount.replace(",", ".").trim()) || 0;
 }
 
-// ── Product Queries ──────────────────────────────────────────────────
+// ── Supabase → ShopifyProduct adapter ────────────────────────────────
 
-const PRODUCT_FIELDS = `
-  id
-  title
-  handle
-  description
-  vendor
-  productType
-  tags
-  images(first: 3) {
-    edges {
-      node {
-        url
-        altText
-      }
-    }
-  }
-  priceRange {
-    minVariantPrice {
-      amount
-      currencyCode
-    }
-  }
-  variants(first: 10) {
-    edges {
-      node {
-        id
-        title
-        price {
-          amount
-          currencyCode
-        }
-        compareAtPrice {
-          amount
-          currencyCode
-        }
-        availableForSale
-        selectedOptions {
-          name
-          value
-        }
-      }
-    }
-  }
-  options {
-    id
-    name
-    values
-  }
-`;
+interface SupabaseProduct {
+  id: string;
+  name: string;
+  title: string | null;
+  handle: string | null;
+  description: string;
+  brand: string;
+  category: string;
+  price: number;
+  image_url: string | null;
+  tags: string[] | null;
+  in_stock: boolean | null;
+  created_at: string;
+  availability_status: string | null;
+}
+
+function supabaseToShopify(row: SupabaseProduct): ShopifyProduct {
+  const displayTitle = row.title || row.name;
+  return {
+    node: {
+      id: row.id,
+      title: displayTitle,
+      handle: row.handle || row.id,
+      description: row.description || "",
+      vendor: row.brand || "",
+      productType: row.category || "",
+      tags: row.tags || [],
+      createdAt: row.created_at,
+      images: {
+        edges: row.image_url
+          ? [{ node: { url: row.image_url, altText: displayTitle } }]
+          : [],
+      },
+      priceRange: {
+        minVariantPrice: {
+          amount: String(row.price),
+          currencyCode: "JOD",
+        },
+      },
+      variants: {
+        edges: [
+          {
+            node: {
+              id: `${row.id}-default`,
+              title: "Default",
+              price: { amount: String(row.price), currencyCode: "JOD" },
+              compareAtPrice: null,
+              availableForSale: row.in_stock !== false,
+              selectedOptions: [],
+            },
+          },
+        ],
+      },
+      options: [],
+    },
+  };
+}
+
+// ── Product Queries (Supabase-backed) ────────────────────────────────
 
 export async function fetchProducts(
   first = 24,
   searchQuery?: string,
 ): Promise<ShopifyProduct[]> {
-  const queryArg = searchQuery ? `, query: $query` : "";
-  const varDef = searchQuery
-    ? "($first: Int!, $query: String!)"
-    : "($first: Int!)";
+  let query = supabase
+    .from("products")
+    .select("id, name, title, handle, description, brand, category, price, image_url, tags, in_stock, created_at, availability_status")
+    .neq("availability_status", "Pending_Purge")
+    .order("bestseller_rank", { ascending: true, nullsFirst: false })
+    .limit(first);
 
-  const gql = `
-    query ${varDef} {
-      products(first: $first${queryArg}) {
-        edges {
-          node { ${PRODUCT_FIELDS} }
-        }
-      }
-    }
-  `;
+  if (searchQuery) {
+    // Use ilike for simple text search across name, brand, category, tags
+    query = query.or(
+      `name.ilike.%${searchQuery}%,brand.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`
+    );
+  }
 
-  const variables: Record<string, unknown> = { first };
-  if (searchQuery) variables.query = searchQuery;
+  const { data, error } = await query;
+  if (error) {
+    console.error("Supabase product fetch error:", error);
+    return [];
+  }
 
-  const data = (await storefrontApiRequest(gql, variables)) as {
-    data?: { products?: { edges?: ShopifyProduct[] } };
-  };
-
-  return data?.data?.products?.edges ?? [];
+  return (data || []).map(supabaseToShopify);
 }
 
 export async function fetchProductsPaginated(
   first = 24,
   after?: string | null,
 ): Promise<PaginatedProductsResponse> {
-  const gql = `
-    query ($first: Int!, $after: String) {
-      products(first: $first, after: $after) {
-        edges {
-          node { ${PRODUCT_FIELDS} }
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-      }
-    }
-  `;
+  const offset = after ? parseInt(after, 10) : 0;
 
-  const variables: Record<string, unknown> = { first };
-  if (after) variables.after = after;
+  const { data, error, count } = await supabase
+    .from("products")
+    .select("id, name, title, handle, description, brand, category, price, image_url, tags, in_stock, created_at, availability_status", { count: "exact" })
+    .neq("availability_status", "Pending_Purge")
+    .order("bestseller_rank", { ascending: true, nullsFirst: false })
+    .range(offset, offset + first - 1);
 
-  const data = (await storefrontApiRequest(gql, variables)) as {
-    data?: {
-      products?: {
-        edges?: ShopifyProduct[];
-        pageInfo?: PaginatedProductsResponse["pageInfo"];
-      };
-    };
-  };
+  if (error) {
+    console.error("Supabase paginated fetch error:", error);
+    return { products: [], pageInfo: { hasNextPage: false, endCursor: null } };
+  }
+
+  const products = (data || []).map(supabaseToShopify);
+  const nextOffset = offset + first;
+  const hasNextPage = (count ?? 0) > nextOffset;
 
   return {
-    products: data?.data?.products?.edges ?? [],
-    pageInfo: data?.data?.products?.pageInfo ?? {
-      hasNextPage: false,
-      endCursor: null,
+    products,
+    pageInfo: {
+      hasNextPage,
+      endCursor: hasNextPage ? String(nextOffset) : null,
     },
   };
 }
@@ -223,20 +227,16 @@ export async function fetchProductsPaginated(
 export async function fetchProductByHandle(
   handle: string,
 ): Promise<ShopifyProduct | null> {
-  const gql = `
-    query ($handle: String!) {
-      productByHandle(handle: $handle) {
-        ${PRODUCT_FIELDS}
-      }
-    }
-  `;
+  // handle can be either a UUID (id) or a slug
+  const { data, error } = await supabase
+    .from("products")
+    .select("id, name, title, handle, description, brand, category, price, image_url, tags, in_stock, created_at, availability_status")
+    .or(`handle.eq.${handle},id.eq.${handle}`)
+    .limit(1)
+    .maybeSingle();
 
-  const data = (await storefrontApiRequest(gql, { handle })) as {
-    data?: { productByHandle?: ShopifyProduct["node"] };
-  };
-
-  if (!data?.data?.productByHandle) return null;
-  return { node: data.data.productByHandle };
+  if (error || !data) return null;
+  return supabaseToShopify(data);
 }
 
 export async function searchProducts(
