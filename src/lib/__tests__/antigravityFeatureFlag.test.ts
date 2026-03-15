@@ -38,7 +38,8 @@ describe("runAntigravityDiagnostic()", () => {
     const originalWindowProcess = (globalThis as GlobalWithWindow & { window?: { process?: unknown } }).window?.process;
 
     // Set up a window object without a .process property
-    (globalThis as GlobalWithWindow).window = {} as unknown as Window & typeof globalThis;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as GlobalWithWindow).window = {} as any;
 
     vi.stubEnv("VITE_FEATURE_ANTIGRAVITY", "true");
     vi.resetModules();
@@ -51,7 +52,8 @@ describe("runAntigravityDiagnostic()", () => {
 
     // Restore window
     if (hadWindow) {
-      (globalThis as GlobalWithWindow).window = { process: originalWindowProcess } as unknown as Window & typeof globalThis;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (globalThis as GlobalWithWindow).window = { process: originalWindowProcess } as any;
     } else {
       delete (globalThis as GlobalWithWindow).window;
     }
