@@ -1,4 +1,3 @@
-import { usePageMeta } from "@/hooks/usePageMeta";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import {
@@ -267,7 +266,6 @@ const AMBITION_PILLS = [
 // ——— Shop Page ————————————————————————————————
 export default function Shop() {
   const { locale } = useLanguage();
-  usePageMeta({ title: "Shop Dermocosmetics", description: "Browse 4,000+ clinical skincare products. Filter by concern, brand or skin type.", canonical: "/shop" });
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -411,7 +409,7 @@ export default function Shop() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main id="main-content" tabindex="-1" className="pt-16">
+      <main className="pt-16">
         {/* Hero Banner */}
         <div className="bg-primary text-primary-foreground py-10 md:py-14">
           <div className="container mx-auto px-4 max-w-7xl text-center">
