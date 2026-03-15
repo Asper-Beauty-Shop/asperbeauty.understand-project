@@ -239,17 +239,17 @@ export default function RegimenPortal() {
     ) || 0;
 
   const handleFulfill = () => {
-    portalData?.steps.forEach((s) => {
-      if (s.product) {
-        addItem({
-          id: s.product.id,
-          title: s.product.title,
-          price: { amount: String(s.product.price), currencyCode: "USD" },
-          image: s.product.image_url || "/editorial-showcase-2.jpg",
-          quantity: 1,
-        });
-      }
-    });
+    const { addMultipleFromPrescription } = useCartStore.getState();
+    const products = (portalData?.steps ?? [])
+      .filter((s) => s.product)
+      .map((s) => ({
+        id: s.product!.id,
+        title: s.product!.title,
+        price: s.product!.price,
+        image_url: s.product!.image_url,
+        brand: s.product!.brand,
+      }));
+    if (products.length) addMultipleFromPrescription(products);
   };
 
   return (

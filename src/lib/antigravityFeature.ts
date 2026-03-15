@@ -53,7 +53,7 @@ export async function runAntigravityDiagnostic(): Promise<{
     const cp: any = await (Function('return import("child_process")')());
     const nodePath: any = await (Function('return import("path")')());
     const util: any = await (Function('return import("util")')());
-    const execAsync = util.promisify(exec);
+    const execAsync = util.promisify(cp.exec);
 
     // Use path.join so this works correctly on any platform (PowerShell also
     // accepts forward-slash separators on Windows).

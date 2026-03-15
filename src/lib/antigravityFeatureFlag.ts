@@ -58,7 +58,7 @@ export async function runAntigravityDiagnostic(): Promise<{
     const cp: any = await (Function('return import("child_process")')());
     const util: any = await (Function('return import("util")')());
     const path: any = await (Function('return import("path")')());
-    const execAsync = util.promisify(exec);
+    const execAsync = util.promisify(cp.exec);
 
     const scriptPath = path.join("scripts", "antigravity-diagnostic.ps1");
     const { stdout } = await execAsync(
