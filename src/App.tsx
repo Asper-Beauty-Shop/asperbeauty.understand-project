@@ -26,19 +26,21 @@ import Auth from "./pages/Auth";
 import Account from "./pages/Account";
 import Profile from "./pages/Profile";
 import Philosophy from "./pages/Philosophy";
-import BulkUpload from "./pages/BulkUpload";
-import AdminOrders from "./pages/AdminOrders";
-import TrackOrder from "./pages/TrackOrder";
-import ManageProducts from "./pages/ManageProducts";
 import Shop from "./pages/Shop";
 import ShopAllOrganized from "./components/ShopAllOrganized";
-import DriverDashboard from "./pages/DriverDashboard";
-import AdminAuditLogs from "./pages/AdminAuditLogs";
-import AsperIntelligence from "./pages/AsperIntelligence";
-import PurgeReview from "./pages/PurgeReview";
-import BrandIntelligenceDashboard from "./pages/BrandIntelligenceDashboard";
+import TrackOrder from "./pages/TrackOrder";
 import Health from "./pages/Health";
 import RegimenPortal from "./pages/RegimenPortal";
+
+// Lazy-load admin & heavy pages to keep initial bundle small
+const BulkUpload = lazy(() => import("./pages/BulkUpload"));
+const AdminOrders = lazy(() => import("./pages/AdminOrders"));
+const ManageProducts = lazy(() => import("./pages/ManageProducts"));
+const DriverDashboard = lazy(() => import("./pages/DriverDashboard"));
+const AdminAuditLogs = lazy(() => import("./pages/AdminAuditLogs"));
+const AsperIntelligence = lazy(() => import("./pages/AsperIntelligence"));
+const PurgeReview = lazy(() => import("./pages/PurgeReview"));
+const BrandIntelligenceDashboard = lazy(() => import("./pages/BrandIntelligenceDashboard"));
 import { RequireAdmin } from "./components/RequireAdmin";
 
 const BeautyAssistant = lazy(() =>
@@ -107,25 +109,25 @@ const App = () => {
                 <Route path="/account" element={<Account />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/philosophy" element={<Philosophy />} />
-                <Route path="/intelligence" element={<AsperIntelligence />} />
+                <Route path="/intelligence" element={<Suspense fallback={null}><AsperIntelligence /></Suspense>} />
                 <Route path="/health" element={<Health />} />
                 <Route path="/portal/regimen/:id" element={<RegimenPortal />} />
-                <Route path="/admin/bulk-upload" element={<BulkUpload />} />
-                <Route path="/admin/orders" element={<AdminOrders />} />
-                <Route path="/admin/products" element={<ManageProducts />} />
+                <Route path="/admin/bulk-upload" element={<Suspense fallback={null}><BulkUpload /></Suspense>} />
+                <Route path="/admin/orders" element={<Suspense fallback={null}><AdminOrders /></Suspense>} />
+                <Route path="/admin/products" element={<Suspense fallback={null}><ManageProducts /></Suspense>} />
                 <Route path="/track-order" element={<TrackOrder />} />
                 <Route path="/tracking" element={<Navigate to="/track-order" replace />} />
                 <Route path="/shipping" element={<Navigate to="/contact" replace />} />
                 <Route path="/returns" element={<Navigate to="/contact" replace />} />
                 <Route path="/consultation" element={<Navigate to="/skin-concerns" replace />} />
-                <Route path="/driver" element={<DriverDashboard />} />
-                <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
-                <Route path="/admin/purge-review" element={<PurgeReview />} />
+                <Route path="/driver" element={<Suspense fallback={null}><DriverDashboard /></Suspense>} />
+                <Route path="/admin/audit-logs" element={<Suspense fallback={null}><AdminAuditLogs /></Suspense>} />
+                <Route path="/admin/purge-review" element={<Suspense fallback={null}><PurgeReview /></Suspense>} />
                 <Route
                   path="/brand-intelligence"
                   element={
                     <RequireAdmin>
-                      <BrandIntelligenceDashboard />
+                      <Suspense fallback={null}><BrandIntelligenceDashboard /></Suspense>
                     </RequireAdmin>
                   }
                 />
