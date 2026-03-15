@@ -220,6 +220,7 @@ export const CartDrawer = () => {
                               <button
                                 onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
                                 className="w-7 h-7 flex items-center justify-center hover:bg-muted transition-colors"
+                                aria-label="Decrease quantity"
                               >
                                 <Minus className="h-3 w-3" />
                               </button>
