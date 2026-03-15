@@ -54,6 +54,7 @@ export default function DualPersonaTriage() {
                 <img
                   src="/editorial-showcase-1.jpg"
                   alt="Clinical Path"
+                  loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-asper-ink/40 group-hover:bg-asper-ink/20 transition-colors duration-700" />
