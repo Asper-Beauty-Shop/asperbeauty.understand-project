@@ -266,46 +266,8 @@ serve(async (req) => {
       });
     }
 
-    // Pipe Gemini SSE → OpenAI-compatible SSE for the frontend
-    const { readable, writable } = new TransformStream();
-    const writer = writable.getWriter();
-    const encoder = new TextEncoder();
-    const decoder = new TextDecoder();
-
-    (async () => {
-      const reader = geminiRes.body!.getReader();
-      let buffer = "";
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          let idx: number;
-          while ((idx = buffer.indexOf("\n")) !== -1) {
-            let line = buffer.slice(0, idx);
-            buffer = buffer.slice(idx + 1);
-            if (line.endsWith("\r")) line = line.slice(0, -1);
-            if (!line.startsWith("data: ")) continue;
-            const json = line.slice(6).trim();
-            if (!json) continue;
-            try {
-              const parsed = JSON.parse(json);
-              const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (text) {
-                // Emit OpenAI-compatible SSE chunk
-                const chunk = JSON.stringify({ choices: [{ delta: { content: text } }] });
-                await writer.write(encoder.encode(`data: ${chunk}\n\n`));
-              }
-            } catch { /* skip malformed */ }
-          }
-        }
-        await writer.write(encoder.encode("data: [DONE]\n\n"));
-      } finally {
-        await writer.close().catch(() => null);
-      }
-    })();
-
-    return new Response(readable, {
+    // Gateway already emits OpenAI-compatible SSE — pass through directly
+    return new Response(gatewayRes.body, {
       headers: {
         ...getCorsHeaders(req),
         "Content-Type": "text/event-stream",
