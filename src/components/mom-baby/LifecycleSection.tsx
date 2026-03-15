@@ -153,7 +153,7 @@ function PhaseSection({ phase, isAr }: { phase: PhaseConfig; isAr: boolean }) {
         {phase.categories.map((cat) => (
           <Link
             key={cat.en}
-            to={`/products?q=${encodeURIComponent(cat.shopifyQuery)}`}
+            to={`/products?q=${encodeURIComponent(cat.searchQuery)}`}
             className="group rounded-xl border border-border bg-card p-4 text-start hover:border-accent/50 hover:shadow-warm transition-all duration-300"
           >
             <span className="block text-sm font-body font-medium text-foreground group-hover:text-primary transition-colors">
