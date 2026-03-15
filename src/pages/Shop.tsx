@@ -273,6 +273,7 @@ export default function Shop() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchParams, setSearchParams] = useSearchParams();
   const concernParam = searchParams.get("concern") ?? "";
+  const brandParam = searchParams.get("brand") ?? "";
 
   // Active asper_category from URL or sidebar
   const categoryParam = searchParams.get("category") ?? "All Curation";
@@ -290,7 +291,7 @@ export default function Shop() {
     searchQuery: "",
     categories: [],
     subcategories: [],
-    brands: [],
+    brands: brandParam ? [brandParam] : [],
     skinConcerns: concernParam ? [concernParam] : [],
     priceRange: [0, 200],
     onSaleOnly: false,
