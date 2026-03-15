@@ -252,6 +252,7 @@ export const ProductQuickView = (
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="w-10 h-10 border border-gray-200 rounded flex items-center justify-center hover:bg-gray-50 transition-colors"
+                  aria-label="Decrease quantity"
                 >
                   <Minus className="w-4 h-4 text-gray-600" />
                 </button>
