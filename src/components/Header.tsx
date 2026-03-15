@@ -132,6 +132,7 @@ export const Header = () => {
                 >
                   <Link
                     to="/brands"
+                    onFocus={() => prefetchRoute("/brands")}
                     className={cn(
                       "flex items-center gap-1 font-body text-sm font-medium transition-colors py-8",
                       textColor, textColorHover
@@ -177,6 +178,7 @@ export const Header = () => {
                 >
                   <Link
                     to="/skin-concerns"
+                    onFocus={() => prefetchRoute("/skin-concerns")}
                     className={cn(
                       "flex items-center gap-1 font-body text-sm font-medium transition-colors py-8",
                       textColor, textColorHover
@@ -220,6 +222,7 @@ export const Header = () => {
                 <Link
                   to="/best-sellers"
                   onMouseEnter={() => prefetchRoute("/best-sellers")}
+                  onFocus={() => prefetchRoute("/best-sellers")}
                   className={cn(
                     "font-body text-sm font-medium transition-colors",
                     textColor, textColorHover
@@ -230,6 +233,7 @@ export const Header = () => {
                 <Link
                   to="/offers"
                   onMouseEnter={() => prefetchRoute("/offers")}
+                  onFocus={() => prefetchRoute("/offers")}
                   className={cn(
                     "font-body text-sm font-medium transition-colors",
                     textColor, textColorHover
