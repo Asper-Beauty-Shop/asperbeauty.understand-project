@@ -100,44 +100,15 @@ serve(async (req) => {
     }
 
     if (action === "tts") {
-      const isClinical = persona === "clinical";
-      const voiceName = isClinical ? "Puck" : "Aoede";
-
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${TTS_MODEL}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text }] }],
-            generationConfig: {
-              responseModalities: ["AUDIO"],
-              speechConfig: {
-                voiceConfig: {
-                  prebuiltVoiceConfig: { voiceName },
-                },
-              },
-            },
-          }),
-        },
-      );
-
-      const data = await response.json();
-      const part = data.candidates?.[0]?.content?.parts?.[0];
-
-      if (!part?.inlineData) {
-        return new Response(JSON.stringify({ error: "No audio generated" }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      return new Response(
-        JSON.stringify({
-          audioData: part.inlineData.data,
-          mimeType: part.inlineData.mimeType,
-        }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
+      // TTS via Lovable AI Gateway — generate spoken text as a text response
+      // Note: Lovable AI Gateway doesn't support native TTS, so we return the text for client-side TTS
+      return new Response(JSON.stringify({ 
+        error: "TTS is not currently supported via the AI gateway. Please use browser-based speech synthesis.",
+        text: text 
+      }), {
+        status: 501,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     return new Response(JSON.stringify({ error: "Unknown action" }), {
