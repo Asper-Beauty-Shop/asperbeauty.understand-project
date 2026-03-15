@@ -36,6 +36,7 @@ export const ProductGrid = ({
     brands: [],
     priceRange: [0, 5000],
   });
+  const [sortBy, setSortBy] = useState<"recommended" | "price-asc" | "price-desc" | "newest">("recommended");
   const { language } = useLanguage();
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -159,9 +160,9 @@ export const ProductGrid = ({
     };
   }, [categoryFilteredProducts]);
 
-  // Apply user filters
+  // Apply user filters + sort
   const filteredProducts = useMemo(() => {
-    return categoryFilteredProducts.filter((product) => {
+    const filtered = categoryFilteredProducts.filter((product) => {
       const { node } = product;
       const price = parseFloat(node.priceRange.minVariantPrice.amount);
 
@@ -182,7 +183,14 @@ export const ProductGrid = ({
 
       return true;
     });
-  }, [categoryFilteredProducts, filters]);
+
+    const priceOf = (p: ShopifyProduct) =>
+      parseFloat(p.node.priceRange.minVariantPrice.amount);
+
+    if (sortBy === "price-asc") return [...filtered].sort((a, b) => priceOf(a) - priceOf(b));
+    if (sortBy === "price-desc") return [...filtered].sort((a, b) => priceOf(b) - priceOf(a));
+    return filtered; // "recommended" / "newest" keep API order
+  }, [categoryFilteredProducts, filters, sortBy]);
 
   return (
     <section id="products" className="py-24 bg-soft-ivory">
@@ -217,10 +225,10 @@ export const ProductGrid = ({
             )}
             <div className="flex-1">
               <div
-                className={`grid gap-8 lg:gap-10 ${
+                className={`grid gap-x-4 gap-y-8 lg:gap-x-6 lg:gap-y-10 ${
                   showFilters
-                    ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    ? "grid-cols-2 xl:grid-cols-3"
+                    : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                 }`}
               >
                 {Array.from({ length: showFilters ? 6 : 8 }).map((_, i) => (
@@ -247,30 +255,41 @@ export const ProductGrid = ({
 
             {/* Products Grid */}
             <div className="flex-1">
-              {/* Results count */}
-              {showFilters && (
-                <div className="mb-6 flex items-center justify-between">
+              {/* Results count + Sort */}
+              <div className="mb-6 flex items-center justify-between gap-3">
+                {showFilters && (
                   <p className="font-body text-sm text-dark-charcoal">
                     {language === "ar"
                       ? `عرض ${filteredProducts.length} من ${products.length} منتج`
                       : `Showing ${filteredProducts.length} of ${products.length} products`}
                   </p>
-                  {pageInfo?.hasNextPage && (
-                    <p className="font-body text-xs text-muted-foreground">
-                      {language === "ar" ? "المزيد متاح" : "More available"}
-                    </p>
-                  )}
+                )}
+                <div className="ms-auto flex items-center gap-2">
+                  <span className="font-body text-xs text-muted-foreground whitespace-nowrap">
+                    {language === "ar" ? "ترتيب حسب:" : "Sort by:"}
+                  </span>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                    className="font-body text-xs border border-border rounded px-2 py-1 bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-polished-gold"
+                    aria-label={language === "ar" ? "ترتيب المنتجات" : "Sort products"}
+                  >
+                    <option value="recommended">{language === "ar" ? "موصى به من الصيدلاني" : "Pharmacist Recommended"}</option>
+                    <option value="price-asc">{language === "ar" ? "السعر: من الأقل" : "Price: Low to High"}</option>
+                    <option value="price-desc">{language === "ar" ? "السعر: من الأعلى" : "Price: High to Low"}</option>
+                    <option value="newest">{language === "ar" ? "الأحدث" : "Newest Arrivals"}</option>
+                  </select>
                 </div>
-              )}
+              </div>
 
               {filteredProducts.length > 0
                 ? (
                   <>
                     <div
-                      className={`grid gap-8 lg:gap-10 ${
+                      className={`grid gap-x-4 gap-y-8 lg:gap-x-6 lg:gap-y-10 ${
                         showFilters
-                          ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                          : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                          ? "grid-cols-2 xl:grid-cols-3"
+                          : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                       }`}
                     >
                       {filteredProducts.map((product) => (
