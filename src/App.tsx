@@ -48,6 +48,9 @@ const PurgeReview             = lazy(() => import("./pages/PurgeReview"));
 const BrandIntelligenceDashboard = lazy(() => import("./pages/BrandIntelligenceDashboard"));
 
 // ── Floating widgets ────────────────────────────────────────────────────────
+const ExitIntentPopup = lazy(() =>
+  import("@/components/ExitIntentPopup").then((m) => ({ default: m.ExitIntentPopup })),
+);
 const BeautyAssistant = lazy(() =>
   import("@/components/BeautyAssistant").then((m) => ({ default: m.BeautyAssistant })),
 );
@@ -82,6 +85,7 @@ const App = () => {
               <Suspense fallback={null}>
                 <BeautyAssistant />
                 <FloatingConciergeWidget />
+                <ExitIntentPopup />
               </Suspense>
               <Suspense fallback={null}>
                 <Routes>

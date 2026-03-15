@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ExpertTipWidget } from "@/components/ExpertTipWidget";
 import { ClinicalBadge, DermBadge } from "@/components/TrustBadges";
 import { DermocosmecticsQuiz } from "@/components/DermocosmecticsQuiz";
+import { ProductFinderWidget } from "@/components/ProductFinderWidget";
 
 const BRANDS = [
   { name: "Eucerin", slug: "eucerin", tagline: "Dermatologically tested since 1900", concern: "Sensitive & Dry Skin" },
@@ -214,8 +215,9 @@ export default function Dermocosmetics() {
               {isAr ? "٣ أسئلة فقط — توصيات شخصية من صيدلانيّنا" : "3 quick questions — personalized clinical skincare in seconds"}
             </p>
           </div>
-          <div className="max-w-2xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             <DermocosmecticsQuiz />
+            <ProductFinderWidget />
           </div>
         </div>
       </section>
