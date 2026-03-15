@@ -230,9 +230,9 @@ const ProductDetail = () => {
             {/* Add to Cart â€” Primary CTA */}
             <div ref={ctaRef} className="space-y-6 mb-10">
               <div className="flex items-center justify-center gap-8 py-4 border border-polished-gold/30">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-burgundy transition-colors"><Minus className="w-4 h-4" /></button>
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-burgundy transition-colors" aria-label="Decrease quantity"><Minus className="w-4 h-4" /></button>
                 <span className="text-lg font-body font-medium w-8 text-center text-asper-ink">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-burgundy transition-colors"><Plus className="w-4 h-4" /></button>
+                <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-burgundy transition-colors" aria-label="Increase quantity"><Plus className="w-4 h-4" /></button>
               </div>
 
               <div className="flex gap-4">
