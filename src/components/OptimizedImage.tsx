@@ -1,16 +1,17 @@
 /**
- * Helper to generate Shopify CDN image URLs with size + WebP optimization
+ * Helper to generate Shopify CDN image URLs with size optimization
  */
 export const getOptimizedShopifyImageUrl = (
   url: string,
   width: number,
   height?: number,
-  format: "webp" | "jpg" | "png" = "webp",
 ): string => {
   if (!url || !url.includes("cdn.shopify.com")) {
     return url;
   }
 
+  // Shopify image URL transformation
+  // Format: {url}_WIDTHxHEIGHT.{format} or using query params
   try {
     const urlObj = new URL(url);
     urlObj.searchParams.set("width", width.toString());
@@ -18,7 +19,6 @@ export const getOptimizedShopifyImageUrl = (
       urlObj.searchParams.set("height", height.toString());
     }
     urlObj.searchParams.set("crop", "center");
-    urlObj.searchParams.set("format", format);
     return urlObj.toString();
   } catch {
     return url;
@@ -26,19 +26,18 @@ export const getOptimizedShopifyImageUrl = (
 };
 
 /**
- * Generate srcset for responsive images (WebP)
+ * Generate srcset for responsive images
  */
 export const getShopifyImageSrcSet = (
   url: string,
   sizes: number[],
-  format: "webp" | "jpg" | "png" = "webp",
 ): string => {
   if (!url || !url.includes("cdn.shopify.com")) {
     return "";
   }
 
   return sizes
-    .map((size) => `${getOptimizedShopifyImageUrl(url, size, undefined, format)} ${size}w`)
+    .map((size) => `${getOptimizedShopifyImageUrl(url, size)} ${size}w`)
     .join(", ");
 };
 
@@ -60,7 +59,7 @@ export const OptimizedImage = ({
   className = "",
   width,
   height,
-  sizes = "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw",
+  sizes = "(max-width: 768px) 100vw, 50vw",
   loading = "lazy",
   fetchPriority = "auto",
   isShopify = true,
@@ -68,28 +67,23 @@ export const OptimizedImage = ({
   const isShopifyUrl = src?.includes("cdn.shopify.com");
 
   if (isShopify && isShopifyUrl) {
-    const webpSrcSet = getShopifyImageSrcSet(src, [200, 400, 600, 800, 1200], "webp");
-    const fallbackSrcSet = getShopifyImageSrcSet(src, [200, 400, 600, 800, 1200], "jpg");
+    const srcSet = getShopifyImageSrcSet(src, [200, 400, 600, 800, 1200]);
     const optimizedSrc = width
-      ? getOptimizedShopifyImageUrl(src, width, height, "webp")
-      : getOptimizedShopifyImageUrl(src, 400, undefined, "webp");
+      ? getOptimizedShopifyImageUrl(src, width, height)
+      : src;
 
     return (
-      <picture>
-        <source type="image/webp" srcSet={webpSrcSet || undefined} sizes={sizes} />
-        <img
-          src={optimizedSrc}
-          srcSet={fallbackSrcSet || undefined}
-          sizes={fallbackSrcSet ? sizes : undefined}
-          alt={alt}
-          className={className}
-          loading={loading}
-          fetchPriority={fetchPriority}
-          width={width}
-          height={height}
-          decoding="async"
-        />
-      </picture>
+      <img
+        src={optimizedSrc}
+        srcSet={srcSet || undefined}
+        sizes={srcSet ? sizes : undefined}
+        alt={alt}
+        className={className}
+        loading={loading}
+        fetchPriority={fetchPriority}
+        width={width}
+        height={height}
+      />
     );
   }
 
@@ -102,7 +96,7 @@ export const OptimizedImage = ({
       fetchPriority={fetchPriority}
       width={width}
       height={height}
-      decoding="async"
     />
   );
 };
+
