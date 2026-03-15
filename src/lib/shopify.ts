@@ -100,12 +100,15 @@ interface DbRow {
   primary_concern: string | null;
 }
 
+// Minimal fields needed for grid listing (avoids over-fetching)
+const GRID_FIELDS = "id,title,name,handle,brand,category,price,image_url,tags,created_at,in_stock,primary_concern";
+
 function rowToProduct(row: DbRow): ShopifyProduct {
   return {
     node: {
       id: row.id,
       title: row.title || row.name,
-      description: row.description,
+      description: row.description ?? "",
       handle: row.handle || row.id,
       vendor: row.brand,
       productType: row.category,
@@ -144,14 +147,13 @@ export async function fetchProducts(
   first: number = 24,
   _query?: string,
 ): Promise<ShopifyProduct[]> {
-  let q = supabase
+  const { data, error } = await supabase
     .from("products")
-    .select("*")
+    .select(GRID_FIELDS)
     .neq("availability_status", "Pending_Purge")
     .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .limit(first);
 
-  const { data, error } = await q;
   if (error) {
     console.error("fetchProducts error:", error);
     return [];
@@ -167,7 +169,7 @@ export async function fetchProductsPaginated(
   const offset = after ? parseInt(after, 10) : 0;
   const { data, error, count } = await supabase
     .from("products")
-    .select("*", { count: "exact" })
+    .select(GRID_FIELDS + ",availability_status", { count: "exact" })
     .neq("availability_status", "Pending_Purge")
     .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .range(offset, offset + first - 1);

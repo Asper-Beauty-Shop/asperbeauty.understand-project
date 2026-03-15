@@ -1,3 +1,4 @@
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -149,6 +150,7 @@ const BESTSELLERS = [
 
 const Index = () => {
   const navigate = useNavigate();
+  usePageMeta({ title: "Asper Beauty Shop — Premium Dermocosmetics & Clinical Skincare", canonical: "/" });
   const [isLoading, setIsLoading] = useState(true);
 
   const { data: newArrivals = [] } = useQuery({
@@ -217,7 +219,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background animate-fade-in">
       <Header />
-      <main>
+      <main id="main-content" tabindex="-1">
         {/* ═══ ZONE 1: Cinematic Full-Screen Video Hero ═══ */}
         <CinematicHero />
 
