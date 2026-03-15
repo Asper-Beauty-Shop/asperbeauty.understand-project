@@ -11,7 +11,6 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { categoryList } from "@/components/brand/CategoryIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { prefetchRoute } from "@/lib/prefetchRoute";
 
 export function CategoryNavBar({ className }: { className?: string }) {
   const { language } = useLanguage();
@@ -42,8 +41,6 @@ export function CategoryNavBar({ className }: { className?: string }) {
             <li key={key} className="shrink-0">
               <Link
                 to={href}
-                onMouseEnter={() => prefetchRoute(href)}
-                onFocus={() => prefetchRoute(href)}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "group flex flex-col items-center gap-1.5 px-4 py-3 transition-all duration-200",

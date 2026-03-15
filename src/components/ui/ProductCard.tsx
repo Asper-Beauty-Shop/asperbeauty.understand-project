@@ -10,7 +10,6 @@
  */
 
 import { Link } from "react-router-dom";
-import { prefetchRoute } from "@/lib/prefetchRoute";
 import { ShoppingBag, Heart, FlaskConical } from "lucide-react";
 import { formatJOD } from "@/lib/productImageUtils";
 import { cn } from "@/lib/utils";
@@ -108,7 +107,6 @@ export function ProductCard({
       {/* ── Image ─────────────────────────────────────────────────── */}
       <Link
         to={productPath}
-        onMouseEnter={() => prefetchRoute(productPath)}
         className="relative aspect-square w-full overflow-hidden bg-background rounded-t-xl block"
         tabIndex={!inStock ? -1 : 0}
         aria-label={isAr ? `عرض ${product.name}` : `View ${product.name}`}
