@@ -232,7 +232,7 @@ export const Header = () => {
                 <Link
                   to="/offers"
                   onMouseEnter={() => prefetchRoute("/offers")}
-                  className={cn(
+                  onFocus={() => prefetchRoute("/offers")}
                     "font-body text-sm font-medium transition-colors",
                     textColor, textColorHover
                   )}
