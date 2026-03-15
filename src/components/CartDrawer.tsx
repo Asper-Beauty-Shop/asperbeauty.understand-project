@@ -54,7 +54,6 @@ export const CartDrawer = () => {
   };
 
   const handleDrawerOpen = (open: boolean) => {
-    if (open) syncCart();
     handleOpenChange(open);
   };
 
