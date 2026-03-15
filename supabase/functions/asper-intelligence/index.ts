@@ -7,8 +7,8 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const TEXT_MODEL = "gemini-2.5-flash-preview-09-2025";
-const TTS_MODEL = "gemini-2.5-flash-preview-tts";
+const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const DEFAULT_MODEL = "google/gemini-2.5-flash";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -39,9 +39,9 @@ serve(async (req) => {
       });
     }
 
-    const apiKey = Deno.env.get("GEMINI_API_KEY");
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "GEMINI_API_KEY not configured" }), {
+    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
+    if (!lovableApiKey) {
+      return new Response(JSON.stringify({ error: "LOVABLE_API_KEY not configured" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -66,29 +66,33 @@ serve(async (req) => {
         Limit to 3 concise sentences. Priority: Catalog recommendations.
       `;
 
-      const parts: Array<{ text?: string; inlineData?: { mimeType: string; data: string } }> = [
-        { text: `Context: ${systemInstruction}\n\nUser Query: ${prompt}` },
-      ];
+      const userContent = image
+        ? `${prompt}\n[User attached an image for analysis]`
+        : prompt;
 
-      if (image) {
-        const base64 = image.includes(",") ? image.split(",")[1] : image;
-        if (base64) {
-          parts.push({ inlineData: { mimeType: "image/png", data: base64 } });
-        }
+      const response = await fetch(GATEWAY_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${lovableApiKey}`,
+        },
+        body: JSON.stringify({
+          model: DEFAULT_MODEL,
+          messages: [
+            { role: "system", content: systemInstruction },
+            { role: "user", content: userContent },
+          ],
+        }),
+      });
+
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again later." }), {
+          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts }] }),
-        },
-      );
-
       const data = await response.json();
-      const reply =
-        data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Intelligence protocol reset required. Please standby.";
+      const reply = data.choices?.[0]?.message?.content ?? "Intelligence protocol reset required. Please standby.";
 
       return new Response(JSON.stringify({ reply }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -96,44 +100,15 @@ serve(async (req) => {
     }
 
     if (action === "tts") {
-      const isClinical = persona === "clinical";
-      const voiceName = isClinical ? "Puck" : "Aoede";
-
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${TTS_MODEL}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text }] }],
-            generationConfig: {
-              responseModalities: ["AUDIO"],
-              speechConfig: {
-                voiceConfig: {
-                  prebuiltVoiceConfig: { voiceName },
-                },
-              },
-            },
-          }),
-        },
-      );
-
-      const data = await response.json();
-      const part = data.candidates?.[0]?.content?.parts?.[0];
-
-      if (!part?.inlineData) {
-        return new Response(JSON.stringify({ error: "No audio generated" }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      return new Response(
-        JSON.stringify({
-          audioData: part.inlineData.data,
-          mimeType: part.inlineData.mimeType,
-        }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
+      // TTS via Lovable AI Gateway — generate spoken text as a text response
+      // Note: Lovable AI Gateway doesn't support native TTS, so we return the text for client-side TTS
+      return new Response(JSON.stringify({ 
+        error: "TTS is not currently supported via the AI gateway. Please use browser-based speech synthesis.",
+        text: text 
+      }), {
+        status: 501,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     return new Response(JSON.stringify({ error: "Unknown action" }), {
