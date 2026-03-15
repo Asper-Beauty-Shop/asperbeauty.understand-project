@@ -54,7 +54,7 @@ export interface ShopifyProduct {
       }>;
     };
     options?: Array<{
-      id: string;
+      id?: string;
       name: string;
       values: string[];
     }>;
