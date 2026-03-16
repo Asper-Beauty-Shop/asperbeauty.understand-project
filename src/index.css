@@ -736,7 +736,7 @@ body::before {
 .hero-portrait-background {
   position: absolute;
   inset: -20%;
-  background-image: url("/luxury-beauty-background.webp");
+  background-image: url("/luxury-beauty-bg-compressed.webp");
   background-size: cover;
   background-position: center right;
   background-repeat: no-repeat;
