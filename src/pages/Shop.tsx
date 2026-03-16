@@ -129,7 +129,7 @@ const ShopProductCard = ({
 
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-background flex items-center justify-center p-4">
-        {imageUrl && imageUrl !== "/editorial-showcase-2.jpg" ? (
+        {imageUrl && imageUrl !== "/editorial-showcase-2.webp" ? (
           <img
             src={imageUrl}
             alt={product.title}
