@@ -34,6 +34,7 @@ import Shop from "./pages/Shop";
 import ShopAllOrganized from "./components/ShopAllOrganized";
 import DriverDashboard from "./pages/DriverDashboard";
 import AdminAuditLogs from "./pages/AdminAuditLogs";
+import AdminEmailDashboard from "./pages/AdminEmailDashboard";
 import AsperIntelligence from "./pages/AsperIntelligence";
 import PurgeReview from "./pages/PurgeReview";
 import BrandIntelligenceDashboard from "./pages/BrandIntelligenceDashboard";
