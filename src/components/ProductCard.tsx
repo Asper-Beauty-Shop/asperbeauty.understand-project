@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { ShopifyProduct } from "@/lib/shopify";
@@ -51,6 +51,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { language } = useLanguage();
 
+  const prefetchedRef = useRef(false);
+  const prefetchProductDetail = () => {
+    if (!prefetchedRef.current) {
+      prefetchedRef.current = true;
+      import("@/pages/ProductDetail").catch(() => { prefetchedRef.current = false; });
+    }
+  };
+
   const isWishlistedItem = isInWishlist(node.id);
   const dnaTag = getDNATag(node);
   const keyBenefit = getKeyBenefit(node);
@@ -93,7 +101,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <Link
         to={`/product/${node.handle}`}
         className="group block"
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={() => { setIsHovered(true); prefetchProductDetail(); }}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="relative bg-asper-stone overflow-hidden transition-all duration-300 border border-border/60 hover:border-polished-gold/40 p-5">
