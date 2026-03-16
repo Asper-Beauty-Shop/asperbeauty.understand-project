@@ -58,24 +58,24 @@ export const AnimatedTrustBadge = () => {
   return (
     <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full 
         bg-gradient-to-r from-white/95 via-asper-ivory/95 to-white/95
-        border-2 border-[#D4AF37]/60 hover:border-[#D4AF37]
+        border-2 border-[polished-gold]/60 hover:border-[polished-gold]
         backdrop-blur-md 
         shadow-[0_4px_30px_rgba(212,175,55,0.2),0_2px_10px_rgba(0,0,0,0.08)] 
         hover:shadow-[0_8px_40px_rgba(212,175,55,0.35),0_4px_15px_rgba(0,0,0,0.1)]
         transition-all duration-500 group cursor-default
         relative overflow-hidden">
       {/* Animated background shimmer */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#D4AF37]/0 via-[#D4AF37]/10 to-[#D4AF37]/0 animate-pulse opacity-60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[polished-gold]/0 via-[polished-gold]/10 to-[polished-gold]/0 animate-pulse opacity-60" />
 
       {/* Sparkle decorations */}
       <Sparkles
-        className="absolute -left-1 top-1/2 -translate-y-1/2 w-3 h-3 text-[#D4AF37]/60 animate-pulse"
+        className="absolute -left-1 top-1/2 -translate-y-1/2 w-3 h-3 text-[polished-gold]/60 animate-pulse"
         style={{
           animationDelay: "0.2s",
         }}
       />
       <Sparkles
-        className="absolute -right-1 top-1/2 -translate-y-1/2 w-3 h-3 text-[#D4AF37]/60 animate-pulse"
+        className="absolute -right-1 top-1/2 -translate-y-1/2 w-3 h-3 text-[polished-gold]/60 animate-pulse"
         style={{
           animationDelay: "0.7s",
         }}
@@ -84,12 +84,12 @@ export const AnimatedTrustBadge = () => {
       {/* Rotating Icon Container */}
       <div className="relative flex-shrink-0">
         {/* Glow ring */}
-        <div className="absolute inset-0 rounded-full bg-[#D4AF37]/20 blur-md scale-150 animate-pulse" />
+        <div className="absolute inset-0 rounded-full bg-[polished-gold]/20 blur-md scale-150 animate-pulse" />
 
         <div
           className={`
             relative w-10 h-10 rounded-full 
-            bg-gradient-to-br from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37]
+            bg-gradient-to-br from-[polished-gold] via-gold-light to-[polished-gold]
             flex items-center justify-center
             shadow-[0_2px_15px_rgba(212,175,55,0.4),inset_0_1px_0_rgba(255,255,255,0.5)]
             transition-all duration-500
@@ -109,7 +109,7 @@ export const AnimatedTrustBadge = () => {
             animationDuration: "8s",
           }}
         >
-          <Gem className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 text-[#D4AF37]/80" />
+          <Gem className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 text-[polished-gold]/80" />
         </div>
         <div
           className="absolute inset-0 animate-spin"
@@ -118,7 +118,7 @@ export const AnimatedTrustBadge = () => {
             animationDelay: "-4s",
           }}
         >
-          <Star className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 text-[#D4AF37]/80 fill-[#D4AF37]/40" />
+          <Star className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 text-[polished-gold]/80 fill-[polished-gold]/40" />
         </div>
       </div>
 
@@ -149,7 +149,7 @@ export const AnimatedTrustBadge = () => {
               w-1.5 h-1.5 rounded-full transition-all duration-300
               ${
               idx === currentIndex
-                ? "bg-[#D4AF37] shadow-[0_0_6px_rgba(212,175,55,0.8)] scale-125"
+                ? "bg-[polished-gold] shadow-[0_0_6px_rgba(212,175,55,0.8)] scale-125"
                 : "bg-asper-charcoal/20 hover:bg-asper-charcoal/40"
             }
             `}
