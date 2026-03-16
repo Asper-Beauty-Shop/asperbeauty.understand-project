@@ -75,6 +75,12 @@ export const BeautyAssistant = () => {
           console.warn("Failed to send consultation email:", emailErr);
         }
       }
+    } catch (err) {
+      console.error(err);
+      toast.error(ASPER_PROTOCOL.errorShort[language === 'ar' ? 'ar' : 'en']);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
