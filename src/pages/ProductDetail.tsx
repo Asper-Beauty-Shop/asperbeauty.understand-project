@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
 import pdpIngredients from "@/assets/pdp-ingredients.jpg";
@@ -118,14 +118,14 @@ const ProductDetail = () => {
       quantity,
       selectedOptions: [],
     });
-    toast.success(isArabic ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Added to your ritual", { description: product.title, position: "top-center" });
+    toast.success(isArabic ? "تمت الإضافة إلى الحقيبة" : "Added to your ritual", { description: product.title, position: "top-center" });
   };
 
   const handleWishlistToggle = () => {
     if (!product) return;
     toggleItem({ node: buildShopifyNode(product) });
     if (!isInWishlist(product.id)) {
-      toast.success(isArabic ? "ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„Ù…ÙØ¶Ù„Ø©" : "Added to wishlist", { description: product.title, position: "top-center" });
+      toast.success(isArabic ? "تمت الإضافة إلى المفضلة" : "Added to wishlist", { description: product.title, position: "top-center" });
     }
   };
 
@@ -157,10 +157,10 @@ const ProductDetail = () => {
         <Header />
         <div className="flex flex-col items-center justify-center min-h-[60vh] pt-36">
           <h1 className="font-serif text-2xl text-foreground mb-4">
-            {isArabic ? "Ø§Ù„Ù…Ù†ØªØ¬ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯" : "Product Not Found"}
+            {isArabic ? "المنتج غير موجود" : "Product Not Found"}
           </h1>
           <Link to="/" className="text-primary hover:underline text-sm">
-            {isArabic ? "Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„Ù…ØªØ¬Ø±" : "Return to Shop"}
+            {isArabic ? "العودة للمتجر" : "Return to Shop"}
           </Link>
         </div>
         <Footer />
@@ -168,57 +168,77 @@ const ProductDetail = () => {
     );
   }
 
-  const brandName = product.brand || (isArabic ? "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø­ØµØ±ÙŠØ©" : "Exclusive Collection");
+  const brandName = product.brand || (isArabic ? "مجموعة حصرية" : "Exclusive Collection");
   const galleryImages = product.image_url ? [product.image_url] : ["/editorial-showcase-2.webp"];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-soft-ivory to-white">
       <Header />
       <div className="grid lg:grid-cols-2 min-h-screen pt-20">
-        {/* LEFT: Hero Image Gallery â€” Above the Fold Priority */}
-        <div className="bg-muted/30 lg:overflow-y-auto">
+        {/* LEFT: Hero Image Gallery */}
+        <div className="bg-asper-stone/20 lg:overflow-y-auto">
           <div className="space-y-1">
             {galleryImages.map((img, idx) => (
               <div key={idx} className="relative aspect-[4/5] overflow-hidden">
-                <img src={img} alt={`${product.title} - View ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                <img
+                  src={img}
+                  alt={`${product.title} - View ${idx + 1}`}
+                  className="w-full h-full object-cover mix-blend-multiply transition-transform duration-700 hover:scale-105"
+                />
               </div>
             ))}
           </div>
         </div>
 
-        {/* RIGHT: Clean PDP â€” Price + Cart Above Fold, Clinical Data in Accordions */}
-        <div className="lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto bg-background">
-          <div className="p-8 lg:p-16 flex flex-col justify-center min-h-full">
+        {/* RIGHT: Frosted Glass PDP Panel */}
+        <div className="lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+          <div
+            className="p-8 lg:p-16 flex flex-col justify-center min-h-full backdrop-blur-sm md:backdrop-blur-md"
+            style={{ backgroundColor: "hsl(240 20% 99% / 0.7)" }}
+          >
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-sm mb-6">
-              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Home"}</Link>
+              <Link to="/" className="text-muted-foreground hover:text-burgundy transition-colors">{isArabic ? "الرئيسية" : "Home"}</Link>
               <span className="text-muted-foreground">/</span>
-              <Link to="/shop" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ù…ØªØ¬Ø±" : "Shop"}</Link>
+              <Link to="/shop" className="text-muted-foreground hover:text-burgundy transition-colors">{isArabic ? "المتجر" : "Shop"}</Link>
             </nav>
 
             {/* Above the Fold: Brand, Title, Price */}
             <div className="mb-8">
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground mb-3 block">{brandName}</span>
-              <h1 className="font-serif text-3xl lg:text-4xl text-foreground leading-tight mb-6">{product.title}</h1>
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-polished-gold/70 mb-3 block font-body">{brandName}</span>
+              <h1 className="font-serif text-3xl lg:text-4xl text-asper-ink leading-tight mb-6">{product.title}</h1>
               <SplitPrice amount={currentPrice} />
             </div>
 
-            {/* Pharmacist Note (brief) */}
+            {/* Pharmacist Note — Frosted Glass Panel */}
             {product.pharmacist_note && (
-              <div className="mb-8 p-6 bg-[#F8F8FF] border-l-4 border-[#800020] rounded-r-xl shadow-sm">
-                <div className="flex items-center gap-2 mb-3 text-[#800020]">
+              <div
+                className="mb-8 p-6 rounded-sm backdrop-blur-sm"
+                style={{
+                  backgroundColor: "hsl(240 20% 99% / 0.6)",
+                  borderLeft: "4px solid hsl(var(--burgundy))",
+                  boxShadow: "0 8px 32px 0 rgba(0,0,0,0.03)",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-3 text-burgundy">
                   <Stethoscope className="w-5 h-5" />
-                  <span className="text-xs font-bold uppercase tracking-widest">{isArabic ? "Ù…Ù„Ø§Ø­Ø¸Ø© Ø§Ù„ØµÙŠØ¯Ù„Ø§Ù†ÙŠ" : "Pharmacist Clinical Note"}</span>
+                  <span className="text-xs font-bold uppercase tracking-widest font-body">{isArabic ? "ملاحظة الصيدلاني" : "Pharmacist Clinical Note"}</span>
                 </div>
-                <p className="text-muted-foreground leading-relaxed font-light italic">"{product.pharmacist_note}"</p>
+                <p className="text-muted-foreground leading-relaxed font-light italic font-body">"{product.pharmacist_note}"</p>
               </div>
             )}
 
             {/* Clinical Badge */}
             {product.clinical_badge && (
-              <div className="mb-6 px-4 py-3 bg-accent/10 border border-accent/30 rounded-lg">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Sparkles className="w-4 h-4 text-accent" />
+              <div
+                className="mb-6 px-4 py-3 rounded-sm"
+                style={{
+                  backgroundColor: "hsl(var(--polished-gold) / 0.08)",
+                  border: "1px solid hsl(var(--polished-gold) / 0.3)",
+                }}
+              >
+                <div className="flex items-center gap-2 text-sm font-medium text-asper-ink">
+                  <Sparkles className="w-4 h-4 text-polished-gold" />
                   {product.clinical_badge}
                 </div>
               </div>
@@ -227,107 +247,134 @@ const ProductDetail = () => {
             {/* Gold Divider */}
             <div className="w-16 h-px bg-polished-gold mb-10" />
 
-            {/* Add to Cart â€” Primary CTA */}
+            {/* Add to Cart — Primary CTA */}
             <div ref={ctaRef} className="space-y-6 mb-10">
-              <div className="flex items-center justify-center gap-8 py-4 border border-polished-gold/30">
+              {/* Quantity Selector — Gold bordered */}
+              <div
+                className="flex items-center justify-center gap-8 py-4 rounded-sm"
+                style={{ border: "1px solid hsl(var(--polished-gold) / 0.3)" }}
+              >
                 <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:text-burgundy transition-colors"><Minus className="w-4 h-4" /></button>
                 <span className="text-lg font-body font-medium w-8 text-center text-asper-ink">{quantity}</span>
                 <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:text-burgundy transition-colors"><Plus className="w-4 h-4" /></button>
               </div>
 
               <div className="flex gap-4">
-                <Button onClick={handleAddToCart} variant="luxury" size="luxury-lg" className="flex-1">
+                <Button
+                  onClick={handleAddToCart}
+                  variant="luxury"
+                  size="luxury-lg"
+                  className="flex-1 transition-all duration-200 hover:scale-[1.01]"
+                >
                   <ShoppingBag className="w-5 h-5 me-3" />
-                  {isArabic ? "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Ritual"} â€” {formatJODSimple(currentPrice * quantity)}
+                  {isArabic ? "أضف إلى الحقيبة" : "Add to Ritual"} — {formatJODSimple(currentPrice * quantity)}
                 </Button>
-                <button onClick={handleWishlistToggle} className={`w-14 h-14 flex items-center justify-center border transition-all ${isWishlisted ? "bg-primary border-primary text-primary-foreground" : "border-border text-foreground hover:border-primary"}`}>
+                <button
+                  onClick={handleWishlistToggle}
+                  className={`w-14 h-14 flex items-center justify-center transition-all duration-300 rounded-sm ${
+                    isWishlisted
+                      ? "bg-burgundy border-burgundy text-white"
+                      : "border text-asper-ink hover:border-burgundy"
+                  }`}
+                  style={{ borderColor: isWishlisted ? undefined : "hsl(var(--polished-gold) / 0.3)" }}
+                >
                   <Heart className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`} />
                 </button>
               </div>
 
+              {/* Trust Signal */}
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                <ShieldCheck className="w-4 h-4 text-primary" />
-                {isArabic ? "Ù…ÙˆØ²Ø¹ Ù…Ø¹ØªÙ…Ø¯ â€¢ Ù…Ù†ØªØ¬ Ø£ØµÙ„ÙŠ 100%" : "Authorized Retailer â€¢ 100% Authentic"}
+                <ShieldCheck className="w-4 h-4 text-burgundy" />
+                {isArabic ? "موزع معتمد • منتج أصلي 100%" : "Authorized Retailer • 100% Authentic"}
               </div>
 
               <SafetyBadges product={product} className="justify-center" />
-              <ShareButtons url={window.location.href} title={`${isArabic ? "Ø§ÙƒØªØ´Ù" : "Check out"} ${product.title}`} />
+              <ShareButtons url={window.location.href} title={`${isArabic ? "اكتشف" : "Check out"} ${product.title}`} />
             </div>
 
-            {/* â”€â”€â”€ Clean PDP Accordions: Clinical data below the fold â”€â”€â”€ */}
-            <Accordion type="multiple" className="w-full border-t border-polished-gold/30">
+            {/* ─── Clinical Accordions — Gold dividers ─── */}
+            <Accordion type="multiple" className="w-full" style={{ borderTop: "1px solid hsl(var(--polished-gold) / 0.2)" }}>
               {/* How to Use */}
-              <AccordionItem value="how-to-use" className="border-border">
+              <AccordionItem value="how-to-use" style={{ borderBottom: "1px solid hsl(var(--polished-gold) / 0.15)" }}>
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
                   <span className="flex items-center gap-2">
-                    <Droplets className="w-4 h-4 text-primary" />
-                    {isArabic ? "Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…" : "How to Use"}
+                    <Droplets className="w-4 h-4 text-burgundy" />
+                    {isArabic ? "طريقة الاستخدام" : "How to Use"}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-4 py-2">
-                    <div className="relative aspect-[4/3] rounded-lg overflow-hidden mb-4">
-                      <img src={pdpHowToUse} alt="Skincare application ritual" className="w-full h-full object-cover" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-asper-ink/30 to-transparent" />
+                    <div className="relative aspect-[4/3] rounded-sm overflow-hidden mb-4">
+                      <img src={pdpHowToUse} alt="Skincare application ritual" className="w-full h-full object-cover mix-blend-multiply" loading="lazy" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-asper-ink/20 to-transparent" />
                     </div>
                     <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
-                    <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">1</span>
-                      <p>{isArabic ? "Ù†Ø¸ÙÙŠ Ø§Ù„Ø¨Ø´Ø±Ø© Ø¬ÙŠØ¯Ø§Ù‹ ÙˆØ¬ÙÙÙŠÙ‡Ø§ Ø¨Ù„Ø·Ù." : "Cleanse skin thoroughly and pat dry."}</p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">2</span>
-                      <p>{isArabic ? "Ø¶Ø¹ÙŠ ÙƒÙ…ÙŠØ© Ù…Ù†Ø§Ø³Ø¨Ø© Ø¹Ù„Ù‰ Ø§Ù„ÙˆØ¬Ù‡ ÙˆØ§Ù„Ø±Ù‚Ø¨Ø©." : "Apply an appropriate amount to face and neck."}</p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">3</span>
-                      <p>{isArabic ? "Ø¯Ù„ÙƒÙŠ Ø¨Ù„Ø·Ù Ø¨Ø­Ø±ÙƒØ§Øª Ø¯Ø§Ø¦Ø±ÙŠØ© Ø­ØªÙ‰ ÙŠÙ…ØªØµ Ø¨Ø§Ù„ÙƒØ§Ù…Ù„." : "Massage gently in circular motions until fully absorbed."}</p>
-                    </div>
-                    {product.regimen_step && (
-                      <div className="mt-3 px-3 py-2 bg-accent/10 rounded text-xs">
-                        <span className="font-semibold text-foreground">{isArabic ? "Ø®Ø·ÙˆØ© Ø§Ù„Ø±ÙˆØªÙŠÙ†:" : "Regimen Step:"}</span>{" "}
-                        {product.regimen_step.replace(/_/g, " ")}
+                      <div className="flex items-start gap-3">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center text-xs font-bold">1</span>
+                        <p>{isArabic ? "نظفي البشرة جيداً وجففيها بلطف." : "Cleanse skin thoroughly and pat dry."}</p>
                       </div>
-                    )}
+                      <div className="flex items-start gap-3">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center text-xs font-bold">2</span>
+                        <p>{isArabic ? "ضعي كمية مناسبة على الوجه والرقبة." : "Apply an appropriate amount to face and neck."}</p>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center text-xs font-bold">3</span>
+                        <p>{isArabic ? "دلكي بلطف بحركات دائرية حتى يمتص بالكامل." : "Massage gently in circular motions until fully absorbed."}</p>
+                      </div>
+                      {product.regimen_step && (
+                        <div className="mt-3 px-3 py-2 rounded-sm text-xs" style={{ backgroundColor: "hsl(var(--polished-gold) / 0.08)" }}>
+                          <span className="font-semibold text-asper-ink">{isArabic ? "خطوة الروتين:" : "Regimen Step:"}</span>{" "}
+                          {product.regimen_step.replace(/_/g, " ")}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </AccordionContent>
               </AccordionItem>
 
               {/* Ingredients (INCI) */}
-              <AccordionItem value="ingredients" className="border-border">
+              <AccordionItem value="ingredients" style={{ borderBottom: "1px solid hsl(var(--polished-gold) / 0.15)" }}>
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
                   <span className="flex items-center gap-2">
-                    <Beaker className="w-4 h-4 text-primary" />
-                    {isArabic ? "Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª (INCI)" : "Ingredients (INCI)"}
+                    <Beaker className="w-4 h-4 text-burgundy" />
+                    {isArabic ? "المكونات (INCI)" : "Ingredients (INCI)"}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="py-2">
-                    <div className="relative aspect-[4/3] rounded-lg overflow-hidden mb-4">
-                      <img src={pdpIngredients} alt="Clinical botanical ingredients" className="w-full h-full object-cover" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-asper-ink/30 to-transparent" />
+                    <div className="relative aspect-[4/3] rounded-sm overflow-hidden mb-4">
+                      <img src={pdpIngredients} alt="Clinical botanical ingredients" className="w-full h-full object-cover mix-blend-multiply" loading="lazy" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-asper-ink/20 to-transparent" />
                     </div>
                     {product.key_ingredients && product.key_ingredients.length > 0 ? (
                       <>
-                        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-3">
-                          {isArabic ? "Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ø§Ù„ÙØ¹Ø§Ù„Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Key Active Ingredients"}
+                        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-3 font-body">
+                          {isArabic ? "المكونات الفعالة الرئيسية" : "Key Active Ingredients"}
                         </p>
                         <div className="flex flex-wrap gap-2 mb-4">
                           {product.key_ingredients.map((ing) => (
-                            <span key={ing} className="px-3 py-1.5 rounded-full bg-accent/10 border border-accent/30 text-xs text-foreground font-medium">{ing}</span>
+                            <span
+                              key={ing}
+                              className="px-3 py-1.5 rounded-full text-xs text-asper-ink font-medium font-body"
+                              style={{
+                                backgroundColor: "hsl(var(--polished-gold) / 0.08)",
+                                border: "1px solid hsl(var(--polished-gold) / 0.3)",
+                              }}
+                            >
+                              {ing}
+                            </span>
                           ))}
                         </div>
-                        <p className="text-xs text-muted-foreground italic">
+                        <p className="text-xs text-muted-foreground italic font-body">
                           {isArabic
-                            ? "Ù„Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ù‚Ø§Ø¦Ù…Ø© INCI Ø§Ù„ÙƒØ§Ù…Ù„Ø©ØŒ ÙŠØ±Ø¬Ù‰ Ù…Ø±Ø§Ø¬Ø¹Ø© Ø¹Ø¨ÙˆØ© Ø§Ù„Ù…Ù†ØªØ¬."
+                            ? "للحصول على قائمة INCI الكاملة، يرجى مراجعة عبوة المنتج."
                             : "For the full INCI list, please refer to the product packaging."}
                         </p>
                       </>
                     ) : (
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground font-body">
                         {isArabic
-                          ? "ÙŠØ±Ø¬Ù‰ Ù…Ø±Ø§Ø¬Ø¹Ø© Ø¹Ø¨ÙˆØ© Ø§Ù„Ù…Ù†ØªØ¬ Ù„Ù…Ø¹Ø±ÙØ© Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„ÙƒØ§Ù…Ù„Ø© Ù„Ù„Ù…ÙƒÙˆÙ†Ø§Øª."
+                          ? "يرجى مراجعة عبوة المنتج لمعرفة القائمة الكاملة للمكونات."
                           : "Please refer to the product packaging for the complete ingredient list."}
                       </p>
                     )}
@@ -336,50 +383,50 @@ const ProductDetail = () => {
               </AccordionItem>
 
               {/* Regulatory Warnings */}
-              <AccordionItem value="regulatory" className="border-border">
+              <AccordionItem value="regulatory" style={{ borderBottom: "1px solid hsl(var(--polished-gold) / 0.15)" }}>
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
                   <span className="flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-primary" />
-                    {isArabic ? "Ø§Ù„ØªØ­Ø°ÙŠØ±Ø§Øª Ø§Ù„ØªÙ†Ø¸ÙŠÙ…ÙŠØ©" : "Regulatory Warnings"}
+                    <AlertTriangle className="w-4 h-4 text-burgundy" />
+                    {isArabic ? "التحذيرات التنظيمية" : "Regulatory Warnings"}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="py-2 space-y-4">
-                    <div className="relative aspect-[4/3] rounded-lg overflow-hidden mb-4">
-                      <img src={pdpRegulatory} alt="Certification and authenticity seal" className="w-full h-full object-cover" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-asper-ink/30 to-transparent" />
+                    <div className="relative aspect-[4/3] rounded-sm overflow-hidden mb-4">
+                      <img src={pdpRegulatory} alt="Certification and authenticity seal" className="w-full h-full object-cover mix-blend-multiply" loading="lazy" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-asper-ink/20 to-transparent" />
                     </div>
                     <div className="text-sm text-muted-foreground leading-relaxed space-y-4">
-                    <div className="p-3 bg-destructive/5 border border-destructive/20 rounded-lg">
-                      <p className="font-medium text-foreground text-xs uppercase tracking-wider mb-2">
-                        {isArabic ? "ØªØ­Ø°ÙŠØ±Ø§Øª Ù…Ù‡Ù…Ø©" : "Important Warnings"}
-                      </p>
-                      <ul className="space-y-1.5 text-xs">
-                        <li>â€¢ {isArabic ? "Ù„Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„Ø®Ø§Ø±Ø¬ÙŠ ÙÙ‚Ø·. ØªØ¬Ù†Ø¨ÙŠ Ù…Ù„Ø§Ù…Ø³Ø© Ø§Ù„Ø¹ÙŠÙ†ÙŠÙ†." : "For external use only. Avoid contact with eyes."}</li>
-                        <li>â€¢ {isArabic ? "ØªÙˆÙ‚ÙÙŠ Ø¹Ù† Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… ÙÙŠ Ø­Ø§Ù„ Ø­Ø¯ÙˆØ« ØªÙ‡ÙŠØ¬." : "Discontinue use if irritation occurs."}</li>
-                        <li>â€¢ {isArabic ? "ÙŠÙØ­ÙØ¸ Ø¨Ø¹ÙŠØ¯Ø§Ù‹ Ø¹Ù† Ù…ØªÙ†Ø§ÙˆÙ„ Ø§Ù„Ø£Ø·ÙØ§Ù„." : "Keep out of reach of children."}</li>
-                        <li>â€¢ {isArabic ? "ÙŠÙØ®Ø²Ù† ÙÙŠ Ø¯Ø±Ø¬Ø© Ø­Ø±Ø§Ø±Ø© Ø£Ù‚Ù„ Ù…Ù† 25 Ø¯Ø±Ø¬Ø© Ù…Ø¦ÙˆÙŠØ©." : "Store below 25Â°C. Protect from direct sunlight."}</li>
-                      </ul>
-                    </div>
-                    <div className="p-3 bg-muted/50 rounded-lg">
-                      <p className="text-xs text-muted-foreground">
-                        <span className="font-semibold text-foreground">{isArabic ? "Ù…Ù„Ø§Ø­Ø¸Ø©:" : "Note:"} </span>
-                        {isArabic
-                          ? "Ù‚Ø¯ ÙŠØ®ØªÙ„Ù ØªØµÙ…ÙŠÙ… Ø§Ù„Ø¹Ø¨ÙˆØ© Ø¹Ù† Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶Ø© Ø¨Ø³Ø¨Ø¨ ØªØ­Ø¯ÙŠØ«Ø§Øª Ø§Ù„Ø´Ø±ÙƒØ© Ø§Ù„Ù…ØµÙ†Ø¹Ø©. Ø§Ù„Ù…Ù†ØªØ¬ ÙˆØ§Ù„Ù…ÙƒÙˆÙ†Ø§Øª ØªØ¨Ù‚Ù‰ ÙƒÙ…Ø§ Ù‡ÙŠ."
-                          : "Packaging design may vary from the image shown due to manufacturer updates. The product and ingredients remain the same."}
-                      </p>
-                    </div>
+                      <div className="p-3 bg-destructive/5 border border-destructive/20 rounded-sm">
+                        <p className="font-medium text-asper-ink text-xs uppercase tracking-wider mb-2 font-body">
+                          {isArabic ? "تحذيرات مهمة" : "Important Warnings"}
+                        </p>
+                        <ul className="space-y-1.5 text-xs font-body">
+                          <li>• {isArabic ? "للاستخدام الخارجي فقط. تجنبي ملامسة العينين." : "For external use only. Avoid contact with eyes."}</li>
+                          <li>• {isArabic ? "توقفي عن الاستخدام في حال حدوث تهيج." : "Discontinue use if irritation occurs."}</li>
+                          <li>• {isArabic ? "يُحفظ بعيداً عن متناول الأطفال." : "Keep out of reach of children."}</li>
+                          <li>• {isArabic ? "يُخزن في درجة حرارة أقل من 25 درجة مئوية." : "Store below 25°C. Protect from direct sunlight."}</li>
+                        </ul>
+                      </div>
+                      <div className="p-3 rounded-sm" style={{ backgroundColor: "hsl(var(--asper-stone) / 0.3)" }}>
+                        <p className="text-xs text-muted-foreground font-body">
+                          <span className="font-semibold text-asper-ink">{isArabic ? "ملاحظة:" : "Note:"} </span>
+                          {isArabic
+                            ? "قد يختلف تصميم العبوة عن الصورة المعروضة بسبب تحديثات الشركة المصنعة. المنتج والمكونات تبقى كما هي."
+                            : "Packaging design may vary from the image shown due to manufacturer updates. The product and ingredients remain the same."}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </AccordionContent>
               </AccordionItem>
 
-              {/* Reviews with Contextual Social Proof */}
-              <AccordionItem value="reviews" className="border-border">
+              {/* Reviews */}
+              <AccordionItem value="reviews" style={{ borderBottom: "1px solid hsl(var(--polished-gold) / 0.15)" }}>
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-widest hover:no-underline py-5">
                   <span className="flex items-center gap-2">
                     <Star className="w-4 h-4 text-polished-gold" />
-                    {isArabic ? "Ø§Ù„ØªÙ‚ÙŠÙŠÙ…Ø§Øª" : "Reviews"}
+                    {isArabic ? "التقييمات" : "Reviews"}
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -391,18 +438,28 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      {/* Related Products */}
+      {/* Related Products — Frosted Glass Cards */}
       {relatedProducts.length > 0 && (
-        <section className="py-16 bg-muted/20">
+        <section className="py-16" style={{ background: "linear-gradient(to bottom right, hsl(240 20% 99%), white)" }}>
           <div className="container mx-auto px-4 max-w-7xl">
-            <h2 className="font-serif text-2xl text-foreground mb-8">{isArabic ? "Ù‚Ø¯ ÙŠØ¹Ø¬Ø¨Ùƒ Ø£ÙŠØ¶Ø§Ù‹" : "You May Also Like"}</h2>
+            <h2 className="font-serif text-2xl text-asper-ink mb-8">{isArabic ? "قد يعجبك أيضاً" : "You May Also Like"}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {relatedProducts.map((rp) => (
                 <Link key={rp.id} to={`/product/${rp.handle}`} className="group">
-                  <div className="aspect-square bg-asper-stone rounded-lg overflow-hidden mb-3 border border-transparent group-hover:border-polished-gold transition-colors duration-300">
-                    <img src={rp.image_url || "/editorial-showcase-2.webp"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div
+                    className="aspect-square overflow-hidden mb-3 rounded-sm transition-all duration-[400ms] group-hover:border-polished-gold group-hover:-translate-y-1"
+                    style={{
+                      backgroundColor: "hsl(var(--asper-stone) / 0.3)",
+                      border: "1px solid hsl(var(--polished-gold) / 0.2)",
+                    }}
+                  >
+                    <img
+                      src={rp.image_url || "/editorial-showcase-2.webp"}
+                      alt={rp.title}
+                      className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
-                  <p className="text-xs text-asper-ink-muted uppercase tracking-widest font-body">{rp.brand}</p>
+                  <p className="text-xs text-polished-gold/70 uppercase tracking-widest font-body">{rp.brand}</p>
                   <p className="text-sm font-medium text-asper-ink line-clamp-2 font-body">{rp.title}</p>
                   <SplitPrice amount={rp.price ?? 0} className="mt-1" />
                 </Link>
@@ -426,4 +483,3 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
-
