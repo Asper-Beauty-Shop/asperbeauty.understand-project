@@ -393,7 +393,37 @@ export default function AIConcierge() {
           setCurrentPersona(p);
         },
         onDelta: upsert,
-        onDone: () => { setIsLoading(false); playNotificationSound(); },
+        onDone: async () => {
+          setIsLoading(false);
+          playNotificationSound();
+
+          // Send consultation summary email once per session for substantive responses
+          if (!emailSentThisSession.current && assistantSoFar.length > 200) {
+            emailSentThisSession.current = true;
+            try {
+              const { data: { user } } = await supabase.auth.getUser();
+              if (user?.email) {
+                const { data: profile } = await supabase
+                  .from("profiles")
+                  .select("display_name")
+                  .eq("user_id", user.id)
+                  .maybeSingle();
+
+                await sendConsultationSummaryEmail({
+                  to: user.email,
+                  customer_name: profile?.display_name || undefined,
+                  concern_type: userProfile?.skin_concern || undefined,
+                  skin_type: userProfile?.skin_type || undefined,
+                  ai_summary: assistantSoFar.slice(0, 800),
+                });
+                console.log("Consultation summary email queued");
+              }
+            } catch (emailErr) {
+              console.warn("Failed to send consultation email:", emailErr);
+              // Non-blocking — don't disrupt the chat experience
+            }
+          }
+        },
         onSafetyFlags: (flags) => setSafetyFlags(flags),
       });
     } catch (e: unknown) {
