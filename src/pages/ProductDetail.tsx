@@ -430,7 +430,7 @@ const ProductDetail = () => {
               {relatedProducts.map((rp) => (
                 <Link key={rp.id} to={`/product/${rp.handle}`} className="group">
                   <div className="aspect-square bg-asper-stone rounded-lg overflow-hidden mb-3 border border-transparent group-hover:border-polished-gold transition-colors duration-300">
-                    <img src={rp.image_url || "/editorial-showcase-2.jpg"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={rp.image_url || "/editorial-showcase-2.webp"} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <p className="text-xs text-asper-ink-muted uppercase tracking-widest font-body">{rp.brand}</p>
                   <p className="text-sm font-medium text-asper-ink line-clamp-2 font-body">{rp.title}</p>

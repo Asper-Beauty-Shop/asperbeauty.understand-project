@@ -186,7 +186,7 @@ const Index = () => {
           title: p.title,
           brand: p.brand,
           price: p.price ?? 0,
-          image_url: p.image_url || "/editorial-showcase-2.jpg",
+          image_url: p.image_url || "/editorial-showcase-2.webp",
           category: p.primary_concern,
           is_on_sale: false,
         }));
