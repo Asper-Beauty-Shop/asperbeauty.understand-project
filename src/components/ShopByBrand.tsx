@@ -24,11 +24,11 @@ export const ShopByBrand = () => {
   const scroll = (direction: "left" | "right") => {
     if (scrollContainerRef.current) {
       const scrollAmount = 200;
-      const newScrollLeft = scrollContainerRef.current.scrollLeft +
-        (direction === "left" ? -scrollAmount : scrollAmount);
-      scrollContainerRef.current.scrollTo({
-        left: newScrollLeft,
-        behavior: "smooth",
+      requestAnimationFrame(() => {
+        if (!scrollContainerRef.current) return;
+        const newScrollLeft = scrollContainerRef.current.scrollLeft +
+          (direction === "left" ? -scrollAmount : scrollAmount);
+        scrollContainerRef.current.scrollTo({ left: newScrollLeft, behavior: "smooth" });
       });
     }
   };
