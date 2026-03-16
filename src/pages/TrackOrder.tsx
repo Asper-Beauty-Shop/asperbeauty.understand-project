@@ -164,7 +164,7 @@ const TrackOrder = () => {
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
             <Package className="h-12 w-12 text-primary mx-auto mb-4" />
-            <h1 className="text-3xl font-serif text-foreground mb-2">
+            <h1 className="text-3xl font-display text-foreground mb-2">
               Track Your Order
             </h1>
             <p className="text-muted-foreground">

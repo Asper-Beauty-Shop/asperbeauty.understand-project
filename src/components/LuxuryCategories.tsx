@@ -60,7 +60,7 @@ export const LuxuryCategories = () => {
                 alt={isAr ? c.nameAr : c.name}
               />
             </div>
-            <span className="font-serif text-lg text-foreground italic group-hover:text-gold-500 transition-colors">
+            <span className="font-display text-lg text-foreground italic group-hover:text-gold-500 transition-colors">
               {isAr ? c.nameAr : c.name}
             </span>
           </Link>

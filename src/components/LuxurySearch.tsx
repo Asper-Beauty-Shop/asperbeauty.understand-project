@@ -164,7 +164,7 @@ export const LuxurySearch = (
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="font-serif text-sm text-luxury-black truncate">
+                  <p className="font-display text-sm text-luxury-black truncate">
                     {product.title}
                   </p>
                   <p className="text-[10px] uppercase tracking-widest text-gray-400">

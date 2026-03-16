@@ -177,7 +177,7 @@ export const GlassGoldProductCard = (
           <p className="text-xs text-asper-gold/70 uppercase tracking-[0.2em] mb-2">
             {brand}
           </p>
-          <h3 className="font-serif text-xl text-asper-ivory mb-2 line-clamp-2">
+          <h3 className="font-display text-xl text-asper-ivory mb-2 line-clamp-2">
             {translateTitle(node.title, language)}
           </h3>
           <div className="flex items-center justify-center gap-2">

@@ -27,7 +27,7 @@ export const FeaturedCollection = () => {
           <span className="mb-3 inline-block font-sans text-xs font-medium uppercase tracking-[0.3em] text-gold-500">
             Selected For You
           </span>
-          <h2 className="font-serif text-4xl font-light tracking-tight text-luxury-black md:text-5xl">
+          <h2 className="font-display text-4xl font-light tracking-tight text-luxury-black md:text-5xl">
             The Iconic Edit
           </h2>
           <div className="mx-auto mt-4 h-px w-16 bg-gold-300" />

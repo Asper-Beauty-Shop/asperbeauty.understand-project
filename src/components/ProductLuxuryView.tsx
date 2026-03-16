@@ -119,7 +119,7 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
               <span className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground mb-3 block">
                 {product.brand || product.category}
               </span>
-              <h1 className="font-serif text-3xl lg:text-4xl text-foreground leading-tight mb-6">
+              <h1 className="font-display text-3xl lg:text-4xl text-foreground leading-tight mb-6">
                 {product.title}
               </h1>
 
@@ -285,7 +285,7 @@ export const ProductLuxuryView = ({ product }: ProductLuxuryViewProps) => {
       {/* Cross-sell Section */}
       <section className="py-20 px-8 lg:px-16 bg-muted/30">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-serif text-2xl lg:text-3xl text-center mb-12">
+          <h2 className="font-display text-2xl lg:text-3xl text-center mb-12">
             {isAr ? "أكملي طقوسك" : "Complete The Ritual"}
           </h2>
           {/* Product recommendations would go here */}

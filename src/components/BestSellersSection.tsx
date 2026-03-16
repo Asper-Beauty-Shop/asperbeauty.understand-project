@@ -33,7 +33,7 @@ export const BestSellersSection = () => {
             <span className="mb-3 inline-block font-sans text-xs font-medium uppercase tracking-[0.3em] text-gold-500">
               {isAr ? "مفضلات عالمية" : "World-Class Favorites"}
             </span>
-            <h2 className="font-serif text-4xl font-light tracking-tight text-luxury-black md:text-5xl">
+            <h2 className="font-display text-4xl font-light tracking-tight text-luxury-black md:text-5xl">
               {isAr ? "الأكثر مبيعاً" : "Global Best Sellers"}
             </h2>
           </div>

@@ -191,7 +191,7 @@ const ProductDetail = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <div className="flex flex-col items-center justify-center min-h-[60vh] pt-36">
-          <h1 className="font-serif text-2xl text-foreground mb-4">
+          <h1 className="font-display text-2xl text-foreground mb-4">
             {isArabic ? "Ø§Ù„Ù…Ù†ØªØ¬ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯" : "Product Not Found"}
           </h1>
           <Link to="/" className="text-primary hover:underline text-sm">
@@ -257,7 +257,7 @@ const ProductDetail = () => {
                   </span>
                 )}
               </div>
-              <h1 className="font-serif text-3xl lg:text-4xl text-foreground leading-tight mb-6">{product.title}</h1>
+              <h1 className="font-display text-3xl lg:text-4xl text-foreground leading-tight mb-6">{product.title}</h1>
               <div className="flex items-baseline gap-3">
                 <SplitPrice amount={currentPrice} />
                 {discountPct > 0 && originalPrice && (
@@ -462,7 +462,7 @@ const ProductDetail = () => {
       {relatedProducts.length > 0 && (
         <section className="py-16 bg-muted/20">
           <div className="container mx-auto px-4 max-w-7xl">
-            <h2 className="font-serif text-2xl text-foreground mb-8">{isArabic ? "Ù‚Ø¯ ÙŠØ¹Ø¬Ø¨Ùƒ Ø£ÙŠØ¶Ø§Ù‹" : "You May Also Like"}</h2>
+            <h2 className="font-display text-2xl text-foreground mb-8">{isArabic ? "Ù‚Ø¯ ÙŠØ¹Ø¬Ø¨Ùƒ Ø£ÙŠØ¶Ø§Ù‹" : "You May Also Like"}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {relatedProducts.map((rp) => (
                 <Link key={rp.id} to={`/product/${rp.handle}`} className="group">

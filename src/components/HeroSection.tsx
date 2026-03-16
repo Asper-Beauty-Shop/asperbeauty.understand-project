@@ -90,7 +90,7 @@ const HeroSection = () => {
 
         {/* Headline */}
         <h1
-          className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-asper-charcoal mb-4 drop-shadow-sm text-center animate-fade-in"
+          className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-asper-charcoal mb-4 drop-shadow-sm text-center animate-fade-in"
           style={{ animationDelay: "0.4s" }}
           dir={isAr ? "rtl" : "ltr"}
         >
@@ -161,7 +161,7 @@ const HeroSection = () => {
           </div>
 
           {/* "Now Playing" Label */}
-          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-[polished-gold]/30 shadow-lg">
+          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-polished-white/90 backdrop-blur-sm rounded-full border border-[polished-gold]/30 shadow-lg">
             <span className="text-xs uppercase tracking-[0.2em] text-asper-charcoal/60 font-sans">
               The Asper Experience
             </span>
@@ -211,7 +211,7 @@ const HeroSection = () => {
             <Link
               key={pill.href + pill.label}
               to={pill.href}
-              className="px-4 py-1.5 rounded-full border border-[polished-gold]/40 bg-white/60 backdrop-blur-sm text-xs font-sans text-asper-charcoal/70 hover:border-[polished-gold] hover:text-asper-charcoal hover:bg-white/80 transition-all duration-200"
+              className="px-4 py-1.5 rounded-full border border-[polished-gold]/40 bg-polished-white/60 backdrop-blur-sm text-xs font-sans text-asper-charcoal/70 hover:border-[polished-gold] hover:text-asper-charcoal hover:bg-polished-white/80 transition-all duration-200"
             >
               {pill.label}
             </Link>
@@ -220,7 +220,7 @@ const HeroSection = () => {
 
         {/* Tagline */}
         <p
-          className="mt-10 font-serif text-sm uppercase tracking-[0.3em] text-[polished-gold] animate-fade-in"
+          className="mt-10 font-display text-sm uppercase tracking-[0.3em] text-[polished-gold] animate-fade-in"
           style={{ animationDelay: "1.1s" }}
         >
           {isAr ? "أصالة معتمدة • جودة طبية" : "Pharmacist Verified • Medical Luxury"}
@@ -229,7 +229,7 @@ const HeroSection = () => {
 
       {/* --- SCROLL INDICATOR --- */}
       <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 animate-bounce">
-        <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-[polished-gold]/60 bg-white/70 pt-2 backdrop-blur-sm shadow-lg">
+        <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-[polished-gold]/60 bg-polished-white/70 pt-2 backdrop-blur-sm shadow-lg">
           <div className="h-2 w-1 rounded-full bg-[polished-gold]" />
         </div>
       </div>
