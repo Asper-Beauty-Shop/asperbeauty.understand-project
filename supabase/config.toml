@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.asper-intelligence]
 verify_jwt = false
+
+[functions.process-email-queue]
+verify_jwt = true
