@@ -23,6 +23,7 @@ export const BeautyAssistant = () => {
   const { language, locale } = useLanguage();
   const isAr = locale === "ar";
   const scrollRef = useRef<HTMLDivElement>(null);
+  const emailSentRef = useRef(false);
 
   useEffect(() => {
     if (scrollRef.current) {
