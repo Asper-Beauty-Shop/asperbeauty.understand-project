@@ -34,6 +34,7 @@ import Shop from "./pages/Shop";
 import ShopAllOrganized from "./components/ShopAllOrganized";
 import DriverDashboard from "./pages/DriverDashboard";
 import AdminAuditLogs from "./pages/AdminAuditLogs";
+import AdminEmailDashboard from "./pages/AdminEmailDashboard";
 import AsperIntelligence from "./pages/AsperIntelligence";
 import PurgeReview from "./pages/PurgeReview";
 import BrandIntelligenceDashboard from "./pages/BrandIntelligenceDashboard";
@@ -121,6 +122,7 @@ const App = () => {
                 <Route path="/driver" element={<DriverDashboard />} />
                 <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
                 <Route path="/admin/purge-review" element={<PurgeReview />} />
+                <Route path="/admin/emails" element={<AdminEmailDashboard />} />
                 <Route
                   path="/brand-intelligence"
                   element={
