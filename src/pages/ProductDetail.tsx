@@ -1,4 +1,5 @@
 ﻿import { useEffect, useRef, useState } from "react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Link, useParams } from "react-router-dom";
 import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
 import pdpIngredients from "@/assets/pdp-ingredients.jpg";
@@ -64,6 +65,35 @@ const ProductDetail = () => {
 
   const addItem = useCartStore((state) => state.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
+
+  const BASE_URL = "https://www.asperbeautyshop.com";
+  usePageMeta({
+    title: product
+      ? `${product.title} — ${product.brand || "Asper Beauty Shop"}`
+      : "Product — Asper Beauty Shop",
+    description: product?.pharmacist_note || product?.description || undefined,
+    image: product?.image_url || undefined,
+    canonical: `/product/${handle}`,
+    type: "product",
+    jsonLd: product ? {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: product.title,
+      description: product.pharmacist_note || product.description || "",
+      image: product.image_url || `${BASE_URL}/og-image.jpg`,
+      brand: { "@type": "Brand", name: product.brand },
+      offers: {
+        "@type": "Offer",
+        price: product.price,
+        priceCurrency: "JOD",
+        availability: product.in_stock !== false
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        url: `${BASE_URL}/product/${product.handle}`,
+        seller: { "@type": "Organization", name: "Asper Beauty Shop" },
+      },
+    } : undefined,
+  });
 
   useEffect(() => {
     const loadProduct = async () => {
