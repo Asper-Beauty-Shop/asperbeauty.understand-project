@@ -21,9 +21,11 @@ export function MorningSpaRitualBanner() {
           transition={{ duration: 0.8, ease: LUXURY_EASE }}
         >
           <img
-            src="/images/vichy-mineral89-ritual.png"
+            src="/images/vichy-mineral89-ritual.webp"
             alt="Morning Spa — Clinical Precision. Eternal Elegance. Vichy Minéral 89"
             className="w-full h-auto object-cover"
+            width={1920}
+            height={1047}
             loading="lazy"
           />
         </motion.div>
