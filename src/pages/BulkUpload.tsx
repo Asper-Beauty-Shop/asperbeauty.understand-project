@@ -36,7 +36,9 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import ExcelJS from "exceljs";
+import type ExcelJS_Type from "exceljs";
+
+const loadExcelJS = () => import("exceljs").then((m) => m.default);
 import { QueueItem, useImageQueue } from "@/lib/imageGenerationQueue";
 
 interface ProcessedProduct {
@@ -162,6 +164,7 @@ export default function BulkUpload() {
 
       try {
         const arrayBuffer = await file.arrayBuffer();
+        const ExcelJS = await loadExcelJS();
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
 
@@ -284,6 +287,7 @@ export default function BulkUpload() {
       if (!response.ok) throw new Error("Failed to fetch file");
 
       const arrayBuffer = await response.arrayBuffer();
+      const ExcelJS = await loadExcelJS();
       const workbook = new ExcelJS.Workbook();
       await workbook.xlsx.load(arrayBuffer);
 
