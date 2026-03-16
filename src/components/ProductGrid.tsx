@@ -189,6 +189,11 @@ export const ProductGrid = ({
       parseFloat(a.node.priceRange.minVariantPrice.amount) - parseFloat(b.node.priceRange.minVariantPrice.amount));
     else if (sortBy === "price-desc") sorted.sort((a, b) =>
       parseFloat(b.node.priceRange.minVariantPrice.amount) - parseFloat(a.node.priceRange.minVariantPrice.amount));
+    else if (sortBy === "newest") sorted.sort((a, b) => {
+      const da = a.node.createdAt ? new Date(a.node.createdAt).getTime() : 0;
+      const db = b.node.createdAt ? new Date(b.node.createdAt).getTime() : 0;
+      return db - da;
+    });
     return sorted;
   }, [categoryFilteredProducts, filters, sortBy]);
 

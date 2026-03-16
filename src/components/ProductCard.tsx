@@ -70,6 +70,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const comparePrice = firstVariant?.compareAtPrice?.amount;
   const hasDiscount = comparePrice && parseFloat(comparePrice) > parseFloat(price || "0");
   const isVerified = node.tags?.includes("authentic") || node.tags?.includes("verified");
+  const isOutOfStock = firstVariant ? !firstVariant.availableForSale : false;
+  const discountPct = hasDiscount
+    ? Math.round((1 - parseFloat(price || "0") / parseFloat(comparePrice!)) * 100)
+    : 0;
   const displayTitle = translateTitle(node.title || "", language);
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -104,11 +108,25 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         onMouseEnter={() => { setIsHovered(true); prefetchProductDetail(); }}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="relative bg-asper-stone overflow-hidden transition-all duration-300 border border-border/60 hover:border-polished-gold/40 p-5">
+        <div className={`relative bg-asper-stone overflow-hidden transition-all duration-300 border border-border/60 hover:border-polished-gold/40 p-5 ${isOutOfStock ? "opacity-60" : ""}`}>
           {/* Clinical Shimmer Beam */}
           <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/50 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
 
-          {dnaTag && (
+          {isOutOfStock && (
+            <div className="absolute top-4 left-4 z-10">
+              <span className="text-[10px] font-body font-semibold px-2.5 py-1 tracking-wider uppercase bg-muted-foreground/70 text-polished-white">
+                {language === "ar" ? "نفد المخزون" : "Out of Stock"}
+              </span>
+            </div>
+          )}
+          {!isOutOfStock && discountPct > 0 && (
+            <div className="absolute top-4 left-4 z-10">
+              <span className="text-[10px] font-body font-semibold px-2.5 py-1 tracking-wider uppercase bg-polished-gold text-dark-charcoal">
+                -{discountPct}%
+              </span>
+            </div>
+          )}
+          {!isOutOfStock && !discountPct && dnaTag && (
             <div className="absolute top-4 left-4 z-10">
               <span className="text-[10px] font-body font-semibold px-2.5 py-1 tracking-wider uppercase bg-burgundy text-polished-white">
                 {dnaTag.label}
@@ -177,9 +195,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             <div className={`pt-3 transition-all duration-300 ${isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}>
               <button
                 onClick={handleAddToCart}
-                className="w-full py-2.5 text-xs font-body font-semibold uppercase tracking-wider text-polished-white bg-burgundy transition-all hover:opacity-90 active:scale-[0.98]"
+                disabled={isOutOfStock}
+                className="w-full py-2.5 text-xs font-body font-semibold uppercase tracking-wider text-polished-white bg-burgundy transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {language === "ar" ? "إضافة إلى النظام" : "Add to Regimen"}
+                {isOutOfStock
+                  ? (language === "ar" ? "نفد المخزون" : "Out of Stock")
+                  : (language === "ar" ? "إضافة إلى النظام" : "Add to Regimen")}
               </button>
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsQuickViewOpen(true); }}

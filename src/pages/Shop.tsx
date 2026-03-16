@@ -139,7 +139,12 @@ const ShopProductCard = ({
         ) : (
           <Package className="h-16 w-16 text-muted-foreground/30" />
         )}
-        {product.clinical_badge && (
+        {product.is_on_sale && product.discount_percent && (
+          <span className="absolute top-3 left-3 z-10 rounded-full bg-polished-gold text-[10px] font-bold px-2 py-0.5 text-dark-charcoal shadow-sm">
+            -{product.discount_percent}%
+          </span>
+        )}
+        {!product.is_on_sale && product.clinical_badge && (
           <span className="absolute top-3 left-3 z-10 flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2 py-0.5 text-[10px] font-medium text-foreground shadow-sm">
             <Shield className="h-3 w-3 text-primary" />
             {product.clinical_badge}
@@ -175,7 +180,14 @@ const ShopProductCard = ({
 
         {/* Price + Type */}
         <div className="flex items-center justify-between pt-1">
-          <LuxuryPrice amount={product.price} />
+          <div className="flex items-baseline gap-1.5">
+            <LuxuryPrice amount={product.price} />
+            {product.is_on_sale && product.original_price && (
+              <span className="text-xs line-through text-muted-foreground font-body">
+                {product.original_price.toFixed(2)}
+              </span>
+            )}
+          </div>
           {product.primary_concern && (
             <Badge variant="secondary" className="text-[10px]">
               {product.primary_concern.replace("Concern_", "")}
@@ -271,6 +283,7 @@ export default function Shop() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [sortBy, setSortBy] = useState<"recommended" | "price-asc" | "price-desc" | "newest" | "sale">("recommended");
   const [searchParams, setSearchParams] = useSearchParams();
   const concernParam = searchParams.get("concern") ?? "";
 
@@ -327,7 +340,7 @@ export default function Shop() {
   }, [products]);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    const filtered = products.filter((product) => {
       // Filter by asper_category sidebar
       if (categoryParam && categoryParam !== "All Curation" && product.asper_category !== categoryParam) return false;
 
@@ -337,7 +350,7 @@ export default function Shop() {
         if (!matches) return false;
       }
       if (filters.brands.length > 0 && (!product.brand || !filters.brands.includes(product.brand))) return false;
-      
+
       // Unify Categories and Concerns
       const activeConcerns = [...filters.skinConcerns];
       filters.categories.forEach(catId => {
@@ -347,9 +360,25 @@ export default function Shop() {
       if (activeConcerns.length > 0 && (!product.primary_concern || !activeConcerns.includes(product.primary_concern))) return false;
       const price = product.price ?? 0;
       if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
+      if (filters.onSaleOnly && !product.is_on_sale) return false;
       return true;
     });
-  }, [products, filters, categoryParam]);
+
+    const sorted = [...filtered];
+    if (sortBy === "price-asc") sorted.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+    else if (sortBy === "price-desc") sorted.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+    else if (sortBy === "newest") sorted.sort((a, b) => {
+      const da = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const db = b.created_at ? new Date(b.created_at).getTime() : 0;
+      return db - da;
+    });
+    else if (sortBy === "sale") sorted.sort((a, b) => {
+      const discA = a.discount_percent ?? 0;
+      const discB = b.discount_percent ?? 0;
+      return discB - discA;
+    });
+    return sorted;
+  }, [products, filters, categoryParam, sortBy]);
 
   // Empty state for search with Dr. Sami recommendation
   const renderEmptyState = () => (
@@ -514,10 +543,35 @@ export default function Shop() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mb-6">
-                <p className="text-sm text-muted-foreground font-body">
-                  {locale === "ar" ? `${filteredProducts.length} \u0645\u0646\u062A\u062C` : `${filteredProducts.length} products`}
+              <div className="flex flex-wrap items-center gap-3 mb-6">
+                <p className="text-sm text-muted-foreground font-body flex-1">
+                  {locale === "ar" ? `${filteredProducts.length} منتج` : `${filteredProducts.length} products`}
                 </p>
+                {/* On Sale toggle */}
+                <button
+                  onClick={() => setFilters(f => ({ ...f, onSaleOnly: !f.onSaleOnly }))}
+                  className={cn(
+                    "text-xs font-body font-semibold px-3 py-1.5 rounded-full border transition-all duration-200",
+                    filters.onSaleOnly
+                      ? "bg-polished-gold text-dark-charcoal border-polished-gold"
+                      : "bg-card text-muted-foreground border-border hover:border-polished-gold/60"
+                  )}
+                >
+                  {locale === "ar" ? "تخفيضات فقط" : "On Sale"}
+                </button>
+                {/* Sort */}
+                <select
+                  value={sortBy}
+                  onChange={e => setSortBy(e.target.value as typeof sortBy)}
+                  className="text-sm font-body border border-border rounded px-2 py-1.5 bg-card text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                >
+                  <option value="recommended">{locale === "ar" ? "موصى به" : "Recommended"}</option>
+                  <option value="newest">{locale === "ar" ? "الأحدث" : "Newest"}</option>
+                  <option value="price-asc">{locale === "ar" ? "السعر: الأقل أولاً" : "Price: Low to High"}</option>
+                  <option value="price-desc">{locale === "ar" ? "السعر: الأعلى أولاً" : "Price: High to Low"}</option>
+                  <option value="sale">{locale === "ar" ? "أكبر خصم" : "Biggest Discount"}</option>
+                </select>
+                {/* View mode */}
                 <div className="flex items-center gap-1 bg-card rounded-lg border border-border p-1">
                   <button
                     onClick={() => setViewMode("grid")}
