@@ -1,15 +1,12 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import CinematicHero from "@/components/home/CinematicHero";
 import { ScienceMeetsEleganceSplit } from "@/components/home/ScienceMeetsEleganceSplit";
-import ThreeClickOnboarding from "@/components/home/ThreeClickOnboarding";
-import DualPersonaTriage from "@/components/home/DualPersonaTriage";
 import { USPBar } from "@/components/home/USPBar";
 import { ProductSlider } from "@/components/home/ProductSlider";
-import { ShopByProtocol } from "@/components/home/ShopByProtocol";
 import { Footer } from "@/components/Footer";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,79 +25,32 @@ import neocellCollagenImg from "@/assets/products/neocell-collagen-c.png";
 import eucerinSunImg from "@/assets/products/eucerin-sun-hydro-spf50.png";
 import aminasCalendulaImg from "@/assets/products/aminas-calendula-cream.png";
 
-// Lazy load below-the-fold components
+// Lazy load below-the-fold sections
 const MorningSpaRitualBanner = lazy(() =>
   import("@/components/home/MorningSpaRitualBanner").then((m) => ({
     default: m.MorningSpaRitualBanner,
   }))
-);
-const EditorialSpotlight = lazy(() =>
-  import("@/components/home/EditorialSpotlight").then((m) => ({
-    default: m.EditorialSpotlight,
-  }))
-);
-const BrandOfTheWeek = lazy(() =>
-  import("@/components/home/BrandOfTheWeek").then((m) => ({
-    default: m.BrandOfTheWeek,
-  }))
-);
-const CelestialFeaturedCollection = lazy(() =>
-  import("@/components/CelestialFeaturedCollection")
-);
-const FeaturedBrands = lazy(() =>
-  import("@/components/FeaturedBrands").then((m) => ({
-    default: m.FeaturedBrands,
-  }))
-);
-const Newsletter = lazy(() =>
-  import("@/components/Newsletter").then((m) => ({ default: m.Newsletter }))
-);
-const NPSSurvey = lazy(() =>
-  import("@/components/home/NPSSurvey").then((m) => ({
-    default: m.NPSSurvey,
-  }))
-);
-const TrustBanner = lazy(() =>
-  import("@/components/TrustBanner").then((m) => ({ default: m.TrustBanner }))
-);
-const ScrollToTop = lazy(() =>
-  import("@/components/ScrollToTop").then((m) => ({ default: m.ScrollToTop }))
-);
-const DermoBrands = lazy(() =>
-  import("@/components/home/DermoBrands").then((m) => ({ default: m.DermoBrands }))
-);
-const EliteBrandShowcase = lazy(() =>
-  import("@/components/home/EliteBrandShowcase")
 );
 const ScienceMeetsStyle = lazy(() =>
   import("@/components/home/ScienceMeetsStyle").then((m) => ({
     default: m.ScienceMeetsStyle,
   }))
 );
-const DualPersonaBestsellers = lazy(() =>
-  import("@/components/home/DualPersonaBestsellers").then((m) => ({
-    default: m.DualPersonaBestsellers,
-  }))
-);
-const GuidedDiscovery = lazy(() =>
-  import("@/components/home/GuidedDiscovery").then((m) => ({
-    default: m.GuidedDiscovery,
-  }))
-);
-const ClinicalTruthBanner = lazy(() =>
-  import("@/components/home/ClinicalTruthBanner")
+const EliteBrandShowcase = lazy(() =>
+  import("@/components/home/EliteBrandShowcase")
 );
 const ContextualSocialProof = lazy(() =>
   import("@/components/home/ContextualSocialProof")
 );
+const Newsletter = lazy(() =>
+  import("@/components/Newsletter").then((m) => ({ default: m.Newsletter }))
+);
+const ScrollToTop = lazy(() =>
+  import("@/components/ScrollToTop").then((m) => ({ default: m.ScrollToTop }))
+);
 const FloatingSocials = lazy(() =>
   import("@/components/FloatingSocials").then((m) => ({
     default: m.FloatingSocials,
-  }))
-);
-const AsperExperience = lazy(() =>
-  import("@/components/home/AsperExperience").then((m) => ({
-    default: m.AsperExperience,
   }))
 );
 
@@ -117,6 +67,29 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
     </div>
   </div>
 );
+
+// Smooth section wrapper — fades in as it enters the viewport.
+// Respects the OS-level "prefers-reduced-motion" setting by skipping
+// the animation for users who have requested reduced motion.
+const FadeInSection = ({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) => {
+  const prefersReducedMotion = useReducedMotion();
+  return (
+    <motion.div
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 32 }}
+      whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1], delay }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 // Sample product data for sliders
 const NEW_ARRIVALS = [
@@ -141,7 +114,6 @@ const BESTSELLERS = [
 ];
 
 const Index = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   const { data: newArrivals = [] } = useQuery({
@@ -210,112 +182,93 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background animate-fade-in">
       <Header />
+
       <main>
-        {/* ═══ ZONE 1: Cinematic Full-Screen Video Hero ═══ */}
+        {/* ══════════════════════════════════════════════
+            ZONE 1 — Full-Screen Cinematic Hero
+        ══════════════════════════════════════════════ */}
         <CinematicHero />
 
-        {/* ═══ ZONE 2: Science Meets Elegance 50/50 Split ═══ */}
-        <ScienceMeetsEleganceSplit />
-
-        <ThreeClickOnboarding />
-
-        {/* ═══ DermoBrands Bar ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-16" />}>
-          <DermoBrands />
-        </Suspense>
-
-        {/* ═══ Morning Spa Ritual Banner ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-96" />}>
-          <MorningSpaRitualBanner />
-        </Suspense>
-
-        {/* ═══ Science Meets Style Brand Logos ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-96" />}>
-          <ScienceMeetsStyle />
-        </Suspense>
-
-        {/* ═══ Dual-Persona Triage (AI Gatekeeper) ═══ */}
-        <DualPersonaTriage />
-
-        {/* ═══ Shop by Protocol (Editorial Navigation) ═══ */}
-        <ShopByProtocol />
-
-        {/* ═══ Dual-Persona Tabbed Bestsellers ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
-          <DualPersonaBestsellers />
-        </Suspense>
-
-        {/* ═══ AI-Guided Discovery (Ms. Zain's Shade Guide) ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
-          <GuidedDiscovery />
-        </Suspense>
-
-        {/* ═══ Product Sliders (Bestsellers + New Arrivals) ═══ */}
-        <ProductSlider
-          title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
-          subtitle={{ en: "Most Loved", ar: "الأكثر حباً" }}
-          products={bestsellers.length > 0 ? bestsellers : BESTSELLERS}
-        />
-        <ProductSlider
-          title={{ en: "Just Landed! What's New", ar: "وصل حديثاً! الجديد لدينا" }}
-          subtitle={{ en: "New Arrivals", ar: "وصل حديثاً" }}
-          products={newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS}
-        />
-
-        {/* ═══ EliteBrandShowcase (Authority) ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
-          <EliteBrandShowcase />
-        </Suspense>
-
-        {/* ═══ Clinical Dispatch (Editorial) ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-96" />}>
-          <EditorialSpotlight />
-        </Suspense>
-
-        {/* ═══ Clinical Truth + Social Proof ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-48" />}>
-          <ClinicalTruthBanner />
-        </Suspense>
-        <Suspense fallback={<SectionSkeleton height="h-96" />}>
-          <ContextualSocialProof />
-        </Suspense>
-
-        {/* ═══ Conversion Close ═══ */}
-        <Suspense fallback={<SectionSkeleton height="h-96" />}>
-          <BrandOfTheWeek />
-        </Suspense>
-        <Suspense fallback={<SectionSkeleton height="h-96" />}>
-          <CelestialFeaturedCollection />
-        </Suspense>
-
-        {/* USP Bar */}
+        {/* ══════════════════════════════════════════════
+            ZONE 2 — Trust Signals
+        ══════════════════════════════════════════════ */}
         <USPBar />
 
-        {/* Featured Brands */}
-        <Suspense fallback={<SectionSkeleton height="h-32" />}>
-          <FeaturedBrands />
+        {/* ══════════════════════════════════════════════
+            ZONE 3 — Clinical vs Luxury 50/50 Split
+        ══════════════════════════════════════════════ */}
+        <FadeInSection>
+          <ScienceMeetsEleganceSplit />
+        </FadeInSection>
+
+        {/* ══════════════════════════════════════════════
+            ZONE 4 — Bestselling Products Slider
+        ══════════════════════════════════════════════ */}
+        <FadeInSection>
+          <ProductSlider
+            title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
+            subtitle={{ en: "Most Loved", ar: "الأكثر حباً" }}
+            products={bestsellers.length > 0 ? bestsellers : BESTSELLERS}
+          />
+        </FadeInSection>
+
+        {/* ══════════════════════════════════════════════
+            ZONE 5 — Morning Spa Editorial Banner
+        ══════════════════════════════════════════════ */}
+        <Suspense fallback={<SectionSkeleton height="h-[480px]" />}>
+          <FadeInSection>
+            <MorningSpaRitualBanner />
+          </FadeInSection>
         </Suspense>
 
-        {/* Newsletter */}
-        <Suspense fallback={<SectionSkeleton height="h-48" />}>
-          <Newsletter />
+        {/* ══════════════════════════════════════════════
+            ZONE 6 — New Arrivals Slider
+        ══════════════════════════════════════════════ */}
+        <FadeInSection>
+          <ProductSlider
+            title={{ en: "Just Landed! What's New", ar: "وصل حديثاً! الجديد لدينا" }}
+            subtitle={{ en: "New Arrivals", ar: "وصل حديثاً" }}
+            products={newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS}
+          />
+        </FadeInSection>
+
+        {/* ══════════════════════════════════════════════
+            ZONE 7 — Brand Logo Showcase
+        ══════════════════════════════════════════════ */}
+        <Suspense fallback={<SectionSkeleton height="h-64" />}>
+          <FadeInSection>
+            <ScienceMeetsStyle />
+          </FadeInSection>
         </Suspense>
 
-        {/* NPS Survey */}
-        <Suspense fallback={<SectionSkeleton height="h-20" />}>
-          <NPSSurvey />
+        {/* ══════════════════════════════════════════════
+            ZONE 8 — Elite Brand Showcase
+        ══════════════════════════════════════════════ */}
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <FadeInSection>
+            <EliteBrandShowcase />
+          </FadeInSection>
         </Suspense>
 
-        {/* ═══ The Asper Experience — Old video carousel relocated here ═══ */}
+        {/* ══════════════════════════════════════════════
+            ZONE 9 — Social Proof / Reviews
+        ══════════════════════════════════════════════ */}
         <Suspense fallback={<SectionSkeleton height="h-96" />}>
-          <AsperExperience />
+          <FadeInSection>
+            <ContextualSocialProof />
+          </FadeInSection>
         </Suspense>
 
-        {/* Trust Banner */}
-        <Suspense fallback={<SectionSkeleton height="h-24" />}>
-          <TrustBanner />
+        {/* ══════════════════════════════════════════════
+            ZONE 10 — Newsletter Sign-Up
+        ══════════════════════════════════════════════ */}
+        <Suspense fallback={<SectionSkeleton height="h-64" />}>
+          <FadeInSection>
+            <Newsletter />
+          </FadeInSection>
         </Suspense>
       </main>
+
       <Footer />
 
       <Suspense fallback={null}>
