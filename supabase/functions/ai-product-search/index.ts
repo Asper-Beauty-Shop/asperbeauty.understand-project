@@ -22,18 +22,21 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    // Fetch all products from database
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
 
+    // Only fetch In_Stock products, top 200 by bestseller rank — AI can't handle 10k rows
     const { data: products, error: dbError } = await supabase
       .from("products")
-      .select("id, name, description, category, price, brand, tags, image_url, in_stock");
+      .select("id, title, handle, brand, category, price, primary_concern, tags")
+      .eq("availability_status", "In_Stock")
+      .order("bestseller_rank", { ascending: true, nullsFirst: false })
+      .limit(200);
 
     if (dbError) throw new Error(`Database error: ${dbError.message}`);
 
-    // Use AI to find the best matching products
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -41,15 +44,17 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-flash",
         messages: [
           {
             role: "system",
-            content: `You are a beauty product search assistant. Given a user query and a product catalog, return the IDs of the most relevant products (up to 5) ranked by relevance. Consider product names, descriptions, categories, brands, and tags when matching.`,
+            content: `You are a beauty product search assistant for Asper Beauty Shop (Jordan).
+Given a user query and a product catalog, return the IDs of the most relevant products (up to 5) ranked by relevance.
+Consider product titles, brands, categories, concerns, and tags when matching.`,
           },
           {
             role: "user",
-            content: `User query: "${query}"\n\nProduct catalog:\n${JSON.stringify(products, null, 2)}`,
+            content: `User query: "${query}"\n\nProduct catalog:\n${JSON.stringify(products)}`,
           },
         ],
         tools: [
@@ -64,7 +69,7 @@ serve(async (req) => {
                   product_ids: {
                     type: "array",
                     items: { type: "string" },
-                    description: "Array of product UUIDs, ordered by relevance",
+                    description: "Array of product UUIDs, ordered by relevance (max 5)",
                   },
                 },
                 required: ["product_ids"],
@@ -80,18 +85,14 @@ serve(async (req) => {
     if (!aiResponse.ok) {
       if (aiResponse.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again later." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (aiResponse.status === 402) {
         return new Response(JSON.stringify({ error: "Payment required, please add credits." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const errorText = await aiResponse.text();
-      console.error("AI gateway error:", aiResponse.status, errorText);
       throw new Error("AI gateway error");
     }
 
@@ -104,8 +105,9 @@ serve(async (req) => {
       matchedIds = args.product_ids || [];
     }
 
-    // Return matched products in order
-    const matchedProducts = matchedIds.map((id: string) => products?.find((p: any) => p.id === id)).filter(Boolean);
+    const matchedProducts = matchedIds
+      .map((id: string) => products?.find((p: any) => p.id === id))
+      .filter(Boolean);
 
     return new Response(JSON.stringify({ products: matchedProducts }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -113,8 +115,7 @@ serve(async (req) => {
   } catch (e) {
     console.error("Search error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
