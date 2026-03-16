@@ -164,6 +164,7 @@ export default function BulkUpload() {
 
       try {
         const arrayBuffer = await file.arrayBuffer();
+        const ExcelJS = await loadExcelJS();
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
 
