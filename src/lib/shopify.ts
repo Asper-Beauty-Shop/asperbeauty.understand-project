@@ -87,36 +87,40 @@ export interface PaginatedProductsResponse {
 interface DbRow {
   id: string;
   title: string | null;
-  name: string;
-  description: string;
+  name: string | null;
+  description: string | null;
   handle: string | null;
-  brand: string;
-  category: string;
-  price: number;
+  brand: string | null;
+  category: string | null;
+  price: number | null;
   image_url: string | null;
   tags: string[] | null;
-  created_at: string;
-  in_stock: boolean | null;
+  created_at: string | null;
+  stock: number | null;
+  availability_status: string | null;
   primary_concern: string | null;
+  [key: string]: unknown;
 }
 
 function rowToProduct(row: DbRow): ShopifyProduct {
+  const title = row.title || row.name || "Unnamed Product";
+  const inStock = row.availability_status === "In_Stock" || (row.stock != null && row.stock > 0);
   return {
     node: {
       id: row.id,
-      title: row.title || row.name,
-      description: row.description,
+      title,
+      description: row.description || "",
       handle: row.handle || row.id,
-      vendor: row.brand,
-      productType: row.category,
+      vendor: row.brand || undefined,
+      productType: row.category || undefined,
       tags: row.tags ?? [],
       createdAt: row.created_at,
       priceRange: {
-        minVariantPrice: { amount: String(row.price), currencyCode: "JOD" },
+        minVariantPrice: { amount: String(row.price ?? 0), currencyCode: "JOD" },
       },
       images: {
         edges: row.image_url
-          ? [{ node: { url: row.image_url, altText: row.title || row.name } }]
+          ? [{ node: { url: row.image_url, altText: title } }]
           : [],
       },
       variants: {
@@ -125,9 +129,9 @@ function rowToProduct(row: DbRow): ShopifyProduct {
             node: {
               id: `${row.id}-default`,
               title: "Default",
-              price: { amount: String(row.price), currencyCode: "JOD" },
+              price: { amount: String(row.price ?? 0), currencyCode: "JOD" },
               compareAtPrice: null,
-              availableForSale: row.in_stock !== false,
+              availableForSale: inStock,
               selectedOptions: [],
             },
           },
@@ -147,7 +151,7 @@ export async function fetchProducts(
   let q = supabase
     .from("products")
     .select("*")
-    .neq("availability_status", "Pending_Purge")
+    .eq("availability_status", "In_Stock")
     .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .limit(first);
 
@@ -168,7 +172,7 @@ export async function fetchProductsPaginated(
   const { data, error, count } = await supabase
     .from("products")
     .select("*", { count: "exact" })
-    .neq("availability_status", "Pending_Purge")
+    .eq("availability_status", "In_Stock")
     .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .range(offset, offset + first - 1);
 
@@ -209,23 +213,7 @@ export async function searchProducts(
     return [];
   }
 
-  return (data ?? []).map((row: any) =>
-    rowToProduct({
-      id: row.id,
-      title: row.title,
-      name: row.name,
-      description: row.description ?? "",
-      handle: row.handle,
-      brand: row.brand,
-      category: row.category,
-      price: row.price,
-      image_url: row.image_url,
-      tags: row.tags,
-      created_at: row.created_at,
-      in_stock: row.in_stock,
-      primary_concern: row.primary_concern,
-    })
-  );
+  return (data ?? []).map((row: any) => rowToProduct(row));
 }
 
 export async function fetchProductByHandle(handle: string) {

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Asper Beauty Shop</title>
+  <script>
+    // SPA redirect: store the path and redirect to root
+    var path = window.location.pathname;
+    sessionStorage.setItem('spa_redirect', path);
+    window.location.replace('/');
+  </script>
+</head>
+<body></body>
+</html>

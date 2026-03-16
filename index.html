@@ -16,6 +16,16 @@
     <link rel="canonical" href="https://www.asperbeautyshop.com/" />
   </head>
   <body>
+    <script>
+      // Restore path from SPA 404 redirect
+      (function() {
+        var redirect = sessionStorage.getItem('spa_redirect');
+        if (redirect && redirect !== '/') {
+          sessionStorage.removeItem('spa_redirect');
+          window.history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
