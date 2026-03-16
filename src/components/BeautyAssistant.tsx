@@ -69,7 +69,7 @@ export const BeautyAssistant = () => {
               <div className="relative shrink-0">
                 <div className="w-11 h-11 rounded-full overflow-hidden border border-polished-gold/40">
                   <img 
-                    src="/dr-sami-head.png" 
+                    src="/dr-sami-head.webp" 
                     alt="Dr. Sami" 
                     className="w-full h-full object-cover object-top"
                   />
