@@ -29,6 +29,7 @@ import Philosophy from "./pages/Philosophy";
 const BulkUpload = lazy(() => import("./pages/BulkUpload"));
 const AdminOrders = lazy(() => import("./pages/AdminOrders"));
 const ManageProducts = lazy(() => import("./pages/ManageProducts"));
+const CatalogIngestion = lazy(() => import("./pages/CatalogIngestion"));
 const TrackOrder = lazy(() => import("./pages/TrackOrder"));
 import Shop from "./pages/Shop";
 import ShopAllOrganized from "./components/ShopAllOrganized";
@@ -114,6 +115,7 @@ const App = () => {
                 <Route path="/admin/bulk-upload" element={<BulkUpload />} />
                 <Route path="/admin/orders" element={<AdminOrders />} />
                 <Route path="/admin/products" element={<ManageProducts />} />
+                <Route path="/admin/catalog-ingestion" element={<CatalogIngestion />} />
                 <Route path="/track-order" element={<TrackOrder />} />
                 <Route path="/tracking" element={<Navigate to="/track-order" replace />} />
                 <Route path="/shipping" element={<Navigate to="/contact" replace />} />
