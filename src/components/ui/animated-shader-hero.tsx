@@ -465,18 +465,18 @@ const AnimatedShaderHero: React.FC<HeroProps> = ({
 
   // Parallax effect for portrait background
   useEffect(() => {
+    let rafId = 0;
     const handleScroll = () => {
-      if (portraitRef.current) {
-        const scrollY = window.scrollY;
-        const parallaxSpeed = 0.15;
-        portraitRef.current.style.transform = `translateY(${
-          scrollY * parallaxSpeed
-        }px)`;
-      }
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (portraitRef.current) {
+          portraitRef.current.style.transform = `translateY(${window.scrollY * 0.15}px)`;
+        }
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => { window.removeEventListener("scroll", handleScroll); cancelAnimationFrame(rafId); };
   }, []);
 
   return (

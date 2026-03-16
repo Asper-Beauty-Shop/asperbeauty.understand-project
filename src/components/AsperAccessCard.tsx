@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from "react";
+import { useState, useRef, MouseEvent } from "react";
 import { format } from "date-fns";
 
 export interface LedgerEntry {
@@ -20,11 +20,16 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
   const [glareY, setGlareY] = useState(50);
   const [isHovered, setIsHovered] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  // Cache bounding rect on mouseenter (once per hover) to avoid per-mousemove reflows
+  const cachedRect = useRef<DOMRect | null>(null);
+
+  const handleMouseEnterCard = (e: MouseEvent<HTMLDivElement>) => {
+    cachedRect.current = e.currentTarget.getBoundingClientRect();
+  };
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (isFlipped) return;
-    const card = e.currentTarget;
-    const box = card.getBoundingClientRect();
+    if (isFlipped || !cachedRect.current) return;
+    const box = cachedRect.current;
     const x = e.clientX - box.left;
     const y = e.clientY - box.top;
     const centerX = box.width / 2;
@@ -80,7 +85,7 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
     >
       <div
         onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={(e) => { handleMouseEnterCard(e); setIsHovered(true); }}
         onMouseLeave={handleMouseLeave}
         className="w-full h-full relative transition-all duration-700 ease-luxury"
         style={{
