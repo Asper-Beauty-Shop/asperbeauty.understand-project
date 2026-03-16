@@ -94,6 +94,8 @@ export const LuxuryPromoBanner = ({
         <img
           src={displayImage}
           alt={displayTitle}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-105"
         />
         {/* Subtle Overlay */}

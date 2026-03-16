@@ -187,6 +187,8 @@ export const CartDrawer = () => {
                               <img
                                 src={item.product.node.images.edges[0].node.url}
                                 alt={item.product.node.title}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover"
                               />
                             )}
