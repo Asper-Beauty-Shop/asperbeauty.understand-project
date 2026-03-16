@@ -200,6 +200,7 @@ export default function AIConcierge() {
   const deepLinkHandled = useRef(false);
   const pendingDeepLinkPrompt = useRef<string | null>(null);
   const deepLinkSource = useRef<string | null>(null);
+  const emailSentThisSession = useRef(false);
 
   // Intent-to-prompt mapping for marketing deep links
   const INTENT_PROMPTS: Record<string, string> = {
