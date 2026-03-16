@@ -35,11 +35,11 @@ export const FeaturedCarousel = () => {
   const scroll = (direction: "left" | "right") => {
     if (scrollContainerRef.current) {
       const scrollAmount = 320;
-      requestAnimationFrame(() => {
-        if (!scrollContainerRef.current) return;
-        const newScrollLeft = scrollContainerRef.current.scrollLeft +
-          (direction === "left" ? -scrollAmount : scrollAmount);
-        scrollContainerRef.current.scrollTo({ left: newScrollLeft, behavior: "smooth" });
+      const newScrollLeft = scrollContainerRef.current.scrollLeft +
+        (direction === "left" ? -scrollAmount : scrollAmount);
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: "smooth",
       });
     }
   };

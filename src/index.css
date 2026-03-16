@@ -718,7 +718,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url("/luxury-beauty-background.jpg");
+  background-image: url("/luxury-beauty-background.webp");
   background-size: 120% auto;
   background-position: center;
   background-repeat: no-repeat;
@@ -736,7 +736,7 @@ body::before {
 .hero-portrait-background {
   position: absolute;
   inset: -20%;
-  background-image: url("/luxury-beauty-background.jpg");
+  background-image: url("/luxury-beauty-background.webp");
   background-size: cover;
   background-position: center right;
   background-repeat: no-repeat;
