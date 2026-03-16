@@ -199,7 +199,7 @@ const ProductDetail = () => {
   }
 
   const brandName = product.brand || (isArabic ? "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø­ØµØ±ÙŠØ©" : "Exclusive Collection");
-  const galleryImages = product.image_url ? [product.image_url] : ["/editorial-showcase-2.jpg"];
+  const galleryImages = product.image_url ? [product.image_url] : ["/editorial-showcase-2.webp"];
 
   return (
     <div className="min-h-screen bg-background">
