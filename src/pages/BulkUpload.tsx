@@ -287,6 +287,7 @@ export default function BulkUpload() {
       if (!response.ok) throw new Error("Failed to fetch file");
 
       const arrayBuffer = await response.arrayBuffer();
+      const ExcelJS = await loadExcelJS();
       const workbook = new ExcelJS.Workbook();
       await workbook.xlsx.load(arrayBuffer);
 
