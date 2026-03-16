@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { MessageCircle, X, Send, Shield, Heart, Loader2, Volume2, VolumeX, Camera, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
+import { sendConsultationSummaryEmail } from "@/lib/sendConsultationEmail";
 import { supabase } from "@/integrations/supabase/client";
 import { playNotificationSound } from "@/lib/sounds";
 
