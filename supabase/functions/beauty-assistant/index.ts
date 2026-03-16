@@ -71,14 +71,26 @@ function formatProduct(p: Record<string, unknown>): string {
 
 // deno-lint-ignore no-explicit-any
 async function fetchProductContext(supabase: any, userMessage: string, slug: string | null) {
+  const FIELDS = "id,title,handle,brand,price,primary_concern,regimen_step,pharmacist_note";
   let matched: Record<string, unknown>[] = [];
   if (slug) {
     const enums = CONCERN_MAPPING[slug] || [];
-    const { data } = await supabase.from("products").select("*").in("primary_concern", enums).gt("inventory_total", 0).limit(6);
+    const { data } = await supabase
+      .from("products")
+      .select(FIELDS)
+      .in("primary_concern", enums)
+      .eq("availability_status", "In_Stock")
+      .order("bestseller_rank", { ascending: true, nullsFirst: false })
+      .limit(6);
     matched = data || [];
   }
   if (matched.length === 0) {
-    const { data } = await supabase.from("products").select("*").gt("inventory_total", 0).limit(6);
+    const { data } = await supabase
+      .from("products")
+      .select(FIELDS)
+      .eq("availability_status", "In_Stock")
+      .order("bestseller_rank", { ascending: true, nullsFirst: false })
+      .limit(6);
     matched = data || [];
   }
   return { context: matched.map(formatProduct).join("\n"), products: matched };
