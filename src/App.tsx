@@ -122,6 +122,7 @@ const App = () => {
                 <Route path="/driver" element={<DriverDashboard />} />
                 <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
                 <Route path="/admin/purge-review" element={<PurgeReview />} />
+                <Route path="/admin/emails" element={<AdminEmailDashboard />} />
                 <Route
                   path="/brand-intelligence"
                   element={
