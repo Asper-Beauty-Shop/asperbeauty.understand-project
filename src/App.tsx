@@ -29,6 +29,7 @@ import Philosophy from "./pages/Philosophy";
 const BulkUpload = lazy(() => import("./pages/BulkUpload"));
 const AdminOrders = lazy(() => import("./pages/AdminOrders"));
 const ManageProducts = lazy(() => import("./pages/ManageProducts"));
+const TrackOrder = lazy(() => import("./pages/TrackOrder"));
 import Shop from "./pages/Shop";
 import ShopAllOrganized from "./components/ShopAllOrganized";
 import DriverDashboard from "./pages/DriverDashboard";
