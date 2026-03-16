@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { MessageCircle, X, Send, Shield, Heart, Loader2, Volume2, VolumeX, Camera, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
+import { sendConsultationSummaryEmail } from "@/lib/sendConsultationEmail";
 import { supabase } from "@/integrations/supabase/client";
 import { playNotificationSound } from "@/lib/sounds";
 
@@ -199,6 +200,7 @@ export default function AIConcierge() {
   const deepLinkHandled = useRef(false);
   const pendingDeepLinkPrompt = useRef<string | null>(null);
   const deepLinkSource = useRef<string | null>(null);
+  const emailSentThisSession = useRef(false);
 
   // Intent-to-prompt mapping for marketing deep links
   const INTENT_PROMPTS: Record<string, string> = {
@@ -391,7 +393,37 @@ export default function AIConcierge() {
           setCurrentPersona(p);
         },
         onDelta: upsert,
-        onDone: () => { setIsLoading(false); playNotificationSound(); },
+        onDone: async () => {
+          setIsLoading(false);
+          playNotificationSound();
+
+          // Send consultation summary email once per session for substantive responses
+          if (!emailSentThisSession.current && assistantSoFar.length > 200) {
+            emailSentThisSession.current = true;
+            try {
+              const { data: { user } } = await supabase.auth.getUser();
+              if (user?.email) {
+                const { data: profile } = await supabase
+                  .from("profiles")
+                  .select("display_name")
+                  .eq("user_id", user.id)
+                  .maybeSingle();
+
+                await sendConsultationSummaryEmail({
+                  to: user.email,
+                  customer_name: profile?.display_name || undefined,
+                  concern_type: userProfile?.skin_concern || undefined,
+                  skin_type: userProfile?.skin_type || undefined,
+                  ai_summary: assistantSoFar.slice(0, 800),
+                });
+                console.log("Consultation summary email queued");
+              }
+            } catch (emailErr) {
+              console.warn("Failed to send consultation email:", emailErr);
+              // Non-blocking — don't disrupt the chat experience
+            }
+          }
+        },
         onSafetyFlags: (flags) => setSafetyFlags(flags),
       });
     } catch (e: unknown) {

@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ASPER_PROTOCOL } from "@/lib/asperProtocol";
 import { DigitalTray } from "./chat/DigitalTray";
 import { cn } from "@/lib/utils";
+import { sendConsultationSummaryEmail } from "@/lib/sendConsultationEmail";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
@@ -22,6 +23,7 @@ export const BeautyAssistant = () => {
   const { language, locale } = useLanguage();
   const isAr = locale === "ar";
   const scrollRef = useRef<HTMLDivElement>(null);
+  const emailSentRef = useRef(false);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -43,7 +45,36 @@ export const BeautyAssistant = () => {
         body: { messages: [...messages, userMsg], language }
       });
       if (error) throw error;
-      setMessages(prev => [...prev, { role: "assistant", content: data.reply, trayProducts: data.products }]);
+      const reply = data.reply || "";
+      setMessages(prev => [...prev, { role: "assistant", content: reply, trayProducts: data.products }]);
+
+      // Send consultation summary email once per session
+      if (!emailSentRef.current && reply.length > 200) {
+        emailSentRef.current = true;
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user?.email) {
+            const { data: profile } = await supabase
+              .from("profiles")
+              .select("display_name")
+              .eq("user_id", user.id)
+              .maybeSingle();
+
+            await sendConsultationSummaryEmail({
+              to: user.email,
+              customer_name: profile?.display_name || undefined,
+              ai_summary: reply.slice(0, 800),
+              regimen: data.products?.map((p: any) => ({
+                title: p.title || p.name,
+                brand: p.brand,
+                price: p.price,
+              })),
+            });
+          }
+        } catch (emailErr) {
+          console.warn("Failed to send consultation email:", emailErr);
+        }
+      }
     } catch (err) {
       console.error(err);
       toast.error(ASPER_PROTOCOL.errorShort[language === 'ar' ? 'ar' : 'en']);
