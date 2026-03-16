@@ -19,6 +19,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { useWishlistStore } from "@/stores/wishlistStore";
 import { CartDrawer } from "./CartDrawer";
 import { WishlistDrawer } from "./WishlistDrawer";
+import { CategoryNavBar } from "./CategoryNavBar";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { SearchDropdown } from "./SearchDropdown";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -516,6 +517,7 @@ export const Header = () => {
         </div>
       )}
 
+      <CategoryNavBar />
       <CartDrawer />
       <WishlistDrawer />
     </header>
