@@ -161,6 +161,11 @@ const ProductDetail = () => {
 
   const isWishlisted = product ? isInWishlist(product.id) : false;
   const currentPrice = product?.price ?? 0;
+  const isOutOfStock = product?.in_stock === false;
+  const originalPrice = product?.original_price ?? null;
+  const discountPct = product?.is_on_sale && originalPrice && currentPrice
+    ? Math.round((1 - currentPrice / originalPrice) * 100)
+    : 0;
 
   if (loading) {
     return (
@@ -221,16 +226,46 @@ const ProductDetail = () => {
           <div className="p-8 lg:p-16 flex flex-col justify-center min-h-full">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-sm mb-6">
-              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Home"}</Link>
+              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "الرئيسية" : "Home"}</Link>
               <span className="text-muted-foreground">/</span>
-              <Link to="/shop" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "Ø§Ù„Ù…ØªØ¬Ø±" : "Shop"}</Link>
+              <Link to="/shop" className="text-muted-foreground hover:text-primary transition-colors">{isArabic ? "المتجر" : "Shop"}</Link>
+              {product.asper_category && (
+                <>
+                  <span className="text-muted-foreground">/</span>
+                  <Link
+                    to={`/shop?category=${encodeURIComponent(product.asper_category)}`}
+                    className="text-muted-foreground hover:text-primary transition-colors truncate max-w-[120px]"
+                  >
+                    {product.asper_category}
+                  </Link>
+                </>
+              )}
             </nav>
 
             {/* Above the Fold: Brand, Title, Price */}
             <div className="mb-8">
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground mb-3 block">{brandName}</span>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground">{brandName}</span>
+                {isOutOfStock && (
+                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 bg-muted-foreground/20 text-muted-foreground rounded">
+                    {isArabic ? "نفد المخزون" : "Out of Stock"}
+                  </span>
+                )}
+                {!isOutOfStock && discountPct > 0 && (
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-polished-gold text-dark-charcoal rounded">
+                    -{discountPct}% OFF
+                  </span>
+                )}
+              </div>
               <h1 className="font-serif text-3xl lg:text-4xl text-foreground leading-tight mb-6">{product.title}</h1>
-              <SplitPrice amount={currentPrice} />
+              <div className="flex items-baseline gap-3">
+                <SplitPrice amount={currentPrice} />
+                {discountPct > 0 && originalPrice && (
+                  <span className="text-base text-muted-foreground line-through font-body">
+                    {originalPrice.toFixed(3)} JD
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Pharmacist Note (brief) */}
@@ -266,9 +301,11 @@ const ProductDetail = () => {
               </div>
 
               <div className="flex gap-4">
-                <Button onClick={handleAddToCart} variant="luxury" size="luxury-lg" className="flex-1">
+                <Button onClick={handleAddToCart} disabled={isOutOfStock} variant="luxury" size="luxury-lg" className="flex-1 disabled:opacity-50 disabled:cursor-not-allowed">
                   <ShoppingBag className="w-5 h-5 me-3" />
-                  {isArabic ? "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø­Ù‚ÙŠØ¨Ø©" : "Add to Ritual"} â€” {formatJODSimple(currentPrice * quantity)}
+                  {isOutOfStock
+                    ? (isArabic ? "نفد المخزون" : "Out of Stock")
+                    : `${isArabic ? "أضف إلى الحقيبة" : "Add to Ritual"} — ${formatJODSimple(currentPrice * quantity)}`}
                 </Button>
                 <button onClick={handleWishlistToggle} className={`w-14 h-14 flex items-center justify-center border transition-all ${isWishlisted ? "bg-primary border-primary text-primary-foreground" : "border-border text-foreground hover:border-primary"}`}>
                   <Heart className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`} />
@@ -456,4 +493,3 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
-
