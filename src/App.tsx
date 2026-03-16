@@ -115,6 +115,7 @@ const App = () => {
                 <Route path="/admin/bulk-upload" element={<BulkUpload />} />
                 <Route path="/admin/orders" element={<AdminOrders />} />
                 <Route path="/admin/products" element={<ManageProducts />} />
+                <Route path="/admin/catalog-ingestion" element={<CatalogIngestion />} />
                 <Route path="/track-order" element={<TrackOrder />} />
                 <Route path="/tracking" element={<Navigate to="/track-order" replace />} />
                 <Route path="/shipping" element={<Navigate to="/contact" replace />} />
