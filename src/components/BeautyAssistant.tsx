@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ASPER_PROTOCOL } from "@/lib/asperProtocol";
 import { DigitalTray } from "./chat/DigitalTray";
 import { cn } from "@/lib/utils";
+import { sendConsultationSummaryEmail } from "@/lib/sendConsultationEmail";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
