@@ -402,7 +402,7 @@ export const Header = () => {
             <div className="space-y-6">
               <div className="space-y-3">
                 <h3 className="font-display text-lg font-bold text-burgundy">
-                  {language === "ar" ? "ØªØ³ÙˆÙ‚ Ø­Ø³Ø¨ Ø§Ù„Ø¹Ù„Ø§Ù…Ø©" : "Shop by Brand"}
+                  {language === "ar" ? "تسوق حسب العلامة" : "Shop by Brand"}
                 </h3>
                 {megaMenus.brands.slice(0, 4).map((b) => (
                   <Link
