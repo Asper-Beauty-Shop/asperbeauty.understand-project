@@ -135,7 +135,7 @@ export const Header = () => {
                       textColor, textColorHover
                     )}
                   >
-                    {language === "ar" ? "Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª" : "Brands"}{" "}
+                    {language === "ar" ? "العلامات" : "Brands"}{" "}
                     <ChevronDown className="h-3 w-3" />
                   </Link>
                   {activeMegaMenu === "brands" && (
