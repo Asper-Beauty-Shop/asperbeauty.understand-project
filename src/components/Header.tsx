@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import asperLogoHorizontal from "@/assets/asper-logo-horizontal.png";
 import { AsperWordmark } from "@/components/ui/AsperWordmark";
 import { Link, useLocation } from "react-router-dom";
@@ -31,16 +31,16 @@ const megaMenus = {
     { name: "La Roche-Posay", href: "/brands/laroche", label: "Dermocosmetic" },
     { name: "CeraVe", href: "/brands/cerave", label: "Daily Care" },
     { name: "Maybelline", href: "/brands/maybelline", label: "Makeup" },
-    { name: "L'OrÃ©al Paris", href: "/brands/loreal", label: "Hair & Skin" },
+    { name: "L'Oréal Paris", href: "/brands/loreal", label: "Hair & Skin" },
     { name: "Garnier", href: "/brands/garnier", label: "Natural" },
   ],
   concerns: [
-    { name: "Acne & Blemishes", href: "/concerns/acne", icon: "âœ¨" },
-    { name: "Anti-Aging & Wrinkles", href: "/concerns/anti-aging", icon: "â³" },
-    { name: "Dryness & Hydration", href: "/concerns/dryness", icon: "ðŸ’§" },
-    { name: "Sensitivity & Redness", href: "/concerns/sensitivity", icon: "ðŸ›¡ï¸" },
-    { name: "Pigmentation", href: "/concerns/pigmentation", icon: "â˜€ï¸" },
-    { name: "Hair Loss", href: "/concerns/hair-loss", icon: "ðŸ’†â€â™€ï¸" },
+    { name: "Acne & Blemishes", href: "/concerns/acne", icon: "✨" },
+    { name: "Anti-Aging & Wrinkles", href: "/concerns/anti-aging", icon: "⏳" },
+    { name: "Dryness & Hydration", href: "/concerns/dryness", icon: "💧" },
+    { name: "Sensitivity & Redness", href: "/concerns/sensitivity", icon: "🛡️" },
+    { name: "Pigmentation", href: "/concerns/pigmentation", icon: "☀️" },
+    { name: "Hair Loss", href: "/concerns/hair-loss", icon: "💆‍♀️" },
   ],
 };
 
@@ -80,10 +80,10 @@ export const Header = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Always solid ivory background â€” text always visible
+  // Always solid ivory background — text always visible
   const isTransparent = false;
 
-  // Dynamic text color class â€” always dark on ivory
+  // Dynamic text color class — always dark on ivory
   const textColor = "text-burgundy";
   const textColorHover = "hover:text-polished-gold";
   const iconColor = "text-burgundy";
@@ -91,7 +91,7 @@ export const Header = () => {
   return (
     <header className={cn("fixed top-0 z-50 w-full", isHomepage && "")}>
       {/* 1. TOP ANNOUNCEMENT BAR */}
-                  <div className="bg-burgundy text-polished-white py-2 text-center text-[10px] uppercase tracking-[0.3em] font-bold">
+      <div className="bg-burgundy text-polished-white py-2 text-center text-[10px] uppercase tracking-[0.3em] font-bold">
         {language === "ar" 
           ? "الافتتاح الكبير اليوم الساعة 6:00 مساءً — اختبري الرفاهية الطبية" 
           : "Grand Opening Today at 6:00 PM — Experience Medical Luxury"}
@@ -109,7 +109,7 @@ export const Header = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center h-20">
 
-            {/* 1. LEFT UTILITY ZONE â€” flex-1 balances the right zone */}
+            {/* 1. LEFT UTILITY ZONE — flex-1 balances the right zone */}
             <div className="flex-1 flex items-center justify-start gap-2 md:gap-4">
               <button
                 type="button"
@@ -135,7 +135,7 @@ export const Header = () => {
                       textColor, textColorHover
                     )}
                   >
-                    {language === "ar" ? "Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª" : "Brands"}{" "}
+                    {language === "ar" ? "العلامات" : "Brands"}{" "}
                     <ChevronDown className="h-3 w-3" />
                   </Link>
                   {activeMegaMenu === "brands" && (
@@ -159,7 +159,7 @@ export const Header = () => {
                           to="/brands"
                           className="text-xs font-bold text-burgundy hover:underline uppercase tracking-widest"
                         >
-                          {language === "ar" ? "Ø¹Ø±Ø¶ ÙƒÙ„ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª 50+" : "View All 50+ Brands"}
+                          {language === "ar" ? "عرض كل العلامات 50+" : "View All 50+ Brands"}
                         </Link>
                       </div>
                     </div>
@@ -179,14 +179,14 @@ export const Header = () => {
                       textColor, textColorHover
                     )}
                   >
-                    {language === "ar" ? "Ù…Ø´Ø§ÙƒÙ„ Ø§Ù„Ø¨Ø´Ø±Ø©" : "Skin Concerns"}{" "}
+                    {language === "ar" ? "مشاكل البشرة" : "Skin Concerns"}{" "}
                     <ChevronDown className="h-3 w-3" />
                   </Link>
                   {activeMegaMenu === "concerns" && (
                     <div className="absolute top-full left-0 min-w-[320px] w-[500px] bg-polished-white shadow-xl border-t-2 border-polished-gold p-6 grid grid-cols-1 gap-2 animate-fade-in rounded-b-sm z-50">
                       <div className="mb-2 pb-2 border-b border-rose-clay-light/30">
                         <span className="text-xs font-bold text-burgundy uppercase tracking-widest">
-                          {language === "ar" ? "ÙˆØ¶Ø¹ Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø©" : "Consultation Mode"}
+                          {language === "ar" ? "وضع الاستشارة" : "Consultation Mode"}
                         </span>
                       </div>
                       {megaMenus.concerns.map((concern) => (
@@ -206,7 +206,7 @@ export const Header = () => {
                           to="/skin-concerns"
                           className="text-xs font-bold text-polished-gold hover:text-burgundy transition-colors"
                         >
-                          {language === "ar" ? "Ø§Ø¨Ø¯Ø£ ØªØ­Ù„ÙŠÙ„ Ø§Ù„Ø¨Ø´Ø±Ø© â†" : "Start AI Skin Analysis â†’"}
+                          {language === "ar" ? "ابدأ تحليل البشرة ←" : "Start AI Skin Analysis →"}
                         </Link>
                       </div>
                     </div>
@@ -220,7 +220,7 @@ export const Header = () => {
                     textColor, textColorHover
                   )}
                 >
-                  {language === "ar" ? "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹" : "Best Sellers"}
+                  {language === "ar" ? "الأكثر مبيعاً" : "Best Sellers"}
                 </Link>
                 <Link
                   to="/offers"
@@ -229,12 +229,12 @@ export const Header = () => {
                     textColor, textColorHover
                   )}
                 >
-                  {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶" : "Offers"}
+                  {language === "ar" ? "العروض" : "Offers"}
                 </Link>
               </nav>
             </div>
 
-            {/* 2. CENTER BRAND ZONE â€” flex-shrink-0 keeps logo untouchable */}
+            {/* 2. CENTER BRAND ZONE — flex-shrink-0 keeps logo untouchable */}
             <div className="flex-shrink-0 flex items-center justify-center px-2 md:px-4">
               <Link to="/" className="block transition-transform duration-300 hover:scale-105" dir="ltr">
                 <AsperWordmark
@@ -243,7 +243,7 @@ export const Header = () => {
               </Link>
             </div>
 
-            {/* 3. RIGHT UTILITY ZONE â€” flex-1 balances the left zone */}
+            {/* 3. RIGHT UTILITY ZONE — flex-1 balances the left zone */}
             <div className="flex-1 flex items-center justify-end gap-2 md:gap-4">
               {/* Desktop Search */}
               <div
@@ -261,7 +261,7 @@ export const Header = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setSearchFocused(true)}
-                  placeholder={language === "ar" ? "Ø§Ø¨Ø­Ø« ÙÙŠ Ø¢Ù„Ø§Ù Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª..." : "Search 5,000+ items..."}
+                  placeholder={language === "ar" ? "ابحث في آلاف المنتجات..." : "Search 5,000+ items..."}
                   className={cn(
                     "bg-transparent border-none outline-none text-xs ml-2 w-full font-body",
                     isTransparent
@@ -369,7 +369,7 @@ export const Header = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onBlur={() => {}}
-              placeholder={language === "ar" ? "Ø§Ø¨Ø­Ø« ÙÙŠ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª..." : "Search 5,000+ items..."}
+              placeholder={language === "ar" ? "ابحث في المنتجات..." : "Search 5,000+ items..."}
               className="w-full px-4 py-2 pl-10 rounded-full border border-rose-clay-light/40 text-foreground font-body text-sm"
               dir={isRTL ? "rtl" : "ltr"}
               autoFocus
@@ -402,7 +402,7 @@ export const Header = () => {
             <div className="space-y-6">
               <div className="space-y-3">
                 <h3 className="font-display text-lg font-bold text-burgundy">
-                  {language === "ar" ? "ØªØ³ÙˆÙ‚ Ø­Ø³Ø¨ Ø§Ù„Ø¹Ù„Ø§Ù…Ø©" : "Shop by Brand"}
+                  {language === "ar" ? "تسوق حسب العلامة" : "Shop by Brand"}
                 </h3>
                 {megaMenus.brands.slice(0, 4).map((b) => (
                   <Link
@@ -419,12 +419,12 @@ export const Header = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="block py-2 text-burgundy font-bold text-sm"
                 >
-                  {language === "ar" ? "Ø¹Ø±Ø¶ ÙƒÙ„ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª" : "View All Brands"}
+                  {language === "ar" ? "عرض كل العلامات" : "View All Brands"}
                 </Link>
               </div>
               <div className="space-y-3">
                 <h3 className="font-display text-lg font-bold text-burgundy">
-                  {language === "ar" ? "Ù…Ø´Ø§ÙƒÙ„ Ø§Ù„Ø¨Ø´Ø±Ø©" : "Skin Concerns"}
+                  {language === "ar" ? "مشاكل البشرة" : "Skin Concerns"}
                 </h3>
                 {megaMenus.concerns.map((c) => (
                   <Link
@@ -489,14 +489,14 @@ export const Header = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="font-body text-burgundy font-medium"
                 >
-                  {language === "ar" ? "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹" : "Best Sellers"}
+                  {language === "ar" ? "الأكثر مبيعاً" : "Best Sellers"}
                 </Link>
                 <Link
                   to="/offers"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="font-body text-burgundy font-medium"
                 >
-                  {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶" : "Offers"}
+                  {language === "ar" ? "العروض" : "Offers"}
                 </Link>
                 <Link
                   to={user ? "/account" : "/auth"}
@@ -504,8 +504,8 @@ export const Header = () => {
                   className="font-body text-burgundy"
                 >
                   {user
-                    ? (language === "ar" ? "Ø­Ø³Ø§Ø¨ÙŠ" : "My Account")
-                    : (language === "ar" ? "ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„" : "Sign In")}
+                    ? (language === "ar" ? "حسابي" : "My Account")
+                    : (language === "ar" ? "تسجيل الدخول" : "Sign In")}
                 </Link>
               </div>
               <div className="pt-4">
@@ -521,6 +521,3 @@ export const Header = () => {
     </header>
   );
 };
-
-
-
