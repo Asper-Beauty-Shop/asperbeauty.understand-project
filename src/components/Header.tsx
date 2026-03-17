@@ -186,7 +186,7 @@ export const Header = () => {
                     <div className="absolute top-full left-0 min-w-[320px] w-[500px] bg-polished-white shadow-xl border-t-2 border-polished-gold p-6 grid grid-cols-1 gap-2 animate-fade-in rounded-b-sm z-50">
                       <div className="mb-2 pb-2 border-b border-rose-clay-light/30">
                         <span className="text-xs font-bold text-burgundy uppercase tracking-widest">
-                          {language === "ar" ? "ÙˆØ¶Ø¹ Ø§Ù„Ø§Ø³ØªØ´Ø§Ø±Ø©" : "Consultation Mode"}
+                          {language === "ar" ? "وضع الاستشارة" : "Consultation Mode"}
                         </span>
                       </div>
                       {megaMenus.concerns.map((concern) => (
