@@ -424,7 +424,7 @@ export const Header = () => {
               </div>
               <div className="space-y-3">
                 <h3 className="font-display text-lg font-bold text-burgundy">
-                  {language === "ar" ? "Ù…Ø´Ø§ÙƒÙ„ Ø§Ù„Ø¨Ø´Ø±Ø©" : "Skin Concerns"}
+                  {language === "ar" ? "مشاكل البشرة" : "Skin Concerns"}
                 </h3>
                 {megaMenus.concerns.map((c) => (
                   <Link
