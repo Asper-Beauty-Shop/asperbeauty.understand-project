@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
@@ -145,6 +146,24 @@ const BESTSELLERS = [
 const Index = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+
+  usePageMeta({
+    title: "Asper Beauty | Jordan's No.1 Pharmacy Beauty Destination",
+    description: "Discover 10,000+ premium skincare, haircare and beauty products curated by pharmacists in Amman, Jordan. Vichy, CeraVe, La Roche-Posay, Eucerin & more.",
+    canonical: "/",
+    type: "website",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Asper Beauty",
+      url: "https://www.asperbeautyshop.com",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: "https://www.asperbeautyshop.com/shop?search={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
+    },
+  });
 
   const { data: newArrivals = [] } = useQuery({
     queryKey: ["new-arrivals-premium"],
