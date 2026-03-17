@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import {
   Grid3X3,
   LayoutList,
@@ -278,6 +279,15 @@ const AMBITION_PILLS = [
 // ——— Shop Page ————————————————————————————————
 export default function Shop() {
   const { locale } = useLanguage();
+  const isAr = locale === "ar";
+
+  usePageMeta({
+    title: isAr ? "تسوق المنتجات | أسبر بيوتي" : "Shop All Products | Asper Beauty",
+    description: isAr
+      ? "تسوقي من أكثر من 10,000 منتج للعناية بالبشرة والشعر والجمال، مختارة بعناية من صيادلة متخصصين في الأردن."
+      : "Shop 10,000+ premium skincare, haircare and beauty products, curated by pharmacist experts in Jordan.",
+    canonical: "/shop",
+  });
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
