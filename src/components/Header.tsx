@@ -220,7 +220,7 @@ export const Header = () => {
                     textColor, textColorHover
                   )}
                 >
-                  {language === "ar" ? "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹" : "Best Sellers"}
+                  {language === "ar" ? "الأكثر مبيعاً" : "Best Sellers"}
                 </Link>
                 <Link
                   to="/offers"
@@ -229,7 +229,7 @@ export const Header = () => {
                     textColor, textColorHover
                   )}
                 >
-                  {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶" : "Offers"}
+                  {language === "ar" ? "العروض" : "Offers"}
                 </Link>
               </nav>
             </div>
