@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import asperLogoHorizontal from "@/assets/asper-logo-horizontal.png";
 import { AsperWordmark } from "@/components/ui/AsperWordmark";
 import { Link, useLocation } from "react-router-dom";
@@ -31,16 +31,16 @@ const megaMenus = {
     { name: "La Roche-Posay", href: "/brands/laroche", label: "Dermocosmetic" },
     { name: "CeraVe", href: "/brands/cerave", label: "Daily Care" },
     { name: "Maybelline", href: "/brands/maybelline", label: "Makeup" },
-    { name: "L'OrÃ©al Paris", href: "/brands/loreal", label: "Hair & Skin" },
+    { name: "L'Oréal Paris", href: "/brands/loreal", label: "Hair & Skin" },
     { name: "Garnier", href: "/brands/garnier", label: "Natural" },
   ],
   concerns: [
-    { name: "Acne & Blemishes", href: "/concerns/acne", icon: "âœ¨" },
-    { name: "Anti-Aging & Wrinkles", href: "/concerns/anti-aging", icon: "â³" },
-    { name: "Dryness & Hydration", href: "/concerns/dryness", icon: "ðŸ’§" },
-    { name: "Sensitivity & Redness", href: "/concerns/sensitivity", icon: "ðŸ›¡ï¸" },
-    { name: "Pigmentation", href: "/concerns/pigmentation", icon: "â˜€ï¸" },
-    { name: "Hair Loss", href: "/concerns/hair-loss", icon: "ðŸ’†â€â™€ï¸" },
+    { name: "Acne & Blemishes", href: "/concerns/acne", icon: "✨" },
+    { name: "Anti-Aging & Wrinkles", href: "/concerns/anti-aging", icon: "⏳" },
+    { name: "Dryness & Hydration", href: "/concerns/dryness", icon: "💧" },
+    { name: "Sensitivity & Redness", href: "/concerns/sensitivity", icon: "🛡️" },
+    { name: "Pigmentation", href: "/concerns/pigmentation", icon: "☀️" },
+    { name: "Hair Loss", href: "/concerns/hair-loss", icon: "💆‍♀️" },
   ],
 };
 
@@ -80,10 +80,10 @@ export const Header = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Always solid ivory background â€” text always visible
+  // Always solid ivory background — text always visible
   const isTransparent = false;
 
-  // Dynamic text color class â€” always dark on ivory
+  // Dynamic text color class — always dark on ivory
   const textColor = "text-burgundy";
   const textColorHover = "hover:text-polished-gold";
   const iconColor = "text-burgundy";
@@ -91,7 +91,7 @@ export const Header = () => {
   return (
     <header className={cn("fixed top-0 z-50 w-full", isHomepage && "")}>
       {/* 1. TOP ANNOUNCEMENT BAR */}
-                  <div className="bg-burgundy text-polished-white py-2 text-center text-[10px] uppercase tracking-[0.3em] font-bold">
+      <div className="bg-burgundy text-polished-white py-2 text-center text-[10px] uppercase tracking-[0.3em] font-bold">
         {language === "ar" 
           ? "الافتتاح الكبير اليوم الساعة 6:00 مساءً — اختبري الرفاهية الطبية" 
           : "Grand Opening Today at 6:00 PM — Experience Medical Luxury"}
@@ -109,7 +109,7 @@ export const Header = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center h-20">
 
-            {/* 1. LEFT UTILITY ZONE â€” flex-1 balances the right zone */}
+            {/* 1. LEFT UTILITY ZONE — flex-1 balances the right zone */}
             <div className="flex-1 flex items-center justify-start gap-2 md:gap-4">
               <button
                 type="button"
@@ -206,7 +206,7 @@ export const Header = () => {
                           to="/skin-concerns"
                           className="text-xs font-bold text-polished-gold hover:text-burgundy transition-colors"
                         >
-                          {language === "ar" ? "Ø§Ø¨Ø¯Ø£ ØªØ­Ù„ÙŠÙ„ Ø§Ù„Ø¨Ø´Ø±Ø© â†" : "Start AI Skin Analysis â†’"}
+                          {language === "ar" ? "ابدأ تحليل البشرة ←" : "Start AI Skin Analysis →"}
                         </Link>
                       </div>
                     </div>
@@ -234,7 +234,7 @@ export const Header = () => {
               </nav>
             </div>
 
-            {/* 2. CENTER BRAND ZONE â€” flex-shrink-0 keeps logo untouchable */}
+            {/* 2. CENTER BRAND ZONE — flex-shrink-0 keeps logo untouchable */}
             <div className="flex-shrink-0 flex items-center justify-center px-2 md:px-4">
               <Link to="/" className="block transition-transform duration-300 hover:scale-105" dir="ltr">
                 <AsperWordmark
@@ -243,7 +243,7 @@ export const Header = () => {
               </Link>
             </div>
 
-            {/* 3. RIGHT UTILITY ZONE â€” flex-1 balances the left zone */}
+            {/* 3. RIGHT UTILITY ZONE — flex-1 balances the left zone */}
             <div className="flex-1 flex items-center justify-end gap-2 md:gap-4">
               {/* Desktop Search */}
               <div
@@ -261,7 +261,7 @@ export const Header = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setSearchFocused(true)}
-                  placeholder={language === "ar" ? "Ø§Ø¨Ø­Ø« ÙÙŠ Ø¢Ù„Ø§Ù Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª..." : "Search 5,000+ items..."}
+                  placeholder={language === "ar" ? "ابحث في آلاف المنتجات..." : "Search 5,000+ items..."}
                   className={cn(
                     "bg-transparent border-none outline-none text-xs ml-2 w-full font-body",
                     isTransparent
@@ -369,7 +369,7 @@ export const Header = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onBlur={() => {}}
-              placeholder={language === "ar" ? "Ø§Ø¨Ø­Ø« ÙÙŠ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª..." : "Search 5,000+ items..."}
+              placeholder={language === "ar" ? "ابحث في المنتجات..." : "Search 5,000+ items..."}
               className="w-full px-4 py-2 pl-10 rounded-full border border-rose-clay-light/40 text-foreground font-body text-sm"
               dir={isRTL ? "rtl" : "ltr"}
               autoFocus
@@ -521,6 +521,3 @@ export const Header = () => {
     </header>
   );
 };
-
-
-
