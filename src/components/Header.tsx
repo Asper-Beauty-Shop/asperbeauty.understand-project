@@ -504,8 +504,8 @@ export const Header = () => {
                   className="font-body text-burgundy"
                 >
                   {user
-                    ? (language === "ar" ? "Ø­Ø³Ø§Ø¨ÙŠ" : "My Account")
-                    : (language === "ar" ? "ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„" : "Sign In")}
+                    ? (language === "ar" ? "حسابي" : "My Account")
+                    : (language === "ar" ? "تسجيل الدخول" : "Sign In")}
                 </Link>
               </div>
               <div className="pt-4">
