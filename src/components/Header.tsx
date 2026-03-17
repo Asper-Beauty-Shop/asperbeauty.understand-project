@@ -159,7 +159,7 @@ export const Header = () => {
                           to="/brands"
                           className="text-xs font-bold text-burgundy hover:underline uppercase tracking-widest"
                         >
-                          {language === "ar" ? "Ø¹Ø±Ø¶ ÙƒÙ„ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª 50+" : "View All 50+ Brands"}
+                          {language === "ar" ? "عرض كل العلامات 50+" : "View All 50+ Brands"}
                         </Link>
                       </div>
                     </div>
