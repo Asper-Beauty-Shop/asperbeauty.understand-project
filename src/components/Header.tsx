@@ -489,14 +489,14 @@ export const Header = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="font-body text-burgundy font-medium"
                 >
-                  {language === "ar" ? "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹" : "Best Sellers"}
+                  {language === "ar" ? "الأكثر مبيعاً" : "Best Sellers"}
                 </Link>
                 <Link
                   to="/offers"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="font-body text-burgundy font-medium"
                 >
-                  {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶" : "Offers"}
+                  {language === "ar" ? "العروض" : "Offers"}
                 </Link>
                 <Link
                   to={user ? "/account" : "/auth"}
