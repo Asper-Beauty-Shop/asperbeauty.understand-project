@@ -419,7 +419,7 @@ export const Header = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="block py-2 text-burgundy font-bold text-sm"
                 >
-                  {language === "ar" ? "Ø¹Ø±Ø¶ ÙƒÙ„ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª" : "View All Brands"}
+                  {language === "ar" ? "عرض كل العلامات" : "View All Brands"}
                 </Link>
               </div>
               <div className="space-y-3">
