@@ -32,7 +32,7 @@ const megaMenus = {
     { name: "La Roche-Posay", href: "/brands/laroche", label: "Dermocosmetic" },
     { name: "CeraVe", href: "/brands/cerave", label: "Daily Care" },
     { name: "Maybelline", href: "/brands/maybelline", label: "Makeup" },
-    { name: "L'OrÃ©al Paris", href: "/brands/loreal", label: "Hair & Skin" },
+    { name: "L'Oréal Paris", href: "/brands/loreal", label: "Hair & Skin" },
     { name: "Garnier", href: "/brands/garnier", label: "Natural" },
   ],
   concerns: [

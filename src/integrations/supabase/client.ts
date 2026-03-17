@@ -16,6 +16,7 @@ export const supabase = createClient<Database>(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY,
   {
+    db: { schema: "api" },
     auth: {
       storage: localStorage,
       persistSession: true,
