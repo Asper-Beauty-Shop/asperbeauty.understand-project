@@ -70,6 +70,18 @@ export default function CinematicHero() {
             )}
           </h1>
 
+          {/* Primary brand slogan */}
+          <p
+            className={cn(
+              "font-display text-base md:text-lg lg:text-xl italic text-foreground/70 mb-10 tracking-wide",
+              isAr && "font-arabic not-italic"
+            )}
+          >
+            {isAr
+              ? "مُنتقاة من الصيادلة. مدعومة بالذكاء."
+              : "Curated by Pharmacists. Powered by Intelligence."}
+          </p>
+
           {/* Ghost CTA */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
