@@ -210,6 +210,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background animate-fade-in">
+      <OrganizationSchema />
       <Header />
       <main>
         {/* ═══ ZONE 1: Clinical Luxury Static Hero ═══ */}
