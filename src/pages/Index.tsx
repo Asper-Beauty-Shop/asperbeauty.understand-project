@@ -211,8 +211,8 @@ const Index = () => {
     <div className="min-h-screen bg-background animate-fade-in">
       <Header />
       <main>
-        {/* ═══ ZONE 1: Cinematic Full-Screen Video Hero ═══ */}
-        <CinematicHero />
+        {/* ═══ ZONE 1: Clinical Luxury Static Hero ═══ */}
+        <ClinicalLuxuryHero />
 
         {/* ═══ ZONE 2: Science Meets Elegance 50/50 Split ═══ */}
         <ScienceMeetsEleganceSplit />
