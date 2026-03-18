@@ -391,7 +391,7 @@ export default function Auth() {
           {/* ─── Branded Header ─── */}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-5">
-              <AsperLogo size={64} animated />
+              <AsperLogo size={96} animated />
             </div>
             <h1 className="font-heading text-2xl md:text-3xl text-foreground tracking-tight">
               Welcome to Asper
