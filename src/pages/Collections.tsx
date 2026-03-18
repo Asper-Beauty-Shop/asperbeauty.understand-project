@@ -3,7 +3,17 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const collections = [
+interface CollectionItem {
+  name: string;
+  nameAr: string;
+  slug: string;
+  description: string;
+  descriptionAr: string;
+  image: string;
+  href?: string;
+}
+
+const collections: CollectionItem[] = [
   {
     name: "Hair Care",
     nameAr: "العناية بالشعر",
@@ -52,6 +62,15 @@ const collections = [
     descriptionAr: "أدوات تجميل بجودة احترافية",
     image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600",
   },
+  {
+    name: "Bridal Beauty",
+    nameAr: "جمال العروس",
+    slug: "wedding",
+    description: "Curated beauty for your most unforgettable day",
+    descriptionAr: "جمال مختار ليومك الذي لا يُنسى",
+    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600",
+    href: "/wedding",
+  },
 ];
 
 export default function Collections() {
@@ -92,7 +111,7 @@ export default function Collections() {
             {collections.map((collection) => (
               <Link
                 key={collection.slug}
-                to={`/collections/${collection.slug}`}
+                to={collection.href ?? `/collections/${collection.slug}`}
                 className="group relative overflow-hidden aspect-[4/5] border border-gold/20 hover:border-gold/50 transition-all duration-500"
               >
                 <img
