@@ -1,5 +1,6 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
@@ -11,9 +12,18 @@ const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 export default function ClinicalLuxuryHero() {
   const { locale, dir } = useLanguage();
   const isAr = locale === "ar";
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Subtle parallax: image moves 0→8% downward as user scrolls past
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
 
   return (
-    <section className="relative w-full min-h-[600px] bg-background overflow-hidden" style={{ height: "100dvh" }}>
+    <section ref={sectionRef} className="relative w-full min-h-[600px] bg-background overflow-hidden" style={{ height: "100dvh" }}>
       {/* Subtle radial glow behind image */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
