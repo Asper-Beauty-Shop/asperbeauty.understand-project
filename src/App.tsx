@@ -17,6 +17,7 @@ import BrandVichy from "./pages/BrandVichy";
 import BrandDetail from "./pages/BrandDetail";
 import BestSellers from "./pages/BestSellers";
 import Offers from "./pages/Offers";
+import Wedding from "./pages/Wedding";
 import Contact from "./pages/Contact";
 import SkinConcerns from "./pages/SkinConcerns";
 import ConcernCollection from "./pages/ConcernCollection";
@@ -98,6 +99,7 @@ const App = () => {
                 <Route path="/brands/:slug" element={<BrandDetail />} />
                 <Route path="/best-sellers" element={<BestSellers />} />
                 <Route path="/offers" element={<Offers />} />
+                <Route path="/wedding" element={<Wedding />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/skin-concerns" element={<SkinConcerns />} />
                 <Route
