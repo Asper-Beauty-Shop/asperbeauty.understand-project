@@ -11,6 +11,7 @@ import { USPBar } from "@/components/home/USPBar";
 import { ProductSlider } from "@/components/home/ProductSlider";
 import { ShopByProtocol } from "@/components/home/ShopByProtocol";
 import { Footer } from "@/components/Footer";
+import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isHomepageBrand } from "@/constants/premiumBrands";
