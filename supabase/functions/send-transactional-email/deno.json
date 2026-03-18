@@ -7,6 +7,7 @@
     "react": "npm:react@18.3.1",
     "react/jsx-runtime": "npm:react@18.3.1/jsx-runtime",
     "@react-email/components": "npm:@react-email/components@0.0.31",
-    "react-dom/server": "npm:react-dom@18.3.1/server"
+    "react-dom/server": "npm:react-dom@18.3.1/server",
+    "@types/react": "npm:@types/react@18.3.18"
   }
 }
