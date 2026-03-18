@@ -135,8 +135,9 @@ export default function ClinicalLuxuryHero() {
             src={heroImg}
             alt={isAr ? "منتجات العناية بالبشرة المميزة" : "Premium skincare serums — ISDIN, Vichy, La Mer"}
             className="relative z-10 w-[85%] max-w-[560px] h-auto object-contain mix-blend-multiply drop-shadow-2xl"
-            initial={{ opacity: 0, scale: 1.06, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            style={{ y: imageY }}
+            initial={{ opacity: 0, scale: 1.06 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: LUXURY_EASE, delay: 0.3 }}
             loading="eager"
             fetchPriority="high"
@@ -144,6 +145,7 @@ export default function ClinicalLuxuryHero() {
           {/* Gold accent circle */}
           <motion.div
             className="absolute w-[420px] h-[420px] rounded-full border border-accent/20 z-0"
+            style={{ y: imageY }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.4, ease: LUXURY_EASE, delay: 0.5 }}
