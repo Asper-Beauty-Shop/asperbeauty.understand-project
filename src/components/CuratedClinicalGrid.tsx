@@ -76,7 +76,7 @@ function ClinicalCard({ product }: { product: ClinicalProduct }) {
       )}
 
       {/* Image — strict 4:5 aspect for uniform grid lines */}
-      <Link to={`/products/${product.handle}`} tabIndex={-1} aria-hidden="true">
+      <Link to={`/product/${product.handle}`} tabIndex={-1} aria-hidden="true">
         <div className="relative w-full aspect-[4/5] mb-4 bg-white/50 rounded-lg overflow-hidden mix-blend-multiply">
           <BlurUpImage
             src={product.image_url}
@@ -95,7 +95,7 @@ function ClinicalCard({ product }: { product: ClinicalProduct }) {
       </p>
 
       {/* Title — 2-line clamp enforces uniform row height */}
-      <Link to={`/products/${product.handle}`}>
+      <Link to={`/product/${product.handle}`}>
         <h3 className={cn(
           "font-montserrat text-[#333333] font-semibold text-sm md:text-base leading-tight mb-2 line-clamp-2",
           "hover:text-[#800020] transition-colors duration-200",
@@ -120,7 +120,7 @@ function ClinicalCard({ product }: { product: ClinicalProduct }) {
         </div>
 
         {/* Quick Add button */}
-        <Link to={`/products/${product.handle}`}>
+        <Link to={`/product/${product.handle}`}>
           <button className="w-full py-3 bg-[#800020] text-white font-montserrat font-semibold text-sm rounded transition-all duration-[400ms] group-hover:bg-[#5a0016] active:scale-[0.98]">
             {locale === "ar" ? "إضافة سريعة" : "Quick Add"}
           </button>

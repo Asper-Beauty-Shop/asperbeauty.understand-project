@@ -144,13 +144,16 @@ function rowToProduct(row: DbRow): ShopifyProduct {
 
 // ── Data fetching (Supabase-backed) ──
 
+const PRODUCT_COLUMNS =
+  "id, title, name, description, handle, brand, category, price, image_url, tags, created_at, stock, availability_status, primary_concern, bestseller_rank";
+
 export async function fetchProducts(
   first: number = 24,
   _query?: string,
 ): Promise<ShopifyProduct[]> {
   let q = supabase
     .from("products")
-    .select("*")
+    .select(PRODUCT_COLUMNS)
     .eq("availability_status", "In_Stock")
     .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .limit(first);
@@ -209,8 +212,21 @@ export async function searchProducts(
     .rpc("search_products", { search_query: searchTerm, max_results: first });
 
   if (error) {
-    console.error("searchProducts error:", error);
-    return [];
+    // Fallback to ilike text search if the RPC is unavailable.
+    // Sanitize to remove characters that break the PostgREST filter syntax.
+    const sanitized = searchTerm.replace(/[%_,()\[\]]/g, " ").trim();
+    const term = `%${sanitized}%`;
+    const { data: fallback, error: fallbackError } = await supabase
+      .from("products")
+      .select(PRODUCT_COLUMNS)
+      .or(`title.ilike.${term},name.ilike.${term},description.ilike.${term},brand.ilike.${term}`)
+      .limit(first);
+
+    if (fallbackError) {
+      console.error("searchProducts error:", fallbackError);
+      return [];
+    }
+    return (fallback ?? []).map((row: any) => rowToProduct(row));
   }
 
   return (data ?? []).map((row: any) => rowToProduct(row));
