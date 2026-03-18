@@ -79,7 +79,7 @@ function ProductTile({
       )}
     >
       {/* Image */}
-      <Link to={`/products/${product.handle}`} className="block">
+      <Link to={`/product/${product.handle}`} className="block">
         <div className={cn(
           "relative overflow-hidden bg-asper-stone-dark",
           featured ? "aspect-[3/2] md:aspect-[16/10]" : "aspect-[4/5]"
@@ -100,7 +100,7 @@ function ProductTile({
           )}>
             {/* View button — navigates to PDP */}
             <button
-              onClick={(e) => { e.preventDefault(); navigate(`/products/${product.handle}`); }}
+              onClick={(e) => { e.preventDefault(); navigate(`/product/${product.handle}`); }}
               className="flex items-center gap-1.5 px-4 py-2.5 bg-white text-dark-charcoal font-body text-[11px] uppercase tracking-[0.2em] hover:bg-polished-gold hover:text-white transition-colors duration-300"
             >
               <Eye className="w-3.5 h-3.5" />
