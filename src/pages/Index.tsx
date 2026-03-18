@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
-import CinematicHero from "@/components/home/CinematicHero";
+import ClinicalLuxuryHero from "@/components/home/ClinicalLuxuryHero";
 import { ScienceMeetsEleganceSplit } from "@/components/home/ScienceMeetsEleganceSplit";
 import ThreeClickOnboarding from "@/components/home/ThreeClickOnboarding";
 import DualPersonaTriage from "@/components/home/DualPersonaTriage";
@@ -211,8 +211,8 @@ const Index = () => {
     <div className="min-h-screen bg-background animate-fade-in">
       <Header />
       <main>
-        {/* ═══ ZONE 1: Cinematic Full-Screen Video Hero ═══ */}
-        <CinematicHero />
+        {/* ═══ ZONE 1: Clinical Luxury Static Hero ═══ */}
+        <ClinicalLuxuryHero />
 
         {/* ═══ ZONE 2: Science Meets Elegance 50/50 Split ═══ */}
         <ScienceMeetsEleganceSplit />
