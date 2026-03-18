@@ -38,7 +38,7 @@ const LuxuryPrice = ({ amount, currency = "JOD" }: { amount: number | null; curr
   );
 };
 
-// ——— Product Card with Gold Stitch ———————————————
+// ——— Frosted Glass Product Card ———————————————
 const ShopProductCard = ({
   product,
   onQuickView,
@@ -84,15 +84,15 @@ const ShopProductCard = ({
   if (viewMode === "list") {
     return (
       <article
-        className="group bg-card rounded-lg overflow-hidden border border-border/50 hover:border-accent/40 shadow-maroon-glow hover:shadow-maroon-deep transition-all duration-300 cursor-pointer flex product-card-hover"
+        className="group bg-background/60 backdrop-blur-sm md:backdrop-blur-md overflow-hidden border border-accent/20 hover:border-accent shadow-[0_8px_32px_0_rgba(0,0,0,0.03)] hover:-translate-y-0.5 transition-all duration-[400ms] cursor-pointer flex"
         onClick={() => onQuickView(product)}
       >
-        <div className="relative w-40 md:w-48 flex-shrink-0 bg-background">
-          <img src={imageUrl} alt={product.title} className="w-full h-full object-cover" loading="lazy" />
+        <div className="relative w-40 md:w-48 flex-shrink-0">
+          <img src={imageUrl} alt={product.title} className="w-full h-full object-cover mix-blend-multiply" loading="lazy" />
         </div>
         <div className="flex-1 p-4 flex flex-col">
           {product.brand && (
-            <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent mb-1">{product.brand}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent mb-1 font-body">{product.brand}</p>
           )}
           <h3 className="font-heading text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
             {product.title}
@@ -104,7 +104,7 @@ const ShopProductCard = ({
           )}
           <div className="flex items-center justify-between mt-auto">
             <LuxuryPrice amount={product.price} />
-            <Button onClick={handleAddToCart} size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs btn-ripple">
+            <Button onClick={handleAddToCart} size="sm" className="bg-primary hover:bg-primary/90 hover:scale-[1.02] text-primary-foreground text-xs transition-all duration-200">
               <ShoppingBag className="w-3.5 h-3.5 me-1" />
               {locale === "ar" ? "\u0625\u0636\u0627\u0641\u0629" : "Add"}
             </Button>
@@ -116,24 +116,16 @@ const ShopProductCard = ({
 
   return (
     <article
-      className="group relative bg-card rounded-lg overflow-hidden border border-border/50 hover:border-accent/40 shadow-maroon-glow hover:shadow-maroon-deep transition-all duration-500 cursor-pointer flex flex-col product-card-hover animate-fade-in"
+      className="group relative bg-background/60 backdrop-blur-sm md:backdrop-blur-md overflow-hidden border border-accent/20 hover:border-accent shadow-[0_8px_32px_0_rgba(0,0,0,0.03)] hover:-translate-y-1 transition-all duration-[400ms] cursor-pointer flex flex-col"
       onClick={() => onQuickView(product)}
     >
-      {/* Gold Stitch animated border corners */}
-      <div className="absolute inset-0 rounded-lg border-2 border-accent/0 group-hover:border-accent/50 transition-all duration-700 pointer-events-none z-10">
-        <div className="absolute -top-0.5 -left-0.5 w-1.5 h-1.5 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 shadow-lg shadow-accent/40" />
-        <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 shadow-lg shadow-accent/40" />
-        <div className="absolute -bottom-0.5 -left-0.5 w-1.5 h-1.5 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 shadow-lg shadow-accent/40" />
-        <div className="absolute -bottom-0.5 -right-0.5 w-1.5 h-1.5 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 shadow-lg shadow-accent/40" />
-      </div>
-
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden bg-background flex items-center justify-center p-4">
+      <div className="relative aspect-square overflow-hidden flex items-center justify-center p-4">
         {imageUrl && imageUrl !== "/editorial-showcase-2.webp" ? (
           <img
             src={imageUrl}
             alt={product.title}
-            className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-contain mix-blend-multiply transition-transform duration-700 group-hover:scale-105"
             loading="lazy"
           />
         ) : (
@@ -145,8 +137,8 @@ const ShopProductCard = ({
             {product.clinical_badge}
           </span>
         )}
-        {/* Authenticity star */}
-        <div className="absolute top-3 right-3 z-10 h-6 w-6 flex items-center justify-center border border-accent bg-card/80 backdrop-blur-sm rounded-sm p-0.5" title="Guaranteed Authenticity">
+        {/* Authenticity seal */}
+        <div className="absolute top-3 right-3 z-10 h-6 w-6 flex items-center justify-center border border-accent bg-card/80 backdrop-blur-sm p-0.5" title="Guaranteed Authenticity">
           <svg viewBox="0 0 24 24" fill="none" className="text-accent h-full w-full">
             <path d="M12 2L14.5 7.5L20 9L15.5 13L17 18.5L12 15.5L7 18.5L8.5 13L4 9L9.5 7.5L12 2Z" fill="currentColor" />
           </svg>
@@ -156,7 +148,7 @@ const ShopProductCard = ({
       {/* Content */}
       <div className="p-4 flex flex-col flex-grow space-y-2">
         {product.brand && (
-          <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent">{product.brand}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent font-body">{product.brand}</p>
         )}
         <h3 className="font-heading text-sm font-semibold text-foreground leading-tight line-clamp-2 group-hover:text-primary transition-colors flex-grow">
           {product.title}
@@ -166,7 +158,7 @@ const ShopProductCard = ({
         {product.key_ingredients && product.key_ingredients.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {product.key_ingredients.slice(0, 2).map((ing) => (
-              <span key={ing} className="px-2 py-0.5 rounded-full bg-secondary border border-border/50 text-[10px] text-muted-foreground font-medium">
+              <span key={ing} className="px-2 py-0.5 bg-accent/8 border border-accent/20 text-[10px] text-muted-foreground font-medium font-body">
                 {ing}
               </span>
             ))}
@@ -187,7 +179,7 @@ const ShopProductCard = ({
         <Button
           onClick={handleAddToCart}
           size="sm"
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xs uppercase tracking-wide btn-ripple"
+          className="w-full bg-primary hover:bg-primary/90 hover:scale-[1.02] text-primary-foreground text-xs uppercase tracking-wide transition-all duration-200"
         >
           <ShoppingBag className="w-3.5 h-3.5 me-1.5" />
           {locale === "ar" ? "\u0623\u0636\u0641 \u0644\u0644\u0633\u0644\u0629" : "Add to Cart"}
@@ -220,10 +212,11 @@ const CategorySidebar = ({
   onSelect: (cat: string) => void;
   categoryCounts: Record<string, number>;
 }) => (
-  <div className="sticky top-24 space-y-1">
+  <div className="sticky top-24 space-y-1 p-5 bg-background/60 backdrop-blur-sm border border-accent/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.03)]">
     <h3 className="font-heading text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-4">
       Filter by Regimen
     </h3>
+    <div className="w-8 h-px bg-accent/40 mb-4" />
     {ASPER_CATEGORIES.map((cat) => {
       const isActive = activeCategory === cat;
       const count = cat === "All Curation" ? undefined : categoryCounts[cat];
@@ -274,7 +267,6 @@ export default function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
   const concernParam = searchParams.get("concern") ?? "";
 
-  // Active asper_category from URL or sidebar
   const categoryParam = searchParams.get("category") ?? "All Curation";
   const setActiveCategory = (cat: string) => {
     const next = new URLSearchParams(searchParams);
@@ -316,7 +308,6 @@ export default function Shop() {
     fetchProducts();
   }, []);
 
-  // Compute category counts for sidebar badges
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of products) {
@@ -328,22 +319,17 @@ export default function Shop() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      // Filter by asper_category sidebar
       if (categoryParam && categoryParam !== "All Curation" && product.asper_category !== categoryParam) return false;
-
       if (filters.searchQuery) {
         const q = filters.searchQuery.toLowerCase();
         const matches = product.title.toLowerCase().includes(q) || product.brand?.toLowerCase().includes(q) || product.pharmacist_note?.toLowerCase().includes(q);
         if (!matches) return false;
       }
       if (filters.brands.length > 0 && (!product.brand || !filters.brands.includes(product.brand))) return false;
-      
-      // Unify Categories and Concerns
       const activeConcerns = [...filters.skinConcerns];
       filters.categories.forEach(catId => {
         activeConcerns.push(...mapCategoryToConcerns(catId));
       });
-
       if (activeConcerns.length > 0 && (!product.primary_concern || !activeConcerns.includes(product.primary_concern))) return false;
       const price = product.price ?? 0;
       if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
@@ -351,9 +337,8 @@ export default function Shop() {
     });
   }, [products, filters, categoryParam]);
 
-  // Empty state for search with Dr. Sami recommendation
   const renderEmptyState = () => (
-    <div className="text-center py-20 bg-card rounded-xl border border-border">
+    <div className="text-center py-20 bg-background/60 backdrop-blur-sm border border-accent/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.03)]">
       <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
       {filters.searchQuery ? (
         <>
@@ -399,7 +384,7 @@ export default function Shop() {
               setFilters({ searchQuery: "", categories: [], subcategories: [], brands: [], skinConcerns: [], priceRange: [0, 200], onSaleOnly: false });
             }}
           >
-            {locale === "ar" ? "\u0645\u0633\u062D \u0627\u0644\u0641\u0644\u0627\u062A\u0631" : "Clear Filters"}
+            {locale === "ar" ? "\u0639\u0631\u0636 \u0627\u0644\u0643\u0644" : "Show All"}
           </Button>
         </>
       )}
@@ -407,26 +392,29 @@ export default function Shop() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background to-white">
       <Header />
       <main className="pt-16">
-        {/* Hero Banner */}
-        <div className="bg-primary text-primary-foreground py-10 md:py-14">
+        {/* Hero Banner — Frosted Glass over Morning Spa gradient */}
+        <div className="relative py-10 md:py-14 overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(240 20% 99%), hsl(345 100% 25% / 0.06), hsl(240 20% 99%))" }}>
+          {/* Decorative gold line */}
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
           <div className="container mx-auto px-4 max-w-7xl text-center">
             <Badge variant="outline" className="mb-3 border-accent/40 text-accent font-body text-xs tracking-[0.2em] px-4 py-1">
               CURATED CATALOG
             </Badge>
-            <h1 className="font-heading text-3xl md:text-5xl font-bold mb-3">
+            <h1 className="font-heading text-3xl md:text-5xl font-bold mb-3 text-foreground">
               {locale === "ar" ? "\u062A\u0633\u0648\u0642 \u062C\u0645\u064A\u0639 \u0627\u0644\u0645\u0646\u062A\u062C\u0627\u062A" : "Shop All Products"}
             </h1>
-            <p className="text-primary-foreground/70 text-sm md:text-base font-body max-w-lg mx-auto">
+            <p className="text-muted-foreground text-sm md:text-base font-body max-w-lg mx-auto">
               {locale === "ar" ? "\u0627\u0643\u062A\u0634\u0641 \u0623\u0641\u0636\u0644 \u0645\u0646\u062A\u062C\u0627\u062A \u0627\u0644\u0639\u0646\u0627\u064A\u0629 \u0628\u0627\u0644\u0628\u0634\u0631\u0629 \u0648\u0627\u0644\u062C\u0645\u0627\u0644" : "Pharmacist-curated skincare and beauty, guaranteed authentic."}
             </p>
           </div>
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
         </div>
 
         {/* Ambition Pills */}
-        <div className="bg-secondary/30 border-b border-border">
+        <div className="border-b border-accent/10" style={{ background: "hsl(240 20% 99% / 0.8)" }}>
           <div className="container mx-auto px-4 max-w-7xl py-4">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-4 h-4 text-accent" />
@@ -445,10 +433,10 @@ export default function Shop() {
                       setFilters({ ...filters, skinConcerns: updated });
                     }}
                     className={cn(
-                      "flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full border text-xs font-semibold transition-all duration-200 font-body",
+                      "flex-shrink-0 flex items-center gap-1.5 px-4 py-2 border text-xs font-semibold transition-all duration-300 font-body",
                       isActive
-                        ? "bg-primary text-primary-foreground border-primary shadow-maroon-glow"
-                        : "bg-card text-foreground/70 border-border hover:border-accent hover:text-foreground"
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background/60 backdrop-blur-sm text-foreground/70 border-accent/20 hover:border-accent hover:text-foreground"
                     )}
                   >
                     <span role="img" aria-hidden="true">{pill.icon}</span>
@@ -473,8 +461,8 @@ export default function Shop() {
 
             {/* Main content area */}
             <div className="flex-1 min-w-0">
-              {/* Mobile category pills — sticky, scroll-snap, 44px touch targets */}
-              <div className="lg:hidden sticky top-16 z-30 bg-background -mx-4 px-4 py-3 border-b border-border/50">
+              {/* Mobile category pills */}
+              <div className="lg:hidden sticky top-16 z-30 bg-background/80 backdrop-blur-md -mx-4 px-4 py-3 border-b border-accent/10">
                 <div
                   className="flex gap-3 overflow-x-auto pb-1"
                   style={{
@@ -492,10 +480,10 @@ export default function Shop() {
                         key={cat}
                         onClick={() => setActiveCategory(cat)}
                         className={cn(
-                          "flex-shrink-0 min-h-[44px] px-5 rounded-full border text-sm font-body font-medium transition-all duration-300 flex items-center gap-1.5",
+                          "flex-shrink-0 min-h-[44px] px-5 border text-sm font-body font-medium transition-all duration-300 flex items-center gap-1.5",
                           isActive
-                            ? "bg-card text-primary border-accent shadow-sm"
-                            : "bg-transparent text-muted-foreground border-border/40"
+                            ? "bg-background text-primary border-accent shadow-sm"
+                            : "bg-transparent text-muted-foreground border-accent/15"
                         )}
                         style={{
                           scrollSnapAlign: "start",
@@ -518,11 +506,11 @@ export default function Shop() {
                 <p className="text-sm text-muted-foreground font-body">
                   {locale === "ar" ? `${filteredProducts.length} \u0645\u0646\u062A\u062C` : `${filteredProducts.length} products`}
                 </p>
-                <div className="flex items-center gap-1 bg-card rounded-lg border border-border p-1">
+                <div className="flex items-center gap-1 bg-background/60 backdrop-blur-sm border border-accent/15 p-1">
                   <button
                     onClick={() => setViewMode("grid")}
                     className={cn(
-                      "p-2 rounded transition-colors",
+                      "p-2 transition-colors",
                       viewMode === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
                     )}
                   >
@@ -531,7 +519,7 @@ export default function Shop() {
                   <button
                     onClick={() => setViewMode("list")}
                     className={cn(
-                      "p-2 rounded transition-colors",
+                      "p-2 transition-colors",
                       viewMode === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
                     )}
                   >
