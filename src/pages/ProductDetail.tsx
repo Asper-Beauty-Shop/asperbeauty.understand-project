@@ -286,7 +286,7 @@ const ProductDetail = () => {
 
               {/* Secondary CTA: Digital Concierge Integration */}
               <button
-                onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant"))}
+                onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant", { detail: { productContext: { name: product.title || product.name, brand: product.brand, key_ingredients: product.key_ingredients, primary_concern: product.primary_concern, price: product.price } } }))}
                 className="w-full h-14 clinical-glass rounded-sm font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98] text-foreground hover:border-accent/40"
                 style={{ border: "1px solid hsl(var(--polished-gold) / 0.3)" }}
               >

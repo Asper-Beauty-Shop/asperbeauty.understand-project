@@ -184,6 +184,7 @@ serve(async (req) => {
     const route = getWebhookRoute(req);
     let userMessage = "";
     let messages: Array<{ role: string; content: string }> = [];
+    let productContextStr = "";
 
     if (route) {
       // Webhook routes (Gorgias/ManyChat): validate shared webhook secret
@@ -223,11 +224,20 @@ serve(async (req) => {
       const body = await req.json();
       messages = body.messages;
       userMessage = messages[messages.length - 1].content;
+      // Extract optional product context from PDP
+      if (body.productContext && typeof body.productContext === "object") {
+        const pc = body.productContext as Record<string, unknown>;
+        productContextStr = `\n\n## CURRENT PRODUCT CONTEXT\nThe customer is viewing: **${pc.name}** by ${pc.brand}` +
+          (pc.key_ingredients ? ` | Key Actives: ${(pc.key_ingredients as string[]).join(", ")}` : "") +
+          (pc.primary_concern ? ` | Concern: ${pc.primary_concern}` : "") +
+          (pc.price ? ` | Price: ${pc.price} JOD` : "") +
+          `\nContextualize your advice around this specific formula when relevant.`;
+      }
     }
 
     const slug = detectConcernSlug(userMessage);
     const { context, products } = await fetchProductContext(supabase, userMessage, slug);
-    const systemPrompt = buildSystemPrompt(context, slug ? `/products?concern=${slug}` : null);
+    const systemPrompt = buildSystemPrompt(context, slug ? `/products?concern=${slug}` : null) + productContextStr;
 
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {

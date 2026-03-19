@@ -58,11 +58,18 @@ export const BeautyAssistant = () => {
   const isAr = locale === "ar";
   const scrollRef = useRef<HTMLDivElement>(null);
   const emailSentRef = useRef(false);
+  const [productContext, setProductContext] = useState<Record<string, unknown> | null>(null);
   const prefersReduced = useReducedMotion();
 
-  // Listen for FAB event
+  // Listen for FAB event (optionally with product context)
   useEffect(() => {
-    const handler = () => setIsOpen(true);
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.productContext) {
+        setProductContext(detail.productContext);
+      }
+      setIsOpen(true);
+    };
     window.addEventListener("open-beauty-assistant", handler);
     return () => window.removeEventListener("open-beauty-assistant", handler);
   }, []);
@@ -93,7 +100,7 @@ export const BeautyAssistant = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke("beauty-assistant", {
-        body: { messages: [...messages, userMsg], language, persona: activePersona },
+        body: { messages: [...messages, userMsg], language, persona: activePersona, productContext },
       });
       if (error) throw error;
       const reply = data.reply || "";
