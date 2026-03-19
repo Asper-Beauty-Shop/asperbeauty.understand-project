@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import {
   AlertTriangle,
+  ClipboardList,
   Loader2,
   LogOut,
   Mail,
@@ -18,6 +19,7 @@ import {
   Trash2,
   User,
 } from "lucide-react";
+import { OrderHistory } from "@/components/account/OrderHistory";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -272,6 +274,16 @@ export default function Account() {
                 )}
               </>
             )}
+          </GlassSection>
+
+          {/* ═══ Order History ═══ */}
+          <GlassSection>
+            <SectionHeader
+              icon={ClipboardList}
+              title="Order History"
+              description="Track your past and current orders"
+            />
+            <OrderHistory userId={user.id} />
           </GlassSection>
 
           {/* ═══ Danger Zone — Account Deletion ═══ */}
