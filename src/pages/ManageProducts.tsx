@@ -844,6 +844,19 @@ const ManageProducts = () => {
         </div>
       </main>
       <Footer />
+
+      <BulkSaleManager
+        open={isSaleDialogOpen}
+        onOpenChange={setIsSaleDialogOpen}
+        products={products as any}
+        onComplete={async () => {
+          const { data } = await supabase
+            .from("products")
+            .select("*")
+            .order("created_at", { ascending: false });
+          if (data) setProducts(data as Product[]);
+        }}
+      />
     </div>
   );
 };
