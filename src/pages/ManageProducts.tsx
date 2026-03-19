@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BulkSaleManager } from "@/components/admin/BulkSaleManager";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,7 @@ import {
   RefreshCw,
   ShieldCheck,
   Sparkles,
+  Tag,
   Trash2,
   Upload,
   Wand2,
@@ -86,6 +88,7 @@ const ManageProducts = () => {
     { id: string; title: string; status: string; image_url?: string }[] | null
   >(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isSaleDialogOpen, setIsSaleDialogOpen] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -466,7 +469,15 @@ const ManageProducts = () => {
               </h1>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Button
+                onClick={() => setIsSaleDialogOpen(true)}
+                variant="outline"
+                className="border-destructive/30 text-destructive hover:bg-destructive/10"
+              >
+                <Tag className="w-4 h-4 me-2" />
+                Bulk Sale
+              </Button>
               <Button
                 onClick={handleGenerateAIImages}
                 disabled={isGeneratingAI || isEnriching}
@@ -769,8 +780,24 @@ const ManageProducts = () => {
                             {(product.primary_concern as string)?.replace("Concern_", "") || "—"}
                           </span>
                         </TableCell>
-                        <TableCell className="text-right font-semibold text-burgundy">
-                          {formatJOD(Number(product.price))}
+                        <TableCell className="text-right">
+                          {(product as any).is_on_sale && (product as any).original_price ? (
+                            <div className="flex flex-col items-end">
+                              <span className="line-through text-muted-foreground text-xs">
+                                {formatJOD(Number((product as any).original_price))}
+                              </span>
+                              <span className="font-semibold text-destructive">
+                                {formatJOD(Number(product.price))}
+                              </span>
+                              <Badge className="bg-destructive/10 text-destructive border-destructive/20 text-[10px] mt-0.5">
+                                {(product as any).discount_percent}% OFF
+                              </Badge>
+                            </div>
+                          ) : (
+                            <span className="font-semibold text-burgundy">
+                              {formatJOD(Number(product.price))}
+                            </span>
+                          )}
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
@@ -817,6 +844,19 @@ const ManageProducts = () => {
         </div>
       </main>
       <Footer />
+
+      <BulkSaleManager
+        open={isSaleDialogOpen}
+        onOpenChange={setIsSaleDialogOpen}
+        products={products as any}
+        onComplete={async () => {
+          const { data } = await supabase
+            .from("products")
+            .select("*")
+            .order("created_at", { ascending: false });
+          if (data) setProducts(data as Product[]);
+        }}
+      />
     </div>
   );
 };
