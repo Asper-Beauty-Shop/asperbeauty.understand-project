@@ -10,12 +10,12 @@ import { BrowserRouter } from "react-router-dom";
 
 // ── Polyfill IntersectionObserver for jsdom ──
 beforeAll(() => {
-  (globalThis as any).IntersectionObserver = class {
+  (globalThis as unknown as Record<string, unknown>).IntersectionObserver = class {
     observe() {}
     unobserve() {}
     disconnect() {}
     constructor() {}
-  } as any;
+  };
 });
 
 // Collect all motion.div props for assertion
@@ -28,10 +28,10 @@ vi.mock("framer-motion", async () => {
     useReducedMotion: () => false,
     motion: {
       ...actual.motion,
-      div: React.forwardRef(function MockMotionDiv(props: any, ref: React.Ref<HTMLDivElement>) {
+      div: React.forwardRef(function MockMotionDiv(props: Record<string, unknown>, ref: React.Ref<HTMLDivElement>) {
         motionDivCalls.push(props);
-        const { variants, initial, whileInView, viewport, animate, exit, ...rest } = props;
-        return <div ref={ref} {...rest} />;
+        const { variants: _v, initial: _i, whileInView: _wiv, viewport: _vp, animate: _a, exit: _e, ...rest } = props;
+        return <div ref={ref} {...(rest as React.HTMLAttributes<HTMLDivElement>)} />;
       }),
     },
   };
@@ -55,8 +55,17 @@ const TEST_PRODUCT = {
 };
 
 // Build a chainable mock for supabase.from()
-const mockFrom = () => {
-  const chain: any = {};
+interface MockChain {
+  select: () => MockChain;
+  eq: () => MockChain;
+  neq: () => MockChain;
+  in: () => Promise<{ data: unknown[]; error: null }>;
+  limit: () => Promise<{ data: unknown[]; error: null }>;
+  maybeSingle: () => Promise<{ data: typeof TEST_PRODUCT; error: null }>;
+  single: () => Promise<{ data: null; error: null }>;
+}
+const mockFrom = (): MockChain => {
+  const chain = {} as MockChain;
   chain.select = () => chain;
   chain.eq = () => chain;
   chain.neq = () => chain;
@@ -106,6 +115,27 @@ const renderPDP = async () => {
   );
 };
 
+interface MotionTransition {
+  staggerChildren?: number;
+  delayChildren?: number;
+  duration?: number;
+  ease?: number[];
+}
+interface MotionVariantState {
+  opacity?: number;
+  y?: number;
+  scale?: number;
+  transition?: MotionTransition;
+}
+interface MotionVariants {
+  hidden?: MotionVariantState;
+  visible?: MotionVariantState & { transition?: MotionTransition };
+}
+interface MotionViewport {
+  once?: boolean;
+  margin?: string;
+}
+
 describe("ProductDetail — Key Clinical Actives Animation", () => {
   beforeEach(() => {
     motionDivCalls.length = 0;
@@ -125,35 +155,35 @@ describe("ProductDetail — Key Clinical Actives Animation", () => {
     await waitFor(() => expect(screen.getByText("Niacinamide")).toBeInTheDocument());
 
     const container = motionDivCalls.find(
-      (c) => (c.variants as any)?.visible?.transition?.staggerChildren !== undefined,
+      (c) => (c.variants as MotionVariants)?.visible?.transition?.staggerChildren !== undefined,
     );
     expect(container).toBeDefined();
 
-    const v = container!.variants as any;
-    expect(v.visible.transition.staggerChildren).toBe(0.15);
-    expect(v.visible.transition.delayChildren).toBe(0.1);
-    expect(v.hidden.opacity).toBe(0);
+    const v = container!.variants as MotionVariants;
+    expect(v.visible!.transition!.staggerChildren).toBe(0.15);
+    expect(v.visible!.transition!.delayChildren).toBe(0.1);
+    expect(v.hidden!.opacity).toBe(0);
     expect(container!.initial).toBe("hidden");
     expect(container!.whileInView).toBe("visible");
-    expect((container!.viewport as any).once).toBe(true);
-    expect((container!.viewport as any).margin).toBe("-100px");
+    expect((container!.viewport as MotionViewport).once).toBe(true);
+    expect((container!.viewport as MotionViewport).margin).toBe("-100px");
   });
 
   it("each card has y:30, scale:0.98 hidden state and premium ease [0.25,0.1,0.25,1]", async () => {
     await renderPDP();
     await waitFor(() => expect(screen.getByText("Niacinamide")).toBeInTheDocument());
 
-    const cards = motionDivCalls.filter((c) => (c.variants as any)?.hidden?.y !== undefined);
+    const cards = motionDivCalls.filter((c) => (c.variants as MotionVariants)?.hidden?.y !== undefined);
     expect(cards.length).toBe(3);
 
     for (const card of cards) {
-      const v = card.variants as any;
+      const v = card.variants as MotionVariants;
       expect(v.hidden).toEqual({ opacity: 0, y: 30, scale: 0.98 });
-      expect(v.visible.opacity).toBe(1);
-      expect(v.visible.y).toBe(0);
-      expect(v.visible.scale).toBe(1);
-      expect(v.visible.transition.duration).toBe(0.6);
-      expect(v.visible.transition.ease).toEqual([0.25, 0.1, 0.25, 1]);
+      expect(v.visible!.opacity).toBe(1);
+      expect(v.visible!.y).toBe(0);
+      expect(v.visible!.scale).toBe(1);
+      expect(v.visible!.transition!.duration).toBe(0.6);
+      expect(v.visible!.transition!.ease).toEqual([0.25, 0.1, 0.25, 1]);
     }
   });
 });

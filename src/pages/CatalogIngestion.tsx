@@ -98,9 +98,9 @@ export default function CatalogIngestion() {
           `Ingested ${data.inserted} products. ${data.quarantined} quarantined.`,
         );
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Ingestion failed:", err);
-      toast.error(err.message || "Ingestion failed");
+      toast.error((err as { message?: string })?.message || "Ingestion failed");
     } finally {
       setIsUploading(false);
     }

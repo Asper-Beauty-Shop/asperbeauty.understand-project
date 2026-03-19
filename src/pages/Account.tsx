@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ const GlassSection = ({ children, className = "" }: { children: React.ReactNode;
   </div>
 );
 
-const SectionHeader = ({ icon: Icon, title, description, badge }: { icon: any; title: string; description: string; badge?: React.ReactNode }) => (
+const SectionHeader = ({ icon: Icon, title, description, badge }: { icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; title: string; description: string; badge?: React.ReactNode }) => (
   <div className="flex items-start justify-between mb-6">
     <div className="flex items-start gap-3">
       <div className="h-10 w-10 rounded-full border border-accent/30 flex items-center justify-center bg-accent/5 flex-shrink-0 mt-0.5">

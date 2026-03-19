@@ -106,7 +106,7 @@ Consider product titles, brands, categories, concerns, and tags when matching.`,
     }
 
     const matchedProducts = matchedIds
-      .map((id: string) => products?.find((p: any) => p.id === id))
+      .map((id: string) => products?.find((p: { id: string }) => p.id === id))
       .filter(Boolean);
 
     return new Response(JSON.stringify({ products: matchedProducts }), {

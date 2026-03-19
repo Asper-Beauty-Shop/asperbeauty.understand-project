@@ -70,7 +70,7 @@ function formatProduct(p: Record<string, unknown>): string {
 }
 
 // deno-lint-ignore no-explicit-any
-async function fetchProductContext(supabase: any, userMessage: string, slug: string | null) {
+async function fetchProductContext(supabase: ReturnType<typeof createClient>, userMessage: string, slug: string | null) {
   const FIELDS = "id,title,handle,brand,price,primary_concern,regimen_step,pharmacist_note";
   let matched: Record<string, unknown>[] = [];
   if (slug) {

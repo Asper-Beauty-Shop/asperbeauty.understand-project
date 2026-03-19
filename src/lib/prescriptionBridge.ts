@@ -40,21 +40,21 @@ export type DigitalTrayRegimen = {
   allProducts: RegimenProduct[];
 };
 
-function dbRowToRegimenProduct(row: any): RegimenProduct {
+function dbRowToRegimenProduct(row: Record<string, unknown>): RegimenProduct {
   return {
-    id: row.id,
-    title: row.title || row.name,
-    handle: row.handle || row.id,
-    description: row.description || "",
-    vendor: row.brand,
-    productType: row.category,
-    tags: row.tags || [],
+    id: row.id as string,
+    title: (row.title || row.name) as string,
+    handle: (row.handle || row.id) as string,
+    description: (row.description as string) || "",
+    vendor: row.brand as string,
+    productType: row.category as string,
+    tags: (row.tags as string[]) || [],
     priceRange: {
       minVariantPrice: { amount: String(row.price), currencyCode: "JOD" },
     },
     images: {
       edges: row.image_url
-        ? [{ node: { url: row.image_url, altText: row.title || row.name } }]
+        ? [{ node: { url: row.image_url as string, altText: (row.title || row.name) as string } }]
         : [],
     },
     variants: {

@@ -231,10 +231,11 @@ export default function AsperIntelligence() {
 
       if (error) throw error;
       return data?.reply ?? "Intelligence protocol reset required. Please standby.";
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Intelligence error:", error);
-      const isTimeout = error?.message?.includes("timeout") || error?.message?.includes("timed out");
-      const isNetwork = error?.message?.includes("Failed to fetch") || error?.message?.includes("NetworkError");
+      const err = error as { message?: string };
+      const isTimeout = err?.message?.includes("timeout") || err?.message?.includes("timed out");
+      const isNetwork = err?.message?.includes("Failed to fetch") || err?.message?.includes("NetworkError");
       
       if (isTimeout) {
         return "⏳ Dr. Sami's clinic is currently experiencing high volume. Your consultation is important to us — please try again in a moment.";
