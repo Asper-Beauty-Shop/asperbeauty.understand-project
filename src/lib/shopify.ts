@@ -96,7 +96,7 @@ interface DbRow {
   image_url: string | null;
   tags: string[] | null;
   created_at: string | null;
-  inventory_total: number | null;
+  inventory_total?: number | null;
   availability_status: string | null;
   primary_concern: string | null;
   [key: string]: unknown;
