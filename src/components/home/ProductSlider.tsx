@@ -43,7 +43,12 @@ export const ProductSlider = ({
   };
 
   return (
-    <section className="py-20 lg:py-28 bg-asper-stone-light relative overflow-hidden">
+    <section
+      className="py-20 lg:py-28 relative overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, hsl(240 100% 99%) 0%, hsl(0 0% 100%) 40%, hsl(240 50% 99.5%) 100%)",
+      }}
+    >
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
 
       <div className="luxury-container">
