@@ -16,7 +16,7 @@ const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
 export const BeautyAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Record<string, unknown>[]>([]);
+  const [messages, setMessages] = useState<Array<{ role: string; content: string; trayProducts?: unknown[] }>>([]);
   const [inputValue, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { language, locale } = useLanguage();
