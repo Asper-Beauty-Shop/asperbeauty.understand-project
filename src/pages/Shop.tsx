@@ -486,6 +486,20 @@ export default function Shop() {
               </span>
             </div>
             <div className="flex gap-2.5 overflow-x-auto pb-1 scrollbar-hide">
+              {/* Sale chip */}
+              <button
+                onClick={() => setFilters(f => ({ ...f, onSaleOnly: !f.onSaleOnly }))}
+                className={cn(
+                  "flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full border text-xs font-semibold transition-all duration-200 font-body",
+                  filters.onSaleOnly
+                    ? "bg-polished-gold text-dark-charcoal border-polished-gold shadow-[0_0_12px_hsl(var(--polished-gold)/0.4)]"
+                    : "bg-card text-foreground/70 border-accent/40 hover:border-accent hover:text-foreground"
+                )}
+              >
+                <span role="img" aria-hidden="true">🔥</span>
+                <span>{isAr ? "تخفيضات" : "On Sale"}</span>
+              </button>
+
               {AMBITION_PILLS.map((pill) => {
                 const isActive = filters.skinConcerns.includes(pill.id);
                 return (
