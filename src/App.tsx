@@ -128,6 +128,7 @@ const App = () => {
                 <Route path="/admin/audit-logs" element={<RequireAdmin><AdminAuditLogs /></RequireAdmin>} />
                 <Route path="/admin/purge-review" element={<RequireAdmin><PurgeReview /></RequireAdmin>} />
                 <Route path="/admin/emails" element={<RequireAdmin><AdminEmailDashboard /></RequireAdmin>} />
+                <Route path="/admin/sale-subscribers" element={<AdminSaleSubscribers />} />
                 <Route
                   path="/brand-intelligence"
                   element={
