@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { cn } from "@/lib/utils";
@@ -23,6 +24,38 @@ interface ProductSliderProps {
   products: SliderProduct[];
 }
 
+/* ── Framer Motion variants ── */
+const PREMIUM_EASE = [0.25, 0.1, 0.25, 1] as const;
+
+const containerVariants = {
+  hidden: { opacity: 1 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 28, scale: 0.98 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, ease: PREMIUM_EASE },
+  },
+};
+
+const cardReducedMotionVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { duration: 0.4 },
+  },
+};
+
 export const ProductSlider = ({
   title,
   subtitle,
@@ -31,6 +64,7 @@ export const ProductSlider = ({
   const { language } = useLanguage();
   const isArabic = language === "ar";
   const scrollRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -42,11 +76,16 @@ export const ProductSlider = ({
     }
   };
 
+  const activeCardVariants = prefersReducedMotion
+    ? cardReducedMotionVariants
+    : cardVariants;
+
   return (
     <section
       className="py-20 lg:py-28 relative overflow-hidden"
       style={{
-        background: "linear-gradient(135deg, hsl(240 100% 99%) 0%, hsl(0 0% 100%) 40%, hsl(240 50% 99.5%) 100%)",
+        background:
+          "linear-gradient(135deg, hsl(240 100% 99%) 0%, hsl(0 0% 100%) 40%, hsl(240 50% 99.5%) 100%)",
       }}
     >
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
@@ -87,24 +126,29 @@ export const ProductSlider = ({
           </div>
         </AnimatedSection>
 
-        {/* Product Carousel — Floating Cards */}
-        <AnimatedSection animation="fade-up" delay={150}>
-          <div
-            ref={scrollRef}
-            className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {products.map((product) => {
-              const imgSrc = product.image || product.image_url || "/editorial-showcase-2.webp";
-              const handle = product.handle || product.id;
-              const clinicalTag = product.clinical_badge || product.tag;
+        {/* Product Carousel — Staggered Reveal */}
+        <motion.div
+          ref={scrollRef}
+          className="flex gap-8 overflow-x-auto pb-4 snap-x snap-mandatory hide-scrollbar"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-50px" }}
+        >
+          {products.map((product) => {
+            const imgSrc =
+              product.image || product.image_url || "/editorial-showcase-2.webp";
+            const handle = product.handle || product.id;
+            const clinicalTag = product.clinical_badge || product.tag;
 
-              return (
-                <Link
-                  key={product.id}
-                  to={`/product/${handle}`}
-                  className="group flex-shrink-0 w-64 lg:w-72"
-                >
+            return (
+              <motion.div
+                key={product.id}
+                variants={activeCardVariants}
+                className="snap-start flex-shrink-0 w-64 lg:w-72"
+              >
+                <Link to={`/product/${handle}`} className="group block">
                   {/* Clinical Glass Card */}
                   <div className="relative clinical-glass-card rounded-lg p-4 overflow-hidden">
                     {/* Clinical Shimmer Beam */}
@@ -122,31 +166,30 @@ export const ProductSlider = ({
 
                     {/* Typography Hierarchy */}
                     <div className="space-y-2">
-                      {/* Clinical pill tag */}
                       {clinicalTag && (
-                        <span className={cn(
-                          "inline-block font-body text-[9px] uppercase tracking-[0.15em] px-3 py-1 rounded-full",
-                          clinicalTag === "Jordanian Heritage" || clinicalTag === "Local Favorite"
-                            ? "bg-accent/10 text-accent border border-accent/50 font-semibold"
-                            : "text-accent border border-accent/40"
-                        )}>
+                        <span
+                          className={cn(
+                            "inline-block font-body text-[9px] uppercase tracking-[0.15em] px-3 py-1 rounded-full",
+                            clinicalTag === "Jordanian Heritage" ||
+                              clinicalTag === "Local Favorite"
+                              ? "bg-accent/10 text-accent border border-accent/50 font-semibold"
+                              : "text-accent border border-accent/40"
+                          )}
+                        >
                           {clinicalTag}
                         </span>
                       )}
 
-                      {/* Brand — Gold micro label */}
                       {product.brand && (
                         <p className="text-[10px] uppercase tracking-[0.2em] text-accent font-body font-semibold">
                           {product.brand}
                         </p>
                       )}
 
-                      {/* Product Name */}
                       <h3 className="font-heading text-sm text-foreground line-clamp-2 leading-snug font-semibold">
                         {product.title}
                       </h3>
 
-                      {/* CTA text */}
                       <span
                         className={cn(
                           "inline-flex items-center gap-1.5 text-xs font-body text-primary font-semibold uppercase tracking-wider mt-1",
@@ -159,14 +202,13 @@ export const ProductSlider = ({
                     </div>
                   </div>
                 </Link>
-              );
-            })}
-          </div>
-        </AnimatedSection>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
     </section>
   );
 };
-
