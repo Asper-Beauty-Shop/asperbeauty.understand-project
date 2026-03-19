@@ -104,14 +104,18 @@ vi.mock("@/assets/pdp-ingredients.jpg", () => ({ default: "" }));
 vi.mock("@/assets/pdp-regulatory.jpg", () => ({ default: "" }));
 
 const renderPDP = async () => {
+  const { QueryClient, QueryClientProvider } = await import("@tanstack/react-query");
   const { LanguageProvider } = await import("@/contexts/LanguageContext");
   const { default: ProductDetail } = await import("@/pages/ProductDetail");
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <BrowserRouter>
-      <LanguageProvider>
-        <ProductDetail />
-      </LanguageProvider>
-    </BrowserRouter>,
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <LanguageProvider>
+          <ProductDetail />
+        </LanguageProvider>
+      </BrowserRouter>
+    </QueryClientProvider>,
   );
 };
 

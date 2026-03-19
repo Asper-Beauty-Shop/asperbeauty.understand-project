@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ASPER_PROTOCOL } from "@/lib/asperProtocol";
-import { DigitalTray } from "./chat/DigitalTray";
+import { DigitalTray, type DigitalTrayProduct } from "./chat/DigitalTray";
 import { cn } from "@/lib/utils";
 
 const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
@@ -158,7 +158,7 @@ export const BeautyAssistant = () => {
                       : "bg-white border border-polished-gold/20 text-asper-ink shadow-sm rounded-2xl rounded-bl-sm"
                   )}>
                     {m.content as string}
-                    {m.trayProducts && <div className="mt-4"><DigitalTray products={m.trayProducts as any} /></div>}
+                    {m.trayProducts && <div className="mt-4"><DigitalTray products={m.trayProducts as DigitalTrayProduct[]} /></div>}
                   </div>
                 </motion.div>
               ))}
