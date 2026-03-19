@@ -469,7 +469,15 @@ const ManageProducts = () => {
               </h1>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Button
+                onClick={() => setIsSaleDialogOpen(true)}
+                variant="outline"
+                className="border-destructive/30 text-destructive hover:bg-destructive/10"
+              >
+                <Tag className="w-4 h-4 me-2" />
+                Bulk Sale
+              </Button>
               <Button
                 onClick={handleGenerateAIImages}
                 disabled={isGeneratingAI || isEnriching}
