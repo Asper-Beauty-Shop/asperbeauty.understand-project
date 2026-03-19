@@ -24,12 +24,15 @@ export default function ClinicalLuxuryHero() {
 
   return (
     <section ref={sectionRef} className="relative w-full min-h-[600px] bg-background overflow-hidden" style={{ height: "100dvh" }}>
-      {/* Subtle radial glow behind image */}
+      {/* Layered radial glows for glass depth */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
-          background:
+          background: [
+            "radial-gradient(ellipse 50% 40% at 30% 60%, hsl(43 69% 46% / 0.04) 0%, transparent 60%)",
             "radial-gradient(ellipse 60% 50% at 65% 50%, hsl(43 69% 46% / 0.06) 0%, transparent 70%)",
+            "radial-gradient(ellipse 40% 30% at 80% 20%, hsl(345 100% 25% / 0.02) 0%, transparent 50%)",
+          ].join(", "),
         }}
       />
 
