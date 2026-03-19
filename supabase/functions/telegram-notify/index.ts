@@ -64,6 +64,17 @@ Deno.serve(async (req) => {
     return new Response("Method not allowed", { status: 405 });
   }
 
+  // Verify the caller is the Supabase service role (pg_net triggers use service_role key)
+  const authHeader = req.headers.get("Authorization");
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (
+    !serviceRoleKey ||
+    !authHeader ||
+    authHeader !== `Bearer ${serviceRoleKey}`
+  ) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   let body: Record<string, unknown>;
   try {
     body = await req.json();
