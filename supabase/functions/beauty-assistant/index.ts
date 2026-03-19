@@ -237,7 +237,7 @@ serve(async (req) => {
 
     const slug = detectConcernSlug(userMessage);
     const { context, products } = await fetchProductContext(supabase, userMessage, slug);
-    const systemPrompt = buildSystemPrompt(context, slug ? `/products?concern=${slug}` : null);
+    const systemPrompt = buildSystemPrompt(context, slug ? `/products?concern=${slug}` : null) + productContextStr;
 
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {
