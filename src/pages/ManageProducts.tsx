@@ -88,6 +88,7 @@ const ManageProducts = () => {
     { id: string; title: string; status: string; image_url?: string }[] | null
   >(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isSaleDialogOpen, setIsSaleDialogOpen] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
