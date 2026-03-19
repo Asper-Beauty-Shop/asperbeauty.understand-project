@@ -145,7 +145,7 @@ function rowToProduct(row: DbRow): ShopifyProduct {
 // ── Data fetching (Supabase-backed) ──
 
 const PRODUCT_COLUMNS =
-  "id, title, name, description, handle, brand, category, price, image_url, tags, created_at, stock, availability_status, primary_concern, bestseller_rank";
+  "id, title, name, description, handle, brand, category, price, image_url, tags, created_at, inventory_total, availability_status, primary_concern, bestseller_rank";
 
 export async function fetchProducts(
   first: number = 24,
