@@ -90,6 +90,11 @@ const ShopProductCard = ({
       >
         <div className="relative w-40 md:w-48 flex-shrink-0 bg-background">
           <img src={imageUrl} alt={product.title} className="w-full h-full object-cover" loading="lazy" />
+          {product.is_on_sale && product.discount_percent && (
+            <span className="absolute top-3 left-3 z-10 rounded-full bg-polished-gold text-[10px] font-bold px-2 py-0.5 text-dark-charcoal shadow-sm">
+              -{product.discount_percent}%
+            </span>
+          )}
         </div>
         <div className="flex-1 p-4 flex flex-col">
           {product.brand && (
