@@ -473,6 +473,16 @@ const ManageProducts = () => {
 
             <div className="flex items-center gap-3 flex-wrap">
               <Button
+                asChild
+                variant="outline"
+                className="border-accent/30 text-accent hover:bg-accent/10"
+              >
+                <Link to="/admin/sale-subscribers">
+                  <Users className="w-4 h-4 me-2" />
+                  Subscribers
+                </Link>
+              </Button>
+              <Button
                 onClick={() => setIsSaleDialogOpen(true)}
                 variant="outline"
                 className="border-destructive/30 text-destructive hover:bg-destructive/10"
