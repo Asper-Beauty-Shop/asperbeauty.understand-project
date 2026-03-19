@@ -15,3 +15,5 @@ project_id = "qqceibvalkoytafynwoc"
     verify_jwt = false
   [functions.ingest-catalog]
     verify_jwt = false
+  [functions.beauty-assistant]
+    verify_jwt = false
