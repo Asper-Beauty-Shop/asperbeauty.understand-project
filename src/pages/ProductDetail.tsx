@@ -4,6 +4,7 @@ import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
 import pdpIngredients from "@/assets/pdp-ingredients.jpg";
 import pdpRegulatory from "@/assets/pdp-regulatory.jpg";
 import { supabase } from "@/integrations/supabase/client";
+import { getIngredientBenefit } from "@/lib/ingredientBenefits";
 import { useCartStore } from "@/stores/cartStore";
 import { useWishlistStore } from "@/stores/wishlistStore";
 import { Header } from "@/components/Header";
