@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
@@ -7,6 +7,16 @@ import { BrowserRouter } from "react-router-dom";
  * Unit tests for Key Clinical Actives staggered animation on PDP.
  * Validates: variant config, stagger timing, once-only viewport, premium ease curve.
  */
+
+// ── Polyfill IntersectionObserver for jsdom ──
+beforeAll(() => {
+  global.IntersectionObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    constructor() {}
+  } as any;
+});
 
 // Collect all motion.div props for assertion
 const motionDivCalls: Array<Record<string, unknown>> = [];
@@ -27,44 +37,39 @@ vi.mock("framer-motion", async () => {
   };
 });
 
-// Mock supabase — return a product with key_ingredients
+const TEST_PRODUCT = {
+  id: "test-id",
+  name: "Test Serum",
+  title: "Test Serum",
+  brand: "TestBrand",
+  price: 45,
+  description: "A test product",
+  category: "Skin Care",
+  image_url: "https://example.com/img.jpg",
+  is_hero: false,
+  created_at: "2026-01-01",
+  updated_at: "2026-01-01",
+  key_ingredients: ["Niacinamide", "Hyaluronic Acid", "Retinol"],
+  primary_concern: "anti-aging",
+  handle: "test-product",
+};
+
+// Build a chainable mock for supabase.from()
+const mockFrom = () => {
+  const chain: any = {};
+  chain.select = () => chain;
+  chain.eq = () => chain;
+  chain.neq = () => chain;
+  chain.in = () => Promise.resolve({ data: [], error: null });
+  chain.limit = () => Promise.resolve({ data: [], error: null });
+  chain.maybeSingle = () => Promise.resolve({ data: TEST_PRODUCT, error: null });
+  chain.single = () => Promise.resolve({ data: null, error: null });
+  return chain;
+};
+
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
-    from: (table: string) => ({
-      select: () => ({
-        eq: () => ({
-          maybeSingle: () =>
-            Promise.resolve({
-              data:
-                table === "products"
-                  ? {
-                      id: "test-id",
-                      name: "Test Serum",
-                      title: "Test Serum",
-                      brand: "TestBrand",
-                      price: 45,
-                      description: "A test product",
-                      category: "Skin Care",
-                      image_url: "https://example.com/img.jpg",
-                      is_hero: false,
-                      created_at: "2026-01-01",
-                      updated_at: "2026-01-01",
-                      key_ingredients: ["Niacinamide", "Hyaluronic Acid", "Retinol"],
-                      primary_concern: "anti-aging",
-                      handle: "test-product",
-                    }
-                  : null,
-              error: null,
-            }),
-          single: () => Promise.resolve({ data: null, error: null }),
-          limit: () => Promise.resolve({ data: [], error: null }),
-        }),
-        neq: () => ({
-          limit: () => Promise.resolve({ data: [], error: null }),
-        }),
-        in: () => Promise.resolve({ data: [], error: null }),
-      }),
-    }),
+    from: () => mockFrom(),
     functions: { invoke: vi.fn() },
     auth: {
       getSession: () => Promise.resolve({ data: { session: null } }),
@@ -85,8 +90,6 @@ vi.mock("react-router-dom", async () => {
 });
 
 vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
-
-// Mock image imports
 vi.mock("@/assets/pdp-how-to-use.jpg", () => ({ default: "" }));
 vi.mock("@/assets/pdp-ingredients.jpg", () => ({ default: "" }));
 vi.mock("@/assets/pdp-regulatory.jpg", () => ({ default: "" }));
@@ -94,7 +97,6 @@ vi.mock("@/assets/pdp-regulatory.jpg", () => ({ default: "" }));
 const renderPDP = async () => {
   const { LanguageProvider } = await import("@/contexts/LanguageContext");
   const { default: ProductDetail } = await import("@/pages/ProductDetail");
-
   return render(
     <BrowserRouter>
       <LanguageProvider>
