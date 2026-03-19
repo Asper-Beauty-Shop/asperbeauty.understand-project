@@ -15,7 +15,7 @@ import serumsImg from "@/assets/hero-golden-serums.jpg";
 
 // ─── constants ────────────────────────────────────────────────────────────────
 
-const EASE = [0.19, 1, 0.22, 1] as unknown as number[];
+const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
 interface Stat {
   value: number;

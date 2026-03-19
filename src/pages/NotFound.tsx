@@ -5,7 +5,7 @@ import { ArrowRight, Home, Search, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 
-const EASE = [0.19, 1, 0.22, 1] as unknown as number[];
+const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
 const QUICK_LINKS = [
   { en: "Shop All Products", ar: "تسوق جميع المنتجات", href: "/shop" },
