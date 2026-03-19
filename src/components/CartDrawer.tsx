@@ -30,7 +30,7 @@ const FREE_SHIPPING_THRESHOLD = 50; // JOD
 
 const itemVariants = {
   hidden: { opacity: 0, x: 20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] } },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] as const } },
   exit: { opacity: 0, x: -20, transition: { duration: 0.2 } },
 };
 
