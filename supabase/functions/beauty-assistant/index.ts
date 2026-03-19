@@ -145,8 +145,11 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: getCorsHeaders(req) });
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+
+  // Service-role client for product queries (bypasses RLS)
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   if (req.method === "GET") return new Response(JSON.stringify({ status: "active", version: "5.0-super-smart" }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
 
@@ -156,10 +159,40 @@ serve(async (req) => {
     let messages: Array<{ role: string; content: string }> = [];
 
     if (route) {
+      // Webhook routes (Gorgias/ManyChat): validate shared webhook secret
+      const webhookSecret = Deno.env.get("WEBHOOK_SECRET");
+      if (webhookSecret) {
+        const providedSecret = req.headers.get("x-webhook-secret");
+        if (providedSecret !== webhookSecret) {
+          return new Response(JSON.stringify({ error: "Unauthorized: invalid webhook secret" }), {
+            status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+          });
+        }
+      }
+
       const body = await req.json();
       userMessage = route === "gorgias" ? extractFromGorgias(body).message : extractFromManyChat(body).message;
       messages = [{ role: "user", content: userMessage }];
     } else {
+      // Regular chat traffic: require authenticated user via JWT
+      const authHeader = req.headers.get("Authorization");
+      if (!authHeader?.startsWith("Bearer ")) {
+        return new Response(JSON.stringify({ error: "Unauthorized: missing authorization" }), {
+          status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+
+      const token = authHeader.replace("Bearer ", "");
+      const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data, error: authError } = await authClient.auth.getUser(token);
+      if (authError || !data?.user) {
+        return new Response(JSON.stringify({ error: "Unauthorized: invalid or expired token" }), {
+          status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+
       const body = await req.json();
       messages = body.messages;
       userMessage = messages[messages.length - 1].content;
