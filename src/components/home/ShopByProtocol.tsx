@@ -68,7 +68,7 @@ export const ShopByProtocol = () => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
-    <section className="py-20 lg:py-28 relative overflow-hidden bg-gradient-to-br from-background to-secondary/30">
+    <section className="py-14 sm:py-20 lg:py-28 relative overflow-hidden bg-gradient-to-br from-background to-secondary/30">
       {/* Radial glow behind glass cards */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -83,14 +83,14 @@ export const ShopByProtocol = () => {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 
       <div className="luxury-container relative z-10">
-        <AnimatedSection className="text-center mb-14" animation="fade-up">
+        <AnimatedSection className="text-center mb-10 sm:mb-14" animation="fade-up">
           <span className="font-body text-xs uppercase tracking-[0.3em] text-accent mb-3 block">
             {isArabic ? "تسوقي حسب البروتوكول" : "Targeted Skincare Protocols"}
           </span>
-          <h2 className="font-heading text-3xl lg:text-4xl text-primary font-bold">
+          <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl text-primary font-bold">
             {isArabic ? "بروتوكولات عنايتك" : "Your Skincare Protocols"}
           </h2>
-          <p className="font-body text-sm text-muted-foreground max-w-lg mx-auto mt-4 leading-relaxed">
+          <p className="font-body text-sm text-muted-foreground max-w-lg mx-auto mt-4 leading-relaxed px-4 sm:px-0">
             {isArabic
               ? "روتينات مُصممة بدقة تضم مستحضرات طبية أصلية لمعالجة مشاكل بشرتك بفعالية سريرية."
               : "Precision-crafted routines featuring authentic dermo-cosmetics, designed to address your specific skin concerns with clinical efficacy."}
@@ -103,12 +103,13 @@ export const ShopByProtocol = () => {
         </AnimatedSection>
 
         <AnimatedSection animation="fade-up" delay={150}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+          {/* 1 col mobile → 2 col sm → 3 col lg */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
             {PROTOCOLS.map((protocol) => (
               <Link
                 key={protocol.id}
                 to={protocol.href}
-                className="group relative aspect-[4/5] overflow-hidden rounded-xl clinical-glass-card"
+                className="group relative aspect-[4/5] sm:aspect-[4/5] overflow-hidden rounded-xl clinical-glass-card active:scale-[0.98] transition-transform"
                 onMouseEnter={() => setHoveredId(protocol.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
@@ -123,31 +124,29 @@ export const ShopByProtocol = () => {
                 {/* Dark overlay for text readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/20 to-transparent" />
 
-                {/* Gold border glow on hover — handled by clinical-glass-card */}
-
                 {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                  <h3 className="font-heading text-xl lg:text-2xl font-bold text-primary-foreground mb-2 tracking-tight">
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 z-10">
+                  <h3 className="font-heading text-lg sm:text-xl lg:text-2xl font-bold text-primary-foreground mb-1.5 sm:mb-2 tracking-tight">
                     {isArabic ? protocol.ar : protocol.en}
                   </h3>
 
-                  {/* Ingredients reveal on hover */}
-                  <div
+                  {/* Mobile: always show ingredients; Desktop: reveal on hover */}
+                  <p
                     className={cn(
-                      "overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
-                      hoveredId === protocol.id ? "max-h-20 opacity-100" : "max-h-0 opacity-0"
+                      "font-body text-xs text-accent tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
+                      "sm:overflow-hidden",
+                      hoveredId === protocol.id ? "sm:max-h-20 sm:opacity-100" : "sm:max-h-0 sm:opacity-0"
                     )}
                   >
-                    <p className="font-body text-xs text-accent tracking-wider uppercase">
-                      {isArabic ? protocol.ingredients.ar : protocol.ingredients.en}
-                    </p>
-                  </div>
+                    {isArabic ? protocol.ingredients.ar : protocol.ingredients.en}
+                  </p>
 
-                  {/* View Protocol CTA */}
+                  {/* View Protocol CTA — always visible on mobile */}
                   <div
                     className={cn(
-                      "overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
-                      hoveredId === protocol.id ? "max-h-12 opacity-100 mt-3" : "max-h-0 opacity-0 mt-0"
+                      "mt-2.5 sm:mt-0 transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
+                      "sm:overflow-hidden",
+                      hoveredId === protocol.id ? "sm:max-h-12 sm:opacity-100 sm:mt-3" : "sm:max-h-0 sm:opacity-0"
                     )}
                   >
                     <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary-foreground border-b border-accent/50 pb-0.5">
