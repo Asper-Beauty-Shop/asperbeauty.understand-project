@@ -140,12 +140,12 @@ const ShopProductCard = ({
         ) : (
           <Package className="h-16 w-16 text-muted-foreground/30" />
         )}
-        {(product as any).is_on_sale && (product as any).discount_percent && (
+        {product.is_on_sale && product.discount_percent && (
           <span className="absolute top-3 left-3 z-10 rounded-full bg-polished-gold text-[10px] font-bold px-2 py-0.5 text-dark-charcoal shadow-sm">
-            -{(product as any).discount_percent}%
+            -{product.discount_percent}%
           </span>
         )}
-        {!(product as any).is_on_sale && product.clinical_badge && (
+        {!product.is_on_sale && product.clinical_badge && (
           <span className="absolute top-3 left-3 z-10 flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2 py-0.5 text-[10px] font-medium text-foreground shadow-sm">
             <Shield className="h-3 w-3 text-primary" />
             {product.clinical_badge}
@@ -183,9 +183,9 @@ const ShopProductCard = ({
         <div className="flex items-center justify-between pt-1">
           <div className="flex items-baseline gap-1.5">
             <LuxuryPrice amount={product.price} />
-            {(product as any).is_on_sale && (product as any).original_price && (
+            {product.is_on_sale && product.original_price && (
               <span className="text-xs line-through text-muted-foreground font-body">
-                {(product as any).original_price.toFixed(2)}
+                {product.original_price.toFixed(2)}
               </span>
             )}
           </div>
@@ -370,7 +370,7 @@ export default function Shop() {
       if (activeConcerns.length > 0 && (!product.primary_concern || !activeConcerns.includes(product.primary_concern))) return false;
       const price = product.price ?? 0;
       if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
-      if (filters.onSaleOnly && !(product as any).is_on_sale) return false;
+      if (filters.onSaleOnly && !product.is_on_sale) return false;
       return true;
     });
 
@@ -383,8 +383,8 @@ export default function Shop() {
       return db - da;
     });
     else if (sortBy === "sale") sorted.sort((a, b) => {
-      const discA = (a as any).discount_percent ?? 0;
-      const discB = (b as any).discount_percent ?? 0;
+      const discA = a.discount_percent ?? 0;
+      const discB = b.discount_percent ?? 0;
       return discB - discA;
     });
     return sorted;

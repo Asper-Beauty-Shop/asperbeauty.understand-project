@@ -165,8 +165,8 @@ const ProductDetail = () => {
   const isWishlisted = product ? isInWishlist(product.id) : false;
   const currentPrice = product?.price ?? 0;
   const isOutOfStock = product?.in_stock === false;
-  const originalPrice = (product as any)?.original_price ?? null;
-  const discountPct = (product as any)?.is_on_sale && originalPrice && currentPrice
+  const originalPrice = product?.original_price ?? null;
+  const discountPct = product?.is_on_sale && originalPrice && currentPrice
     ? Math.round((1 - currentPrice / originalPrice) * 100)
     : 0;
 
