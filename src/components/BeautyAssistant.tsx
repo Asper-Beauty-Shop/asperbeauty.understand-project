@@ -16,7 +16,7 @@ const LUXURY_EASE = [0.19, 1, 0.22, 1] as const;
 
 export const BeautyAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Record<string, unknown>[]>([]);
+  const [messages, setMessages] = useState<Array<{ role: string; content: string; trayProducts?: unknown[] }>>([]);
   const [inputValue, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { language, locale } = useLanguage();
@@ -157,8 +157,8 @@ export const BeautyAssistant = () => {
                       ? "bg-asper-ink text-polished-white font-medium rounded-2xl rounded-br-sm shadow-md" 
                       : "bg-white border border-polished-gold/20 text-asper-ink shadow-sm rounded-2xl rounded-bl-sm"
                   )}>
-                    {m.content}
-                    {m.trayProducts && <div className="mt-4"><DigitalTray products={m.trayProducts} /></div>}
+                    {m.content as string}
+                    {m.trayProducts && <div className="mt-4"><DigitalTray products={m.trayProducts as any} /></div>}
                   </div>
                 </motion.div>
               ))}

@@ -221,6 +221,16 @@ serve(async (req) => {
       }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
     }
 
+    // Persist transcript for analytics (fire-and-forget)
+    const productIds = products.map((p: Record<string, unknown>) => p.id).filter(Boolean);
+    supabase.from("chat_transcripts").insert({
+      user_message: userMessage,
+      ai_reply: replyText,
+      detected_concern: slug,
+      channel: route || "web",
+      product_ids: productIds,
+    }).then(() => {}).catch(() => {});
+
     return new Response(JSON.stringify({ reply: replyText, products: products.map((p: Record<string, unknown>) => ({ id: p.id, title: p.title, handle: p.handle })) }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
 
   } catch (e: unknown) {

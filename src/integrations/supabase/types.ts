@@ -53,6 +53,39 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_transcripts: {
+        Row: {
+          ai_reply: string
+          channel: string
+          created_at: string
+          detected_concern: string | null
+          id: string
+          product_ids: string[] | null
+          session_id: string | null
+          user_message: string
+        }
+        Insert: {
+          ai_reply: string
+          channel?: string
+          created_at?: string
+          detected_concern?: string | null
+          id?: string
+          product_ids?: string[] | null
+          session_id?: string | null
+          user_message: string
+        }
+        Update: {
+          ai_reply?: string
+          channel?: string
+          created_at?: string
+          detected_concern?: string | null
+          id?: string
+          product_ids?: string[] | null
+          session_id?: string | null
+          user_message?: string
+        }
+        Relationships: []
+      }
       cod_orders: {
         Row: {
           assigned_at: string | null
