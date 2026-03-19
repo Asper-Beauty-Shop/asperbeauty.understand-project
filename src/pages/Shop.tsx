@@ -638,7 +638,7 @@ export default function Shop() {
       </main>
       <Footer />
       <ProductQuickView
-        product={selectedProduct ? { id: selectedProduct.id, title: selectedProduct.title, price: selectedProduct.price ?? 0, description: selectedProduct.pharmacist_note, category: selectedProduct.primary_concern?.replace("Concern_","") ?? "General", image_url: selectedProduct.image_url, brand: selectedProduct.brand, volume_ml: null, is_on_sale: null, original_price: null, discount_percent: null, created_at: selectedProduct.created_at, updated_at: selectedProduct.updated_at } : null}
+        product={selectedProduct ? { id: selectedProduct.id, title: selectedProduct.title, price: selectedProduct.price ?? 0, description: selectedProduct.pharmacist_note, category: selectedProduct.primary_concern?.replace("Concern_","") ?? "General", image_url: selectedProduct.image_url, brand: selectedProduct.brand, volume_ml: null, is_on_sale: selectedProduct.is_on_sale ?? null, original_price: selectedProduct.original_price ?? null, discount_percent: selectedProduct.discount_percent ?? null, created_at: selectedProduct.created_at, updated_at: selectedProduct.updated_at } : null}
         isOpen={isQuickViewOpen}
         onClose={() => { setIsQuickViewOpen(false); setTimeout(() => setSelectedProduct(null), 300); }}
       />
