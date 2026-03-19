@@ -44,6 +44,7 @@ import {
   RefreshCw,
   ShieldCheck,
   Sparkles,
+  Tag,
   Trash2,
   Upload,
   Wand2,
