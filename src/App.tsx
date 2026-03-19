@@ -40,6 +40,7 @@ import AdminEmailDashboard from "./pages/AdminEmailDashboard";
 import AsperIntelligence from "./pages/AsperIntelligence";
 import PurgeReview from "./pages/PurgeReview";
 import BrandIntelligenceDashboard from "./pages/BrandIntelligenceDashboard";
+import AdminSaleSubscribers from "./pages/AdminSaleSubscribers";
 import Health from "./pages/Health";
 import RegimenPortal from "./pages/RegimenPortal";
 import { RequireAdmin } from "./components/RequireAdmin";
