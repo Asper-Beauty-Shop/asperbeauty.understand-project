@@ -311,20 +311,23 @@ const ProductDetail = () => {
                   </h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {product.key_ingredients.map((ingredient) => (
-                    <div
-                      key={ingredient}
-                      className="clinical-glass rounded-sm p-5 transition-colors duration-300 hover:-translate-y-0.5"
-                      style={{
-                        border: "1px solid hsl(var(--polished-gold) / 0.2)",
-                      }}
-                    >
-                      <h4 className="font-body font-bold text-sm text-asper-ink mb-1">{ingredient}</h4>
-                      <p className="text-xs text-muted-foreground leading-relaxed font-body">
-                        {isArabic ? "مكون فعال سريرياً" : "Clinically active ingredient"}
-                      </p>
-                    </div>
-                  ))}
+                  {product.key_ingredients.map((ingredient) => {
+                    const benefit = getIngredientBenefit(ingredient, isArabic);
+                    return (
+                      <div
+                        key={ingredient}
+                        className="clinical-glass rounded-sm p-5 transition-colors duration-300 hover:-translate-y-0.5"
+                        style={{
+                          border: "1px solid hsl(var(--polished-gold) / 0.2)",
+                        }}
+                      >
+                        <h4 className="font-body font-bold text-sm text-asper-ink mb-1">{ingredient}</h4>
+                        <p className="text-xs text-muted-foreground leading-relaxed font-body">
+                          {benefit}
+                        </p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
