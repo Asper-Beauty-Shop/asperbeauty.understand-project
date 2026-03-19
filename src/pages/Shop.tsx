@@ -370,7 +370,7 @@ export default function Shop() {
       if (activeConcerns.length > 0 && (!product.primary_concern || !activeConcerns.includes(product.primary_concern))) return false;
       const price = product.price ?? 0;
       if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
-      if (filters.onSaleOnly && !product.is_on_sale) return false;
+      if (filters.onSaleOnly && !(product as any).is_on_sale) return false;
       return true;
     });
 
