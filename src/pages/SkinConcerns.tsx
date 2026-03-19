@@ -17,13 +17,13 @@ import {
   Umbrella,
 } from "lucide-react";
 import { logSkinConcernClick } from "@/lib/conciergeAnalytics";
-const antiAgingImage = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&q=80";
-const hydrationImage = "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=800&q=80";
-const acneImage = "https://images.unsplash.com/photo-1559181567-c3190ca9be8a?w=800&q=80";
-const brighteningImage = "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=800&q=80";
-const sensitivityImage = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80";
-const sunProtectionImage = "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80";
-const darkCirclesImage = "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&q=80";
+const antiAgingImage = "/categories/anti-aging.webp";
+const hydrationImage = "/categories/hydration.webp";
+const acneImage = "/categories/acne.webp";
+const brighteningImage = "/categories/brightening.webp";
+const sensitivityImage = "/categories/sensitivity.webp";
+const sunProtectionImage = "/categories/sun-protection.webp";
+const darkCirclesImage = "/categories/dark-circles.webp";
 const skinConcerns = [{
   id: "anti-aging",
   nameEn: "Anti-Aging",
