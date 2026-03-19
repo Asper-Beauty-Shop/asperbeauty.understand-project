@@ -780,8 +780,24 @@ const ManageProducts = () => {
                             {(product.primary_concern as string)?.replace("Concern_", "") || "—"}
                           </span>
                         </TableCell>
-                        <TableCell className="text-right font-semibold text-burgundy">
-                          {formatJOD(Number(product.price))}
+                        <TableCell className="text-right">
+                          {(product as any).is_on_sale && (product as any).original_price ? (
+                            <div className="flex flex-col items-end">
+                              <span className="line-through text-muted-foreground text-xs">
+                                {formatJOD(Number((product as any).original_price))}
+                              </span>
+                              <span className="font-semibold text-destructive">
+                                {formatJOD(Number(product.price))}
+                              </span>
+                              <Badge className="bg-destructive/10 text-destructive border-destructive/20 text-[10px] mt-0.5">
+                                {(product as any).discount_percent}% OFF
+                              </Badge>
+                            </div>
+                          ) : (
+                            <span className="font-semibold text-burgundy">
+                              {formatJOD(Number(product.price))}
+                            </span>
+                          )}
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
