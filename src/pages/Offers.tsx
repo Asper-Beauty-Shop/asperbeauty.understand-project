@@ -214,6 +214,11 @@ export default function Offers() {
     }, 0);
   }, [saleProducts]);
 
+  const flashDealIds = useMemo(() => {
+    const sorted = [...saleProducts].sort((a, b) => (b.discount_percent ?? 0) - (a.discount_percent ?? 0));
+    return new Set(sorted.slice(0, 3).map((p) => p.id));
+  }, [saleProducts]);
+
   const handleQuickView = (product: Product) => {
     setSelectedProduct(product);
     setIsQuickViewOpen(true);
