@@ -47,8 +47,10 @@ import {
   Tag,
   Trash2,
   Upload,
+  Users,
   Wand2,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { getProductImage } from "@/lib/productImageUtils";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
