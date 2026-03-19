@@ -282,7 +282,16 @@ const ProductDetail = () => {
                 </button>
               </div>
 
-              {/* Trust Signal */}
+              {/* Secondary CTA: Digital Concierge Integration */}
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent("open-beauty-assistant"))}
+                className="w-full h-14 clinical-glass rounded-sm font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98] text-foreground hover:border-accent/40"
+                style={{ border: "1px solid hsl(var(--polished-gold) / 0.3)" }}
+              >
+                <Sparkles className="w-5 h-5 text-polished-gold" />
+                {isArabic ? "غير متأكد؟ اسألي د. روز عن هذا المنتج" : "Unsure? Ask Dr. Rose about this formula"}
+              </button>
+
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <ShieldCheck className="w-4 h-4 text-burgundy" />
                 {isArabic ? "موزع معتمد • منتج أصلي 100%" : "Authorized Retailer • 100% Authentic"}
