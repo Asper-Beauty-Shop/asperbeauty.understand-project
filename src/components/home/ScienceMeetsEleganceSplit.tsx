@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Stethoscope, Sparkles } from "lucide-react";
+import { Stethoscope, Sparkles, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 
@@ -11,19 +11,26 @@ export function ScienceMeetsEleganceSplit() {
   const isAr = locale === "ar";
 
   return (
-    <section className="w-full">
+    <section className="w-full bg-background relative overflow-hidden">
+      {/* Subtle radial glow behind the glass for depth */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: [
+            "radial-gradient(ellipse 50% 50% at 25% 50%, hsl(43 69% 46% / 0.04) 0%, transparent 60%)",
+            "radial-gradient(ellipse 50% 50% at 75% 50%, hsl(345 100% 25% / 0.03) 0%, transparent 60%)",
+          ].join(", "),
+        }}
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-[70vh]">
         {/* LEFT — Dr. Sami's Clinical Domain */}
         <Link
           to="/shop?category=Clinical+Serums+%26+Actives"
           className="group relative flex flex-col justify-center items-center text-center
-                     bg-background px-8 md:px-14 py-20 overflow-hidden
-                     border-r border-border/20
-                     transition-all duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)]
-                     hover:border-accent"
+                     px-8 md:px-14 py-20 overflow-hidden"
         >
-          <div className="absolute inset-0 border-2 border-transparent group-hover:border-accent transition-all duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] pointer-events-none z-10" />
-
+          {/* Background imagery — very subtle */}
           <div
             className="absolute inset-0 bg-cover bg-center opacity-[0.06] group-hover:opacity-[0.12] group-hover:scale-[1.02]
                         transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)]"
@@ -34,7 +41,7 @@ export function ScienceMeetsEleganceSplit() {
           />
 
           <motion.div
-            className="relative z-10"
+            className="clinical-glass relative z-10 rounded-xl p-8 lg:p-10 xl:p-12 max-w-md"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -72,8 +79,10 @@ export function ScienceMeetsEleganceSplit() {
                 : "Pharmacist-curated formulas backed by clinical evidence."}
             </p>
 
-            <span className="inline-block font-body text-[11px] uppercase tracking-[0.3em] text-foreground border-b border-accent pb-1 group-hover:text-primary transition-colors duration-[400ms]">
+            {/* Solid CTA that breaks the glass plane */}
+            <span className="inline-flex items-center gap-2 font-body text-[11px] uppercase tracking-[0.3em] text-primary-foreground bg-primary px-6 py-3 group-hover:bg-burgundy-dark transition-all duration-[400ms]">
               {isAr ? "استكشفي" : "Explore Clinical"}
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
             </span>
           </motion.div>
         </Link>
@@ -82,11 +91,9 @@ export function ScienceMeetsEleganceSplit() {
         <Link
           to="/shop?category=Evening+Radiance+%26+Glamour"
           className="group relative flex flex-col justify-center items-center text-center
-                     bg-primary px-8 md:px-14 py-20 overflow-hidden
-                     transition-all duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)]"
+                     bg-primary px-8 md:px-14 py-20 overflow-hidden"
         >
-          <div className="absolute inset-0 border-2 border-transparent group-hover:border-accent transition-all duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] pointer-events-none z-10" />
-
+          {/* Background imagery */}
           <div
             className="absolute inset-0 bg-cover bg-center opacity-[0.08] group-hover:opacity-[0.15] group-hover:scale-[1.02]
                         transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)]"
@@ -97,7 +104,11 @@ export function ScienceMeetsEleganceSplit() {
           />
 
           <motion.div
-            className="relative z-10"
+            className="relative z-10 rounded-xl p-8 lg:p-10 xl:p-12 max-w-md
+                       bg-primary-foreground/10 backdrop-blur-md border border-accent/20
+                       shadow-[0_12px_40px_0_rgba(14,20,36,0.05)]
+                       transition-all duration-[400ms]
+                       group-hover:border-accent/50"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -135,8 +146,10 @@ export function ScienceMeetsEleganceSplit() {
                 : "Luxury daily rituals that transform skincare into self-care."}
             </p>
 
-            <span className="inline-block font-body text-[11px] uppercase tracking-[0.3em] text-primary-foreground border-b border-accent pb-1 group-hover:text-accent transition-colors duration-[400ms]">
+            {/* Solid CTA */}
+            <span className="inline-flex items-center gap-2 font-body text-[11px] uppercase tracking-[0.3em] text-primary bg-accent px-6 py-3 group-hover:bg-polished-gold-light transition-all duration-[400ms]">
               {isAr ? "تسوقي" : "Shop Luxury"}
+              <Sparkles className="h-3.5 w-3.5 transition-transform duration-300 group-hover:scale-110" />
             </span>
           </motion.div>
         </Link>
