@@ -381,6 +381,9 @@ export default function Offers() {
         </div>
       </main>
 
+      {/* Sale signup form */}
+      <SaleSignupForm isAr={isAr} />
+
       <Footer />
 
       <ProductQuickView
