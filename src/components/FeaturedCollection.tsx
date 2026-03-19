@@ -54,13 +54,13 @@ export const FeaturedCollection = () => {
                     category: product.primary_concern || undefined,
                     brand: product.brand || undefined,
                     price: product.price ?? 0,
-                    original_price: null,
-                    discount_percent: null,
+                    original_price: product.original_price ?? null,
+                    discount_percent: product.discount_percent ?? null,
                     image_url: product.image_url || "/editorial-showcase-2.webp",
                     description: product.pharmacist_note || undefined,
                     volume_ml: undefined,
                     is_new: new Date(product.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-                    is_on_sale: false,
+                    is_on_sale: product.is_on_sale ?? false,
                   }}
                 />
               ))}

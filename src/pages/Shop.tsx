@@ -90,6 +90,11 @@ const ShopProductCard = ({
       >
         <div className="relative w-40 md:w-48 flex-shrink-0 bg-background">
           <img src={imageUrl} alt={product.title} className="w-full h-full object-cover" loading="lazy" />
+          {product.is_on_sale && product.discount_percent && (
+            <span className="absolute top-3 left-3 z-10 rounded-full bg-polished-gold text-[10px] font-bold px-2 py-0.5 text-dark-charcoal shadow-sm">
+              -{product.discount_percent}%
+            </span>
+          )}
         </div>
         <div className="flex-1 p-4 flex flex-col">
           {product.brand && (
@@ -104,7 +109,14 @@ const ShopProductCard = ({
             </p>
           )}
           <div className="flex items-center justify-between mt-auto">
-            <LuxuryPrice amount={product.price} />
+            <div className="flex items-baseline gap-1.5">
+              <LuxuryPrice amount={product.price} />
+              {product.is_on_sale && product.original_price && (
+                <span className="text-xs line-through text-muted-foreground font-body">
+                  {product.original_price.toFixed(2)}
+                </span>
+              )}
+            </div>
             <Button onClick={handleAddToCart} size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs btn-ripple">
               <ShoppingBag className="w-3.5 h-3.5 me-1" />
               {locale === "ar" ? "\u0625\u0636\u0627\u0641\u0629" : "Add"}
@@ -638,7 +650,7 @@ export default function Shop() {
       </main>
       <Footer />
       <ProductQuickView
-        product={selectedProduct ? { id: selectedProduct.id, title: selectedProduct.title, price: selectedProduct.price ?? 0, description: selectedProduct.pharmacist_note, category: selectedProduct.primary_concern?.replace("Concern_","") ?? "General", image_url: selectedProduct.image_url, brand: selectedProduct.brand, volume_ml: null, is_on_sale: null, original_price: null, discount_percent: null, created_at: selectedProduct.created_at, updated_at: selectedProduct.updated_at } : null}
+        product={selectedProduct ? { id: selectedProduct.id, title: selectedProduct.title, price: selectedProduct.price ?? 0, description: selectedProduct.pharmacist_note, category: selectedProduct.primary_concern?.replace("Concern_","") ?? "General", image_url: selectedProduct.image_url, brand: selectedProduct.brand, volume_ml: null, is_on_sale: selectedProduct.is_on_sale ?? null, original_price: selectedProduct.original_price ?? null, discount_percent: selectedProduct.discount_percent ?? null, created_at: selectedProduct.created_at, updated_at: selectedProduct.updated_at } : null}
         isOpen={isQuickViewOpen}
         onClose={() => { setIsQuickViewOpen(false); setTimeout(() => setSelectedProduct(null), 300); }}
       />
