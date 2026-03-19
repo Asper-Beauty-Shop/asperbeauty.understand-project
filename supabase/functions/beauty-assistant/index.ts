@@ -184,6 +184,7 @@ serve(async (req) => {
     const route = getWebhookRoute(req);
     let userMessage = "";
     let messages: Array<{ role: string; content: string }> = [];
+    let productContextStr = "";
 
     if (route) {
       // Webhook routes (Gorgias/ManyChat): validate shared webhook secret
