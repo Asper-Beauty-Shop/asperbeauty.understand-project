@@ -137,58 +137,53 @@ export const ShopByProtocol = () => {
           viewport={{ once: true, margin: "-50px" }}
         >
             {PROTOCOLS.map((protocol) => (
-              <Link
+              <motion.div
                 key={protocol.id}
-                to={protocol.href}
-                className="group relative aspect-[4/5] sm:aspect-[4/5] overflow-hidden rounded-xl clinical-glass-card active:scale-[0.98] transition-transform"
-                onMouseEnter={() => setHoveredId(protocol.id)}
-                onMouseLeave={() => setHoveredId(null)}
+                variants={cardVariants}
+                custom={!!prefersReducedMotion}
               >
-                {/* Image */}
-                <img
-                  src={protocol.image}
-                  alt={isArabic ? protocol.ar : protocol.en}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-105"
-                  loading="lazy"
-                />
-
-                {/* Dark overlay for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/20 to-transparent" />
-
-                {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 z-10">
-                  <h3 className="font-heading text-lg sm:text-xl lg:text-2xl font-bold text-primary-foreground mb-1.5 sm:mb-2 tracking-tight">
-                    {isArabic ? protocol.ar : protocol.en}
-                  </h3>
-
-                  {/* Mobile: always show ingredients; Desktop: reveal on hover */}
-                  <p
-                    className={cn(
-                      "font-body text-xs text-accent tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
-                      "sm:overflow-hidden",
-                      hoveredId === protocol.id ? "sm:max-h-20 sm:opacity-100" : "sm:max-h-0 sm:opacity-0"
-                    )}
-                  >
-                    {isArabic ? protocol.ingredients.ar : protocol.ingredients.en}
-                  </p>
-
-                  {/* View Protocol CTA — always visible on mobile */}
-                  <div
-                    className={cn(
-                      "mt-2.5 sm:mt-0 transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
-                      "sm:overflow-hidden",
-                      hoveredId === protocol.id ? "sm:max-h-12 sm:opacity-100 sm:mt-3" : "sm:max-h-0 sm:opacity-0"
-                    )}
-                  >
-                    <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary-foreground border-b border-accent/50 pb-0.5">
-                      {isArabic ? "عرض البروتوكول ←" : "View Protocol →"}
-                    </span>
+                <Link
+                  to={protocol.href}
+                  className="group relative aspect-[4/5] sm:aspect-[4/5] overflow-hidden rounded-xl clinical-glass-card active:scale-[0.98] transition-transform block"
+                  onMouseEnter={() => setHoveredId(protocol.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                >
+                  <img
+                    src={protocol.image}
+                    alt={isArabic ? protocol.ar : protocol.en}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 z-10">
+                    <h3 className="font-heading text-lg sm:text-xl lg:text-2xl font-bold text-primary-foreground mb-1.5 sm:mb-2 tracking-tight">
+                      {isArabic ? protocol.ar : protocol.en}
+                    </h3>
+                    <p
+                      className={cn(
+                        "font-body text-xs text-accent tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
+                        "sm:overflow-hidden",
+                        hoveredId === protocol.id ? "sm:max-h-20 sm:opacity-100" : "sm:max-h-0 sm:opacity-0"
+                      )}
+                    >
+                      {isArabic ? protocol.ingredients.ar : protocol.ingredients.en}
+                    </p>
+                    <div
+                      className={cn(
+                        "mt-2.5 sm:mt-0 transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
+                        "sm:overflow-hidden",
+                        hoveredId === protocol.id ? "sm:max-h-12 sm:opacity-100 sm:mt-3" : "sm:max-h-0 sm:opacity-0"
+                      )}
+                    >
+                      <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary-foreground border-b border-accent/50 pb-0.5">
+                        {isArabic ? "عرض البروتوكول ←" : "View Protocol →"}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </motion.div>
             ))}
-          </div>
-        </AnimatedSection>
+        </motion.div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
