@@ -64,6 +64,21 @@ export const Header = () => {
   const location = useLocation();
   const isHomepage = location.pathname === "/";
 
+  // Sale count for nav badge
+  const { data: saleCount = 0 } = useQuery({
+    queryKey: ["sale-count"],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("products")
+        .select("id", { count: "exact", head: true })
+        .eq("is_on_sale", true)
+        .neq("availability_status", "Pending_Purge");
+      if (error) return 0;
+      return count ?? 0;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 60);
     window.addEventListener("scroll", handleScroll);
