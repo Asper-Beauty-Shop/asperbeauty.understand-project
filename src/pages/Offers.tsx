@@ -47,7 +47,7 @@ const LuxuryPrice = ({ amount, currency = "JOD" }: { amount: number | null; curr
   );
 };
 
-const SaleProductCard = ({ product, onQuickView }: { product: Product; onQuickView: (p: Product) => void }) => {
+const SaleProductCard = ({ product, onQuickView, isFlashDeal }: { product: Product; onQuickView: (p: Product) => void; isFlashDeal?: boolean }) => {
   const { locale } = useLanguage();
   const addItem = useCartStore((s) => s.addItem);
   const imageUrl = product.image_url || "/editorial-showcase-2.webp";
