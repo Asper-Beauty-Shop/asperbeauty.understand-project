@@ -121,7 +121,7 @@ export default function ShopAllOrganized() {
           </Link>
         </div>
         <div className="text-center mb-12 md:mb-16 space-y-4">
-          <h1 className="font-serif text-4xl md:text-5xl text-maroon">
+          <h1 className="font-display text-4xl md:text-5xl text-maroon">
             {language === 'ar' ? 'المجموعة' : 'The Collection'}
           </h1>
           <p className="font-sans text-maroon/70 tracking-wide uppercase text-sm">
@@ -176,7 +176,7 @@ export default function ShopAllOrganized() {
             {Object.entries(groupedProducts).map(([collectionName, items]) => (
               <div key={collectionName} className="relative">
                 <div className="flex items-center gap-4 mb-8">
-                  <h2 className="font-serif text-2xl md:text-3xl text-maroon whitespace-nowrap">
+                  <h2 className="font-display text-2xl md:text-3xl text-maroon whitespace-nowrap">
                     {collectionName}
                   </h2>
                   <div className="h-px w-full bg-shiny-gold/30" />
@@ -208,7 +208,7 @@ export default function ShopAllOrganized() {
                           <p className="font-sans text-[10px] uppercase tracking-widest text-shiny-gold">
                             {product.category}
                           </p>
-                          <h3 className="font-serif text-lg text-maroon group-hover:text-shiny-gold transition-colors line-clamp-2">
+                          <h3 className="font-display text-lg text-maroon group-hover:text-shiny-gold transition-colors line-clamp-2">
                             {product.title}
                           </h3>
                           <p className="font-sans text-sm text-maroon">

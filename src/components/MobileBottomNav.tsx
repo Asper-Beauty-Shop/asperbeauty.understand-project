@@ -5,7 +5,7 @@ import { useCartStore } from "@/stores/cartStore";
 
 const navItems = [
   { icon: Home, label: "Home", path: "/" },
-  { icon: Search, label: "Search", path: "/products" },
+  { icon: Search, label: "Shop", path: "/shop" },
   { icon: MessageCircle, label: "Ezabila", path: "#concierge", isConcierge: true },
   { icon: ShoppingBag, label: "Cart", path: "#cart", isCart: true },
   { icon: User, label: "Profile", path: "/auth" },
@@ -25,7 +25,10 @@ export default function MobileBottomNav({ onOpenConcierge, onOpenCart }: Props) 
       <div className="flex items-center justify-around h-16 px-2">
         {navItems.map((item) => {
           const isActive =
-            !item.isConcierge && !item.isCart && location.pathname === item.path;
+            !item.isConcierge && !item.isCart && (
+            location.pathname === item.path ||
+            (item.path === "/shop" && (location.pathname === "/products" || location.pathname.startsWith("/shop")))
+          );
 
           if (item.isConcierge) {
             return (

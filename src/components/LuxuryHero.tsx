@@ -32,7 +32,7 @@ export const LuxuryHero = () => {
         </span>
 
         {/* Main Headline - Playfair Display */}
-        <h1 className="font-serif text-5xl font-light leading-tight tracking-tight text-soft-ivory md:text-7xl lg:text-8xl animate-fade-in-up opacity-0 [animation-delay:0.4s]">
+        <h1 className="font-display text-5xl font-light leading-tight tracking-tight text-soft-ivory md:text-7xl lg:text-8xl animate-fade-in-up opacity-0 [animation-delay:0.4s]">
           Redefining{" "}
           <span className="block italic text-gold-300">
             Eternal Beauty

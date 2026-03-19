@@ -48,6 +48,11 @@ export default {
           DEFAULT: "hsl(var(--asper-ink))",
           muted: "hsl(var(--asper-ink-muted))",
         },
+        // Missing token aliases (fixes undefined class errors)
+        "luxury-black": "#1a0505",
+        "gold-400": "hsl(var(--polished-gold))",
+        "gold-300": "hsl(var(--gold-light))",
+        "gold-500": "hsl(43 69% 38%)",
         // Legacy compat tokens
         maroon: "hsl(var(--burgundy))",
         "soft-ivory": "#F8F8FF",

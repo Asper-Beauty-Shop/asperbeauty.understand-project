@@ -25,7 +25,7 @@ const GoldParticles = () => {
       {particles.map((particle) => (
         <div
           key={particle.id}
-          className="absolute rounded-full bg-gradient-to-br from-[#FFC300] to-[#D4AF37]"
+          className="absolute rounded-full bg-gradient-to-br from-polished-gold to-[polished-gold]"
           style={{
             left: `${particle.left}%`,
             width: `${particle.size}px`,
@@ -84,13 +84,13 @@ const HeroSection = () => {
 
         {/* Gold divider above headline */}
         <div
-          className="mb-6 h-px w-32 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent animate-fade-in"
+          className="mb-6 h-px w-32 bg-gradient-to-r from-transparent via-[polished-gold] to-transparent animate-fade-in"
           style={{ animationDelay: "0.3s" }}
         />
 
         {/* Headline */}
         <h1
-          className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-asper-charcoal mb-4 drop-shadow-sm text-center animate-fade-in"
+          className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-asper-charcoal mb-4 drop-shadow-sm text-center animate-fade-in"
           style={{ animationDelay: "0.4s" }}
           dir={isAr ? "rtl" : "ltr"}
         >
@@ -99,7 +99,7 @@ const HeroSection = () => {
 
         {/* Gold divider below headline */}
         <div
-          className="mb-6 h-px w-32 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent animate-fade-in"
+          className="mb-6 h-px w-32 bg-gradient-to-r from-transparent via-[polished-gold] to-transparent animate-fade-in"
           style={{ animationDelay: "0.5s" }}
         />
 
@@ -120,16 +120,16 @@ const HeroSection = () => {
           style={{ animationDelay: "0.7s" }}
         >
           {/* Decorative Corner Accents */}
-          <div className="absolute -top-3 -left-3 w-16 h-16 border-l-2 border-t-2 border-[#D4AF37]/60 rounded-tl-lg" />
-          <div className="absolute -top-3 -right-3 w-16 h-16 border-r-2 border-t-2 border-[#D4AF37]/60 rounded-tr-lg" />
-          <div className="absolute -bottom-3 -left-3 w-16 h-16 border-l-2 border-b-2 border-[#D4AF37]/60 rounded-bl-lg" />
-          <div className="absolute -bottom-3 -right-3 w-16 h-16 border-r-2 border-b-2 border-[#D4AF37]/60 rounded-br-lg" />
+          <div className="absolute -top-3 -left-3 w-16 h-16 border-l-2 border-t-2 border-[polished-gold]/60 rounded-tl-lg" />
+          <div className="absolute -top-3 -right-3 w-16 h-16 border-r-2 border-t-2 border-[polished-gold]/60 rounded-tr-lg" />
+          <div className="absolute -bottom-3 -left-3 w-16 h-16 border-l-2 border-b-2 border-[polished-gold]/60 rounded-bl-lg" />
+          <div className="absolute -bottom-3 -right-3 w-16 h-16 border-r-2 border-b-2 border-[polished-gold]/60 rounded-br-lg" />
 
           {/* Outer Glow */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#D4AF37]/20 via-transparent to-[#D4AF37]/20 blur-2xl -z-10 scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[polished-gold]/20 via-transparent to-[polished-gold]/20 blur-2xl -z-10 scale-105" />
 
           {/* Video Container with Gold Border */}
-          <div className="group relative rounded-2xl overflow-hidden border-2 border-[#D4AF37]/40 shadow-[0_20px_60px_-15px_rgba(212,175,55,0.3),0_10px_30px_-10px_rgba(0,0,0,0.15)] hover:border-[#D4AF37]/70 hover:shadow-[0_25px_70px_-15px_rgba(212,175,55,0.4),0_15px_40px_-10px_rgba(0,0,0,0.2)] transition-all duration-500 cursor-pointer">
+          <div className="group relative rounded-2xl overflow-hidden border-2 border-[polished-gold]/40 shadow-[0_20px_60px_-15px_rgba(212,175,55,0.3),0_10px_30px_-10px_rgba(0,0,0,0.15)] hover:border-[polished-gold]/70 hover:shadow-[0_25px_70px_-15px_rgba(212,175,55,0.4),0_15px_40px_-10px_rgba(0,0,0,0.2)] transition-all duration-500 cursor-pointer">
             {/* Shimmer Overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer pointer-events-none z-10" />
 
@@ -161,7 +161,7 @@ const HeroSection = () => {
           </div>
 
           {/* "Now Playing" Label */}
-          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-[#D4AF37]/30 shadow-lg">
+          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-polished-white/90 backdrop-blur-sm rounded-full border border-[polished-gold]/30 shadow-lg">
             <span className="text-xs uppercase tracking-[0.2em] text-asper-charcoal/60 font-sans">
               The Asper Experience
             </span>
@@ -187,10 +187,10 @@ const HeroSection = () => {
             asChild
             variant="outline"
             size="lg"
-            className="border-2 border-[#D4AF37]/60 text-asper-charcoal px-10 py-6 text-base hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] transition-all duration-300 rounded-full"
+            className="border-2 border-[polished-gold]/60 text-asper-charcoal px-10 py-6 text-base hover:bg-[polished-gold]/10 hover:border-[polished-gold] transition-all duration-300 rounded-full"
           >
             <Link to="/skin-concerns">
-              <Sparkles className={`h-4 w-4 ${isAr ? "ms-2" : "me-2"} text-[#D4AF37]`} />
+              <Sparkles className={`h-4 w-4 ${isAr ? "ms-2" : "me-2"} text-[polished-gold]`} />
               {isAr ? "اكتشفي روتينك" : "Find My Ritual"}
             </Link>
           </Button>
@@ -211,7 +211,7 @@ const HeroSection = () => {
             <Link
               key={pill.href + pill.label}
               to={pill.href}
-              className="px-4 py-1.5 rounded-full border border-[#D4AF37]/40 bg-white/60 backdrop-blur-sm text-xs font-sans text-asper-charcoal/70 hover:border-[#D4AF37] hover:text-asper-charcoal hover:bg-white/80 transition-all duration-200"
+              className="px-4 py-1.5 rounded-full border border-[polished-gold]/40 bg-polished-white/60 backdrop-blur-sm text-xs font-sans text-asper-charcoal/70 hover:border-[polished-gold] hover:text-asper-charcoal hover:bg-polished-white/80 transition-all duration-200"
             >
               {pill.label}
             </Link>
@@ -220,7 +220,7 @@ const HeroSection = () => {
 
         {/* Tagline */}
         <p
-          className="mt-10 font-serif text-sm uppercase tracking-[0.3em] text-[#D4AF37] animate-fade-in"
+          className="mt-10 font-display text-sm uppercase tracking-[0.3em] text-[polished-gold] animate-fade-in"
           style={{ animationDelay: "1.1s" }}
         >
           {isAr ? "أصالة معتمدة • جودة طبية" : "Pharmacist Verified • Medical Luxury"}
@@ -229,8 +229,8 @@ const HeroSection = () => {
 
       {/* --- SCROLL INDICATOR --- */}
       <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 animate-bounce">
-        <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-[#D4AF37]/60 bg-white/70 pt-2 backdrop-blur-sm shadow-lg">
-          <div className="h-2 w-1 rounded-full bg-[#D4AF37]" />
+        <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-[polished-gold]/60 bg-polished-white/70 pt-2 backdrop-blur-sm shadow-lg">
+          <div className="h-2 w-1 rounded-full bg-[polished-gold]" />
         </div>
       </div>
     </section>

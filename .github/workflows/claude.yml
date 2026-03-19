@@ -1,0 +1,63 @@
+name: Claude Code
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  # ── Respond to @claude mentions in PR/issue comments ──────────────────────
+  claude-mention:
+    name: Claude (on-demand)
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'issues' && contains(github.event.issue.body, '@claude'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--model claude-sonnet-4-6 --max-turns 15"
+
+  # ── Automatic code review on every PR ────────────────────────────────────
+  claude-review:
+    name: Claude PR Review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review this pull request for the asper-beauty-spot Next.js/Vite beauty shop.
+            Focus on:
+            - React/TypeScript correctness and type safety
+            - Framer Motion animation performance
+            - RTL (Arabic) layout correctness
+            - Tailwind class consistency with the brand design system (burgundy #800020, polished-gold, soft-ivory)
+            - Accessibility (alt text, ARIA, keyboard nav)
+            - Any broken imports or missing assets
+
+            Post concise inline review comments where relevant. End with a short summary.
+          claude_args: "--model claude-sonnet-4-6 --max-turns 5"

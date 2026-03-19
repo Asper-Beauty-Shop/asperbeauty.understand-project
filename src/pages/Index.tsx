@@ -1,17 +1,19 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
-import ClinicalLuxuryHero from "@/components/home/ClinicalLuxuryHero";
+import CinematicHero from "@/components/home/CinematicHero";
 import { ScienceMeetsEleganceSplit } from "@/components/home/ScienceMeetsEleganceSplit";
 import ThreeClickOnboarding from "@/components/home/ThreeClickOnboarding";
 import DualPersonaTriage from "@/components/home/DualPersonaTriage";
 import { USPBar } from "@/components/home/USPBar";
 import { ProductSlider } from "@/components/home/ProductSlider";
 import { ShopByProtocol } from "@/components/home/ShopByProtocol";
+import { ElegantProductGrid } from "@/components/ElegantProductGrid";
+import { CuratedClinicalGrid } from "@/components/CuratedClinicalGrid";
 import { Footer } from "@/components/Footer";
-import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isHomepageBrand } from "@/constants/premiumBrands";
@@ -145,6 +147,24 @@ const Index = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
+  usePageMeta({
+    title: "Asper Beauty | Jordan's No.1 Pharmacy Beauty Destination",
+    description: "Discover 10,000+ premium skincare, haircare and beauty products curated by pharmacists in Amman, Jordan. Vichy, CeraVe, La Roche-Posay, Eucerin & more.",
+    canonical: "/",
+    type: "website",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Asper Beauty",
+      url: "https://www.asperbeautyshop.com",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: "https://www.asperbeautyshop.com/shop?search={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
+    },
+  });
+
   const { data: newArrivals = [] } = useQuery({
     queryKey: ["new-arrivals-premium"],
     queryFn: async () => {
@@ -210,11 +230,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background animate-fade-in">
-      <OrganizationSchema />
       <Header />
       <main>
-        {/* ═══ ZONE 1: Clinical Luxury Static Hero ═══ */}
-        <ClinicalLuxuryHero />
+        {/* ═══ ZONE 1: Cinematic Full-Screen Video Hero ═══ */}
+        <CinematicHero />
 
         {/* ═══ ZONE 2: Science Meets Elegance 50/50 Split ═══ */}
         <ScienceMeetsEleganceSplit />
@@ -241,6 +260,42 @@ const Index = () => {
 
         {/* ═══ Shop by Protocol (Editorial Navigation) ═══ */}
         <ShopByProtocol />
+
+        {/* ═══ Elegant Editorial Product Grid ═══ */}
+        <ElegantProductGrid
+          products={[
+            ...(bestsellers.length > 0 ? bestsellers : BESTSELLERS).map((p) => ({
+              id: p.id,
+              handle: "handle" in p ? (p as { handle: string }).handle : p.id,
+              title: p.title,
+              brand: p.brand,
+              price: "price" in p ? (p as { price: number }).price : 0,
+              image_url: "image_url" in p ? (p as { image_url: string }).image_url : ("image" in p ? String((p as { image: unknown }).image) : ""),
+              tag: "tag" in p ? (p as { tag?: string }).tag : undefined,
+              category: "category" in p ? (p as { category?: string }).category : undefined,
+              is_new: "is_new" in p ? (p as { is_new?: boolean }).is_new : false,
+            })),
+          ]}
+          title={{ en: "Curated for You", ar: "مختارة لكِ" }}
+          subtitle={{ en: "Pharmacist Approved", ar: "بإشراف صيدلاني" }}
+          showCategoryFilter={false}
+        />
+
+        {/* ═══ Curated Clinical Grid — Frosted Glass ═══ */}
+        <CuratedClinicalGrid
+          products={[
+            ...(newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS).map((p) => ({
+              id: p.id,
+              handle: "handle" in p ? (p as { handle: string }).handle : p.id,
+              title: p.title,
+              brand: p.brand,
+              price: "price" in p ? (p as { price: number }).price : 0,
+              image_url: "image_url" in p ? (p as { image_url: string }).image_url : ("image" in p ? String((p as { image: unknown }).image) : ""),
+              tag: "tag" in p ? (p as { tag?: string }).tag : undefined,
+              category: "category" in p ? (p as { category?: string }).category : undefined,
+            })),
+          ]}
+        />
 
         {/* ═══ Dual-Persona Tabbed Bestsellers ═══ */}
         <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>

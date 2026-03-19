@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CategoryGroup {
   label: string;
@@ -25,6 +26,7 @@ interface CategoryFilterProps {
 }
 
 export function CategoryFilter({ selected, onSelect, groups }: CategoryFilterProps) {
+  const { isRTL } = useLanguage();
   const displayGroups = groups || CATEGORY_GROUPS;
   const [expandedGroups, setExpandedGroups] = useState<string[]>(
     displayGroups.map((g) => g.label)
@@ -70,12 +72,14 @@ export function CategoryFilter({ selected, onSelect, groups }: CategoryFilterPro
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-foreground font-heading">Categories</h3>
+      <div className={cn("flex items-center justify-between mb-3", isRTL && "flex-row-reverse")}>
+        <h3 className="text-sm font-semibold text-foreground font-heading">
+          {isRTL ? "الفئات" : "Categories"}
+        </h3>
         {selected.length > 0 && (
-          <Button variant="ghost" size="sm" onClick={() => onSelect([])} className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground">
-            <X className="h-3 w-3 mr-1" />
-            Clear ({selected.length})
+          <Button variant="ghost" size="sm" onClick={() => onSelect([])} className={cn("h-6 px-2 text-xs text-muted-foreground hover:text-foreground", isRTL && "flex-row-reverse")}>
+            <X className={cn("h-3 w-3", isRTL ? "ml-1" : "mr-1")} />
+            {isRTL ? `مسح (${selected.length})` : `Clear (${selected.length})`}
           </Button>
         )}
       </div>

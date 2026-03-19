@@ -15,9 +15,11 @@ const CategoryCard = ({ title, image, description }: CategoryCardProps) => {
       }}
     >
       <div className="aspect-square overflow-hidden">
-        <img 
-          src={image} 
+        <img
+          src={image}
           alt={title}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
       </div>

@@ -36,6 +36,7 @@ export const ProductGrid = ({
     brands: [],
     priceRange: [0, 5000],
   });
+  const [sortBy, setSortBy] = useState<"recommended" | "price-asc" | "price-desc" | "newest">("recommended");
   const { language } = useLanguage();
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -161,7 +162,7 @@ export const ProductGrid = ({
 
   // Apply user filters
   const filteredProducts = useMemo(() => {
-    return categoryFilteredProducts.filter((product) => {
+    const filtered = categoryFilteredProducts.filter((product) => {
       const { node } = product;
       const price = parseFloat(node.priceRange.minVariantPrice.amount);
 
@@ -182,7 +183,19 @@ export const ProductGrid = ({
 
       return true;
     });
-  }, [categoryFilteredProducts, filters]);
+
+    const sorted = [...filtered];
+    if (sortBy === "price-asc") sorted.sort((a, b) =>
+      parseFloat(a.node.priceRange.minVariantPrice.amount) - parseFloat(b.node.priceRange.minVariantPrice.amount));
+    else if (sortBy === "price-desc") sorted.sort((a, b) =>
+      parseFloat(b.node.priceRange.minVariantPrice.amount) - parseFloat(a.node.priceRange.minVariantPrice.amount));
+    else if (sortBy === "newest") sorted.sort((a, b) => {
+      const da = a.node.createdAt ? new Date(a.node.createdAt).getTime() : 0;
+      const db = b.node.createdAt ? new Date(b.node.createdAt).getTime() : 0;
+      return db - da;
+    });
+    return sorted;
+  }, [categoryFilteredProducts, filters, sortBy]);
 
   return (
     <section id="products" className="py-24 bg-soft-ivory">
@@ -217,10 +230,10 @@ export const ProductGrid = ({
             )}
             <div className="flex-1">
               <div
-                className={`grid gap-8 lg:gap-10 ${
+                className={`grid gap-x-4 gap-y-8 lg:gap-x-6 lg:gap-y-10 ${
                   showFilters
-                    ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    ? "grid-cols-2 xl:grid-cols-3"
+                    : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                 }`}
               >
                 {Array.from({ length: showFilters ? 6 : 8 }).map((_, i) => (
@@ -249,17 +262,29 @@ export const ProductGrid = ({
             <div className="flex-1">
               {/* Results count */}
               {showFilters && (
-                <div className="mb-6 flex items-center justify-between">
+                <div className="mb-6 flex items-center justify-between gap-4">
                   <p className="font-body text-sm text-dark-charcoal">
                     {language === "ar"
                       ? `عرض ${filteredProducts.length} من ${products.length} منتج`
                       : `Showing ${filteredProducts.length} of ${products.length} products`}
                   </p>
-                  {pageInfo?.hasNextPage && (
-                    <p className="font-body text-xs text-muted-foreground">
-                      {language === "ar" ? "المزيد متاح" : "More available"}
-                    </p>
-                  )}
+                  <div className="flex items-center gap-3">
+                    <select
+                      value={sortBy}
+                      onChange={e => setSortBy(e.target.value as typeof sortBy)}
+                      className="font-body text-sm border border-border rounded px-2 py-1 bg-background text-foreground"
+                    >
+                      <option value="recommended">Pharmacist Recommended</option>
+                      <option value="price-asc">Price: Low to High</option>
+                      <option value="price-desc">Price: High to Low</option>
+                      <option value="newest">Newest Arrivals</option>
+                    </select>
+                    {pageInfo?.hasNextPage && (
+                      <p className="font-body text-xs text-muted-foreground">
+                        {language === "ar" ? "المزيد متاح" : "More available"}
+                      </p>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -267,10 +292,10 @@ export const ProductGrid = ({
                 ? (
                   <>
                     <div
-                      className={`grid gap-8 lg:gap-10 ${
+                      className={`grid gap-x-4 gap-y-8 lg:gap-x-6 lg:gap-y-10 ${
                         showFilters
-                          ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                          : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                          ? "grid-cols-2 xl:grid-cols-3"
+                          : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                       }`}
                     >
                       {filteredProducts.map((product) => (

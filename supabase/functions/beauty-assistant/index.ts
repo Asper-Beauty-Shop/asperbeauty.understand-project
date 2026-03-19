@@ -96,29 +96,6 @@ async function fetchProductContext(supabase: any, userMessage: string, slug: str
   return { context: matched.map(formatProduct).join("\n"), products: matched };
 }
 
-const INGREDIENT_KNOWLEDGE = `
-- Niacinamide: Fades discolorations & refines pores
-- Retinol: Accelerates cell turnover, reduces fine lines & wrinkles
-- Hyaluronic Acid: Retains 1000x its weight in moisture
-- Vitamin C: Potent antioxidant, brightens & evens skin tone
-- Salicylic Acid: Penetrates pores to clear acne & prevent breakouts
-- Ceramide: Restores skin barrier & locks in moisture
-- Glycerin: Humectant for lasting softness
-- Zinc Oxide: Mineral UV filter, broad-spectrum sun protection
-- Azelaic Acid: Reduces redness & hyperpigmentation
-- Peptides: Signals collagen production for firmer skin
-- Squalane: Lightweight emollient, nourishes without clogging pores
-- Panthenol: Provitamin B5, soothes irritation & strengthens barrier
-- Centella Asiatica: Calms inflammation, accelerates healing
-- Alpha Arbutin: Targets dark spots safely
-- Glycolic Acid: Exfoliates for smoother, radiant skin
-- Lactic Acid: Gentle AHA, exfoliates & boosts hydration
-- Caffeine: Reduces puffiness & dark circles
-- Biotin: Essential for healthy hair, skin & nails
-- Minoxidil: Stimulates hair follicles for regrowth
-- Urea: Intense hydration for rough, cracked skin
-`;
-
 function buildSystemPrompt(productContext: string, shopRoutinePath: string | null): string {
   return `
 # DR. BOT — THE ASPER DUAL-VOICE CONCIERGE
@@ -157,10 +134,6 @@ You are a high-performance Sales Consultant. Your goal is to maximize Basket Val
 2. Recommend ONE regimen: Step 1 (Cleanser) → Step 2 (Treatment) → Step 3 (Protection).
 3. Close with: "Shall I add this clinical tray to your regimen?"
 
-## INGREDIENT KNOWLEDGE BASE
-When discussing product formulas, use these clinically accurate benefit descriptions:
-${INGREDIENT_KNOWLEDGE}
-
 ## CURRENT INVENTORY CONTEXT
 ${productContext}
 
@@ -172,11 +145,8 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: getCorsHeaders(req) });
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-
-  // Service-role client for product queries (bypasses RLS)
-  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
   if (req.method === "GET") return new Response(JSON.stringify({ status: "active", version: "5.0-super-smart" }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
 
@@ -184,60 +154,20 @@ serve(async (req) => {
     const route = getWebhookRoute(req);
     let userMessage = "";
     let messages: Array<{ role: string; content: string }> = [];
-    let productContextStr = "";
 
     if (route) {
-      // Webhook routes (Gorgias/ManyChat): validate shared webhook secret
-      const webhookSecret = Deno.env.get("WEBHOOK_SECRET");
-      if (webhookSecret) {
-        const providedSecret = req.headers.get("x-webhook-secret");
-        if (providedSecret !== webhookSecret) {
-          return new Response(JSON.stringify({ error: "Unauthorized: invalid webhook secret" }), {
-            status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-          });
-        }
-      }
-
       const body = await req.json();
       userMessage = route === "gorgias" ? extractFromGorgias(body).message : extractFromManyChat(body).message;
       messages = [{ role: "user", content: userMessage }];
     } else {
-      // Regular chat traffic: require authenticated user via JWT
-      const authHeader = req.headers.get("Authorization");
-      if (!authHeader?.startsWith("Bearer ")) {
-        return new Response(JSON.stringify({ error: "Unauthorized: missing authorization" }), {
-          status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
-
-      const token = authHeader.replace("Bearer ", "");
-      const authClient = createClient(supabaseUrl, supabaseAnonKey, {
-        global: { headers: { Authorization: authHeader } },
-      });
-      const { data, error: authError } = await authClient.auth.getUser(token);
-      if (authError || !data?.user) {
-        return new Response(JSON.stringify({ error: "Unauthorized: invalid or expired token" }), {
-          status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
-
       const body = await req.json();
       messages = body.messages;
       userMessage = messages[messages.length - 1].content;
-      // Extract optional product context from PDP
-      if (body.productContext && typeof body.productContext === "object") {
-        const pc = body.productContext as Record<string, unknown>;
-        productContextStr = `\n\n## CURRENT PRODUCT CONTEXT\nThe customer is viewing: **${pc.name}** by ${pc.brand}` +
-          (pc.key_ingredients ? ` | Key Actives: ${(pc.key_ingredients as string[]).join(", ")}` : "") +
-          (pc.primary_concern ? ` | Concern: ${pc.primary_concern}` : "") +
-          (pc.price ? ` | Price: ${pc.price} JOD` : "") +
-          `\nContextualize your advice around this specific formula when relevant.`;
-      }
     }
 
     const slug = detectConcernSlug(userMessage);
     const { context, products } = await fetchProductContext(supabase, userMessage, slug);
-    const systemPrompt = buildSystemPrompt(context, slug ? `/products?concern=${slug}` : null) + productContextStr;
+    const systemPrompt = buildSystemPrompt(context, slug ? `/products?concern=${slug}` : null);
 
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {

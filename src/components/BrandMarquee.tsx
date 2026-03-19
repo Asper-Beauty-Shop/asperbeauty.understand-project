@@ -63,7 +63,7 @@ export const BrandMarquee = () => {
             </div>
             <div className="h-px w-12 md:w-20 bg-gradient-to-l from-transparent to-gold/60" />
           </div>
-          <p className="font-serif text-xs md:text-sm uppercase tracking-[0.3em] text-muted-foreground">
+          <p className="font-display text-xs md:text-sm uppercase tracking-[0.3em] text-muted-foreground">
             {isAr ? "موزع معتمد للعلامات الفاخرة" : "Authorized Luxury Retailer"}
           </p>
         </div>
@@ -133,7 +133,7 @@ export const BrandMarquee = () => {
                   if (e.currentTarget.parentElement) {
                     const fallback = document.createElement("span");
                     fallback.className =
-                      "relative font-serif text-sm md:text-base font-medium text-foreground/80 tracking-wider group-hover:text-burgundy transition-colors duration-300";
+                      "relative font-display text-sm md:text-base font-medium text-foreground/80 tracking-wider group-hover:text-burgundy transition-colors duration-300";
                     fallback.textContent = brand.name;
                     e.currentTarget.parentElement.appendChild(fallback);
                   }

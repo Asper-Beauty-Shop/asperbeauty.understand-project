@@ -11,9 +11,8 @@ import {
   Lock,
   Minus,
   Plus,
-  ShieldCheck,
-  Sparkles,
   Stethoscope,
+  Sparkles,
   Trash2,
   Truck,
   X,
@@ -24,7 +23,6 @@ import { ASPER_PROTOCOL } from "@/lib/asperProtocol";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translateTitle } from "@/lib/productUtils";
 import { CODCheckoutForm, OrderSuccess } from "./CODCheckoutForm";
-import { Link } from "react-router-dom";
 
 const FREE_SHIPPING_THRESHOLD = 50; // JOD
 
@@ -51,6 +49,7 @@ export const CartDrawer = () => {
   const hasFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
 
   const handleCheckout = () => {
+    // Navigate to COD checkout
     setCheckoutMode("cod");
   };
 
@@ -87,32 +86,28 @@ export const CartDrawer = () => {
   return (
     <Sheet open={isOpen} onOpenChange={handleDrawerOpen}>
       <SheetContent
-        className={`w-full sm:max-w-[450px] flex flex-col h-full p-0 backdrop-blur-2xl ${
+        className={`w-full sm:max-w-[450px] flex flex-col h-full p-0 ${
           isRTL ? "border-r-0" : ""
         }`}
         side={isRTL ? "left" : "right"}
         style={{
-          backgroundColor: "hsl(240 20% 99% / 0.92)",
-          borderLeftWidth: "1px",
-          borderLeftColor: "hsl(var(--polished-gold) / 0.3)",
-          boxShadow: "-8px 0 32px 0 rgba(0,0,0,0.05)",
+          backgroundColor: "hsl(240 20% 99%)",
+          borderLeftWidth: "2px",
+          borderLeftColor: "hsl(var(--polished-gold))",
         }}
       >
         {/* ─── Header: "Your Curated Regimen" ─── */}
-        <SheetHeader
-          className="flex-shrink-0 px-8 pt-8 pb-5"
-          style={{ borderBottom: "1px solid hsl(var(--polished-gold) / 0.2)" }}
-        >
+        <SheetHeader className="flex-shrink-0 px-8 pt-8 pb-5 border-b" style={{ borderColor: "hsl(var(--asper-stone-dark))" }}>
           <div className="flex items-center justify-between">
             {checkoutMode === "cod" && (
               <button
                 onClick={handleBackToCart}
-                className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-burgundy transition-colors mr-2"
+                className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors mr-2"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
             )}
-            <SheetTitle className="font-heading text-2xl tracking-wide flex-1" style={{ color: "hsl(var(--burgundy))" }}>
+            <SheetTitle className="font-heading text-2xl tracking-wide flex-1" style={{ color: "hsl(var(--asper-ink))" }}>
               {checkoutMode === "success"
                 ? (isArabic ? "تم الطلب بنجاح" : "Order Confirmed")
                 : checkoutMode === "cod"
@@ -121,16 +116,16 @@ export const CartDrawer = () => {
             </SheetTitle>
             <button
               onClick={() => handleOpenChange(false)}
-              className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-burgundy transition-colors"
+              className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Shipping Progress — Gold Fill */}
+          {/* Shipping Progress */}
           {checkoutMode === "cart" && items.length > 0 && (
             <div className="mt-4">
-              <div className="h-[2px] rounded-full overflow-hidden bg-white/50">
+              <div className="h-[2px] rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--asper-stone-dark))" }}>
                 <div
                   className="h-full transition-all duration-500 ease-out rounded-full"
                   style={{ width: `${shippingProgress}%`, backgroundColor: "hsl(var(--polished-gold))" }}
@@ -138,7 +133,7 @@ export const CartDrawer = () => {
               </div>
               <p className="font-body text-[11px] text-muted-foreground mt-2 text-center tracking-wide">
                 {hasFreeShipping
-                  ? (isArabic ? "🎁 شحن مجاني مفعّل!" : "🎁 Complimentary Clinical Shipping Unlocked!")
+                  ? (isArabic ? "🎁 شحن مجاني مفعّل!" : "🎁 Complimentary Shipping Unlocked!")
                   : (isArabic
                     ? `أنت على بعد ${amountToFreeShipping.toFixed(0)} دينار من الشحن المجاني`
                     : `You are ${amountToFreeShipping.toFixed(0)} JOD away from Complimentary Shipping`)}
@@ -166,67 +161,35 @@ export const CartDrawer = () => {
           {checkoutMode === "cart" && (
             <>
               {items.length === 0 ? (
-                /* ─── Empty State: "Your Regimen is Empty" ─── */
                 <div className="flex-1 flex items-center justify-center p-8">
                   <div className="text-center">
-                    <div
-                      className="w-16 h-16 mx-auto mb-5 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: "hsl(var(--asper-stone))" }}
-                    >
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: "hsl(var(--asper-stone))" }}>
                       <Stethoscope className="w-7 h-7 text-muted-foreground" />
                     </div>
-                    <p className="font-heading text-xl mb-2" style={{ color: "hsl(var(--burgundy))" }}>
-                      {isArabic ? "روتينك فارغ" : "Your Regimen is Empty"}
+                    <p className="font-heading text-lg mb-1" style={{ color: "hsl(var(--asper-ink))" }}>
+                      {isArabic ? "لم يُوصف شيء بعد" : "No Prescriptions Yet"}
                     </p>
-                    <p className="font-body text-sm text-muted-foreground mb-6">
+                    <p className="font-body text-sm text-muted-foreground">
                       {isArabic ? "تصفحي المنتجات أو استشيري الدكتور سامي" : "Browse products or consult with Dr. Sami"}
                     </p>
-                    <Link
-                      to="/shop"
-                      onClick={() => setOpen(false)}
-                      className="inline-block font-body text-xs font-semibold uppercase tracking-[0.15em] px-6 py-3 border-2 transition-all duration-300 hover:scale-[1.02]"
-                      style={{
-                        borderColor: "hsl(var(--burgundy))",
-                        color: "hsl(var(--burgundy))",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))";
-                        e.currentTarget.style.color = "white";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                        e.currentTarget.style.color = "hsl(var(--burgundy))";
-                      }}
-                    >
-                      {isArabic ? "استكشفي الحلول المنسّقة" : "Explore Curated Solutions"}
-                    </Link>
                   </div>
                 </div>
               ) : (
                 <>
-                  {/* ─── Cart Items — Clinical Glass Rows with Gold Dividers ─── */}
+                  {/* ─── Cart Items — Spacious Clinical Rows ─── */}
                   <div className="flex-1 overflow-y-auto px-8 py-6 min-h-0">
-                    <div>
-                      {items.map((item, idx) => (
-                        <div
-                          key={item.variantId}
-                          className="flex gap-4 group py-5"
-                          style={{
-                            borderBottom: idx < items.length - 1
-                              ? "1px solid hsl(var(--polished-gold) / 0.15)"
-                              : "none",
-                          }}
-                        >
-                          {/* Thumbnail with mix-blend-multiply */}
-                          <div
-                            className="w-20 h-20 overflow-hidden flex-shrink-0 rounded-sm"
-                            style={{ backgroundColor: "hsl(var(--asper-stone))" }}
-                          >
+                    <div className="space-y-6">
+                      {items.map((item) => (
+                        <div key={item.variantId} className="flex gap-4 group">
+                          {/* Thumbnail */}
+                          <div className="w-20 h-20 overflow-hidden flex-shrink-0" style={{ backgroundColor: "hsl(var(--asper-stone))" }}>
                             {item.product.node.images?.edges?.[0]?.node && (
                               <img
                                 src={item.product.node.images.edges[0].node.url}
                                 alt={item.product.node.title}
-                                className="w-full h-full object-cover mix-blend-multiply"
+                                loading="lazy"
+                                decoding="async"
+                                className="w-full h-full object-cover"
                               />
                             )}
                           </div>
@@ -252,19 +215,14 @@ export const CartDrawer = () => {
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>
-                            <div
-                              className="flex items-center border overflow-hidden rounded-sm"
-                              style={{ borderColor: "hsl(var(--polished-gold) / 0.3)" }}
-                            >
+                            <div className="flex items-center border overflow-hidden" style={{ borderColor: "hsl(var(--asper-stone-dark))" }}>
                               <button
                                 onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
                                 className="w-7 h-7 flex items-center justify-center hover:bg-muted transition-colors"
                               >
                                 <Minus className="h-3 w-3" />
                               </button>
-                              <span className="w-8 text-center text-sm font-body" style={{ color: "hsl(var(--asper-ink))" }}>
-                                {item.quantity}
-                              </span>
+                              <span className="w-8 text-center text-sm font-body">{item.quantity}</span>
                               <button
                                 onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
                                 className="w-7 h-7 flex items-center justify-center hover:bg-muted transition-colors"
@@ -280,9 +238,9 @@ export const CartDrawer = () => {
                     {/* ─── AI Prescription Upsell Block ─── */}
                     {items.length > 0 && (
                       <div
-                        className="mt-8 p-6 relative rounded-sm"
+                        className="mt-8 p-6 relative"
                         style={{
-                          border: "1px dashed hsl(var(--polished-gold) / 0.4)",
+                          border: "1px dashed hsl(var(--polished-gold))",
                           backgroundColor: "hsl(var(--polished-white))",
                         }}
                       >
@@ -296,6 +254,7 @@ export const CartDrawer = () => {
                         </div>
 
                         <div className="flex gap-4 items-start mt-2">
+                          {/* Persona icon */}
                           <div
                             className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
                             style={{
@@ -315,7 +274,10 @@ export const CartDrawer = () => {
                                 : `To maximize the efficacy of your ${items[0]?.product.node.title?.slice(0, 30) || "product"}, we prescribe adding a complementary active.`}
                             </p>
                             <button
-                              className="mt-3 font-body text-[11px] font-semibold uppercase tracking-[0.15em] transition-colors duration-300 text-burgundy hover:text-polished-gold"
+                              className="mt-3 font-body text-[11px] font-semibold uppercase tracking-[0.15em] transition-colors duration-300"
+                              style={{ color: "hsl(var(--burgundy))" }}
+                              onMouseEnter={(e) => e.currentTarget.style.color = "hsl(var(--polished-gold))"}
+                              onMouseLeave={(e) => e.currentTarget.style.color = "hsl(var(--burgundy))"}
                             >
                               {isArabic ? "+ أضف إلى الروتين" : "+ Add to Regimen"}
                             </button>
@@ -325,29 +287,15 @@ export const CartDrawer = () => {
                     )}
                   </div>
 
-                  {/* ─── Checkout Footer — Frosted & Sticky ─── */}
-                  <div
-                    className="flex-shrink-0 p-8"
-                    style={{
-                      borderTop: "1px solid hsl(var(--polished-gold) / 0.2)",
-                      backgroundColor: "hsl(240 20% 99% / 0.95)",
-                    }}
-                  >
+                  {/* ─── Checkout Footer ─── */}
+                  <div className="flex-shrink-0 p-8 border-t" style={{ borderColor: "hsl(var(--asper-stone-dark))", backgroundColor: "hsl(var(--polished-white))" }}>
                     {/* Subtotal */}
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex justify-between items-center mb-6">
                       <span className="font-body text-sm text-muted-foreground tracking-wide">
                         {isArabic ? "المجموع المقدّر" : "Estimated Total"}
                       </span>
                       <span className="font-heading text-xl" style={{ color: "hsl(var(--asper-ink))" }}>
                         {totalPrice.toFixed(3)} {items[0]?.price.currencyCode || "JOD"}
-                      </span>
-                    </div>
-
-                    {/* Trust Signal */}
-                    <div className="flex items-center justify-center gap-1.5 mb-4">
-                      <ShieldCheck className="w-3.5 h-3.5 text-muted-foreground" />
-                      <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.15em]">
-                        {isArabic ? "دفع سريري آمن" : "Secure Clinical Checkout"}
                       </span>
                     </div>
 
@@ -357,7 +305,10 @@ export const CartDrawer = () => {
                       <button
                         onClick={() => setCheckoutMode("cod")}
                         disabled={items.length === 0 || isLoading}
-                        className="w-full py-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 rounded-sm shadow-md bg-burgundy hover:bg-burgundy-dark hover:scale-[1.01]"
+                        className="w-full py-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        style={{ backgroundColor: "hsl(var(--burgundy))" }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy-dark))"}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))"}
                       >
                         {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                           <>
@@ -371,7 +322,20 @@ export const CartDrawer = () => {
                       <button
                         onClick={handleCheckout}
                         disabled={items.length === 0 || isLoading}
-                        className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 rounded-sm border-2 border-burgundy text-burgundy bg-transparent hover:bg-burgundy hover:text-white"
+                        className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        style={{
+                          border: "2px solid hsl(var(--burgundy))",
+                          color: "hsl(var(--burgundy))",
+                          backgroundColor: "transparent",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))";
+                          e.currentTarget.style.color = "white";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                          e.currentTarget.style.color = "hsl(var(--burgundy))";
+                        }}
                       >
                         <Lock className="w-4 h-4" />
                         {isArabic ? "الدفع بالبطاقة" : "Pay with Card"}
@@ -387,3 +351,4 @@ export const CartDrawer = () => {
     </Sheet>
   );
 };
+

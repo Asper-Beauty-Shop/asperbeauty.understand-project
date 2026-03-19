@@ -82,7 +82,7 @@ export const AmmanEdit = () => {
                 {/* Product Card */}
                 <div className="relative overflow-hidden rounded-lg transition-all duration-500">
                   {/* Image Container with hover effect */}
-                  <div className="aspect-[3/4] bg-[#f5f5f5] group-hover:bg-[#D4AF37] transition-colors duration-500 p-6">
+                  <div className="aspect-[3/4] bg-asper-stone-dark group-hover:bg-[polished-gold] transition-colors duration-500 p-6">
                     <LazyImage
                       src={product.image}
                       alt={isArabic ? product.nameAr : product.name}

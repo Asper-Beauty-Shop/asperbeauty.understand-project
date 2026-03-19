@@ -220,7 +220,7 @@ export const GlobalHeader = () => {
                 key={item.name}
                 to={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="font-serif text-3xl font-light text-foreground transition-colors hover:text-primary"
+                className="font-display text-3xl font-light text-foreground transition-colors hover:text-primary"
               >
                 {isAr ? item.nameAr : item.name}
               </Link>

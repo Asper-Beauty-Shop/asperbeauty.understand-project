@@ -2,10 +2,19 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductGrid } from "@/components/ProductGrid";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function BestSellers() {
   const { language } = useLanguage();
   const isAr = language === "ar";
+
+  usePageMeta({
+    title: isAr ? "الأكثر مبيعاً | أسبر بيوتي" : "Best Sellers | Asper Beauty",
+    description: isAr
+      ? "اكتشفي منتجاتنا الأكثر شعبية، المختارة بعناية من عملائنا المميزين."
+      : "Discover our most loved skincare & beauty products, curated by Jordan's leading pharmacy beauty experts.",
+    canonical: "/best-sellers",
+  });
 
   return (
     <div className="min-h-screen bg-background">

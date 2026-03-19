@@ -46,9 +46,9 @@ export const WishlistDrawer = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent
-        className={`w-full sm:max-w-md flex flex-col h-full bg-[#F8F8FF] ${
+        className={`w-full sm:max-w-md flex flex-col h-full bg-asper-stone ${
           isRTL ? "border-r border-l-0" : "border-l"
-        } border-[#C5A028]/40 shadow-gold-lg`}
+        } border-polished-gold/40 shadow-gold-lg`}
         side={isRTL ? "left" : "right"}
         style={{
           transition: "transform 0.5s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -57,10 +57,10 @@ export const WishlistDrawer = () => {
         {/* Decorative Gold Accent Line */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
-        <SheetHeader className="flex-shrink-0 border-b border-[#C5A028]/30 pb-4 pt-2 bg-gradient-to-b from-white/50 to-transparent">
+        <SheetHeader className="flex-shrink-0 border-b border-polished-gold/30 pb-4 pt-2 bg-gradient-to-b from-polished-white/50 to-transparent">
           <SheetTitle className="font-display text-2xl text-foreground flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C5A028]/30 via-[#C5A028]/20 to-transparent border border-[#C5A028]/40 flex items-center justify-center shadow-gold-sm">
-              <Heart className="w-5 h-5 text-[#C5A028] fill-[#C5A028]" />
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-polished-gold/30 via-polished-gold/20 to-transparent border border-polished-gold/40 flex items-center justify-center shadow-gold-sm">
+              <Heart className="w-5 h-5 text-polished-gold fill-polished-gold" />
             </div>
             {language === "ar" ? "قائمة الرغبات" : "My Wishlist"}
           </SheetTitle>
@@ -70,8 +70,8 @@ export const WishlistDrawer = () => {
           {items.length === 0
             ? (
               <div className="flex flex-col items-center justify-center h-full text-center px-6">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#C5A028]/20 via-[#C5A028]/10 to-transparent border border-[#C5A028]/30 flex items-center justify-center mb-4 shadow-gold-md">
-                  <Heart className="w-10 h-10 text-[#C5A028]" />
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-polished-gold/20 via-polished-gold/10 to-transparent border border-polished-gold/30 flex items-center justify-center mb-4 shadow-gold-md">
+                  <Heart className="w-10 h-10 text-polished-gold" />
                 </div>
                 <h3 className="font-display text-xl text-foreground mb-2">
                   {language === "ar"
@@ -85,7 +85,7 @@ export const WishlistDrawer = () => {
                 </p>
                 <Button
                   variant="outline"
-                  className="border-[#C5A028]/40 hover:border-[#C5A028] hover:bg-[#C5A028]/10 transition-all duration-500"
+                  className="border-polished-gold/40 hover:border-polished-gold hover:bg-polished-gold/10 transition-all duration-500"
                   onClick={() => setOpen(false)}
                 >
                   {language === "ar" ? "متابعة التسوق" : "Continue Shopping"}
@@ -101,25 +101,27 @@ export const WishlistDrawer = () => {
                   return (
                     <div
                       key={product.node.id}
-                      className="flex gap-4 p-3 bg-white/80 border border-[#C5A028]/20 hover:border-[#C5A028]/50 hover:shadow-gold-sm transition-all duration-500 rounded-lg group"
+                      className="flex gap-4 p-3 bg-polished-white/80 border border-polished-gold/20 hover:border-polished-gold/50 hover:shadow-gold-sm transition-all duration-500 rounded-lg group"
                     >
                       {/* Image */}
                       <Link
                         to={`/product/${product.node.handle}`}
                         onClick={() => setOpen(false)}
-                        className="w-20 h-24 flex-shrink-0 bg-[#F8F8FF] overflow-hidden rounded-lg border border-[#C5A028]/10 shadow-gold-sm"
+                        className="w-20 h-24 flex-shrink-0 bg-asper-stone overflow-hidden rounded-lg border border-polished-gold/10 shadow-gold-sm"
                       >
                         {firstImage
                           ? (
                             <img
                               src={firstImage.url}
                               alt={firstImage.altText || product.node.title}
+                              loading="lazy"
+                              decoding="async"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                           )
                           : (
-                            <div className="w-full h-full flex items-center justify-center bg-[#F8F8FF]">
-                              <Heart className="w-6 h-6 text-[#C5A028]/30" />
+                            <div className="w-full h-full flex items-center justify-center bg-asper-stone">
+                              <Heart className="w-6 h-6 text-polished-gold/30" />
                             </div>
                           )}
                       </Link>
@@ -129,11 +131,11 @@ export const WishlistDrawer = () => {
                         <Link
                           to={`/product/${product.node.handle}`}
                           onClick={() => setOpen(false)}
-                          className="font-display text-sm text-foreground hover:text-[#C5A028] transition-colors duration-500 line-clamp-2 mb-1"
+                          className="font-display text-sm text-foreground hover:text-polished-gold transition-colors duration-500 line-clamp-2 mb-1"
                         >
                           {translateTitle(product.node.title, language)}
                         </Link>
-                        <p className="font-display text-[#800020] text-sm mb-auto font-semibold">
+                        <p className="font-display text-burgundy text-sm mb-auto font-semibold">
                           {formatJOD(parseFloat(price.amount))}
                         </p>
 
@@ -142,7 +144,7 @@ export const WishlistDrawer = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="flex-1 h-8 text-xs border-[#C5A028]/40 hover:bg-gradient-to-r hover:from-[#C5A028] hover:to-[#C5A028]/80 hover:text-[#800020] hover:border-[#C5A028] transition-all duration-500 shadow-gold-sm"
+                            className="flex-1 h-8 text-xs border-polished-gold/40 hover:bg-gradient-to-r hover:from-polished-gold hover:to-[#C5A028]/80 hover:text-burgundy hover:border-polished-gold transition-all duration-500 shadow-gold-sm"
                             onClick={() => handleAddToCart(product)}
                           >
                             <ShoppingBag className="w-3 h-3 me-1" />
@@ -151,7 +153,7 @@ export const WishlistDrawer = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-8 w-8 p-0 text-muted-foreground hover:text-[#800020] hover:bg-[#800020]/10 transition-colors duration-500"
+                            className="h-8 w-8 p-0 text-muted-foreground hover:text-burgundy hover:bg-burgundy/10 transition-colors duration-500"
                             onClick={() => removeItem(product.node.id)}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -166,7 +168,7 @@ export const WishlistDrawer = () => {
         </div>
 
         {items.length > 0 && (
-          <div className="flex-shrink-0 border-t border-[#C5A028]/30 pt-4 pb-2 space-y-3 bg-gradient-to-t from-white/50 to-transparent px-4">
+          <div className="flex-shrink-0 border-t border-polished-gold/30 pt-4 pb-2 space-y-3 bg-gradient-to-t from-polished-white/50 to-transparent px-4">
             <p className="font-body text-sm text-muted-foreground text-center">
               {language === "ar"
                 ? `${items.length} ${
@@ -176,7 +178,7 @@ export const WishlistDrawer = () => {
             </p>
             <Button
               variant="outline"
-              className="w-full border-[#C5A028]/40 hover:border-[#C5A028] hover:bg-[#C5A028]/10 transition-all duration-500"
+              className="w-full border-polished-gold/40 hover:border-polished-gold hover:bg-polished-gold/10 transition-all duration-500"
               onClick={() => setOpen(false)}
             >
               {language === "ar" ? "متابعة التسوق" : "Continue Shopping"}
@@ -196,11 +198,11 @@ export const WishlistButton = () => {
   return (
     <button
       onClick={() => setOpen(true)}
-      className="relative p-2 text-foreground hover:text-[#C5A028] transition-colors"
+      className="relative p-2 text-foreground hover:text-polished-gold transition-colors"
       aria-label="Wishlist"
     >
       <Heart
-        className={`w-5 h-5 ${itemCount > 0 ? "fill-[#C5A028] text-[#C5A028]" : ""}`}
+        className={`w-5 h-5 ${itemCount > 0 ? "fill-polished-gold text-polished-gold" : ""}`}
       />
       {itemCount > 0 && (
         <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold text-cream text-xs font-display rounded-full flex items-center justify-center">

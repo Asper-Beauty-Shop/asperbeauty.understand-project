@@ -55,7 +55,7 @@ export const DealOfTheDay = () => {
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10">
               <Flame className="h-5 w-5 text-destructive" />
             </div>
-            <h2 className="font-serif text-2xl font-light tracking-tight text-foreground md:text-3xl">
+            <h2 className="font-display text-2xl font-light tracking-tight text-foreground md:text-3xl">
               {isAr ? "عروض اليوم" : "Specials & Offers"}
             </h2>
           </div>
@@ -118,7 +118,7 @@ export const DealOfTheDay = () => {
                       {product.title}
                     </h3>
                     <div className="mt-2 flex items-center gap-2">
-                      <span className="font-serif text-lg font-semibold text-primary">
+                      <span className="font-display text-lg font-semibold text-primary">
                         {formatJOD(product.price)}
                       </span>
                     </div>

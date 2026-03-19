@@ -146,6 +146,8 @@ export const SearchDropdown = ({
                             <img
                               src={imageUrl}
                               alt={displayTitle}
+                              loading="lazy"
+                              decoding="async"
                               className="w-full h-full object-cover"
                             />
                           )

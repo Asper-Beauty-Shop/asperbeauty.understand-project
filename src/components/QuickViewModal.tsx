@@ -185,19 +185,31 @@ export const QuickViewModal = (
                   {node.options?.[0]?.name || "Option"}
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {variants.map((variant, index) => (
-                    <button
-                      key={variant.node.id}
-                      onClick={() => setSelectedVariantIndex(index)}
-                      className={`px-4 py-2 border text-sm font-body transition-all ${
-                        index === selectedVariantIndex
-                          ? "border-gold bg-gold text-cream"
-                          : "border-gold/30 hover:border-gold text-foreground"
-                      }`}
-                    >
-                      {variant.node.title}
-                    </button>
-                  ))}
+                  {variants.map((variant, index) => {
+                    const oos = !variant.node.availableForSale;
+                    return (
+                      <button
+                        key={variant.node.id}
+                        onClick={() => !oos && setSelectedVariantIndex(index)}
+                        disabled={oos}
+                        title={oos ? (language === "ar" ? "نفد المخزون" : "Sold Out") : undefined}
+                        className={`px-4 py-2 border text-sm font-body transition-all relative ${
+                          oos
+                            ? "border-border/30 text-muted-foreground/40 cursor-not-allowed line-through"
+                            : index === selectedVariantIndex
+                            ? "border-gold bg-gold text-cream"
+                            : "border-gold/30 hover:border-gold text-foreground"
+                        }`}
+                      >
+                        {variant.node.title}
+                        {oos && (
+                          <span className="absolute -top-2 -right-2 text-[8px] bg-muted-foreground/60 text-white px-1 rounded-full">
+                            {language === "ar" ? "نفد" : "OOS"}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -244,11 +256,14 @@ export const QuickViewModal = (
               <Button
                 variant="luxury"
                 size="luxury"
-                className="w-full bg-cta hover:bg-cta/90 text-cta-foreground"
+                className="w-full bg-cta hover:bg-cta/90 text-cta-foreground disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleAddToCart}
+                disabled={selectedVariant ? !selectedVariant.availableForSale : false}
               >
                 <ShoppingBag className="w-4 h-4 me-2" />
-                {t.addToBag}
+                {selectedVariant && !selectedVariant.availableForSale
+                  ? (language === "ar" ? "نفد المخزون" : "Out of Stock")
+                  : t.addToBag}
               </Button>
 
               <Link to={`/product/${node.handle}`} onClick={onClose}>

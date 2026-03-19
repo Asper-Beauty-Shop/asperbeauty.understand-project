@@ -96,8 +96,10 @@ export const InstagramFeed = () => {
               {/* Image with filters */}
               <img
                 src={post.image}
-                alt="Instagram post"
-                className="w-full h-full object-cover transition-all duration-700 ease-out 
+                alt={`Asper Beauty Shop — post ${post.id}`}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover transition-all duration-700 ease-out
                   group-hover:scale-125 group-hover:rotate-2
                   filter saturate-100 group-hover:saturate-[1.2] group-hover:brightness-90"
               />
