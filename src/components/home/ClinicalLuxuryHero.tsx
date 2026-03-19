@@ -38,12 +38,13 @@ export default function ClinicalLuxuryHero() {
 
       {/* ── Desktop: Split Layout ── */}
       <div className="hidden md:flex h-full">
-        {/* Left — Copy */}
+        {/* Left — Copy inside frosted glass panel */}
         <div className="flex flex-col justify-center w-1/2 px-12 lg:px-20 xl:px-28 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: LUXURY_EASE, delay: 0.1 }}
+            className="clinical-glass rounded-lg p-8 lg:p-10 xl:p-12"
           >
             {/* Eyebrow */}
             <span className="font-body text-[10px] md:text-[11px] uppercase tracking-[0.45em] text-accent font-semibold mb-5 block">
@@ -92,7 +93,7 @@ export default function ClinicalLuxuryHero() {
                 : "Trusted clinical solutions for ageless radiance — dispensed directly from the pharmacist's shelf to you."}
             </motion.p>
 
-            {/* CTA row */}
+            {/* CTA row — solid buttons that break the glass plane */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -106,8 +107,8 @@ export default function ClinicalLuxuryHero() {
                              bg-primary text-primary-foreground
                              font-body text-[11px] md:text-[12px] uppercase tracking-[0.3em] font-semibold
                              hover:bg-burgundy-dark hover:shadow-maroon-glow
-                             transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]
-                             hover:-translate-y-0.5"
+                             hover:scale-[1.02]
+                             transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]"
                 >
                   {isAr ? "تسوقي الآن" : "Shop Now"}
                   <ArrowRight
