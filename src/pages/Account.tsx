@@ -276,6 +276,16 @@ export default function Account() {
             )}
           </GlassSection>
 
+          {/* ═══ Order History ═══ */}
+          <GlassSection>
+            <SectionHeader
+              icon={ClipboardList}
+              title="Order History"
+              description="Track your past and current orders"
+            />
+            <OrderHistory userId={user.id} />
+          </GlassSection>
+
           {/* ═══ Danger Zone — Account Deletion ═══ */}
           <GlassSection className="border-destructive/15">
             <SectionHeader icon={AlertTriangle} title="Delete Account" description="Permanently delete your account and all associated data" />
