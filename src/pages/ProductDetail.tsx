@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link, useParams } from "react-router-dom";
 import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
 import pdpIngredients from "@/assets/pdp-ingredients.jpg";
@@ -63,6 +64,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const prefersReduced = useReducedMotion();
 
   const addItem = useCartStore((state) => state.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
@@ -303,7 +305,7 @@ const ProductDetail = () => {
               <ShareButtons url={window.location.href} title={`${isArabic ? "اكتشف" : "Check out"} ${product.title}`} />
             </div>
 
-            {/* ─── Key Clinical Actives — Frosted Glass Cards ─── */}
+            {/* ─── Key Clinical Actives — Staggered Frosted Glass Cards ─── */}
             {product.key_ingredients && product.key_ingredients.length > 0 && (
               <div className="mb-10">
                 <div className="flex items-center gap-2 mb-6">
@@ -312,25 +314,34 @@ const ProductDetail = () => {
                     {isArabic ? "المكونات السريرية الفعالة" : "Key Clinical Actives"}
                   </h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <motion.div
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.1 } },
+                  }}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                >
                   {product.key_ingredients.map((ingredient) => {
                     const benefit = getIngredientBenefit(ingredient, isArabic);
                     return (
-                      <div
+                      <motion.div
                         key={ingredient}
-                        className="clinical-glass rounded-sm p-5 transition-colors duration-300 hover:-translate-y-0.5"
-                        style={{
-                          border: "1px solid hsl(var(--polished-gold) / 0.2)",
+                        variants={{
+                          hidden: prefersReduced ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.98 },
+                          visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } },
                         }}
+                        className="clinical-glass rounded-sm p-5 transition-colors duration-300 hover:-translate-y-0.5"
+                        style={{ border: "1px solid hsl(var(--polished-gold) / 0.2)" }}
                       >
                         <h4 className="font-body font-bold text-sm text-asper-ink mb-1">{ingredient}</h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-body">
-                          {benefit}
-                        </p>
-                      </div>
+                        <p className="text-xs text-muted-foreground leading-relaxed font-body">{benefit}</p>
+                      </motion.div>
                     );
                   })}
-                </div>
+                </motion.div>
               </div>
             )}
 
