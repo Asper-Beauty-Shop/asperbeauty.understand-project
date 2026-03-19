@@ -373,6 +373,7 @@ export type Database = {
           contraindications: string | null
           created_at: string
           description: string
+          discount_percent: number | null
           fts: unknown
           gold_stitch_tier: boolean | null
           gtin: string | null
@@ -384,10 +385,12 @@ export type Database = {
           inventory_total: number | null
           is_bestseller: boolean | null
           is_hero: boolean
+          is_on_sale: boolean
           key_ingredients: string[] | null
           medical_tags: string[] | null
           mpn: string | null
           name: string
+          original_price: number | null
           pharmacist_note: string | null
           price: number
           primary_concern: string | null
@@ -411,6 +414,7 @@ export type Database = {
           contraindications?: string | null
           created_at?: string
           description: string
+          discount_percent?: number | null
           fts?: unknown
           gold_stitch_tier?: boolean | null
           gtin?: string | null
@@ -422,10 +426,12 @@ export type Database = {
           inventory_total?: number | null
           is_bestseller?: boolean | null
           is_hero?: boolean
+          is_on_sale?: boolean
           key_ingredients?: string[] | null
           medical_tags?: string[] | null
           mpn?: string | null
           name: string
+          original_price?: number | null
           pharmacist_note?: string | null
           price: number
           primary_concern?: string | null
@@ -449,6 +455,7 @@ export type Database = {
           contraindications?: string | null
           created_at?: string
           description?: string
+          discount_percent?: number | null
           fts?: unknown
           gold_stitch_tier?: boolean | null
           gtin?: string | null
@@ -460,10 +467,12 @@ export type Database = {
           inventory_total?: number | null
           is_bestseller?: boolean | null
           is_hero?: boolean
+          is_on_sale?: boolean
           key_ingredients?: string[] | null
           medical_tags?: string[] | null
           mpn?: string | null
           name?: string
+          original_price?: number | null
           pharmacist_note?: string | null
           price?: number
           primary_concern?: string | null
