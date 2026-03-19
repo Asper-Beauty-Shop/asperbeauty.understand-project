@@ -100,7 +100,7 @@ export const BeautyAssistant = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke("beauty-assistant", {
-        body: { messages: [...messages, userMsg], language, persona: activePersona },
+        body: { messages: [...messages, userMsg], language, persona: activePersona, productContext },
       });
       if (error) throw error;
       const reply = data.reply || "";

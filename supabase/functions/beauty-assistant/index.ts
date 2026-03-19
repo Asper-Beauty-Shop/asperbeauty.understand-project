@@ -223,6 +223,15 @@ serve(async (req) => {
       const body = await req.json();
       messages = body.messages;
       userMessage = messages[messages.length - 1].content;
+      // Extract optional product context from PDP
+      if (body.productContext && typeof body.productContext === "object") {
+        const pc = body.productContext as Record<string, unknown>;
+        productContextStr = `\n\n## CURRENT PRODUCT CONTEXT\nThe customer is viewing: **${pc.name}** by ${pc.brand}` +
+          (pc.key_ingredients ? ` | Key Actives: ${(pc.key_ingredients as string[]).join(", ")}` : "") +
+          (pc.primary_concern ? ` | Concern: ${pc.primary_concern}` : "") +
+          (pc.price ? ` | Price: ${pc.price} JOD` : "") +
+          `\nContextualize your advice around this specific formula when relevant.`;
+      }
     }
 
     const slug = detectConcernSlug(userMessage);
