@@ -1,55 +1,58 @@
+import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState, useEffect } from "react";
 
 export const FloatingConciergeWidget = () => {
-  const { isRTL } = useLanguage();
+  const { isRTL, locale } = useLanguage();
+  const isAr = locale === "ar";
+  const [isAssistantOpen, setIsAssistantOpen] = useState(false);
+
+  // Track overlay state to hide FAB when chat is open
+  useEffect(() => {
+    const onOpen = () => setIsAssistantOpen(true);
+    const onClose = () => setIsAssistantOpen(false);
+    // The BeautyAssistant dispatches open-beauty-assistant; we listen for unmount via AnimatePresence
+    window.addEventListener("open-beauty-assistant", onOpen);
+    // We also poll the overlay presence
+    const observer = new MutationObserver(() => {
+      const overlay = document.querySelector('[data-concierge-overlay]');
+      setIsAssistantOpen(!!overlay);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      window.removeEventListener("open-beauty-assistant", onOpen);
+      observer.disconnect();
+    };
+  }, []);
 
   const handleClick = () => {
     window.dispatchEvent(new CustomEvent("open-beauty-assistant"));
   };
 
   return (
-    <div
-      className={`fixed bottom-6 z-50 flex flex-col items-center group cursor-pointer ${isRTL ? "left-6" : "right-6"}`}
-      onClick={handleClick}
-      role="button"
-      aria-label="Consult Dr. Sami"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && handleClick()}
-    >
-      {/* Hover label */}
-      <span
-        className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm font-display text-burgundy bg-polished-white/90 px-3 py-1 rounded-full shadow-sm pointer-events-none whitespace-nowrap"
-      >
-        Consult Dr. Sami
-      </span>
-
-      {/* Floating icon — no background box */}
-      <div className="relative w-14 h-14 md:w-16 md:h-16 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-110 group-hover:-translate-y-2">
-        {/* Mortar & Pestle SVG */}
-        <svg
-          className="w-full h-full text-burgundy group-hover:text-polished-gold transition-colors duration-500 drop-shadow-[0_4px_8px_rgba(0,0,0,0.1)]"
-          fill="currentColor"
-          viewBox="0 0 24 24"
+    <AnimatePresence>
+      {!isAssistantOpen && (
+        <motion.button
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0, transition: { duration: 0.3 } }}
+          transition={{ type: "spring", stiffness: 260, damping: 22, delay: 1 }}
+          onClick={handleClick}
+          className={`fixed bottom-6 z-[100] group clinical-glass w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all active:scale-[0.95] border border-white hover:border-accent/40 ${isRTL ? "left-6" : "right-6"}`}
+          aria-label={isAr ? "افتح المستشار الرقمي" : "Open Digital Concierge"}
         >
-          <path
-            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+          {/* Subtle pulse ring */}
+          <span className="absolute inset-0 rounded-full border border-primary/30 animate-ping opacity-50 pointer-events-none" />
 
-        {/* Sparkle indicator on hover */}
-        <svg
-          className="absolute -top-1 -right-1 w-5 h-5 text-polished-gold opacity-0 group-hover:opacity-100 animate-pulse transition-opacity duration-300"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M10 2a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 2zm0 12.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75zM4.75 10a.75.75 0 01-.75.75h-3.5a.75.75 0 010-1.5h3.5a.75.75 0 01.75.75zm13.5 0a.75.75 0 01-.75.75h-3.5a.75.75 0 010-1.5h3.5a.75.75 0 01.75.75zm-9.354 3.854a.75.75 0 011.06 0l2.5 2.5a.75.75 0 01-1.06 1.06l-2.5-2.5a.75.75 0 010-1.06zm6.108-8.81a.75.75 0 010 1.06l-2.5 2.5a.75.75 0 01-1.06-1.06l2.5-2.5a.75.75 0 011.06 0z" />
-        </svg>
-      </div>
-    </div>
+          {/* Sparkle icon */}
+          <span className="text-2xl text-primary group-hover:scale-110 transition-transform">✨</span>
+
+          {/* Hover label */}
+          <span className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xs font-display text-primary bg-card/90 px-3 py-1 rounded-full shadow-sm pointer-events-none whitespace-nowrap">
+            {isAr ? "استشارة خبير" : "Consult an Expert"}
+          </span>
+        </motion.button>
+      )}
+    </AnimatePresence>
   );
 };
