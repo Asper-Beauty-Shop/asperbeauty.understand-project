@@ -183,9 +183,9 @@ const ShopProductCard = ({
         <div className="flex items-center justify-between pt-1">
           <div className="flex items-baseline gap-1.5">
             <LuxuryPrice amount={product.price} />
-            {(product as any).is_on_sale && (product as any).original_price && (
+            {product.is_on_sale && product.original_price && (
               <span className="text-xs line-through text-muted-foreground font-body">
-                {(product as any).original_price.toFixed(2)}
+                {product.original_price.toFixed(2)}
               </span>
             )}
           </div>
