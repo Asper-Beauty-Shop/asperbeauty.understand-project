@@ -303,6 +303,9 @@ export default function Offers() {
         </div>
       </section>
 
+      {/* Countdown Banner */}
+      {saleProducts.length > 0 && <CountdownBanner isAr={isAr} />}
+
       {/* Filters & Content */}
       <main className="py-10 md:py-16">
         <div className="luxury-container">
