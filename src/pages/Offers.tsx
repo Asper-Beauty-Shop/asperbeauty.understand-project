@@ -29,6 +29,7 @@ import {
   Sparkles,
   Tag,
   Timer,
+  Zap,
 } from "lucide-react";
 import { ProductQuickView } from "@/components/ProductQuickView";
 import type { Tables } from "@/integrations/supabase/types";
