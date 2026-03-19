@@ -2,10 +2,19 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductGrid } from "@/components/ProductGrid";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Offers() {
   const { language } = useLanguage();
   const isAr = language === "ar";
+
+  usePageMeta({
+    title: isAr ? "العروض والتخفيضات | أسبر بيوتي" : "Offers & Deals | Asper Beauty",
+    description: isAr
+      ? "اكتشفي أحدث عروض وتخفيضات أسبر بيوتي على منتجات العناية بالبشرة والجمال."
+      : "Explore the latest deals and discounts on premium skincare and beauty products at Asper Beauty.",
+    canonical: "/offers",
+  });
 
   return (
     <div className="min-h-screen bg-background">

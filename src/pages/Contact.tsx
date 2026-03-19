@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 // Brand-accurate social media icon components
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -61,6 +62,14 @@ const PinterestIcon = ({ className }: { className?: string }) => (
 export default function Contact() {
   const { language } = useLanguage();
   const isAr = language === "ar";
+
+  usePageMeta({
+    title: isAr ? "تواصلي معنا | أسبر بيوتي" : "Contact Us | Asper Beauty",
+    description: isAr
+      ? "تواصلي مع فريق أسبر بيوتي في عمان، الأردن. هاتف: 6666 065 79 962+"
+      : "Get in touch with Asper Beauty in Amman, Jordan. Phone: +962 79 065 6666 | Email: asperpharma@gmail.com",
+    canonical: "/contact",
+  });
 
   return (
     <div className="min-h-screen bg-background">

@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 
 // ── Asper Beauty Shop — Audio Waveform + Replay Component ───────────────────
 // Design tokens (strict):
-//   Background  : Soft Ivory  (#F8F8FF) — blends with page canvas
-//   Active bar  : Deep Maroon (#800020) — progress & active waveform
-//   Inactive bar: rose clay alpha       — unplayed bars
-//   Replay hover: Shiny Gold  (#C5A028) — "Midas Touch"
-//   Text        : Dark Charcoal #333333
+//   Background  : Soft Ivory  (asper-stone) — blends with page canvas
+//   Active bar  : Deep Maroon (burgundy)    — progress & active waveform
+//   Inactive bar: rose clay alpha           — unplayed bars
+//   Replay hover: Shiny Gold  (polished-gold) — "Midas Touch"
+//   Text        : Dark Charcoal (asper-ink)
 
 interface AudioWaveformReplayProps {
   /** 0–1 playback progress */
@@ -90,7 +90,7 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
     <div
       className={cn(
         "flex flex-col gap-2 rounded-xl px-4 py-3 select-none",
-        "bg-[#F8F8FF] border border-[#C5A028]/20",
+        "bg-asper-stone border border-polished-gold/20",
         className,
       )}
       aria-label="Audio player"
@@ -98,9 +98,9 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
       {pulseStyle}
 
       {/* ── Persona label row ─────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between text-xs text-[#333333]/60 font-[Montserrat,sans-serif]">
+      <div className="flex items-center justify-between text-xs text-asper-ink/60 font-body">
         <span>
-          <span className="font-semibold text-[#800020]">{personaLabel.name}</span>
+          <span className="font-semibold text-burgundy">{personaLabel.name}</span>
           {" · "}
           {personaLabel.title}
         </span>
@@ -118,13 +118,13 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
             {BAR_HEIGHTS.map((h, i) => (
               <div
                 key={i}
-                className="flex-1 rounded-sm bg-[#800020]/20 animate-pulse"
+                className="flex-1 rounded-sm bg-burgundy/20 animate-pulse"
                 style={{ height: `${(h / 95) * 100}%` }}
               />
             ))}
           </div>
         ) : error ? (
-          <p className="w-full text-center text-xs text-red-500 font-[Montserrat,sans-serif]">
+          <p className="w-full text-center text-xs text-red-500 font-body">
             {error}
           </p>
         ) : (
@@ -140,9 +140,9 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
                   className={cn(
                     "flex-1 rounded-sm transition-all duration-100",
                     isActive
-                      ? "bg-[#800020]"
-                      : "bg-[#800020]/15",
-                    isPlaying && isCurrent && "asper-bar-active-pulse bg-[#800020]",
+                      ? "bg-burgundy"
+                      : "bg-burgundy/15",
+                    isPlaying && isCurrent && "asper-bar-active-pulse bg-burgundy",
                   )}
                   style={{ height: heightPct }}
                 />
@@ -154,16 +154,16 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
         {/* Maroon playhead line */}
         {!isLoading && !error && (
           <div
-            className="absolute top-0 bottom-0 w-[2px] bg-[#800020] rounded-full transition-all duration-100 pointer-events-none"
+            className="absolute top-0 bottom-0 w-[2px] bg-burgundy rounded-full transition-all duration-100 pointer-events-none"
             style={{ left: `${clampedProgress * 100}%` }}
           />
         )}
       </div>
 
       {/* ── Progress bar ─────────────────────────────────────────────────── */}
-      <div className="h-[3px] w-full rounded-full bg-[#800020]/15 overflow-hidden">
+      <div className="h-[3px] w-full rounded-full bg-burgundy/15 overflow-hidden">
         <div
-          className="h-full bg-[#800020] rounded-full transition-all duration-100"
+          className="h-full bg-burgundy rounded-full transition-all duration-100"
           style={{ width: `${clampedProgress * 100}%` }}
         />
       </div>
@@ -175,12 +175,12 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
           <button
             onClick={onStop}
             className="group flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium
-                       text-[#800020] border border-[#800020]/30 bg-transparent
-                       hover:bg-[#800020]/10 transition-colors duration-200
-                       font-[Montserrat,sans-serif]"
+                       text-burgundy border border-burgundy/30 bg-transparent
+                       hover:bg-burgundy/10 transition-colors duration-200
+                       font-body"
             aria-label="Stop playback"
           >
-            <Square size={13} className="fill-[#800020]" />
+            <Square size={13} className="fill-burgundy" />
             Stop
           </button>
         )}
@@ -191,20 +191,20 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
           disabled={isLoading}
           className={cn(
             "group flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium",
-            "text-[#800020] border border-[#800020]/30 bg-transparent",
-            "hover:border-[#C5A028] hover:text-[#C5A028] hover:bg-[#C5A028]/5",
+            "text-burgundy border border-burgundy/30 bg-transparent",
+            "hover:border-polished-gold hover:text-polished-gold hover:bg-polished-gold/5",
             "active:scale-95 transition-all duration-200",
             "disabled:opacity-40 disabled:cursor-not-allowed",
-            "font-[Montserrat,sans-serif]",
+            "font-body",
           )}
           aria-label="Replay voiceover"
         >
           {isLoading ? (
-            <Loader2 size={13} className="animate-spin text-[#800020]" />
+            <Loader2 size={13} className="animate-spin text-burgundy" />
           ) : (
             <RotateCcw
               size={13}
-              className="text-[#800020] group-hover:text-[#C5A028] transition-colors duration-200"
+              className="text-burgundy group-hover:text-polished-gold transition-colors duration-200"
             />
           )}
           {isLoading ? "Generating…" : "Replay"}
@@ -215,4 +215,3 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
 };
 
 export default AudioWaveformReplay;
-

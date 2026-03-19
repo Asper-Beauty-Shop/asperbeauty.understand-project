@@ -63,7 +63,7 @@ export const LuxuryPromoBanner = ({
         </span>
 
         {/* Main Title */}
-        <h2 className="font-serif text-4xl font-light leading-tight tracking-tight text-foreground md:text-5xl lg:text-6xl">
+        <h2 className="font-display text-4xl font-light leading-tight tracking-tight text-foreground md:text-5xl lg:text-6xl">
           {displayTitle}
         </h2>
 
@@ -94,6 +94,8 @@ export const LuxuryPromoBanner = ({
         <img
           src={displayImage}
           alt={displayTitle}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-105"
         />
         {/* Subtle Overlay */}

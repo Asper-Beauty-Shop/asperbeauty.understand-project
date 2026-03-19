@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import {
   Droplets,
   Eye,
@@ -154,6 +155,16 @@ export default function SkinConcerns() {
     language,
     isRTL,
   } = useLanguage();
+  const isAr = language === "ar";
+
+  usePageMeta({
+    title: isAr ? "مشاكل البشرة | أسبر بيوتي" : "Skin Concerns | Asper Beauty",
+    description: isAr
+      ? "اكتشفي الحلول العلمية لمشاكل بشرتك: حب الشباب، الشيخوخة، الجفاف، والحساسية — بإشراف صيادلة متخصصين."
+      : "Find science-backed solutions for your skin concerns: acne, aging, dryness, sensitivity — curated by pharmacists.",
+    canonical: "/skin-concerns",
+  });
+
   const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);

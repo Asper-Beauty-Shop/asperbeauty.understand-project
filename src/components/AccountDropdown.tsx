@@ -86,7 +86,7 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                       <span className="px-2 py-0.5 bg-gold-400 text-luxury-black text-[9px] font-bold uppercase tracking-widest rounded-sm">
                         {loyaltyData.tier}
                       </span>
-                      <p className="text-lg font-serif mt-2">{displayName}</p>
+                      <p className="text-lg font-display mt-2">{displayName}</p>
                       <p className="text-xs text-white/60 mt-0.5">
                         {userEmail}
                       </p>
@@ -197,7 +197,7 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
                 <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
                   <User className="h-8 w-8 text-muted-foreground" />
                 </div>
-                <h3 className="font-serif text-lg">
+                <h3 className="font-display text-lg">
                   {isAr ? "مرحباً بك" : "Welcome"}
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1">

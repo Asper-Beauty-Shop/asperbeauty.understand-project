@@ -20,6 +20,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { formatJOD } from "@/lib/productImageUtils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SearchResult {
   id: string;
@@ -32,6 +33,7 @@ interface SearchResult {
 export const LuxurySearch = (
   { open, setOpen }: { open: boolean; setOpen: (open: boolean) => void },
 ) => {
+  const { isRTL } = useLanguage();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [recentSearches] = useState(["Olaplex", "CeraVe Cleanser", "Retinol"]);
@@ -72,17 +74,18 @@ export const LuxurySearch = (
       <div className="flex items-center border-b border-gray-100 px-4">
         <Search className="h-5 w-5 text-gold-500" />
         <CommandInput
-          placeholder="Search for products, brands..."
+          placeholder={isRTL ? "ابحثي عن منتجات، ماركات..." : "Search for products, brands..."}
           value={query}
           onValueChange={setQuery}
           className="border-0 focus:ring-0 font-sans text-base placeholder:text-gray-400"
+          dir={isRTL ? "rtl" : "ltr"}
         />
       </div>
 
       <CommandList className="max-h-[60vh]">
         <CommandEmpty className="py-12 text-center">
           <p className="text-gray-400 text-sm">
-            No results found for "{query}"
+            {isRTL ? `لا توجد نتائج لـ "${query}"` : `No results found for "${query}"`}
           </p>
         </CommandEmpty>
 
@@ -92,7 +95,7 @@ export const LuxurySearch = (
             heading={
               <span className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-400 font-bold px-2">
                 <History className="h-3 w-3" />
-                Recent Searches
+                {isRTL ? "عمليات البحث الأخيرة" : "Recent Searches"}
               </span>
             }
           >
@@ -116,7 +119,7 @@ export const LuxurySearch = (
               heading={
                 <span className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-400 font-bold px-2">
                   <TrendingUp className="h-3 w-3" />
-                  Trending Luxury Brands
+                  {isRTL ? "العلامات التجارية الأكثر رواجاً" : "Trending Luxury Brands"}
                 </span>
               }
             >
@@ -143,7 +146,7 @@ export const LuxurySearch = (
             heading={
               <span className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-400 font-bold px-2">
                 <Sparkles className="h-3 w-3" />
-                Suggested Products
+                {isRTL ? "منتجات مقترحة" : "Suggested Products"}
               </span>
             }
           >
@@ -158,13 +161,15 @@ export const LuxurySearch = (
                     <img
                       src={product.image_url}
                       alt={product.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover"
                     />
                   )}
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="font-serif text-sm text-luxury-black truncate">
+                  <p className="font-display text-sm text-luxury-black truncate">
                     {product.title}
                   </p>
                   <p className="text-[10px] uppercase tracking-widest text-gray-400">

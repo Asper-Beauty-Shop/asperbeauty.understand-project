@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Droplets, Heart, Sparkles, Sun } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const FEATURED_BRANDS = [
   {
@@ -64,6 +65,14 @@ const FEATURED_BRANDS = [
 export default function Brands() {
   const { language } = useLanguage();
   const isAr = language === "ar";
+
+  usePageMeta({
+    title: isAr ? "العلامات التجارية | أسبر بيوتي" : "Brands | Asper Beauty",
+    description: isAr
+      ? "تسوقي من أفضل العلامات التجارية الدرموكوزماتيكية: فيشي، سيراف، لاروش-بوزيه، يوسرين والمزيد."
+      : "Shop premium dermo-cosmetic brands: Vichy, CeraVe, La Roche-Posay, Eucerin, and more — curated by pharmacists.",
+    canonical: "/brands",
+  });
 
   return (
     <div className="min-h-screen bg-background">
