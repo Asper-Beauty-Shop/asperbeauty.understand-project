@@ -383,8 +383,8 @@ export default function Shop() {
       return db - da;
     });
     else if (sortBy === "sale") sorted.sort((a, b) => {
-      const discA = a.discount_percent ?? 0;
-      const discB = b.discount_percent ?? 0;
+      const discA = (a as any).discount_percent ?? 0;
+      const discB = (b as any).discount_percent ?? 0;
       return discB - discA;
     });
     return sorted;
