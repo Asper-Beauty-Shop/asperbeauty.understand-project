@@ -96,7 +96,7 @@ interface DbRow {
   image_url: string | null;
   tags: string[] | null;
   created_at: string | null;
-  stock: number | null;
+  inventory_total: number | null;
   availability_status: string | null;
   primary_concern: string | null;
   [key: string]: unknown;
@@ -104,7 +104,7 @@ interface DbRow {
 
 function rowToProduct(row: DbRow): ShopifyProduct {
   const title = row.title || row.name || "Unnamed Product";
-  const inStock = row.availability_status === "In_Stock" || (row.stock != null && row.stock > 0);
+  const inStock = row.availability_status === "In_Stock" || (row.inventory_total != null && row.inventory_total > 0);
   return {
     node: {
       id: row.id,

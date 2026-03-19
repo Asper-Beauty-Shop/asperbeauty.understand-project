@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { BlurUpImage } from "@/components/BlurUpImage";
 
 // Shared ease — cast to satisfy framer-motion's EasingDefinition
-const LUXURY_EASE = [0.19, 1, 0.22, 1] as unknown as number[];
+const LUXURY_EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
 export interface ElegantProduct {
   id: string;
