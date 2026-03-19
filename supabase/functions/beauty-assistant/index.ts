@@ -96,6 +96,29 @@ async function fetchProductContext(supabase: any, userMessage: string, slug: str
   return { context: matched.map(formatProduct).join("\n"), products: matched };
 }
 
+const INGREDIENT_KNOWLEDGE = `
+- Niacinamide: Fades discolorations & refines pores
+- Retinol: Accelerates cell turnover, reduces fine lines & wrinkles
+- Hyaluronic Acid: Retains 1000x its weight in moisture
+- Vitamin C: Potent antioxidant, brightens & evens skin tone
+- Salicylic Acid: Penetrates pores to clear acne & prevent breakouts
+- Ceramide: Restores skin barrier & locks in moisture
+- Glycerin: Humectant for lasting softness
+- Zinc Oxide: Mineral UV filter, broad-spectrum sun protection
+- Azelaic Acid: Reduces redness & hyperpigmentation
+- Peptides: Signals collagen production for firmer skin
+- Squalane: Lightweight emollient, nourishes without clogging pores
+- Panthenol: Provitamin B5, soothes irritation & strengthens barrier
+- Centella Asiatica: Calms inflammation, accelerates healing
+- Alpha Arbutin: Targets dark spots safely
+- Glycolic Acid: Exfoliates for smoother, radiant skin
+- Lactic Acid: Gentle AHA, exfoliates & boosts hydration
+- Caffeine: Reduces puffiness & dark circles
+- Biotin: Essential for healthy hair, skin & nails
+- Minoxidil: Stimulates hair follicles for regrowth
+- Urea: Intense hydration for rough, cracked skin
+`;
+
 function buildSystemPrompt(productContext: string, shopRoutinePath: string | null): string {
   return `
 # DR. BOT — THE ASPER DUAL-VOICE CONCIERGE
@@ -133,6 +156,10 @@ You are a high-performance Sales Consultant. Your goal is to maximize Basket Val
 1. Confirm the concern with empathy.
 2. Recommend ONE regimen: Step 1 (Cleanser) → Step 2 (Treatment) → Step 3 (Protection).
 3. Close with: "Shall I add this clinical tray to your regimen?"
+
+## INGREDIENT KNOWLEDGE BASE
+When discussing product formulas, use these clinically accurate benefit descriptions:
+${INGREDIENT_KNOWLEDGE}
 
 ## CURRENT INVENTORY CONTEXT
 ${productContext}
