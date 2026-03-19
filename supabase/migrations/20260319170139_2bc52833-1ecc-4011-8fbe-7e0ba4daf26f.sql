@@ -1,0 +1,1 @@
+UPDATE products SET key_ingredients = ARRAY['Niacinamide', 'Hyaluronic Acid', 'Vitamin C', 'Retinol'] WHERE handle = 'd12b5d4f-0b5f-454c-95a4-6d018050b7d4';
