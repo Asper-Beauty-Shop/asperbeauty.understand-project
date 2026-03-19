@@ -107,6 +107,13 @@ const SaleProductCard = ({ product, onQuickView, isFlashDeal }: { product: Produ
         ) : (
           <Package className="h-16 w-16 text-muted-foreground/30" />
         )}
+        {/* Flash Deal badge */}
+        {isFlashDeal && (
+          <span className="absolute top-3 right-14 z-20 flex items-center gap-1 rounded-full bg-destructive px-2.5 py-1 text-[10px] font-bold text-destructive-foreground shadow-md animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]">
+            <Zap className="w-3 h-3" />
+            Flash Deal
+          </span>
+        )}
         {/* Sale badge */}
         {discountPct > 0 && (
           <span className="absolute top-3 left-3 z-10 rounded-full bg-polished-gold text-[10px] font-bold px-2.5 py-1 text-dark-charcoal shadow-sm">
