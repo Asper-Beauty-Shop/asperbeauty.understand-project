@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { CountdownBanner } from "@/components/offers/CountdownBanner";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -301,6 +302,9 @@ export default function Offers() {
           </div>
         </div>
       </section>
+
+      {/* Countdown Banner */}
+      {saleProducts.length > 0 && <CountdownBanner isAr={isAr} />}
 
       {/* Filters & Content */}
       <main className="py-10 md:py-16">
