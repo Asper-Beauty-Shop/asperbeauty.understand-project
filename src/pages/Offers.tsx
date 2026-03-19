@@ -373,7 +373,7 @@ export default function Offers() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {saleProducts.map((product) => (
-                <SaleProductCard key={product.id} product={product} onQuickView={handleQuickView} />
+                <SaleProductCard key={product.id} product={product} onQuickView={handleQuickView} isFlashDeal={flashDealIds.has(product.id)} />
               ))}
             </div>
           )}
