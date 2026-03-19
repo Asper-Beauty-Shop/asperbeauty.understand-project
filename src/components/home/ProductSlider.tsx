@@ -43,7 +43,12 @@ export const ProductSlider = ({
   };
 
   return (
-    <section className="py-20 lg:py-28 bg-asper-stone-light relative overflow-hidden">
+    <section
+      className="py-20 lg:py-28 relative overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, hsl(240 100% 99%) 0%, hsl(0 0% 100%) 40%, hsl(240 50% 99.5%) 100%)",
+      }}
+    >
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-polished-gold/30 to-transparent" />
 
       <div className="luxury-container">
@@ -100,30 +105,30 @@ export const ProductSlider = ({
                   to={`/product/${handle}`}
                   className="group flex-shrink-0 w-64 lg:w-72"
                 >
-                  {/* Floating Card — No borders, no background */}
-                  <div className="relative">
+                  {/* Clinical Glass Card */}
+                  <div className="relative clinical-glass-card rounded-lg p-4 overflow-hidden">
                     {/* Clinical Shimmer Beam */}
-                    <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-polished-white/50 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
+                    <div className="absolute top-0 -left-[150%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-[20deg] pointer-events-none z-20 group-hover:left-[150%] transition-all duration-700 ease-in-out" />
 
-                    {/* Image — floats directly on background */}
-                    <div className="relative aspect-[5/6] overflow-hidden mb-5">
+                    {/* Image — transparent PNG floats inside glass */}
+                    <div className="relative aspect-[5/6] overflow-hidden mb-4">
                       <img
                         src={imgSrc}
                         alt={product.title}
-                        className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
+                        className="h-full w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
                         loading="lazy"
                       />
                     </div>
 
                     {/* Typography Hierarchy */}
                     <div className="space-y-2">
-                    {/* Clinical pill tag — gold for heritage badges */}
+                      {/* Clinical pill tag */}
                       {clinicalTag && (
                         <span className={cn(
                           "inline-block font-body text-[9px] uppercase tracking-[0.15em] px-3 py-1 rounded-full",
                           clinicalTag === "Jordanian Heritage" || clinicalTag === "Local Favorite"
-                            ? "bg-polished-gold/10 text-polished-gold border border-polished-gold/50 font-semibold"
-                            : "text-polished-gold border border-polished-gold/40"
+                            ? "bg-accent/10 text-accent border border-accent/50 font-semibold"
+                            : "text-accent border border-accent/40"
                         )}>
                           {clinicalTag}
                         </span>
@@ -131,21 +136,21 @@ export const ProductSlider = ({
 
                       {/* Brand — Gold micro label */}
                       {product.brand && (
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-polished-gold font-body font-semibold">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-accent font-body font-semibold">
                           {product.brand}
                         </p>
                       )}
 
-                      {/* Product Name — Playfair */}
-                      <h3 className="font-heading text-sm text-asper-ink line-clamp-2 leading-snug font-semibold">
+                      {/* Product Name */}
+                      <h3 className="font-heading text-sm text-foreground line-clamp-2 leading-snug font-semibold">
                         {product.title}
                       </h3>
 
                       {/* CTA text */}
                       <span
                         className={cn(
-                          "inline-flex items-center gap-1.5 text-xs font-body text-burgundy font-semibold uppercase tracking-wider mt-1",
-                          "group-hover:text-polished-gold transition-colors duration-300"
+                          "inline-flex items-center gap-1.5 text-xs font-body text-primary font-semibold uppercase tracking-wider mt-1",
+                          "group-hover:text-accent transition-colors duration-300"
                         )}
                       >
                         {isArabic ? "تسوق الآن" : "Add to Regimen"}

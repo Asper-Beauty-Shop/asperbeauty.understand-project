@@ -24,23 +24,27 @@ export default function ClinicalLuxuryHero() {
 
   return (
     <section ref={sectionRef} className="relative w-full min-h-[600px] bg-background overflow-hidden" style={{ height: "100dvh" }}>
-      {/* Subtle radial glow behind image */}
+      {/* Layered radial glows for glass depth */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
-          background:
+          background: [
+            "radial-gradient(ellipse 50% 40% at 30% 60%, hsl(43 69% 46% / 0.04) 0%, transparent 60%)",
             "radial-gradient(ellipse 60% 50% at 65% 50%, hsl(43 69% 46% / 0.06) 0%, transparent 70%)",
+            "radial-gradient(ellipse 40% 30% at 80% 20%, hsl(345 100% 25% / 0.02) 0%, transparent 50%)",
+          ].join(", "),
         }}
       />
 
       {/* ── Desktop: Split Layout ── */}
       <div className="hidden md:flex h-full">
-        {/* Left — Copy */}
+        {/* Left — Copy inside frosted glass panel */}
         <div className="flex flex-col justify-center w-1/2 px-12 lg:px-20 xl:px-28 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: LUXURY_EASE, delay: 0.1 }}
+            className="clinical-glass rounded-lg p-8 lg:p-10 xl:p-12"
           >
             {/* Eyebrow */}
             <span className="font-body text-[10px] md:text-[11px] uppercase tracking-[0.45em] text-accent font-semibold mb-5 block">
@@ -89,7 +93,7 @@ export default function ClinicalLuxuryHero() {
                 : "Trusted clinical solutions for ageless radiance — dispensed directly from the pharmacist's shelf to you."}
             </motion.p>
 
-            {/* CTA row */}
+            {/* CTA row — solid buttons that break the glass plane */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -103,8 +107,8 @@ export default function ClinicalLuxuryHero() {
                              bg-primary text-primary-foreground
                              font-body text-[11px] md:text-[12px] uppercase tracking-[0.3em] font-semibold
                              hover:bg-burgundy-dark hover:shadow-maroon-glow
-                             transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]
-                             hover:-translate-y-0.5"
+                             hover:scale-[1.02]
+                             transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)]"
                 >
                   {isAr ? "تسوقي الآن" : "Shop Now"}
                   <ArrowRight
