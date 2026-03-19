@@ -516,9 +516,14 @@ export const Header = () => {
                 <Link
                   to="/offers"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-body text-burgundy font-medium"
+                  className="font-body text-burgundy font-medium flex items-center gap-2"
                 >
-                  {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶" : "Offers"}
+                  {language === "ar" ? "العروض" : "Sale"}
+                  {saleCount > 0 && (
+                    <span className="min-w-[20px] h-[20px] flex items-center justify-center rounded-full bg-polished-gold text-dark-charcoal text-[10px] font-bold px-1">
+                      {saleCount}
+                    </span>
+                  )}
                 </Link>
                 <Link
                   to={user ? "/account" : "/auth"}
