@@ -129,9 +129,13 @@ export const ShopByProtocol = () => {
           </div>
         </AnimatedSection>
 
-        <AnimatedSection animation="fade-up" delay={150}>
-          {/* 1 col mobile → 2 col sm → 3 col lg */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6"
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-50px" }}
+        >
             {PROTOCOLS.map((protocol) => (
               <Link
                 key={protocol.id}
