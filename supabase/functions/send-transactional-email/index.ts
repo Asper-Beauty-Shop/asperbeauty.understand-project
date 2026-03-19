@@ -79,6 +79,24 @@ Deno.serve(async (req) => {
       )
     }
 
+    // Check if user is admin
+    const { data: adminRole } = await supabaseClient
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .maybeSingle()
+
+    const isAdmin = !!adminRole
+
+    // Non-admin users can only send to their own email
+    if (!isAdmin && to.toLowerCase() !== user.email?.toLowerCase()) {
+      return new Response(
+        JSON.stringify({ error: 'Forbidden: recipient mismatch' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     const template = TEMPLATES[template_name]
     if (!template) {
       return new Response(

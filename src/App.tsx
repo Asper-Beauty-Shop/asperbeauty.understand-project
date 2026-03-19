@@ -114,19 +114,19 @@ const App = () => {
                 <Route path="/intelligence" element={<AsperIntelligence />} />
                 <Route path="/health" element={<Health />} />
                 <Route path="/portal/regimen/:id" element={<RegimenPortal />} />
-                <Route path="/admin/bulk-upload" element={<BulkUpload />} />
-                <Route path="/admin/orders" element={<AdminOrders />} />
-                <Route path="/admin/products" element={<ManageProducts />} />
-                <Route path="/admin/catalog-ingestion" element={<CatalogIngestion />} />
+                <Route path="/admin/bulk-upload" element={<RequireAdmin><BulkUpload /></RequireAdmin>} />
+                <Route path="/admin/orders" element={<RequireAdmin><AdminOrders /></RequireAdmin>} />
+                <Route path="/admin/products" element={<RequireAdmin><ManageProducts /></RequireAdmin>} />
+                <Route path="/admin/catalog-ingestion" element={<RequireAdmin><CatalogIngestion /></RequireAdmin>} />
                 <Route path="/track-order" element={<TrackOrder />} />
                 <Route path="/tracking" element={<Navigate to="/track-order" replace />} />
                 <Route path="/shipping" element={<Navigate to="/contact" replace />} />
                 <Route path="/returns" element={<Navigate to="/contact" replace />} />
                 <Route path="/consultation" element={<Navigate to="/skin-concerns" replace />} />
-                <Route path="/driver" element={<DriverDashboard />} />
-                <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
-                <Route path="/admin/purge-review" element={<PurgeReview />} />
-                <Route path="/admin/emails" element={<AdminEmailDashboard />} />
+                <Route path="/driver" element={<RequireAdmin><DriverDashboard /></RequireAdmin>} />
+                <Route path="/admin/audit-logs" element={<RequireAdmin><AdminAuditLogs /></RequireAdmin>} />
+                <Route path="/admin/purge-review" element={<RequireAdmin><PurgeReview /></RequireAdmin>} />
+                <Route path="/admin/emails" element={<RequireAdmin><AdminEmailDashboard /></RequireAdmin>} />
                 <Route
                   path="/brand-intelligence"
                   element={
