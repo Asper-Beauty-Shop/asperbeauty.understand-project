@@ -63,10 +63,36 @@ const PROTOCOLS = [
   },
 ];
 
+const LUXURY_EASE = [0.25, 0.1, 0.25, 1] as const;
+
+const gridVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: (prefersReducedMotion: boolean) => ({
+    opacity: 0,
+    ...(prefersReducedMotion ? {} : { y: 28, scale: 0.98 }),
+  }),
+  show: (prefersReducedMotion: boolean) => ({
+    opacity: 1,
+    ...(prefersReducedMotion ? {} : { y: 0, scale: 1 }),
+    transition: { duration: 0.6, ease: LUXURY_EASE },
+  }),
+};
+
 export const ShopByProtocol = () => {
   const { language } = useLanguage();
   const isArabic = language === "ar";
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <section className="py-14 sm:py-20 lg:py-28 relative overflow-hidden bg-gradient-to-br from-background to-secondary/30">
