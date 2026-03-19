@@ -1,4 +1,5 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import asperLogoHorizontal from "@/assets/asper-logo-horizontal.png";
 import { AsperWordmark } from "@/components/ui/AsperWordmark";
 import { Link, useLocation } from "react-router-dom";
@@ -62,6 +63,21 @@ export const Header = () => {
   const { language, isRTL } = useLanguage();
   const location = useLocation();
   const isHomepage = location.pathname === "/";
+
+  // Sale count for nav badge
+  const { data: saleCount = 0 } = useQuery({
+    queryKey: ["sale-count"],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("products")
+        .select("id", { count: "exact", head: true })
+        .eq("is_on_sale", true)
+        .neq("availability_status", "Pending_Purge");
+      if (error) return 0;
+      return count ?? 0;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 60);
@@ -226,11 +242,16 @@ export const Header = () => {
                 <Link
                   to="/offers"
                   className={cn(
-                    "font-body text-sm font-medium transition-colors",
+                    "font-body text-sm font-medium transition-colors relative",
                     textColor, textColorHover
                   )}
                 >
-                  {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶" : "Offers"}
+                  {language === "ar" ? "العروض" : "Sale"}
+                  {saleCount > 0 && (
+                    <span className="absolute -top-2 -right-5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-polished-gold text-dark-charcoal text-[9px] font-bold px-1 shadow-sm">
+                      {saleCount}
+                    </span>
+                  )}
                 </Link>
               </nav>
             </div>
@@ -495,9 +516,14 @@ export const Header = () => {
                 <Link
                   to="/offers"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-body text-burgundy font-medium"
+                  className="font-body text-burgundy font-medium flex items-center gap-2"
                 >
-                  {language === "ar" ? "Ø§Ù„Ø¹Ø±ÙˆØ¶" : "Offers"}
+                  {language === "ar" ? "العروض" : "Sale"}
+                  {saleCount > 0 && (
+                    <span className="min-w-[20px] h-[20px] flex items-center justify-center rounded-full bg-polished-gold text-dark-charcoal text-[10px] font-bold px-1">
+                      {saleCount}
+                    </span>
+                  )}
                 </Link>
                 <Link
                   to={user ? "/account" : "/auth"}
