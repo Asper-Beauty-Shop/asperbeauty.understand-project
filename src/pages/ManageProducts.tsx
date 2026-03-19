@@ -65,6 +65,9 @@ interface Product {
   image_url: string | null;
   brand: string | null;
   pharmacist_note: string | null;
+  is_on_sale: boolean;
+  original_price: number | null;
+  discount_percent: number | null;
   created_at: string;
   updated_at: string;
   [key: string]: unknown;
@@ -793,16 +796,16 @@ const ManageProducts = () => {
                           </span>
                         </TableCell>
                         <TableCell className="text-right">
-                          {(product as any).is_on_sale && (product as any).original_price ? (
+                          {product.is_on_sale && product.original_price ? (
                             <div className="flex flex-col items-end">
                               <span className="line-through text-muted-foreground text-xs">
-                                {formatJOD(Number((product as any).original_price))}
+                                {formatJOD(Number(product.original_price))}
                               </span>
                               <span className="font-semibold text-destructive">
                                 {formatJOD(Number(product.price))}
                               </span>
                               <Badge className="bg-destructive/10 text-destructive border-destructive/20 text-[10px] mt-0.5">
-                                {(product as any).discount_percent}% OFF
+                                {product.discount_percent}% OFF
                               </Badge>
                             </div>
                           ) : (
@@ -860,7 +863,7 @@ const ManageProducts = () => {
       <BulkSaleManager
         open={isSaleDialogOpen}
         onOpenChange={setIsSaleDialogOpen}
-        products={products as any}
+        products={products}
         onComplete={async () => {
           const { data } = await supabase
             .from("products")

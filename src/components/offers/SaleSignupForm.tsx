@@ -30,8 +30,8 @@ export function SaleSignupForm({ isAr }: SaleSignupFormProps) {
     try {
       setIsSubmitting(true);
       const { error } = await supabase
-        .from("sale_subscribers" as any)
-        .insert({ email: result.data } as any);
+        .from("sale_subscribers")
+        .insert({ email: result.data });
 
       if (error) {
         if (error.code === "23505") {

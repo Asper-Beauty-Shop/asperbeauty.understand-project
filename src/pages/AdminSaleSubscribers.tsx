@@ -25,7 +25,7 @@ function SaleSubscribersContent() {
     queryKey: ["sale-subscribers"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("sale_subscribers" as any)
+        .from("sale_subscribers")
         .select("*")
         .order("subscribed_at", { ascending: false });
       if (error) throw error;
