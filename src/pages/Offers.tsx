@@ -29,6 +29,7 @@ import {
   Sparkles,
   Tag,
   Timer,
+  Zap,
 } from "lucide-react";
 import { ProductQuickView } from "@/components/ProductQuickView";
 import type { Tables } from "@/integrations/supabase/types";
@@ -47,7 +48,7 @@ const LuxuryPrice = ({ amount, currency = "JOD" }: { amount: number | null; curr
   );
 };
 
-const SaleProductCard = ({ product, onQuickView }: { product: Product; onQuickView: (p: Product) => void }) => {
+const SaleProductCard = ({ product, onQuickView, isFlashDeal }: { product: Product; onQuickView: (p: Product) => void; isFlashDeal?: boolean }) => {
   const { locale } = useLanguage();
   const addItem = useCartStore((s) => s.addItem);
   const imageUrl = product.image_url || "/editorial-showcase-2.webp";
@@ -106,6 +107,13 @@ const SaleProductCard = ({ product, onQuickView }: { product: Product; onQuickVi
           <img src={imageUrl} alt={product.title} className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" loading="lazy" />
         ) : (
           <Package className="h-16 w-16 text-muted-foreground/30" />
+        )}
+        {/* Flash Deal badge */}
+        {isFlashDeal && (
+          <span className="absolute top-3 right-14 z-20 flex items-center gap-1 rounded-full bg-destructive px-2.5 py-1 text-[10px] font-bold text-destructive-foreground shadow-md animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]">
+            <Zap className="w-3 h-3" />
+            Flash Deal
+          </span>
         )}
         {/* Sale badge */}
         {discountPct > 0 && (
@@ -204,6 +212,11 @@ export default function Offers() {
       if (p.original_price && p.price) return acc + (p.original_price - p.price);
       return acc;
     }, 0);
+  }, [saleProducts]);
+
+  const flashDealIds = useMemo(() => {
+    const sorted = [...saleProducts].sort((a, b) => (b.discount_percent ?? 0) - (a.discount_percent ?? 0));
+    return new Set(sorted.slice(0, 3).map((p) => p.id));
   }, [saleProducts]);
 
   const handleQuickView = (product: Product) => {
@@ -360,7 +373,7 @@ export default function Offers() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {saleProducts.map((product) => (
-                <SaleProductCard key={product.id} product={product} onQuickView={handleQuickView} />
+                <SaleProductCard key={product.id} product={product} onQuickView={handleQuickView} isFlashDeal={flashDealIds.has(product.id)} />
               ))}
             </div>
           )}
