@@ -10,7 +10,7 @@ import { BrowserRouter } from "react-router-dom";
 
 // ── Polyfill IntersectionObserver for jsdom ──
 beforeAll(() => {
-  global.IntersectionObserver = class {
+  (globalThis as any).IntersectionObserver = class {
     observe() {}
     unobserve() {}
     disconnect() {}
