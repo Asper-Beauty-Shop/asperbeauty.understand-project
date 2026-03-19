@@ -64,6 +64,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const prefersReduced = useReducedMotion();
 
   const addItem = useCartStore((state) => state.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
