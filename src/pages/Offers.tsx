@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { CountdownBanner } from "@/components/offers/CountdownBanner";
+import { SaleSignupForm } from "@/components/offers/SaleSignupForm";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -379,6 +380,9 @@ export default function Offers() {
           )}
         </div>
       </main>
+
+      {/* Sale signup form */}
+      <SaleSignupForm isAr={isAr} />
 
       <Footer />
 
