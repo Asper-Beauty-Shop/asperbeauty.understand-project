@@ -104,7 +104,14 @@ const ShopProductCard = ({
             </p>
           )}
           <div className="flex items-center justify-between mt-auto">
-            <LuxuryPrice amount={product.price} />
+            <div className="flex items-baseline gap-1.5">
+              <LuxuryPrice amount={product.price} />
+              {product.is_on_sale && product.original_price && (
+                <span className="text-xs line-through text-muted-foreground font-body">
+                  {product.original_price.toFixed(2)}
+                </span>
+              )}
+            </div>
             <Button onClick={handleAddToCart} size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs btn-ripple">
               <ShoppingBag className="w-3.5 h-3.5 me-1" />
               {locale === "ar" ? "\u0625\u0636\u0627\u0641\u0629" : "Add"}
