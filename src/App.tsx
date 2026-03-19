@@ -40,6 +40,7 @@ import AdminEmailDashboard from "./pages/AdminEmailDashboard";
 import AsperIntelligence from "./pages/AsperIntelligence";
 import PurgeReview from "./pages/PurgeReview";
 import BrandIntelligenceDashboard from "./pages/BrandIntelligenceDashboard";
+import AdminSaleSubscribers from "./pages/AdminSaleSubscribers";
 import Health from "./pages/Health";
 import RegimenPortal from "./pages/RegimenPortal";
 import { RequireAdmin } from "./components/RequireAdmin";
@@ -127,6 +128,7 @@ const App = () => {
                 <Route path="/admin/audit-logs" element={<RequireAdmin><AdminAuditLogs /></RequireAdmin>} />
                 <Route path="/admin/purge-review" element={<RequireAdmin><PurgeReview /></RequireAdmin>} />
                 <Route path="/admin/emails" element={<RequireAdmin><AdminEmailDashboard /></RequireAdmin>} />
+                <Route path="/admin/sale-subscribers" element={<AdminSaleSubscribers />} />
                 <Route
                   path="/brand-intelligence"
                   element={
