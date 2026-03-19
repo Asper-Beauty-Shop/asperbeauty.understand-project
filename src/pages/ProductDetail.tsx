@@ -301,6 +301,34 @@ const ProductDetail = () => {
               <ShareButtons url={window.location.href} title={`${isArabic ? "اكتشف" : "Check out"} ${product.title}`} />
             </div>
 
+            {/* ─── Key Clinical Actives — Frosted Glass Cards ─── */}
+            {product.key_ingredients && product.key_ingredients.length > 0 && (
+              <div className="mb-10">
+                <div className="flex items-center gap-2 mb-6">
+                  <Beaker className="w-4 h-4 text-burgundy" />
+                  <h3 className="font-serif text-lg text-asper-ink">
+                    {isArabic ? "المكونات السريرية الفعالة" : "Key Clinical Actives"}
+                  </h3>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {product.key_ingredients.map((ingredient) => (
+                    <div
+                      key={ingredient}
+                      className="clinical-glass rounded-sm p-5 transition-colors duration-300 hover:-translate-y-0.5"
+                      style={{
+                        border: "1px solid hsl(var(--polished-gold) / 0.2)",
+                      }}
+                    >
+                      <h4 className="font-body font-bold text-sm text-asper-ink mb-1">{ingredient}</h4>
+                      <p className="text-xs text-muted-foreground leading-relaxed font-body">
+                        {isArabic ? "مكون فعال سريرياً" : "Clinically active ingredient"}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* ─── Clinical Accordions — Gold dividers ─── */}
             <Accordion type="multiple" className="w-full" style={{ borderTop: "1px solid hsl(var(--polished-gold) / 0.2)" }}>
               {/* How to Use */}
