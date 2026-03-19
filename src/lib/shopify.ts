@@ -151,7 +151,7 @@ export async function fetchProducts(
   first: number = 24,
   _query?: string,
 ): Promise<ShopifyProduct[]> {
-  let q = supabase
+  const q = supabase
     .from("products")
     .select(PRODUCT_COLUMNS)
     .eq("availability_status", "In_Stock")
@@ -214,7 +214,7 @@ export async function searchProducts(
   if (error) {
     // Fallback to ilike text search if the RPC is unavailable.
     // Sanitize to remove characters that break the PostgREST filter syntax.
-    const sanitized = searchTerm.replace(/[%_,()\[\]]/g, " ").trim();
+    const sanitized = searchTerm.replace(/[%_,()[\]]/g, " ").trim();
     const term = `%${sanitized}%`;
     const { data: fallback, error: fallbackError } = await supabase
       .from("products")
@@ -226,10 +226,10 @@ export async function searchProducts(
       console.error("searchProducts error:", fallbackError);
       return [];
     }
-    return (fallback ?? []).map((row: any) => rowToProduct(row));
+    return (fallback ?? []).map((row: DbRow) => rowToProduct(row));
   }
 
-  return (data ?? []).map((row: any) => rowToProduct(row));
+  return (data ?? []).map((row: DbRow) => rowToProduct(row));
 }
 
 export async function fetchProductByHandle(handle: string) {
@@ -242,7 +242,7 @@ export async function fetchProductByHandle(handle: string) {
 
   if (error || !data) return null;
 
-  const p = rowToProduct(data as any);
+  const p = rowToProduct(data as DbRow);
   return p.node;
 }
 

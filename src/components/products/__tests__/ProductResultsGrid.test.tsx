@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ProductResultsGrid } from "../ProductResultsGrid";
+import type { ShopifyProduct } from "@/lib/shopify";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
@@ -94,7 +95,7 @@ describe("ProductResultsGrid", () => {
     };
 
     renderWithProviders(
-      <ProductResultsGrid products={[mockProduct as any]} isLoading={false} error={null} />
+      <ProductResultsGrid products={[mockProduct as ShopifyProduct]} isLoading={false} error={null} />
     );
     expect(screen.getByText("Test Serum")).toBeInTheDocument();
     expect(screen.getByText(/showing 1 products/i)).toBeInTheDocument();

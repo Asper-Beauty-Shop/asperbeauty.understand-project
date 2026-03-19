@@ -1,4 +1,5 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { Link, useParams } from "react-router-dom";
 import pdpHowToUse from "@/assets/pdp-how-to-use.jpg";
@@ -35,6 +36,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { SafetyBadges } from "@/components/product/SafetyBadges";
+import { getIngredientBenefit } from "@/lib/ingredientBenefits";
 import type { Tables } from "@/integrations/supabase/types";
 
 type DbProduct = Tables<"products">;
@@ -57,6 +59,7 @@ const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
   const { locale } = useLanguage();
   const isArabic = locale === "ar";
+  const prefersReduced = useReducedMotion();
   const [product, setProduct] = useState<DbProduct | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -321,7 +324,47 @@ const ProductDetail = () => {
               <ShareButtons url={window.location.href} title={`${isArabic ? "Ø§ÙƒØªØ´Ù" : "Check out"} ${product.title}`} />
             </div>
 
-            {/* â”€â”€â”€ Clean PDP Accordions: Clinical data below the fold â”€â”€â”€ */}
+            {/* ─── Key Clinical Actives — Staggered Frosted Glass Cards ─── */}
+            {product.key_ingredients && product.key_ingredients.length > 0 && (
+              <div className="mb-10">
+                <div className="flex items-center gap-2 mb-6">
+                  <Beaker className="w-4 h-4 text-burgundy" />
+                  <h3 className="font-serif text-lg text-asper-ink">
+                    {isArabic ? "المكونات السريرية الفعالة" : "Key Clinical Actives"}
+                  </h3>
+                </div>
+                <motion.div
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.1 } },
+                  }}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                >
+                  {product.key_ingredients.map((ingredient) => {
+                    const benefit = getIngredientBenefit(ingredient, isArabic);
+                    return (
+                      <motion.div
+                        key={ingredient}
+                        variants={{
+                          hidden: prefersReduced ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.98 },
+                          visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } },
+                        }}
+                        className="clinical-glass rounded-sm p-5 transition-colors duration-300 hover:-translate-y-0.5"
+                        style={{ border: "1px solid hsl(var(--polished-gold) / 0.2)" }}
+                      >
+                        <h4 className="font-body font-bold text-sm text-asper-ink mb-1">{ingredient}</h4>
+                        <p className="text-xs text-muted-foreground leading-relaxed font-body">{benefit}</p>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+              </div>
+            )}
+
+            {/* ─── Clean PDP Accordions: Clinical data below the fold ─── */}
             <Accordion type="multiple" className="w-full border-t border-polished-gold/30">
               {/* How to Use */}
               <AccordionItem value="how-to-use" className="border-border">

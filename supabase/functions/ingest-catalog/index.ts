@@ -263,7 +263,7 @@ Deno.serve(async (req) => {
     // Batch upsert (50 per batch)
     const BATCH_SIZE = 50;
     let insertedCount = 0;
-    let updatedCount = 0;
+    const updatedCount = 0; // placeholder for future update tracking
     const batchErrors: string[] = [];
 
     for (let i = 0; i < validProducts.length; i += BATCH_SIZE) {

@@ -1,9 +1,10 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ShieldCheck, Sun, Moon, Info, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/stores/cartStore";
+import type { PrescriptionProduct } from "@/stores/cartStore";
 import AsperLogo from "@/components/brand/AsperLogo";
 
 interface RegimenStep {
@@ -110,7 +111,7 @@ export default function RegimenPortal() {
   const [isDecrypting, setIsDecrypting] = useState(true);
   const [portalData, setPortalData] = useState<PortalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const addItem = useCartStore((s) => s.addItem);
+  const addMultipleFromPrescription = useCartStore((s) => s.addMultipleFromPrescription);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsDecrypting(false), 1500);
@@ -182,7 +183,7 @@ export default function RegimenPortal() {
             protocolId: id.slice(0, 8).toUpperCase(),
             prescribedBy: "Dr. Sami",
             steps: regimenSteps,
-            clinicalNote: (plan as any).description || undefined,
+            clinicalNote: (plan as Record<string, unknown>).description as string | undefined,
           });
         } else {
           // Fallback: use get_tray_by_concern with a default
@@ -239,17 +240,16 @@ export default function RegimenPortal() {
     ) || 0;
 
   const handleFulfill = () => {
-    portalData?.steps.forEach((s) => {
-      if (s.product) {
-          addItem({
-            id: s.product.id,
-            title: s.product.title,
-            price: { amount: String(s.product.price), currencyCode: "JOD" },
-            image: s.product.image_url || "/editorial-showcase-2.webp",
-            quantity: 1,
-          } as any);
-      }
-    });
+    const prescriptionProducts: PrescriptionProduct[] = (portalData?.steps ?? [])
+      .filter((s) => s.product != null)
+      .map((s) => ({
+        id: s.product!.id,
+        title: s.product!.title,
+        price: s.product!.price,
+        image_url: s.product!.image_url,
+        brand: s.product!.brand,
+      }));
+    addMultipleFromPrescription(prescriptionProducts);
   };
 
   return (
