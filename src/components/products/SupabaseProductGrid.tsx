@@ -250,13 +250,14 @@ function EliteProductCard({ product, index, featured = false }: { product: Produ
             <Heart className={cn("w-4 h-4 transition-colors duration-200", wishlist ? "fill-primary text-primary" : "text-card")} />
           </button>
 
-          {/* Mobile quick-add */}
+          {/* Mobile persistent quick-add — 44px+ touch target */}
           <button
-            className="absolute bottom-2 right-2 md:hidden bg-primary text-primary-foreground p-2.5 shadow-lg active:scale-[0.95] transition-transform"
+            className="absolute bottom-2 right-2 md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 bg-primary/95 text-primary-foreground px-3 py-2.5 shadow-lg active:scale-[0.95] transition-transform font-body text-[10px] uppercase tracking-[0.15em]"
             onClick={handleAddToCart}
             aria-label={language === "ar" ? "أضف إلى الحقيبة" : "Add to Bag"}
           >
-            <ShoppingBag className="h-4 w-4" />
+            <ShoppingBag className="h-3.5 w-3.5 shrink-0" />
+            <span className="hidden xs:inline">{language === "ar" ? "أضيفي" : "+ Add"}</span>
           </button>
         </div>
       </Link>
