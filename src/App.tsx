@@ -32,6 +32,7 @@ const AdminOrders = lazy(() => import("./pages/AdminOrders"));
 const ManageProducts = lazy(() => import("./pages/ManageProducts"));
 const CatalogIngestion = lazy(() => import("./pages/CatalogIngestion"));
 const TrackOrder = lazy(() => import("./pages/TrackOrder"));
+const AdminShopify = lazy(() => import("./pages/AdminShopify"));
 import Shop from "./pages/Shop";
 import ShopAllOrganized from "./components/ShopAllOrganized";
 import DriverDashboard from "./pages/DriverDashboard";
