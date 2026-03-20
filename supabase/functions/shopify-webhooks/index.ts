@@ -105,6 +105,21 @@ Deno.serve(async (req) => {
       await handleCustomerEvent(supabase, topic, payload);
     }
 
+    // ── Collection Events ──
+    if (topic.startsWith("collections/")) {
+      await handleCollectionEvent(topic, payload);
+    }
+
+    // ── Inventory Item Events ──
+    if (topic.startsWith("inventory_items/")) {
+      await handleInventoryItemEvent(supabase, topic, payload);
+    }
+
+    // ── Discount Events ──
+    if (topic.startsWith("discounts/")) {
+      await handleDiscountEvent(topic, payload);
+    }
+
     // Mark as processed
     if (shopifyId) {
       await supabase
