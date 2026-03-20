@@ -1,28 +1,55 @@
 
 
-## Problem
+## Shopify Integration Plan
 
-Your 20 products are stored in the database and do load on the `/shop` page. However, they appear missing or replaced by placeholder data in several places due to filtering logic:
+Your Shopify store (`asper-beauty-shop-7.myshopify.com`) is now connected with **17 products**. Here's the plan to integrate it into your website.
 
-1. **Homepage "Curated for You" and "New Arrivals" grids**: These sections query the database but then filter results through `isHomepageBrand()`, which only allows premium brands (La Roche-Posay, Vichy, CeraVe, etc.). Your products use brands like "AgelessSkin", "GlowLab", "AquaDerm" which don't match, so the homepage falls back to hardcoded placeholder images.
+### Current State
+- Products are fetched from the database (Supabase `products` table)
+- Cart is local-only (Zustand with no Shopify sync)
+- No Shopify checkout — you have a COD (cash-on-delivery) flow
 
-2. **Expert-Curated Picks (DualPersonaBestsellers)**: This section queries by `asper_category` — your products do have these values set, so this section should work.
+### What Will Change
 
-3. **Product Sliders**: Same `isHomepageBrand` filter issue as #1.
+**Step 1: Add Shopify Storefront API client**
+Create `src/lib/shopifyStorefront.ts` with:
+- Storefront API helper using your token (`1ecc14ed...`) and domain (`asper-beauty-shop-7.myshopify.com`)
+- Product fetching via GraphQL (the `STOREFRONT_QUERY`)
+- Cart mutations (create, add line, update line, remove line)
+- Proper 402 billing error handling with toast
 
-## Plan
+**Step 2: Update cart store for Shopify checkout**
+Rewrite `src/stores/cartStore.ts` to:
+- Create a Shopify cart on first item add via `cartCreate` mutation
+- Track `cartId`, `checkoutUrl`, and `lineId` per item
+- Sync cart updates in real-time with Shopify API
+- Open Shopify checkout in new tab with `channel=online_store` param
+- Keep `addMultipleFromPrescription` working for the AI bot flow
 
-### Step 1: Remove the premium brand filter from homepage queries
-In `src/pages/Index.tsx`, remove the `.filter((p) => isHomepageBrand(p.brand))` calls from both the `new-arrivals-premium` and `bestsellers-premium` queries (lines 178 and 203). This will let your actual database products appear instead of being filtered out.
+**Step 3: Update `useCartSync` hook**
+Replace the no-op hook with real cart sync:
+- Query Shopify cart on page load and tab focus
+- Clear local cart if Shopify cart is empty (post-checkout)
 
-### Step 2: Remove hardcoded fallback product arrays
-Remove or deprecate the `NEW_ARRIVALS` and `BESTSELLERS` hardcoded arrays (lines 125-144) and their associated static image imports (lines 20-32). The components will always use database products instead of falling back to placeholder data that doesn't exist in the catalog.
+**Step 4: Add a Shopify products page/section**
+Create a new route or tab on `/shop` that fetches products directly from Shopify Storefront API, displaying real Shopify product images, prices, variants, and availability. Your existing Supabase-backed `/shop` page stays intact so you can use both data sources.
 
-### Step 3: Order homepage bestsellers by bestseller_rank
-Change the `bestsellers-premium` query to order by `bestseller_rank` ascending (instead of `created_at` ascending) so the homepage shows your top-ranked products first.
+**Step 5: Update product detail page**
+When navigating to a Shopify product (by handle), fetch from Storefront API instead of Supabase. Add variant selection UI (size, color) and wire "Add to Cart" to the Shopify cart store.
+
+**Step 6: Update CartDrawer checkout button**
+Replace COD checkout with "Checkout with Shopify" button that opens `checkoutUrl` in a new tab.
+
+### What Stays the Same
+- All existing Supabase product pages and admin tools remain functional
+- AI Beauty Assistant and prescription flow continue working
+- Skin Concerns, Brands, Collections pages unchanged
+- Database product management (admin) unchanged
 
 ### Technical Details
-- Files modified: `src/pages/Index.tsx`, potentially `src/constants/premiumBrands.ts` (can keep for future use)
-- No database changes needed — products are already stored and accessible
-- The `/shop` page, skin concerns page, and DualPersonaBestsellers already work with your products
+- API version: `2025-07`
+- Store domain: `asper-beauty-shop-7.myshopify.com`
+- Storefront token: `1ecc14ed9df843957873db89fbcbf6cb` (public, safe to embed in client code)
+- Cart IDs use GraphQL format: `gid://shopify/ProductVariant/...`
+- Files modified: `src/lib/shopifyStorefront.ts` (new), `src/stores/cartStore.ts`, `src/hooks/useCartSync.ts`, `src/pages/Shop.tsx`, `src/pages/ProductDetail.tsx`, cart drawer component
 
