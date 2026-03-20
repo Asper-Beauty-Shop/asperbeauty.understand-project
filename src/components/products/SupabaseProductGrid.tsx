@@ -43,15 +43,36 @@ function EliteSkeletonCard({ index }: { index: number }) {
       className="bg-card border border-border/30 overflow-hidden"
       style={{ animationDelay: `${index * 0.12}s` }}
     >
+      {/* Image — matches aspect-[3/4] of real card */}
       <div className="aspect-[3/4] w-full bg-secondary animate-skeleton-breathe" />
-      <div className="p-5 md:p-6 space-y-3">
+      {/* Content — matches p-4 md:p-6 of real card */}
+      <div className="p-4 md:p-6 space-y-2.5">
+        {/* Brand */}
         <div className="h-2.5 w-16 bg-secondary rounded-sm animate-skeleton-breathe" style={{ animationDelay: `${index * 0.12 + 0.1}s` }} />
-        <div className="h-4 w-3/4 bg-secondary rounded-sm animate-skeleton-breathe" style={{ animationDelay: `${index * 0.12 + 0.15}s` }} />
-        <div className="h-3 w-1/2 bg-secondary rounded-sm animate-skeleton-breathe" style={{ animationDelay: `${index * 0.12 + 0.2}s` }} />
-        <div className="flex gap-1.5 pt-1">
-          <div className="h-5 w-14 rounded-full bg-secondary animate-skeleton-breathe" />
-          <div className="h-5 w-18 rounded-full bg-secondary animate-skeleton-breathe" />
+        {/* Title */}
+        <div className="space-y-1.5">
+          <div className="h-3.5 w-full bg-secondary rounded-sm animate-skeleton-breathe" style={{ animationDelay: `${index * 0.12 + 0.15}s` }} />
+          <div className="h-3.5 w-2/3 bg-secondary rounded-sm animate-skeleton-breathe" style={{ animationDelay: `${index * 0.12 + 0.18}s` }} />
         </div>
+        {/* Pharmacist note */}
+        <div className="flex items-center gap-1.5">
+          <div className="h-3 w-3 bg-secondary animate-skeleton-breathe shrink-0" />
+          <div className="h-3 w-3/5 bg-secondary rounded-sm animate-skeleton-breathe" />
+        </div>
+        {/* Ingredient pills */}
+        <div className="flex gap-1.5">
+          <div className="h-5 w-14 rounded-full bg-secondary animate-skeleton-breathe" />
+          <div className="h-5 w-16 rounded-full bg-secondary animate-skeleton-breathe" />
+          <div className="h-5 w-12 rounded-full bg-secondary animate-skeleton-breathe" />
+        </div>
+        {/* Rating stars */}
+        <div className="flex gap-0.5">
+          {[0, 1, 2, 3, 4].map((s) => (
+            <div key={s} className="h-2.5 w-2.5 bg-secondary animate-skeleton-breathe" />
+          ))}
+          <div className="h-2.5 w-6 bg-secondary rounded-sm animate-skeleton-breathe ml-1" />
+        </div>
+        {/* Price */}
         <div className="h-4 w-20 bg-secondary rounded-sm animate-skeleton-breathe" />
       </div>
     </div>
