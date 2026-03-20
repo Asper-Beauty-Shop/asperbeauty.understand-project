@@ -395,8 +395,8 @@ export function SupabaseProductGrid({
     <>
       <div className={cn(
         "grid auto-rows-auto",
-        // Elite spacing — generous gaps that let products breathe
-        "gap-6 md:gap-10 lg:gap-12",
+        // Mobile-tighter gaps, generous desktop gaps
+        "gap-4 gap-y-8 md:gap-8 lg:gap-10 xl:gap-12",
         gridCols
       )}>
         {products.map((product, i) => (
