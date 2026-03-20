@@ -132,7 +132,7 @@ Deno.serve(async (req) => {
       ?? req.headers.get("cf-connecting-ip")
       ?? "unknown";
 
-    if (isRateLimited(clientIp)) {
+    if (isRateLimited(`ip:${clientIp}`, RATE_LIMIT_MAX_REQUESTS_IP)) {
       return new Response(
         JSON.stringify({ error: { code: "RATE_LIMITED", message: "Too many checkout attempts. Please wait a moment and try again." } }),
         { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" } },
