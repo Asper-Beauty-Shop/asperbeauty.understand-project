@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import {
   ArrowLeft,
+  ExternalLink,
   Loader2,
   Lock,
   Minus,
