@@ -83,6 +83,7 @@ function EliteProductCard({ product, index, featured = false }: { product: Produ
   const handle = product.handle || product.id;
   const title = product.title || product.name;
   const imageUrl = product.image_url;
+  const hoverImageUrl = (product as any).hover_image_url as string | null;
   const navigate = useNavigate();
   const { language } = useLanguage();
   const addItem = useCartStore((s) => s.addItem);
@@ -155,14 +156,36 @@ function EliteProductCard({ product, index, featured = false }: { product: Produ
           featured ? "aspect-[3/2] md:aspect-[16/10]" : "aspect-[3/4]"
         )}>
           {imageUrl ? (
-            <BlurUpImage
-              src={imageUrl}
-              alt={title}
-              className="w-full h-full object-contain mix-blend-multiply transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.04]"
-              containerClassName="h-full w-full"
-              blurAmount={15}
-              transitionDuration={400}
-            />
+            <>
+              {/* Primary Image — fades out on hover if secondary exists */}
+              <BlurUpImage
+                src={imageUrl}
+                alt={title}
+                className={cn(
+                  "w-full h-full object-contain mix-blend-multiply transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]",
+                  hoverImageUrl
+                    ? "group-hover:opacity-0 group-hover:scale-[1.02]"
+                    : "group-hover:scale-[1.04]"
+                )}
+                containerClassName="h-full w-full"
+                blurAmount={15}
+                transitionDuration={400}
+              />
+
+              {/* Secondary Hover Image — slow cross-fade in */}
+              {hoverImageUrl && (
+                <div className="absolute inset-0">
+                  <BlurUpImage
+                    src={hoverImageUrl}
+                    alt={`${title} — alternate view`}
+                    className="w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-in-out group-hover:opacity-100"
+                    containerClassName="h-full w-full"
+                    blurAmount={15}
+                    transitionDuration={400}
+                  />
+                </div>
+              )}
+            </>
           ) : (
             <div className="h-full w-full flex items-center justify-center">
               <Package className="h-12 w-12 text-muted-foreground/30" />
