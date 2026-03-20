@@ -232,19 +232,17 @@ const Index = () => {
 
         {/* ═══ Elegant Editorial Product Grid ═══ */}
         <ElegantProductGrid
-          products={[
-            ...(bestsellers.length > 0 ? bestsellers : BESTSELLERS).map((p) => ({
-              id: p.id,
-              handle: "handle" in p ? (p as { handle: string }).handle : p.id,
-              title: p.title,
-              brand: p.brand,
-              price: "price" in p ? (p as { price: number }).price : 0,
-              image_url: "image_url" in p ? (p as { image_url: string }).image_url : ("image" in p ? String((p as { image: unknown }).image) : ""),
-              tag: "tag" in p ? (p as { tag?: string }).tag : undefined,
-              category: "category" in p ? (p as { category?: string }).category : undefined,
-              is_new: "is_new" in p ? (p as { is_new?: boolean }).is_new : false,
-            })),
-          ]}
+          products={bestsellers.map((p) => ({
+            id: p.id,
+            handle: p.handle,
+            title: p.title,
+            brand: p.brand,
+            price: p.price,
+            image_url: p.image_url,
+            tag: p.tag,
+            category: p.category,
+            is_new: false,
+          }))}
           title={{ en: "Curated for You", ar: "مختارة لكِ" }}
           subtitle={{ en: "Pharmacist Approved", ar: "بإشراف صيدلاني" }}
           showCategoryFilter={false}
