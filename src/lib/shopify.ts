@@ -104,7 +104,7 @@ interface DbRow {
 
 function rowToProduct(row: DbRow): ShopifyProduct {
   const title = row.title || row.name || "Unnamed Product";
-  const inStock = row.availability_status === "In_Stock" || (row.inventory_total != null && row.inventory_total > 0);
+  const inStock = row.availability_status === "in_stock" || (row.inventory_total != null && row.inventory_total > 0);
   return {
     node: {
       id: row.id,
