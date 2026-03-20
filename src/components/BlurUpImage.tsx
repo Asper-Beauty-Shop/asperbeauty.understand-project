@@ -17,6 +17,8 @@ interface BlurUpImageProps
   blurAmount?: number;
   /** Transition duration in ms (default: 500) */
   transitionDuration?: number;
+  /** If true, uses loading="eager" and fetchpriority="high" for above-the-fold images */
+  priority?: boolean;
 }
 
 /**
