@@ -22,6 +22,7 @@ import { ProductQuickView } from "@/components/ProductQuickView";
 import { ProductSearchFilters, type FilterState } from "@/components/ProductSearchFilters";
 import { cn } from "@/lib/utils";
 import { mapCategoryToConcerns } from "@/lib/categoryHierarchy";
+import { FilterBarSkeleton } from "@/components/skeletons/FilterBarSkeleton";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Product = Tables<"products">;
