@@ -91,6 +91,11 @@ Deno.serve(async (req) => {
       await handleProductEvent(supabase, topic, payload);
     }
 
+    // ── Inventory Level Events ──
+    if (topic === "inventory_levels/update" || topic === "inventory_levels/connect") {
+      await handleInventoryLevelEvent(supabase, payload);
+    }
+
     // ── Customer Events ──
     if (topic.startsWith("customers/")) {
       await handleCustomerEvent(supabase, topic, payload);
