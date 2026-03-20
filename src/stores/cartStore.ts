@@ -101,6 +101,11 @@ function prescriptionToCartItem(p: PrescriptionProduct): Omit<CartItem, "lineId"
   };
 }
 
+/** Returns true if the variant ID looks like a Shopify GID (eligible for Storefront API calls). */
+function isShopifyVariant(variantId: string): boolean {
+  return variantId.startsWith("gid://shopify/");
+}
+
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
