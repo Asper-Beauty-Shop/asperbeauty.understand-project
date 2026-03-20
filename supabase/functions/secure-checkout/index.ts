@@ -99,7 +99,18 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-    // --- Rate Limiting (persistent, DB-backed) ---
+  try {
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    // --- Periodic cleanup (fire-and-forget, ~1% of requests) ---
+    if (Math.random() < 0.01) {
+      supabaseAdmin.rpc("cleanup_rate_limit_entries", { older_than_seconds: 120 }).then(() => {});
+    }
+
+    // --- IP-based Rate Limiting (persistent, DB-backed) ---
     const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
       ?? req.headers.get("cf-connecting-ip")
       ?? "unknown";
@@ -119,11 +130,6 @@ Deno.serve(async (req) => {
 
     // --- Auth (optional for guest checkout) ---
     const authHeader = req.headers.get("authorization") ?? "";
-
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
 
     let userId: string | null = null;
     if (authHeader.startsWith("Bearer ")) {
@@ -145,8 +151,14 @@ Deno.serve(async (req) => {
 
     const payload = validation.data!;
 
-    // --- Phone-based rate limiting (prevents abuse from shared networks) ---
-    if (isRateLimited(`phone:${payload.customerPhone}`, RATE_LIMIT_MAX_REQUESTS_PHONE)) {
+    // --- Phone-based rate limiting (persistent, DB-backed) ---
+    const { data: phoneLimited } = await supabaseAdmin.rpc("check_rate_limit", {
+      p_key: `phone:${payload.customerPhone}`,
+      p_window_seconds: RATE_LIMIT_WINDOW_SECONDS,
+      p_max_requests: RATE_LIMIT_MAX_REQUESTS_PHONE,
+    });
+
+    if (phoneLimited) {
       return new Response(
         JSON.stringify({ error: { code: "RATE_LIMITED", message: "Too many orders from this phone number. Please wait a moment and try again." } }),
         { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" } },
