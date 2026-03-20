@@ -598,6 +598,36 @@ export type Database = {
         }
         Relationships: []
       }
+      shopify_webhook_log: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          payload: Json
+          processed: boolean
+          shopify_id: string | null
+          topic: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          payload?: Json
+          processed?: boolean
+          shopify_id?: string | null
+          topic: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          payload?: Json
+          processed?: boolean
+          shopify_id?: string | null
+          topic?: string
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string

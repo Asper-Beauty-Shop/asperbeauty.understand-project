@@ -32,6 +32,7 @@ const AdminOrders = lazy(() => import("./pages/AdminOrders"));
 const ManageProducts = lazy(() => import("./pages/ManageProducts"));
 const CatalogIngestion = lazy(() => import("./pages/CatalogIngestion"));
 const TrackOrder = lazy(() => import("./pages/TrackOrder"));
+const AdminShopify = lazy(() => import("./pages/AdminShopify"));
 import Shop from "./pages/Shop";
 import ShopAllOrganized from "./components/ShopAllOrganized";
 import DriverDashboard from "./pages/DriverDashboard";
@@ -129,6 +130,7 @@ const App = () => {
                 <Route path="/admin/purge-review" element={<RequireAdmin><PurgeReview /></RequireAdmin>} />
                 <Route path="/admin/emails" element={<RequireAdmin><AdminEmailDashboard /></RequireAdmin>} />
                 <Route path="/admin/sale-subscribers" element={<AdminSaleSubscribers />} />
+                <Route path="/admin/shopify" element={<RequireAdmin><AdminShopify /></RequireAdmin>} />
                 <Route
                   path="/brand-intelligence"
                   element={
