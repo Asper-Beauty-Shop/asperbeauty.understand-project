@@ -16,20 +16,8 @@ import { CuratedClinicalGrid } from "@/components/CuratedClinicalGrid";
 import { Footer } from "@/components/Footer";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
-import { isHomepageBrand } from "@/constants/premiumBrands";
-import ceraveCleanserImg from "@/assets/products/cerave-foaming-cleanser.png";
-import vichyAmpoulesImg from "@/assets/products/vichy-liftactiv-ampoules.png";
-import biodermaSensibioImg from "@/assets/products/bioderma-sensibio-h2o.png";
-import lrpTolerianeMoisturizerImg from "@/assets/products/lrp-toleriane-ultra.png";
-import biodermaSensibioArImg from "@/assets/products/bioderma-sensibio-ar.png";
-import lrpTolerianewashImg from "@/assets/products/lrp-toleriane-wash.png";
-import vichyCapitalSoleilImg from "@/assets/products/vichy-capital-soleil.png";
-import vichyNormadermImg from "@/assets/products/vichy-normaderm.png";
-import ceraveMoisturizingCreamImg from "@/assets/products/cerave-moisturizing-cream.png";
-import olaplexNo7Img from "@/assets/products/olaplex-no7-bonding-oil.png";
-import neocellCollagenImg from "@/assets/products/neocell-collagen-c.png";
-import eucerinSunImg from "@/assets/products/eucerin-sun-hydro-spf50.png";
-import aminasCalendulaImg from "@/assets/products/aminas-calendula-cream.png";
+
+
 
 // Lazy load below-the-fold components
 const MorningSpaRitualBanner = lazy(() =>
@@ -121,27 +109,8 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
   </div>
 );
 
-// Sample product data for sliders
-const NEW_ARRIVALS = [
-  { id: "1", handle: "cerave-moisturizing-cream", title: "Moisturizing Cream", brand: "CeraVe", image: ceraveMoisturizingCreamImg, tag: "Dermat-Tested" },
-  { id: "2", handle: "olaplex-no7-bonding-oil", title: "No.7 Bonding Oil", brand: "Olaplex", image: olaplexNo7Img, tag: "Just In" },
-  { id: "3", handle: "neocell-super-collagen-c", title: "Super Collagen + C", brand: "NeoCell", image: neocellCollagenImg, tag: "Wellness" },
-  { id: "4", handle: "eucerin-sun-hydro-protect-spf50", title: "Sun Hydro Protect Ultra-Light Fluid SPF50+", brand: "Eucerin", image: eucerinSunImg, tag: "Clinical" },
-  { id: "5", handle: "vichy-capital-soleil-uv-age", title: "Capital Soleil UV-Age Daily SPF 50+", brand: "Vichy", image: vichyCapitalSoleilImg },
-  { id: "6", handle: "bioderma-sensibio-h2o", title: "Sensibio H2O Micellar Water", brand: "Bioderma", image: biodermaSensibioImg, tag: "Bestseller" },
-];
 
-const BESTSELLERS = [
-  { id: "7", handle: "cerave-foaming-facial-cleanser", title: "Foaming Facial Cleanser", brand: "CeraVe", image: ceraveCleanserImg, tag: "Bestseller" },
-  { id: "8", handle: "vichy-liftactiv-peptide-c-ampoules", title: "LiftActiv Peptide-C Ampoules", brand: "Vichy", image: vichyAmpoulesImg, tag: "Bestseller" },
-  { id: "9", handle: "bioderma-sensibio-h2o", title: "Sensibio H2O Micellar Water", brand: "Bioderma", image: biodermaSensibioImg },
-  { id: "10", handle: "lrp-toleriane-ultra-moisturizer", title: "Toleriane Ultra Soothing Repair Moisturizer", brand: "La Roche-Posay", image: lrpTolerianeMoisturizerImg, tag: "Bestseller" },
-  { id: "11", handle: "bioderma-sensibio-ar-cream", title: "Sensibio AR Anti-Redness Cream SPF 30", brand: "Bioderma", image: biodermaSensibioArImg },
-  { id: "12", handle: "lrp-toleriane-hydrating-wash", title: "Toleriane Hydrating Gentle Face Wash", brand: "La Roche-Posay", image: lrpTolerianewashImg, tag: "Bestseller" },
-  { id: "13", handle: "vichy-capital-soleil-uv-age", title: "Capital Soleil UV-Age Daily SPF 50+", brand: "Vichy", image: vichyCapitalSoleilImg },
-  { id: "14", handle: "vichy-normaderm-phytosolution", title: "Normaderm Phytosolution Double-Correction Care", brand: "Vichy", image: vichyNormadermImg, tag: "Bestseller" },
-  { id: "15", handle: "aminas-calendula-face-body-cream", title: "Calendula Face & Body Cream", brand: "Amina's Natural Skincare", image: aminasCalendulaImg, tag: "Jordanian Heritage" },
-];
+
 
 const Index = () => {
   const navigate = useNavigate();
@@ -172,21 +141,21 @@ const Index = () => {
         .from("products")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(30);
+        .limit(8);
       if (error) throw error;
-      return (data || [])
-        .filter((p) => isHomepageBrand(p.brand))
-        .slice(0, 8)
-        .map((p) => ({
-          id: p.id,
-          title: p.title,
-          brand: p.brand,
-          price: p.price ?? 0,
-          image_url: p.image_url || "/editorial-showcase-2.webp",
-          category: p.primary_concern,
-          tags: [] as string[],
-          is_new: true,
-        }));
+      return (data || []).map((p) => ({
+        id: p.id,
+        handle: p.handle || p.id,
+        title: p.title || p.name,
+        brand: p.brand,
+        price: p.price ?? 0,
+        image_url: p.image_url || "/editorial-showcase-2.webp",
+        image: p.image_url || "/editorial-showcase-2.webp",
+        category: p.primary_concern,
+        tag: p.clinical_badge || (p.is_bestseller ? "Bestseller" : undefined),
+        tags: [] as string[],
+        is_new: true,
+      }));
     },
   });
 
@@ -196,21 +165,21 @@ const Index = () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .order("created_at", { ascending: true })
-        .limit(30);
+        .order("bestseller_rank", { ascending: true })
+        .limit(8);
       if (error) throw error;
-      return (data || [])
-        .filter((p) => isHomepageBrand(p.brand))
-        .slice(0, 8)
-        .map((p) => ({
-          id: p.id,
-          title: p.title,
-          brand: p.brand,
-          price: p.price ?? 0,
-          image_url: p.image_url || "/editorial-showcase-2.webp",
-          category: p.primary_concern,
-          is_on_sale: false,
-        }));
+      return (data || []).map((p) => ({
+        id: p.id,
+        handle: p.handle || p.id,
+        title: p.title || p.name,
+        brand: p.brand,
+        price: p.price ?? 0,
+        image_url: p.image_url || "/editorial-showcase-2.webp",
+        image: p.image_url || "/editorial-showcase-2.webp",
+        category: p.primary_concern,
+        tag: p.clinical_badge || (p.is_bestseller ? "Bestseller" : undefined),
+        is_on_sale: p.is_on_sale,
+      }));
     },
   });
 
@@ -263,19 +232,17 @@ const Index = () => {
 
         {/* ═══ Elegant Editorial Product Grid ═══ */}
         <ElegantProductGrid
-          products={[
-            ...(bestsellers.length > 0 ? bestsellers : BESTSELLERS).map((p) => ({
-              id: p.id,
-              handle: "handle" in p ? (p as { handle: string }).handle : p.id,
-              title: p.title,
-              brand: p.brand,
-              price: "price" in p ? (p as { price: number }).price : 0,
-              image_url: "image_url" in p ? (p as { image_url: string }).image_url : ("image" in p ? String((p as { image: unknown }).image) : ""),
-              tag: "tag" in p ? (p as { tag?: string }).tag : undefined,
-              category: "category" in p ? (p as { category?: string }).category : undefined,
-              is_new: "is_new" in p ? (p as { is_new?: boolean }).is_new : false,
-            })),
-          ]}
+          products={bestsellers.map((p) => ({
+            id: p.id,
+            handle: p.handle,
+            title: p.title,
+            brand: p.brand,
+            price: p.price,
+            image_url: p.image_url,
+            tag: p.tag,
+            category: p.category,
+            is_new: false,
+          }))}
           title={{ en: "Curated for You", ar: "مختارة لكِ" }}
           subtitle={{ en: "Pharmacist Approved", ar: "بإشراف صيدلاني" }}
           showCategoryFilter={false}
@@ -283,18 +250,16 @@ const Index = () => {
 
         {/* ═══ Curated Clinical Grid — Frosted Glass ═══ */}
         <CuratedClinicalGrid
-          products={[
-            ...(newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS).map((p) => ({
-              id: p.id,
-              handle: "handle" in p ? (p as { handle: string }).handle : p.id,
-              title: p.title,
-              brand: p.brand,
-              price: "price" in p ? (p as { price: number }).price : 0,
-              image_url: "image_url" in p ? (p as { image_url: string }).image_url : ("image" in p ? String((p as { image: unknown }).image) : ""),
-              tag: "tag" in p ? (p as { tag?: string }).tag : undefined,
-              category: "category" in p ? (p as { category?: string }).category : undefined,
-            })),
-          ]}
+          products={newArrivals.map((p) => ({
+            id: p.id,
+            handle: p.handle,
+            title: p.title,
+            brand: p.brand,
+            price: p.price,
+            image_url: p.image_url,
+            tag: p.tag,
+            category: p.category,
+          }))}
         />
 
         {/* ═══ Dual-Persona Tabbed Bestsellers ═══ */}
@@ -311,12 +276,12 @@ const Index = () => {
         <ProductSlider
           title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
           subtitle={{ en: "Most Loved", ar: "الأكثر حباً" }}
-          products={bestsellers.length > 0 ? bestsellers : BESTSELLERS}
+          products={bestsellers}
         />
         <ProductSlider
           title={{ en: "Just Landed! What's New", ar: "وصل حديثاً! الجديد لدينا" }}
           subtitle={{ en: "New Arrivals", ar: "وصل حديثاً" }}
-          products={newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS}
+          products={newArrivals}
         />
 
         {/* ═══ EliteBrandShowcase (Authority) ═══ */}
