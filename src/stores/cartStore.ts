@@ -119,10 +119,23 @@ export const useCartStore = create<CartStore>()(
       addItem: async (item) => {
         const { items, cartId, clearCart } = get();
         const existingItem = items.find((i) => i.variantId === item.variantId);
+        const isShopify = isShopifyVariant(item.variantId);
 
         set({ isLoading: true });
         try {
-          if (!cartId) {
+          if (!isShopify) {
+            // Local-only product (Supabase / prescription) — no Shopify API calls
+            if (existingItem) {
+              const newQuantity = existingItem.quantity + item.quantity;
+              set({
+                items: get().items.map((i) =>
+                  i.variantId === item.variantId ? { ...i, quantity: newQuantity } : i,
+                ),
+              });
+            } else {
+              set({ items: [...get().items, { ...item, lineId: null }] });
+            }
+          } else if (!cartId) {
             // Create a new Shopify cart
             const result = await createShopifyCart({ ...item, lineId: null });
             if (result) {
@@ -140,9 +153,8 @@ export const useCartStore = create<CartStore>()(
             }
             const result = await updateShopifyCartLine(cartId, existingItem.lineId, newQuantity);
             if (result.success) {
-              const currentItems = get().items;
               set({
-                items: currentItems.map((i) =>
+                items: get().items.map((i) =>
                   i.variantId === item.variantId ? { ...i, quantity: newQuantity } : i,
                 ),
               });
@@ -153,9 +165,8 @@ export const useCartStore = create<CartStore>()(
             // Add new line to existing cart
             const result = await addLineToShopifyCart(cartId, { ...item, lineId: null });
             if (result.success) {
-              const currentItems = get().items;
               set({
-                items: [...currentItems, { ...item, lineId: result.lineId ?? null }],
+                items: [...get().items, { ...item, lineId: result.lineId ?? null }],
               });
             } else if (result.cartNotFound) {
               clearCart();
