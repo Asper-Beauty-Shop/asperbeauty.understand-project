@@ -16,20 +16,8 @@ import { CuratedClinicalGrid } from "@/components/CuratedClinicalGrid";
 import { Footer } from "@/components/Footer";
 import { PageLoadingSkeleton } from "@/components/PageLoadingSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
-import { isHomepageBrand } from "@/constants/premiumBrands";
-import ceraveCleanserImg from "@/assets/products/cerave-foaming-cleanser.png";
-import vichyAmpoulesImg from "@/assets/products/vichy-liftactiv-ampoules.png";
-import biodermaSensibioImg from "@/assets/products/bioderma-sensibio-h2o.png";
-import lrpTolerianeMoisturizerImg from "@/assets/products/lrp-toleriane-ultra.png";
-import biodermaSensibioArImg from "@/assets/products/bioderma-sensibio-ar.png";
-import lrpTolerianewashImg from "@/assets/products/lrp-toleriane-wash.png";
-import vichyCapitalSoleilImg from "@/assets/products/vichy-capital-soleil.png";
-import vichyNormadermImg from "@/assets/products/vichy-normaderm.png";
-import ceraveMoisturizingCreamImg from "@/assets/products/cerave-moisturizing-cream.png";
-import olaplexNo7Img from "@/assets/products/olaplex-no7-bonding-oil.png";
-import neocellCollagenImg from "@/assets/products/neocell-collagen-c.png";
-import eucerinSunImg from "@/assets/products/eucerin-sun-hydro-spf50.png";
-import aminasCalendulaImg from "@/assets/products/aminas-calendula-cream.png";
+
+
 
 // Lazy load below-the-fold components
 const MorningSpaRitualBanner = lazy(() =>
