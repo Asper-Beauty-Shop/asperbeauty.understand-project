@@ -119,8 +119,9 @@ export const BlurUpImage = ({
       <img
         src={currentSrc}
         alt={alt}
-        loading="lazy"
-        decoding="async"
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
+        fetchPriority={priority ? "high" : "auto"}
         className={cn(
           "w-full h-full transition-opacity",
           isLoaded && !isError ? "opacity-100" : "opacity-0",
