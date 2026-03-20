@@ -154,7 +154,7 @@ export async function fetchProducts(
   const q = supabase
     .from("products")
     .select(PRODUCT_COLUMNS)
-    .eq("availability_status", "In_Stock")
+    .eq("availability_status", "in_stock")
     .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .limit(first);
 
