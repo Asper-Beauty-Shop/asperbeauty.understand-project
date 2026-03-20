@@ -7,37 +7,36 @@ const corsHeaders = {
 };
 
 // ---------------------------------------------------------------------------
-// IP-based Rate Limiter (sliding window, in-memory)
+// Rate Limiter (sliding window, in-memory) — dual: IP + phone
 // ---------------------------------------------------------------------------
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX_REQUESTS = 5;   // max 5 orders per IP per minute
+const RATE_LIMIT_MAX_REQUESTS_IP = 5;    // max 5 orders per IP per minute
+const RATE_LIMIT_MAX_REQUESTS_PHONE = 3; // max 3 orders per phone per minute
 
-const ipRequestLog = new Map<string, number[]>();
+const rateLimitLog = new Map<string, number[]>();
 
-function isRateLimited(ip: string): boolean {
+function isRateLimited(key: string, maxRequests: number): boolean {
   const now = Date.now();
-  const timestamps = ipRequestLog.get(ip) ?? [];
-
-  // Evict expired entries
+  const timestamps = rateLimitLog.get(key) ?? [];
   const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
 
-  if (valid.length >= RATE_LIMIT_MAX_REQUESTS) {
-    ipRequestLog.set(ip, valid);
+  if (valid.length >= maxRequests) {
+    rateLimitLog.set(key, valid);
     return true;
   }
 
   valid.push(now);
-  ipRequestLog.set(ip, valid);
+  rateLimitLog.set(key, valid);
   return false;
 }
 
 // Periodic cleanup to prevent memory leak (every 5 min)
 setInterval(() => {
   const now = Date.now();
-  for (const [ip, timestamps] of ipRequestLog) {
+  for (const [key, timestamps] of rateLimitLog) {
     const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-    if (valid.length === 0) ipRequestLog.delete(ip);
-    else ipRequestLog.set(ip, valid);
+    if (valid.length === 0) rateLimitLog.delete(key);
+    else rateLimitLog.set(key, valid);
   }
 }, 300_000);
 
