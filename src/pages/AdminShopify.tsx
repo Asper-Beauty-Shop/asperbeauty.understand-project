@@ -28,16 +28,23 @@ import {
 const WEBHOOK_FUNCTION_URL = `https://dsggmechzloaqevepktp.supabase.co/functions/v1/shopify-webhooks`;
 
 const WEBHOOK_TOPICS = [
-  "orders/create",
-  "orders/updated",
-  "orders/paid",
-  "orders/fulfilled",
   "products/create",
   "products/update",
   "products/delete",
   "inventory_levels/update",
-  "customers/create",
-  "customers/update",
+  "inventory_levels/connect",
+  "inventory_levels/disconnect",
+  "inventory_items/create",
+  "inventory_items/update",
+  "inventory_items/delete",
+  "variants/in_stock",
+  "variants/out_of_stock",
+  "collections/create",
+  "collections/update",
+  "collections/delete",
+  "discounts/create",
+  "discounts/update",
+  "discounts/delete",
 ];
 
 export default function AdminShopify() {
