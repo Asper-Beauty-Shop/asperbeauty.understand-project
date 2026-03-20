@@ -64,14 +64,18 @@ export const CartDrawer = () => {
   const shippingProgress = Math.min(100, (totalPrice / FREE_SHIPPING_THRESHOLD) * 100);
   const hasFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
 
-  const handleCheckout = () => {
+  const shopifyItems = getShopifyItems();
+  const localItems = getLocalItems();
+  const shopifyTotal = getShopifyTotal();
+  const localTotal = getLocalTotal();
+  const hasShopify = shopifyItems.length > 0;
+  const hasLocal = localItems.length > 0;
+
+  const handleShopifyCheckout = () => {
     const checkoutUrl = getCheckoutUrl();
     if (checkoutUrl) {
       window.open(checkoutUrl, "_blank");
       setOpen(false);
-    } else {
-      // Fallback to COD if no Shopify cart
-      setCheckoutMode("cod");
     }
   };
 
