@@ -79,7 +79,7 @@ async function fetchProductContext(supabase: ReturnType<typeof createClient>, us
       .from("products")
       .select(FIELDS)
       .in("primary_concern", enums)
-      .eq("availability_status", "In_Stock")
+      .eq("availability_status", "in_stock")
       .order("bestseller_rank", { ascending: true, nullsFirst: false })
       .limit(6);
     matched = data || [];
