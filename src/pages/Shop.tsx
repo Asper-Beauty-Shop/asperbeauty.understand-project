@@ -631,7 +631,7 @@ export default function Shop() {
               </div>
 
               {isLoading && (
-                <div className="flex items-center justify-center py-20">
+                <div className="flex items-center justify-center min-h-[50vh] md:min-h-[40vh]">
                   <Loader2 className="w-8 h-8 text-primary animate-spin" />
                 </div>
               )}
