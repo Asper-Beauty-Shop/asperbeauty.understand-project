@@ -396,45 +396,103 @@ export const CartDrawer = () => {
 
                     {/* Checkout Buttons */}
                     <div className="flex flex-col gap-3">
-                      {/* Primary: Shopify Checkout */}
-                      <button
-                        onClick={handleCheckout}
-                        disabled={items.length === 0 || isLoading || isSyncing}
-                        className="w-full py-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
-                        style={{ backgroundColor: "hsl(var(--burgundy))" }}
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy-dark))"}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))"}
-                      >
-                        {isLoading || isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : (
-                          <>
-                            <ExternalLink className="w-4 h-4" />
-                            {isArabic ? "إتمام الشراء" : "Checkout with Shopify"}
-                          </>
-                        )}
-                      </button>
+                      {/* Shopify Checkout — only if Shopify items exist */}
+                      {hasShopify && (
+                        <div>
+                          {hasLocal && (
+                            <p className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                              {isArabic ? `منتجات شوبيفاي — ${shopifyTotal.toFixed(3)} دينار` : `Shopify Items — ${shopifyTotal.toFixed(3)} JOD`}
+                            </p>
+                          )}
+                          <button
+                            onClick={handleShopifyCheckout}
+                            disabled={isLoading || isSyncing}
+                            className="w-full py-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
+                            style={{ backgroundColor: "hsl(var(--burgundy))" }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy-dark))"}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))"}
+                          >
+                            {isLoading || isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                              <>
+                                <ExternalLink className="w-4 h-4" />
+                                {isArabic ? "إتمام شراء شوبيفاي" : "Checkout with Shopify"}
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      )}
 
-                      {/* Secondary: COD */}
-                      <button
-                        onClick={() => setCheckoutMode("cod")}
-                        disabled={items.length === 0 || isLoading}
-                        className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
-                        style={{
-                          border: "2px solid hsl(var(--burgundy))",
-                          color: "hsl(var(--burgundy))",
-                          backgroundColor: "transparent",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))";
-                          e.currentTarget.style.color = "white";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "transparent";
-                          e.currentTarget.style.color = "hsl(var(--burgundy))";
-                        }}
-                      >
-                        <Truck className="w-4 h-4" />
-                        {isArabic ? "الدفع عند الاستلام" : "Cash on Delivery"}
-                      </button>
+                      {/* COD Checkout — only if local items exist */}
+                      {hasLocal && (
+                        <div>
+                          {hasShopify && (
+                            <p className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-2 mt-2">
+                              {isArabic ? `منتجات محلية — ${localTotal.toFixed(3)} دينار` : `Local Items — ${localTotal.toFixed(3)} JOD`}
+                            </p>
+                          )}
+                          <button
+                            onClick={() => setCheckoutMode("cod")}
+                            disabled={isLoading}
+                            className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
+                            style={{
+                              border: "2px solid hsl(var(--burgundy))",
+                              color: "hsl(var(--burgundy))",
+                              backgroundColor: "transparent",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))";
+                              e.currentTarget.style.color = "white";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = "transparent";
+                              e.currentTarget.style.color = "hsl(var(--burgundy))";
+                            }}
+                          >
+                            <Truck className="w-4 h-4" />
+                            {isArabic ? "الدفع عند الاستلام" : "Cash on Delivery"}
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Fallback: If only Shopify items, still show COD as alternative */}
+                      {hasShopify && !hasLocal && (
+                        <button
+                          onClick={() => setCheckoutMode("cod")}
+                          disabled={isLoading}
+                          className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
+                          style={{
+                            border: "2px solid hsl(var(--burgundy))",
+                            color: "hsl(var(--burgundy))",
+                            backgroundColor: "transparent",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))";
+                            e.currentTarget.style.color = "white";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                            e.currentTarget.style.color = "hsl(var(--burgundy))";
+                          }}
+                        >
+                          <Truck className="w-4 h-4" />
+                          {isArabic ? "الدفع عند الاستلام" : "Cash on Delivery"}
+                        </button>
+                      )}
+
+                      {/* Only local items: COD is primary */}
+                      {!hasShopify && !hasLocal && items.length > 0 && (
+                        <button
+                          onClick={() => setCheckoutMode("cod")}
+                          disabled={isLoading}
+                          className="w-full py-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
+                          style={{ backgroundColor: "hsl(var(--burgundy))" }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy-dark))"}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))"}
+                        >
+                          <Truck className="w-4 h-4" />
+                          {isArabic ? "الدفع عند الاستلام" : "Cash on Delivery"}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </>
