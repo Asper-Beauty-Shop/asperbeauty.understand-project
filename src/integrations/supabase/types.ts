@@ -379,6 +379,7 @@ export type Database = {
           gtin: string | null
           handle: string | null
           hex_swatch: string | null
+          hover_image_url: string | null
           id: string
           image_url: string | null
           in_stock: boolean | null
@@ -420,6 +421,7 @@ export type Database = {
           gtin?: string | null
           handle?: string | null
           hex_swatch?: string | null
+          hover_image_url?: string | null
           id?: string
           image_url?: string | null
           in_stock?: boolean | null
@@ -461,6 +463,7 @@ export type Database = {
           gtin?: string | null
           handle?: string | null
           hex_swatch?: string | null
+          hover_image_url?: string | null
           id?: string
           image_url?: string | null
           in_stock?: boolean | null
