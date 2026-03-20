@@ -140,10 +140,10 @@ function EliteProductCard({ product, index, featured = false }: { product: Produ
       viewport={{ once: true, margin: "-60px" }}
       className={cn(
         "group relative flex flex-col overflow-hidden bg-card",
-        // Subtle gold framing — 1px border, not heavy shadows
+        // Subtle gold framing — 1px border, gentle lift
         "border border-border/40 hover:border-accent/30",
         "transition-all duration-500 ease-in-out",
-        "hover:shadow-[0_12px_48px_-12px_hsl(var(--accent)/0.12)]",
+        "hover:-translate-y-1 hover:shadow-[0_12px_48px_-12px_hsl(var(--accent)/0.12)]",
         product.gold_stitch_tier && "border-accent/50 hover:border-accent",
         featured && "md:col-span-2 md:row-span-2"
       )}
