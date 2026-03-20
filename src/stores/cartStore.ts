@@ -308,6 +308,17 @@ export const useCartStore = create<CartStore>()(
       },
 
       getCheckoutUrl: () => get().checkoutUrl,
+
+      getShopifyItems: () => get().items.filter((i) => isShopifyVariant(i.variantId)),
+      getLocalItems: () => get().items.filter((i) => !isShopifyVariant(i.variantId)),
+      getShopifyTotal: () =>
+        get().items
+          .filter((i) => isShopifyVariant(i.variantId))
+          .reduce((sum, item) => sum + parseFloat(item.price.amount) * item.quantity, 0),
+      getLocalTotal: () =>
+        get().items
+          .filter((i) => !isShopifyVariant(i.variantId))
+          .reduce((sum, item) => sum + parseFloat(item.price.amount) * item.quantity, 0),
     }),
     {
       name: "asper-beauty-cart",
