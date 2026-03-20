@@ -140,43 +140,29 @@ export const CODCheckoutForm = (
     setIsSubmitting(true);
 
     try {
-      // Prepare order items with sanitized data
-      const orderItems = items.map((item) => ({
-        productId: String(item.product.node.id).slice(0, 100),
-        productTitle: String(item.product.node.title).slice(0, 200),
-        variantId: String(item.variantId).slice(0, 100),
-        variantTitle: item.variantTitle
-          ? String(item.variantTitle).slice(0, 100)
-          : undefined,
-        price: String(item.price.amount),
-        currency: String(item.price.currencyCode),
-        quantity: Math.min(Math.max(1, item.quantity), 99),
-        selectedOptions: item.selectedOptions || {},
-        imageUrl: item.product.node.images?.edges?.[0]?.node?.url || null,
-      }));
+      // Zero-Trust: Only send product IDs and quantities — NO price data
+      const securePayload = {
+        items: items.map((item) => ({
+          productId: String(item.product.node.id),
+          quantity: Math.min(Math.max(1, item.quantity), 99),
+        })),
+        customerName: formData.customerName.trim(),
+        customerPhone: formData.customerPhone.trim(),
+        deliveryAddress: formData.deliveryAddress.trim(),
+        city: formData.city,
+        notes: formData.notes.trim() || undefined,
+      };
 
-      // Call secure edge function with CAPTCHA token
+      // Call secure-checkout edge function (server recalculates prices from DB)
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-cod-order`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/secure-checkout`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
           },
-          body: JSON.stringify({
-            customerName: formData.customerName.trim(),
-            customerPhone: formData.customerPhone.trim(),
-            customerEmail: formData.customerEmail.trim() || "",
-            deliveryAddress: formData.deliveryAddress.trim(),
-            city: formData.city,
-            notes: formData.notes.trim() || "",
-            items: orderItems,
-            subtotal: subtotal,
-            shippingCost: shippingCost,
-            total: total,
-            captchaToken: captchaToken,
-          }),
+          body: JSON.stringify(securePayload),
         },
       );
 
@@ -186,11 +172,13 @@ export const CODCheckoutForm = (
         // Reset captcha on error
         captchaRef.current?.resetCaptcha();
         setCaptchaToken(null);
-        throw new Error(result.error || "Failed to create order");
+        const errDetails = result?.error?.details;
+        const errMsg = Array.isArray(errDetails) ? errDetails.join(", ") : (result?.error?.message || "Failed to create order");
+        throw new Error(errMsg);
       }
 
       clearCart();
-      onSuccess(result.orderNumber);
+      onSuccess(result.data?.orderNumber || result.orderNumber);
     } catch (error) {
       console.error("Failed to place COD order:", error);
       toast.error(
