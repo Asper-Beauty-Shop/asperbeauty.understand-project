@@ -88,7 +88,7 @@ async function fetchProductContext(supabase: ReturnType<typeof createClient>, us
     const { data } = await supabase
       .from("products")
       .select(FIELDS)
-      .eq("availability_status", "In_Stock")
+      .eq("availability_status", "in_stock")
       .order("bestseller_rank", { ascending: true, nullsFirst: false })
       .limit(6);
     matched = data || [];
