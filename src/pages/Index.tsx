@@ -141,21 +141,21 @@ const Index = () => {
         .from("products")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(30);
+        .limit(8);
       if (error) throw error;
-      return (data || [])
-        .filter((p) => isHomepageBrand(p.brand))
-        .slice(0, 8)
-        .map((p) => ({
-          id: p.id,
-          title: p.title,
-          brand: p.brand,
-          price: p.price ?? 0,
-          image_url: p.image_url || "/editorial-showcase-2.webp",
-          category: p.primary_concern,
-          tags: [] as string[],
-          is_new: true,
-        }));
+      return (data || []).map((p) => ({
+        id: p.id,
+        handle: p.handle || p.id,
+        title: p.title || p.name,
+        brand: p.brand,
+        price: p.price ?? 0,
+        image_url: p.image_url || "/editorial-showcase-2.webp",
+        image: p.image_url || "/editorial-showcase-2.webp",
+        category: p.primary_concern,
+        tag: p.clinical_badge || (p.is_bestseller ? "Bestseller" : undefined),
+        tags: [] as string[],
+        is_new: true,
+      }));
     },
   });
 
@@ -165,21 +165,21 @@ const Index = () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .order("created_at", { ascending: true })
-        .limit(30);
+        .order("bestseller_rank", { ascending: true })
+        .limit(8);
       if (error) throw error;
-      return (data || [])
-        .filter((p) => isHomepageBrand(p.brand))
-        .slice(0, 8)
-        .map((p) => ({
-          id: p.id,
-          title: p.title,
-          brand: p.brand,
-          price: p.price ?? 0,
-          image_url: p.image_url || "/editorial-showcase-2.webp",
-          category: p.primary_concern,
-          is_on_sale: false,
-        }));
+      return (data || []).map((p) => ({
+        id: p.id,
+        handle: p.handle || p.id,
+        title: p.title || p.name,
+        brand: p.brand,
+        price: p.price ?? 0,
+        image_url: p.image_url || "/editorial-showcase-2.webp",
+        image: p.image_url || "/editorial-showcase-2.webp",
+        category: p.primary_concern,
+        tag: p.clinical_badge || (p.is_bestseller ? "Bestseller" : undefined),
+        is_on_sale: p.is_on_sale,
+      }));
     },
   });
 
