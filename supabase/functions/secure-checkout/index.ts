@@ -7,7 +7,42 @@ const corsHeaders = {
 };
 
 // ---------------------------------------------------------------------------
-// Inline Zod-less validation (Edge Functions can't import from src/)
+// IP-based Rate Limiter (sliding window, in-memory)
+// ---------------------------------------------------------------------------
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 5;   // max 5 orders per IP per minute
+
+const ipRequestLog = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = ipRequestLog.get(ip) ?? [];
+
+  // Evict expired entries
+  const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+
+  if (valid.length >= RATE_LIMIT_MAX_REQUESTS) {
+    ipRequestLog.set(ip, valid);
+    return true;
+  }
+
+  valid.push(now);
+  ipRequestLog.set(ip, valid);
+  return false;
+}
+
+// Periodic cleanup to prevent memory leak (every 5 min)
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, timestamps] of ipRequestLog) {
+    const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+    if (valid.length === 0) ipRequestLog.delete(ip);
+    else ipRequestLog.set(ip, valid);
+  }
+}, 300_000);
+
+// ---------------------------------------------------------------------------
+// Inline validation
 // ---------------------------------------------------------------------------
 interface CheckoutItem {
   productId: string;
@@ -34,7 +69,6 @@ function validate(body: unknown): { data?: CheckoutBody; errors?: string[] } {
 
   const b = body as Record<string, unknown>;
 
-  // items
   if (!Array.isArray(b.items) || b.items.length === 0) {
     errors.push("Cart cannot be empty");
   } else if (b.items.length > 50) {
@@ -48,19 +82,15 @@ function validate(body: unknown): { data?: CheckoutBody; errors?: string[] } {
     }
   }
 
-  // customerName
   if (typeof b.customerName !== "string" || b.customerName.trim().length < 2 || b.customerName.trim().length > 100 || !NAME_RE.test(b.customerName.trim()))
     errors.push("Invalid customer name");
 
-  // customerPhone
   if (typeof b.customerPhone !== "string" || !PHONE_RE.test(b.customerPhone.trim()))
     errors.push("Invalid phone number format (07XXXXXXXX)");
 
-  // deliveryAddress
   if (typeof b.deliveryAddress !== "string" || b.deliveryAddress.trim().length < 10 || b.deliveryAddress.trim().length > 500)
     errors.push("Invalid delivery address");
 
-  // city
   if (typeof b.city !== "string" || b.city.trim().length === 0)
     errors.push("City is required");
 
@@ -98,7 +128,19 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // --- Auth (optional for guest checkout, but we try) ---
+    // --- Rate Limiting ---
+    const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+      ?? req.headers.get("cf-connecting-ip")
+      ?? "unknown";
+
+    if (isRateLimited(clientIp)) {
+      return new Response(
+        JSON.stringify({ error: { code: "RATE_LIMITED", message: "Too many checkout attempts. Please wait a moment and try again." } }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" } },
+      );
+    }
+
+    // --- Auth (optional for guest checkout) ---
     const authHeader = req.headers.get("authorization") ?? "";
 
     const supabaseAdmin = createClient(
@@ -141,7 +183,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // O(1) lookup map
     const productMap = new Map((dbProducts ?? []).map((p) => [p.id, p]));
 
     const errors: string[] = [];
@@ -159,27 +200,22 @@ Deno.serve(async (req) => {
     for (const reqItem of payload.items) {
       const dbProduct = productMap.get(reqItem.productId);
 
-      // Defensive Check 1: exists & active
       if (!dbProduct || dbProduct.availability_status === "Pending_Purge") {
         errors.push(`Product ${reqItem.productId} is unavailable.`);
         continue;
       }
 
-      // Defensive Check 2: in stock
       if (dbProduct.in_stock === false) {
         errors.push(`${dbProduct.name} is out of stock.`);
         continue;
       }
 
-      // Defensive Check 3: inventory
       const inventory = dbProduct.inventory_total ?? 0;
       if (inventory > 0 && inventory < reqItem.quantity) {
         errors.push(`Only ${inventory} units available for ${dbProduct.name}.`);
         continue;
       }
 
-      // Core Security: use DB price, ignore client
-      // Use integer math (cents) to avoid floating point issues
       const unitPriceCents = Math.round(dbProduct.price * 100);
       const lineTotalCents = unitPriceCents * reqItem.quantity;
 
@@ -203,12 +239,10 @@ Deno.serve(async (req) => {
       );
     }
 
-    // --- Calculate shipping (cents) ---
     const subtotalJOD = subtotal / 100;
-    const shippingCostCents = subtotalJOD >= 50 ? 0 : 300; // 3 JOD in cents
+    const shippingCostCents = subtotalJOD >= 50 ? 0 : 300;
     const totalCents = subtotal + shippingCostCents;
 
-    // --- Create COD order ---
     const orderNumber = generateOrderNumber();
 
     const { data: order, error: orderErr } = await supabaseAdmin
@@ -238,7 +272,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // --- Success response ---
     return new Response(
       JSON.stringify({
         data: {
