@@ -388,26 +388,26 @@ export const CartDrawer = () => {
 
                     {/* Checkout Buttons */}
                     <div className="flex flex-col gap-3">
-                      {/* Primary: COD */}
+                      {/* Primary: Shopify Checkout */}
                       <button
-                        onClick={() => setCheckoutMode("cod")}
-                        disabled={items.length === 0 || isLoading}
+                        onClick={handleCheckout}
+                        disabled={items.length === 0 || isLoading || isSyncing}
                         className="w-full py-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
                         style={{ backgroundColor: "hsl(var(--burgundy))" }}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy-dark))"}
                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "hsl(var(--burgundy))"}
                       >
-                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                        {isLoading || isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                           <>
-                            <Truck className="w-4 h-4" />
-                            {isArabic ? "تأمين الروتين والدفع عند الاستلام" : "Secure Regimen & Checkout"}
+                            <ExternalLink className="w-4 h-4" />
+                            {isArabic ? "إتمام الشراء" : "Checkout with Shopify"}
                           </>
                         )}
                       </button>
 
-                      {/* Secondary: Card */}
+                      {/* Secondary: COD */}
                       <button
-                        onClick={handleCheckout}
+                        onClick={() => setCheckoutMode("cod")}
                         disabled={items.length === 0 || isLoading}
                         className="w-full py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
                         style={{
@@ -424,8 +424,8 @@ export const CartDrawer = () => {
                           e.currentTarget.style.color = "hsl(var(--burgundy))";
                         }}
                       >
-                        <Lock className="w-4 h-4" />
-                        {isArabic ? "الدفع بالبطاقة" : "Pay with Card"}
+                        <Truck className="w-4 h-4" />
+                        {isArabic ? "الدفع عند الاستلام" : "Cash on Delivery"}
                       </button>
                     </div>
                   </div>
