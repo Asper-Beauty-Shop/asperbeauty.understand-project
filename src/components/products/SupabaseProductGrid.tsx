@@ -84,8 +84,6 @@ function EliteProductCard({ product, index, featured = false }: { product: Produ
   const title = product.title || product.name;
   const imageUrl = product.image_url;
   const hoverImageUrl = (product as any).hover_image_url as string | null;
-  const title = product.title || product.name;
-  const imageUrl = product.image_url;
   const navigate = useNavigate();
   const { language } = useLanguage();
   const addItem = useCartStore((s) => s.addItem);
