@@ -202,15 +202,28 @@ export const useCartStore = create<CartStore>()(
 
         const { items, cartId, clearCart } = get();
         const item = items.find((i) => i.variantId === variantId);
-        if (!item?.lineId || !cartId) return;
+        if (!item) return;
+
+        const isShopify = isShopifyVariant(variantId);
+
+        if (!isShopify) {
+          // Local product — update locally only
+          set({
+            items: get().items.map((i) =>
+              i.variantId === variantId ? { ...i, quantity } : i,
+            ),
+          });
+          return;
+        }
+
+        if (!item.lineId || !cartId) return;
 
         set({ isLoading: true });
         try {
           const result = await updateShopifyCartLine(cartId, item.lineId, quantity);
           if (result.success) {
-            const currentItems = get().items;
             set({
-              items: currentItems.map((i) =>
+              items: get().items.map((i) =>
                 i.variantId === variantId ? { ...i, quantity } : i,
               ),
             });
@@ -227,14 +240,24 @@ export const useCartStore = create<CartStore>()(
       removeItem: async (variantId) => {
         const { items, cartId, clearCart } = get();
         const item = items.find((i) => i.variantId === variantId);
-        if (!item?.lineId || !cartId) return;
+        if (!item) return;
+
+        const isShopify = isShopifyVariant(variantId);
+
+        if (!isShopify) {
+          // Local product — remove locally only
+          const newItems = items.filter((i) => i.variantId !== variantId);
+          newItems.length === 0 ? clearCart() : set({ items: newItems });
+          return;
+        }
+
+        if (!item.lineId || !cartId) return;
 
         set({ isLoading: true });
         try {
           const result = await removeLineFromShopifyCart(cartId, item.lineId);
           if (result.success) {
-            const currentItems = get().items;
-            const newItems = currentItems.filter((i) => i.variantId !== variantId);
+            const newItems = get().items.filter((i) => i.variantId !== variantId);
             newItems.length === 0 ? clearCart() : set({ items: newItems });
           } else if (result.cartNotFound) {
             clearCart();
