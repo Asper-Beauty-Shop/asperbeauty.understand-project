@@ -33,6 +33,7 @@ export const BlurUpImage = ({
   containerClassName = "",
   blurAmount = 20,
   transitionDuration = 500,
+  priority = false,
   ...props
 }: BlurUpImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
