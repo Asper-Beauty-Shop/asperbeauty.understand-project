@@ -55,6 +55,10 @@ interface CartStore {
   getTotalItems: () => number;
   getTotalPrice: () => number;
   getCheckoutUrl: () => string | null;
+  getShopifyItems: () => CartItem[];
+  getLocalItems: () => CartItem[];
+  getShopifyTotal: () => number;
+  getLocalTotal: () => number;
 }
 
 function prescriptionToCartItem(p: PrescriptionProduct): Omit<CartItem, "lineId"> {
