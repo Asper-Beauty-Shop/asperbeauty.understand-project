@@ -7,38 +7,11 @@ const corsHeaders = {
 };
 
 // ---------------------------------------------------------------------------
-// Rate Limiter (sliding window, in-memory) — dual: IP + phone
+// Rate Limiter — persistent (database-backed, survives cold starts)
 // ---------------------------------------------------------------------------
-const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX_REQUESTS_IP = 5;    // max 5 orders per IP per minute
-const RATE_LIMIT_MAX_REQUESTS_PHONE = 3; // max 3 orders per phone per minute
-
-const rateLimitLog = new Map<string, number[]>();
-
-function isRateLimited(key: string, maxRequests: number): boolean {
-  const now = Date.now();
-  const timestamps = rateLimitLog.get(key) ?? [];
-  const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-
-  if (valid.length >= maxRequests) {
-    rateLimitLog.set(key, valid);
-    return true;
-  }
-
-  valid.push(now);
-  rateLimitLog.set(key, valid);
-  return false;
-}
-
-// Periodic cleanup to prevent memory leak (every 5 min)
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, timestamps] of rateLimitLog) {
-    const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-    if (valid.length === 0) rateLimitLog.delete(key);
-    else rateLimitLog.set(key, valid);
-  }
-}, 300_000);
+const RATE_LIMIT_WINDOW_SECONDS = 60; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS_IP = 5;
+const RATE_LIMIT_MAX_REQUESTS_PHONE = 3;
 
 // ---------------------------------------------------------------------------
 // Inline validation
@@ -127,12 +100,28 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // --- Rate Limiting ---
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    // --- Periodic cleanup (fire-and-forget, ~1% of requests) ---
+    if (Math.random() < 0.01) {
+      supabaseAdmin.rpc("cleanup_rate_limit_entries", { older_than_seconds: 120 }).then(() => {});
+    }
+
+    // --- IP-based Rate Limiting (persistent, DB-backed) ---
     const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
       ?? req.headers.get("cf-connecting-ip")
       ?? "unknown";
 
-    if (isRateLimited(`ip:${clientIp}`, RATE_LIMIT_MAX_REQUESTS_IP)) {
+    const { data: ipLimited } = await supabaseAdmin.rpc("check_rate_limit", {
+      p_key: `ip:${clientIp}`,
+      p_window_seconds: RATE_LIMIT_WINDOW_SECONDS,
+      p_max_requests: RATE_LIMIT_MAX_REQUESTS_IP,
+    });
+
+    if (ipLimited) {
       return new Response(
         JSON.stringify({ error: { code: "RATE_LIMITED", message: "Too many checkout attempts. Please wait a moment and try again." } }),
         { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" } },
@@ -141,11 +130,6 @@ Deno.serve(async (req) => {
 
     // --- Auth (optional for guest checkout) ---
     const authHeader = req.headers.get("authorization") ?? "";
-
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
 
     let userId: string | null = null;
     if (authHeader.startsWith("Bearer ")) {
@@ -167,8 +151,14 @@ Deno.serve(async (req) => {
 
     const payload = validation.data!;
 
-    // --- Phone-based rate limiting (prevents abuse from shared networks) ---
-    if (isRateLimited(`phone:${payload.customerPhone}`, RATE_LIMIT_MAX_REQUESTS_PHONE)) {
+    // --- Phone-based rate limiting (persistent, DB-backed) ---
+    const { data: phoneLimited } = await supabaseAdmin.rpc("check_rate_limit", {
+      p_key: `phone:${payload.customerPhone}`,
+      p_window_seconds: RATE_LIMIT_WINDOW_SECONDS,
+      p_max_requests: RATE_LIMIT_MAX_REQUESTS_PHONE,
+    });
+
+    if (phoneLimited) {
       return new Response(
         JSON.stringify({ error: { code: "RATE_LIMITED", message: "Too many orders from this phone number. Please wait a moment and try again." } }),
         { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" } },

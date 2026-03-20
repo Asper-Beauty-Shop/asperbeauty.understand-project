@@ -515,6 +515,24 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_entries: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+        }
+        Relationships: []
+      }
       regimen_plans: {
         Row: {
           concern_tag: string | null
@@ -707,6 +725,18 @@ export type Database = {
     Functions: {
       bulk_delete_purged: { Args: { p_ids: string[] }; Returns: number }
       bulk_restore_purged: { Args: { p_ids: string[] }; Returns: number }
+      check_rate_limit: {
+        Args: {
+          p_key: string
+          p_max_requests: number
+          p_window_seconds: number
+        }
+        Returns: boolean
+      }
+      cleanup_rate_limit_entries: {
+        Args: { older_than_seconds?: number }
+        Returns: number
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
