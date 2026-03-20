@@ -91,6 +91,11 @@ Deno.serve(async (req) => {
       await handleProductEvent(supabase, topic, payload);
     }
 
+    // ── Inventory Level Events ──
+    if (topic === "inventory_levels/update" || topic === "inventory_levels/connect") {
+      await handleInventoryLevelEvent(supabase, payload);
+    }
+
     // ── Customer Events ──
     if (topic.startsWith("customers/")) {
       await handleCustomerEvent(supabase, topic, payload);
@@ -230,6 +235,97 @@ async function handleProductEvent(
   }
 }
 
+async function handleInventoryLevelEvent(
+  supabase: ReturnType<typeof createClient>,
+  payload: Record<string, unknown>,
+) {
+  const inventoryItemId = payload.inventory_item_id;
+  const available = Number(payload.available ?? 0);
+  console.log(`Inventory level update: item=${inventoryItemId}, available=${available}`);
+
+  // Shopify inventory_levels/update only gives inventory_item_id, not the product handle.
+  // We need to look up the product via the Shopify Admin API.
+  const SHOPIFY_ACCESS_TOKEN = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
+  if (!SHOPIFY_ACCESS_TOKEN || !inventoryItemId) return;
+
+  try {
+    // Get the inventory item to find the variant
+    const itemRes = await fetch(
+      `https://asper-beauty-shop-7.myshopify.com/admin/api/2025-07/inventory_items/${inventoryItemId}.json`,
+      { headers: { "X-Shopify-Access-Token": SHOPIFY_ACCESS_TOKEN } },
+    );
+    if (!itemRes.ok) {
+      console.error(`Failed to fetch inventory item ${inventoryItemId}: ${itemRes.status}`);
+      return;
+    }
+    const itemData = await itemRes.json();
+    const sku = itemData.inventory_item?.sku;
+
+    // Get the variant to find the product
+    const variantRes = await fetch(
+      `https://asper-beauty-shop-7.myshopify.com/admin/api/2025-07/variants.json?fields=id,product_id,inventory_quantity&limit=1`,
+      { headers: { "X-Shopify-Access-Token": SHOPIFY_ACCESS_TOKEN } },
+    );
+
+    // Alternative approach: get the product directly via inventory_item_id
+    // Search for the product by looking up all products and matching
+    const prodSearchRes = await fetch(
+      `https://asper-beauty-shop-7.myshopify.com/admin/api/2025-07/products.json?limit=250&fields=id,handle,variants`,
+      { headers: { "X-Shopify-Access-Token": SHOPIFY_ACCESS_TOKEN } },
+    );
+
+    if (!prodSearchRes.ok) {
+      // Consume unused response
+      await variantRes.text();
+      console.error("Failed to fetch products for inventory sync");
+      return;
+    }
+    // Consume the variant response we don't need
+    await variantRes.text();
+
+    const prodData = await prodSearchRes.json();
+    const products = Array.isArray(prodData.products) ? prodData.products : [];
+
+    // Find the product that contains a variant with this inventory_item_id
+    let matchedHandle: string | null = null;
+    let totalProductInventory = 0;
+
+    for (const p of products) {
+      const variants = Array.isArray(p.variants) ? p.variants : [];
+      const match = variants.find(
+        (v: Record<string, unknown>) => Number(v.inventory_item_id) === Number(inventoryItemId),
+      );
+      if (match) {
+        matchedHandle = p.handle;
+        totalProductInventory = variants.reduce(
+          (sum: number, v: Record<string, unknown>) => sum + Number(v.inventory_quantity || 0),
+          0,
+        );
+        break;
+      }
+    }
+
+    if (!matchedHandle) {
+      console.log(`No matching product found for inventory_item_id=${inventoryItemId}, sku=${sku}`);
+      return;
+    }
+
+    const inStock = totalProductInventory > 0;
+    console.log(`Syncing inventory for handle=${matchedHandle}: total=${totalProductInventory}, inStock=${inStock}`);
+
+    await supabase
+      .from("products")
+      .update({
+        inventory_total: totalProductInventory,
+        in_stock: inStock,
+        availability_status: inStock ? "in_stock" : "out_of_stock",
+      })
+      .eq("handle", matchedHandle);
+  } catch (err) {
+    console.error("Inventory level sync error:", err);
+  }
+}
+
 async function handleCustomerEvent(
   supabase: ReturnType<typeof createClient>,
   _topic: string,
@@ -240,11 +336,6 @@ async function handleCustomerEvent(
 
   console.log(`Processing customer event for: ${email}`);
 
-  // Log the customer data for reference — we don't auto-create Supabase users
-  // but we can capture lead data
   const phone = customer.phone as string || (customer.default_address as Record<string, unknown>)?.phone as string || null;
-
-  // Check if there's a profile with matching email (via auth)
-  // This is informational — actual user linking happens through auth flows
   console.log(`Customer sync: ${email}, phone: ${phone}`);
 }
