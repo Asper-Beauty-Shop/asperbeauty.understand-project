@@ -539,102 +539,102 @@ export default function Shop() {
 
             {/* Main content area */}
             <div className="flex-1 min-w-0">
-              {/* Mobile category pills — sticky, scroll-snap, 44px touch targets */}
-              <div className="lg:hidden sticky top-16 z-30 bg-background -mx-4 px-4 py-3 border-b border-border/50">
-                <div
-                  className="flex gap-3 overflow-x-auto pb-1"
-                  style={{
-                    scrollSnapType: "x mandatory",
-                    overscrollBehaviorX: "contain",
-                    msOverflowStyle: "none",
-                    scrollbarWidth: "none",
-                  }}
-                >
-                  {ASPER_CATEGORIES.map((cat) => {
-                    const isActive = categoryParam === cat;
-                    const count = cat === "All Curation" ? undefined : categoryCounts[cat];
-                    return (
+              {isLoading ? (
+                <FilterBarSkeleton />
+              ) : (
+                <>
+                  {/* Mobile category pills — sticky, scroll-snap, 44px touch targets */}
+                  <div className="lg:hidden sticky top-16 z-30 bg-background -mx-4 px-4 py-3 border-b border-border/50">
+                    <div
+                      className="flex gap-3 overflow-x-auto pb-1"
+                      style={{
+                        scrollSnapType: "x mandatory",
+                        overscrollBehaviorX: "contain",
+                        msOverflowStyle: "none",
+                        scrollbarWidth: "none",
+                      }}
+                    >
+                      {ASPER_CATEGORIES.map((cat) => {
+                        const isActive = categoryParam === cat;
+                        const count = cat === "All Curation" ? undefined : categoryCounts[cat];
+                        return (
+                          <button
+                            key={cat}
+                            onClick={() => setActiveCategory(cat)}
+                            className={cn(
+                              "flex-shrink-0 min-h-[44px] px-5 rounded-full border text-sm font-body font-medium transition-all duration-300 flex items-center gap-1.5",
+                              isActive
+                                ? "bg-card text-primary border-accent shadow-sm"
+                                : "bg-transparent text-muted-foreground border-border/40"
+                            )}
+                            style={{
+                              scrollSnapAlign: "start",
+                              transitionTimingFunction: "cubic-bezier(0.19, 1, 0.22, 1)",
+                            }}
+                          >
+                            <span className="whitespace-nowrap">{cat}</span>
+                            {count !== undefined && (
+                              <span className={cn("text-[10px] tabular-nums", isActive ? "text-accent" : "text-muted-foreground/50")}>
+                                {count}
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3 mb-6">
+                    <p className="text-sm text-muted-foreground font-body flex-1">
+                      {locale === "ar" ? `${filteredProducts.length} منتج` : `${filteredProducts.length} products`}
+                    </p>
+                    {/* On Sale toggle */}
+                    <button
+                      onClick={() => setFilters(f => ({ ...f, onSaleOnly: !f.onSaleOnly }))}
+                      className={cn(
+                        "text-xs font-body font-semibold px-3 py-1.5 rounded-full border transition-all duration-200",
+                        filters.onSaleOnly
+                          ? "bg-polished-gold text-dark-charcoal border-polished-gold"
+                          : "bg-card text-muted-foreground border-border hover:border-polished-gold/60"
+                      )}
+                    >
+                      {locale === "ar" ? "تخفيضات فقط" : "On Sale"}
+                    </button>
+                    {/* Sort */}
+                    <select
+                      value={sortBy}
+                      onChange={e => setSortBy(e.target.value as typeof sortBy)}
+                      className="text-sm font-body border border-border rounded px-2 py-1.5 bg-card text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                    >
+                      <option value="recommended">{locale === "ar" ? "موصى به" : "Recommended"}</option>
+                      <option value="newest">{locale === "ar" ? "الأحدث" : "Newest"}</option>
+                      <option value="price-asc">{locale === "ar" ? "السعر: الأقل أولاً" : "Price: Low to High"}</option>
+                      <option value="price-desc">{locale === "ar" ? "السعر: الأعلى أولاً" : "Price: High to Low"}</option>
+                      <option value="sale">{locale === "ar" ? "أكبر خصم" : "Biggest Discount"}</option>
+                    </select>
+                    {/* View mode */}
+                    <div className="flex items-center gap-1 bg-card rounded-lg border border-border p-1">
                       <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
+                        onClick={() => setViewMode("grid")}
                         className={cn(
-                          "flex-shrink-0 min-h-[44px] px-5 rounded-full border text-sm font-body font-medium transition-all duration-300 flex items-center gap-1.5",
-                          isActive
-                            ? "bg-card text-primary border-accent shadow-sm"
-                            : "bg-transparent text-muted-foreground border-border/40"
+                          "p-2 rounded transition-colors",
+                          viewMode === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
                         )}
-                        style={{
-                          scrollSnapAlign: "start",
-                          transitionTimingFunction: "cubic-bezier(0.19, 1, 0.22, 1)",
-                        }}
                       >
-                        <span className="whitespace-nowrap">{cat}</span>
-                        {count !== undefined && (
-                          <span className={cn("text-[10px] tabular-nums", isActive ? "text-accent" : "text-muted-foreground/50")}>
-                            {count}
-                          </span>
-                        )}
+                        <Grid3X3 className="w-4 h-4" />
                       </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3 mb-6">
-                <p className="text-sm text-muted-foreground font-body flex-1">
-                  {locale === "ar" ? `${filteredProducts.length} منتج` : `${filteredProducts.length} products`}
-                </p>
-                {/* On Sale toggle */}
-                <button
-                  onClick={() => setFilters(f => ({ ...f, onSaleOnly: !f.onSaleOnly }))}
-                  className={cn(
-                    "text-xs font-body font-semibold px-3 py-1.5 rounded-full border transition-all duration-200",
-                    filters.onSaleOnly
-                      ? "bg-polished-gold text-dark-charcoal border-polished-gold"
-                      : "bg-card text-muted-foreground border-border hover:border-polished-gold/60"
-                  )}
-                >
-                  {locale === "ar" ? "تخفيضات فقط" : "On Sale"}
-                </button>
-                {/* Sort */}
-                <select
-                  value={sortBy}
-                  onChange={e => setSortBy(e.target.value as typeof sortBy)}
-                  className="text-sm font-body border border-border rounded px-2 py-1.5 bg-card text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
-                >
-                  <option value="recommended">{locale === "ar" ? "موصى به" : "Recommended"}</option>
-                  <option value="newest">{locale === "ar" ? "الأحدث" : "Newest"}</option>
-                  <option value="price-asc">{locale === "ar" ? "السعر: الأقل أولاً" : "Price: Low to High"}</option>
-                  <option value="price-desc">{locale === "ar" ? "السعر: الأعلى أولاً" : "Price: High to Low"}</option>
-                  <option value="sale">{locale === "ar" ? "أكبر خصم" : "Biggest Discount"}</option>
-                </select>
-                {/* View mode */}
-                <div className="flex items-center gap-1 bg-card rounded-lg border border-border p-1">
-                  <button
-                    onClick={() => setViewMode("grid")}
-                    className={cn(
-                      "p-2 rounded transition-colors",
-                      viewMode === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
-                    )}
-                  >
-                    <Grid3X3 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode("list")}
-                    className={cn(
-                      "p-2 rounded transition-colors",
-                      viewMode === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
-                    )}
-                  >
-                    <LayoutList className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {isLoading && (
-                <div className="flex items-center justify-center min-h-[50vh] md:min-h-[40vh]">
-                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                </div>
+                      <button
+                        onClick={() => setViewMode("list")}
+                        className={cn(
+                          "p-2 rounded transition-colors",
+                          viewMode === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
+                        )}
+                      >
+                        <LayoutList className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </>
               )}
 
               {!isLoading && filteredProducts.length === 0 && renderEmptyState()}
