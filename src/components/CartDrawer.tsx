@@ -61,8 +61,20 @@ export const CartDrawer = () => {
   const hasFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
 
   const handleCheckout = () => {
-    setCheckoutMode("cod");
+    const checkoutUrl = getCheckoutUrl();
+    if (checkoutUrl) {
+      window.open(checkoutUrl, "_blank");
+      setOpen(false);
+    } else {
+      // Fallback to COD if no Shopify cart
+      setCheckoutMode("cod");
+    }
   };
+
+  // Sync cart with Shopify when drawer opens
+  useEffect(() => {
+    if (isOpen) syncCart();
+  }, [isOpen, syncCart]);
 
   const handleDrawerOpen = (open: boolean) => {
     handleOpenChange(open);
