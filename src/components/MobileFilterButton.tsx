@@ -29,7 +29,7 @@ export default function MobileFilterButton({ activeFilterCount = 0, onClick }: M
   return (
     <div
       className={cn(
-        "fixed bottom-20 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 ease-out",
+        "fixed bottom-36 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 ease-out",
         isVisible ? "translate-y-0 opacity-100" : "translate-y-24 opacity-0 pointer-events-none"
       )}
     >
