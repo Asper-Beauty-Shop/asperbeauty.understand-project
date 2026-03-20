@@ -109,27 +109,8 @@ const SectionSkeleton = ({ height = "h-64" }: { height?: string }) => (
   </div>
 );
 
-// Sample product data for sliders
-const NEW_ARRIVALS = [
-  { id: "1", handle: "cerave-moisturizing-cream", title: "Moisturizing Cream", brand: "CeraVe", image: ceraveMoisturizingCreamImg, tag: "Dermat-Tested" },
-  { id: "2", handle: "olaplex-no7-bonding-oil", title: "No.7 Bonding Oil", brand: "Olaplex", image: olaplexNo7Img, tag: "Just In" },
-  { id: "3", handle: "neocell-super-collagen-c", title: "Super Collagen + C", brand: "NeoCell", image: neocellCollagenImg, tag: "Wellness" },
-  { id: "4", handle: "eucerin-sun-hydro-protect-spf50", title: "Sun Hydro Protect Ultra-Light Fluid SPF50+", brand: "Eucerin", image: eucerinSunImg, tag: "Clinical" },
-  { id: "5", handle: "vichy-capital-soleil-uv-age", title: "Capital Soleil UV-Age Daily SPF 50+", brand: "Vichy", image: vichyCapitalSoleilImg },
-  { id: "6", handle: "bioderma-sensibio-h2o", title: "Sensibio H2O Micellar Water", brand: "Bioderma", image: biodermaSensibioImg, tag: "Bestseller" },
-];
 
-const BESTSELLERS = [
-  { id: "7", handle: "cerave-foaming-facial-cleanser", title: "Foaming Facial Cleanser", brand: "CeraVe", image: ceraveCleanserImg, tag: "Bestseller" },
-  { id: "8", handle: "vichy-liftactiv-peptide-c-ampoules", title: "LiftActiv Peptide-C Ampoules", brand: "Vichy", image: vichyAmpoulesImg, tag: "Bestseller" },
-  { id: "9", handle: "bioderma-sensibio-h2o", title: "Sensibio H2O Micellar Water", brand: "Bioderma", image: biodermaSensibioImg },
-  { id: "10", handle: "lrp-toleriane-ultra-moisturizer", title: "Toleriane Ultra Soothing Repair Moisturizer", brand: "La Roche-Posay", image: lrpTolerianeMoisturizerImg, tag: "Bestseller" },
-  { id: "11", handle: "bioderma-sensibio-ar-cream", title: "Sensibio AR Anti-Redness Cream SPF 30", brand: "Bioderma", image: biodermaSensibioArImg },
-  { id: "12", handle: "lrp-toleriane-hydrating-wash", title: "Toleriane Hydrating Gentle Face Wash", brand: "La Roche-Posay", image: lrpTolerianewashImg, tag: "Bestseller" },
-  { id: "13", handle: "vichy-capital-soleil-uv-age", title: "Capital Soleil UV-Age Daily SPF 50+", brand: "Vichy", image: vichyCapitalSoleilImg },
-  { id: "14", handle: "vichy-normaderm-phytosolution", title: "Normaderm Phytosolution Double-Correction Care", brand: "Vichy", image: vichyNormadermImg, tag: "Bestseller" },
-  { id: "15", handle: "aminas-calendula-face-body-cream", title: "Calendula Face & Body Cream", brand: "Amina's Natural Skincare", image: aminasCalendulaImg, tag: "Jordanian Heritage" },
-];
+
 
 const Index = () => {
   const navigate = useNavigate();
