@@ -358,3 +358,96 @@ async function handleCustomerEvent(
   const phone = customer.phone as string || (customer.default_address as Record<string, unknown>)?.phone as string || null;
   console.log(`Customer sync: ${email}, phone: ${phone}`);
 }
+
+// ── Collection Handler ──
+async function handleCollectionEvent(
+  topic: string,
+  collection: Record<string, unknown>,
+) {
+  const title = collection.title as string || "unknown";
+  const handle = collection.handle as string || "";
+  console.log(`Processing ${topic} for collection: "${title}" (handle: ${handle})`);
+
+  if (topic === "collections/delete") {
+    console.log(`Collection deleted: ${collection.id}`);
+  }
+  // Collections are logged to shopify_webhook_log automatically.
+  // Future: sync to a local collections table if needed.
+}
+
+// ── Inventory Item Handler ──
+async function handleInventoryItemEvent(
+  supabase: ReturnType<typeof createClient>,
+  topic: string,
+  item: Record<string, unknown>,
+) {
+  const inventoryItemId = item.id;
+  const sku = item.sku as string || "";
+  console.log(`Processing ${topic} for inventory_item: id=${inventoryItemId}, sku=${sku}`);
+
+  if (topic === "inventory_items/delete") {
+    console.log(`Inventory item deleted: ${inventoryItemId}`);
+    return;
+  }
+
+  // For create/update, try to sync inventory to the matching product
+  const SHOPIFY_ACCESS_TOKEN = Deno.env.get("SHOPIFY_ACCESS_TOKEN");
+  if (!SHOPIFY_ACCESS_TOKEN || !inventoryItemId) return;
+
+  try {
+    const prodRes = await fetch(
+      `https://asper-beauty-shop-7.myshopify.com/admin/api/2025-07/products.json?limit=250&fields=id,handle,variants`,
+      { headers: { "X-Shopify-Access-Token": SHOPIFY_ACCESS_TOKEN } },
+    );
+    if (!prodRes.ok) {
+      console.error("Failed to fetch products for inventory_items sync");
+      return;
+    }
+    const prodData = await prodRes.json();
+    const products = Array.isArray(prodData.products) ? prodData.products : [];
+
+    for (const p of products) {
+      const variants = Array.isArray(p.variants) ? p.variants : [];
+      const match = variants.find(
+        (v: Record<string, unknown>) => Number(v.inventory_item_id) === Number(inventoryItemId),
+      );
+      if (match) {
+        const totalInventory = variants.reduce(
+          (sum: number, v: Record<string, unknown>) => sum + Number(v.inventory_quantity || 0),
+          0,
+        );
+        const inStock = totalInventory > 0;
+        console.log(`inventory_items sync: handle=${p.handle}, total=${totalInventory}, inStock=${inStock}`);
+
+        await supabase
+          .from("products")
+          .update({
+            inventory_total: totalInventory,
+            in_stock: inStock,
+            availability_status: inStock ? "in_stock" : "out_of_stock",
+          })
+          .eq("handle", p.handle);
+        break;
+      }
+    }
+  } catch (err) {
+    console.error("inventory_items sync error:", err);
+  }
+}
+
+// ── Discount Handler ──
+async function handleDiscountEvent(
+  topic: string,
+  discount: Record<string, unknown>,
+) {
+  const title = discount.title as string || "";
+  const code = discount.code as string || "";
+  const id = discount.id;
+  console.log(`Processing ${topic} for discount: title="${title}", code="${code}", id=${id}`);
+
+  if (topic === "discounts/delete") {
+    console.log(`Discount deleted: ${id}`);
+  }
+  // Discounts are logged to shopify_webhook_log automatically.
+  // Future: sync to a local discount_codes table if needed.
+}
