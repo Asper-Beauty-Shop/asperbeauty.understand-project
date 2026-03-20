@@ -55,6 +55,10 @@ interface CartStore {
   getTotalItems: () => number;
   getTotalPrice: () => number;
   getCheckoutUrl: () => string | null;
+  getShopifyItems: () => CartItem[];
+  getLocalItems: () => CartItem[];
+  getShopifyTotal: () => number;
+  getLocalTotal: () => number;
 }
 
 function prescriptionToCartItem(p: PrescriptionProduct): Omit<CartItem, "lineId"> {
@@ -304,6 +308,17 @@ export const useCartStore = create<CartStore>()(
       },
 
       getCheckoutUrl: () => get().checkoutUrl,
+
+      getShopifyItems: () => get().items.filter((i) => isShopifyVariant(i.variantId)),
+      getLocalItems: () => get().items.filter((i) => !isShopifyVariant(i.variantId)),
+      getShopifyTotal: () =>
+        get().items
+          .filter((i) => isShopifyVariant(i.variantId))
+          .reduce((sum, item) => sum + parseFloat(item.price.amount) * item.quantity, 0),
+      getLocalTotal: () =>
+        get().items
+          .filter((i) => !isShopifyVariant(i.variantId))
+          .reduce((sum, item) => sum + parseFloat(item.price.amount) * item.quantity, 0),
     }),
     {
       name: "asper-beauty-cart",
