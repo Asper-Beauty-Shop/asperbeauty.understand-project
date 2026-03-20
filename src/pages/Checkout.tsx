@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
-import { Lock, ChevronDown, CreditCard, Banknote, Loader2, ArrowLeft } from "lucide-react";
+import { Lock, Banknote, Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,7 @@ import AsperLogo from "@/components/brand/AsperLogo";
 import { cn } from "@/lib/utils";
 import { normalizePrice } from "@/lib/shopify";
 import { playSuccessSound } from "@/lib/sounds";
+import { supabase } from "@/integrations/supabase/client";
 
 /* ─── Jordanian Location Data ─── */
 const CITIES = [
@@ -31,11 +32,9 @@ const AMMAN_AREAS = [
   "Airport Road", "Abu Alanda", "Tabarbour", "Al-Hashmi",
 ];
 
-type PaymentMethod = "cod" | "card";
-
 export default function Checkout() {
   const navigate = useNavigate();
-  const { items } = useCartStore();
+  const { items, clearCart } = useCartStore();
   const totalPrice = items.reduce((sum, item) => sum + normalizePrice(item.price.amount) * item.quantity, 0);
   const deliveryFee = totalPrice >= 50 ? 0 : 3;
   const currency = items[0]?.price.currencyCode || "JOD";
@@ -45,48 +44,91 @@ export default function Checkout() {
   const [phone, setPhone] = useState("");
   const [fullName, setFullName] = useState("");
   const [address, setAddress] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
+  const [notes, setNotes] = useState("");
   const [shakeFields, setShakeFields] = useState<Set<string>>(new Set());
   const [submitting, setSubmitting] = useState(false);
 
   const triggerShake = (fields: string[]) => {
     setShakeFields(new Set(fields));
-    // Haptic feedback
     if ("vibrate" in navigator) navigator.vibrate(50);
     setTimeout(() => setShakeFields(new Set()), 600);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const missing: string[] = [];
     if (!fullName.trim()) missing.push("fullName");
-    if (!phone.trim() || phone.replace(/\D/g, "").length < 9) missing.push("phone");
+    if (!phone.trim() || !/^07[789]\d{7}$/.test(`07${phone.replace(/\D/g, "").slice(-7)}`)) missing.push("phone");
     if (!city) missing.push("city");
-    if (!address.trim()) missing.push("address");
+    if (!address.trim() || address.trim().length < 10) missing.push("address");
 
     if (missing.length > 0) {
       triggerShake(missing);
       return;
     }
 
-    if (paymentMethod === "card") {
-      // Card payments not yet supported without external checkout
-      toast.error("Card payment is not available. Please use Cash on Delivery.");
-      return;
-    } else {
-      // COD flow — show confirmation
-      setSubmitting(true);
+    setSubmitting(true);
+
+    try {
+      // Build zero-trust payload — NO price data sent
+      const payload = {
+        items: items.map((item) => ({
+          productId: item.product.node.id,
+          quantity: item.quantity,
+        })),
+        customerName: fullName.trim(),
+        customerPhone: `07${phone.replace(/\D/g, "").slice(-7)}`,
+        deliveryAddress: address.trim(),
+        city,
+        area: city === "amman" ? area : undefined,
+        notes: notes.trim() || undefined,
+      };
+
+      const { data, error } = await supabase.functions.invoke("secure-checkout", {
+        body: payload,
+      });
+
+      if (error) {
+        // Try to parse structured error from edge function
+        const errBody = typeof error === "object" && "context" in error
+          ? (error as { context?: { body?: string } }).context?.body
+          : null;
+        let parsed: { error?: { code?: string; details?: string[]; message?: string } } | null = null;
+        try { if (errBody) parsed = JSON.parse(errBody); } catch { /* ignore */ }
+
+        if (parsed?.error?.code === "INVENTORY_CONFLICT") {
+          toast.error("Some items are unavailable", {
+            description: parsed.error.details?.join(", "),
+          });
+        } else if (parsed?.error?.code === "VALIDATION_ERROR") {
+          toast.error("Please check your details", {
+            description: parsed.error.details?.join(", "),
+          });
+        } else {
+          toast.error("Order failed. Please try again.");
+        }
+        setSubmitting(false);
+        return;
+      }
+
+      // Success — server validated prices & created order
       playSuccessSound();
       if ("vibrate" in navigator) navigator.vibrate([100, 50, 100]);
-      setTimeout(() => {
-        setSubmitting(false);
-        navigate("/");
-      }, 2000);
+      clearCart();
+
+      toast.success("Order placed!", {
+        description: `Order #${data?.data?.orderNumber} — Total: ${data?.data?.total?.toFixed(2)} JOD`,
+      });
+
+      setTimeout(() => navigate("/"), 1500);
+    } catch (err) {
+      console.error("[CHECKOUT_ERROR]", err);
+      toast.error("Something went wrong. Please try again.");
+      setSubmitting(false);
     }
   };
 
   const formatPhone = (val: string) => {
-    // Only allow digits after +962
     const digits = val.replace(/\D/g, "").slice(0, 9);
     setPhone(digits);
   };
@@ -104,7 +146,7 @@ export default function Checkout() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* ─── Enclosed "Trust Tunnel" Header ─── */}
+      {/* ─── Trust Tunnel Header ─── */}
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
           <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground font-body">
@@ -119,7 +161,6 @@ export default function Checkout() {
             <span>Secure Checkout</span>
           </div>
         </div>
-        {/* Gold trust line */}
         <div className="h-[2px] bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
       </header>
 
@@ -179,10 +220,7 @@ export default function Checkout() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Enter your full name"
-                className={cn(
-                  "h-12 rounded-xl font-body",
-                  shakeFields.has("fullName") && "animate-shake border-destructive"
-                )}
+                className={cn("h-12 rounded-xl font-body", shakeFields.has("fullName") && "animate-shake border-destructive")}
               />
               {shakeFields.has("fullName") && (
                 <p className="text-xs text-destructive font-body">Please enter your name so we know who to deliver to.</p>
@@ -193,9 +231,7 @@ export default function Checkout() {
             <div className="space-y-1.5">
               <Label htmlFor="phone" className="font-body text-sm">Phone Number</Label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-body font-semibold">
-                  +962
-                </span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-body font-semibold">+962</span>
                 <Input
                   id="phone"
                   type="tel"
@@ -203,10 +239,7 @@ export default function Checkout() {
                   onChange={(e) => formatPhone(e.target.value)}
                   placeholder="7X XXX XXXX"
                   maxLength={10}
-                  className={cn(
-                    "h-12 rounded-xl font-body pl-14",
-                    shakeFields.has("phone") && "animate-shake border-destructive"
-                  )}
+                  className={cn("h-12 rounded-xl font-body pl-14", shakeFields.has("phone") && "animate-shake border-destructive")}
                 />
               </div>
               {shakeFields.has("phone") && (
@@ -218,10 +251,7 @@ export default function Checkout() {
             <div className="space-y-1.5">
               <Label className="font-body text-sm">City</Label>
               <Select value={city} onValueChange={setCity}>
-                <SelectTrigger className={cn(
-                  "h-12 rounded-xl font-body",
-                  shakeFields.has("city") && "animate-shake border-destructive"
-                )}>
+                <SelectTrigger className={cn("h-12 rounded-xl font-body", shakeFields.has("city") && "animate-shake border-destructive")}>
                   <SelectValue placeholder="Select your city" />
                 </SelectTrigger>
                 <SelectContent className="bg-card z-50">
@@ -260,68 +290,28 @@ export default function Checkout() {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Building name, street, floor"
-                className={cn(
-                  "h-12 rounded-xl font-body",
-                  shakeFields.has("address") && "animate-shake border-destructive"
-                )}
+                className={cn("h-12 rounded-xl font-body", shakeFields.has("address") && "animate-shake border-destructive")}
               />
               {shakeFields.has("address") && (
                 <p className="text-xs text-destructive font-body">We need your address to deliver your order.</p>
               )}
             </div>
-          </section>
 
-          {/* Payment Method */}
-          <section className="space-y-4">
-            <h2 className="font-heading text-lg text-foreground">Payment Method</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {/* COD */}
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("cod")}
-                className={cn(
-                  "flex items-start gap-3 rounded-xl border-2 p-4 text-left transition-all",
-                  paymentMethod === "cod"
-                    ? "border-accent bg-accent/5 shadow-maroon-glow"
-                    : "border-border/50 hover:border-border"
-                )}
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                  <Banknote className="h-5 w-5 text-accent" />
-                </div>
-                <div>
-                  <p className="font-body font-semibold text-sm text-foreground">Cash on Delivery</p>
-                  <p className="text-xs text-muted-foreground font-body mt-0.5">
-                    Pay securely at your doorstep.
-                  </p>
-                </div>
-              </button>
-
-              {/* Credit Card */}
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("card")}
-                className={cn(
-                  "flex items-start gap-3 rounded-xl border-2 p-4 text-left transition-all",
-                  paymentMethod === "card"
-                    ? "border-accent bg-accent/5 shadow-maroon-glow"
-                    : "border-border/50 hover:border-border"
-                )}
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                  <CreditCard className="h-5 w-5 text-accent" />
-                </div>
-                <div>
-                  <p className="font-body font-semibold text-sm text-foreground">Credit / Debit Card</p>
-                  <p className="text-xs text-muted-foreground font-body mt-0.5">
-                    Secure payment via Shopify.
-                  </p>
-                </div>
-              </button>
+            {/* Notes */}
+            <div className="space-y-1.5">
+              <Label htmlFor="notes" className="font-body text-sm">Notes (optional)</Label>
+              <Input
+                id="notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Any special instructions"
+                maxLength={500}
+                className="h-12 rounded-xl font-body"
+              />
             </div>
           </section>
 
-          {/* Submit */}
+          {/* Submit — COD only */}
           <Button
             type="submit"
             size="lg"
@@ -330,11 +320,6 @@ export default function Checkout() {
           >
             {submitting ? (
               <Loader2 className="h-5 w-5 animate-spin" />
-            ) : paymentMethod === "card" ? (
-              <>
-                <Lock className="h-4 w-4 mr-2" />
-                Pay with Card ({(totalPrice + deliveryFee).toFixed(2)} {currency})
-              </>
             ) : (
               <>
                 <Banknote className="h-4 w-4 mr-2" />
