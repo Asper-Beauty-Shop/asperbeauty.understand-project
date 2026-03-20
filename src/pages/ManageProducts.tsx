@@ -47,6 +47,7 @@ import {
   Tag,
   Trash2,
   Upload,
+  Store,
   Users,
   Wand2,
 } from "lucide-react";
