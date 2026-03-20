@@ -1,6 +1,13 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { ShopifyProduct } from "@/lib/shopify";
+import {
+  createShopifyCart,
+  addLineToShopifyCart,
+  updateShopifyCartLine,
+  removeLineFromShopifyCart,
+  queryShopifyCart,
+} from "@/lib/shopifyStorefront";
 
 /** Product shape from bot / prescription (Supabase products or bot response). */
 export interface PrescriptionProduct {
@@ -32,7 +39,10 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[];
+  cartId: string | null;
+  checkoutUrl: string | null;
   isLoading: boolean;
+  isSyncing: boolean;
   isOpen: boolean;
 
   addItem: (item: Omit<CartItem, "lineId">) => Promise<void>;
@@ -40,9 +50,11 @@ interface CartStore {
   updateQuantity: (variantId: string, quantity: number) => Promise<void>;
   removeItem: (variantId: string) => Promise<void>;
   clearCart: () => void;
+  syncCart: () => Promise<void>;
   setOpen: (open: boolean) => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  getCheckoutUrl: () => string | null;
 }
 
 function prescriptionToCartItem(p: PrescriptionProduct): Omit<CartItem, "lineId"> {
@@ -61,18 +73,20 @@ function prescriptionToCartItem(p: PrescriptionProduct): Omit<CartItem, "lineId"
         minVariantPrice: { amount: String(p.price), currencyCode: "JOD" },
       },
       variants: {
-        edges: [{
-          node: {
-            id: `${p.id}-default`,
-            title: "Default",
-            price: { amount: String(p.price), currencyCode: "JOD" },
-            compareAtPrice: p.original_price
-              ? { amount: String(p.original_price), currencyCode: "JOD" }
-              : null,
-            availableForSale: true,
-            selectedOptions: [],
+        edges: [
+          {
+            node: {
+              id: `${p.id}-default`,
+              title: "Default",
+              price: { amount: String(p.price), currencyCode: "JOD" },
+              compareAtPrice: p.original_price
+                ? { amount: String(p.original_price), currencyCode: "JOD" }
+                : null,
+              availableForSale: true,
+              selectedOptions: [],
+            },
           },
-        }],
+        ],
       },
       options: [],
     },
@@ -91,23 +105,61 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      cartId: null,
+      checkoutUrl: null,
       isLoading: false,
+      isSyncing: false,
       isOpen: false,
 
       addItem: async (item) => {
-        const { items } = get();
+        const { items, cartId, clearCart } = get();
         const existingItem = items.find((i) => i.variantId === item.variantId);
 
-        if (existingItem) {
-          set({
-            items: items.map((i) =>
-              i.variantId === item.variantId
-                ? { ...i, quantity: i.quantity + item.quantity }
-                : i
-            ),
-          });
-        } else {
-          set({ items: [...items, { ...item, lineId: item.variantId }] });
+        set({ isLoading: true });
+        try {
+          if (!cartId) {
+            // Create a new Shopify cart
+            const result = await createShopifyCart({ ...item, lineId: null });
+            if (result) {
+              set({
+                cartId: result.cartId,
+                checkoutUrl: result.checkoutUrl,
+                items: [{ ...item, lineId: result.lineId }],
+              });
+            }
+          } else if (existingItem) {
+            const newQuantity = existingItem.quantity + item.quantity;
+            if (!existingItem.lineId) {
+              console.error("Cannot update quantity for item without lineId:", existingItem);
+              return;
+            }
+            const result = await updateShopifyCartLine(cartId, existingItem.lineId, newQuantity);
+            if (result.success) {
+              const currentItems = get().items;
+              set({
+                items: currentItems.map((i) =>
+                  i.variantId === item.variantId ? { ...i, quantity: newQuantity } : i,
+                ),
+              });
+            } else if (result.cartNotFound) {
+              clearCart();
+            }
+          } else {
+            // Add new line to existing cart
+            const result = await addLineToShopifyCart(cartId, { ...item, lineId: null });
+            if (result.success) {
+              const currentItems = get().items;
+              set({
+                items: [...currentItems, { ...item, lineId: result.lineId ?? null }],
+              });
+            } else if (result.cartNotFound) {
+              clearCart();
+            }
+          }
+        } catch (error) {
+          console.error("Failed to add item:", error);
+        } finally {
+          set({ isLoading: false });
         }
       },
 
@@ -131,19 +183,72 @@ export const useCartStore = create<CartStore>()(
           await get().removeItem(variantId);
           return;
         }
-        set({
-          items: get().items.map((i) =>
-            i.variantId === variantId ? { ...i, quantity } : i
-          ),
-        });
+
+        const { items, cartId, clearCart } = get();
+        const item = items.find((i) => i.variantId === variantId);
+        if (!item?.lineId || !cartId) return;
+
+        set({ isLoading: true });
+        try {
+          const result = await updateShopifyCartLine(cartId, item.lineId, quantity);
+          if (result.success) {
+            const currentItems = get().items;
+            set({
+              items: currentItems.map((i) =>
+                i.variantId === variantId ? { ...i, quantity } : i,
+              ),
+            });
+          } else if (result.cartNotFound) {
+            clearCart();
+          }
+        } catch (error) {
+          console.error("Failed to update quantity:", error);
+        } finally {
+          set({ isLoading: false });
+        }
       },
 
       removeItem: async (variantId) => {
-        set({ items: get().items.filter((i) => i.variantId !== variantId) });
+        const { items, cartId, clearCart } = get();
+        const item = items.find((i) => i.variantId === variantId);
+        if (!item?.lineId || !cartId) return;
+
+        set({ isLoading: true });
+        try {
+          const result = await removeLineFromShopifyCart(cartId, item.lineId);
+          if (result.success) {
+            const currentItems = get().items;
+            const newItems = currentItems.filter((i) => i.variantId !== variantId);
+            newItems.length === 0 ? clearCart() : set({ items: newItems });
+          } else if (result.cartNotFound) {
+            clearCart();
+          }
+        } catch (error) {
+          console.error("Failed to remove item:", error);
+        } finally {
+          set({ isLoading: false });
+        }
       },
 
       clearCart: () => {
-        set({ items: [] });
+        set({ items: [], cartId: null, checkoutUrl: null });
+      },
+
+      syncCart: async () => {
+        const { cartId, isSyncing, clearCart } = get();
+        if (!cartId || isSyncing) return;
+
+        set({ isSyncing: true });
+        try {
+          const result = await queryShopifyCart(cartId);
+          if (!result.exists || result.totalQuantity === 0) {
+            clearCart();
+          }
+        } catch (error) {
+          console.error("Failed to sync cart with Shopify:", error);
+        } finally {
+          set({ isSyncing: false });
+        }
       },
 
       setOpen: (isOpen) => set({ isOpen }),
@@ -154,16 +259,20 @@ export const useCartStore = create<CartStore>()(
 
       getTotalPrice: () => {
         return get().items.reduce(
-          (sum, item) => sum + (parseFloat(item.price.amount) * item.quantity),
+          (sum, item) => sum + parseFloat(item.price.amount) * item.quantity,
           0,
         );
       },
+
+      getCheckoutUrl: () => get().checkoutUrl,
     }),
     {
       name: "asper-beauty-cart",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         items: state.items,
+        cartId: state.cartId,
+        checkoutUrl: state.checkoutUrl,
       }),
     },
   ),
