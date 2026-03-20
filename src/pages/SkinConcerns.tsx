@@ -112,37 +112,79 @@ export default function SkinConcerns() {
   });
 
   const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
-  const [products, setProducts] = useState<ShopifyProduct[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredProducts, setFilteredProducts] = useState<ShopifyProduct[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const activeConcern = skinConcerns.find((c) => c.id === selectedConcern);
+
   useEffect(() => {
-    const loadProducts = async () => {
+    if (!selectedConcern) {
+      setFilteredProducts([]);
+      return;
+    }
+    const concern = skinConcerns.find((c) => c.id === selectedConcern);
+    if (!concern) return;
+
+    const load = async () => {
+      setLoading(true);
       try {
-        const fetchedProducts = await fetchProducts(50);
-        setProducts(fetchedProducts);
-      } catch (error) {
-        console.error("Error loading products:", error);
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .in("primary_concern", concern.dbConcerns)
+          .eq("availability_status", "in_stock")
+          .order("bestseller_rank", { ascending: true, nullsFirst: false })
+          .limit(24);
+
+        if (error) {
+          console.error("Error filtering products:", error);
+          setFilteredProducts([]);
+          return;
+        }
+
+        const mapped: ShopifyProduct[] = (data ?? []).map((row: any) => ({
+          node: {
+            id: row.id,
+            title: row.title || row.name || "Unnamed Product",
+            description: row.description || "",
+            handle: row.handle || row.id,
+            vendor: row.brand || undefined,
+            productType: row.category || undefined,
+            tags: row.tags ?? [],
+            createdAt: row.created_at,
+            priceRange: {
+              minVariantPrice: { amount: String(row.price ?? 0), currencyCode: "JOD" },
+            },
+            images: {
+              edges: row.image_url
+                ? [{ node: { url: row.image_url, altText: row.title || row.name } }]
+                : [],
+            },
+            variants: {
+              edges: [{
+                node: {
+                  id: `${row.id}-default`,
+                  title: "Default",
+                  price: { amount: String(row.price ?? 0), currencyCode: "JOD" },
+                  compareAtPrice: null,
+                  availableForSale: true,
+                  selectedOptions: [],
+                },
+              }],
+            },
+            options: [],
+          },
+        }));
+        setFilteredProducts(mapped);
+      } catch (err) {
+        console.error("Error loading concern products:", err);
+        setFilteredProducts([]);
       } finally {
         setLoading(false);
       }
     };
-    loadProducts();
-  }, []);
-  const filterProductsByConcern = (concernId: string) => {
-    const concern = skinConcerns.find((c) => c.id === concernId);
-    if (!concern) return [];
-    return products.filter((product) => {
-      const title = product.node.title.toLowerCase();
-      const description = product.node.description?.toLowerCase() || "";
-      const combined = `${title} ${description}`;
-      return concern.keywords.some((keyword) =>
-        combined.includes(keyword.toLowerCase())
-      );
-    });
-  };
-  const filteredProducts = selectedConcern
-    ? filterProductsByConcern(selectedConcern)
-    : [];
-  const activeConcern = skinConcerns.find((c) => c.id === selectedConcern);
+    load();
+  }, [selectedConcern]);
   return (
     <div className="min-h-screen bg-soft-ivory" dir={isRTL ? "rtl" : "ltr"}>
       <Header />
