@@ -166,6 +166,15 @@ Deno.serve(async (req) => {
     }
 
     const payload = validation.data!;
+
+    // --- Phone-based rate limiting (prevents abuse from shared networks) ---
+    if (isRateLimited(`phone:${payload.customerPhone}`, RATE_LIMIT_MAX_REQUESTS_PHONE)) {
+      return new Response(
+        JSON.stringify({ error: { code: "RATE_LIMITED", message: "Too many orders from this phone number. Please wait a moment and try again." } }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" } },
+      );
+    }
+
     const itemIds = payload.items.map((i) => i.productId);
 
     // --- Fetch canonical prices from DB (single IN query, O(1) map lookup) ---
