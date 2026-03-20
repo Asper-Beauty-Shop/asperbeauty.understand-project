@@ -50,6 +50,10 @@ export const CartDrawer = () => {
     getTotalPrice,
     getCheckoutUrl,
     syncCart,
+    getShopifyItems,
+    getLocalItems,
+    getShopifyTotal,
+    getLocalTotal,
   } = useCartStore();
 
   const totalPrice = getTotalPrice();
