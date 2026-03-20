@@ -7,38 +7,11 @@ const corsHeaders = {
 };
 
 // ---------------------------------------------------------------------------
-// Rate Limiter (sliding window, in-memory) — dual: IP + phone
+// Rate Limiter — persistent (database-backed, survives cold starts)
 // ---------------------------------------------------------------------------
-const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX_REQUESTS_IP = 5;    // max 5 orders per IP per minute
-const RATE_LIMIT_MAX_REQUESTS_PHONE = 3; // max 3 orders per phone per minute
-
-const rateLimitLog = new Map<string, number[]>();
-
-function isRateLimited(key: string, maxRequests: number): boolean {
-  const now = Date.now();
-  const timestamps = rateLimitLog.get(key) ?? [];
-  const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-
-  if (valid.length >= maxRequests) {
-    rateLimitLog.set(key, valid);
-    return true;
-  }
-
-  valid.push(now);
-  rateLimitLog.set(key, valid);
-  return false;
-}
-
-// Periodic cleanup to prevent memory leak (every 5 min)
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, timestamps] of rateLimitLog) {
-    const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-    if (valid.length === 0) rateLimitLog.delete(key);
-    else rateLimitLog.set(key, valid);
-  }
-}, 300_000);
+const RATE_LIMIT_WINDOW_SECONDS = 60; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS_IP = 5;
+const RATE_LIMIT_MAX_REQUESTS_PHONE = 3;
 
 // ---------------------------------------------------------------------------
 // Inline validation
