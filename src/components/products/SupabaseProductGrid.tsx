@@ -109,12 +109,10 @@ function EliteProductCard({ product, index, featured = false }: { product: Produ
           images: { edges: imageUrl ? [{ node: { url: imageUrl, altText: title } }] : [] },
           priceRange: {
             minVariantPrice: { amount: product.price.toString(), currencyCode: "JOD" },
-            maxVariantPrice: { amount: product.price.toString(), currencyCode: "JOD" },
           },
-          compareAtPriceRange: {
-            maxVariantPrice: { amount: (product.original_price || product.price).toString(), currencyCode: "JOD" },
-            minVariantPrice: { amount: (product.original_price || product.price).toString(), currencyCode: "JOD" },
-          },
+          compareAtPriceRange: product.original_price ? {
+            maxVariantPrice: { amount: product.original_price.toString(), currencyCode: "JOD" },
+          } : null,
           variants: { edges: [{ node: { id: `${product.id}-default`, title: "Default", price: { amount: product.price.toString(), currencyCode: "JOD" }, compareAtPrice: null, availableForSale: true, selectedOptions: [] } }] },
           options: [],
           tags: [],
