@@ -141,4 +141,4 @@ export const checkoutPayloadSchema = z.object({
     .or(z.literal("")),
 });
 
-export type OrderTrackingData = z.infer<typeof orderTrackingSchema>;
+export type CheckoutPayload = z.infer<typeof checkoutPayloadSchema>;
