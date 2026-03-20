@@ -57,36 +57,22 @@ export const BeautyAssistant = () => {
       <AnimatePresence>
         {!isOpen && (
           <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0, transition: { duration: 0.3 } }}
-            transition={{ type: "spring", stiffness: 260, damping: 22, delay: 1 }}
-            className="fixed bottom-6 right-4 sm:right-8 z-[100] cursor-pointer group"
+            initial={{ y: 60, opacity: 0, scale: 0.8 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 60, opacity: 0, scale: 0.8, transition: { duration: 0.25 } }}
+            transition={{ type: "spring", stiffness: 300, damping: 24, delay: 1.2 }}
+            className="fixed bottom-20 lg:bottom-6 left-1/2 -translate-x-1/2 z-[100] cursor-pointer group"
             onClick={() => setIsOpen(true)}
           >
-            <div className="flex items-center gap-3 bg-background/90 backdrop-blur-xl border border-polished-gold/25 rounded-full pl-2 pr-5 py-2 shadow-[0_8px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:shadow-[0_12px_50px_-8px_rgba(197,160,40,0.3)] group-hover:border-polished-gold/50 group-hover:scale-105">
-              {/* Realistic avatar */}
-              <div className="relative shrink-0">
-                <div className="w-11 h-11 rounded-full overflow-hidden border border-polished-gold/40">
-                  <img 
-                    src="/dr-sami-head.png" 
-                    alt="Dr. Sami" 
-                    className="w-full h-full object-cover object-top"
-                  />
-                </div>
-                {/* Online dot */}
-                <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-background" />
-              </div>
-
-              {/* Elegant text */}
-              <div className="flex flex-col">
-                <span className="font-display text-sm font-semibold tracking-wide text-foreground leading-tight">
-                  {isAr ? "د. سامي" : "Dr. Sami"}
-                </span>
-                <span className="text-[10px] uppercase tracking-[0.15em] text-polished-gold/80 font-body">
-                  {isAr ? "استشارة مباشرة" : "Beauty Consultant"}
-                </span>
-              </div>
+            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-polished-gold/50 shadow-[0_4px_20px_-4px_rgba(197,160,40,0.4)] transition-all duration-500 group-hover:shadow-[0_6px_30px_-4px_rgba(197,160,40,0.6)] group-hover:scale-110 group-hover:border-polished-gold/80 relative">
+              <img
+                src="/dr-sami-head.png"
+                alt="Dr. Sami"
+                className="w-full h-full object-cover object-top"
+                loading="lazy"
+              />
+              {/* Online dot */}
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-background" />
             </div>
           </motion.div>
         )}
