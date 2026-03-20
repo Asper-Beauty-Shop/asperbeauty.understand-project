@@ -47,6 +47,7 @@ import {
   Tag,
   Trash2,
   Upload,
+  Store,
   Users,
   Wand2,
 } from "lucide-react";
@@ -475,6 +476,16 @@ const ManageProducts = () => {
             </div>
 
             <div className="flex items-center gap-3 flex-wrap">
+              <Button
+                asChild
+                variant="outline"
+                className="border-primary/30 text-primary hover:bg-primary/10"
+              >
+                <Link to="/admin/shopify">
+                  <Store className="w-4 h-4 me-2" />
+                  Shopify
+                </Link>
+              </Button>
               <Button
                 asChild
                 variant="outline"
