@@ -1,35 +1,28 @@
 
 
-## Plan: Set Bestseller Ranks for Top Products
+## Problem
 
-### Current State
-- All products have `bestseller_rank` set to `null` or `999` (default)
-- The catalog has ~10,000+ products across diverse categories (Perfume, Watches, Baby, Skincare, etc.)
-- The **Best Sellers** homepage section fetches 4 products ordered by `created_at ASC` — not using `bestseller_rank` at all
-- The **DualPersonaBestsellers** component orders by `bestseller_rank ASC` but all ranks are equal, so results are arbitrary
+Your 20 products are stored in the database and do load on the `/shop` page. However, they appear missing or replaced by placeholder data in several places due to filtering logic:
 
-### What We'll Do
+1. **Homepage "Curated for You" and "New Arrivals" grids**: These sections query the database but then filter results through `isHomepageBrand()`, which only allows premium brands (La Roche-Posay, Vichy, CeraVe, etc.). Your products use brands like "AgelessSkin", "GlowLab", "AquaDerm" which don't match, so the homepage falls back to hardcoded placeholder images.
 
-**Step 1 — Assign bestseller_rank to top products per key category**
+2. **Expert-Curated Picks (DualPersonaBestsellers)**: This section queries by `asper_category` — your products do have these values set, so this section should work.
 
-Run UPDATE statements to rank products 1-10 within each storefront-relevant category, using price and brand diversity as a heuristic (since there's no sales data):
+3. **Product Sliders**: Same `isHomepageBrand` filter issue as #1.
 
-Categories to rank:
-- **Skincare**: Serum, Cleanser, Moisturizer, Sunscreen, Cream, Toner
-- **Makeup**: Mascara, Foundation, Concealer, Lipstick, Eyeshadow, Primer
-- **Fragrance**: Perfume
-- **Hair**: Shampoo, Conditioner, Hair Mask
-- **Body**: Body Lotion, Shower Gel, Body Wash
+## Plan
 
-For each category, we'll assign ranks 1-10 to products with the best combination of having a non-null image, reasonable price, and brand variety.
+### Step 1: Remove the premium brand filter from homepage queries
+In `src/pages/Index.tsx`, remove the `.filter((p) => isHomepageBrand(p.brand))` calls from both the `new-arrivals-premium` and `bestsellers-premium` queries (lines 178 and 203). This will let your actual database products appear instead of being filtered out.
 
-**Step 2 — Fix BestSellersSection query**
+### Step 2: Remove hardcoded fallback product arrays
+Remove or deprecate the `NEW_ARRIVALS` and `BESTSELLERS` hardcoded arrays (lines 125-144) and their associated static image imports (lines 20-32). The components will always use database products instead of falling back to placeholder data that doesn't exist in the catalog.
 
-Update `BestSellersSection.tsx` to order by `bestseller_rank ASC` instead of `created_at ASC`, and filter out products where `bestseller_rank` is null or 999, so only intentionally ranked products appear.
+### Step 3: Order homepage bestsellers by bestseller_rank
+Change the `bestsellers-premium` query to order by `bestseller_rank` ascending (instead of `created_at` ascending) so the homepage shows your top-ranked products first.
 
 ### Technical Details
-
-- Data updates via the insert/execute tool (not migrations — this is data, not schema)
-- SQL will use window functions: `ROW_NUMBER() OVER (PARTITION BY asper_category ORDER BY random())` to pick diverse top products per category
-- Approximately 100-150 products will get ranks assigned across all categories
+- Files modified: `src/pages/Index.tsx`, potentially `src/constants/premiumBrands.ts` (can keep for future use)
+- No database changes needed — products are already stored and accessible
+- The `/shop` page, skin concerns page, and DualPersonaBestsellers already work with your products
 
