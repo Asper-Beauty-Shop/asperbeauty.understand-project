@@ -99,13 +99,18 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    // --- Rate Limiting ---
+    // --- Rate Limiting (persistent, DB-backed) ---
     const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
       ?? req.headers.get("cf-connecting-ip")
       ?? "unknown";
 
-    if (isRateLimited(`ip:${clientIp}`, RATE_LIMIT_MAX_REQUESTS_IP)) {
+    const { data: ipLimited } = await supabaseAdmin.rpc("check_rate_limit", {
+      p_key: `ip:${clientIp}`,
+      p_window_seconds: RATE_LIMIT_WINDOW_SECONDS,
+      p_max_requests: RATE_LIMIT_MAX_REQUESTS_IP,
+    });
+
+    if (ipLimited) {
       return new Response(
         JSON.stringify({ error: { code: "RATE_LIMITED", message: "Too many checkout attempts. Please wait a moment and try again." } }),
         { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" } },
