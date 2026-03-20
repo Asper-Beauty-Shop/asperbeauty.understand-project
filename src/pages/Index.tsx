@@ -276,12 +276,12 @@ const Index = () => {
         <ProductSlider
           title={{ en: "Bestsellers — Niche Approved", ar: "الأكثر مبيعاً — اختيار الخبراء" }}
           subtitle={{ en: "Most Loved", ar: "الأكثر حباً" }}
-          products={bestsellers.length > 0 ? bestsellers : BESTSELLERS}
+          products={bestsellers}
         />
         <ProductSlider
           title={{ en: "Just Landed! What's New", ar: "وصل حديثاً! الجديد لدينا" }}
           subtitle={{ en: "New Arrivals", ar: "وصل حديثاً" }}
-          products={newArrivals.length > 0 ? newArrivals : NEW_ARRIVALS}
+          products={newArrivals}
         />
 
         {/* ═══ EliteBrandShowcase (Authority) ═══ */}
