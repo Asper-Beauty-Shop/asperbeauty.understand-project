@@ -192,6 +192,11 @@ export default {
           "0%": { transform: "translate3d(0, 0, 0)" },
           "100%": { transform: "translate3d(-50%, 0, 0)" },
         },
+        pop: {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.25)" },
+          "100%": { transform: "scale(1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -204,6 +209,7 @@ export default {
         "skeleton-breathe": "skeleton-breathe 2s ease-in-out infinite",
         shake: "shake 0.5s ease-in-out",
         "marquee-float": "marquee-float 35s linear infinite",
+        pop: "pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards",
       },
     },
   },
