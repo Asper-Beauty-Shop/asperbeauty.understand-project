@@ -31,7 +31,7 @@ serve(async (req) => {
     const { data: products, error: dbError } = await supabase
       .from("products")
       .select("id, title, handle, brand, category, price, primary_concern, tags")
-      .eq("availability_status", "In_Stock")
+      .eq("availability_status", "in_stock")
       .order("bestseller_rank", { ascending: true, nullsFirst: false })
       .limit(200);
 

@@ -4,7 +4,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
+import { type ShopifyProduct } from "@/lib/shopify";
+import { supabase } from "@/integrations/supabase/client";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import {
   Droplets,
@@ -28,126 +29,71 @@ const skinConcerns = [{
   id: "anti-aging",
   nameEn: "Anti-Aging",
   nameAr: "مكافحة الشيخوخة",
-  descriptionEn:
-    "Turn back time with powerful anti-aging formulas featuring retinol, collagen, and peptides.",
+  descriptionEn: "Turn back time with powerful anti-aging formulas featuring retinol, collagen, and peptides.",
   descriptionAr: "استعيدي شباب بشرتك مع تركيبات قوية لمكافحة الشيخوخة.",
   image: antiAgingImage,
   icon: Sparkles,
-  keywords: [
-    "anti-aging",
-    "collagen",
-    "retinol",
-    "liftactiv",
-    "wrinkle",
-    "firming",
-    "peptide",
-  ],
+  dbConcerns: ["Concern_Aging", "Concern_AntiAging"],
   color: "from-amber-500/20 to-orange-500/20",
 }, {
   id: "hydration",
   nameEn: "Hydration",
   nameAr: "الترطيب",
-  descriptionEn:
-    "Quench your skin's thirst with intense hydration boosters and hyaluronic acid.",
+  descriptionEn: "Quench your skin's thirst with intense hydration boosters and hyaluronic acid.",
   descriptionAr: "رطبي بشرتك بعمق مع معززات الترطيب وحمض الهيالورونيك.",
   image: hydrationImage,
   icon: Droplets,
-  keywords: [
-    "hydration",
-    "hyaluronic",
-    "moistur",
-    "mineral 89",
-    "aqua",
-    "h.a.",
-    "booster",
-  ],
+  dbConcerns: ["Concern_Hydration", "Concern_Dryness"],
   color: "from-cyan-500/20 to-blue-500/20",
 }, {
   id: "acne",
   nameEn: "Acne & Blemishes",
   nameAr: "حب الشباب والبقع",
-  descriptionEn:
-    "Clear and purify your skin with targeted treatments for acne-prone skin.",
+  descriptionEn: "Clear and purify your skin with targeted treatments for acne-prone skin.",
   descriptionAr: "نقي بشرتك مع علاجات مستهدفة للبشرة المعرضة لحب الشباب.",
   image: acneImage,
   icon: Shield,
-  keywords: [
-    "acne",
-    "blemish",
-    "purif",
-    "normaderm",
-    "cleanser",
-    "pore",
-    "oil-free",
-    "mattif",
-  ],
+  dbConcerns: ["Concern_Acne"],
   color: "from-green-500/20 to-emerald-500/20",
 }, {
   id: "brightening",
   nameEn: "Brightening",
   nameAr: "التفتيح والإشراق",
-  descriptionEn:
-    "Reveal radiant, glowing skin with vitamin C and brightening serums.",
+  descriptionEn: "Reveal radiant, glowing skin with vitamin C and brightening serums.",
   descriptionAr: "اكشفي عن بشرة مشرقة ومتألقة مع فيتامين سي وسيرومات التفتيح.",
   image: brighteningImage,
   icon: Sun,
-  keywords: [
-    "bright",
-    "vitamin c",
-    "radiance",
-    "glow",
-    "dark spot",
-    "b3",
-    "luminous",
-  ],
+  dbConcerns: ["Concern_Brightening", "Concern_Pigmentation"],
   color: "from-yellow-500/20 to-orange-400/20",
 }, {
   id: "sensitivity",
   nameEn: "Sensitivity",
   nameAr: "البشرة الحساسة",
-  descriptionEn:
-    "Gentle, soothing formulas designed for delicate and reactive skin types.",
+  descriptionEn: "Gentle, soothing formulas designed for delicate and reactive skin types.",
   descriptionAr: "تركيبات لطيفة ومهدئة مصممة للبشرة الحساسة والمتفاعلة.",
   image: sensitivityImage,
   icon: Heart,
-  keywords: [
-    "sensitive",
-    "soothing",
-    "calming",
-    "gentle",
-    "redness",
-    "irritat",
-    "dermatolog",
-  ],
+  dbConcerns: ["Concern_Sensitivity", "Concern_Redness"],
   color: "from-pink-400/20 to-rose-400/20",
 }, {
   id: "sun-protection",
   nameEn: "Sun Protection",
   nameAr: "الحماية من الشمس",
-  descriptionEn:
-    "Shield your skin from harmful UV rays with advanced SPF protection.",
+  descriptionEn: "Shield your skin from harmful UV rays with advanced SPF protection.",
   descriptionAr: "احمي بشرتك من أشعة الشمس الضارة مع حماية متقدمة.",
   image: sunProtectionImage,
   icon: Umbrella,
-  keywords: ["spf", "sun", "uv", "protect", "sunscreen", "broad spectrum"],
+  dbConcerns: ["Concern_SunProtection"],
   color: "from-yellow-400/20 to-amber-400/20",
 }, {
   id: "dark-circles",
   nameEn: "Dark Circles",
   nameAr: "الهالات السوداء",
-  descriptionEn:
-    "Target under-eye concerns with specialized eye care treatments.",
+  descriptionEn: "Target under-eye concerns with specialized eye care treatments.",
   descriptionAr: "عالجي مشاكل منطقة العين مع علاجات متخصصة للعناية بالعين.",
   image: darkCirclesImage,
   icon: Eye,
-  keywords: [
-    "eye",
-    "dark circle",
-    "puff",
-    "under-eye",
-    "eye care",
-    "eye cream",
-  ],
+  dbConcerns: ["Concern_DarkCircles"],
   color: "from-purple-400/20 to-violet-400/20",
 }];
 export default function SkinConcerns() {
@@ -166,37 +112,79 @@ export default function SkinConcerns() {
   });
 
   const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
-  const [products, setProducts] = useState<ShopifyProduct[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredProducts, setFilteredProducts] = useState<ShopifyProduct[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const activeConcern = skinConcerns.find((c) => c.id === selectedConcern);
+
   useEffect(() => {
-    const loadProducts = async () => {
+    if (!selectedConcern) {
+      setFilteredProducts([]);
+      return;
+    }
+    const concern = skinConcerns.find((c) => c.id === selectedConcern);
+    if (!concern) return;
+
+    const load = async () => {
+      setLoading(true);
       try {
-        const fetchedProducts = await fetchProducts(50);
-        setProducts(fetchedProducts);
-      } catch (error) {
-        console.error("Error loading products:", error);
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .in("primary_concern", concern.dbConcerns)
+          .eq("availability_status", "in_stock")
+          .order("bestseller_rank", { ascending: true, nullsFirst: false })
+          .limit(24);
+
+        if (error) {
+          console.error("Error filtering products:", error);
+          setFilteredProducts([]);
+          return;
+        }
+
+        const mapped: ShopifyProduct[] = (data ?? []).map((row: any) => ({
+          node: {
+            id: row.id,
+            title: row.title || row.name || "Unnamed Product",
+            description: row.description || "",
+            handle: row.handle || row.id,
+            vendor: row.brand || undefined,
+            productType: row.category || undefined,
+            tags: row.tags ?? [],
+            createdAt: row.created_at,
+            priceRange: {
+              minVariantPrice: { amount: String(row.price ?? 0), currencyCode: "JOD" },
+            },
+            images: {
+              edges: row.image_url
+                ? [{ node: { url: row.image_url, altText: row.title || row.name } }]
+                : [],
+            },
+            variants: {
+              edges: [{
+                node: {
+                  id: `${row.id}-default`,
+                  title: "Default",
+                  price: { amount: String(row.price ?? 0), currencyCode: "JOD" },
+                  compareAtPrice: null,
+                  availableForSale: true,
+                  selectedOptions: [],
+                },
+              }],
+            },
+            options: [],
+          },
+        }));
+        setFilteredProducts(mapped);
+      } catch (err) {
+        console.error("Error loading concern products:", err);
+        setFilteredProducts([]);
       } finally {
         setLoading(false);
       }
     };
-    loadProducts();
-  }, []);
-  const filterProductsByConcern = (concernId: string) => {
-    const concern = skinConcerns.find((c) => c.id === concernId);
-    if (!concern) return [];
-    return products.filter((product) => {
-      const title = product.node.title.toLowerCase();
-      const description = product.node.description?.toLowerCase() || "";
-      const combined = `${title} ${description}`;
-      return concern.keywords.some((keyword) =>
-        combined.includes(keyword.toLowerCase())
-      );
-    });
-  };
-  const filteredProducts = selectedConcern
-    ? filterProductsByConcern(selectedConcern)
-    : [];
-  const activeConcern = skinConcerns.find((c) => c.id === selectedConcern);
+    load();
+  }, [selectedConcern]);
   return (
     <div className="min-h-screen bg-soft-ivory" dir={isRTL ? "rtl" : "ltr"}>
       <Header />

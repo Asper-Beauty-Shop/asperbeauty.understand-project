@@ -104,7 +104,7 @@ interface DbRow {
 
 function rowToProduct(row: DbRow): ShopifyProduct {
   const title = row.title || row.name || "Unnamed Product";
-  const inStock = row.availability_status === "In_Stock" || (row.inventory_total != null && row.inventory_total > 0);
+  const inStock = row.availability_status === "in_stock" || (row.inventory_total != null && row.inventory_total > 0);
   return {
     node: {
       id: row.id,
@@ -154,7 +154,7 @@ export async function fetchProducts(
   const q = supabase
     .from("products")
     .select(PRODUCT_COLUMNS)
-    .eq("availability_status", "In_Stock")
+    .eq("availability_status", "in_stock")
     .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .limit(first);
 
@@ -175,7 +175,7 @@ export async function fetchProductsPaginated(
   const { data, error, count } = await supabase
     .from("products")
     .select("*", { count: "exact" })
-    .eq("availability_status", "In_Stock")
+    .eq("availability_status", "in_stock")
     .order("bestseller_rank", { ascending: true, nullsFirst: false })
     .range(offset, offset + first - 1);
 
