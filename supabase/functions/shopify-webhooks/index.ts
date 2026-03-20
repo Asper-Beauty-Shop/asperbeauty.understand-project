@@ -1,11 +1,15 @@
 /**
  * shopify-webhooks — Receives Shopify webhook events, verifies HMAC,
- * logs to shopify_webhook_log, and processes order/product/customer events.
+ * logs to shopify_webhook_log, and processes events.
  *
  * Supported topics:
  *   orders/create, orders/updated, orders/paid, orders/fulfilled
  *   products/create, products/update, products/delete
  *   customers/create, customers/update
+ *   collections/create, collections/update, collections/delete
+ *   inventory_items/create, inventory_items/update, inventory_items/delete
+ *   inventory_levels/update, inventory_levels/connect
+ *   discounts/create, discounts/update, discounts/delete
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
