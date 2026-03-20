@@ -23,10 +23,17 @@ const Products = () => {
   const { data: products, isLoading, error } = useQuery({
     queryKey: ["shop-products", activeCategory, selectedBrands, selectedConcern, searchQuery],
     queryFn: async () => {
-      // If there's a search query, use the search_products RPC
+      // If there's a search query, use the search_products RPC then fetch full rows
       if (searchQuery?.trim()) {
-        const { data, error } = await supabase
+        const { data: searchResults, error: searchError } = await supabase
           .rpc("search_products", { search_query: searchQuery, max_results: 50 });
+        if (searchError) throw searchError;
+        if (!searchResults || searchResults.length === 0) return [];
+        const ids = searchResults.map((r: { id: string }) => r.id);
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .in("id", ids);
         if (error) throw error;
         return data ?? [];
       }
