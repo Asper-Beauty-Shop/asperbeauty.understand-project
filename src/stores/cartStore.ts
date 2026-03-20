@@ -101,6 +101,11 @@ function prescriptionToCartItem(p: PrescriptionProduct): Omit<CartItem, "lineId"
   };
 }
 
+/** Returns true if the variant ID looks like a Shopify GID (eligible for Storefront API calls). */
+function isShopifyVariant(variantId: string): boolean {
+  return variantId.startsWith("gid://shopify/");
+}
+
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
@@ -114,10 +119,23 @@ export const useCartStore = create<CartStore>()(
       addItem: async (item) => {
         const { items, cartId, clearCart } = get();
         const existingItem = items.find((i) => i.variantId === item.variantId);
+        const isShopify = isShopifyVariant(item.variantId);
 
         set({ isLoading: true });
         try {
-          if (!cartId) {
+          if (!isShopify) {
+            // Local-only product (Supabase / prescription) — no Shopify API calls
+            if (existingItem) {
+              const newQuantity = existingItem.quantity + item.quantity;
+              set({
+                items: get().items.map((i) =>
+                  i.variantId === item.variantId ? { ...i, quantity: newQuantity } : i,
+                ),
+              });
+            } else {
+              set({ items: [...get().items, { ...item, lineId: null }] });
+            }
+          } else if (!cartId) {
             // Create a new Shopify cart
             const result = await createShopifyCart({ ...item, lineId: null });
             if (result) {
@@ -135,9 +153,8 @@ export const useCartStore = create<CartStore>()(
             }
             const result = await updateShopifyCartLine(cartId, existingItem.lineId, newQuantity);
             if (result.success) {
-              const currentItems = get().items;
               set({
-                items: currentItems.map((i) =>
+                items: get().items.map((i) =>
                   i.variantId === item.variantId ? { ...i, quantity: newQuantity } : i,
                 ),
               });
@@ -148,9 +165,8 @@ export const useCartStore = create<CartStore>()(
             // Add new line to existing cart
             const result = await addLineToShopifyCart(cartId, { ...item, lineId: null });
             if (result.success) {
-              const currentItems = get().items;
               set({
-                items: [...currentItems, { ...item, lineId: result.lineId ?? null }],
+                items: [...get().items, { ...item, lineId: result.lineId ?? null }],
               });
             } else if (result.cartNotFound) {
               clearCart();
@@ -186,15 +202,28 @@ export const useCartStore = create<CartStore>()(
 
         const { items, cartId, clearCart } = get();
         const item = items.find((i) => i.variantId === variantId);
-        if (!item?.lineId || !cartId) return;
+        if (!item) return;
+
+        const isShopify = isShopifyVariant(variantId);
+
+        if (!isShopify) {
+          // Local product — update locally only
+          set({
+            items: get().items.map((i) =>
+              i.variantId === variantId ? { ...i, quantity } : i,
+            ),
+          });
+          return;
+        }
+
+        if (!item.lineId || !cartId) return;
 
         set({ isLoading: true });
         try {
           const result = await updateShopifyCartLine(cartId, item.lineId, quantity);
           if (result.success) {
-            const currentItems = get().items;
             set({
-              items: currentItems.map((i) =>
+              items: get().items.map((i) =>
                 i.variantId === variantId ? { ...i, quantity } : i,
               ),
             });
@@ -211,14 +240,24 @@ export const useCartStore = create<CartStore>()(
       removeItem: async (variantId) => {
         const { items, cartId, clearCart } = get();
         const item = items.find((i) => i.variantId === variantId);
-        if (!item?.lineId || !cartId) return;
+        if (!item) return;
+
+        const isShopify = isShopifyVariant(variantId);
+
+        if (!isShopify) {
+          // Local product — remove locally only
+          const newItems = items.filter((i) => i.variantId !== variantId);
+          newItems.length === 0 ? clearCart() : set({ items: newItems });
+          return;
+        }
+
+        if (!item.lineId || !cartId) return;
 
         set({ isLoading: true });
         try {
           const result = await removeLineFromShopifyCart(cartId, item.lineId);
           if (result.success) {
-            const currentItems = get().items;
-            const newItems = currentItems.filter((i) => i.variantId !== variantId);
+            const newItems = get().items.filter((i) => i.variantId !== variantId);
             newItems.length === 0 ? clearCart() : set({ items: newItems });
           } else if (result.cartNotFound) {
             clearCart();
