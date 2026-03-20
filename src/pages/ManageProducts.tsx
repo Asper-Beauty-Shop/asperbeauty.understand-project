@@ -479,6 +479,16 @@ const ManageProducts = () => {
               <Button
                 asChild
                 variant="outline"
+                className="border-primary/30 text-primary hover:bg-primary/10"
+              >
+                <Link to="/admin/shopify">
+                  <Store className="w-4 h-4 me-2" />
+                  Shopify
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
                 className="border-accent/30 text-accent hover:bg-accent/10"
               >
                 <Link to="/admin/sale-subscribers">
