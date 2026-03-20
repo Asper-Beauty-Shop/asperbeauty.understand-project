@@ -17,6 +17,8 @@ interface BlurUpImageProps
   blurAmount?: number;
   /** Transition duration in ms (default: 500) */
   transitionDuration?: number;
+  /** If true, uses loading="eager" and fetchpriority="high" for above-the-fold images */
+  priority?: boolean;
 }
 
 /**
@@ -31,6 +33,7 @@ export const BlurUpImage = ({
   containerClassName = "",
   blurAmount = 20,
   transitionDuration = 500,
+  priority = false,
   ...props
 }: BlurUpImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -116,8 +119,9 @@ export const BlurUpImage = ({
       <img
         src={currentSrc}
         alt={alt}
-        loading="lazy"
-        decoding="async"
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
+        fetchPriority={priority ? "high" : "auto"}
         className={cn(
           "w-full h-full transition-opacity",
           isLoaded && !isError ? "opacity-100" : "opacity-0",
