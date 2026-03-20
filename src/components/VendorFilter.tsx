@@ -4,14 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronDown, ChevronRight, X, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-/** Well-known brands in the store, grouped alphabetically for quick access */
-const POPULAR_BRANDS = [
-  "Beesline", "Bioderma", "Bourjois", "Catrice", "CeraVe",
-  "Essence", "Eucerin", "Golden Rose", "L'Oreal", "La Roche-Posay",
-  "Maybelline", "Note", "NYX", "Sebamed", "Seventeen",
-  "Too Faced", "Topface", "Vaseline", "Vichy",
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VendorFilterProps {
   selected: string[];
@@ -22,11 +16,23 @@ export function VendorFilter({ selected, onSelect }: VendorFilterProps) {
   const [expanded, setExpanded] = useState(true);
   const [search, setSearch] = useState("");
 
+  const { data: brands = [] } = useQuery({
+    queryKey: ["product-brands"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("brand")
+        .neq("availability_status", "Pending_Purge");
+      if (error) throw error;
+      const unique = [...new Set((data ?? []).map((r) => r.brand).filter(Boolean))].sort();
+      return unique;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
   const filtered = search.trim()
-    ? POPULAR_BRANDS.filter((b) =>
-        b.toLowerCase().includes(search.trim().toLowerCase())
-      )
-    : POPULAR_BRANDS;
+    ? brands.filter((b) => b.toLowerCase().includes(search.trim().toLowerCase()))
+    : brands;
 
   const toggle = (brand: string) => {
     onSelect(
@@ -111,10 +117,9 @@ export function VendorFilter({ selected, onSelect }: VendorFilterProps) {
 }
 
 /**
- * Build a Shopify vendor query from selected brand names.
+ * Build a vendor query string (kept for backward compatibility).
  */
 export function buildVendorQuery(vendors: string[]): string | undefined {
   if (vendors.length === 0) return undefined;
   return vendors.map((v) => `vendor:${v}`).join(" OR ");
 }
-

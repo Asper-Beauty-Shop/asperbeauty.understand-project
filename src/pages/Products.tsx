@@ -1,13 +1,12 @@
 import { useState, useMemo } from "react";
-import { useShopifyProducts } from "@/hooks/useShopifyProducts";
-import { useProductEnrichmentBulk } from "@/hooks/useProductEnrichment";
-import { CategoryTabs } from "@/components/CategoryTabs";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { ConcernFilter } from "@/components/ConcernFilter";
-import { buildVendorQuery } from "@/components/VendorFilter";
 import { ProductSearchForm } from "@/components/products/ProductSearchForm";
 import { ProductFilterSidebar } from "@/components/products/ProductFilterSidebar";
 import { ActiveFilterPills } from "@/components/products/ActiveFilterPills";
-import { ProductResultsGrid } from "@/components/products/ProductResultsGrid";
+import { SupabaseProductGrid } from "@/components/products/SupabaseProductGrid";
+import { ShopCategoryTabs } from "@/components/products/ShopCategoryTabs";
 import MobileFilterButton from "@/components/MobileFilterButton";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -15,38 +14,56 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 const Products = () => {
-  const [activeQuery, setActiveQuery] = useState<string | undefined>();
-  const [activeTab, setActiveTab] = useState("All");
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string | undefined>();
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
-  const buildQuery = () => {
-    const parts: string[] = [];
-    if (activeQuery) parts.push(activeQuery);
-    if (activeTab !== "All") parts.push(`product_type:${activeTab}`);
-    if (selectedVendors.length > 0) {
-      const vendorQuery = buildVendorQuery(selectedVendors);
-      if (vendorQuery) parts.push(`(${vendorQuery})`);
-    }
-    return parts.length > 0 ? parts.join(" ") : undefined;
-  };
+  const { data: products, isLoading, error } = useQuery({
+    queryKey: ["shop-products", activeCategory, selectedBrands, selectedConcern, searchQuery],
+    queryFn: async () => {
+      // If there's a search query, use the search_products RPC then fetch full rows
+      if (searchQuery?.trim()) {
+        const { data: searchResults, error: searchError } = await supabase
+          .rpc("search_products", { search_query: searchQuery, max_results: 50 });
+        if (searchError) throw searchError;
+        if (!searchResults || searchResults.length === 0) return [];
+        const ids = searchResults.map((r: { id: string }) => r.id);
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .in("id", ids);
+        if (error) throw error;
+        return data ?? [];
+      }
 
-  const { data, isLoading, error } = useShopifyProducts(buildQuery(), 24);
+      // Otherwise build a filtered query
+      let query = supabase
+        .from("products")
+        .select("*")
+        .neq("availability_status", "Pending_Purge")
+        .order("bestseller_rank", { ascending: true, nullsFirst: false });
 
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-    setSelectedTypes([]);
-  };
+      if (activeCategory !== "All") {
+        query = query.eq("category", activeCategory);
+      }
 
-  const handles = useMemo(
-    () => (data || []).map((p) => p.node.handle),
-    [data],
-  );
-  const { data: enrichmentMap } = useProductEnrichmentBulk(handles);
+      if (selectedBrands.length > 0) {
+        query = query.in("brand", selectedBrands);
+      }
 
-  const totalFilters = selectedTypes.length + selectedVendors.length;
+      if (selectedConcern) {
+        query = query.eq("primary_concern", selectedConcern);
+      }
+
+      const { data, error } = await query.limit(50);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const totalFilters = selectedBrands.length + (selectedConcern ? 1 : 0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,21 +75,21 @@ const Products = () => {
               Product Catalog
             </h1>
             <p className="mt-2 text-muted-foreground font-body">
-              Browse our curated collection of 4,000+ beauty & wellness products
+              Browse our curated collection of premium beauty & wellness products
             </p>
 
-            <ProductSearchForm onSearch={setActiveQuery} />
+            <ProductSearchForm onSearch={setSearchQuery} />
 
             <div className="mt-5">
-              <CategoryTabs activeTab={activeTab} onTabChange={handleTabChange} />
+              <ShopCategoryTabs activeTab={activeCategory} onTabChange={(tab) => { setActiveCategory(tab); }} />
             </div>
 
             <ActiveFilterPills
-              selectedTypes={selectedTypes}
-              selectedVendors={selectedVendors}
-              onRemoveType={(t) => setSelectedTypes(selectedTypes.filter((x) => x !== t))}
-              onRemoveVendor={(v) => setSelectedVendors(selectedVendors.filter((x) => x !== v))}
-              onClearAll={() => { setSelectedTypes([]); setSelectedVendors([]); }}
+              selectedTypes={[]}
+              selectedVendors={selectedBrands}
+              onRemoveType={() => {}}
+              onRemoveVendor={(v) => setSelectedBrands(selectedBrands.filter((x) => x !== v))}
+              onClearAll={() => { setSelectedBrands([]); setSelectedConcern(null); }}
             />
           </div>
         </header>
@@ -83,10 +100,10 @@ const Products = () => {
               <aside className="w-56 shrink-0">
                 <div className="sticky top-24">
                   <ProductFilterSidebar
-                    selectedTypes={selectedTypes}
-                    onSelectTypes={setSelectedTypes}
-                    selectedVendors={selectedVendors}
-                    onSelectVendors={setSelectedVendors}
+                    selectedTypes={[]}
+                    onSelectTypes={() => {}}
+                    selectedVendors={selectedBrands}
+                    onSelectVendors={setSelectedBrands}
                   />
                 </div>
               </aside>
@@ -107,10 +124,10 @@ const Products = () => {
                     <SheetContent side="left" className="w-72 overflow-y-auto">
                       <div className="pt-6">
                         <ProductFilterSidebar
-                          selectedTypes={selectedTypes}
-                          onSelectTypes={setSelectedTypes}
-                          selectedVendors={selectedVendors}
-                          onSelectVendors={setSelectedVendors}
+                          selectedTypes={[]}
+                          onSelectTypes={() => {}}
+                          selectedVendors={selectedBrands}
+                          onSelectVendors={setSelectedBrands}
                         />
                       </div>
                     </SheetContent>
@@ -125,12 +142,11 @@ const Products = () => {
                 </>
               )}
 
-              <ProductResultsGrid
-                products={data}
+              <SupabaseProductGrid
+                products={products}
                 isLoading={isLoading}
                 error={error}
-                enrichmentMap={enrichmentMap}
-                searchQuery={activeQuery}
+                searchQuery={searchQuery}
               />
             </div>
           </div>
