@@ -231,8 +231,9 @@ serve(async (req) => {
       }
     }
 
-    // --- Rate limiting: 20 requests per 60 seconds ---
-    const isLimited = await checkRateLimit(serviceClient, rateLimitKey, 20, 60);
+    // Rate limiting: 20/min for authenticated, 5/min for anonymous
+    const maxReqs = rateLimitKey.startsWith("chat-anon:") ? 5 : 20;
+    const isLimited = await checkRateLimit(serviceClient, rateLimitKey, maxReqs, 60);
     if (isLimited) {
       return new Response(JSON.stringify({ error: "Rate limit exceeded. Please wait a moment." }), {
         status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
