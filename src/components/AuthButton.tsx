@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { saveReturnPath } from "@/lib/auth-redirect";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +26,7 @@ export default function AuthButton() {
         variant="outline"
         size="sm"
         onClick={async () => {
+          saveReturnPath();
           setSigningIn(true);
           try {
             await supabase.auth.signInWithOAuth({

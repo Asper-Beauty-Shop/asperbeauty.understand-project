@@ -5,6 +5,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
+import { getOAuthRedirectUrl, popReturnPath } from "@/lib/auth-redirect";
 import {
   useLoginRateLimiter,
   useMFARateLimiter,
@@ -93,7 +94,7 @@ const SocialLoginButtons = () => {
     setLoading("google");
     try {
       const { error } = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/account`,
+        redirect_uri: getOAuthRedirectUrl(),
       });
       if (error) {
         toast.error("Google sign-in failed. Please try again.");
@@ -108,7 +109,7 @@ const SocialLoginButtons = () => {
     setLoading("apple");
     try {
       const { error } = await lovable.auth.signInWithOAuth("apple", {
-        redirect_uri: `${window.location.origin}/account`,
+        redirect_uri: getOAuthRedirectUrl(),
       });
       if (error) {
         toast.error("Apple sign-in failed. Please try again.");
@@ -186,7 +187,7 @@ export default function Auth() {
   const captchaRef = useRef<HCaptcha>(null);
 
   useEffect(() => {
-    if (user && !loading && !mfaRequired) navigate("/account");
+    if (user && !loading && !mfaRequired) navigate(popReturnPath());
   }, [user, loading, mfaRequired, navigate]);
 
   useEffect(() => {
