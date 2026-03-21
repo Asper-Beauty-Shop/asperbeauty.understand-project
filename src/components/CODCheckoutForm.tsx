@@ -440,7 +440,7 @@ export const CODCheckoutForm = (
         </Button>
         <Button
           type="submit"
-          disabled={isSubmitting || items.length === 0 || !captchaToken}
+          disabled={isSubmitting || items.length === 0 || (!isAuthenticated && !captchaToken)}
           className="flex-1 bg-burgundy hover:bg-burgundy-light text-polished-white"
         >
           {isSubmitting
