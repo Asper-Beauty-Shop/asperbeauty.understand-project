@@ -82,6 +82,16 @@ export const CODCheckoutForm = (
   const { language } = useLanguage();
   const isArabic = language === "ar";
 
+  // Skip captcha for authenticated users
+  const isAuthenticated = useMemo(() => {
+    const storageKey = Object.keys(localStorage).find(k => k.startsWith('sb-') && k.endsWith('-auth-token'));
+    if (!storageKey) return false;
+    try {
+      const data = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      return !!data?.access_token;
+    } catch { return false; }
+  }, []);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captchaRef = useRef<HCaptcha>(null);
