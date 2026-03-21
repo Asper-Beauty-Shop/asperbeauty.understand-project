@@ -7,10 +7,50 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+async function verifyJwt(req: Request, supabaseUrl: string, anonKey: string): Promise<{ userId: string } | null> {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) return null;
+
+  const supabase = createClient(supabaseUrl, anonKey, {
+    global: { headers: { Authorization: authHeader } },
+  });
+
+  const token = authHeader.replace("Bearer ", "");
+  const { data, error } = await supabase.auth.getClaims(token);
+  if (error || !data?.claims) return null;
+
+  return { userId: data.claims.sub as string };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+    // --- JWT Authentication ---
+    const auth = await verifyJwt(req, supabaseUrl, anonKey);
+    if (!auth) {
+      return new Response(JSON.stringify({ error: "Authentication required" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // --- Rate limiting: 10 searches per 60 seconds per user ---
+    const serviceClient = createClient(supabaseUrl, serviceRoleKey);
+    const { data: isLimited } = await serviceClient.rpc("check_rate_limit", {
+      p_key: `ai-search:${auth.userId}`,
+      p_max_requests: 10,
+      p_window_seconds: 60,
+    });
+    if (isLimited === true) {
+      return new Response(JSON.stringify({ error: "Search rate limit exceeded. Please wait." }), {
+        status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const { query } = await req.json();
     if (!query || typeof query !== "string") {
       return new Response(JSON.stringify({ error: "Query is required" }), {
@@ -22,13 +62,10 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
+    // Use anon client for product reads (publicly readable)
+    const anonClient = createClient(supabaseUrl, anonKey);
 
-    // Only fetch In_Stock products, top 200 by bestseller rank — AI can't handle 10k rows
-    const { data: products, error: dbError } = await supabase
+    const { data: products, error: dbError } = await anonClient
       .from("products")
       .select("id, title, handle, brand, category, price, primary_concern, tags")
       .eq("availability_status", "in_stock")
