@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { saveReturnPath } from "@/lib/auth-redirect";
 import { Loader2 } from "lucide-react";
 
 /**
@@ -21,6 +22,7 @@ export function RequireAdmin({ children }: { children: React.ReactNode }) {
         } = await supabase.auth.getUser();
 
         if (!user) {
+          saveReturnPath();
           navigate("/auth", { replace: true });
           return;
         }
