@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -82,6 +82,16 @@ export const CODCheckoutForm = (
   const { language } = useLanguage();
   const isArabic = language === "ar";
 
+  // Skip captcha for authenticated users
+  const isAuthenticated = useMemo(() => {
+    const storageKey = Object.keys(localStorage).find(k => k.startsWith('sb-') && k.endsWith('-auth-token'));
+    if (!storageKey) return false;
+    try {
+      const data = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      return !!data?.access_token;
+    } catch { return false; }
+  }, []);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captchaRef = useRef<HCaptcha>(null);
@@ -129,7 +139,7 @@ export const CODCheckoutForm = (
       toast.error(isArabic ? "سلة التسوق فارغة" : "Cart is empty");
       return;
     }
-    if (!captchaToken) {
+    if (!isAuthenticated && !captchaToken) {
       toast.error(
         isArabic
           ? "يرجى التحقق من أنك لست روبوت"
@@ -154,15 +164,29 @@ export const CODCheckoutForm = (
         notes: formData.notes.trim() || undefined,
       };
 
+      // Build headers — include auth token if logged in to skip captcha server-side
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+      };
+      if (isAuthenticated) {
+        const storageKey = Object.keys(localStorage).find(k => k.startsWith('sb-') && k.endsWith('-auth-token'));
+        if (storageKey) {
+          try {
+            const data = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            if (data?.access_token) {
+              headers["Authorization"] = `Bearer ${data.access_token}`;
+            }
+          } catch { /* ignore */ }
+        }
+      }
+
       // Call secure-checkout edge function (server recalculates prices from DB)
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/secure-checkout`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-          },
+          headers,
           body: JSON.stringify(securePayload),
         },
       );
@@ -359,28 +383,37 @@ export const CODCheckoutForm = (
         </div>
       </div>
 
-      {/* CAPTCHA Verification */}
-      <div className="space-y-2">
-        <Label className="flex items-center gap-2 text-sm">
-          <ShieldCheck className="w-4 h-4 text-polished-gold" />
-          {isArabic ? "التحقق الأمني" : "Security Verification"} *
-        </Label>
-        <div className="flex justify-center bg-asper-stone/30 rounded-lg p-3">
-          <HCaptcha
-            ref={captchaRef}
-            sitekey={HCAPTCHA_SITE_KEY}
-            onVerify={handleCaptchaVerify}
-            onExpire={handleCaptchaExpire}
-            languageOverride={isArabic ? "ar" : "en"}
-          />
+      {/* CAPTCHA Verification — skipped for logged-in users */}
+      {!isAuthenticated ? (
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2 text-sm">
+            <ShieldCheck className="w-4 h-4 text-polished-gold" />
+            {isArabic ? "التحقق الأمني" : "Security Verification"} *
+          </Label>
+          <div className="flex justify-center bg-asper-stone/30 rounded-lg p-3">
+            <HCaptcha
+              ref={captchaRef}
+              sitekey={HCAPTCHA_SITE_KEY}
+              onVerify={handleCaptchaVerify}
+              onExpire={handleCaptchaExpire}
+              languageOverride={isArabic ? "ar" : "en"}
+            />
+          </div>
+          {captchaToken && (
+            <p className="text-xs text-green-600 flex items-center gap-1 justify-center">
+              <CheckCircle className="w-3 h-3" />
+              {isArabic ? "تم التحقق بنجاح" : "Verified successfully"}
+            </p>
+          )}
         </div>
-        {captchaToken && (
-          <p className="text-xs text-green-600 flex items-center gap-1 justify-center">
-            <CheckCircle className="w-3 h-3" />
-            {isArabic ? "تم التحقق بنجاح" : "Verified successfully"}
+      ) : (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+          <p className="text-sm text-green-700 flex items-center gap-2 justify-center">
+            <ShieldCheck className="w-4 h-4" />
+            {isArabic ? "تم التحقق — أنت مسجل الدخول" : "Verified — you're signed in"}
           </p>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* COD Notice */}
       <div className="bg-polished-gold/10 border border-polished-gold/30 rounded-lg p-3 text-center">
@@ -407,7 +440,7 @@ export const CODCheckoutForm = (
         </Button>
         <Button
           type="submit"
-          disabled={isSubmitting || items.length === 0 || !captchaToken}
+          disabled={isSubmitting || items.length === 0 || (!isAuthenticated && !captchaToken)}
           className="flex-1 bg-burgundy hover:bg-burgundy-light text-polished-white"
         >
           {isSubmitting
