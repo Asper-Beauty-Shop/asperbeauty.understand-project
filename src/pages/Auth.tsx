@@ -86,10 +86,13 @@ const SocialLoginButtons = () => {
   const handleGoogle = async () => {
     setLoading("google");
     try {
-      await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: `${window.location.origin}/` },
+      const { error } = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
       });
+      if (error) {
+        toast.error("Google sign-in failed. Please try again.");
+        setLoading(null);
+      }
     } catch {
       setLoading(null);
     }
