@@ -108,7 +108,7 @@ const SocialLoginButtons = () => {
     setLoading("apple");
     try {
       const { error } = await lovable.auth.signInWithOAuth("apple", {
-        redirect_uri: window.location.origin,
+        redirect_uri: `${window.location.origin}/account`,
       });
       if (error) {
         toast.error("Apple sign-in failed. Please try again.");
