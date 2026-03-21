@@ -53,7 +53,7 @@ export const checkoutFormSchema = z.object({
     .trim()
     .min(2, "Name must be at least 2 characters")
     .max(100, "Name too long")
-    .regex(/^[a-zA-Z\u0600-\u06FF\s'-]+$/, "Name contains invalid characters"),
+    .regex(/^[a-zA-Z0-9\u0600-\u06FF\s'.\-]+$/, "Name contains invalid characters"),
   customerPhone: z.string()
     .trim()
     .regex(/^07[789]\d{7}$/, "Invalid phone number format (07XXXXXXXX)"),
