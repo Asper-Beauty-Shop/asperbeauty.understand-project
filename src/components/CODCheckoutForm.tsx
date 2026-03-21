@@ -139,7 +139,7 @@ export const CODCheckoutForm = (
       toast.error(isArabic ? "سلة التسوق فارغة" : "Cart is empty");
       return;
     }
-    if (!captchaToken) {
+    if (!isAuthenticated && !captchaToken) {
       toast.error(
         isArabic
           ? "يرجى التحقق من أنك لست روبوت"
