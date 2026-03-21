@@ -5,6 +5,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
+import { getOAuthRedirectUrl, popReturnPath } from "@/lib/auth-redirect";
 import {
   useLoginRateLimiter,
   useMFARateLimiter,
