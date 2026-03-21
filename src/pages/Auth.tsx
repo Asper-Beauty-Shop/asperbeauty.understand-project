@@ -186,7 +186,7 @@ export default function Auth() {
   const captchaRef = useRef<HCaptcha>(null);
 
   useEffect(() => {
-    if (user && !loading && !mfaRequired) navigate("/");
+    if (user && !loading && !mfaRequired) navigate("/account");
   }, [user, loading, mfaRequired, navigate]);
 
   useEffect(() => {
