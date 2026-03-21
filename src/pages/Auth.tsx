@@ -93,7 +93,7 @@ const SocialLoginButtons = () => {
     setLoading("google");
     try {
       const { error } = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: `${window.location.origin}/account`,
       });
       if (error) {
         toast.error("Google sign-in failed. Please try again.");
@@ -108,7 +108,7 @@ const SocialLoginButtons = () => {
     setLoading("apple");
     try {
       const { error } = await lovable.auth.signInWithOAuth("apple", {
-        redirect_uri: window.location.origin,
+        redirect_uri: `${window.location.origin}/account`,
       });
       if (error) {
         toast.error("Apple sign-in failed. Please try again.");
@@ -186,7 +186,7 @@ export default function Auth() {
   const captchaRef = useRef<HCaptcha>(null);
 
   useEffect(() => {
-    if (user && !loading && !mfaRequired) navigate("/");
+    if (user && !loading && !mfaRequired) navigate("/account");
   }, [user, loading, mfaRequired, navigate]);
 
   useEffect(() => {
