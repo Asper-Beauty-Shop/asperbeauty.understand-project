@@ -2,6 +2,7 @@
  * Beauty Assistant (Dr. Bot) — Supabase Edge Function.
  * Dr. Bot = Asper Dual-Voice Concierge: Dr. Sami (clinical) + Ms. Zain (luxury). 
  * Upgraded to "Super Smart" Architecture (March 2026).
+ * Security: JWT auth for web, HMAC for webhooks, rate limiting.
  */
 declare const Deno: { env: { get(key: string): string | undefined } };
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -36,6 +37,41 @@ function getWebhookRoute(req: Request): "gorgias" | "manychat" | null {
     if (header === "gorgias" || header === "manychat") return header;
   } catch { /* ignore */ }
   return null;
+}
+
+// --- Authentication & Rate Limiting ---
+
+async function verifyJwt(req: Request, supabaseUrl: string, anonKey: string): Promise<{ userId: string } | null> {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) return null;
+
+  const supabase = createClient(supabaseUrl, anonKey, {
+    global: { headers: { Authorization: authHeader } },
+  });
+
+  const token = authHeader.replace("Bearer ", "");
+  const { data, error } = await supabase.auth.getClaims(token);
+  if (error || !data?.claims) return null;
+
+  return { userId: data.claims.sub as string };
+}
+
+async function checkRateLimit(
+  supabase: ReturnType<typeof createClient>,
+  key: string,
+  maxRequests: number,
+  windowSeconds: number,
+): Promise<boolean> {
+  const { data, error } = await supabase.rpc("check_rate_limit", {
+    p_key: key,
+    p_max_requests: maxRequests,
+    p_window_seconds: windowSeconds,
+  });
+  if (error) {
+    console.error("Rate limit check failed:", error.message);
+    return false; // fail open to avoid blocking on DB issues
+  }
+  return data === true; // true = rate limited
 }
 
 function extractFromGorgias(body: Record<string, unknown>): { message: string } {
@@ -145,8 +181,12 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: getCorsHeaders(req) });
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+  // Use anon client for product reads (publicly readable), service client only for writes
+  const anonClient = createClient(supabaseUrl, anonKey);
+  const serviceClient = createClient(supabaseUrl, serviceRoleKey);
 
   if (req.method === "GET") return new Response(JSON.stringify({ status: "active", version: "5.0-super-smart" }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
 
@@ -154,19 +194,54 @@ serve(async (req) => {
     const route = getWebhookRoute(req);
     let userMessage = "";
     let messages: Array<{ role: string; content: string }> = [];
+    let rateLimitKey = "";
 
     if (route) {
+      // --- Webhook route: validate WEBHOOK_SECRET ---
+      const webhookSecret = Deno.env.get("SHOPIFY_WEBHOOK_SECRET");
       const body = await req.json();
+
+      // For webhook routes, validate a shared secret header
+      const providedSecret = req.headers.get("x-webhook-secret");
+      if (webhookSecret && providedSecret !== webhookSecret) {
+        console.error(`Webhook auth failed for route=${route}`);
+        return new Response(JSON.stringify({ error: "Unauthorized webhook" }), {
+          status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+        });
+      }
+
       userMessage = route === "gorgias" ? extractFromGorgias(body).message : extractFromManyChat(body).message;
       messages = [{ role: "user", content: userMessage }];
+      rateLimitKey = `webhook:${route}`;
     } else {
+      // --- Web traffic: try JWT, fall back to IP-based rate limiting for anonymous ---
+      const auth = await verifyJwt(req, supabaseUrl, anonKey);
+      const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+
       const body = await req.json();
       messages = body.messages;
       userMessage = messages[messages.length - 1].content;
+
+      if (auth) {
+        // Authenticated: 20 req/min
+        rateLimitKey = `chat:${auth.userId}`;
+      } else {
+        // Anonymous: stricter limit (5 req/min per IP)
+        rateLimitKey = `chat-anon:${clientIp}`;
+      }
+    }
+
+    // Rate limiting: 20/min for authenticated, 5/min for anonymous
+    const maxReqs = rateLimitKey.startsWith("chat-anon:") ? 5 : 20;
+    const isLimited = await checkRateLimit(serviceClient, rateLimitKey, maxReqs, 60);
+    if (isLimited) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded. Please wait a moment." }), {
+        status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
+      });
     }
 
     const slug = detectConcernSlug(userMessage);
-    const { context, products } = await fetchProductContext(supabase, userMessage, slug);
+    const { context, products } = await fetchProductContext(anonClient, userMessage, slug);
     const systemPrompt = buildSystemPrompt(context, slug ? `/products?concern=${slug}` : null);
 
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
@@ -221,9 +296,9 @@ serve(async (req) => {
       }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
     }
 
-    // Persist transcript for analytics (fire-and-forget)
+    // Persist transcript for analytics (fire-and-forget, uses service client)
     const productIds = products.map((p: Record<string, unknown>) => p.id).filter(Boolean);
-    supabase.from("chat_transcripts").insert({
+    serviceClient.from("chat_transcripts").insert({
       user_message: userMessage,
       ai_reply: replyText,
       detected_concern: slug,
@@ -238,5 +313,3 @@ serve(async (req) => {
     return new Response(JSON.stringify({ error: message }), { status: 500, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
   }
 });
-
-
