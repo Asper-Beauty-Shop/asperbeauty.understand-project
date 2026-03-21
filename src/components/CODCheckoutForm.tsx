@@ -84,13 +84,14 @@ export const CODCheckoutForm = (
   const isArabic = language === "ar";
 
   // Skip captcha for authenticated users
-  const isAuthenticated = useMemo(() => {
-    const storageKey = Object.keys(localStorage).find(k => k.startsWith('sb-') && k.endsWith('-auth-token'));
-    if (!storageKey) return false;
-    try {
-      const data = JSON.parse(localStorage.getItem(storageKey) || '{}');
-      return !!data?.access_token;
-    } catch { return false; }
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authToken, setAuthToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session?.user);
+      setAuthToken(session?.access_token ?? null);
+    });
   }, []);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
