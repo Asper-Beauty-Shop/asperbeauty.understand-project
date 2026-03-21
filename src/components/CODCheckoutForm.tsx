@@ -383,28 +383,37 @@ export const CODCheckoutForm = (
         </div>
       </div>
 
-      {/* CAPTCHA Verification */}
-      <div className="space-y-2">
-        <Label className="flex items-center gap-2 text-sm">
-          <ShieldCheck className="w-4 h-4 text-polished-gold" />
-          {isArabic ? "التحقق الأمني" : "Security Verification"} *
-        </Label>
-        <div className="flex justify-center bg-asper-stone/30 rounded-lg p-3">
-          <HCaptcha
-            ref={captchaRef}
-            sitekey={HCAPTCHA_SITE_KEY}
-            onVerify={handleCaptchaVerify}
-            onExpire={handleCaptchaExpire}
-            languageOverride={isArabic ? "ar" : "en"}
-          />
+      {/* CAPTCHA Verification — skipped for logged-in users */}
+      {!isAuthenticated ? (
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2 text-sm">
+            <ShieldCheck className="w-4 h-4 text-polished-gold" />
+            {isArabic ? "التحقق الأمني" : "Security Verification"} *
+          </Label>
+          <div className="flex justify-center bg-asper-stone/30 rounded-lg p-3">
+            <HCaptcha
+              ref={captchaRef}
+              sitekey={HCAPTCHA_SITE_KEY}
+              onVerify={handleCaptchaVerify}
+              onExpire={handleCaptchaExpire}
+              languageOverride={isArabic ? "ar" : "en"}
+            />
+          </div>
+          {captchaToken && (
+            <p className="text-xs text-green-600 flex items-center gap-1 justify-center">
+              <CheckCircle className="w-3 h-3" />
+              {isArabic ? "تم التحقق بنجاح" : "Verified successfully"}
+            </p>
+          )}
         </div>
-        {captchaToken && (
-          <p className="text-xs text-green-600 flex items-center gap-1 justify-center">
-            <CheckCircle className="w-3 h-3" />
-            {isArabic ? "تم التحقق بنجاح" : "Verified successfully"}
+      ) : (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+          <p className="text-sm text-green-700 flex items-center gap-2 justify-center">
+            <ShieldCheck className="w-4 h-4" />
+            {isArabic ? "تم التحقق — أنت مسجل الدخول" : "Verified — you're signed in"}
           </p>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* COD Notice */}
       <div className="bg-polished-gold/10 border border-polished-gold/30 rounded-lg p-3 text-center">
