@@ -34,7 +34,8 @@ const HCAPTCHA_SITE_KEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY ||
 // Validation schema
 const orderFormSchema = z.object({
   customerName: z.string().trim().min(2, "Name must be at least 2 characters")
-    .max(100, "Name too long"),
+    .max(100, "Name too long")
+    .regex(/^[a-zA-Z\u0600-\u06FF\s'-]+$/, "Name contains invalid characters"),
   customerPhone: z.string().trim().regex(
     /^07[789]\d{7}$/,
     "Invalid phone number format (07XXXXXXXX)",
