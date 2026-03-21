@@ -214,18 +214,21 @@ serve(async (req) => {
       messages = [{ role: "user", content: userMessage }];
       rateLimitKey = `webhook:${route}`;
     } else {
-      // --- Web traffic: validate JWT ---
+      // --- Web traffic: try JWT, fall back to IP-based rate limiting for anonymous ---
       const auth = await verifyJwt(req, supabaseUrl, anonKey);
-      if (!auth) {
-        return new Response(JSON.stringify({ error: "Authentication required" }), {
-          status: 401, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
-        });
-      }
+      const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
 
       const body = await req.json();
       messages = body.messages;
       userMessage = messages[messages.length - 1].content;
-      rateLimitKey = `chat:${auth.userId}`;
+
+      if (auth) {
+        // Authenticated: 20 req/min
+        rateLimitKey = `chat:${auth.userId}`;
+      } else {
+        // Anonymous: stricter limit (5 req/min per IP)
+        rateLimitKey = `chat-anon:${clientIp}`;
+      }
     }
 
     // --- Rate limiting: 20 requests per 60 seconds ---
