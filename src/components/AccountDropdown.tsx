@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { saveReturnPath } from "@/lib/auth-redirect";
+import { Link, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -209,7 +208,7 @@ export const AccountDropdown = ({ isScrolled }: { isScrolled: boolean }) => {
               </div>
 
               <button
-                onClick={() => { saveReturnPath(); navigate("/auth"); }}
+                onClick={() => navigate("/auth")}
                 className="w-full py-3 bg-foreground text-background font-medium text-sm uppercase tracking-wide hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
               >
                 <LogIn className="h-4 w-4" />

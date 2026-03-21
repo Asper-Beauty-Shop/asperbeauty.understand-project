@@ -33,7 +33,7 @@ interface CheckoutBody {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const PHONE_RE = /^07[789]\d{7}$/;
-const NAME_RE = /^[a-zA-Z0-9\u0600-\u06FF\s'.\-]+$/;
+const NAME_RE = /^[a-zA-Z\u0600-\u06FF\s'-]+$/;
 
 function validate(body: unknown): { data?: CheckoutBody; errors?: string[] } {
   const errors: string[] = [];
