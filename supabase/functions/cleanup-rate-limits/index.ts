@@ -40,6 +40,14 @@ Deno.serve(async (req) => {
     }
 
     console.log(`Cleaned up ${data} expired rate limit entries`);
+
+    // Log to telemetry for monitoring
+    await supabaseAdmin.from("telemetry_events").insert({
+      event: "rate_limit_cleanup",
+      source: "cron",
+      payload: { deleted_count: data, run_at: new Date().toISOString() },
+    });
+
     return new Response(JSON.stringify({ deleted: data }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
