@@ -4,6 +4,7 @@ import { z } from "zod";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 import {
   useLoginRateLimiter,
   useMFARateLimiter,
