@@ -164,15 +164,29 @@ export const CODCheckoutForm = (
         notes: formData.notes.trim() || undefined,
       };
 
+      // Build headers — include auth token if logged in to skip captcha server-side
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+      };
+      if (isAuthenticated) {
+        const storageKey = Object.keys(localStorage).find(k => k.startsWith('sb-') && k.endsWith('-auth-token'));
+        if (storageKey) {
+          try {
+            const data = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            if (data?.access_token) {
+              headers["Authorization"] = `Bearer ${data.access_token}`;
+            }
+          } catch { /* ignore */ }
+        }
+      }
+
       // Call secure-checkout edge function (server recalculates prices from DB)
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/secure-checkout`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-          },
+          headers,
           body: JSON.stringify(securePayload),
         },
       );
