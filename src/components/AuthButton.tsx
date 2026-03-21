@@ -26,6 +26,7 @@ export default function AuthButton() {
         variant="outline"
         size="sm"
         onClick={async () => {
+          saveReturnPath();
           setSigningIn(true);
           try {
             await supabase.auth.signInWithOAuth({
