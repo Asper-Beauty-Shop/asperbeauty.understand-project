@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   CheckCircle,
@@ -83,13 +84,14 @@ export const CODCheckoutForm = (
   const isArabic = language === "ar";
 
   // Skip captcha for authenticated users
-  const isAuthenticated = useMemo(() => {
-    const storageKey = Object.keys(localStorage).find(k => k.startsWith('sb-') && k.endsWith('-auth-token'));
-    if (!storageKey) return false;
-    try {
-      const data = JSON.parse(localStorage.getItem(storageKey) || '{}');
-      return !!data?.access_token;
-    } catch { return false; }
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authToken, setAuthToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session?.user);
+      setAuthToken(session?.access_token ?? null);
+    });
   }, []);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -169,16 +171,8 @@ export const CODCheckoutForm = (
         "Content-Type": "application/json",
         "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
       };
-      if (isAuthenticated) {
-        const storageKey = Object.keys(localStorage).find(k => k.startsWith('sb-') && k.endsWith('-auth-token'));
-        if (storageKey) {
-          try {
-            const data = JSON.parse(localStorage.getItem(storageKey) || '{}');
-            if (data?.access_token) {
-              headers["Authorization"] = `Bearer ${data.access_token}`;
-            }
-          } catch { /* ignore */ }
-        }
+      if (isAuthenticated && authToken) {
+        headers["Authorization"] = `Bearer ${authToken}`;
       }
 
       // Call secure-checkout edge function (server recalculates prices from DB)
