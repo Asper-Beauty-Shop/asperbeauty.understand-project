@@ -171,16 +171,8 @@ export const CODCheckoutForm = (
         "Content-Type": "application/json",
         "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
       };
-      if (isAuthenticated) {
-        const storageKey = Object.keys(localStorage).find(k => k.startsWith('sb-') && k.endsWith('-auth-token'));
-        if (storageKey) {
-          try {
-            const data = JSON.parse(localStorage.getItem(storageKey) || '{}');
-            if (data?.access_token) {
-              headers["Authorization"] = `Bearer ${data.access_token}`;
-            }
-          } catch { /* ignore */ }
-        }
+      if (isAuthenticated && authToken) {
+        headers["Authorization"] = `Bearer ${authToken}`;
       }
 
       // Call secure-checkout edge function (server recalculates prices from DB)
