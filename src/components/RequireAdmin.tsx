@@ -22,6 +22,7 @@ export function RequireAdmin({ children }: { children: React.ReactNode }) {
         } = await supabase.auth.getUser();
 
         if (!user) {
+          saveReturnPath();
           navigate("/auth", { replace: true });
           return;
         }
