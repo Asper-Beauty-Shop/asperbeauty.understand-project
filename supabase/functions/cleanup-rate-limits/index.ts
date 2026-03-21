@@ -41,12 +41,14 @@ Deno.serve(async (req) => {
 
     console.log(`Cleaned up ${data} expired rate limit entries`);
 
-    // Log to telemetry for monitoring
-    await supabaseAdmin.from("telemetry_events").insert({
+    // Log to telemetry for monitoring (user_id=null for system events)
+    const { error: telError } = await supabaseAdmin.from("telemetry_events").insert({
       event: "rate_limit_cleanup",
       source: "cron",
+      user_id: null,
       payload: { deleted_count: data, run_at: new Date().toISOString() },
     });
+    if (telError) console.error("Telemetry insert error:", telError);
 
     return new Response(JSON.stringify({ deleted: data }), {
       status: 200,
