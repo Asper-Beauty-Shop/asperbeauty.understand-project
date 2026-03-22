@@ -1,12 +1,12 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 /**
- * Asper Beauty Shop â€” Production health check.
+ * Asper Beauty Shop — Production health check.
  * Run: npm run health
  */
 
 const FRONTEND_HEALTH = "https://www.asperbeautyshop.com/health";
 const BRAIN_URL =
-  "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
+  "https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant";
 
 async function check(name, url) {
   try {
@@ -18,7 +18,7 @@ async function check(name, url) {
 }
 
 async function main() {
-  console.log("Asper Beauty Shop â€” Health Check\n");
+  console.log("Asper Beauty Shop — Health Check\n");
 
   const frontend = await check("Frontend /health", FRONTEND_HEALTH);
   const brain = await check("Beauty Assistant (brain)", BRAIN_URL);
@@ -26,16 +26,16 @@ async function main() {
   let failed = false;
 
   if (frontend.status === 200) {
-    console.log(`  âœ“ ${frontend.name}: ${frontend.status}`);
+    console.log(`  ✓ ${frontend.name}: ${frontend.status}`);
   } else {
-    console.log(`  âœ— ${frontend.name}: ${frontend.status || frontend.error}`);
+    console.log(`  ✗ ${frontend.name}: ${frontend.status || frontend.error}`);
     failed = true;
   }
 
   if (brain.status === 200) {
-    console.log(`  âœ“ ${brain.name}: ${brain.status}`);
+    console.log(`  ✓ ${brain.name}: ${brain.status}`);
   } else {
-    console.log(`  âœ— ${brain.name}: ${brain.status || brain.error} (expect 200)`);
+    console.log(`  ✗ ${brain.name}: ${brain.status || brain.error} (expect 200)`);
     failed = true;
   }
 
@@ -44,4 +44,5 @@ async function main() {
 }
 
 main();
+
 

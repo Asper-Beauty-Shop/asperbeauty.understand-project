@@ -25,11 +25,11 @@ Not influencer-store. Not dropshipping. Not noisy Instagram shop. **Premium.**
 
 ### Brand Identity Blend (Hybrid)
 
-| Pillar | Weight | Expression |
-|---|---|---|
-| Medical Authority | 40% | Clinical tone, ingredient transparency, dermatologist credibility |
-| Luxury Boutique | 30% | Ivory palette, breathing whitespace, gold accents, editorial typography |
-| Smart Tech Platform | 30% | AI personalization, modular architecture, SaaS-ready components |
+| Pillar              | Weight | Expression                                                              |
+| ------------------- | ------ | ----------------------------------------------------------------------- |
+| Medical Authority   | 40%    | Clinical tone, ingredient transparency, dermatologist credibility       |
+| Luxury Boutique     | 30%    | Ivory palette, breathing whitespace, gold accents, editorial typography |
+| Smart Tech Platform | 30%    | AI personalization, modular architecture, SaaS-ready components         |
 
 ---
 
@@ -52,11 +52,11 @@ Requirements:
 
 ### Login Options
 
-| Method | Rationale |
-|---|---|
-| Apple ID | Luxury audience alignment |
-| Google | Mass adoption, lowest friction |
-| Email + OTP | No password friction |
+| Method       | Rationale                      |
+| ------------ | ------------------------------ |
+| Apple ID     | Luxury audience alignment      |
+| Google       | Mass adoption, lowest friction |
+| Email + OTP  | No password friction           |
 | WhatsApp OTP | Regionally powerful (optional) |
 
 ### Post-Login Personalization (High-Value, Low-Cost)
@@ -124,7 +124,7 @@ The product card must feel: Clean. Clinical. Structured. Premium.
 - Brand name (small)
 - Product name (bold, 2 lines max)
 - Short benefit line (1 sentence only)
-  - Example: *"Targets pigmentation and improves skin clarity."*
+  - Example: _"Targets pigmentation and improves skin clarity."_
 
 **Bottom Section:**
 
@@ -145,23 +145,6 @@ No extra page needed.
 
 ---
 
-## 5. Checkout System
-
-Checkout must be: **1-page. Minimal. No distractions. Mobile-first.**
-
-### Structure
-
-| Step | Content |
-|---|---|
-| 1 | Contact Information |
-| 2 | Delivery Method |
-| 3 | Payment |
-| 4 | Review & Confirm |
-
-### AI Upsell Block
-
-Add block: **"Add a Doctor-Recommended Complement"**
-
 AI suggests 1 related item. Example: buying Vitamin C serum? Suggest sunscreen. Upsell without being pushy.
 
 ---
@@ -170,14 +153,14 @@ AI suggests 1 related item. Example: buying Vitamin C serum? Suggest sunscreen. 
 
 ### Color System
 
-| Role | Value | Notes |
-|---|---|---|
-| Base | Ivory (`asper-stone`) | Primary background |
-| Accent | Soft beige / `rose-clay` | Cards, sections |
-| Medical | Clean white | Clinical areas |
+| Role    | Value                        | Notes                      |
+| ------- | ---------------------------- | -------------------------- |
+| Base    | Ivory (`asper-stone`)        | Primary background         |
+| Accent  | Soft beige / `rose-clay`     | Cards, sections            |
+| Medical | Clean white                  | Clinical areas             |
 | Premium | Light gold (`polished-gold`) | Accents, icons — sparingly |
-| CTA | Deep maroon (`burgundy`) | Buttons, primary actions |
-| Text | Near-black (`asper-ink`) | Body copy |
+| CTA     | Deep maroon (`burgundy`)     | Buttons, primary actions   |
+| Text    | Near-black (`asper-ink`)     | Body copy                  |
 
 ### Typography
 
@@ -246,4 +229,4 @@ The website becomes a product.
 
 ---
 
-*This document defines the immutable strategic DNA of the Asper Beauty Shop digital flagship. Every component, feature, and design decision must trace back to these principles.*
+_This document defines the immutable strategic DNA of the Asper Beauty Shop digital flagship. Every component, feature, and design decision must trace back to these principles._

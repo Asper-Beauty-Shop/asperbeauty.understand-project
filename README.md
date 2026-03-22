@@ -7,7 +7,7 @@ Welcome to your production-ready **Medical Luxury** flagship. The engineering is
 ## 🚀 Final Steps to Go Live (10 Minutes)
 
 ### 1. Populate the 4,311 Product Catalog
-- Open your [Supabase Dashboard](https://supabase.com/dashboard/project/qqceibvalkoytafynwoc).
+- Open your [Supabase Dashboard](https://supabase.com/dashboard/project/vhgwvfedgfmcixhdyttt).
 - Go to the **SQL Editor**.
 - Open the file: `catalog-sync.sql` (located in the project root).
 - Copy the entire content, paste it into the editor, and click **RUN**.
