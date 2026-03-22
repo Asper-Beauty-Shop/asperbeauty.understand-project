@@ -25,7 +25,7 @@ import {
   type ShopifyWebhook,
 } from "@/hooks/useShopifyAdmin";
 
-const WEBHOOK_FUNCTION_URL = `https://dsggmechzloaqevepktp.supabase.co/functions/v1/shopify-webhooks`;
+const WEBHOOK_FUNCTION_URL = `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/shopify-webhooks`;
 
 const WEBHOOK_TOPICS = [
   "products/create",

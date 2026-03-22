@@ -40,7 +40,7 @@ export function ConsultationSummaryEmail(data: ConsultationData) {
   } = data
 
   const unsubscribeUrl = unsubscribe_token
-    ? `https://dsggmechzloaqevepktp.supabase.co/functions/v1/handle-email-unsubscribe?token=${unsubscribe_token}`
+    ? `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/handle-email-unsubscribe?token=${unsubscribe_token}`
     : null
 
   return (

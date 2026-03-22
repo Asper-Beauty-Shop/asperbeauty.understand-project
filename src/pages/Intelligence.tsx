@@ -26,7 +26,7 @@ const ASPER_CATALOG = [
   { handle: "rimmel-stay-matte", title: "Rimmel Stay Matte Pressed Powder", price: "6.50", vendor: "Rimmel London", type: "Makeup" },
 ];
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://qqceibvalkoytafynwoc.supabase.co";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://vhgwvfedgfmcixhdyttt.supabase.co";
 const CHAT_URL = `${SUPABASE_URL}/functions/v1/beauty-assistant`;
 
 type Msg = {
@@ -582,3 +582,4 @@ export default function Intelligence() {
     </div>
   );
 }
+

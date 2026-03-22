@@ -1,6 +1,6 @@
-﻿# Brain & Project Configuration (Official)
+# Brain & Project Configuration (Official)
 
-**Enforced Brain ID:** `qqceibvalkoytafynwoc`  
+**Enforced Brain ID:** `vhgwvfedgfmcixhdyttt`  
 **GitHub repo:** [asperpharma/understand-project](https://github.com/asperpharma/understand-project)
 
 Legacy staging IDs are overridden; all configs use the live Supabase Brain and this repository.
@@ -13,8 +13,8 @@ Create a `.env` file at the project root and paste the block below. These variab
 
 ```env
 # The Centralized Brain (Supabase)
-VITE_SUPABASE_PROJECT_ID="qqceibvalkoytafynwoc"
-VITE_SUPABASE_URL="https://qqceibvalkoytafynwoc.supabase.co"
+VITE_SUPABASE_PROJECT_ID="vhgwvfedgfmcixhdyttt"
+VITE_SUPABASE_URL="https://vhgwvfedgfmcixhdyttt.supabase.co"
 VITE_SUPABASE_PUBLISHABLE_KEY="sb_publishable_XYH3MdZyiulOKUcAD5f6_w_MQIhHLru"
 
 # The Commerce Engine (Shopify)
@@ -36,7 +36,7 @@ VITE_LOVABLE_URL="www.asperbeautyshop.com"
 
 **Do not put these in `.env` or commit them to GitHub.**
 
-Store them only in **Supabase Dashboard** â†’ Project **qqceibvalkoytafynwoc** â†’ **Project Settings** â†’ **Edge Functions** â†’ **Secrets**.
+Store them only in **Supabase Dashboard** → Project **vhgwvfedgfmcixhdyttt** → **Project Settings** → **Edge Functions** → **Secrets**.
 
 | Secret | Purpose |
 |--------|--------|
@@ -51,27 +51,27 @@ Store them only in **Supabase Dashboard** â†’ Project **qqceibvalkoytafynwo
 ## 3. Direct Database & Cursor OAuth
 
 - **Direct DB (PostgreSQL):**  
-  `postgresql://postgres:[YOUR-PASSWORD]@db.qqceibvalkoytafynwoc.supabase.co:5432/postgres`  
+  `postgresql://postgres:[YOUR-PASSWORD]@db.vhgwvfedgfmcixhdyttt.supabase.co:5432/postgres`  
   Use your project DB password from Supabase Dashboard.
 
 - **Supabase Auth callback (e.g. Cursor OAuth):**  
-  `https://qqceibvalkoytafynwoc.supabase.co/auth/v1/callback`
+  `https://vhgwvfedgfmcixhdyttt.supabase.co/auth/v1/callback`
 
 - **Cursor consent:**  
   `https://cursor.com/oauth/consent`
 
 ---
 
-## 4. Webhooks (Omnichannel â†’ Dr. Bot)
+## 4. Webhooks (Omnichannel → Dr. Bot)
 
-All endpoints use Brain **qqceibvalkoytafynwoc**. POST only.
+All endpoints use Brain **vhgwvfedgfmcixhdyttt**. POST only.
 
 | Use | URL |
 |-----|-----|
-| Gorgias (Unified Helpdesk) | `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant?route=gorgias` |
-| ManyChat (WhatsApp & Instagram) | `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant?route=manychat` |
-| Bulk Inventory Uploader | `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/bulk-product-upload` |
-| Frontend / Brain health check | `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant?health=true` |
+| Gorgias (Unified Helpdesk) | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?route=gorgias` |
+| ManyChat (WhatsApp & Instagram) | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?route=manychat` |
+| Bulk Inventory Uploader | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/bulk-product-upload` |
+| Frontend / Brain health check | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?health=true` |
 
 ---
 
@@ -85,4 +85,5 @@ All endpoints use Brain **qqceibvalkoytafynwoc**. POST only.
 | Live staging frontend | https://www.asperbeautyshop.com/ |
 | Production domain (pending DNS) | https://www.asperbeautyshop.com |
 | Shopify Admin | https://admin.shopify.com/store/lovable-project-milns |
+
 

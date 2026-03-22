@@ -1,7 +1,7 @@
 # Supabase Master Project Profile
 
 > Official backend infrastructure profile for Asper Beauty Shop.
-> **Active Project ID:** `qqceibvalkoytafynwoc`
+> **Active Project ID:** `vhgwvfedgfmcixhdyttt`
 > Last updated: 2026-03-04.
 
 ---
@@ -11,13 +11,13 @@
 | Field | Value |
 |---|---|
 | Backend platform | Supabase |
-| Project ID (production) | `qqceibvalkoytafynwoc` |
-| Project base URL | `https://qqceibvalkoytafynwoc.supabase.co` |
-| Dashboard | `https://supabase.com/dashboard/project/qqceibvalkoytafynwoc` |
+| Project ID (production) | `vhgwvfedgfmcixhdyttt` |
+| Project base URL | `https://vhgwvfedgfmcixhdyttt.supabase.co` |
+| Dashboard | `https://supabase.com/dashboard/project/vhgwvfedgfmcixhdyttt` |
 | GitHub repository | `asperpharma/understand-project` |
 | Primary branch | `main` |
 
-**Deprecated ID:** `rgehleqcubtmcwyipyvi` — do NOT use. All references must point to `qqceibvalkoytafynwoc`.
+**Deprecated ID:** `rgehleqcubtmcwyipyvi` — do NOT use. All references must point to `vhgwvfedgfmcixhdyttt`.
 
 ---
 
@@ -91,7 +91,7 @@ Stored securely inside Supabase project settings:
 Supabase receives external automation triggers at:
 
 ```
-https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant
+https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant
 ```
 
 Routing parameters:
@@ -203,7 +203,7 @@ Must be enabled on all tables:
 
 ### Environment Separation
 
-- **Production:** `qqceibvalkoytafynwoc`
+- **Production:** `vhgwvfedgfmcixhdyttt`
 - **Staging:** Create a separate Supabase project if needed — never mix environments
 
 ---
@@ -259,13 +259,14 @@ Enable:
 
 | Component | Value |
 |---|---|
-| Supabase Project | `qqceibvalkoytafynwoc` |
+| Supabase Project | `vhgwvfedgfmcixhdyttt` |
 | AI Engine | Dr. Bot (beauty-assistant edge function) |
 | Working Branch | `main` |
-| Backend Brain | `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant` |
+| Backend Brain | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant` |
 
 **This is the official backend infrastructure. Locked.**
 
 ---
 
 *This document is the single source of truth for Supabase project configuration in the Asper Beauty Shop platform.*
+
