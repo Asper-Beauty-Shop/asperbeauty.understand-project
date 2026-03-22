@@ -274,6 +274,6 @@ These domains are allowed in the CSP header (`index.html`):
 
 ## 16. Google Cloud / Gemini Project Info
 *   **Project Name:** Asper Beauty Shop
-*   **Project Number:** 147143724210
-*   **Project ID:** gen-lang-client-0019655668
+*   **Project Number:** 745216919925
+*   **Project ID:** gen-lang-client-0600937774
 

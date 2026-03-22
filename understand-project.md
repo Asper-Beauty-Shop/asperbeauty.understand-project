@@ -144,5 +144,5 @@ VITE_SHOPIFY_STOREFRONT_TOKEN="79d7870bb2e8b940752bdee2af19edbb"
 
 ## 16. Google Cloud / Gemini Project Info
 *   **Project Name:** Asper Beauty Shop
-*   **Project Number:** 147143724210
-*   **Project ID:** gen-lang-client-0019655668
+*   **Project Number:** 745216919925
+*   **Project ID:** gen-lang-client-0600937774
