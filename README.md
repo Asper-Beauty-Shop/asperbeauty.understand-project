@@ -51,3 +51,25 @@ Welcome to your production-ready **Medical Luxury** flagship. The engineering is
 - `npm run brain` — Check AI health.
 
 **Congratulations! Your Medical Luxury empire is now live.**
+---
+
+## 🤖 Prompt Library
+
+The `prompts/` directory contains a curated library of AI prompts for frontend development, design, and UX — aligned with the "Clinical Luxury" brand.
+
+```
+prompts/
+├── accessibility/     # ARIA attributes, WCAG compliance
+├── animation/         # Micro-interactions, Gold Stitch hover
+├── components/        # React TypeScript components (Digital Tray, etc.)
+├── responsive/        # Mobile-first, RTL Arabic support
+├── ui-design/         # Design systems, Clinical Luxury methodology
+├── ux-research/       # User personas for beauty e-commerce
+└── web-development/   # CSS architecture, ProductGrid modules
+```
+
+See [`prompts/README.md`](prompts/README.md) for the full index and format guide.
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for prompt format, brand alignment requirements, and PR checklist.
