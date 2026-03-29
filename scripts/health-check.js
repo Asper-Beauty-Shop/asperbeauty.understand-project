@@ -6,7 +6,7 @@
 
 const FRONTEND_HEALTH = "https://www.asperbeautyshop.com/health";
 const BRAIN_URL =
-  "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
+  "https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant";
 
 async function check(name, url) {
   try {
