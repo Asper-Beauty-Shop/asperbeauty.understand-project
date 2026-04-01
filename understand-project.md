@@ -1,7 +1,7 @@
 ﻿# Asper Beauty Shop — Master Project Intelligence (understand-project)
 
 > **Status:** Live Flagship Reference
-> **Brain ID:** qqceibvalkoytafynwoc
+> **Brain ID:** vhgwvfedgfmcixhdyttt
 > **Last Updated:** March 2026
 
 ---
@@ -27,11 +27,11 @@ Asper is not just e-commerce; it is **Luxury Medical-Commerce**. It blends medic
 ## 3. Master Connections & Project IDs
 | System | Value |
 |---|---|
-| **Supabase Project ID** | qqceibvalkoytafynwoc |
-| **Shopify Domain** | lovable-project-milns.myshopify.com |
+| **Supabase Project ID** | vhgwvfedgfmcixhdyttt |
+| **Shopify Domain** | asper-beauty-shop-6.myshopify.com |
 | **Production URL** | https://www.asperbeautyshop.com |
 | **Staging URL** | https://www.asperbeautyshop.com |
-| **GitHub Repo** | sperpharma/understand-project |
+| **GitHub Repo** | Asper-Beauty-Shop/asperbeauty.understand-project |
 
 ---
 
@@ -50,10 +50,10 @@ Dr. Bot is the clinical AI agent managing customer consultations, product discov
 
 ## 5. Critical Environment Variables (.env)
 `env
-VITE_SUPABASE_PROJECT_ID="qqceibvalkoytafynwoc"
-VITE_SUPABASE_URL="https://qqceibvalkoytafynwoc.supabase.co"
-VITE_SHOPIFY_STORE_DOMAIN="lovable-project-milns.myshopify.com"
-VITE_SHOPIFY_STOREFRONT_TOKEN="79d7870bb2e8b940752bdee2af19edbb"
+VITE_SUPABASE_PROJECT_ID="vhgwvfedgfmcixhdyttt"
+VITE_SUPABASE_URL="https://vhgwvfedgfmcixhdyttt.supabase.co"
+VITE_SHOPIFY_STORE_DOMAIN="asper-beauty-shop-6.myshopify.com"
+VITE_SHOPIFY_STOREFRONT_TOKEN="(set in Cloudflare Worker env vars)"
 `
 
 ---
