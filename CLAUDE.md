@@ -24,7 +24,18 @@
 npm run dev       # local dev on port 8080
 npm run build     # build to dist/
 npm run lint      # lint check
+npm run typecheck # TypeScript validation
 ```
+
+## Supabase MCP Setup
+
+This project ships with `.mcp.json` that auto-loads the Supabase MCP server when you open it in Claude Code. To activate it, export your Supabase personal access token:
+
+```bash
+export SUPABASE_ACCESS_TOKEN="your-supabase-pat"
+```
+
+---
 
 ## Edge Functions (all ACTIVE)
 | Function | Purpose |
@@ -60,10 +71,33 @@ npm run lint      # lint check
 - `/sync` — trigger Shopify catalog sync
 - `/broadcast <msg>` — send message to users
 
-## Database
-- 44 tables with RLS enabled
+---
+
+## Database (44 tables, all with RLS)
 - 10,399+ products in `products` table
 - Key columns: `asper_category`, `brand`, `is_bestseller`, `available`, `shopify_product_id`
+
+### Catalog
+| Table | Description |
+|---|---|
+| `products` | 10,000+ SKUs with pricing, images, AI persona, regimen step, concern tags |
+| `brands` | 350+ brands with slug, hero image, logo, elite flag |
+| `digital_tray_products` | Featured "digital tray" curation |
+
+### Orders & Commerce
+| Table | Description |
+|---|---|
+| `cod_orders` | Cash-on-delivery orders with driver assignment |
+| `customer_leads` | Pre-checkout lead capture |
+
+### AI & Concierge
+| Table | Description |
+|---|---|
+| `concierge_brains` | AI brain configuration per persona |
+| `conversations` | Chat session containers |
+| `messages` | Individual chat messages |
+
+---
 
 ## Coding Conventions
 - Use `asper_category` (not `category`) for product categorization
@@ -72,9 +106,12 @@ npm run lint      # lint check
 - Colors: maroon (`#800020`), shiny-gold, soft-ivory
 - Fonts: Playfair Display (headings), Montserrat (body), Tajawal (Arabic)
 - Always support Arabic/English via `useLanguage()` context
+- **TypeScript strict** — no `any`, no unchecked casts
+- **RLS mandatory** — every new table must have Row Level Security enabled
 
 ## Security
 - Never expose service role key client-side
 - All tables have RLS enabled
 - Use `VITE_SUPABASE_PUBLISHABLE_KEY` (anon key) on frontend
 - Shopify Storefront token is public-safe
+- Never commit `SUPABASE_ACCESS_TOKEN` or service role keys
