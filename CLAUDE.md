@@ -1,13 +1,31 @@
-# Asper Beauty Shop — Claude Code Guide
+# Asper Beauty Shop — Claude Code Project Intelligence
 
-## Project Overview
+## Stack
+- **Frontend:** React 18 + TypeScript + Vite + Tailwind CSS
+- **Backend:** Supabase (PostgreSQL + Edge Functions)
+- **Commerce:** Shopify Storefront API
+- **AI:** Google Gemini via Supabase Edge Functions
+- **Hosting:** Cloudflare Worker (`aws-shopify-cloude`)
+- **Domain:** https://asperbeautyshop.com
 
-**Asper Beauty Shop** is a medical-luxury e-commerce platform blending clinical authority with a premium boutique experience. Stack: React 18 + TypeScript + Vite + Tailwind CSS on the frontend, Supabase (Auth, PostgreSQL, Edge Functions) on the backend, Shopify Storefront API for commerce, and Google Gemini for AI.
+## Service IDs & Connections
+| Service | Value |
+|---|---|
+| Supabase Project | `vhgwvfedgfmcixhdyttt` |
+| Supabase URL | `https://vhgwvfedgfmcixhdyttt.supabase.co` |
+| Shopify Store | `asper-beauty-shop-6.myshopify.com` |
+| Cloudflare Account | `1b07d13d6b4443176934e16389de03fa` |
+| Cloudflare Worker | `aws-shopify-cloude` |
+| GitHub Repo | `Asper-Beauty-Shop/asperbeauty.understand-project` |
+| Production URL | `https://asperbeautyshop.com` |
 
-- **Production URL:** https://www.asperbeautyshop.com
-- **Supabase Project:** `vhgwvfedgfmcixhdyttt` → `https://vhgwvfedgfmcixhdyttt.supabase.co`
-
----
+## Dev Commands
+```bash
+npm run dev       # local dev on port 8080
+npm run build     # build to dist/
+npm run lint      # lint check
+npm run typecheck # TypeScript validation
+```
 
 ## Supabase MCP Setup
 
@@ -17,164 +35,83 @@ This project ships with `.mcp.json` that auto-loads the Supabase MCP server when
 export SUPABASE_ACCESS_TOKEN="your-supabase-pat"
 ```
 
-You can then use MCP tools to run SQL queries, inspect tables, apply migrations, and manage edge functions directly from the session.
-
 ---
 
-## Development Commands
-
-| Command | Purpose |
+## Edge Functions (all ACTIVE)
+| Function | Purpose |
 |---|---|
-| `npm run dev` | Start local dev server |
-| `npm run build` | Production build |
-| `npm run lint` | ESLint check |
-| `npm run typecheck` | TypeScript validation |
-| `npm run test` | Run unit tests (Vitest) |
-| `npm run sync` | Sync Shopify catalog to Supabase |
-| `npm run sync:dry` | Dry-run catalog sync |
+| `beauty-assistant` | AI chat — Dr. Sami + Ms. Zain personas. Routes: `?route=gorgias`, `?route=manychat` |
+| `sync-shopify-catalog` | Sync products from Shopify → Supabase |
+| `asper-intelligence` | Advanced AI product intelligence |
+| `concierge-tip` | Clinical ingredient tips (Dr. Sami) |
+| `ai-product-search` | AI-powered product search |
+| `telegram-bot` | Telegram command center from phone |
+| `telegram-notify` | Push notifications to Telegram |
+| `gemini-tts` | Voice interface proxy |
+| `rapid-task` | Fast task execution |
+| `sitemap` | Dynamic sitemap.xml |
+| `send-email` | Transactional emails |
+| `meta-bot` | Meta/Facebook bot integration |
+| `meta-capi` | Meta Conversions API |
+| `ingest-catalog` | Catalog ingestion |
+| `shopify_mcp_proxy` | Shopify MCP proxy |
+| `bright-handler` | Brightening concern handler |
+
+## Channel Webhooks
+| Channel | Webhook URL |
+|---|---|
+| **Gorgias** | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?route=gorgias` |
+| **ManyChat** (IG/FB/WA) | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?route=manychat` |
+| **Telegram Bot** | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/telegram-bot` |
+
+## Telegram Commands (from phone)
+- `/orders` — today's orders
+- `/stats` — sales + traffic summary
+- `/products` — top selling products
+- `/sync` — trigger Shopify catalog sync
+- `/broadcast <msg>` — send message to users
 
 ---
 
-## Coding Conventions
-
-- **TypeScript strict** — no `any`, no unchecked casts
-- **Tailwind CSS only** — no inline styles or external CSS files
-- **shadcn/ui + Radix UI** — use existing primitives before creating new components
-- **React Query** for server state; **Zustand** for client state (cart, wishlist)
-- **Typography:** Playfair Display (headings), Montserrat (body), Tajawal (Arabic)
-- **Colors:** Ivory `#F8F8FF`, Gold `#C5A028`, Burgundy `#4A0404`, Emerald `#005C45`
-- **No placeholders** — always use real brand imagery (La Roche-Posay, Vichy, etc.)
-- **RLS mandatory** — every new table must have Row Level Security enabled
-
----
-
-## Database Schema (44 tables, all with RLS)
+## Database (44 tables, all with RLS)
+- 10,399+ products in `products` table
+- Key columns: `asper_category`, `brand`, `is_bestseller`, `available`, `shopify_product_id`
 
 ### Catalog
 | Table | Description |
 |---|---|
 | `products` | 10,000+ SKUs with pricing, images, AI persona, regimen step, concern tags |
 | `brands` | 350+ brands with slug, hero image, logo, elite flag |
-| `product_clinical_metadata` | Clinical/dermatologist notes per product |
-| `digital_tray_products` | Featured "digital tray" curation (19 active items) |
-| `regimen_plans` | 3-step regimen plan definitions |
-| `regimen_steps` | Individual steps (Cleanser / Treatment / Protection) |
-| `user_regimen_choices` | Per-user regimen selections |
-
-### Users & Auth
-| Table | Description |
-|---|---|
-| `profiles` | Supabase auth user profiles |
-| `user_profiles` | Extended user preferences and skin type data |
-| `concierge_profiles` | Dr. Bot consultation profiles |
-| `user_roles` | RBAC role assignments (`admin`, `driver`, etc.) |
-| `user_tenants` | Multi-tenant support |
+| `digital_tray_products` | Featured "digital tray" curation |
 
 ### Orders & Commerce
 | Table | Description |
 |---|---|
 | `cod_orders` | Cash-on-delivery orders with driver assignment |
 | `customer_leads` | Pre-checkout lead capture |
-| `sale_subscribers` | Sale alert opt-ins |
-| `newsletter_subscribers` | Email newsletter subscribers |
 
 ### AI & Concierge
 | Table | Description |
 |---|---|
 | `concierge_brains` | AI brain configuration per persona |
-| `concierge_brain_rules` | Rules engine for Dr. Bot responses |
 | `conversations` | Chat session containers |
 | `messages` | Individual chat messages |
-| `chat_logs` | Full chat transcript logs |
-| `chat_transcripts` | Archived transcripts |
-| `consultations` | Formal consultation records |
-| `ai_message_audit` | Audit trail for AI-generated messages |
-
-### Prompts & Experimentation
-| Table | Description |
-|---|---|
-| `prompts` | Prompt templates for edge functions |
-| `prompt_experiments` | A/B prompt testing configs |
-| `prompt_audit_logs` | Prompt change history |
-
-### Analytics & Telemetry
-| Table | Description |
-|---|---|
-| `telemetry_events` | Frontend event tracking |
-| `quiz_funnel_events` | Skin quiz conversion funnel |
-| `events` | Generic event store |
-
-### Operations & Admin
-| Table | Description |
-|---|---|
-| `audit_logs` | Admin action audit trail |
-| `webhook_audit_logs` | Gorgias / ManyChat webhook logs |
-| `access_links` | Token-based access links (e.g., driver links) |
-| `rate_limits` | API rate limiting state |
-| `site_config` | Runtime site configuration key-value store |
-| `cleanup_allowlist` | Safe-to-purge data allowlist |
-| `pipeline_error_log` | Background pipeline error tracking |
-| `pipeline_requeue_queue` | Failed pipeline job retry queue |
-
-### UI Testing
-| Table | Description |
-|---|---|
-| `ui_checks` | Automated UI check definitions |
-| `ui_check_runs` | UI check execution history |
-| `ui_check_artifacts` | Screenshots / diffs from UI checks |
-
-### Email
-| Table | Description |
-|---|---|
-| `email_send_log` | Outbound email delivery log |
 
 ---
 
-## Edge Functions (Deno/TypeScript)
+## Coding Conventions
+- Use `asper_category` (not `category`) for product categorization
+- Filter products with `available = true`
+- Order by `bestseller_rank` ASC NULLS LAST, then `created_at` DESC
+- Colors: maroon (`#800020`), shiny-gold, soft-ivory
+- Fonts: Playfair Display (headings), Montserrat (body), Tajawal (Arabic)
+- Always support Arabic/English via `useLanguage()` context
+- **TypeScript strict** — no `any`, no unchecked casts
+- **RLS mandatory** — every new table must have Row Level Security enabled
 
-Located in `supabase/functions/`:
-
-| Function | Description |
-|---|---|
-| `beauty-assistant` | Dr. Bot AI concierge — bilingual, dual-persona (Dr. Sami / Ms. Zain), Gorgias + ManyChat webhooks |
-| `ai-product-search` | Semantic product search over 10,000+ SKUs using Gemini via Lovable Gateway |
-| `asper-intelligence` | Brand intelligence & analytics with Gemini 2.5-Flash |
-| `concierge-tip` | Personalized 3-step regimen recommendations |
-| `sync-shopify-catalog` | Bulk product sync from Shopify Storefront API |
-
----
-
-## Migration Workflow
-
-Migrations live in `supabase/migrations/`. To add a new migration:
-
-```bash
-# Create a new migration file (timestamp prefix required)
-touch supabase/migrations/$(date +%Y%m%d%H%M%S)_describe_change.sql
-```
-
-Then write your SQL. All new tables must include:
-- UUID primary key
-- `created_at TIMESTAMPTZ DEFAULT now()`
-- `ALTER TABLE ... ENABLE ROW LEVEL SECURITY;`
-- At minimum one RLS policy
-
----
-
-## Key Integrations
-
-| Service | Env Variable | Purpose |
-|---|---|---|
-| Supabase | `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` | Auth, DB, Edge Functions |
-| Shopify | `VITE_SHOPIFY_STORE_DOMAIN`, `VITE_SHOPIFY_STOREFRONT_TOKEN` | Product catalog, checkout |
-| Google Gemini | `GEMINI_API_KEY` | AI search, TTS, consultations |
-| Lovable Gateway | `LOVABLE_API_KEY` | Gemini model access proxy |
-
----
-
-## Security Notes
-
-- Customer skin history is **highly sensitive** — always enforce RLS
-- Admin-only tables (`concierge_brains`, `prompt_experiments`, `notes`) require `has_role(auth.uid(), 'admin')` check
-- The Supabase publishable (anon) key in `src/integrations/supabase/client.ts` is safe to commit — it is not a secret
+## Security
+- Never expose service role key client-side
+- All tables have RLS enabled
+- Use `VITE_SUPABASE_PUBLISHABLE_KEY` (anon key) on frontend
+- Shopify Storefront token is public-safe
 - Never commit `SUPABASE_ACCESS_TOKEN` or service role keys

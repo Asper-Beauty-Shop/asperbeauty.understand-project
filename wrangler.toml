@@ -1,4 +1,4 @@
-name = "asper-beauty-shop"
+name = "aws-shopify-cloude"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 
@@ -7,3 +7,4 @@ command = "npm run build"
 
 [assets]
 directory = "./dist"
+not_found_handling = "single-page-application"
