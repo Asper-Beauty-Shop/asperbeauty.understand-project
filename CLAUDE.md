@@ -37,11 +37,21 @@ export SUPABASE_ACCESS_TOKEN="your-supabase-pat"
 
 ---
 
+## Cloudflare Worker Routes (ACTIVE)
+| Pattern | Worker |
+|---|---|
+| `asperbeautyshop.com/*` | `aws-shopify-cloude` |
+| `www.asperbeautyshop.com/*` | `aws-shopify-cloude` |
+
+Zone ID: `1be9ffe01e2e19b41f6622172a3ee9be`
+Routes take priority over any Pages project custom domain.
+
 ## Edge Functions (all ACTIVE)
 | Function | Purpose |
 |---|---|
 | `beauty-assistant` | AI chat — Dr. Sami + Ms. Zain personas. Routes: `?route=gorgias`, `?route=manychat` |
-| `sync-shopify-catalog` | Sync products from Shopify → Supabase |
+| `sync-shopify-catalog` | Sync products from Shopify → Supabase (requires admin user JWT) |
+| `run-sync` | One-shot sync wrapper — callable from pg_net without JWT |
 | `asper-intelligence` | Advanced AI product intelligence |
 | `concierge-tip` | Clinical ingredient tips (Dr. Sami) |
 | `ai-product-search` | AI-powered product search |
@@ -56,6 +66,11 @@ export SUPABASE_ACCESS_TOKEN="your-supabase-pat"
 | `ingest-catalog` | Catalog ingestion |
 | `shopify_mcp_proxy` | Shopify MCP proxy |
 | `bright-handler` | Brightening concern handler |
+
+## Pending Manual Steps
+1. **Shopify Catalog Sync** — Set `SHOPIFY_STOREFRONT_ACCESS_TOKEN` in Supabase edge function secrets:
+   `https://supabase.com/dashboard/project/vhgwvfedgfmcixhdyttt/settings/functions`
+   Then trigger via SQL: `SELECT net.http_post(url := 'https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/run-sync', headers := '{"Content-Type":"application/json"}'::jsonb, body := '{}'::jsonb);`
 
 ## Channel Webhooks
 | Channel | Webhook URL |
