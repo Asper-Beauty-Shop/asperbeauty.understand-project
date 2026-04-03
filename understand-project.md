@@ -1,4 +1,4 @@
-# Asper Beauty Shop — Master Project Intelligence (understand-project)
+# Asper Beauty Shop ï¿½ Master Project Intelligence (understand-project)
 
 > **Status:** Live Flagship Reference
 > **Brain ID:** vhgwvfedgfmcixhdyttt
@@ -28,14 +28,14 @@ Asper is not just e-commerce; it is **Luxury Medical-Commerce**. It blends medic
 | System | Value |
 |---|---|
 | **Supabase Project ID** | vhgwvfedgfmcixhdyttt |
-| **Shopify Domain** | lovable-project-milns.myshopify.com |
+| **Shopify Domain** | asper-beauty-shop-6.myshopify.com |
 | **Production URL** | https://www.asperbeautyshop.com |
 | **Staging URL** | https://www.asperbeautyshop.com |
-| **GitHub Repo** | sperpharma/understand-project |
+| **GitHub Repo** | Asper-Beauty-Shop/asperbeauty.understand-project |
 
 ---
 
-## 4. Dr. Bot — The AI Beauty Assistant
+## 4. Dr. Bot ï¿½ The AI Beauty Assistant
 Dr. Bot is the clinical AI agent managing customer consultations, product discovery, and support.
 
 *   **Logic:** Uses Gemini for medical-beauty reasoning.
@@ -52,8 +52,8 @@ Dr. Bot is the clinical AI agent managing customer consultations, product discov
 `env
 VITE_SUPABASE_PROJECT_ID="vhgwvfedgfmcixhdyttt"
 VITE_SUPABASE_URL="https://vhgwvfedgfmcixhdyttt.supabase.co"
-VITE_SHOPIFY_STORE_DOMAIN="lovable-project-milns.myshopify.com"
-VITE_SHOPIFY_STOREFRONT_TOKEN="79d7870bb2e8b940752bdee2af19edbb"
+VITE_SHOPIFY_STORE_DOMAIN="asper-beauty-shop-6.myshopify.com"
+VITE_SHOPIFY_STOREFRONT_TOKEN="(set in Cloudflare Worker env vars)"
 `
 
 ---
@@ -84,11 +84,11 @@ VITE_SHOPIFY_STOREFRONT_TOKEN="79d7870bb2e8b940752bdee2af19edbb"
 2. **Eucerin** (Anti-Pigment dual serum focus)
 3. **Bioderma** (Sensibio clarity focus)
 4. **CeraVe** (Ceramide molecular focus)
-5. **Vichy** (Minéral 89 hydration focus)
+5. **Vichy** (Minï¿½ral 89 hydration focus)
 6. **Sesderma** (Amber glass dropper/prescription focus)
 7. **COSRX** (Snail Mucin/glossy reflection focus)
 8. **Heliocare** (Medical sun protection)
-9. **Avène** (Thermal spring water)
+9. **Avï¿½ne** (Thermal spring water)
 10. **ISDIN** (Photo-aging focus)
 11. **Uriage** (Barrier repair)
 12. **Filorga** (Medical-spa bridge)
@@ -102,13 +102,13 @@ VITE_SHOPIFY_STOREFRONT_TOKEN="79d7870bb2e8b940752bdee2af19edbb"
     *   **By Concern:** Acne, Anti-Aging, Dryness, Sensitivity.
     *   **By Persona:**
         *   **Dr. Sami:** Clinical/Medical brands (Vichy, Eucerin, Omron).
-        *   **Ms. Zain:** Aesthetic/Luxury brands (YSL, L'Oréal, K-Beauty).
+        *   **Ms. Zain:** Aesthetic/Luxury brands (YSL, L'Orï¿½al, K-Beauty).
 
 ---
 
 ## 11. The Virtual Mall: Departmental Hierarchy
 *   **Dermocosmetics (The Core):** Vichy, La Roche-Posay, CeraVe. (Managed by Dr. Sami).
-*   **Makeup & Essentials:** Maybelline, L'Oréal, Essence. (Managed by Ms. Zain).
+*   **Makeup & Essentials:** Maybelline, L'Orï¿½al, Essence. (Managed by Ms. Zain).
 *   **Luxury Fragrance:** YSL, Memo Paris, Niche perfumery.
 *   **Mom & Baby:** Chicco, Lionelo, Daily Care.
 *   **Lifestyle & Travel:** Samsonite, American Tourister.
