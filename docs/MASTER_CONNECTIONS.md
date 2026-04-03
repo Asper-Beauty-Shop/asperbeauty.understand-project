@@ -10,7 +10,7 @@
 
 | System | ID / Domain |
 |---|---|
-| **Supabase Project ID** | `qqceibvalkoytafynwoc` |
+| **Supabase Project ID** | `vhgwvfedgfmcixhdyttt` |
 | **Lovable Project ID** | `657fb572-13a5-4a3e-bac9-184d39fdf7e6` |
 | **Shopify Store Domain** | `lovable-project-milns.myshopify.com` |
 | **Shopify API Version** | `2025-07` |
@@ -35,7 +35,7 @@
 | Dashboard | URL |
 |---|---|
 | **GitHub Repo** | `https://github.com/asperpharma/understand-project` |
-| **Supabase Dashboard** | `https://supabase.com/dashboard/project/qqceibvalkoytafynwoc` |
+| **Supabase Dashboard** | `https://supabase.com/dashboard/project/vhgwvfedgfmcixhdyttt` |
 | **Lovable Dashboard** | `https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6` |
 | **Lovable Settings** | `https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6/settings` |
 | **Shopify Admin** | `https://admin.shopify.com/store/lovable-project-milns` |
@@ -51,7 +51,7 @@
 ### Supabase Base URL
 
 ```
-https://qqceibvalkoytafynwoc.supabase.co
+https://vhgwvfedgfmcixhdyttt.supabase.co
 ```
 
 ### Shopify Storefront GraphQL
@@ -63,14 +63,14 @@ https://lovable-project-milns.myshopify.com/api/2025-07/graphql.json
 ### Edge Function Base
 
 ```
-https://qqceibvalkoytafynwoc.supabase.co/functions/v1/{function_name}
+https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/{function_name}
 ```
 
 ---
 
 ## 5. Edge Functions (All 20+)
 
-All deployed at `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/`
+All deployed at `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/`
 
 | Function | Purpose |
 |---|---|
@@ -104,7 +104,7 @@ All deployed at `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/`
 
 Base endpoint:
 ```
-https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant
+https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant
 ```
 
 | Route Parameter | Source | Full URL |
@@ -152,8 +152,8 @@ https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant
 
 | Variable | Value |
 |---|---|
-| `VITE_SUPABASE_PROJECT_ID` | `qqceibvalkoytafynwoc` |
-| `VITE_SUPABASE_URL` | `https://qqceibvalkoytafynwoc.supabase.co` |
+| `VITE_SUPABASE_PROJECT_ID` | `vhgwvfedgfmcixhdyttt` |
+| `VITE_SUPABASE_URL` | `https://vhgwvfedgfmcixhdyttt.supabase.co` |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | *(Supabase anon key — get from dashboard)* |
 | `VITE_SHOPIFY_STORE_DOMAIN` | `lovable-project-milns.myshopify.com` |
 | `VITE_SHOPIFY_STOREFRONT_TOKEN` | *(Storefront API token — get from Shopify)* |
@@ -236,7 +236,7 @@ These domains are allowed in the CSP header (`index.html`):
 
 | Integration | Status | Connection Point |
 |---|---|---|
-| **Supabase** (DB + Auth + Edge Functions) | Active | `qqceibvalkoytafynwoc` |
+| **Supabase** (DB + Auth + Edge Functions) | Active | `vhgwvfedgfmcixhdyttt` |
 | **Shopify** (5,000+ SKU catalog) | Active | Storefront API + Admin API |
 | **Gorgias** (Customer support) | Active | CSP + webhook via `beauty-assistant` |
 | **ManyChat** (Conversational commerce) | Active | Webhook via `beauty-assistant` |
@@ -253,7 +253,7 @@ These domains are allowed in the CSP header (`index.html`):
 
 | Item | Old Value | Correct Value |
 |---|---|---|
-| Supabase Project ID | ~~`rgehleqcubtmcwyipyvi`~~ | `qqceibvalkoytafynwoc` |
+| Supabase Project ID | ~~`rgehleqcubtmcwyipyvi`~~ | `vhgwvfedgfmcixhdyttt` |
 | Facebook Page URL | ~~`facebook.com/robu.sweileh`~~ | `facebook.com/AsperBeautyShop` |
 | Twitter Handle | ~~`@AsperBeauty`~~ | `@asperbeautyshop` |
 
@@ -274,6 +274,7 @@ These domains are allowed in the CSP header (`index.html`):
 
 ## 16. Google Cloud / Gemini Project Info
 *   **Project Name:** Asper Beauty Shop
-*   **Project Number:** 147143724210
-*   **Project ID:** gen-lang-client-0019655668
+*   **Project Number:** 745216919925
+*   **Project ID:** gen-lang-client-0600937774
+
 

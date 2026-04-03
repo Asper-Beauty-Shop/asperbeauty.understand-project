@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 async function verify() {
-  const url = 'https://qqceibvalkoytafynwoc.supabase.co/functions/v1/bulk-product-upload';
+  const url = 'https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/bulk-product-upload';
   console.log('--- Checking Supabase Clinical Vault ---');
   try {
     const res = await fetch(url);
@@ -17,3 +17,4 @@ async function verify() {
   }
 }
 verify();
+

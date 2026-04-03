@@ -25,131 +25,131 @@ export function ShareRegimenButton() {
       const canvas = document.createElement("canvas");
       canvas.width = 1080;
       canvas.height = 1920;
-      const ctx = canvas.getContext("2d")!;
+      const canvasContext = canvas.getContext("2d")!;
 
       // Background — Soft Ivory
-      ctx.fillStyle = "#F5F0E8";
-      ctx.fillRect(0, 0, 1080, 1920);
+      canvasContext.fillStyle = "#F5F0E8";
+      canvasContext.fillRect(0, 0, 1080, 1920);
 
       // Subtle grain texture dots
       for (let i = 0; i < 3000; i++) {
-        const x = Math.random() * 1080;
-        const y = Math.random() * 1920;
-        ctx.fillStyle = `rgba(128,0,32,${Math.random() * 0.03})`;
-        ctx.fillRect(x, y, 1, 1);
+        const grainX = Math.random() * 1080;
+        const grainY = Math.random() * 1920;
+        canvasContext.fillStyle = `rgba(128,0,32,${Math.random() * 0.03})`;
+        canvasContext.fillRect(grainX, grainY, 1, 1);
       }
 
       // Top accent line
-      const gradient = ctx.createLinearGradient(0, 0, 1080, 0);
+      const gradient = canvasContext.createLinearGradient(0, 0, 1080, 0);
       gradient.addColorStop(0, "transparent");
       gradient.addColorStop(0.5, "#C5A028");
       gradient.addColorStop(1, "transparent");
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 80, 1080, 3);
+      canvasContext.fillStyle = gradient;
+      canvasContext.fillRect(0, 80, 1080, 3);
 
       // Header
-      ctx.fillStyle = "#800020";
-      ctx.font = "bold 64px 'Playfair Display', Georgia, serif";
-      ctx.textAlign = "center";
-      ctx.fillText("My Clinical Routine", 540, 180);
+      canvasContext.fillStyle = "#800020";
+      canvasContext.font = "bold 64px 'Playfair Display', Georgia, serif";
+      canvasContext.textAlign = "center";
+      canvasContext.fillText("My Clinical Routine", 540, 180);
 
-      ctx.fillStyle = "#C5A028";
-      ctx.font = "24px 'Montserrat', sans-serif";
-      ctx.fillText("via @AsperBeauty", 540, 230);
+      canvasContext.fillStyle = "#C5A028";
+      canvasContext.font = "24px 'Montserrat', sans-serif";
+      canvasContext.fillText("via @AsperBeauty", 540, 230);
 
       // Product grid (2 columns)
-      const cols = 2;
-      const cardW = 420;
-      const cardH = 500;
-      const startX = (1080 - cols * cardW - 40) / 2;
-      const startY = 320;
+      const gridColumns = 2;
+      const cardWidth = 420;
+      const cardHeight = 500;
+      const gridStartX = (1080 - gridColumns * cardWidth - 40) / 2;
+      const gridStartY = 320;
 
       const displayItems = items.slice(0, 4);
 
       for (let i = 0; i < displayItems.length; i++) {
         const item = displayItems[i];
-        const col = i % cols;
-        const row = Math.floor(i / cols);
-        const x = startX + col * (cardW + 40);
-        const y = startY + row * (cardH + 40);
+        const gridColumn = i % gridColumns;
+        const gridRow = Math.floor(i / gridColumns);
+        const cardX = gridStartX + gridColumn * (cardWidth + 40);
+        const cardY = gridStartY + gridRow * (cardHeight + 40);
 
         // Card background
-        ctx.fillStyle = "#FFFFFF";
-        ctx.shadowColor = "rgba(128,0,32,0.08)";
-        ctx.shadowBlur = 20;
-        ctx.shadowOffsetY = 4;
-        roundRect(ctx, x, y, cardW, cardH, 16);
-        ctx.fill();
-        ctx.shadowColor = "transparent";
+        canvasContext.fillStyle = "#FFFFFF";
+        canvasContext.shadowColor = "rgba(128,0,32,0.08)";
+        canvasContext.shadowBlur = 20;
+        canvasContext.shadowOffsetY = 4;
+        drawRoundedRect(canvasContext, cardX, cardY, cardWidth, cardHeight, 16);
+        canvasContext.fill();
+        canvasContext.shadowColor = "transparent";
 
         // Gold border
-        ctx.strokeStyle = "#C5A028";
-        ctx.lineWidth = 1.5;
-        roundRect(ctx, x, y, cardW, cardH, 16);
-        ctx.stroke();
+        canvasContext.strokeStyle = "#C5A028";
+        canvasContext.lineWidth = 1.5;
+        drawRoundedRect(canvasContext, cardX, cardY, cardWidth, cardHeight, 16);
+        canvasContext.stroke();
 
         // Load product image
         try {
           const imgUrl = item.product.node.images?.edges?.[0]?.node?.url;
           if (imgUrl) {
-            const img = await loadImage(imgUrl);
+            const productImage = await loadImage(imgUrl);
             const imgSize = 280;
-            const imgX = x + (cardW - imgSize) / 2;
-            const imgY = y + 30;
-            ctx.drawImage(img, imgX, imgY, imgSize, imgSize);
+            const imgX = cardX + (cardWidth - imgSize) / 2;
+            const imgY = cardY + 30;
+            canvasContext.drawImage(productImage, imgX, imgY, imgSize, imgSize);
           }
         } catch {
           // Skip image on error
         }
 
         // Product title
-        ctx.fillStyle = "#333333";
-        ctx.font = "bold 28px 'Montserrat', sans-serif";
-        ctx.textAlign = "center";
+        canvasContext.fillStyle = "#333333";
+        canvasContext.font = "bold 28px 'Montserrat', sans-serif";
+        canvasContext.textAlign = "center";
         const title = item.product.node.title;
         const truncated = title.length > 28 ? title.slice(0, 25) + "..." : title;
-        ctx.fillText(truncated, x + cardW / 2, y + cardH - 80);
+        canvasContext.fillText(truncated, cardX + cardWidth / 2, cardY + cardHeight - 80);
 
         // Price
-        ctx.fillStyle = "#800020";
-        ctx.font = "bold 32px 'Montserrat', sans-serif";
-        ctx.fillText(`${normalizePrice(item.price.amount).toFixed(2)} ${item.price.currencyCode}`, x + cardW / 2, y + cardH - 35);
+        canvasContext.fillStyle = "#800020";
+        canvasContext.font = "bold 32px 'Montserrat', sans-serif";
+        canvasContext.fillText(`${normalizePrice(item.price.amount).toFixed(2)} ${item.price.currencyCode}`, cardX + cardWidth / 2, cardY + cardHeight - 35);
       }
 
       // "Dr. Sami Approved" stamp
-      const stampY = startY + Math.ceil(displayItems.length / cols) * (cardH + 40) + 40;
-      ctx.save();
-      ctx.translate(540, stampY);
+      const stampY = gridStartY + Math.ceil(displayItems.length / gridColumns) * (cardHeight + 40) + 40;
+      canvasContext.save();
+      canvasContext.translate(540, stampY);
 
       // Gold circle stamp
-      ctx.beginPath();
-      ctx.arc(0, 0, 80, 0, Math.PI * 2);
-      ctx.fillStyle = "#C5A028";
-      ctx.fill();
+      canvasContext.beginPath();
+      canvasContext.arc(0, 0, 80, 0, Math.PI * 2);
+      canvasContext.fillStyle = "#C5A028";
+      canvasContext.fill();
 
-      ctx.beginPath();
-      ctx.arc(0, 0, 70, 0, Math.PI * 2);
-      ctx.strokeStyle = "#F5F0E8";
-      ctx.lineWidth = 3;
-      ctx.stroke();
+      canvasContext.beginPath();
+      canvasContext.arc(0, 0, 70, 0, Math.PI * 2);
+      canvasContext.strokeStyle = "#F5F0E8";
+      canvasContext.lineWidth = 3;
+      canvasContext.stroke();
 
-      ctx.fillStyle = "#FFFFFF";
-      ctx.font = "bold 20px 'Montserrat', sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("Dr. Sami", 0, -10);
-      ctx.font = "16px 'Montserrat', sans-serif";
-      ctx.fillText("Approved ✓", 0, 15);
-      ctx.restore();
+      canvasContext.fillStyle = "#FFFFFF";
+      canvasContext.font = "bold 20px 'Montserrat', sans-serif";
+      canvasContext.textAlign = "center";
+      canvasContext.fillText("Dr. Sami", 0, -10);
+      canvasContext.font = "16px 'Montserrat', sans-serif";
+      canvasContext.fillText("Approved ✓", 0, 15);
+      canvasContext.restore();
 
       // Footer
-      ctx.fillStyle = "#800020";
-      ctx.font = "28px 'Playfair Display', Georgia, serif";
-      ctx.textAlign = "center";
-      ctx.fillText("asperbeauty.com", 540, 1840);
+      canvasContext.fillStyle = "#800020";
+      canvasContext.font = "28px 'Playfair Display', Georgia, serif";
+      canvasContext.textAlign = "center";
+      canvasContext.fillText("asperbeauty.com", 540, 1840);
 
       // Bottom accent line
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 1870, 1080, 3);
+      canvasContext.fillStyle = gradient;
+      canvasContext.fillRect(0, 1870, 1080, 3);
 
       // Convert to blob and share/download
       canvas.toBlob(async (blob) => {
@@ -169,8 +169,8 @@ export function ShareRegimenButton() {
           downloadBlob(blob);
         }
       }, "image/png");
-    } catch (err) {
-      console.error("Share image generation failed:", err);
+    } catch (error) {
+      console.error("Share image generation failed:", error);
       toast.error("Could not generate your routine image.");
     } finally {
       setGenerating(false);
@@ -211,25 +211,25 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 
 function downloadBlob(blob: Blob) {
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "my-asper-routine.png";
-  a.click();
+  const downloadLink = document.createElement("a");
+  downloadLink.href = url;
+  downloadLink.download = "my-asper-routine.png";
+  downloadLink.click();
   URL.revokeObjectURL(url);
   toast.success("Image downloaded! Share it on Instagram 📸");
 }
 
-function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
+function drawRoundedRect(canvasContext: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  canvasContext.beginPath();
+  canvasContext.moveTo(x + r, y);
+  canvasContext.lineTo(x + w - r, y);
+  canvasContext.quadraticCurveTo(x + w, y, x + w, y + r);
+  canvasContext.lineTo(x + w, y + h - r);
+  canvasContext.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  canvasContext.lineTo(x + r, y + h);
+  canvasContext.quadraticCurveTo(x, y + h, x, y + h - r);
+  canvasContext.lineTo(x, y + r);
+  canvasContext.quadraticCurveTo(x, y, x + r, y);
+  canvasContext.closePath();
 }
 
