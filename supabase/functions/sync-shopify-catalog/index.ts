@@ -11,43 +11,126 @@ const corsHeaders = {
 /** Known brands sorted longest-first so "La Roche-Posay" matches before "La" */
 const KNOWN_BRANDS: string[] = [
   // Clinical Dermocosmetics
-  "La Roche-Posay", "La Roche Posay",
-  "CeraVe", "Bioderma", "Vichy", "Eucerin", "Sesderma", "COSRX", "SVR",
-  "Avene", "Avène", "Uriage", "Ducray", "Noreva", "ACM", "Isdin",
-  "The NewLab", "NewLab", "Rilastil", "Exuviance", "Cetaphil",
-  "Acnecinamide", "Bio Balance",
+  "La Roche-Posay",
+  "La Roche Posay",
+  "CeraVe",
+  "Bioderma",
+  "Vichy",
+  "Eucerin",
+  "Sesderma",
+  "COSRX",
+  "SVR",
+  "Avene",
+  "Avène",
+  "Uriage",
+  "Ducray",
+  "Noreva",
+  "ACM",
+  "Isdin",
+  "The NewLab",
+  "NewLab",
+  "Rilastil",
+  "Exuviance",
+  "Cetaphil",
+  "Acnecinamide",
+  "Bio Balance",
   // L'Oréal Group
-  "Lancôme", "Lancome", "Kérastase", "Kerastase", "YSL",
-  "Yves Saint Laurent", "Giorgio Armani", "Armani",
-  "L'Oréal", "L'Oreal", "Garnier", "Maybelline", "NYX",
+  "Lancôme",
+  "Lancome",
+  "Kérastase",
+  "Kerastase",
+  "YSL",
+  "Yves Saint Laurent",
+  "Giorgio Armani",
+  "Armani",
+  "L'Oréal",
+  "L'Oreal",
+  "Garnier",
+  "Maybelline",
+  "NYX",
   // Luxury Fragrance Houses
-  "Carolina Herrera", "Memo Paris", "Van Cleef & Arpels", "Van Cleef",
-  "Valentino", "Versace", "Prada", "Gucci", "Dolce & Gabbana", "Dolce Gabbana",
-  "Burberry", "Calvin Klein", "Ralph Lauren", "Hugo Boss",
-  "Mont Blanc", "Montblanc", "Coach", "Bvlgari", "Bulgari",
-  "Narciso Rodriguez", "Jimmy Choo", "Azzaro",
-  "Mancera", "Mercedes-Benz", "Mercedes Benz", "Boucheron",
-  "Paco Rabanne", "Jean Paul Gaultier",
+  "Carolina Herrera",
+  "Memo Paris",
+  "Van Cleef & Arpels",
+  "Van Cleef",
+  "Valentino",
+  "Versace",
+  "Prada",
+  "Gucci",
+  "Dolce & Gabbana",
+  "Dolce Gabbana",
+  "Burberry",
+  "Calvin Klein",
+  "Ralph Lauren",
+  "Hugo Boss",
+  "Mont Blanc",
+  "Montblanc",
+  "Coach",
+  "Bvlgari",
+  "Bulgari",
+  "Narciso Rodriguez",
+  "Jimmy Choo",
+  "Azzaro",
+  "Mancera",
+  "Mercedes-Benz",
+  "Mercedes Benz",
+  "Boucheron",
+  "Paco Rabanne",
+  "Jean Paul Gaultier",
   // Premium Care
-  "Clarins", "Guerlain", "Nuxe", "Dior", "Olaplex", "NeoCell",
-  "Estée Lauder", "Estee Lauder", "Clinique", "Origins",
+  "Clarins",
+  "Guerlain",
+  "Nuxe",
+  "Dior",
+  "Olaplex",
+  "NeoCell",
+  "Estée Lauder",
+  "Estee Lauder",
+  "Clinique",
+  "Origins",
   "Anastasia Beverly Hills",
   // Regional & Jordanian
-  "Beesline", "Amina's", "Aminas", "Natalifé", "Natalife",
+  "Beesline",
+  "Amina's",
+  "Aminas",
+  "Natalifé",
+  "Natalife",
   // Mid-range
-  "Babaria", "Revlon", "Rimmel", "Bourjois", "Max Factor",
-  "Essence", "Catrice", "Seventeen", "Eveline", "Pastel",
+  "Babaria",
+  "Revlon",
+  "Rimmel",
+  "Bourjois",
+  "Max Factor",
+  "Essence",
+  "Catrice",
+  "Seventeen",
+  "Eveline",
+  "Pastel",
   // Baby & Mom
-  "Medela", "Chicco", "Mustela", "Bepanthen", "Sudocrem",
-  "Philips Avent", "NUK", "MAM", "Baby Safe",
+  "Medela",
+  "Chicco",
+  "Mustela",
+  "Bepanthen",
+  "Sudocrem",
+  "Philips Avent",
+  "NUK",
+  "MAM",
+  "Baby Safe",
   // Hair
-  "Tresemme", "TRESemmé", "Schwarzkopf", "Wella",
+  "Tresemme",
+  "TRESemmé",
+  "Schwarzkopf",
+  "Wella",
   // Supplements
-  "Solgar", "Nature's Bounty", "Centrum", "Vitabiotics",
+  "Solgar",
+  "Nature's Bounty",
+  "Centrum",
+  "Vitabiotics",
 ].sort((a, b) => b.length - a.length);
 
 /** Product-type keywords that should NOT be captured as brand names */
-const PRODUCT_TERM_PATTERN = /^(serum|cream|lotion|gel|foam|wash|cleanser|moistur|mask|oil|spray|toner|peel|scrub|sunscreen|spf|balm|mist|essence|ampoule|eye|lip|hand|body|foot|hair|nail|baby|anti|ultra|hydra|aqua|vitamin|retinol|hyaluronic|salicylic|glycolic|niacin|collagen|peptide|ceramide|whitening|brightening|matte|glow|peeling|exfoli)/i;
+const PRODUCT_TERM_PATTERN =
+  /^(serum|cream|lotion|gel|foam|wash|cleanser|moistur|mask|oil|spray|toner|peel|scrub|sunscreen|spf|balm|mist|essence|ampoule|eye|lip|hand|body|foot|hair|nail|baby|anti|ultra|hydra|aqua|vitamin|retinol|hyaluronic|salicylic|glycolic|niacin|collagen|peptide|ceramide|whitening|brightening|matte|glow|peeling|exfoli)/i;
 
 function extractBrand(title: string, vendor: string): string {
   const titleLower = title.toLowerCase();
@@ -60,7 +143,9 @@ function extractBrand(title: string, vendor: string): string {
   // 2. Try first word only — but reject if it looks like a product term
   const words = title.split(/\s+/);
   const firstWord = words[0] || "";
-  if (firstWord && !PRODUCT_TERM_PATTERN.test(firstWord) && firstWord.length > 2) {
+  if (
+    firstWord && !PRODUCT_TERM_PATTERN.test(firstWord) && firstWord.length > 2
+  ) {
     // If vendor is generic "Asper Beauty", use first word as brand
     if (vendor === "Asper Beauty" || !vendor) {
       return firstWord;
@@ -77,22 +162,43 @@ function extractBrand(title: string, vendor: string): string {
 
 /** Budget/mid-range brands whose CSV prices are in fils (÷100 to get JOD) */
 const BUDGET_BRANDS = new Set([
-  "essence", "rimmel", "seventeen", "catrice", "bourjois",
-  "acnecinamide", "bio balance", "cetaphil", "eveline",
-  "pastel", "baby safe",
-  "chicco", "mustela", "medela", "philips avent", "nuk", "mam",
-  "sudocrem", "bepanthen",
+  "essence",
+  "rimmel",
+  "seventeen",
+  "catrice",
+  "bourjois",
+  "acnecinamide",
+  "bio balance",
+  "cetaphil",
+  "eveline",
+  "pastel",
+  "baby safe",
+  "chicco",
+  "mustela",
+  "medela",
+  "philips avent",
+  "nuk",
+  "mam",
+  "sudocrem",
+  "bepanthen",
 ]);
 
 /** Mid-range brands: fils if price > 50 */
 const MID_BRANDS = new Set([
-  "maybelline", "babaria", "beesline", "revlon", "max factor",
-  "garnier", "nyx", "l'oréal", "l'oreal",
+  "maybelline",
+  "babaria",
+  "beesline",
+  "revlon",
+  "max factor",
+  "garnier",
+  "nyx",
+  "l'oréal",
+  "l'oreal",
 ]);
 
 /**
  * Smart price normalization.
- * 
+ *
  * CSV data has mixed conventions:
  * - Budget brands: prices in piasters (300 = 3.00 JOD) → ÷100
  * - Premium brands: prices in JOD (125.00 = 125 JOD) → keep as-is
@@ -156,24 +262,65 @@ interface MappingResult {
 }
 
 const CONCERN_RULES: Array<{ pattern: RegExp; concern: SkinConcern }> = [
-  { pattern: /acne|blemish|salicylic|anti.?blemish|pimple/i, concern: "Concern_Acne" },
-  { pattern: /spf|sunscreen|sun\s*protect|uv\s*protect|solar/i, concern: "Concern_SunProtection" },
-  { pattern: /retinol|anti.?aging|anti.?age|wrinkle|firming|lift|renergie|absolue/i, concern: "Concern_AntiAging" },
-  { pattern: /bright|vitamin\s*c|glow|radiance|luminous|clarifique/i, concern: "Concern_Brightening" },
-  { pattern: /pigment|dark\s*spot|melasma|even\s*tone|whitening/i, concern: "Concern_Pigmentation" },
-  { pattern: /dark\s*circle|eye\s*contour|under.?eye|age\s*rewind/i, concern: "Concern_DarkCircles" },
-  { pattern: /redness|rosacea|calming|anti.?redness/i, concern: "Concern_Redness" },
-  { pattern: /oil\s*control|mattif|oily|sebum|shine.?free|matte.*pore/i, concern: "Concern_Oiliness" },
-  { pattern: /sensitiv|sooth|gentle|irritat|atopic|sensibio/i, concern: "Concern_Sensitivity" },
+  {
+    pattern: /acne|blemish|salicylic|anti.?blemish|pimple/i,
+    concern: "Concern_Acne",
+  },
+  {
+    pattern: /spf|sunscreen|sun\s*protect|uv\s*protect|solar/i,
+    concern: "Concern_SunProtection",
+  },
+  {
+    pattern:
+      /retinol|anti.?aging|anti.?age|wrinkle|firming|lift|renergie|absolue/i,
+    concern: "Concern_AntiAging",
+  },
+  {
+    pattern: /bright|vitamin\s*c|glow|radiance|luminous|clarifique/i,
+    concern: "Concern_Brightening",
+  },
+  {
+    pattern: /pigment|dark\s*spot|melasma|even\s*tone|whitening/i,
+    concern: "Concern_Pigmentation",
+  },
+  {
+    pattern: /dark\s*circle|eye\s*contour|under.?eye|age\s*rewind/i,
+    concern: "Concern_DarkCircles",
+  },
+  {
+    pattern: /redness|rosacea|calming|anti.?redness/i,
+    concern: "Concern_Redness",
+  },
+  {
+    pattern: /oil\s*control|mattif|oily|sebum|shine.?free|matte.*pore/i,
+    concern: "Concern_Oiliness",
+  },
+  {
+    pattern: /sensitiv|sooth|gentle|irritat|atopic|sensibio/i,
+    concern: "Concern_Sensitivity",
+  },
   { pattern: /dry|dehydrat/i, concern: "Concern_Dryness" },
-  { pattern: /hydra|hyaluronic|moistur|aqua|h\.a\./i, concern: "Concern_Hydration" },
+  {
+    pattern: /hydra|hyaluronic|moistur|aqua|h\.a\./i,
+    concern: "Concern_Hydration",
+  },
 ];
 
 const STEP_RULES: Array<{ pattern: RegExp; step: RegimenStep }> = [
-  { pattern: /cleanser|wash|foam|micellar|makeup\s*remov|cleansing/i, step: "Step_1_Cleanser" },
+  {
+    pattern: /cleanser|wash|foam|micellar|makeup\s*remov|cleansing/i,
+    step: "Step_1_Cleanser",
+  },
   { pattern: /spf|sunscreen|sun\s*protect|solar/i, step: "Step_3_Protection" },
-  { pattern: /moistur|cream|lotion|balm|emulsion|day\s*cream|night\s*cream/i, step: "Step_3_Protection" },
-  { pattern: /serum|treatment|ampoule|booster|concentrate|essence|oil|mask|peel|exfoli|toner|tonic/i, step: "Step_2_Treatment" },
+  {
+    pattern: /moistur|cream|lotion|balm|emulsion|day\s*cream|night\s*cream/i,
+    step: "Step_3_Protection",
+  },
+  {
+    pattern:
+      /serum|treatment|ampoule|booster|concentrate|essence|oil|mask|peel|exfoli|toner|tonic/i,
+    step: "Step_2_Treatment",
+  },
 ];
 
 /**
@@ -182,19 +329,41 @@ const STEP_RULES: Array<{ pattern: RegExp; step: RegimenStep }> = [
  */
 const NON_CLINICAL_PATTERNS: Array<{ pattern: RegExp; category: string }> = [
   // Baby & Mom
-  { pattern: /breast\s*pump|nursing\s*pad|nipple\s*shield|baby\s*cup|bustier|feeder|breastmilk|diaper|pacifier|teether/i, category: "baby_mom" },
-  { pattern: /medela|chicco|mustela|philips\s*avent|nuk\b|mam\b/i, category: "baby_mom" },
+  {
+    pattern:
+      /breast\s*pump|nursing\s*pad|nipple\s*shield|baby\s*cup|bustier|feeder|breastmilk|diaper|pacifier|teether/i,
+    category: "baby_mom",
+  },
+  {
+    pattern: /medela|chicco|mustela|philips\s*avent|nuk\b|mam\b/i,
+    category: "baby_mom",
+  },
   // Fragrances
-  { pattern: /eau\s*de\s*(parfum|toilette)|edp|edt|cologne|fragrance|perfume|oud/i, category: "fragrance" },
+  {
+    pattern:
+      /eau\s*de\s*(parfum|toilette)|edp|edt|cologne|fragrance|perfume|oud/i,
+    category: "fragrance",
+  },
   // Hair Care (non-clinical)
-  { pattern: /shampoo|conditioner|hair\s*mask|hair\s*spray|hair\s*oil|hair\s*serum|curl|straighten|keratin/i, category: "hair_care" },
+  {
+    pattern:
+      /shampoo|conditioner|hair\s*mask|hair\s*spray|hair\s*oil|hair\s*serum|curl|straighten|keratin/i,
+    category: "hair_care",
+  },
   // Deodorant
   { pattern: /deodorant|antiperspirant|deo\s*roll/i, category: "deodorant" },
   // Makeup (pure cosmetics, non-treatment)
-  { pattern: /mascara|lipstick|lip\s*gloss|eyeshadow|eyeliner|blush|bronzer|highlighter|concealer|foundation|powder|primer|brow\s*pencil|brow\s*mascara|nail\s*polish/i, category: "makeup" },
+  {
+    pattern:
+      /mascara|lipstick|lip\s*gloss|eyeshadow|eyeliner|blush|bronzer|highlighter|concealer|foundation|powder|primer|brow\s*pencil|brow\s*mascara|nail\s*polish/i,
+    category: "makeup",
+  },
 ];
 
-function mapProduct(text: string, productType: string): MappingResult & { is_clinical: boolean } {
+function mapProduct(
+  text: string,
+  productType: string,
+): MappingResult & { is_clinical: boolean } {
   const combined = `${text} ${productType}`;
 
   // Check if this is a non-clinical product first
@@ -203,25 +372,43 @@ function mapProduct(text: string, productType: string): MappingResult & { is_cli
       // Non-clinical products get default mapping
       // Makeup with SPF still gets SunProtection
       if (rule.category === "makeup" && /spf|sunscreen/i.test(combined)) {
-        return { primary_concern: "Concern_SunProtection", regimen_step: "Step_3_Protection", is_clinical: false };
+        return {
+          primary_concern: "Concern_SunProtection",
+          regimen_step: "Step_3_Protection",
+          is_clinical: false,
+        };
       }
       // Deodorant with whitening gets Pigmentation
       if (rule.category === "deodorant" && /whitening/i.test(combined)) {
-        return { primary_concern: "Concern_Pigmentation", regimen_step: "Step_2_Treatment", is_clinical: false };
+        return {
+          primary_concern: "Concern_Pigmentation",
+          regimen_step: "Step_2_Treatment",
+          is_clinical: false,
+        };
       }
-      return { primary_concern: "Concern_Hydration", regimen_step: "Step_2_Treatment", is_clinical: false };
+      return {
+        primary_concern: "Concern_Hydration",
+        regimen_step: "Step_2_Treatment",
+        is_clinical: false,
+      };
     }
   }
 
   // Clinical product mapping
   let concern: SkinConcern = "Concern_Hydration";
   for (const rule of CONCERN_RULES) {
-    if (rule.pattern.test(combined)) { concern = rule.concern; break; }
+    if (rule.pattern.test(combined)) {
+      concern = rule.concern;
+      break;
+    }
   }
 
   let step: RegimenStep = "Step_2_Treatment";
   for (const rule of STEP_RULES) {
-    if (rule.pattern.test(combined)) { step = rule.step; break; }
+    if (rule.pattern.test(combined)) {
+      step = rule.step;
+      break;
+    }
   }
 
   return { primary_concern: concern, regimen_step: step, is_clinical: true };
@@ -268,7 +455,8 @@ async function fetchShopifyPage(
   hasNext: boolean;
   endCursor: string | null;
 }> {
-  const url = `https://${SHOPIFY_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
+  const url =
+    `https://${SHOPIFY_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
   const res = await fetch(url, {
     method: "POST",
     headers: {
@@ -283,7 +471,11 @@ async function fetchShopifyPage(
 
   if (!res.ok) throw new Error(`Shopify ${res.status}: ${await res.text()}`);
   const json = await res.json();
-  if (json.errors) throw new Error(json.errors.map((e: { message: string }) => e.message).join("; "));
+  if (json.errors) {
+    throw new Error(
+      json.errors.map((e: { message: string }) => e.message).join("; "),
+    );
+  }
 
   const data = json.data.products;
   return {
@@ -316,7 +508,8 @@ Deno.serve(async (req) => {
       const userClient = createClient(supabaseUrl, anonKey, {
         global: { headers: { Authorization: `Bearer ${bearerToken}` } },
       });
-      const { data: { user }, error: authErr } = await userClient.auth.getUser();
+      const { data: { user }, error: authErr } = await userClient.auth
+        .getUser();
       if (authErr || !user) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401,
@@ -338,13 +531,23 @@ Deno.serve(async (req) => {
 
     // Parse params
     const url = new URL(req.url);
-    const limit = Math.min(parseInt(url.searchParams.get("limit") ?? "200"), 1000);
+    const limit = Math.min(
+      parseInt(url.searchParams.get("limit") ?? "200"),
+      1000,
+    );
     const dryRun = url.searchParams.get("dry_run") === "true";
     const batchSize = 50;
 
     let synced = 0, skipped = 0, failed = 0;
     const errors: string[] = [];
-    const priceAudit: Array<{ handle: string; rawPrice: number; normalizedPrice: number; brand: string }> = [];
+    const priceAudit: Array<
+      {
+        handle: string;
+        rawPrice: number;
+        normalizedPrice: number;
+        brand: string;
+      }
+    > = [];
     let cursor: string | undefined = url.searchParams.get("after") ?? undefined;
     let fetched = 0;
 
@@ -355,7 +558,10 @@ Deno.serve(async (req) => {
 
       for (const p of page.products) {
         try {
-          if (!p.images.edges.length) { skipped++; continue; }
+          if (!p.images.edges.length) {
+            skipped++;
+            continue;
+          }
 
           // 1. Extract real brand from title
           const brand = extractBrand(p.title, p.vendor);
@@ -365,8 +571,13 @@ Deno.serve(async (req) => {
           const price = normalizeShopifyPrice(rawPrice, brand);
 
           // 3. Enhanced clinical tagging
-          const combinedText = `${p.title} ${p.productType} ${p.tags.join(" ")}`;
-          const { primary_concern, regimen_step } = mapProduct(combinedText, p.productType);
+          const combinedText = `${p.title} ${p.productType} ${
+            p.tags.join(" ")
+          }`;
+          const { primary_concern, regimen_step } = mapProduct(
+            combinedText,
+            p.productType,
+          );
 
           const row = {
             handle: p.handle,
@@ -382,7 +593,12 @@ Deno.serve(async (req) => {
 
           // Track price audit for dry runs
           if (dryRun) {
-            priceAudit.push({ handle: p.handle, rawPrice, normalizedPrice: price, brand });
+            priceAudit.push({
+              handle: p.handle,
+              rawPrice,
+              normalizedPrice: price,
+              brand,
+            });
             synced++;
             continue;
           }
@@ -426,7 +642,10 @@ Deno.serve(async (req) => {
   } catch (e) {
     return new Response(
       JSON.stringify({ error: (e as Error).message }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
     );
   }
 });
