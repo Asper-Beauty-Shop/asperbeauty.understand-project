@@ -25,14 +25,14 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
     if (isFlipped) return;
     const card = e.currentTarget;
     const box = card.getBoundingClientRect();
-    const x = e.clientX - box.left;
-    const y = e.clientY - box.top;
+    const mouseX = e.clientX - box.left;
+    const mouseY = e.clientY - box.top;
     const centerX = box.width / 2;
     const centerY = box.height / 2;
-    setRotateX(((y - centerY) / centerY) * -15);
-    setRotateY(((x - centerX) / centerX) * 15);
-    setGlareX((x / box.width) * 100);
-    setGlareY((y / box.height) * 100);
+    setRotateX(((mouseY - centerY) / centerY) * -15);
+    setRotateY(((mouseX - centerX) / centerX) * 15);
+    setGlareX((mouseX / box.width) * 100);
+    setGlareY((mouseY / box.height) * 100);
   };
 
   const handleMouseLeave = () => {
@@ -60,9 +60,9 @@ export default function AsperAccessCard({ name = "Guest", protocol = "HYDRATION"
       ];
 
   const personaColor = (persona: string) => {
-    const lower = persona.toLowerCase();
-    if (lower.includes("sami") || lower === "dr_sami") return "text-burgundy";
-    if (lower.includes("zain") || lower === "ms_zain") return "text-polished-gold";
+    const lowerCasePersona = persona.toLowerCase();
+    if (lowerCasePersona.includes("sami") || lowerCasePersona === "dr_sami") return "text-burgundy";
+    if (lowerCasePersona.includes("zain") || lowerCasePersona === "ms_zain") return "text-polished-gold";
     return "text-burgundy";
   };
 

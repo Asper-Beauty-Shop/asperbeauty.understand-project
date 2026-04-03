@@ -5,7 +5,7 @@
  */
 
 const BRAIN_URL =
-  "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
+  "https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant";
 
 async function main() {
   console.log("Asper Beauty Shop — Brain connectivity check\n");
@@ -39,3 +39,4 @@ async function main() {
 }
 
 main();
+

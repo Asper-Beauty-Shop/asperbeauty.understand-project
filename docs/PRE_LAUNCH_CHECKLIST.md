@@ -1,14 +1,3 @@
-﻿# Pre-Launch Checklist
-
-> **Important:** Replace all placeholders in this documentation with your actual values:
-> - `REPLACE_WITH_PROJECT_ID` â†’ Your Lovable project ID
-> - `YOUR_PROJECT` / `YOUR_SUPABASE_PROJECT` / `YOUR_PROJECT_REF` â†’ Your Supabase project reference ID
-> - `YOUR_JWT_TOKEN` / `YOUR_SUPABASE_JWT_TOKEN` â†’ Your JWT token from `supabase auth token`
-> - `YOUR_HEALTH_CHECKS_SECRET` â†’ Your configured health checks secret (min 32 characters)
-> - `YOUR_SHOPIFY_ACCESS_TOKEN` â†’ Your Shopify Admin API access token
-> - `your-store.myshopify.com` â†’ Your Shopify store domain
-> - `YOUR_ANON_KEY` â†’ Your Supabase anon key
-
 This checklist ensures all systems are configured and tested before launching the Asper Beauty Shop to production.
 
 ## Checklist Overview
@@ -86,6 +75,7 @@ curl https://YOUR_PROJECT.supabase.co/rest/v1/products?select=count \
 - [ ] Test API call successful
 
 **Test Shopify Connection:**
+
 ```bash
 curl -X GET "https://your-store.myshopify.com/admin/api/2025-01/products.json" \
   -H "X-Shopify-Access-Token: YOUR_SHOPIFY_ACCESS_TOKEN"
@@ -202,6 +192,7 @@ curl -v https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload
 ```
 
 **Expected Response (HTTP 200):**
+
 ```json
 {
   "status": "ok",
@@ -210,6 +201,7 @@ curl -v https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload
 ```
 
 **If you get HTTP 503:**
+
 ```json
 {
   "status": "unavailable",
@@ -220,6 +212,7 @@ curl -v https://YOUR_PROJECT.supabase.co/functions/v1/bulk-product-upload
 ```
 
 **Actions if 503:**
+
 1. Verify secret names are exactly as specified (case-sensitive)
 2. Check `SHOPIFY_STORE_DOMAIN` has no `https://` prefix
 3. Confirm `SHOPIFY_ACCESS_TOKEN` is valid and not expired
@@ -243,6 +236,7 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/health-checks-ingest 
 ```
 
 **Expected Response (HTTP 201):**
+
 ```json
 {
   "ok": true,
@@ -253,6 +247,7 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/health-checks-ingest 
 ```
 
 **If you get HTTP 401:**
+
 ```json
 {
   "error": "Unauthorized"
@@ -260,6 +255,7 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/health-checks-ingest 
 ```
 
 **Actions if 401:**
+
 1. Verify `HEALTH_CHECKS_SECRET` is set in Supabase secrets
 2. Confirm the header name is `x-health-checks-secret` (with dashes, all lowercase)
 3. Check the secret value matches exactly (no extra spaces)
@@ -267,12 +263,12 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/health-checks-ingest 
 
 ### Common Secret Configuration Errors
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| 503 on bulk-product-upload | Shopify secrets missing | Set `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_ACCESS_TOKEN` |
-| "invalidDomain" hint | Domain includes `https://` | Remove protocol, use only `your-store.myshopify.com` |
-| 401 on health-checks-ingest | Wrong or missing secret | Set `HEALTH_CHECKS_SECRET` and use correct header |
-| Secrets not taking effect | Stale deployment | Redeploy function: `supabase functions deploy <name>` |
+| Error                       | Cause                      | Solution                                              |
+| --------------------------- | -------------------------- | ----------------------------------------------------- |
+| 503 on bulk-product-upload  | Shopify secrets missing    | Set `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_ACCESS_TOKEN` |
+| "invalidDomain" hint        | Domain includes `https://` | Remove protocol, use only `your-store.myshopify.com`  |
+| 401 on health-checks-ingest | Wrong or missing secret    | Set `HEALTH_CHECKS_SECRET` and use correct header     |
+| Secrets not taking effect   | Stale deployment           | Redeploy function: `supabase functions deploy <name>` |
 
 ---
 
@@ -282,10 +278,10 @@ curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/health-checks-ingest 
 
 Configure these secrets in GitHub repository **Settings â†’ Secrets and variables â†’ Actions**:
 
-- [ ] `LOVABLE_WEBHOOK_URL` - Webhook URL for syncing file/issue/PR events to Lovable *(optional; workflows skip gracefully if absent)*
+- [ ] `LOVABLE_WEBHOOK_URL` - Webhook URL for syncing file/issue/PR events to Lovable _(optional; workflows skip gracefully if absent)_
   - **How to get it:** Open https://lovable.dev/projects/657fb572-13a5-4a3e-bac9-184d39fdf7e6 â†’ **Settings â†’ Integrations** (or **Settings â†’ GitHub**) â†’ copy the webhook URL
   - If not visible in the Lovable UI, contact Lovable support with project ID `657fb572-13a5-4a3e-bac9-184d39fdf7e6`
-- [ ] `DISCORD_WEBHOOK_URL` - Discord webhook for deployment notifications *(optional)*
+- [ ] `DISCORD_WEBHOOK_URL` - Discord webhook for deployment notifications _(optional)_
 
 ### Automated Health Checks
 
@@ -367,6 +363,7 @@ Understanding responses from health checks and API endpoints is critical for tro
 #### Frontend Health (`/health`)
 
 **Success (200 OK):**
+
 ```json
 {
   "status": "ok",
@@ -377,9 +374,11 @@ Understanding responses from health checks and API endpoints is critical for tro
   }
 }
 ```
+
 **Interpretation:** All systems operational, ready for production.
 
 **Partial Failure (200 OK with failed checks):**
+
 ```json
 {
   "status": "degraded",
@@ -390,20 +389,24 @@ Understanding responses from health checks and API endpoints is critical for tro
   }
 }
 ```
+
 **Interpretation:** Shopify integration down, investigate Shopify API or credentials.
 
 #### Bulk Product Upload Health (`GET /bulk-product-upload`)
 
 **Success (200 OK):**
+
 ```json
 {
   "status": "ok",
   "message": "Shopify secrets configured"
 }
 ```
+
 **Interpretation:** âœ… Shopify integration ready, can proceed with deployment.
 
 **Failure (503 Service Unavailable):**
+
 ```json
 {
   "status": "unavailable",
@@ -412,11 +415,13 @@ Understanding responses from health checks and API endpoints is critical for tro
   "hint": "SHOPIFY_STORE_DOMAIN must be myshopify domain only (no https://)"
 }
 ```
+
 **Interpretation:** âš ï¸ Configuration incomplete, follow Â§5 to set missing secrets.
 
 #### Health Checks Ingest (`POST /health-checks-ingest`)
 
 **Success (201 Created):**
+
 ```json
 {
   "ok": true,
@@ -425,22 +430,27 @@ Understanding responses from health checks and API endpoints is critical for tro
   }
 }
 ```
+
 **Interpretation:** âœ… Health check logged successfully in database.
 
 **Authentication Failure (401 Unauthorized):**
+
 ```json
 {
   "error": "Unauthorized"
 }
 ```
+
 **Interpretation:** âš ï¸ Missing or incorrect `x-health-checks-secret` header, verify secret.
 
 **Bad Request (400):**
+
 ```json
 {
   "error": "health_check.branch and health_check.job_name required"
 }
 ```
+
 **Interpretation:** âš ï¸ Malformed request, check payload structure.
 
 ### Troubleshooting Decision Tree
@@ -531,6 +541,7 @@ After launch, monitor these metrics:
 - [ ] Third-party API usage and rate limits
 
 Set up alerts for:
+
 - Health check failures
 - Error rate spikes
 - Slow response times
@@ -546,6 +557,7 @@ Set up alerts for:
 - **Shopify Admin:** https://your-store.myshopify.com/admin
 
 For questions or issues:
+
 1. Check [NEXT_STEPS.md](../NEXT_STEPS.md) for deployment flow
 2. Review [DEPLOYMENT_TEMPLATE.md](DEPLOYMENT_TEMPLATE.md) for examples
 3. Search Supabase logs for error messages
@@ -553,7 +565,6 @@ For questions or issues:
 
 ---
 
-**Checklist completed on:** _____________  
-**Completed by:** _____________  
-**Production launch date:** _____________
-
+**Checklist completed on:** ******\_******  
+**Completed by:** ******\_******  
+**Production launch date:** ******\_******
