@@ -1,12 +1,12 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 /**
- * Asper Beauty Shop â€” Sync check (frontend + brain connectivity).
+ * Asper Beauty Shop — Sync check (frontend + brain connectivity).
  * Run: npm run sync:check
  */
 
 const FRONTEND_HEALTH = "https://www.asperbeautyshop.com/health";
 const BRAIN_URL =
-  "https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant";
+  "https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant";
 
 async function fetchStatus(name, url) {
   try {
@@ -18,7 +18,7 @@ async function fetchStatus(name, url) {
 }
 
 async function main() {
-  console.log("Asper Beauty Shop â€” Sync check\n");
+  console.log("Asper Beauty Shop — Sync check\n");
 
   const [frontend, brain] = await Promise.all([
     fetchStatus("Frontend /health", FRONTEND_HEALTH),
@@ -29,12 +29,12 @@ async function main() {
   const brainOk = brain.ok;
 
   console.log(
-    frontendOk ? "  âœ“" : "  âœ—",
+    frontendOk ? "  ✓" : "  ✗",
     frontend.name + ":",
     frontend.status || frontend.error
   );
   console.log(
-    brainOk ? "  âœ“" : "  âœ—",
+    brainOk ? "  ✓" : "  ✗",
     brain.name + ":",
     brain.status || brain.error
   );
@@ -44,4 +44,5 @@ async function main() {
 }
 
 main();
+
 
