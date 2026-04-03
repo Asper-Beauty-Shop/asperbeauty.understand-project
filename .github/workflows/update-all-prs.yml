@@ -1,0 +1,71 @@
+name: Update All Open Pull Requests
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  update-pull-requests:
+    name: Update Open PRs with Base Branch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Update all open pull requests
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Fetching all open pull requests for $REPO..."
+          PAGE=1
+          MAX_PAGES=50
+          UPDATED=0
+          SKIPPED=0
+          ERRORS=0
+
+          while [ "$PAGE" -le "$MAX_PAGES" ]; do
+            PRS=$(gh api \
+              -H "Accept: application/vnd.github+json" \
+              "/repos/$REPO/pulls?state=open&per_page=100&page=$PAGE" \
+              --jq '[.[] | {number: .number, title: .title, base: .base.ref}]')
+
+            COUNT=$(echo "$PRS" | jq 'length')
+            if [ "$COUNT" -eq 0 ]; then
+              break
+            fi
+
+            echo "Processing page $PAGE ($COUNT PRs)..."
+
+            while IFS= read -r PR_NUM; do
+              echo "  → Attempting to update PR #$PR_NUM..."
+              RESPONSE=$(gh api \
+                --method PUT \
+                -H "Accept: application/vnd.github+json" \
+                "/repos/$REPO/pulls/$PR_NUM/update-branch" \
+                2>&1) && RC=0 || RC=$?
+              if [ $RC -eq 0 ]; then
+                echo "    ✓ PR #$PR_NUM updated successfully."
+                UPDATED=$((UPDATED + 1))
+              else
+                MSG=$(echo "$RESPONSE" | head -1)
+                if echo "$RESPONSE" | grep -qi "already up to date\|not behind"; then
+                  echo "    – PR #$PR_NUM is already up to date (skipped)."
+                  SKIPPED=$((SKIPPED + 1))
+                else
+                  echo "    ✗ PR #$PR_NUM could not be updated: $MSG"
+                  ERRORS=$((ERRORS + 1))
+                fi
+              fi
+            done < <(echo "$PRS" | jq -r '.[].number')
+
+            PAGE=$((PAGE + 1))
+          done
+
+          echo ""
+          echo "===== Summary ====="
+          echo "Updated : $UPDATED"
+          echo "Skipped : $SKIPPED"
+          echo "Errors  : $ERRORS"
