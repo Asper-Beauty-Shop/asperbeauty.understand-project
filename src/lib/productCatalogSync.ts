@@ -34,7 +34,7 @@ function parseTags(tags: string[] | string | undefined): string[] {
   if (Array.isArray(tags)) return tags;
   return String(tags)
     .split(",")
-    .map((t) => t.trim())
+    .map((tag) => tag.trim())
     .filter(Boolean);
 }
 
@@ -45,17 +45,17 @@ function getMetafield(
 ): string | null {
   if (!metafields) return null;
   if (Array.isArray(metafields)) {
-    const m = metafields.find((f) =>
+    const foundMetafield = metafields.find((f) =>
       f.namespace === namespace && f.key === key
     );
-    return m?.value ?? null;
+    return foundMetafield?.value ?? null;
   }
-  const ns = (metafields as Record<string, { value?: string }>)[namespace];
-  const k = ns && typeof ns === "object"
-    ? (ns as Record<string, { value?: string }>)[key]
+  const namespaceGroup = (metafields as Record<string, { value?: string }>)[namespace];
+  const fieldEntry = namespaceGroup && typeof namespaceGroup === "object"
+    ? (namespaceGroup as Record<string, { value?: string }>)[key]
     : null;
-  if (k && typeof k === "object" && "value" in k) {
-    return (k as { value?: string }).value ?? null;
+  if (fieldEntry && typeof fieldEntry === "object" && "value" in fieldEntry) {
+    return (fieldEntry as { value?: string }).value ?? null;
   }
   return null;
 }
@@ -84,15 +84,15 @@ export function processProduct(
     : null;
 
   let inventory_total = 0;
-  const v = shopifyProduct.variants;
-  if (Array.isArray(v) && v.length > 0) {
-    inventory_total = v.reduce(
+  const variants = shopifyProduct.variants;
+  if (Array.isArray(variants) && variants.length > 0) {
+    inventory_total = variants.reduce(
       (sum, variant) => sum + (variant.inventory_quantity ?? 0),
       0,
     );
-  } else if (v && typeof v === "object" && "inventory_quantity" in v) {
+  } else if (variants && typeof variants === "object" && "inventory_quantity" in variants) {
     inventory_total =
-      (v as { inventory_quantity?: number }).inventory_quantity ?? 0;
+      (variants as { inventory_quantity?: number }).inventory_quantity ?? 0;
   }
 
   const bestsellerRankRaw = getMetafield(
@@ -140,11 +140,11 @@ export function processMatrixifyRow(row: {
   const tags = row.Tags
     ? String(row.Tags)
       .split(",")
-      .map((t) => t.trim())
+      .map((tag) => tag.trim())
       .filter(Boolean)
     : [];
-  const concernTag = tags.find((t) => t.startsWith("Concern_"));
-  const stepTag = tags.find((t) => t.startsWith("Step_"));
+  const concernTag = tags.find((tag) => tag.startsWith("Concern_"));
+  const stepTag = tags.find((tag) => tag.startsWith("Step_"));
   const inventory = row["Variant Inventory Qty"];
   const inventory_total = typeof inventory === "number"
     ? inventory
