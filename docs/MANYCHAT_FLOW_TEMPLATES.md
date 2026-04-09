@@ -7,7 +7,7 @@ These templates are designed for the **ManyChat External Request** block. They c
 ## 1. Connection Details (Global)
 
 **Request Type:** POST  
-**Request URL:** `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant?route=manychat`  
+**Request URL:** `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?route=manychat`  
 **Content-Type:** `application/json`
 
 ---
@@ -119,3 +119,4 @@ The AI Brain returns a `v2` ManyChat response. You do **not** need to map fields
   }
 }
 ``
+
