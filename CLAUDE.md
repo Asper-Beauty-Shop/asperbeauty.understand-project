@@ -115,3 +115,13 @@ export SUPABASE_ACCESS_TOKEN="your-supabase-pat"
 - Use `VITE_SUPABASE_PUBLISHABLE_KEY` (anon key) on frontend
 - Shopify Storefront token is public-safe
 - Never commit `SUPABASE_ACCESS_TOKEN` or service role keys
+
+## Vercel
+- Vercel MCP auth = `asperpharma` team (different from project owner)
+- Project lives under `fahmawispot` CLI team — `.vercel/project.json` is correct, do not re-link
+- Branch `feat/neumorphic-elite-ui-redesign` bypasses 4 protection rules on push — expected
+
+## Neumorphic Design System (src/index.css)
+- Shadows: `.neu-raised` (card elevation), `.neu-inset` (pressed), `.neu-flat` (rings/badges), `.neu-pressed`
+- Gold utilities: `.gold-accent-line` (divider), `.luxury-button-primary` (CTA), `.section-header` (gold underline via `::after`)
+- RTL: wrap sections with `dir={isAr ? "rtl" : "ltr"}`, use `rtl:ml-1 rtl:mr-0` for icon spacing

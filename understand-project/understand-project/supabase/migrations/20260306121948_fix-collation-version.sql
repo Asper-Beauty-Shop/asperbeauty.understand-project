@@ -1,0 +1,15 @@
+-- Fix PostgreSQL collation version mismatch
+-- Error: WARNING (01000): database "postgres" has a collation version mismatch
+-- This warning appears after a PostgreSQL upgrade when the collation library
+-- (ICU or libc) version changes. It must be refreshed to suppress the warning
+-- and avoid index corruption risk.
+--
+-- Note: If you also see "Remote migration versions not found in local migrations
+-- directory", that means migrations were applied to the remote database via the
+-- Supabase Dashboard or another out-of-band process. To repair the migration
+-- history tracking, run:
+--   supabase migration repair --status reverted <version>
+-- for each orphaned remote version, or use:
+--   supabase db remote commit
+-- to pull those remote migrations into this local directory.
+ALTER DATABASE postgres REFRESH COLLATION VERSION;
