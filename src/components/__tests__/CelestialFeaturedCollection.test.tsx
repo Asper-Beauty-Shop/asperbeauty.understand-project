@@ -273,10 +273,12 @@ describe("CelestialFeaturedCollection — Digital Tray", () => {
   describe("error handling", () => {
     it("does not crash when supabase.rpc returns an error", async () => {
       const { supabase } = await import("@/integrations/supabase/client");
-      vi.mocked(supabase.rpc).mockResolvedValueOnce({
-        data: null,
-        error: { message: "Network error" },
-      } as any);
+      vi.mocked(supabase.rpc).mockImplementationOnce(() =>
+        Promise.resolve({
+          data: null,
+          error: { message: "Network error" },
+        }),
+      );
 
       renderComponent();
 
