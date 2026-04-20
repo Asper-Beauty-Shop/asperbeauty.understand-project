@@ -30,8 +30,8 @@ function getCorsHeaders(req: Request): Record<string, string> {
 function getWebhookRoute(req: Request): "gorgias" | "manychat" | null {
   try {
     const url = new URL(req.url);
-    const q = url.searchParams.get("route")?.toLowerCase();
-    if (q === "gorgias" || q === "manychat") return q;
+    const routeParam = url.searchParams.get("route")?.toLowerCase();
+    if (routeParam === "gorgias" || routeParam === "manychat") return routeParam;
     const header = req.headers.get("x-webhook-route")?.toLowerCase();
     if (header === "gorgias" || header === "manychat") return header;
   } catch { /* ignore */ }
@@ -47,8 +47,8 @@ function extractFromGorgias(body: Record<string, unknown>): { message: string } 
 
 function extractFromManyChat(body: Record<string, unknown>): { message: string } {
   const data = body.data as Record<string, unknown> | undefined;
-  const msg = (data?.text as string) || (body.message as string) || "";
-  return { message: msg };
+  const extractedMessage = (data?.text as string) || (body.message as string) || "";
+  return { message: extractedMessage };
 }
 
 function detectConcernSlug(text: string): string | null {
@@ -64,24 +64,24 @@ function detectConcernSlug(text: string): string | null {
   return null;
 }
 
-function formatProduct(p: Record<string, unknown>): string {
-  const step = typeof p.regimen_step === "string" ? p.regimen_step.replace("Step_", "") : "";
-  return `- **${p.title}** (${p.brand}) | ${p.price} JOD | Step: ${step} | Note: ${p.pharmacist_note || "Pharmacist-curated"}`;
+function formatProduct(product: Record<string, unknown>): string {
+  const step = typeof product.regimen_step === "string" ? product.regimen_step.replace("Step_", "") : "";
+  return `- **${product.title}** (${product.brand}) | ${product.price} JOD | Step: ${step} | Note: ${product.pharmacist_note || "Pharmacist-curated"}`;
 }
 
 // deno-lint-ignore no-explicit-any
 async function fetchProductContext(supabase: any, userMessage: string, slug: string | null) {
-  let matched: Record<string, unknown>[] = [];
+  let matchedProducts: Record<string, unknown>[] = [];
   if (slug) {
     const enums = CONCERN_MAPPING[slug] || [];
     const { data } = await supabase.from("products").select("*").in("primary_concern", enums).gt("inventory_total", 0).limit(6);
-    matched = data || [];
+    matchedProducts = data || [];
   }
-  if (matched.length === 0) {
+  if (matchedProducts.length === 0) {
     const { data } = await supabase.from("products").select("*").gt("inventory_total", 0).limit(6);
-    matched = data || [];
+    matchedProducts = data || [];
   }
-  return { context: matched.map(formatProduct).join("\n"), products: matched };
+  return { context: matchedProducts.map(formatProduct).join("\n"), products: matchedProducts };
 }
 
 function buildSystemPrompt(productContext: string, shopRoutinePath: string | null): string {
@@ -174,7 +174,7 @@ serve(async (req) => {
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: systemPrompt },
-          ...messages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content })),
+          ...messages.map(chatMessage => ({ role: chatMessage.role === "assistant" ? "assistant" : "user", content: chatMessage.content })),
         ],
         temperature: 0.7,
         max_tokens: 1024,
@@ -192,8 +192,8 @@ serve(async (req) => {
       });
     }
 
-    const data = await res.json();
-    const replyText = data.choices?.[0]?.message?.content || "I apologize, I am processing your request. Please wait a moment.";
+    const aiResponseData = await res.json();
+    const replyText = aiResponseData.choices?.[0]?.message?.content || "I apologize, I am processing your request. Please wait a moment.";
 
     if (route === "manychat") {
       return new Response(JSON.stringify({
@@ -209,7 +209,7 @@ serve(async (req) => {
       }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
     }
 
-    return new Response(JSON.stringify({ reply: replyText, products: products.map((p: Record<string, unknown>) => ({ id: p.id, title: p.title, handle: p.handle })) }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ reply: replyText, products: products.map((product: Record<string, unknown>) => ({ id: product.id, title: product.title, handle: product.handle })) }), { headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } });
 
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : "Unknown error";

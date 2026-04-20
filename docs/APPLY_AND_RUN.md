@@ -1,6 +1,6 @@
 # Apply to Main Site & Run — All Sites & Social Media
 
-**Single source:** [BRAIN-CONFIG.md](./BRAIN-CONFIG.md) (Brain `qqceibvalkoytafynwoc`)  
+**Single source:** [BRAIN-CONFIG.md](./BRAIN-CONFIG.md) (Brain `vhgwvfedgfmcixhdyttt`)  
 **Full checklist:** [APPLY_TO_MAIN_SITE.md](../APPLY_TO_MAIN_SITE.md)  
 **Role & mandate:** [ROLE_AND_MANDATE.md](./ROLE_AND_MANDATE.md)
 
@@ -48,14 +48,14 @@ Ensure Lovable env has `VITE_SITE_URL` and `VITE_LOVABLE_URL` per [APPLY_TO_MAIN
 
 ## 3. Omnichannel webhooks (Brain — all use main site context)
 
-From [BRAIN-CONFIG.md](./BRAIN-CONFIG.md). All POST to Brain **qqceibvalkoytafynwoc**; responses and links should reference the main site.
+From [BRAIN-CONFIG.md](./BRAIN-CONFIG.md). All POST to Brain **vhgwvfedgfmcixhdyttt**; responses and links should reference the main site.
 
 | Channel | Webhook / config |
 |---------|-------------------|
-| **Gorgias** (Unified Helpdesk) | `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant?route=gorgias` |
-| **ManyChat** (WhatsApp & Instagram) | `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant?route=manychat` |
-| **Bulk upload** | `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/bulk-product-upload` |
-| **Health check** | `https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant?health=true` |
+| **Gorgias** (Unified Helpdesk) | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?route=gorgias` |
+| **ManyChat** (WhatsApp & Instagram) | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?route=manychat` |
+| **Bulk upload** | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/bulk-product-upload` |
+| **Health check** | `https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?health=true` |
 
 Configure Gorgias and ManyChat so CTAs and links point to **https://www.asperbeautyshop.com/** (or production domain when live).
 
@@ -94,7 +94,7 @@ Base URL: **https://www.asperbeautyshop.com/** (or https://www.asperbeautyshop.c
 
 | What | Where |
 |------|--------|
-| Brain ID | `qqceibvalkoytafynwoc` |
+| Brain ID | `vhgwvfedgfmcixhdyttt` |
 | Main site | https://www.asperbeautyshop.com/ |
 | Full apply checklist | [APPLY_TO_MAIN_SITE.md](../APPLY_TO_MAIN_SITE.md) |
 | Brain & webhooks | [BRAIN-CONFIG.md](./BRAIN-CONFIG.md) |
@@ -102,4 +102,5 @@ Base URL: **https://www.asperbeautyshop.com/** (or https://www.asperbeautyshop.c
 ---
 
 *Ensures one deploy applies to the main site and all sites and social media accounts (webhooks + social links).*
+
 

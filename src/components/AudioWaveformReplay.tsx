@@ -42,9 +42,9 @@ const NUM_BARS = BAR_HEIGHTS.length;
 
 function formatTime(secs: number): string {
   if (!isFinite(secs) || secs <= 0) return "0:00";
-  const m = Math.floor(secs / 60);
-  const s = Math.floor(secs % 60);
-  return `${m}:${s.toString().padStart(2, "0")}`;
+  const minutes = Math.floor(secs / 60);
+  const remainingSeconds = Math.floor(secs % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
 }
 
 const PERSONA_LABELS: Record<string, { name: string; title: string }> = {
@@ -115,11 +115,11 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
         {isLoading ? (
           /* Loading state — shimmer bars */
           <div className="flex items-end gap-[2px] w-full h-full px-1">
-            {BAR_HEIGHTS.map((h, i) => (
+            {BAR_HEIGHTS.map((barHeight, barIndex) => (
               <div
-                key={i}
+                key={barIndex}
                 className="flex-1 rounded-sm bg-[#800020]/20 animate-pulse"
-                style={{ height: `${(h / 95) * 100}%` }}
+                style={{ height: `${(barHeight / 95) * 100}%` }}
               />
             ))}
           </div>
@@ -129,14 +129,14 @@ export const AudioWaveformReplay: React.FC<AudioWaveformReplayProps> = ({
           </p>
         ) : (
           <div className="flex items-end gap-[2px] w-full h-full px-1">
-            {BAR_HEIGHTS.map((h, i) => {
-              const isActive = i < activeBars;
-              const isCurrent = i === activeBars;
-              const heightPct = `${(h / 95) * 100}%`;
+            {BAR_HEIGHTS.map((barHeight, barIndex) => {
+              const isActive = barIndex < activeBars;
+              const isCurrent = barIndex === activeBars;
+              const heightPct = `${(barHeight / 95) * 100}%`;
 
               return (
                 <div
-                  key={i}
+                  key={barIndex}
                   className={cn(
                     "flex-1 rounded-sm transition-all duration-100",
                     isActive
