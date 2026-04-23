@@ -10,7 +10,7 @@ async function testSocialMediaRoute() {
   };
 
   try {
-    const response = await fetch('https://qqceibvalkoytafynwoc.supabase.co/functions/v1/beauty-assistant?route=manychat', {
+    const response = await fetch('https://vhgwvfedgfmcixhdyttt.supabase.co/functions/v1/beauty-assistant?route=manychat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

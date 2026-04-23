@@ -11,18 +11,18 @@ const EXPECTED = {
 } as const;
 
 function hexToRgb(hex: string): string {
-  const n = parseInt(hex.slice(1), 16);
-  const r = (n >> 16) & 0xff;
-  const g = (n >> 8) & 0xff;
-  const b = n & 0xff;
-  return `rgb(${r}, ${g}, ${b})`;
+  const hexNumericValue = parseInt(hex.slice(1), 16);
+  const redComponent = (hexNumericValue >> 16) & 0xff;
+  const greenComponent = (hexNumericValue >> 8) & 0xff;
+  const blueComponent = hexNumericValue & 0xff;
+  return `rgb(${redComponent}, ${greenComponent}, ${blueComponent})`;
 }
 
 function normalizeRgb(computed: string): string {
   if (computed.startsWith("rgb(")) return computed;
   if (computed.startsWith("rgba(")) {
-    const m = computed.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-    if (m) return `rgb(${m[1]}, ${m[2]}, ${m[3]})`;
+    const rgbaMatch = computed.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (rgbaMatch) return `rgb(${rgbaMatch[1]}, ${rgbaMatch[2]}, ${rgbaMatch[3]})`;
   }
   return computed;
 }
@@ -60,11 +60,11 @@ export function verifyBrandDNA(): void {
   const expectedMaroon = hexToRgb(EXPECTED.maroon);
   const expectedGold = hexToRgb(EXPECTED["shiny-gold"]);
 
-  const ok = ivory === expectedIvory &&
+  const isBrandDNAVerified = ivory === expectedIvory &&
     maroon === expectedMaroon &&
     gold === expectedGold;
 
-  if (!ok) {
+  if (!isBrandDNAVerified) {
     console.error(
       "⚠️ ASPER BRAND ALERT: Clinical DNA Mismatch. Check Tailwind config and index.css.",
       { ivory, expectedIvory, maroon, expectedMaroon, gold, expectedGold },

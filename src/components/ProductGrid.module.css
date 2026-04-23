@@ -1,0 +1,215 @@
+/* =========================================
+   ProductGrid.module.css
+   Asper Beauty Shop — "Clinical Luxury"
+   Palette: Soft Ivory #F8F8FF | Maroon #800020 | Shiny Gold #C5A028
+   ========================================= */
+
+/* =========================================
+   Section Wrapper
+   ========================================= */
+.productSection {
+  background-color: var(--soft-ivory, #F8F8FF);
+  padding: 4rem 5%;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  color: hsl(var(--maroon, 345 100% 25%));
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* =========================================
+   The Grid — Engineered for 4,000+ SKUs
+   auto-fill eliminates breakpoint media queries
+   ========================================= */
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2.5rem;
+  align-items: stretch;
+}
+
+/* =========================================
+   The Product Card — "Digital Tray"
+   White surface on Ivory canvas
+   ========================================= */
+.card {
+  background-color: #ffffff;
+  border: 1px solid transparent; /* transparent prevents layout shift on hover */
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+/* The "Gold Stitch" — Midas Touch on hover */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(128, 0, 32, 0.08); /* Maroon-toned shadow */
+  border-color: hsl(var(--shiny-gold, 46 66% 46%)); /* #C5A028 */
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: border-color 0.2s ease;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .imageWrapper img {
+    transition: none;
+  }
+}
+
+/* =========================================
+   Visual Assets & Badging
+   ========================================= */
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Uniform clinical photography */
+  background-color: #f9f9f9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.imageWrapper img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.6s ease;
+}
+
+.card:hover .imageWrapper img {
+  transform: scale(1.05);
+}
+
+/* Gold badge — "Seal of Authenticity" */
+.badge {
+  position: absolute;
+  top: 1rem;
+  inset-inline-start: 1rem; /* RTL-safe: replaces left: 1rem */
+  background-color: hsl(var(--shiny-gold, 46 66% 46%));
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2px;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(197, 160, 40, 0.3);
+}
+
+/* =========================================
+   Card Content & Conversion Engine
+   ========================================= */
+.content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.brandName {
+  font-size: 0.8rem;
+  color: #888888;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.productName {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 1.1rem;
+  color: hsl(var(--maroon, 345 100% 25%));
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.productPrice {
+  font-size: 1rem;
+  color: hsl(var(--dark-charcoal, 0 0% 20%));
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  margin-top: auto; /* Pushes price to bottom for uniform card heights */
+}
+
+/* =========================================
+   Dual-Action Buttons
+   ========================================= */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* "Add to Cart" — Primary Maroon CTA */
+.btnCart {
+  flex-grow: 1;
+  background-color: hsl(var(--maroon, 345 100% 25%));
+  color: hsl(var(--soft-ivory, 240 100% 99%));
+  border: 1px solid hsl(var(--maroon, 345 100% 25%));
+  padding: 0.75rem;
+  font-size: 0.85rem;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.btnCart:hover {
+  background-color: hsl(var(--shiny-gold, 46 66% 46%));
+  border-color: hsl(var(--shiny-gold, 46 66% 46%));
+}
+
+.btnCart:focus-visible {
+  outline: 2px solid hsl(var(--shiny-gold, 46 66% 46%));
+  outline-offset: 2px;
+}
+
+/* "Ask AI" — Concierge Trigger */
+.btnAskAI {
+  background-color: transparent;
+  color: hsl(var(--maroon, 345 100% 25%));
+  border: 1px solid hsl(var(--maroon, 345 100% 25%));
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px; /* Minimum touch target */
+  border-radius: 2px;
+}
+
+.btnAskAI:hover {
+  background-color: hsl(var(--soft-ivory, 240 100% 99%));
+  color: hsl(var(--shiny-gold, 46 66% 46%));
+  border-color: hsl(var(--shiny-gold, 46 66% 46%));
+}
+
+.btnAskAI:focus-visible {
+  outline: 2px solid hsl(var(--shiny-gold, 46 66% 46%));
+  outline-offset: 2px;
+}

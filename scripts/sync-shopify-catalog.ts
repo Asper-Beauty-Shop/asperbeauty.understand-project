@@ -74,11 +74,17 @@ const CSV_PATH =
 // Throttle between products (ms)
 const THROTTLE_MS = 500;
 
+const MAX_RETRIES = 3;
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-async function adminGraphQL(query: string, variables: Record<string, unknown> = {}) {
+async function adminGraphQL(
+  query: string,
+  variables: Record<string, unknown> = {},
+  attempt = 0
+) {
   const res = await fetch(ADMIN_URL, {
     method: "POST",
     headers: {

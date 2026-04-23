@@ -1,0 +1,5 @@
+# Notebooks: Jupyter + Gemini + data (install in project venv or .conda)
+jupyter>=1.0.0
+google-generativeai>=0.8.0
+pandas>=2.2.0
+python-dotenv>=1.0.0
